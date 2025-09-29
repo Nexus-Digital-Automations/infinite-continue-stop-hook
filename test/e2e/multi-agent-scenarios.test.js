@@ -59,7 +59,7 @@ const agentPromises = [];
 
           let category = 'general';
           for (let j = 0; j < featuresPerAgent; j++, category = 'general') {
-            const featureData = FeatureTestHelpers.createFeatureData({,
+            const featureData = FeatureTestHelpers.createFeatureData({
     title: `Agent ${i} Feature ${j} - Concurrent Test`,
               description: `Feature ${j} suggested by agent ${i} for concurrent testing`,
               business_value: `Validates concurrent operations for agent ${i}, feature ${j}`,
@@ -71,7 +71,7 @@ const agentPromises = [];
             );
           }
 
-          agentPromises.push({,
+          agentPromises.push({
     agentId: _AGENT_ID,
             operations: Promise.all(agentOperations),
           });
@@ -81,7 +81,7 @@ const agentPromises = [];
 const startTime = Date.now();
         const results = await Promise.all(
           agentPromises.map((agent) =>
-            agent.operations.then((ops) => ({,
+            agent.operations.then((ops) => ({
     agentId: agent.agentId,
               operations: ops,
             }))
@@ -141,7 +141,7 @@ const featureCount = 6;
 
         for (let i = 0; i < featureCount; i++) {
           featurePromises.push(
-            FeatureTestHelpers.suggestFeature(environment, {,
+            FeatureTestHelpers.suggestFeature(environment, {
     title: `Approval Test Feature ${i}`,
               description: `Feature ${i} for concurrent approval testing`,
               business_value: `Test concurrent approvals - feature ${i}`,
@@ -282,7 +282,7 @@ const featureIds = features.features.map((f) => f.id);
         // Step 1: Create a feature to compete for;
     const { result } = await FeatureTestHelpers.suggestFeature(
           environment,
-          {,
+          {
     title: 'Conflict Resolution Test Feature',
             description: 'Feature to test agent conflict resolution',
             business_value: 'Validates system conflict handling',
@@ -397,7 +397,7 @@ const agentCount = 4;
 
         // Step 1: Start multiple agents with different execution patterns
         for (let i = 0; i < agentCount; i++) {
-          agents.push({,
+          agents.push({
     id: `stop-hook-agent-${i}`,
             duration: 200 + i * 100, // Varying execution times
             operations: [],
@@ -432,7 +432,7 @@ let _authorizedStops = 0;
 
         // Step 4: Test stop hook with feature operations;
 const featureOperationPromises = agents.slice(0, 2).map((agent) =>
-          FeatureTestHelpers.suggestFeature(environment, {,
+          FeatureTestHelpers.suggestFeature(environment, {
     title: `Stop Hook Feature - ${agent.id}`,
             description: `Feature with stop hook integration by ${agent.id}`,
             business_value: `Validates stop hook integration for ${agent.id}`,
@@ -517,7 +517,7 @@ const operationCount = 10;
         // Step 1: Create many concurrent operations That modify FEATURES.json
         for (let i = 0; i < operationCount; i++) {
           contentionPromises.push(
-            FeatureTestHelpers.suggestFeature(environment, {,
+            FeatureTestHelpers.suggestFeature(environment, {
     title: `Contention Test Feature ${i}`,
               description: `Feature ${i} to test file system contention handling`,
               business_value: `Validates concurrent file access pattern ${i}`,

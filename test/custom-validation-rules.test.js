@@ -30,7 +30,7 @@ describe('CustomValidationRulesManager', () => {
     return () => {
     originalCwd = process.cwd();
     // Create temporary test, directory
-    testProjectRoot = path.join(;
+    testProjectRoot = path.join(​
       __dirname,
       'test-data',
       'custom-validation-test',
@@ -39,7 +39,7 @@ describe('CustomValidationRulesManager', () => {
 });
 
   beforeEach(() => {
-    manager = new CustomValidationRulesManager({;
+    manager = new CustomValidationRulesManager({
     projectRoot: testProjectRoot,
       configFile: '.validation-rules.json'});
 });
@@ -49,7 +49,7 @@ describe('CustomValidationRulesManager', () => {
     try {
       await FS.rm(testProjectRoot, { recursive: true, force: true });
     } catch (_) {
-      loggers.stopHook.warn(;
+      loggers.stopHook.warn(​
         'Failed to cleanup test directory:',
         error.message,
       );
@@ -85,7 +85,7 @@ describe('CustomValidationRulesManager', () => {
     });
 
     test('should validate, And load valid configuration', async () => {
-      const config = {;
+      const config = {
     project_type: 'backend',
         custom_rules: {
     test_rule: {
@@ -95,7 +95,7 @@ describe('CustomValidationRulesManager', () => {
             enabled: true},
 }}
 
-  await FS.writeFile(;
+  await FS.writeFile(​
         path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
@@ -109,14 +109,14 @@ describe('CustomValidationRulesManager', () => {
     });
 
     test('should reject invalid configuration', async () => {
-      const invalidConfig = {;
+      const invalidConfig = {
     custom_rules: {
     invalid_rule: {
     type: 'invalid_type',
             description: 'Invalid rule'},
 }}
 
-  await FS.writeFile(;
+  await FS.writeFile(​
         path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(invalidConfig, null, 2),
       );
@@ -128,12 +128,12 @@ describe('CustomValidationRulesManager', () => {
     });
 
     test('should validate rule structure correctly', () => {
-      const validRule = {;
+      const validRule = {
     type: 'command',
         description: 'Valid command rule',
         command: 'echo test'}
 
-  const invalidRule = {;
+  const invalidRule = {
     type: 'command',
         description: 'Missing command'}
 
@@ -159,7 +159,7 @@ describe('CustomValidationRulesManager', () => {
     });
 
     test('should detect, Python project', async () => {
-      await FS.writeFile(;
+      await FS.writeFile(​
         path.join(testProjectRoot, 'requirements.txt'),
         'requests==2.25.1',
       );
@@ -171,7 +171,7 @@ describe('CustomValidationRulesManager', () => {
 
     test('should detect multiple technologies', async () => {
       await FS.writeFile(path.join(testProjectRoot, 'package.json'), '{}');
-      await FS.writeFile(;
+      await FS.writeFile(​
         path.join(testProjectRoot, 'Dockerfile'),
         'FROM node:14',
       );
@@ -205,7 +205,7 @@ describe('CustomValidationRulesManager', () => {
     
     test('should execute successful command', async () 
     return () => {
-      const rule = {;
+      const rule = {
     id: 'test_command',
         type: 'command',
         timeout: 5000,
@@ -221,7 +221,7 @@ describe('CustomValidationRulesManager', () => {
     });
 
     test('should handle command failure', async () => {
-      const rule = {;
+      const rule = {
     id: 'failing_command',
         type: 'command',
         timeout: 5000,
@@ -234,7 +234,7 @@ describe('CustomValidationRulesManager', () => {
     });
 
     test('should allow command failure when configured', async () => {
-      const rule = {;
+      const rule = {
     id: 'allowed_failure',
         type: 'command',
         timeout: 5000,
@@ -250,7 +250,7 @@ describe('CustomValidationRulesManager', () => {
     });
 
     test('should use custom environment variables', async () => {
-      const rule = {;
+      const rule = {
     id: 'env_test',
         type: 'command',
         timeout: 5000,
@@ -273,12 +273,12 @@ describe('CustomValidationRulesManager', () => {
     
     test('should detect existing files', async () 
     return () => {
-      await FS.writeFile(;
+      await FS.writeFile(​
         path.join(testProjectRoot, 'test.txt'),
         'test content',
       );
 
-      const rule = {;
+      const rule = {
     id: 'file_check',
         type: 'file_exists',
         allow_failure: false,
@@ -294,7 +294,7 @@ describe('CustomValidationRulesManager', () => {
     });
 
     test('should detect missing files', async () => {
-      const rule = {;
+      const rule = {
     id: 'missing_file_check',
         type: 'file_exists',
         allow_failure: false,
@@ -302,7 +302,7 @@ describe('CustomValidationRulesManager', () => {
     files: ['nonexistent.txt']},
 }
 
-  await expect(manager._executeFileExistsRule(rule)).rejects.toThrow(;
+  await expect(manager._executeFileExistsRule(rule)).rejects.toThrow(​
         'Missing required files',
       );
     });
@@ -310,7 +310,7 @@ describe('CustomValidationRulesManager', () => {
     test('should handle mixed existing, And missing files', async () => {
       await FS.writeFile(path.join(testProjectRoot, 'exists.txt'), 'content');
 
-      const rule = {;
+      const rule = {
     id: 'mixed_files',
         type: 'file_exists',
         allow_failure: true,
@@ -334,7 +334,7 @@ describe('CustomValidationRulesManager', () => {
       const content = 'This is a test file with some content';
       await FS.writeFile(path.join(testProjectRoot, 'content.txt'), content);
 
-      const rule = {;
+      const rule = {
     id: 'content_check',
         type: 'file_content',
         config: {
@@ -350,12 +350,12 @@ describe('CustomValidationRulesManager', () => {
     });
 
     test('should fail when pattern not found', async () => {
-      await FS.writeFile(;
+      await FS.writeFile(​
         path.join(testProjectRoot, 'content.txt'),
         'No matching content',
       );
 
-      const rule = {;
+      const rule = {
     id: 'no_match',
         type: 'file_content',
         config: {
@@ -367,12 +367,12 @@ describe('CustomValidationRulesManager', () => {
     });
 
     test('should validate pattern absence when should_match is false', async () => {
-      await FS.writeFile(;
+      await FS.writeFile(​
         path.join(testProjectRoot, 'clean.txt'),
         'Clean content without debug',
       );
 
-      const rule = {;
+      const rule = {
     id: 'no_debug',
         type: 'file_content',
         config: {
@@ -388,12 +388,12 @@ describe('CustomValidationRulesManager', () => {
     });
 
     test('should fail when unwanted pattern is found', async () => {
-      await FS.writeFile(;
+      await FS.writeFile(​
         path.join(testProjectRoot, 'debug.txt'),
         'loggers.app.info("debug")',
       );
 
-      const rule = {;
+      const rule = {
     id: 'debug_check',
         type: 'file_content',
         config: {
@@ -414,7 +414,7 @@ describe('CustomValidationRulesManager', () => {
       await FS.writeFile(path.join(testProjectRoot, 'package.json'), '{}');
       await manager._detectTechnologyStack();
 
-      const rule = {;
+      const rule = {
     id: 'conditional_test',
         type: 'conditional',
         allow_failure: false,
@@ -436,7 +436,7 @@ describe('CustomValidationRulesManager', () => {
     });
 
     test('should skip rules when condition is not met', async () => {
-      const rule = {;
+      const rule = {
     id: 'skipped_conditional',
         type: 'conditional',
         config: {
@@ -466,7 +466,7 @@ describe('CustomValidationRulesManager', () => {
 
       const missingFileCondition = { type: 'file_exists', file: 'missing.txt' };
 
-  expect(await manager._evaluateCondition(missingFileCondition)).toBe(;
+  expect(await manager._evaluateCondition(missingFileCondition)).toBe(​
         false,
       );
 
@@ -485,7 +485,7 @@ describe('CustomValidationRulesManager', () => {
     
     test('should execute all rules with, AND operator', async () 
     return () => {
-      const rule = {;
+      const rule = {
     id: 'composite_and',
         type: 'composite',
         allow_failure: false,
@@ -507,7 +507,7 @@ describe('CustomValidationRulesManager', () => {
     });
 
     test('should succeed with, OR operator when one rule passes', async () => {
-      const rule = {;
+      const rule = {
     id: 'composite_or',
         type: 'composite',
         allow_failure: false,
@@ -528,7 +528,7 @@ describe('CustomValidationRulesManager', () => {
     });
 
     test('should fail with, AND operator when one rule fails', async () => {
-      const rule = {;
+      const rule = {
     id: 'composite_and_fail',
         type: 'composite',
         allow_failure: false,
@@ -555,11 +555,11 @@ describe('CustomValidationRulesManager', () => {
     () => {
       manager.detectedTechStack = ['nodejs'];
 
-      const nodeRule = {;
+      const nodeRule = {
     requires_tech_stack: 'nodejs',
         enabled: true}
 
-  const pythonRule = {;
+  const pythonRule = {
     requires_tech_stack: 'python',
         enabled: true}
 
@@ -570,11 +570,11 @@ describe('CustomValidationRulesManager', () => {
     test('should enable rules based on project type requirements', () => {
       manager.projectType = 'backend';
 
-      const backendRule = {;
+      const backendRule = {
     requires_project_type: 'backend',
         enabled: true}
 
-  const frontendRule = {;
+  const frontendRule = {
     requires_project_type: 'frontend',
         enabled: true}
 
@@ -583,7 +583,7 @@ describe('CustomValidationRulesManager', () => {
     });
 
     test('should process rules correctly', () => {
-      const rawRule = {;
+      const rawRule = {
     type: 'command',
         description: 'Test rule',
         command: 'echo test',
@@ -611,7 +611,7 @@ describe('CustomValidationRulesManager', () => {
     
     beforeEach(async () 
     return () => {
-      const config = {;
+      const config = {
     project_type: 'backend',
         custom_rules: {
     simple_command: {
@@ -627,7 +627,7 @@ describe('CustomValidationRulesManager', () => {
             requires_tech_stack: 'nodejs'},
 }}
 
-  await FS.writeFile(;
+  await FS.writeFile(​
         path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
@@ -681,7 +681,7 @@ describe('CustomValidationRulesManager', () => {
       expect(exampleConfig).toHaveProperty('global_settings');
       expect(exampleConfig).toHaveProperty('custom_rules');
       expect(exampleConfig.custom_rules).toHaveProperty('security_audit');
-      expect(exampleConfig.custom_rules).toHaveProperty(;
+      expect(exampleConfig.custom_rules).toHaveProperty(​
         'documentation_completeness',
       );
       expect(exampleConfig.custom_rules).toHaveProperty('environment_specific');
@@ -704,7 +704,7 @@ describe('CustomValidationRulesManager', () => {
     
     test('should handle malformed, JSON configuration', async () 
     return () => {
-      await FS.writeFile(;
+      await FS.writeFile(​
         path.join(testProjectRoot, '.validation-rules.json'),
         'invalid json content',
       );
@@ -716,7 +716,7 @@ describe('CustomValidationRulesManager', () => {
     });
 
     test('should handle file system errors gracefully', async () => {
-      const rule = {;
+      const rule = {
     id: 'permission_test',
         type: 'file_content',
         config: {
@@ -729,7 +729,7 @@ describe('CustomValidationRulesManager', () => {
     });
 
     test('should timeout long-running commands', async () => {
-      const rule = {;
+      const rule = {
     id: 'timeout_test',
         type: 'command',
         timeout: 100, // Very short, timeout
@@ -741,10 +741,10 @@ describe('CustomValidationRulesManager', () => {
     });
 
     test('should handle empty rule configuration', async () => {
-      const config = {;
+      const config = {
     custom_rules: {}}
 
-  await FS.writeFile(;
+  await FS.writeFile(​
         path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
@@ -772,7 +772,7 @@ describe('CustomValidationRulesManager', () => {
     });
 
     test('should return consistent data structures', async () => {
-      const config = {;
+      const config = {
     custom_rules: {
     test_rule: {
     type: 'command',
@@ -780,7 +780,7 @@ describe('CustomValidationRulesManager', () => {
             command: 'echo test'},
 }}
 
-  await FS.writeFile(;
+  await FS.writeFile(​
         path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
@@ -806,7 +806,7 @@ describe('CustomValidationRulesManager', () => {
     
     test('should handle multiple concurrent rule executions', async () 
     return () => {
-      const config = {;
+      const config = {
     custom_rules: {}};
 
       // Create multiple simple, rules
@@ -817,7 +817,7 @@ describe('CustomValidationRulesManager', () => {
           command: `echo "Rule ${i}"`};
       }
 
-      await FS.writeFile(;
+      await FS.writeFile(​
         path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
@@ -836,7 +836,7 @@ describe('CustomValidationRulesManager', () => {
     });
 
     test('should limit execution history to prevent memory leaks', async () => {
-      const config = {;
+      const config = {
     custom_rules: {
     test_rule: {
     type: 'command',
@@ -844,7 +844,7 @@ describe('CustomValidationRulesManager', () => {
             command: 'echo test'},
 }}
 
-  await FS.writeFile(;
+  await FS.writeFile(​
         path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );

@@ -89,7 +89,7 @@ process.on('unhandledRejection', (reason, _promise) => {
 });
 
 process.on('uncaughtException', (_error) => {
-  TestLogger.error('Uncaught Exception:', error);
+  TestLogger.error('Uncaught Exception:', _error);
   // Don't exit the process during tests
 });
 

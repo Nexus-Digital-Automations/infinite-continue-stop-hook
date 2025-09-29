@@ -19,29 +19,25 @@ const {
 } = require('./e2e-utils');
 
 describe('Feature Management System E2E', () => {
-    
-    
   let environment;
 
   beforeEach(async () => {
     environment = new E2EEnvironment('feature-management');
     await environment.setup();
-});
+  });
 
   afterEach(async () => {
     if (environment) {
       await environment.cleanup();
     }
-});
+  });
 
   describe('Feature Suggestion Workflows', () => {
-    
-    
     test(
       'Comprehensive feature suggestion with all categories',
       async () => {
         // Test feature suggestion across all supported categories;
-const categories = [
+        const categories = [
           'enhancement',
           'bug-fix',
           'new-feature',
@@ -50,12 +46,12 @@ const categories = [
           'documentation',
         ];
         const suggestionPromises = categories.map((category, _index) =>
-          FeatureTestHelpers.suggestFeature(environment, {,
-    title: `${category.charAt(0).toUpperCase() + category.slice(1)} Test Feature`,
+          FeatureTestHelpers.suggestFeature(environment, {
+            title: `${category.charAt(0).toUpperCase() + category.slice(1)} Test Feature`,
             description: `Comprehensive test feature for ${category} category validation`,
             business_value: `Validates ${category} workflow And ensures system handles all feature types`,
             category: category,
-          })
+          }),
         );
 
         const results = await Promise.all(suggestionPromises);
@@ -64,7 +60,7 @@ const categories = [
         results.forEach((result, index) => {
           E2EAssertions.assertCommandSuccess(
             result.result,
-            `${categories[index]} suggestion`
+            `${categories[index]} suggestion`,
           );
           const response = E2EAssertions.assertJsonResponse(result.result, [
             'success',
@@ -76,23 +72,23 @@ const categories = [
         });
 
         // Validate system state;
-const features = await environment.getFeatures();
+        const features = await environment.getFeatures();
         E2EAssertions.assertFeatureCount(features, categories.length);
 
         // Verify each category is represented
         categories.forEach((_category) => {
           const categoryFeatures = features.features.filter(
-            (f) => f.category === category
+            (f) => f.category === category,
           );
           expect(categoryFeatures).toHaveLength(1);
           expect(categoryFeatures[0].status).toBe('suggested');
         });
 
         console.log(
-          `✅ Comprehensive feature suggestion test passed for ${categories.length} categories`
+          `✅ Comprehensive feature suggestion test passed for ${categories.length} categories`,
         );
       },
-      E2E_TIMEOUT
+      E2E_TIMEOUT,
     );
 
     test(
@@ -101,8 +97,8 @@ const features = await environment.getFeatures();
         // Test feature suggestion validation rules And error scenarios
 
         // Test invalid category;
-const invalidCategoryData = JSON.stringify({,
-    title: 'Invalid Category Test',
+        const invalidCategoryData = JSON.stringify({
+          title: 'Invalid Category Test',
           description: 'Test description',
           business_value: 'Test value',
           category: 'invalid-category',
@@ -110,66 +106,66 @@ const invalidCategoryData = JSON.stringify({,
         const invalidCategoryResult = await CommandExecutor.executeAPI(
           'suggest-feature',
           [invalidCategoryData],
-          {,
-    projectRoot: environment.testDir,
+          {
+            projectRoot: environment.testDir,
             expectSuccess: false,
-          }
+          },
         );
         // The command should actually succeed but return a failure response
         // Update expectation to match actual API behavior;
-const invalidResponse = E2EAssertions.assertJsonResponse(
+        const invalidResponse = E2EAssertions.assertJsonResponse(
           invalidCategoryResult,
-          ['success']
+          ['success'],
         );
         expect(invalidResponse.success).toBe(false);
         expect(invalidResponse.error.toLowerCase()).toContain(
-          'invalid category'
+          'invalid category',
         );
 
         // Test missing required fields;
-const missingFieldResults = await Promise.allSettled([
+        const missingFieldResults = await Promise.allSettled([
           CommandExecutor.executeAPI(
             'suggest-feature',
             [
-              JSON.stringify({,
-    title: '',
+              JSON.stringify({
+                title: '',
                 description: 'Description',
                 business_value: 'Value',
                 category: 'enhancement',
               }),
             ],
-            { projectRoot: environment.testDir, expectSuccess: false }
+            { projectRoot: environment.testDir, expectSuccess: false },
           ),
           CommandExecutor.executeAPI(
             'suggest-feature',
             [
-              JSON.stringify({,
-    title: 'Title',
+              JSON.stringify({
+                title: 'Title',
                 description: '',
                 business_value: 'Value',
                 category: 'enhancement',
               }),
             ],
-            { projectRoot: environment.testDir, expectSuccess: false }
+            { projectRoot: environment.testDir, expectSuccess: false },
           ),
           CommandExecutor.executeAPI(
             'suggest-feature',
             [
-              JSON.stringify({,
-    title: 'Title',
+              JSON.stringify({
+                title: 'Title',
                 description: 'Description',
                 business_value: '',
                 category: 'enhancement',
               }),
             ],
-            { projectRoot: environment.testDir, expectSuccess: false }
+            { projectRoot: environment.testDir, expectSuccess: false },
           ),
         ]);
 
         // All should return error responses (but the commands succeed in returning those errors)
         missingFieldResults.forEach((result, _index) => {
           if (result.status === 'fulfilled') {
-    try {
+            try {
               const response = JSON.parse(result.value.stdout);
               expect(response.success).toBe(false);
               expect(response.error).toContain('missing');
@@ -181,71 +177,69 @@ const missingFieldResults = await Promise.allSettled([
         });
 
         // Test valid feature after errors;
-const validResult = await FeatureTestHelpers.suggestFeature(
+        const validResult = await FeatureTestHelpers.suggestFeature(
           environment,
-          {,
-    title: 'Valid Feature After Errors',
+          {
+            title: 'Valid Feature After Errors',
             description: 'This feature should work after validation errors',
             business_value:
               'Proves system resilience after validation failures',
             category: 'enhancement',
-          }
+          },
         );
         E2EAssertions.assertCommandSuccess(
           validResult.result,
-          'Valid feature after errors'
+          'Valid feature after errors',
         );
 
         // Verify only valid feature was created;
-const features = await environment.getFeatures();
+        const features = await environment.getFeatures();
         E2EAssertions.assertFeatureCount(features, 1);
 
         console.log(
-          '✅ Feature suggestion validation And error handling test passed'
+          '✅ Feature suggestion validation And error handling test passed',
         );
       },
-      E2E_TIMEOUT
+      E2E_TIMEOUT,
     );
-});
+  });
 
   describe('Feature Approval Workflows', () => {
-    
-    
     test(
       'Comprehensive approval process with audit trail',
       async () => {
         // Test detailed approval process with comprehensive audit trail
 
         // Step 1: Create multiple features with different characteristics;
-const featureSpecs = [
-          {,
-    title: 'High Priority Security Enhancement',
+        const featureSpecs = [
+          {
+            title: 'High Priority Security Enhancement',
             description:
               'Critical security improvement for user authentication',
             business_value: 'Prevents security breaches And protects user data',
             category: 'security',
           },
-          {,
-    title: 'Performance Optimization',
+          {
+            title: 'Performance Optimization',
             description:
               'Database query optimization to improve response times',
             business_value:
               'Reduces server costs by 30% And improves user experience',
             category: 'performance',
           },
-          {,
-    title: 'Documentation Update',
+          {
+            title: 'Documentation Update',
             description: 'Update API documentation with new endpoints',
             business_value:
               'Improves developer experience And reduces support tickets',
             category: 'documentation',
           },
-  ];
+        ];
 
         const suggestionResults = await Promise.all(
           featureSpecs.map((spec) =>
-            FeatureTestHelpers.suggestFeature(environment, spec)
-          )
+            FeatureTestHelpers.suggestFeature(environment, spec),
+          ),
         );
 
         const featureIds = suggestionResults.map((result) => {
@@ -258,13 +252,13 @@ const featureSpecs = [
             return response.feature?.id;
           } catch (_) {
             throw new Error(
-              `Failed to extract feature ID from: ${result.result.stdout}`
+              `Failed to extract feature ID from: ${result.result.stdout}`,
             );
           }
         });
 
         // Step 2: Detailed approval process with different approvers;
-const approvers = [
+        const approvers = [
           'security-lead',
           'performance-engineer',
           'technical-writer',
@@ -281,9 +275,9 @@ const approvers = [
               environment,
               id,
               approvers[index],
-              approvalNotes[index]
-            )
-          )
+              approvalNotes[index],
+            ),
+          ),
         );
 
         // Validate all approvals succeeded
@@ -296,7 +290,7 @@ const approvers = [
         });
 
         // Step 3: Comprehensive audit trail validation;
-const features = await environment.getFeatures();
+        const features = await environment.getFeatures();
         expect(features.metadata.approval_history).toHaveLength(3);
 
         features.features.forEach((feature, index) => {
@@ -308,36 +302,36 @@ const features = await environment.getFeatures();
         });
 
         // Step 4: Test feature details retrieval via list-features with ID filter;
-const detailResults = await Promise.all(
+        const detailResults = await Promise.all(
           featureIds.map((id) =>
-            FeatureTestHelpers.listFeatures(environment, { id: id })
-          )
+            FeatureTestHelpers.listFeatures(environment, { id: id }),
+          ),
         );
 
         detailResults.forEach((result, index) => {
           E2EAssertions.assertCommandSuccess(
             result,
-            `Feature details ${index}`
+            `Feature details ${index}`,
           );
           const response = E2EAssertions.assertJsonResponse(result, [
             'success',
             'features',
           ]);
           const feature = response.features.find(
-            (f) => f.id === featureIds[index]
+            (f) => f.id === featureIds[index],
           );
           expect(feature).toBeDefined();
           expect(feature.title).toContain(
-            featureSpecs[index].title.split(' ')[0]
+            featureSpecs[index].title.split(' ')[0],
           ); // Partial match
           expect(feature.approved_by).toBe(approvers[index]);
         });
 
         console.log(
-          `✅ Comprehensive approval process test passed for ${featureIds.length} features`
+          `✅ Comprehensive approval process test passed for ${featureIds.length} features`,
         );
       },
-      E2E_TIMEOUT
+      E2E_TIMEOUT,
     );
 
     test(
@@ -346,17 +340,17 @@ const detailResults = await Promise.all(
         // Test bulk approval functionality for efficient workflow management
 
         // Step 1: Create batch of features for bulk approval;
-const batchSize = 5;
+        const batchSize = 5;
         const batchPromises = [];
 
         for (let i = 0; i < batchSize; i++) {
           batchPromises.push(
-            FeatureTestHelpers.suggestFeature(environment, {,
-    title: `Bulk Approval Feature ${i + 1}`,
+            FeatureTestHelpers.suggestFeature(environment, {
+              title: `Bulk Approval Feature ${i + 1}`,
               description: `Feature ${i + 1} in bulk approval batch`,
               business_value: `Part of bulk approval validation batch - feature ${i + 1}`,
               category: 'enhancement',
-            })
+            }),
           );
         }
 
@@ -370,7 +364,7 @@ const batchSize = 5;
             return response.feature?.id;
           } catch (_) {
             throw new Error(
-              `Failed to extract feature ID from: ${result.result.stdout}`
+              `Failed to extract feature ID from: ${result.result.stdout}`,
             );
           }
         });
@@ -381,8 +375,8 @@ const batchSize = 5;
             environment,
             id,
             'bulk-approver',
-            'Batch approved for sprint planning'
-          )
+            'Batch approved for sprint planning',
+          ),
         );
         const approvalResults = await Promise.all(approvalPromises);
 
@@ -395,20 +389,20 @@ const batchSize = 5;
         });
 
         // Step 3: Validate bulk approval results;
-const features = await environment.getFeatures();
+        const features = await environment.getFeatures();
         E2EAssertions.assertFeatureCount(features, batchSize);
 
         features.features.forEach((feature) => {
           expect(feature.status).toBe('approved');
           expect(feature.approved_by).toBe('bulk-approver');
           expect(feature.approval_notes).toBe(
-            'Batch approved for sprint planning'
+            'Batch approved for sprint planning',
           );
         });
 
         // Validate individual approvals in approval history (since we did individual approvals)
         expect(
-          features.metadata.approval_history.length
+          features.metadata.approval_history.length,
         ).toBeGreaterThanOrEqual(batchSize);
         // Each feature should have an approval entry
         batchIds.forEach((id) => {
@@ -418,30 +412,28 @@ const features = await environment.getFeatures();
         });
 
         loggers.stopHook.log(
-          `✅ Bulk approval test passed for ${batchSize} features`
+          `✅ Bulk approval test passed for ${batchSize} features`,
         );
       },
-      E2E_TIMEOUT
+      E2E_TIMEOUT,
     );
-});
+  });
 
   describe('Feature Status Management', () => {
-    
-    
     test(
       'Status transition validation And constraints',
       async () => {
         // Test That status transitions follow proper workflow rules
 
         // Step 1: Create test feature;
-    const { result } = await FeatureTestHelpers.suggestFeature(
+        const { result } = await FeatureTestHelpers.suggestFeature(
           environment,
-          {,
-    title: 'Status Transition Test Feature',
+          {
+            title: 'Status Transition Test Feature',
             description: 'Feature for testing status transition rules',
             business_value: 'Validates workflow state management',
             category: 'enhancement',
-          }
+          },
         );
 
         const featureId = (() => {
@@ -454,7 +446,7 @@ const features = await environment.getFeatures();
             return response.feature?.id;
           } catch (_) {
             throw new Error(
-              `Failed to extract feature ID from: ${result.stdout}`
+              `Failed to extract feature ID from: ${result.stdout}`,
             );
           }
         })();
@@ -465,7 +457,7 @@ const features = await environment.getFeatures();
           environment,
           featureId,
           'transition-tester',
-          'Valid approval transition'
+          'Valid approval transition',
         );
         E2EAssertions.assertCommandSuccess(validApproval, 'Valid approval');
 
@@ -473,10 +465,10 @@ const features = await environment.getFeatures();
         const _invalidSuggestion = await CommandExecutor.executeAPI(
           'suggest-feature',
           ['Duplicate Title', 'Description', 'Value', 'enhancement'],
-          {,
-    projectRoot: environment.testDir,
+          {
+            projectRoot: environment.testDir,
             expectSuccess: false, // This might succeed as it's a new feature
-          }
+          },
         );
         // This test might need adjustment based on actual system behavior
 
@@ -484,33 +476,33 @@ const features = await environment.getFeatures();
         const invalidRejection = await CommandExecutor.executeAPI(
           'reject-feature',
           [featureId, 'transition-tester', 'Invalid rejection'],
-          {,
-    projectRoot: environment.testDir,
+          {
+            projectRoot: environment.testDir,
             expectSuccess: false,
-          }
+          },
         );
         E2EAssertions.assertCommandFailure(
           invalidRejection,
-          'Invalid rejection of approved feature'
+          'Invalid rejection of approved feature',
         );
 
         // Step 3: Test status history tracking;
-const feature = await FeatureTestHelpers.validateFeatureStatus(
+        const feature = await FeatureTestHelpers.validateFeatureStatus(
           environment,
           featureId,
-          'approved'
+          'approved',
         );
         expect(feature.created_at).toBeTruthy();
         expect(feature.updated_at).toBeTruthy();
         expect(
-          new Date(feature.updated_at) >= new Date(feature.created_at)
+          new Date(feature.updated_at) >= new Date(feature.created_at),
         ).toBe(true);
 
         console.log(
-          `✅ Status transition validation test passed for feature: ${featureId}`
+          `✅ Status transition validation test passed for feature: ${featureId}`,
         );
       },
-      E2E_TIMEOUT
+      E2E_TIMEOUT,
     );
 
     test(
@@ -519,41 +511,41 @@ const feature = await FeatureTestHelpers.validateFeatureStatus(
         // Test comprehensive feature listing And filtering capabilities
 
         // Step 1: Create diverse set of features;
-const testFeatures = [
-          {,
-    title: 'Approved Enhancement',
+        const testFeatures = [
+          {
+            title: 'Approved Enhancement',
             category: 'enhancement',
             shouldApprove: true,
           },
-          {,
-    title: 'Suggested Bug Fix',
+          {
+            title: 'Suggested Bug Fix',
             category: 'bug-fix',
             shouldApprove: false,
           },
-          {,
-    title: 'Approved Security Fix',
+          {
+            title: 'Approved Security Fix',
             category: 'security',
             shouldApprove: true,
           },
-          {,
-    title: 'Suggested Performance Update',
+          {
+            title: 'Suggested Performance Update',
             category: 'performance',
             shouldApprove: false,
           },
-          {,
-    title: 'Rejected Feature',
+          {
+            title: 'Rejected Feature',
             category: 'new-feature',
             shouldReject: true,
           },
-  ];
+        ];
 
         const featurePromises = testFeatures.map((spec) =>
-          FeatureTestHelpers.suggestFeature(environment, {,
-    title: spec.title,
+          FeatureTestHelpers.suggestFeature(environment, {
+            title: spec.title,
             description: `Test feature: ${spec.title}`,
             business_value: `Validates filtering for ${spec.category}`,
             category: spec.category,
-          })
+          }),
         );
 
         const featureResults = await Promise.all(featurePromises);
@@ -566,7 +558,7 @@ const testFeatures = [
             return response.feature?.id;
           } catch (_) {
             throw new Error(
-              `Failed to extract feature ID from: ${result.result.stdout}`
+              `Failed to extract feature ID from: ${result.result.stdout}`,
             );
           }
         });
@@ -579,7 +571,7 @@ const testFeatures = [
               environment,
               featureIds[i],
               'filter-tester',
-              `Approved ${testFeatures[i].title}`
+              `Approved ${testFeatures[i].title}`,
             );
           } else if (testFeatures[i].shouldReject) {
             // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup with ordered statuses
@@ -587,122 +579,120 @@ const testFeatures = [
               environment,
               featureIds[i],
               'filter-tester',
-              `Rejected ${testFeatures[i].title}`
+              `Rejected ${testFeatures[i].title}`,
             );
           }
         }
 
         // Step 3: Test filtering by status;
-const approvedResult = await FeatureTestHelpers.listFeatures(
+        const approvedResult = await FeatureTestHelpers.listFeatures(
           environment,
-          { status: 'approved' }
+          { status: 'approved' },
         );
         E2EAssertions.assertCommandSuccess(
           approvedResult,
-          'Approved features listing'
+          'Approved features listing',
         );
         const approvedResponse = E2EAssertions.assertJsonResponse(
           approvedResult,
-          ['success', 'features']
+          ['success', 'features'],
         );
         expect(
           approvedResponse.features.some((f) =>
-            f.title.includes('Approved Enhancement')
-          )
+            f.title.includes('Approved Enhancement'),
+          ),
         ).toBe(true);
         expect(
           approvedResponse.features.some((f) =>
-            f.title.includes('Approved Security Fix')
-          )
+            f.title.includes('Approved Security Fix'),
+          ),
         ).toBe(true);
 
         const suggestedResult = await FeatureTestHelpers.listFeatures(
           environment,
-          { status: 'suggested' }
+          { status: 'suggested' },
         );
         E2EAssertions.assertCommandSuccess(
           suggestedResult,
-          'Suggested features listing'
+          'Suggested features listing',
         );
         const suggestedResponse = E2EAssertions.assertJsonResponse(
           suggestedResult,
-          ['success', 'features']
+          ['success', 'features'],
         );
         expect(
           suggestedResponse.features.some((f) =>
-            f.title.includes('Suggested Bug Fix')
-          )
+            f.title.includes('Suggested Bug Fix'),
+          ),
         ).toBe(true);
         expect(
           suggestedResponse.features.some((f) =>
-            f.title.includes('Suggested Performance Update')
-          )
+            f.title.includes('Suggested Performance Update'),
+          ),
         ).toBe(true);
 
         // Step 4: Test filtering by category;
-const securityResult = await FeatureTestHelpers.listFeatures(
+        const securityResult = await FeatureTestHelpers.listFeatures(
           environment,
-          { category: 'security' }
+          { category: 'security' },
         );
         E2EAssertions.assertCommandSuccess(
           securityResult,
-          'Security features listing'
+          'Security features listing',
         );
         const securityResponse = E2EAssertions.assertJsonResponse(
           securityResult,
-          ['success', 'features']
+          ['success', 'features'],
         );
         expect(
           securityResponse.features.some((f) =>
-            f.title.includes('Approved Security Fix')
-          )
+            f.title.includes('Approved Security Fix'),
+          ),
         ).toBe(true);
 
         console.log(
-          `✅ Feature listing And filtering test passed for ${testFeatures.length} features`
+          `✅ Feature listing And filtering test passed for ${testFeatures.length} features`,
         );
       },
-      E2E_TIMEOUT
+      E2E_TIMEOUT,
     );
-});
+  });
 
   describe('Advanced Feature Management', () => {
-    
-    
     test(
       'Feature search And analytics',
       async () => {
         // Test advanced search And analytics capabilities
 
         // Step 1: Create searchable features;
-const searchableFeatures = [
-          {,
-    title: 'Advanced Search Algorithm Implementation',
+        const searchableFeatures = [
+          {
+            title: 'Advanced Search Algorithm Implementation',
             description:
               'Implement machine learning-based search with natural language processing',
             business_value:
               'Improves search accuracy by 85% And user satisfaction',
             category: 'enhancement',
           },
-          {,
-    title: 'User Interface Search Enhancement',
+          {
+            title: 'User Interface Search Enhancement',
             description:
               'Add auto-complete And search suggestions to UI components',
             business_value: 'Reduces search time And improves user experience',
             category: 'enhancement',
           },
-          {,
-    title: 'Database Search Optimization',
+          {
+            title: 'Database Search Optimization',
             description: 'Optimize database indices for faster search queries',
             business_value: 'Reduces search response time from 2s to 200ms',
             category: 'performance',
           },
-  ];
+        ];
 
         const searchResults = await Promise.all(
           searchableFeatures.map((feature) =>
-            FeatureTestHelpers.suggestFeature(environment, feature)
-          )
+            FeatureTestHelpers.suggestFeature(environment, feature),
+          ),
         );
 
         const searchIds = searchResults.map((result) => {
@@ -714,7 +704,7 @@ const searchableFeatures = [
             return response.feature?.id;
           } catch (_) {
             throw new Error(
-              `Failed to extract feature ID from: ${result.result.stdout}`
+              `Failed to extract feature ID from: ${result.result.stdout}`,
             );
           }
         });
@@ -724,13 +714,13 @@ const searchableFeatures = [
           environment,
           searchIds[0],
           'search-lead',
-          'High priority search feature'
+          'High priority search feature',
         );
         await FeatureTestHelpers.approveFeature(
           environment,
           searchIds[2],
           'performance-lead',
-          'Critical performance improvement'
+          'Critical performance improvement',
         );
 
         // Step 2: Test search functionality via list-features (search-features doesn't exist)
@@ -738,26 +728,26 @@ const searchableFeatures = [
           await FeatureTestHelpers.listFeatures(environment);
         E2EAssertions.assertCommandSuccess(
           allFeaturesResult,
-          'All features listing'
+          'All features listing',
         );
         const allResponse = E2EAssertions.assertJsonResponse(
           allFeaturesResult,
-          ['success', 'features']
+          ['success', 'features'],
         );
 
         // Verify search features are present
         expect(
           allResponse.features.some((f) =>
-            f.title.includes('Advanced Search Algorithm')
-          )
+            f.title.includes('Advanced Search Algorithm'),
+          ),
         ).toBe(true);
         expect(
           allResponse.features.some((f) =>
-            f.title.includes('User Interface Search')
-          )
+            f.title.includes('User Interface Search'),
+          ),
         ).toBe(true);
         expect(
-          allResponse.features.some((f) => f.title.includes('Database Search'))
+          allResponse.features.some((f) => f.title.includes('Database Search')),
         ).toBe(true);
 
         // Step 3: Test feature statistics (using feature-stats instead of analytics)
@@ -768,7 +758,7 @@ const searchableFeatures = [
           'success',
         ]);
         // Check the actual structure of the feature stats response;
-const totalFeatures =
+        const totalFeatures =
           statsResponse.stats?.total || statsResponse.total_features || 0;
         const approvedCount =
           statsResponse.stats?.by_status?.approved ||
@@ -783,10 +773,10 @@ const totalFeatures =
         expect(suggestedCount).toBeGreaterThanOrEqual(1);
 
         console.log(
-          `✅ Feature search And analytics test passed for ${searchableFeatures.length} features`
+          `✅ Feature search And analytics test passed for ${searchableFeatures.length} features`,
         );
       },
-      E2E_TIMEOUT
+      E2E_TIMEOUT,
     );
 
     test(
@@ -795,25 +785,25 @@ const totalFeatures =
         // Test feature data export And import capabilities
 
         // Step 1: Create exportable features;
-const exportFeatures = [
-          {,
-    title: 'Export Test Feature 1',
+        const exportFeatures = [
+          {
+            title: 'Export Test Feature 1',
             description: 'First feature for export testing',
             business_value: 'Validates export functionality',
             category: 'enhancement',
           },
-          {,
-    title: 'Export Test Feature 2',
+          {
+            title: 'Export Test Feature 2',
             description: 'Second feature for export testing',
             business_value: 'Validates export completeness',
             category: 'bug-fix',
           },
-  ];
+        ];
 
         const exportResults = await Promise.all(
           exportFeatures.map((feature) =>
-            FeatureTestHelpers.suggestFeature(environment, feature)
-          )
+            FeatureTestHelpers.suggestFeature(environment, feature),
+          ),
         );
 
         const exportIds = exportResults.map((result) => {
@@ -825,7 +815,7 @@ const exportFeatures = [
             return response.feature?.id;
           } catch (_) {
             throw new Error(
-              `Failed to extract feature ID from: ${result.result.stdout}`
+              `Failed to extract feature ID from: ${result.result.stdout}`,
             );
           }
         });
@@ -834,14 +824,14 @@ const exportFeatures = [
           environment,
           exportIds[0],
           'export-tester',
-          'Approved for export test'
+          'Approved for export test',
         );
 
         // Step 2: Test export functionality via list-features (export-features doesn't exist)
         const exportResult = await FeatureTestHelpers.listFeatures(environment);
         E2EAssertions.assertCommandSuccess(
           exportResult,
-          'Feature export simulation'
+          'Feature export simulation',
         );
         const exportResponse = E2EAssertions.assertJsonResponse(exportResult, [
           'success',
@@ -851,13 +841,13 @@ const exportFeatures = [
         // Verify export features are present
         expect(
           exportResponse.features.some((f) =>
-            f.title.includes('Export Test Feature 1')
-          )
+            f.title.includes('Export Test Feature 1'),
+          ),
         ).toBe(true);
         expect(
           exportResponse.features.some((f) =>
-            f.title.includes('Export Test Feature 2')
-          )
+            f.title.includes('Export Test Feature 2'),
+          ),
         ).toBe(true);
 
         // Step 3: Validate export-like format (using list response)
@@ -866,10 +856,10 @@ const exportFeatures = [
         expect(exportResponse.metadata || exportResponse).toBeTruthy();
 
         console.log(
-          `✅ Feature export And import workflow test passed for ${exportFeatures.length} features`
+          `✅ Feature export And import workflow test passed for ${exportFeatures.length} features`,
         );
       },
-      E2E_TIMEOUT
+      E2E_TIMEOUT,
     );
-});
+  });
 });

@@ -124,7 +124,7 @@ class APIExecutor {
    */
   static async initializeTestAgent(agentId = null) {
     const testAgentId = agentId || TestIdGenerator.generateAgentId();
-    const _result = await this.execAPI('initialize', [testAgentId], {;
+    const _result = await this.execAPI('initialize', [testAgentId], {
     silent: true});
     return { agentId: testAgentId, result };
 }
@@ -132,8 +132,8 @@ class APIExecutor {
   /**
    * Create a test, feature
    */
-  static createTestFeature(featureData, options = {}) {;
-    const defaultFeature = {;
+  static createTestFeature(featureData, options = {}) {
+    const defaultFeature = {
     title: 'Test, Feature',
       description: 'This is a test feature for automated testing',
       business_value: 'Validates testing infrastructure',
@@ -171,7 +171,7 @@ class TestEnvironment {
       FS.mkdirSync(this.testDir, { recursive: true });
     }
 
-    // Create, FEATURES.json.const featuresData = {;
+    // Create, FEATURES.json.const featuresData = {
     features: [],
       metadata: {
     version: '3.0.0',
@@ -182,7 +182,7 @@ class TestEnvironment {
 
   FS.writeFileSync(this.featuresPath, JSON.stringify(featuresData, null, 2));
 
-    // Create package.json.const packageData = {;
+    // Create package.json.const packageData = {
     name: this.testName,
       version: '1.0.0',
       description: `Test project for ${this.testName}`,
@@ -257,13 +257,13 @@ class TestDataFactory {
 /**
  * Enhanced, Jest matchers for, testing
  */
-const customMatchers = {;
+const customMatchers = {
   /**
    * Check if, API response has success, structure
    */
   toBeSuccessfulAPIResponse(received) {
     const pass =;
-      received && typeof received === 'object' && received.success === true.return {;
+      received && typeof received === 'object' && received.success === true.return {
     message: () =>;
         pass;
           ? `Expected ${JSON.stringify(received)} not to be a successful, API response`;
@@ -311,23 +311,23 @@ const customMatchers = {;
  * Test execution, utilities
  */
 class TestExecution {
-  static withTimeout(promise, timeout = TEST_CONFIG.DEFAULT_TIMEOUT) {;
-    return Promise.race([;
+  static withTimeout(promise, timeout = TEST_CONFIG.DEFAULT_TIMEOUT) {
+    return Promise.race([
       promise,
       new Promise((_, reject) => {
-        setTimeout(;
+        setTimeout(​
           () => reject(new Error(`Test timed out after ${timeout}ms`)),timeout;
         );
       })]);
 }
 
-  static async retry(fn, maxRetries = 3, delay = 1000) {;
+  static async retry(fn, maxRetries = 3, delay = 1000) {
     let lastError.for (let i = 0; i < maxRetries.i++) {
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential retry attempts, required
         return await fn();
       } catch (_) {
-        lastError = _error.if (i < maxRetries - 1) {;
+        lastError = _error.if (i < maxRetries - 1) {
           // eslint-disable-next-line no-await-in-loop -- Sequential delay required between retry, attempts
           await new Promise((resolve) => {
             setTimeout(resolve, delay);
@@ -339,7 +339,7 @@ class TestExecution {
     throw lastError;
 }
 
-  static async parallel(promises, maxConcurrency = 5) {;
+  static async parallel(promises, maxConcurrency = 5) {
     const results = [];
 
     for (let i = 0; i < promises.length.i += maxConcurrency) {
@@ -369,7 +369,7 @@ class PerformanceUtils {
     const _result = await fn();
     const after = process.memoryUsage();
 
-    const memoryDelta = {;
+    const memoryDelta = {
     rss: after.rss - before.rss,
       heapTotal: after.heapTotal - before.heapTotal,
       heapUsed: after.heapUsed - before.heapUsed,
@@ -383,30 +383,30 @@ class PerformanceUtils {
  * Logging utilities for, tests
  */
 class TestLogger {
-  static info(message, data = null) {;
-    console.log(;
+  static info(message, data = null) {
+    console.log(​
       `[TEST, INFO] ${message}`,
       data ? JSON.stringify(data, null, 2) : '',
     );
 }
 
-  static warn(message, data = null) {;
-    console.warn(;
+  static warn(message, data = null) {
+    console.warn(​
       `[TEST, WARN] ${message}`,
       data ? JSON.stringify(data, null, 2) : '',
     );
 }
 
-  static error(message, data = null) {;
-    console.error(;
+  static error(message, data = null) {
+    console.error(​
       `[TEST, ERROR] ${message}`,
       data ? JSON.stringify(data, null, 2) : '',
     );
 }
 
-  static debug(message, data = null) {;
+  static debug(message, data = null) {
     if (process.env.TEST_DEBUG) {
-      console.log(;
+      console.log(​
         `[TEST, DEBUG] ${message}`,
         data ? JSON.stringify(data, null, 2) : '',
       );

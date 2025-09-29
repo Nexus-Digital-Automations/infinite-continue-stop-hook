@@ -1,0 +1,14 @@
+{
+  "name": "e2e-test-feature-management",
+  "version": "1.0.0",
+  "description": "E2E test environment for feature-management",
+  "scripts": {
+    "start": "echo \"Test project started\"",
+    "build": "echo \"Test project built\"",
+    "test": "jest",
+    "lint": "echo \"Linting passed\""
+  },
+  "devDependencies": {
+    "jest": "^30.1.3"
+  }
+}

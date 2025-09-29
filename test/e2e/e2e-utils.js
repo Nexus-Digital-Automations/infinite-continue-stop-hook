@@ -32,7 +32,7 @@ class E2EEnvironment {
     this.apiPath = path.join(PROJECT_ROOT, 'taskmanager-api.js');
     this.stopHookPath = path.join(PROJECT_ROOT, 'stop-hook.js');
     this.cleanupTasks = [];
-}
+  }
 
   /**
    * Initialize test environment with clean directory structure
@@ -51,14 +51,14 @@ class E2EEnvironment {
     this.cleanupTasks.push(() => this.removeDirectory(this.testDir));
 
     return this;
-}
+  }
 
   /**
    * Create initial FEATURES.json file
    */
   async createFeaturesFile(category = 'general') {
     const initialFeatures = {
-    project: `e2e-test-${this.testName}`,
+      project: `e2e-test-${this.testName}`,
       schema_version: '2.0.0',
       migrated_from: 'test-initialization',
       migration_date: new Date().toISOString(),
@@ -66,7 +66,7 @@ class E2EEnvironment {
       completed_features: [],
       feature_relationships: {},
       workflow_config: {
-    require_approval: true,
+        require_approval: true,
         auto_reject_timeout_hours: 168,
         allowed_statuses: ['suggested', 'approved', 'rejected', 'implemented'],
         allowed_feature_types: ['error', 'feature', 'test', 'audit'],
@@ -82,12 +82,12 @@ class E2EEnvironment {
         ],
       },
       metadata: {
-    version: '2.0.0',
+        version: '2.0.0',
         created: new Date().toISOString(),
         updated: new Date().toISOString(),
         total_features: 0,
         features_by_type: {
-    error: 0,
+          error: 0,
           feature: 0,
           test: 0,
           audit: 0,
@@ -99,34 +99,34 @@ class E2EEnvironment {
 
     await FS.writeFile(
       this.featuresPath,
-      JSON.stringify(initialFeatures, null, 2)
+      JSON.stringify(initialFeatures, null, 2),
     );
-}
+  }
 
   /**
    * Create realistic package.json for testing
    */
   async createPackageJson() {
     const packageJson = {
-    name: `e2e-test-${this.testName}`,
+      name: `e2e-test-${this.testName}`,
       version: '1.0.0',
       description: `E2E test environment for ${this.testName}`,
       scripts: {
-    start: 'echo "Test project started"',
+        start: 'echo "Test project started"',
         build: 'echo "Test project built"',
         test: 'jest',
         lint: 'echo "Linting passed"',
       },
       devDependencies: {
-    jest: '^30.1.3',
-      }
-};
+        jest: '^30.1.3',
+      },
+    };
 
     await FS.writeFile(
       path.join(this.testDir, 'package.json'),
-      JSON.stringify(packageJson, null, 2)
+      JSON.stringify(packageJson, null, 2),
     );
-}
+  }
 
   /**
    * Clean up test environment
@@ -140,7 +140,7 @@ class E2EEnvironment {
         console.warn(`Cleanup task failed: ${_error.message}`);
       }
     }
-}
+  }
 
   /**
    * Remove directory recursively
@@ -151,7 +151,7 @@ class E2EEnvironment {
       if (stats.isDirectory()) {
         const files = await FS.readdir(dirPath);
         await Promise.all(
-          files.map((file) => this.removeDirectory(path.join(dirPath, file)))
+          files.map((file) => this.removeDirectory(path.join(dirPath, file))),
         );
         await FS.rmdir(dirPath);
       } else {
@@ -162,7 +162,7 @@ class E2EEnvironment {
         throw _error;
       }
     }
-}
+  }
 
   /**
    * Get current features using TaskManager API
@@ -170,11 +170,11 @@ class E2EEnvironment {
   async getFeatures() {
     try {
       const _result = await CommandExecutor.executeAPI('list-features', [], {
-    projectRoot: this.testDir,
+        projectRoot: this.testDir,
       });
 
       // Parse the JSON response from stdout;
-let apiResponse;
+      let apiResponse;
       if (result.result && result.result.stdout) {
         apiResponse = JSON.parse(result.result.stdout);
       } else if (result.stdout) {
@@ -190,17 +190,17 @@ let apiResponse;
       }
     } catch (_) {
       throw new Error(
-        `Failed to get features from TaskManager API: ${error.message}`
+        `Failed to get features from TaskManager API: ${error.message}`,
       );
     }
-}
+  }
 
   /**
    * Update FEATURES.json content
    */
   async updateFeatures(features) {
     await FS.writeFile(this.featuresPath, JSON.stringify(features, null, 2));
-}
+  }
 }
 
 /**
@@ -223,7 +223,6 @@ class CommandExecutor {
     } = options;
 
     return new Promise((resolve, reject) => {
-    
       const startTime = Date.now();
       let isResolved = false;
 
@@ -242,7 +241,7 @@ class CommandExecutor {
       });
 
       const child = spawn(command, escapedArgs, {
-    stdio: ['pipe', 'pipe', 'pipe'],
+        stdio: ['pipe', 'pipe', 'pipe'],
         env: { ...env, NODE_ENV: 'test' },
         cwd,
         shell: true,
@@ -272,8 +271,8 @@ class CommandExecutor {
         isResolved = true;
 
         const _result = {
-          code,,
-    stdout: stdout.trim(),
+          code,
+          stdout: stdout.trim(),
           stderr: stderr.trim(),
           duration: Date.now() - startTime,
           success: code === 0,
@@ -296,7 +295,7 @@ class CommandExecutor {
         isResolved = true;
 
         error.result = {
-    code: -1,
+          code: -1,
           stdout: stdout.trim(),
           stderr: stderr.trim(),
           duration: Date.now() - startTime,
@@ -308,7 +307,7 @@ class CommandExecutor {
       });
 
       // Handle timeout;
-const timeoutId = setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         if (isResolved) {
           return;
         }
@@ -317,10 +316,10 @@ const timeoutId = setTimeout(() => {
         child.kill('SIGKILL');
 
         const error = new Error(
-          `Command timed out after ${timeout}ms: ${command} ${args.join(' ')}`
+          `Command timed out after ${timeout}ms: ${command} ${args.join(' ')}`,
         );
         error.result = {
-    code: -1,
+          code: -1,
           stdout: stdout.trim(),
           stderr: stderr.trim(),
           duration: timeout,
@@ -337,7 +336,7 @@ const timeoutId = setTimeout(() => {
         clearTimeout(timeoutId);
       });
     });
-}
+  }
 
   /**
    * Execute TaskManager API command
@@ -352,12 +351,13 @@ const timeoutId = setTimeout(() => {
 
     return this.execute(
       'timeout',
-      [`${API_TIMEOUT / 1000}s`, 'node', ...apiArgs], {
-        ...options,,
-    timeout: options.timeout || API_TIMEOUT,
-      }
+      [`${API_TIMEOUT / 1000}s`, 'node', ...apiArgs],
+      {
+        ...options,
+        timeout: options.timeout || API_TIMEOUT,
+      },
     );
-}
+  }
 
   /**
    * Execute stop hook command
@@ -366,10 +366,10 @@ const timeoutId = setTimeout(() => {
     const hookArgs = [PROJECT_ROOT + '/stop-hook.js', ...args];
 
     return this.execute('node', hookArgs, {
-      ...options,,
-    timeout: options.timeout || API_TIMEOUT,
+      ...options,
+      timeout: options.timeout || API_TIMEOUT,
     });
-}
+  }
 }
 
 /**
@@ -382,7 +382,7 @@ class FeatureTestHelpers {
    */
   static createFeatureData(overrides = {}) {
     return {
-    title: `Test Feature ${Date.now()}`,
+      title: `Test Feature ${Date.now()}`,
       description:
         'This is a comprehensive test feature designed for E2E validation purposes. It includes detailed information to meet validation requirements and ensure proper testing of all system components and workflows.',
       business_value:
@@ -390,7 +390,7 @@ class FeatureTestHelpers {
       category: 'enhancement',
       ...overrides,
     };
-}
+  }
 
   /**
    * Suggest a feature via API
@@ -399,8 +399,8 @@ class FeatureTestHelpers {
     const data = this.createFeatureData(featureData);
 
     // Format as JSON for the API;
-const jsonData = JSON.stringify({
-    title: data.title,
+    const jsonData = JSON.stringify({
+      title: data.title,
       description: data.description,
       business_value: data.business_value,
       category: data.category,
@@ -409,11 +409,11 @@ const jsonData = JSON.stringify({
     const _result = await CommandExecutor.executeAPI(
       'suggest-feature',
       [jsonData],
-      { projectRoot: environment.testDir }
+      { projectRoot: environment.testDir },
     );
 
     return { result, featureData: data };
-}
+  }
 
   /**
    * Approve a feature via API
@@ -422,19 +422,19 @@ const jsonData = JSON.stringify({
     environment,
     featureId,
     approver = 'e2e-test',
-    notes = 'E2E test approval'
+    notes = 'E2E test approval',
   ) {
     const approvalData = JSON.stringify({
-    approved_by: approver,
+      approved_by: approver,
       notes: notes,
     });
 
     return CommandExecutor.executeAPI(
       'approve-feature',
       [featureId, approvalData],
-      { projectRoot: environment.testDir }
+      { projectRoot: environment.testDir },
     );
-}
+  }
 
   /**
    * Reject a feature via API
@@ -443,19 +443,19 @@ const jsonData = JSON.stringify({
     environment,
     featureId,
     rejector = 'e2e-test',
-    reason = 'E2E test rejection'
+    reason = 'E2E test rejection',
   ) {
     const rejectionData = JSON.stringify({
-    rejected_by: rejector,
+      rejected_by: rejector,
       reason: reason,
     });
 
     return CommandExecutor.executeAPI(
       'reject-feature',
       [featureId, rejectionData],
-      { projectRoot: environment.testDir }
+      { projectRoot: environment.testDir },
     );
-}
+  }
 
   /**
    * List features with filtering
@@ -464,18 +464,18 @@ const jsonData = JSON.stringify({
     const args = Object.keys(filter).length > 0 ? [JSON.stringify(filter)] : [];
 
     return CommandExecutor.executeAPI('list-features', args, {
-    projectRoot: environment.testDir,
+      projectRoot: environment.testDir,
     });
-}
+  }
 
   /**
    * Get feature statistics
    */
   static async getFeatureStats(environment) {
     return CommandExecutor.executeAPI('feature-stats', [], {
-    projectRoot: environment.testDir,
+      projectRoot: environment.testDir,
     });
-}
+  }
 
   /**
    * Validate feature status in FEATURES.json
@@ -490,12 +490,12 @@ const jsonData = JSON.stringify({
 
     if (feature.status !== expectedStatus) {
       throw new Error(
-        `Expected feature status '${expectedStatus}' but got '${feature.status}'`
+        `Expected feature status '${expectedStatus}' but got '${feature.status}'`,
       );
     }
 
     return feature;
-}
+  }
 }
 
 /**
@@ -509,7 +509,7 @@ class StopHookTestHelpers {
   static async simulateAgentExecution(
     environment,
     agentId = 'e2e-test-agent',
-    duration = 1000
+    duration = 1000,
   ) {
     // Simulate some work
     await new Promise((resolve) => {
@@ -522,10 +522,10 @@ class StopHookTestHelpers {
     );
 
     return {
-    blocked: blockResult.code === 2,
+      blocked: blockResult.code === 2,
       result: blockResult,
     };
-}
+  }
 
   /**
    * Test infinite continue mode
@@ -536,15 +536,16 @@ class StopHookTestHelpers {
     for (let i = 0; i < maxIterations; i++) {
       // Test the stop hook - should always block (exit code 2) in infinite mode
       // eslint-disable-next-line no-await-in-loop -- Sequential processing required for testing infinite continue behavior over time;
-const _result = await CommandExecutor.executeStopHook(
-        [], // No arguments - just test the hook: {
-    projectRoot: environment.testDir,
+      const _result = await CommandExecutor.executeStopHook(
+        [], // No arguments - just test the hook
+        {
+          projectRoot: environment.testDir,
           expectSuccess: false, // Expect blocking behavior
-        }
+        },
       );
 
       iterations.push({
-    iteration: i,
+        iteration: i,
         blocked: result.code === 2,
         result: result,
         success: result.code === 2, // Success means it properly blocked
@@ -555,7 +556,7 @@ const _result = await CommandExecutor.executeStopHook(
     }
 
     return iterations;
-}
+  }
 }
 
 /**
@@ -578,12 +579,12 @@ class PerformanceTestHelpers {
     }
 
     return {
-    min: Math.min(...results),
+      min: Math.min(...results),
       max: Math.max(...results),
       avg: results.reduce((sum, time) => sum + time, 0) / results.length,
       results,
     };
-}
+  }
 
   /**
    * Validate performance thresholds
@@ -593,13 +594,13 @@ class PerformanceTestHelpers {
 
     if (thresholds.maxAvg && metrics.avg > thresholds.maxAvg) {
       issues.push(
-        `Average time ${metrics.avg}ms exceeds threshold ${thresholds.maxAvg}ms`
+        `Average time ${metrics.avg}ms exceeds threshold ${thresholds.maxAvg}ms`,
       );
     }
 
     if (thresholds.maxMax && metrics.max > thresholds.maxMax) {
       issues.push(
-        `Maximum time ${metrics.max}ms exceeds threshold ${thresholds.maxMax}ms`
+        `Maximum time ${metrics.max}ms exceeds threshold ${thresholds.maxMax}ms`,
       );
     }
 
@@ -608,7 +609,7 @@ class PerformanceTestHelpers {
     }
 
     return true;
-}
+  }
 }
 
 /**
@@ -622,7 +623,7 @@ class MultiAgentTestHelpers {
   static async simulateConcurrentAgents(
     environment,
     agentCount = 3,
-    operationsPerAgent = 2
+    operationsPerAgent = 2,
   ) {
     const agents = [];
 
@@ -633,30 +634,30 @@ class MultiAgentTestHelpers {
 
       for (let j = 0; j < operationsPerAgent; j++) {
         const featureData = FeatureTestHelpers.createFeatureData({
-    title: `Agent ${i} Feature ${j}`,
+          title: `Agent ${i} Feature ${j}`,
           description: `Feature created by agent ${i}, operation ${j}`,
         });
 
         operations.push(
-          FeatureTestHelpers.suggestFeature(environment, featureData)
+          FeatureTestHelpers.suggestFeature(environment, featureData),
         );
       }
 
       agents.push({
-    id: agentId,
+        id: agentId,
         operations: Promise.all(operations),
       });
     }
 
     // Wait for all agents to complete;
-const results = await Promise.all(
+    const results = await Promise.all(
       agents.map((agent) =>
-        agent.operations.catch((error) => ({ error, agentId: agent.id }))
-      )
+        agent.operations.catch((error) => ({ error, agentId: agent.id })),
+      ),
     );
 
     return { agents, results };
-}
+  }
 }
 
 /**
@@ -670,10 +671,10 @@ class E2EAssertions {
   static assertCommandSuccess(result, message = '') {
     if (!result.success) {
       throw new Error(
-        `Command failed ${message}: ${result.command}\nStdout: ${result.stdout}\nStderr: ${result.stderr}`
+        `Command failed ${message}: ${result.command}\nStdout: ${result.stdout}\nStderr: ${result.stderr}`,
       );
     }
-}
+  }
 
   /**
    * Assert command failed as expected
@@ -681,10 +682,10 @@ class E2EAssertions {
   static assertCommandFailure(result, message = '') {
     if (result.success) {
       throw new Error(
-        `Command unexpectedly succeeded ${message}: ${result.command}\nStdout: ${result.stdout}`
+        `Command unexpectedly succeeded ${message}: ${result.command}\nStdout: ${result.stdout}`,
       );
     }
-}
+  }
 
   /**
    * Assert output contains text (handles both JSON and text responses)
@@ -693,10 +694,10 @@ class E2EAssertions {
     const fullOutput = `${result.stdout} ${result.stderr}`.toLowerCase();
     if (!fullOutput.includes(expectedText.toLowerCase())) {
       throw new Error(
-        `Output does not contain "${expectedText}" ${message}\nActual output: ${fullOutput}`
+        `Output does not contain "${expectedText}" ${message}\nActual output: ${fullOutput}`,
       );
     }
-}
+  }
 
   /**
    * Assert JSON response contains expected message
@@ -707,14 +708,14 @@ class E2EAssertions {
       const responseText = JSON.stringify(parsed).toLowerCase();
       if (!responseText.includes(expectedText.toLowerCase())) {
         throw new Error(
-          `JSON response does not contain "${expectedText}" ${message}\nActual response: ${responseText}`
+          `JSON response does not contain "${expectedText}" ${message}\nActual response: ${responseText}`,
         );
       }
     } catch (_) {
       // Fall back to text search if not JSON
       this.assertOutputContains(result, expectedText, message);
     }
-}
+  }
 
   /**
    * Assert feature count
@@ -722,10 +723,10 @@ class E2EAssertions {
   static assertFeatureCount(features, expectedCount, message = '') {
     if (features.features.length !== expectedCount) {
       throw new Error(
-        `Expected ${expectedCount} features but got ${features.features.length} ${message}`
+        `Expected ${expectedCount} features but got ${features.features.length} ${message}`,
       );
     }
-}
+  }
 
   /**
    * Extract feature ID from API response
@@ -739,10 +740,10 @@ class E2EAssertions {
       throw new Error('No feature ID found in response');
     } catch (_) {
       throw new Error(
-        `Failed to extract feature ID: ${error.message}\nResponse: ${commandResult.stdout}`
+        `Failed to extract feature ID: ${error.message}\nResponse: ${commandResult.stdout}`,
       );
     }
-}
+  }
 
   /**
    * Assert JSON response contains expected fields
@@ -758,13 +759,13 @@ class E2EAssertions {
     expectedFields.forEach((field) => {
       if (!(field in parsed)) {
         throw new Error(
-          `Response missing expected field '${field}': ${result.stdout}`
+          `Response missing expected field '${field}': ${result.stdout}`,
         );
       }
     });
 
     return parsed;
-}
+  }
 
   /**
    * Assert command succeeded with JSON response
@@ -772,7 +773,7 @@ class E2EAssertions {
   static assertCommandSuccessWithJson(result, message = '') {
     this.assertCommandSuccess(result, message);
     return this.assertJsonResponse(result, ['success']);
-}
+  }
 }
 
 module.exports = {

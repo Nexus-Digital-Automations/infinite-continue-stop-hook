@@ -1,14 +1,14 @@
 {
   "metadata": {
-    "timestamp": "2025-09-29T16:06:20.037Z",
+    "timestamp": "2025-09-29T22:05:42.282Z",
     "reporter": "jest-cicd-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System",
-    "duration_ms": 340
+    "duration_ms": 551
   },
   "cicd_summary": {
     "pipeline_status": "FAILURE",
-    "total_duration_ms": 340,
+    "total_duration_ms": 551,
     "should_block_deployment": true,
     "quality_gate_status": {
       "status": "FAILED",
@@ -51,21 +51,21 @@
       "failed_tests": 0,
       "pending_tests": 0,
       "success_rate": "NaN",
-      "execution_time_ms": 340
+      "execution_time_ms": 551
     },
     "performance_metrics": {
       "average_test_duration": null,
       "slowest_suite": null,
       "memory_usage": {
-        "rss": 215744512,
-        "heap_total": 111935488,
-        "heap_used": 63970688,
-        "external": 4762730,
-        "heap_usage_percent": "57.15"
+        "rss": 283672576,
+        "heap_total": 175554560,
+        "heap_used": 147480368,
+        "external": 4752870,
+        "heap_usage_percent": "84.01"
       },
       "parallel_efficiency": {
         "parallel_efficiency_percent": 0,
-        "total_execution_time_ms": 340,
+        "total_execution_time_ms": 551,
         "serial_time_ms": 0,
         "time_saved_ms": 0
       }
@@ -84,11 +84,11 @@
     }
   },
   "git": {
-    "commit_sha": "94ebadc57bb9d12da2dc8fc00f05f2a580de8fc9",
+    "commit_sha": "21fe6ff6a8256ae118e95ebe83c7beb70822ca9f",
     "branch": "main",
     "author": "Claude <claude@anthropic.com>",
-    "commit_message": "fix: resolve async/await syntax, Promise handling, and asynchronous code errors",
-    "commit_date": "2025-09-29 10:56:19 -0500",
+    "commit_message": "fix: auto-fix linting errors across codebase - trailing commas, unused variables, formatting",
+    "commit_date": "2025-09-29 17:03:37 -0500",
     "tag": null,
     "is_dirty": true,
     "remote_url": "https://github.com/Nexus-Digital-Automations/infinite-continue-stop-hook.git"
@@ -104,7 +104,7 @@
     "locale": "en-US",
     "memory": {
       "total": 25769803776,
-      "available": 911294464
+      "available": 142819328
     },
     "cpu": {
       "cores": 8,

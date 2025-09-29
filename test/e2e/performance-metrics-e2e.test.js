@@ -361,7 +361,8 @@ const mixedQualityData = {
     version: '2.0.0',
         generatedAt: new Date().toISOString(),
         metrics: [
-          // Perfect metric: {
+          // Perfect metric
+          {
     criterion: 'linter-validation',
             timing: {
     startTime: '2025-09-27T10:00:00.000Z',
@@ -374,7 +375,8 @@ const mixedQualityData = {
               memoryUsageAfter: { rss: 52000000, heapUsed: 31000000 },
 },
           },
-          // Missing end time: {
+          // Missing end time
+          {
     criterion: 'type-validation',
             timing: {
     startTime: '2025-09-27T10:05:00.000Z',
@@ -382,7 +384,8 @@ const mixedQualityData = {
             },
             execution: { success: true },
 },
-          // Invalid timestamp: {
+          // Invalid timestamp
+          {
     criterion: 'build-validation',
             timing: {
     startTime: 'invalid-timestamp',
@@ -390,7 +393,8 @@ const mixedQualityData = {
             },
             execution: { success: false },
 },
-          // Missing execution data: {
+          // Missing execution data
+          {
     criterion: 'test-validation',
             timing: {
     startTime: '2025-09-27T10:15:00.000Z',

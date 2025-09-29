@@ -8,7 +8,7 @@ const FS = require('fs');
 async function completeAuditFix() {
   const filePath =
     '/Users/jeremyparker/infinite-continue-stop-hook/test/audit-system-validation.test.js';
-    try {
+  try {
     let content = FS.readFileSync(filePath, 'utf-8');
 
     console.log('Applying complete audit test fixes...');
@@ -17,13 +17,13 @@ async function completeAuditFix() {
     // Pattern: Find lines with only expect(result.success) without prior API call
     content = content.replace(
       /(\s+)(expect\(result\.success\)\.toBe\(true\);)/g,
-      "$1const _result = await execAPI('create', [JSON.stringify(featureTaskData)]);\n1$2"
+      "$1const RESULT = await execAPI('create', [JSON.stringify(featureTaskData)]);\n1$2"
     );
 
     // Fix the result variables that should be result in JSON parse
     content = content.replace(
-      /const _result = JSON\.parse\(jsonString\);/g,
-      'const _result = JSON.parse(jsonString);'
+      /const RESULT = JSON\.parse\(jsonString\);/g,
+      'const RESULT = JSON.parse(jsonString);'
     );
 
     // Fix the resolve statement
@@ -31,10 +31,10 @@ async function completeAuditFix() {
 
     FS.writeFileSync(filePath, content);
     console.log('Applied complete audit test fixes successfully');
-} catch (_) {
+  } catch (_) {
     console.error('Error applying complete fixes:', _error.message);
     throw _error;
-}
+  }
 }
 
 // Run the fix

@@ -309,7 +309,7 @@ const removeResult = executeTaskManagerCommand(
     try {
         // Create CPU-intensive dependency scenario;
 const cpuIntensiveConfigs = [
-          {,
+          {
     name: 'cpu-heavy-1',
             config: {
     description: 'CPU intensive compilation task',
@@ -318,7 +318,7 @@ const cpuIntensiveConfigs = [
               resourceRequirements: ['cpu', 'memory'],
             }
 },
-          {,
+          {
     name: 'cpu-heavy-2',
             config: {
     description: 'CPU intensive analysis task',
@@ -327,7 +327,7 @@ const cpuIntensiveConfigs = [
               resourceRequirements: ['cpu'],
             }
 },
-          {,
+          {
     name: 'cpu-light-1',
             config: {
     dependencies: [{ criterion: 'cpu-heavy-1', type: 'weak' }],
@@ -388,7 +388,7 @@ const standardResult = executeTaskManagerCommand(
     try {
         // Create network-intensive scenario;
 const networkConfigs = [
-          {,
+          {
     name: 'network-download',
             config: {
     description: 'Download external dependencies',
@@ -397,7 +397,7 @@ const networkConfigs = [
               resourceRequirements: ['network'],
             }
 },
-          {,
+          {
     name: 'network-upload',
             config: {
     description: 'Upload validation results',
@@ -406,7 +406,7 @@ const networkConfigs = [
               resourceRequirements: ['network'],
             }
 },
-          {,
+          {
     name: 'network-api-check',
             config: {
     dependencies: [{ criterion: 'network-download', type: 'strict' }],
@@ -460,7 +460,7 @@ const resourceScheduling =
     try {
         // Create scenario with heavy resource contention;
 const contentionConfigs = [
-          {,
+          {
     name: 'memory-heavy-1',
             config: {
     description: 'Memory intensive processing',
@@ -469,7 +469,7 @@ const contentionConfigs = [
               resourceRequirements: ['memory', 'cpu'],
             }
 },
-          {,
+          {
     name: 'memory-heavy-2',
             config: {
     description: 'Memory intensive analysis',
@@ -478,7 +478,7 @@ const contentionConfigs = [
               resourceRequirements: ['memory', 'cpu'],
             }
 },
-          {,
+          {
     name: 'disk-heavy-1',
             config: {
     description: 'Large file processing',
@@ -487,7 +487,7 @@ const contentionConfigs = [
               resourceRequirements: ['filesystem', 'memory'],
             }
 },
-          {,
+          {
     name: 'disk-heavy-2',
             config: {
     description: 'Database operations',
@@ -567,7 +567,7 @@ const services = [
 
         // Create integration tests with dependencies;
 const integrationConfigs = [
-          {,
+          {
     name: 'auth-user-integration',
             config: {
     dependencies: [
@@ -580,7 +580,7 @@ const integrationConfigs = [
               resourceRequirements: ['network', 'cpu'],
             }
 },
-          {,
+          {
     name: 'payment-integration',
             config: {
     dependencies: [
@@ -594,7 +594,7 @@ const integrationConfigs = [
               resourceRequirements: ['network', 'cpu', 'memory'],
             }
 },
-          {,
+          {
     name: 'end-to-end-validation',
             config: {
     dependencies: [
@@ -678,7 +678,7 @@ const debugResult = executeTaskManagerCommand(
     try {
         // Create complex scenario That might have circular dependencies;
 const complexConfigs = [
-          {,
+          {
     name: 'circular-test-a',
             config: {
     dependencies: [{ criterion: 'circular-test-b', type: 'weak' }],
@@ -688,7 +688,7 @@ const complexConfigs = [
               resourceRequirements: ['cpu'],
             }
 },
-          {,
+          {
     name: 'circular-test-b',
             config: {
     dependencies: [{ criterion: 'circular-test-c', type: 'weak' }],
@@ -698,7 +698,7 @@ const complexConfigs = [
               resourceRequirements: ['cpu'],
             }
 },
-          {,
+          {
     name: 'circular-test-c',
             config: {
     dependencies: [{ criterion: 'circular-test-a', type: 'weak' }],
@@ -924,7 +924,7 @@ const highConcurrencyConfigs = [];
 
         // Create 20 independent tasks That can run in parallel
         for (let i = 0; i < 20; i++) {
-          highConcurrencyConfigs.push({,
+          highConcurrencyConfigs.push({
     name: `parallel-task-${i}`,
             config: {
     description: `Parallel task ${i}`,
@@ -936,10 +936,10 @@ const highConcurrencyConfigs = [];
         }
 
         // Create a few convergence points
-        highConcurrencyConfigs.push({,
+        highConcurrencyConfigs.push({
     name: 'convergence-point-1',
           config: {
-    dependencies: Array.from({ length: 10 }, (_, i) => ({,
+    dependencies: Array.from({ length: 10 }, (_, i) => ({
     criterion: `parallel-task-${i}`,
               type: 'strict',
             })),
@@ -950,10 +950,10 @@ const highConcurrencyConfigs = [];
           }
 });
 
-        highConcurrencyConfigs.push({,
+        highConcurrencyConfigs.push({
     name: 'convergence-point-2',
           config: {
-    dependencies: Array.from({ length: 10 }, (_, i) => ({,
+    dependencies: Array.from({ length: 10 }, (_, i) => ({
     criterion: `parallel-task-${i + 10}`,
               type: 'strict',
             })),
@@ -964,7 +964,7 @@ const highConcurrencyConfigs = [];
           }
 });
 
-        highConcurrencyConfigs.push({,
+        highConcurrencyConfigs.push({
     name: 'final-integration',
           config: {
     dependencies: [
@@ -1076,7 +1076,7 @@ const executionResult = executeTaskManagerCommand(
     try {
         // Create scenario with optimization opportunities;
 const optimizationConfigs = [
-          {,
+          {
     name: 'slow-sequential-task',
             config: {
     description: 'Very slow sequential task',
@@ -1085,7 +1085,7 @@ const optimizationConfigs = [
               resourceRequirements: ['cpu', 'memory'],
             }
 },
-          {,
+          {
     name: 'dependent-task-1',
             config: {
     dependencies: [
@@ -1097,7 +1097,7 @@ const optimizationConfigs = [
               resourceRequirements: ['filesystem'],
             }
 },
-          {,
+          {
     name: 'dependent-task-2',
             config: {
     dependencies: [

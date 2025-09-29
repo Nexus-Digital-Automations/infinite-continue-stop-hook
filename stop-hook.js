@@ -109,7 +109,7 @@ function generateValidationProgressReport(
       // Implementation would go here to load custom rules
       return customRules;
     } catch (_) {
-      logger.warn(`Failed to load custom validation rules: ${error.message}`);
+      logger.warn(`Failed to load custom validation rules: ${_.message}`);
       return customRules;
     }
   }
@@ -134,7 +134,7 @@ function generateValidationProgressReport(
   // Process validation results from flag data
   if (flagData.validation_results) {
     for (const criteria of validationCriteria) {
-      const _result = flagData.validation_results[criteria];
+      const result = flagData.validation_results[criteria];
       if (result) {
         progressReport.validationDetails.push({
           criterion: criteria,
@@ -248,8 +248,8 @@ function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
       loggers.stopHook.warn(
         'Invalid validation progress file detected - cleaning up',
         {
-          error: error.message,
-          errorName: error.name,
+          error: _.message,
+          errorName: _.name,
           stopFlagPath,
         },
       );
@@ -313,15 +313,13 @@ function cleanupStaleAgentsInProject(
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path constructed from trusted hook configuration
     todoData = JSON.parse(FS.readFileSync(todoPath, 'utf8'));
   } catch (_) {
-    logger.addFlow(
-      `Failed to read TASKS.json in ${projectPath}: ${_1.message}`,
-    );
+    logger.addFlow(`Failed to read TASKS.json in ${projectPath}: ${_.message}`);
     return {
       agentsRemoved: 0,
       tasksUnassigned: 0,
       orphanedTasksReset: 0,
       projectPath,
-      error: _1.message,
+      error: _.message,
     };
   }
 
@@ -356,7 +354,7 @@ function cleanupStaleAgentsInProject(
     const isActive = timeSinceHeartbeat < staleAgentTimeout;
 
     if (!isActive) {
-      staleAgents.push(_agentId);
+      staleAgents.push(agentId);
     }
   }
 
@@ -420,14 +418,14 @@ function cleanupStaleAgentsInProject(
       logger.addFlow(`Updated ${projectPath}/TASKS.json with cleanup results`);
     } catch (_) {
       logger.addFlow(
-        `Failed to write TASKS.json in ${projectPath}: ${_1.message}`,
+        `Failed to write TASKS.json in ${projectPath}: ${_.message}`,
       );
       return {
         agentsRemoved: 0,
         tasksUnassigned: 0,
         orphanedTasksReset: 0,
         projectPath,
-        error: _1.message,
+        error: _.message,
       };
     }
   }
@@ -466,7 +464,7 @@ async function cleanupStaleAgentsAcrossProjects(logger, _category = 'general') {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- Stop hook path validated through hook configuration system
       if (FS.existsSync(projectPath)) {
         const _result = await cleanupStaleAgentsInProject(projectPath, logger);
-        return result;
+        return _result;
       } else {
         logger.addFlow(
           `Project path does not exist: ${projectPath} - skipping`,
@@ -537,7 +535,7 @@ async function autoSortTasksByPriority(_taskManager, _category = 'general') {
       const title = (task.title || '').toLowerCase();
       const description = (task.description || '').toLowerCase();
       const CATEGORY = task.category ? String(task.category).toLowerCase() : '';
-      const allText = `${title} ${description} ${_category}`;
+      const allText = `${title} ${description} ${CATEGORY}`;
 
       // ERROR detection (highest priority)
       const errorPatterns = [
@@ -663,7 +661,7 @@ async function autoSortTasksByPriority(_taskManager, _category = 'general') {
       }
 
       // STEP 2: Ensure all tasks have required task.category field for validation
-      if (!task.task.category) {
+      if (!task.category) {
         const taskPrefix = getCurrentPrefix(task.id || '');
         switch (taskPrefix) {
           case 'error':
@@ -1044,7 +1042,7 @@ process.stdin.on('end', async () => {
     } catch (_) {
       logger.addFlow(`TASKS.json corruption check failed: ${_1.message}`);
       loggers.stopHook.error('TASKS.json corruption check failed', {
-        error: _1.message,
+        error: _.message,
         errorName: _1.name,
         stack: _1.stack,
         component: 'StopHook',
@@ -1119,7 +1117,7 @@ process.stdin.on('end', async () => {
         );
       }
     } catch (_) {
-      logger.addFlow(`Multi-project cleanup failed: ${_1.message}`);
+      logger.addFlow(`Multi-project cleanup failed: ${_.message}`);
       // Continue with local cleanup even if multi-project cleanup fails
     }
 
@@ -1148,9 +1146,9 @@ process.stdin.on('end', async () => {
       );
 
       if (isActive) {
-        activeAgents.push(_agentId);
+        activeAgents.push(agentId);
       } else {
-        staleAgents.push(_agentId);
+        staleAgents.push(agentId);
       }
     }
 
@@ -1596,9 +1594,7 @@ When ALL TodoWrite tasks are complete And project achieves perfection, agents mu
       taskStatus = await taskManager.getTaskStatus();
     } catch (_) {
       // Handle corrupted TASKS.json by using autoFixer
-      logger.addFlow(
-        `Task status failed, attempting auto-fix: ${error.message}`,
-      );
+      logger.addFlow(`Task status failed, attempting auto-fix: ${_.message}`);
       const fixResult = await taskManager.autoFix(todoPath);
       if (fixResult.fixed) {
         taskStatus = await taskManager.getTaskStatus();
@@ -1650,7 +1646,7 @@ When ALL TodoWrite tasks are complete And project achieves perfection, agents mu
 
       loggers.stopHook.warn('AUTOMATIC TASK ARCHIVAL WARNING', {
         status: 'AUTOMATIC TASK ARCHIVAL WARNING',
-        error: _1.message,
+        error: _.message,
         errorName: _1.name,
         severity: 'non-critical',
         impact: "Won't prevent continued operation",
