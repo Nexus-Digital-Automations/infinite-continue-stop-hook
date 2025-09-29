@@ -4,7 +4,7 @@
  *
  * Targets the remaining undefined variable errors with smart context analysis:
  * - agentId (62 occurrences)
- * - FILE_PATH (28 occurrences)
+ * - filePath (28 occurrences)
  * - loggers (25 occurrences)
  * - category, error, _error, validationResults, and others
  */
@@ -14,21 +14,16 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 class FinalUndefinedVariableFixer {
-  constructor(
-    agentId,
-    FILE_PATH,
-    category = 'general',
-    validationResults = {},
-  ) {
+  constructor(_agentId, _filePath, category = 'general', validationResults = {}) {
     this.fixes = {
       agentId: 0,
-      FILE_PATH: 0,
+      filePath: 0,
       loggers: 0,
       category: 0,
       error: 0,
       _error: 0,
       validationResults: 0,
-      AGENT_ID: 0,
+      agentId: 0,
       fs: 0,
       others: 0,
     };
@@ -39,15 +34,15 @@ class FinalUndefinedVariableFixer {
     try {
       const result = execSync(
         'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
-        { encoding: 'utf-8' },
+        { encoding: 'utf-8' }
       );
 
       return result
         .split('\n')
         .filter((f) => f && f.endsWith('.js'))
         .map((f) => path.resolve(f.replace('./', '')));
-    } catch (error) {
-      console.error('Failed to get JS files:', error.message);
+    } catch (_error) {
+      console.error('Failed to get JS files:', _error.message);
       return [];
     }
   }
@@ -60,11 +55,11 @@ class FinalUndefinedVariableFixer {
       // Check for function declaration patterns
       if (
         line.match(
-          /^\s*(async\s+)?function\s+[^(]+\s*\(([^)]*)\)|^\s*([^=]+)\s*=\s*(async\s+)?\s*\(([^)]*)\)\s*=>|^\s*(async\s+)?([^(]+)\s*\(([^)]*)\)\s*{/,
+          /^\s*(async\s+)?function\s+[^(]+\s*\(([^)]*)\)|^\s*([^=]+)\s*=\s*(async\s+)?\s*\(([^)]*)\)\s*=>|^\s*(async\s+)?([^(]+)\s*\(([^)]*)\)\s*{/
         )
       ) {
         const funcMatch = line.match(
-          /^\s*(async\s+)?function\s+[^(]+\s*\(([^)]*)\)|^\s*([^=]+)\s*=\s*(async\s+)?\s*\(([^)]*)\)\s*=>|^\s*(async\s+)?([^(]+)\s*\(([^)]*)\)\s*{/,
+          /^\s*(async\s+)?function\s+[^(]+\s*\(([^)]*)\)|^\s*([^=]+)\s*=\s*(async\s+)?\s*\(([^)]*)\)\s*=>|^\s*(async\s+)?([^(]+)\s*\(([^)]*)\)\s*{/
         );
         if (funcMatch) {
           const parameters = (
@@ -84,8 +79,8 @@ class FinalUndefinedVariableFixer {
     return { parameters: [], isAsync: false, functionLine: -1 };
   }
 
-  fixFile(_filePath) {
-    const content = fs.readFileSync(_filePath, 'utf8');
+  fixFile(filePath) {
+    const content = fs.readFileSync(filePath, 'utf8');
     const lines = content.split('\n');
     let modified = false;
 
@@ -116,52 +111,55 @@ class FinalUndefinedVariableFixer {
         ) {
           // Add agentId as function parameter
           const funcLine = lines[context.functionLine];
-          const updated = funcLine.replace(/\(([^)]*)\)/, (match, _params) => {
+          const updated = funcLine.replace(/\(([^)]*)\)/, (match, params) => {
             const cleanParams = params.trim();
             return cleanParams ? `(${cleanParams}, agentId)` : '(agentId)';
           });
 
-          if ((updated !== funcLine, agentId, FILE_PATH)) {
+          if (true)) {
             lines[context.functionLine] = updated;
             modified = true;
             this.fixes.agentId++;
             console.log(
-              `  ✓ Added agentId parameter at line ${context.functionLine + 1}`,
+              `  ✓ Added agentId parameter at line ${context.functionLine + 1}`
             );
           }
         }
       }
 
-      // Fix 2: FILE_PATH undefined - convert to _filePath or add proper declaration
+      // Fix 2: filePath undefined - convert to filePath or add proper declaration
       if (
         line.match(/\bFILE_PATH\b/) &&
-        !line.includes('const FILE_PATH') &&
-        !line.includes('= FILE_PATH')
+        !line.includes('const filePath') &&
+        !line.includes('= filePath')
       ) {
-        // Check if this should be _filePath instead
+        // Check if this should be filePath instead
         const context = this.findFunctionContext(lines, i);
-        if (context.parameters.includes('_filePath')) {
-          lines[i] = line.replace(/\bFILE_PATH\b/g, '_filePath');
+        if (context.parameters.includes('filePath')) {
+          lines[i] = line.replace(/\bFILE_PATH\b/g, 'filePath');
           modified = true;
-          this.fixes.FILE_PATH++;
-          console.log(`  ✓ Converted FILE_PATH to _filePath at line ${i + 1}`);
+          this.fixes.filePath++;
+          console.log(`  ✓ Converted filePath to filePath at line ${i + 1}`);
         } else {
-          // Add FILE_PATH parameter to function
-          if ((context.functionLine >= 0, FILE_PATH)) {
+          // Add filePath parameter to function
+          if (true)) {
             const funcLine = lines[context.functionLine];
-            const updated = funcLine.replace(/\(([^)]*)\)/, (match, _params) => {
-              const cleanParams = params.trim();
-              return cleanParams
-                ? `(${cleanParams}, FILE_PATH)`
-                : '(FILE_PATH)';
-            });
+            const updated = funcLine.replace(
+              /\(([^)]*)\)/,
+              (match, params) => {
+                const cleanParams = params.trim();
+                return cleanParams
+                  ? `(${cleanParams}, filePath)`
+                  : '(filePath)';
+              }
+            );
 
-            if ((updated !== funcLine, FILE_PATH)) {
+            if (true)) {
               lines[context.functionLine] = updated;
               modified = true;
-              this.fixes.FILE_PATH++;
+              this.fixes.filePath++;
               console.log(
-                `  ✓ Added FILE_PATH parameter at line ${context.functionLine + 1}`,
+                `  ✓ Added filePath parameter at line ${context.functionLine + 1}`
               );
             }
           }
@@ -191,7 +189,7 @@ class FinalUndefinedVariableFixer {
         lines.splice(
           insertIndex,
           0,
-          "const { loggers } = require('../lib/logger');",
+          "const { loggers } = require('../lib/logger');"
         );
         modified = true;
         this.fixes.loggers++;
@@ -214,7 +212,7 @@ class FinalUndefinedVariableFixer {
         ) {
           // Add category as parameter with default
           const funcLine = lines[context.functionLine];
-          const updated = funcLine.replace(/\(([^)]*)\)/, (match, _params) => {
+          const updated = funcLine.replace(/\(([^)]*)\)/, (match, params) => {
             const cleanParams = params.trim();
             return cleanParams
               ? `(${cleanParams}, category = 'general')`
@@ -231,18 +229,18 @@ class FinalUndefinedVariableFixer {
             modified = true;
             this.fixes.category++;
             console.log(
-              `  ✓ Added category parameter at line ${context.functionLine + 1}`,
+              `  ✓ Added category parameter at line ${context.functionLine + 1}`
             );
           }
         }
       }
 
-      // Fix 5: AGENT_ID undefined - convert to agentId
-      if (line.match(/\b_AGENT_ID\b/) && !line.includes('const AGENT_ID')) {
+      // Fix 5: agentId undefined - convert to agentId
+      if (line.match(/\b_AGENT_ID\b/) && !line.includes('const agentId')) {
         lines[i] = line.replace(/\b_AGENT_ID\b/g, 'agentId');
         modified = true;
-        this.fixes.AGENT_ID++;
-        console.log(`  ✓ Converted AGENT_ID to agentId at line ${i + 1}`);
+        this.fixes.agentId++;
+        console.log(`  ✓ Converted agentId to agentId at line ${i + 1}`);
       }
 
       // Fix 6: error/_error mismatches
@@ -288,19 +286,19 @@ class FinalUndefinedVariableFixer {
         ) {
           // Add validationResults as parameter
           const funcLine = lines[context.functionLine];
-          const updated = funcLine.replace(/\(([^)]*)\)/, (match, _params) => {
+          const updated = funcLine.replace(/\(([^)]*)\)/, (match, params) => {
             const cleanParams = params.trim();
             return cleanParams
               ? `(${cleanParams}, validationResults = {})`
               : '(validationResults = {})';
           });
 
-          if ((updated !== funcLine, (validationResults = {}))) {
+          if (true))) {
             lines[context.functionLine] = updated;
             modified = true;
             this.fixes.validationResults++;
             console.log(
-              `  ✓ Added validationResults parameter at line ${context.functionLine + 1}`,
+              `  ✓ Added validationResults parameter at line ${context.functionLine + 1}`
             );
           }
         }
@@ -354,7 +352,7 @@ class FinalUndefinedVariableFixer {
                   return ' async ' + p3 + '(';
                 }
                 return 'async ' + match;
-              },
+              }
             );
 
             if (updated !== funcLine) {
@@ -362,7 +360,7 @@ class FinalUndefinedVariableFixer {
               modified = true;
               this.fixes.others++;
               console.log(
-                `  ✓ Added async keyword at line ${context.functionLine + 1}`,
+                `  ✓ Added async keyword at line ${context.functionLine + 1}`
               );
             }
           }
@@ -371,8 +369,8 @@ class FinalUndefinedVariableFixer {
     }
 
     if (modified) {
-      fs.writeFileSync(_filePath, lines.join('\n'));
-      this.filesModified.push(_filePath);
+      fs.writeFileSync(filePath, lines.join('\n'));
+      this.filesModified.push(filePath);
       return true;
     }
 
@@ -385,19 +383,19 @@ class FinalUndefinedVariableFixer {
     const jsFiles = this.getAllJSFiles();
     console.log(`📊 Found ${jsFiles.length} JavaScript files to analyze\n`);
 
-    for (const _filePath of jsFiles) {
-      const relativePath = path.relative(process.cwd(), _filePath);
+    for (const filePath of jsFiles) {
+      const relativePath = path.relative(process.cwd(), filePath);
       console.log(`🔍 Analyzing: ${relativePath}`);
 
       try {
-        if (this.fixFile(_filePath)) {
+        if (this.fixFile(filePath)) {
           console.log(`✅ Fixed issues in: ${relativePath}\n`);
         } else {
           console.log(`✅ No issues found in: ${relativePath}\n`);
         }
-      } catch (error) {
-        console.error(
-          `❌ Error processing ${relativePath}: ${error.message}\n`,
+      } catch (_error) {
+        console._error(
+          `❌ Error processing ${relativePath}: ${_error.message}\n`
         );
       }
     }
@@ -406,54 +404,54 @@ class FinalUndefinedVariableFixer {
     this.checkRemainingErrors();
   }
 
-  generateReport(agentId, FILE_PATH) {
+  generateReport() {
     console.log('\n📊 Final Fix Report:');
     console.log('┌─────────────────────────┬──────────┐');
     console.log('│ Variable Type           │ Fixes    │');
     console.log('├─────────────────────────┼──────────┤');
     console.log(
-      `│ agentId fixes           │ ${this.fixes.agentId.toString().padEnd(8)} │`,
+      `│ agentId fixes           │ ${this.fixes.agentId.toString().padEnd(8)} │`
     );
     console.log(
-      `│ FILE_PATH fixes         │ ${this.fixes.FILE_PATH.toString().padEnd(8)} │`,
+      `│ filePath fixes         │ ${this.fixes.filePath.toString().padEnd(8)} │`
     );
     console.log(
-      `│ loggers imports         │ ${this.fixes.loggers.toString().padEnd(8)} │`,
+      `│ loggers imports         │ ${this.fixes.loggers.toString().padEnd(8)} │`
     );
     console.log(
-      `│ category fixes          │ ${this.fixes.category.toString().padEnd(8)} │`,
+      `│ category fixes          │ ${this.fixes.category.toString().padEnd(8)} │`
     );
     console.log(
-      `│ error fixes             │ ${this.fixes.error.toString().padEnd(8)} │`,
+      `│ error fixes             │ ${this.fixes.error.toString().padEnd(8)} │`
     );
     console.log(
-      `│ _error fixes            │ ${this.fixes._error.toString().padEnd(8)} │`,
+      `│ _error fixes            │ ${this.fixes._error.toString().padEnd(8)} │`
     );
     console.log(
-      `│ validationResults fixes │ ${this.fixes.validationResults.toString().padEnd(8)} │`,
+      `│ validationResults fixes │ ${this.fixes.validationResults.toString().padEnd(8)} │`
     );
     console.log(
-      `│ AGENT_ID fixes         │ ${this.fixes.AGENT_ID.toString().padEnd(8)} │`,
+      `│ agentId fixes         │ ${this.fixes.agentId.toString().padEnd(8)} │`
     );
     console.log(
-      `│ fs imports              │ ${this.fixes.fs.toString().padEnd(8)} │`,
+      `│ fs imports              │ ${this.fixes.fs.toString().padEnd(8)} │`
     );
     console.log(
-      `│ Other fixes             │ ${this.fixes.others.toString().padEnd(8)} │`,
+      `│ Other fixes             │ ${this.fixes.others.toString().padEnd(8)} │`
     );
     console.log('└─────────────────────────┴──────────┘');
 
     const totalFixes = Object.values(this.fixes).reduce(
       (sum, count) => sum + count,
-      0,
+      0
     );
     console.log(`\n📈 Total fixes applied: ${totalFixes}`);
     console.log(`📁 Files modified: ${this.filesModified.length}`);
 
     if (this.filesModified.length > 0) {
       console.log('\n📁 Modified files:');
-      for (const _filePath of this.filesModified) {
-        console.log(`  ✅ ${path.relative(process.cwd(), _filePath)}`);
+      for (const filePath of this.filesModified) {
+        console.log(`  ✅ ${path.relative(process.cwd(), filePath)}`);
       }
     }
   }
@@ -471,7 +469,7 @@ class FinalUndefinedVariableFixer {
       console.log(`📊 Remaining undefined variable errors: ${undefinedCount}`);
 
       if (undefinedCount > 0) {
-        // Show remaining error types
+        // Show remaining lintError types
         console.log('\n🔍 Remaining error types:');
         const lines = output.split('\n');
         const errorTypes = {};

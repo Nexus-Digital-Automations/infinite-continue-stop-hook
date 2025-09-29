@@ -20,13 +20,13 @@ const SPECIFIC_FIXES = [
       // Line 121: result.testCases should be result.testCases
       {
         pattern: /(\s+)(result\.testCases\s*=)/g,
-        replacement: '$1RESULT.testCases =',
+        replacement: '$1result.testCases ='
         description: 'Fix result.testCases to result.testCases',
       },
       // Line 133: result.failureDetails should be result.failureDetails
       {
         pattern: /(\s+)(result\.failureDetails\s*=)/g,
-        replacement: '$1RESULT.failureDetails =',
+        replacement: '$1result.failureDetails ='
         description: 'Fix result.failureDetails to result.failureDetails',
       },
       // Line 155: return result should be return result
@@ -105,41 +105,10 @@ class RemainingResultFixer {
       console.log(
         '✅ Remaining result/result variable issues fixed successfully'
       );
-    } catch (_) {
-      console.error('❌ Failed to fix remaining issues:', _error.message);
-      throw new Error(`Failed to fix remaining issues: ${_error.message}`);
-    }
-  }
+    } catch (_error) {
+      console.error('❌ Failed to fix remaining issues:')}`);
 
-  applySpecificFixes(fixSpec) {
-    const { file, fixes } = fixSpec;
-
-    if (!FS.existsSync(file)) {
-      console.warn(`⚠️ File not found: ${file}`);
-      return;
-    }
-
-    console.log(`🔧 Processing: ${PATH.relative(process.cwd(), file)}`);
-
-    let content = FS.readFileSync(file, 'utf8');
-    let modified = false;
-    let totalChanges = 0;
-
-    for (const fix of fixes) {
-      const beforeCount = (content.match(fix.pattern) || []).length;
-      content = content.replace(fix.pattern, fix.replacement);
-      const afterCount = (content.match(fix.pattern) || []).length;
-
-      const changes = beforeCount - afterCount;
-      if (changes > 0) {
-        modified = true;
-        totalChanges += changes;
-        console.log(`  📝 ${fix.description}: ${changes} fixes`);
-      }
-    }
-
-    if (modified) {
-      FS.writeFileSync(file, content);
+    let content = FS.readFileSync(file);
       this.fixedFiles.push({
         path: file,
         changes: totalChanges,
@@ -154,37 +123,18 @@ class RemainingResultFixer {
     }
   }
 
-  fixTestFile(FILE_PATH, FILE_PATH, FILE_PATH, FILE_PATH) {
+  fixTestFile(filePath) {
     console.log(
-      `🔧 Processing test file: ${PATH.relative(process.cwd(), FILE_PATH)}`
-    );
-
-    let content = FS.readFileSync(FILE_PATH, 'utf8');
-    let modified = false;
-    let totalChanges = 0;
-
-    // Fix patterns where result is declared but result is used
-    const fixes = [
-      // Fix cases where result is declared but result is referenced
-      {
-        pattern:
-          /(\s+const\s+result\s*=\s*[^;]+;\s*)([^}]*?result\.[a-zA-Z_][a-zA-Z0-9_]*)/g,
-        replacement: (match, declaration, usage) => {
-          return declaration + usage.replace(/result\./g, 'result.');
-        },
-        description: 'Fix result references in result scope',
-      },
-      // Fix unused result variables - convert to result
-      {
-        pattern: /const\s+result\s*=\s*([^;]+);\s*([^}]*?)result\s*=/g,
+      `🔧 Processing test file: ${PATH.relative(process.cwd()) => {
+          return declaration + usage.replace(/result\./g);\s*([^}]*?)result\s*=/g,
         replacement: 'const result = $1;\n$2result =',
         description: 'Convert result to result for consistency',
       },
-      // Fix agentId/AGENT_ID inconsistencies
+      // Fix agentId/agentId inconsistencies
       {
-        pattern: /const\s+agentId\s*=\s*([^;]+);\s*([^}]*?)AGENT_ID/g,
-        replacement: 'const AGENT_ID = $1;\n$2__agentId',
-        description: 'Fix agentId/AGENT_ID consistency',
+        pattern: /const\s+agentId\s*=\s*([^;]+);\s*([^}]*?)agentId/g,
+        replacement: 'const agentId = $1;\n$2__agentId',
+        description: 'Fix agentId/agentId consistency',
       },
     ];
 
@@ -254,17 +204,17 @@ class RemainingResultFixer {
     }
 
     if (modified) {
-      FS.writeFileSync(_filePath, content);
+      FS.writeFileSync(filePath, content);
       this.fixedFiles.push({
-        path: _filePath,
+        path: filePath,
         changes: totalChanges,
       });
       console.log(
-        `✅ Fixed ${totalChanges} issues in ${PATH.relative(process.cwd(), _filePath)}`
+        `✅ Fixed ${totalChanges} issues in ${PATH.relative(process.cwd(), filePath)}`
       );
     } else {
       console.log(
-        `✅ No issues found in ${PATH.relative(process.cwd(), _filePath)}`
+        `✅ No issues found in ${PATH.relative(process.cwd(), filePath)}`
       );
     }
   }
