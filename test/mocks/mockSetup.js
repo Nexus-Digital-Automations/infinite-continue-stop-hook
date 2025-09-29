@@ -326,7 +326,7 @@ class MockManager {
     }
 
     // Restore fs methods
-    const FS = require('fs');
+    // Use existing FS declaration from line 168
     [
       'existsSync',
       'readFileSync',

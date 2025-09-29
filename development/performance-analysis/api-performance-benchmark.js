@@ -41,7 +41,7 @@ class APIPerformanceBenchmark {
   /**
    * Execute API command and measure performance
    */
-  executeCommand(command, args = [], iterations = 5) {
+  async executeCommand(command, args = [], iterations = 5) {
     const results = [];
 
     for (let i = 0; i < iterations; i++) {
@@ -75,7 +75,7 @@ class APIPerformanceBenchmark {
           responseTime: -1,
           memoryDelta: -1,
           success: false,
-          errorDetails: error.message,
+          errorDetails: _error.message,
           outputSize: 0,
         });
       }
@@ -120,7 +120,7 @@ class APIPerformanceBenchmark {
         } catch (_error) {
           resolve({
             success: false,
-            error: `Parse error: ${error.message}`,
+            error: `Parse error: ${_error.message}`,
             stdout,
             stderr,
             exitCode: code,
@@ -176,7 +176,7 @@ class APIPerformanceBenchmark {
   /**
    * Benchmark all critical API endpoints
    */
-  benchmarkAllEndpoints() {
+  async benchmarkAllEndpoints() {
     loggers.stopHook.log(
       '🚀 Starting comprehensive API performance benchmark...\n',
     );
@@ -416,7 +416,7 @@ class APIPerformanceBenchmark {
   /**
    * Load testing simulation
    */
-  performLoadTest(endpoint = 'list', concurrency = 5, duration = 30) {
+  async performLoadTest(endpoint = 'list', concurrency = 5, duration = 30) {
     loggers.app.info(
       `🔥 Starting load test: ${endpoint} (${concurrency} concurrent, ${duration}s)`,
     );
@@ -458,7 +458,7 @@ class APIPerformanceBenchmark {
   /**
    * Load test worker
    */
-  loadTestWorker(endpoint, endTime, workerId) {
+  async loadTestWorker(endpoint, endTime, workerId) {
     const results = [];
     let requestCount = 0;
 
@@ -484,7 +484,7 @@ class APIPerformanceBenchmark {
           requestCount: ++requestCount,
           responseTime: -1,
           success: false,
-          error: error.message,
+          error: _error.message,
           timestamp: Date.now(),
         });
       }
@@ -756,7 +756,7 @@ async function main() {
 
     loggers.stopHook.log(`\n📄 Full report: ${outputFile}`);
   } catch (_error) {
-    loggers.stopHook.error('❌ Benchmark failed:', error);
+    loggers.stopHook.error('❌ Benchmark failed:', _error);
     throw error;
   }
 }

@@ -42,7 +42,7 @@ function fixVariableNames(_filePath) {
     if (beforeOperationResult !== fixed) {
       changes++;
       console.log(
-        `Fixed _operationresult references in ${PATH.basename(_filePath)}`,
+        `Fixed _operationresult references in ${PATH.basename(_filePath)}`
       );
     }
 

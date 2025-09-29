@@ -61,7 +61,7 @@ class SecurityUtils {
    * @returns {Promise<string>} File contents
    */
   static safeReadFile(basePath, filePath, encoding = 'utf-8') {
-    const safePath = this.validatePath(basePath, _filePath);
+    const safePath = this.validatePath(basePath, filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
     return FS.readFile(safePath, encoding);
   }
@@ -73,8 +73,8 @@ class SecurityUtils {
    * @param {string} content - Content to write
    * @returns {Promise<void>}
    */
-  static safeWriteFile(basePath, filePath, content) {
-    const safePath = this.validatePath(basePath, _filePath);
+  static async safeWriteFile(basePath, filePath, content) {
+    const safePath = this.validatePath(basePath, filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
     await FS.mkdir(path.dirname(safePath), { recursive: true });
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
@@ -88,8 +88,8 @@ class SecurityUtils {
    * @param {string} content - Content to append
    * @returns {Promise<void>}
    */
-  static safeAppendFile(basePath, filePath, content) {
-    const safePath = this.validatePath(basePath, _filePath);
+  static async safeAppendFile(basePath, filePath, content) {
+    const safePath = this.validatePath(basePath, filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
     await FS.mkdir(path.dirname(safePath), { recursive: true });
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
@@ -163,7 +163,7 @@ class AUDIT_INTEGRATION {
    * @param {Object} taskDetails - Original task details
    * @returns {Object} Created audit task information
    */
-  createAuditTask(originalTaskId, implementerAgentId, taskDetails = {}) {
+  async createAuditTask(originalTaskId, implementerAgentId, taskDetails = {}) {
     this.logger.log(
       `🔍 Creating audit task for completed feature: ${originalTaskId}`,
     );
@@ -196,7 +196,7 @@ class AUDIT_INTEGRATION {
    * @param {Object} taskDetails - Task details
    * @returns {Object} Complete audit task definition
    */
-  generateAuditTaskDefinition(
+  async generateAuditTaskDefinition(
     originalTaskId,
     implementerAgentId,
     taskDetails,
@@ -338,7 +338,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
    * Load project-specific success criteria from task-requirements.md
    * @returns {Object} Parsed project success criteria
    */
-  loadProjectSuccessCriteria() {
+  async loadProjectSuccessCriteria() {
     try {
       // Use safe file reading with path validation
       const content = await SecurityUtils.safeReadFile(
@@ -409,7 +409,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
    * Generate validation commands for the current project
    * @returns {Array} Array of validation command objects
    */
-  generateValidationCommands() {
+  async generateValidationCommands() {
     let hasPackageJson = false;
 
     try {
@@ -468,7 +468,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
    * @param {Object} auditTaskData - Complete audit task definition
    * @returns {Object} Created task information
    */
-  createTaskViaApi(auditTaskData) {
+  async createTaskViaApi(auditTaskData) {
     const command = `timeout ${this.config.auditTimeoutMs / 1000}s node "${this.taskManagerApiPath}" create '${JSON.stringify(auditTaskData)}'`;
 
     try {
@@ -530,7 +530,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
    * @returns {string|null} Detected role or null
    */
   detectAgentRole(_AGENT_ID) {
-    const lowerAgentId = agentId.toLowerCase();
+    const lowerAgentId = _AGENT_ID.toLowerCase();
 
     for (const [role, patterns] of Object.entries(this.agentRolePatterns)) {
       if (patterns.some((pattern) => lowerAgentId.includes(pattern))) {
@@ -547,7 +547,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
    * @param {string} auditTaskId - Created audit task ID
    * @param {string} implementerAgentId - Implementer agent ID
    */
-  logAuditTaskCreation(originalTaskId, auditTaskId, implementerAgentId) {
+  async logAuditTaskCreation(originalTaskId, auditTaskId, implementerAgentId) {
     const logEntry = {
       timestamp: new Date().toISOString(),
       event: 'audit_task_created',

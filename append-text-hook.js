@@ -37,7 +37,7 @@ process.stdin.on('end', () => {
     };
 
     loggers.stopHook.info(JSON.stringify(modifiedData));
-  } catch (_error) {
+  } catch {
     // If JSON parsing fails, treat as plain text And append
     const appendText =
       '\n\ncontinue. make sure to think And use concurrent subagents when appropriate';

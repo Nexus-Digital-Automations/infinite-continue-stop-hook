@@ -18,7 +18,7 @@ class SystematicLintingFixer {
   run() {
     try {
       console.log(
-        '🔧 Starting systematic linting fix for remaining 2437 issues...',
+        '🔧 Starting systematic linting fix for remaining 2437 issues...'
       );
 
       // Get all JavaScript files
@@ -142,7 +142,7 @@ class SystematicLintingFixer {
       // Replace result.something with result.something (but not in strings)
       fixedContent = fixedContent.replace(
         /(?<!['"`])(\s+)result\.([\w]+)/g,
-        '$1RESULT.$2',
+        '$1RESULT.$2'
       );
     }
 
@@ -250,7 +250,7 @@ class SystematicLintingFixer {
     // Fix catch blocks that reference error without defining it
     fixedContent = fixedContent.replace(
       /catch\s*\(\s*\)\s*{([^}]*?)(\berror\b)([^}]*?)}/g,
-      'catch (_error) {$1_error$3}',
+      'catch (_error) {$1_error$3}'
     );
 
     return { content: fixedContent };

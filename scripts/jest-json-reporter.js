@@ -89,8 +89,8 @@ class JestJsonReporter {
           failed_suites: report.summary.numFailedTestSuites,
         },
         null,
-        2,
-      ),
+        2
+      )
     );
   }
 

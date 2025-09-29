@@ -76,10 +76,10 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
       expect(successCriteriaManager.taskManager).toBe(mockTaskManager);
       expect(successCriteriaManager.withTimeout).toBe(mockWithTimeout);
       expect(successCriteriaManager.getGuideForError).toBe(
-        mockGetGuideForError,
+        mockGetGuideForError
       );
       expect(successCriteriaManager.getFallbackGuide).toBe(
-        mockGetFallbackGuide,
+        mockGetFallbackGuide
       );
     });
 
@@ -100,27 +100,27 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
 
     test('should have correct default criteria templates', () => {
       expect(successCriteriaManager.defaultCriteriaTemplates).toHaveProperty(
-        'basic',
+        'basic'
       );
       expect(successCriteriaManager.defaultCriteriaTemplates).toHaveProperty(
-        'comprehensive',
+        'comprehensive'
       );
       expect(successCriteriaManager.defaultCriteriaTemplates).toHaveProperty(
-        'enterprise',
+        'enterprise'
       );
 
       // Verify basic template contains core criteria
       expect(successCriteriaManager.defaultCriteriaTemplates.basic).toContain(
-        'Linter Perfection',
+        'Linter Perfection'
       );
       expect(successCriteriaManager.defaultCriteriaTemplates.basic).toContain(
-        'Build Success',
+        'Build Success'
       );
       expect(successCriteriaManager.defaultCriteriaTemplates.basic).toContain(
-        'Runtime Success',
+        'Runtime Success'
       );
       expect(successCriteriaManager.defaultCriteriaTemplates.basic).toContain(
-        'Test Integrity',
+        'Test Integrity'
       );
     });
 
@@ -154,7 +154,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
     test('should successfully add criteria to task with empty criteria', async () => {
       const result = await successCriteriaManager.addCriteria(
         testTaskId,
-        testCriteria,
+        testCriteria
       );
 
       expect(result.success).toBe(true);
@@ -180,7 +180,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
 
       const result = await successCriteriaManager.addCriteria(
         testTaskId,
-        testCriteria,
+        testCriteria
       );
 
       expect(result.success).toBe(true);
@@ -198,7 +198,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
       const result = await successCriteriaManager.addCriteria(
         testTaskId,
         testCriteria,
-        { replace: true },
+        { replace: true }
       );
 
       expect(result.success).toBe(true);
@@ -213,12 +213,12 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
 
       expect(result.success).toBe(true);
       expect(result.criteria).toEqual(
-        successCriteriaManager.defaultCriteriaTemplates.basic,
+        successCriteriaManager.defaultCriteriaTemplates.basic
       );
       expect(mockBroadcastCriteriaUpdate).toHaveBeenCalledWith(
         expect.objectContaining({
           template: 'basic',
-        }),
+        })
       );
     });
 
@@ -233,7 +233,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
 
       const result = await successCriteriaManager.addCriteria(
         testTaskId,
-        NEW_CRITERIA,
+        NEW_CRITERIA
       );
 
       expect(result.success).toBe(true);
@@ -246,7 +246,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
 
       const result = await successCriteriaManager.addCriteria(
         testTaskId,
-        SINGLE_CRITERION,
+        SINGLE_CRITERION
       );
 
       expect(result.success).toBe(true);
@@ -258,7 +258,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
 
       const result = await successCriteriaManager.addCriteria(
         testTaskId,
-        testCriteria,
+        testCriteria
       );
 
       expect(result.success).toBe(false);
@@ -274,7 +274,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
 
       const result = await successCriteriaManager.addCriteria(
         testTaskId,
-        testCriteria,
+        testCriteria
       );
 
       expect(result.success).toBe(false);
@@ -287,7 +287,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
 
       const result = await successCriteriaManager.addCriteria(
         testTaskId,
-        testCriteria,
+        testCriteria
       );
 
       expect(result.success).toBe(false);
@@ -303,7 +303,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
 
       const result = await successCriteriaManager.addCriteria(
         testTaskId,
-        testCriteria,
+        testCriteria
       );
 
       expect(result.success).toBe(false);
@@ -316,7 +316,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
 
       const result = await successCriteriaManager.addCriteria(
         testTaskId,
-        testCriteria,
+        testCriteria
       );
 
       expect(result.success).toBe(false);
@@ -327,12 +327,12 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
     test('should include guide in response', async () => {
       const result = await successCriteriaManager.addCriteria(
         testTaskId,
-        testCriteria,
+        testCriteria
       );
 
       expect(result.guide).toBeDefined();
       expect(mockGetGuideForError).toHaveBeenCalledWith(
-        'success-criteria-operations',
+        'success-criteria-operations'
       );
     });
 
@@ -341,12 +341,12 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
 
       const result = await successCriteriaManager.addCriteria(
         testTaskId,
-        testCriteria,
+        testCriteria
       );
 
       expect(result.guide).toBeDefined();
       expect(mockGetFallbackGuide).toHaveBeenCalledWith(
-        'success-criteria-operations',
+        'success-criteria-operations'
       );
     });
   });
@@ -442,7 +442,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
 
       const ADD_CRITERIA_SPY = jest.spyOn(
         successCriteriaManager,
-        'addCriteria',
+        'addCriteria'
       );
       ADD_CRITERIA_SPY.mockResolvedValue({ success: true });
 
@@ -453,7 +453,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
         NEW_CRITERIA,
         {
           replace: true,
-        },
+        }
       );
     });
   });
@@ -476,7 +476,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
       const CRITERION_TO_DELETE = 'Criterion 2';
       const result = await successCriteriaManager.deleteCriterion(
         testTaskId,
-        CRITERION_TO_DELETE,
+        CRITERION_TO_DELETE
       );
 
       expect(result.success).toBe(true);
@@ -496,7 +496,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
       const NON_EXISTENT_CRITERION = 'Non-existent Criterion';
       const result = await successCriteriaManager.deleteCriterion(
         testTaskId,
-        NON_EXISTENT_CRITERION,
+        NON_EXISTENT_CRITERION
       );
 
       expect(result.success).toBe(false);
@@ -509,7 +509,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
 
       const result = await successCriteriaManager.deleteCriterion(
         testTaskId,
-        'Any Criterion',
+        'Any Criterion'
       );
 
       expect(result.success).toBe(false);
@@ -524,7 +524,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
 
       const result = await successCriteriaManager.deleteCriterion(
         testTaskId,
-        'Criterion 1',
+        'Criterion 1'
       );
 
       expect(result.success).toBe(false);
@@ -559,19 +559,19 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
       const result = await successCriteriaManager.getProjectWideTemplates();
 
       expect(result.templates.basic.description).toContain(
-        'Essential success criteria',
+        'Essential success criteria'
       );
       expect(result.templates.comprehensive.description).toContain(
-        'Extended criteria',
+        'Extended criteria'
       );
       expect(result.templates.enterprise.description).toContain(
-        'Full enterprise-grade criteria',
+        'Full enterprise-grade criteria'
       );
     });
 
     test('should handle exceptions in template retrieval', async () => {
       mockWithTimeout.mockRejectedValue(
-        new Error('Template service unavailable'),
+        new Error('Template service unavailable')
       );
 
       const result = await successCriteriaManager.getProjectWideTemplates();
@@ -588,41 +588,41 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
     test('should apply basic template successfully', async () => {
       const ADD_CRITERIA_SPY = jest.spyOn(
         successCriteriaManager,
-        'addCriteria',
+        'addCriteria'
       );
       ADD_CRITERIA_SPY.mockResolvedValue({ success: true });
 
       const result = await successCriteriaManager.applyProjectTemplate(
         testTaskId,
         'basic',
-        false,
+        false
       );
 
       expect(ADD_CRITERIA_SPY).toHaveBeenCalledWith(
         testTaskId,
         successCriteriaManager.defaultCriteriaTemplates.basic,
-        { replace: false, template: 'basic' },
+        { replace: false, template: 'basic' }
       );
     });
 
     test('should apply template with replace option', async () => {
       const ADD_CRITERIA_SPY = jest.spyOn(
         successCriteriaManager,
-        'addCriteria',
+        'addCriteria'
       );
       ADD_CRITERIA_SPY.mockResolvedValue({ success: true });
 
       const result = await successCriteriaManager.applyProjectTemplate(
         testTaskId,
         'enterprise',
-        true,
+        true
       );
 
       expect(result.success).toBe(true);
       expect(ADD_CRITERIA_SPY).toHaveBeenCalledWith(
         testTaskId,
         successCriteriaManager.defaultCriteriaTemplates.enterprise,
-        { replace: true, template: 'enterprise' },
+        { replace: true, template: 'enterprise' }
       );
     });
 
@@ -630,14 +630,14 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
       const result = await successCriteriaManager.applyProjectTemplate(
         testTaskId,
         'unknown',
-        false,
+        false
       );
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Template "unknown" not found');
       expect(result.errorCode).toBe('TEMPLATE_NOT_FOUND');
       expect(result.error).toContain(
-        'Available templates: basic, comprehensive, enterprise',
+        'Available templates: basic, comprehensive, enterprise'
       );
     });
   });
@@ -678,19 +678,19 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
     describe('_getTemplateDescription', () => {
       test('should return correct descriptions for known templates', () => {
         expect(
-          successCriteriaManager._getTemplateDescription('basic'),
+          successCriteriaManager._getTemplateDescription('basic')
         ).toContain('Essential');
         expect(
-          successCriteriaManager._getTemplateDescription('comprehensive'),
+          successCriteriaManager._getTemplateDescription('comprehensive')
         ).toContain('Extended');
         expect(
-          successCriteriaManager._getTemplateDescription('enterprise'),
+          successCriteriaManager._getTemplateDescription('enterprise')
         ).toContain('Full enterprise');
       });
 
       test('should return default description for unknown template', () => {
         expect(successCriteriaManager._getTemplateDescription('unknown')).toBe(
-          'Custom template',
+          'Custom template'
         );
       });
     });
@@ -715,7 +715,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
         const result = successCriteriaManager._defaultCriteriaValidator([]);
         expect(result.valid).toBe(false);
         expect(result.errors).toContain(
-          'At least one success criterion is required',
+          'At least one success criterion is required'
         );
       });
 
@@ -727,7 +727,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
         ]);
         expect(result.valid).toBe(false);
         expect(result.errors).toContain(
-          'Success criterion at index 1 must be a string',
+          'Success criterion at index 1 must be a string'
         );
       });
 
@@ -739,7 +739,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
         ]);
         expect(result.valid).toBe(false);
         expect(result.errors).toContain(
-          'Success criterion at index 1 cannot be empty',
+          'Success criterion at index 1 cannot be empty'
         );
       });
 
@@ -750,7 +750,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
         ]);
         expect(result.valid).toBe(false);
         expect(result.errors).toContain(
-          'Success criterion at index 0 is too long (max 200 characters)',
+          'Success criterion at index 0 is too long (max 200 characters)'
         );
       });
 
@@ -762,7 +762,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
         ]);
         expect(result.valid).toBe(false);
         expect(result.errors).toContain(
-          'Success criteria must be unique (no duplicates)',
+          'Success criteria must be unique (no duplicates)'
         );
       });
     });
@@ -788,7 +788,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
 
       test('should handle task retrieval errors', async () => {
         mockTaskManager.getTask.mockRejectedValue(
-          new Error('Database connection failed'),
+          new Error('Database connection failed')
         );
 
         const result =
@@ -815,7 +815,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
       // Simulate concurrent operations
       for (let i = 0; i < 10; i++) {
         OPERATIONS.push(
-          successCriteriaManager.addCriteria(TEST_TASK_ID, [`Criterion ${i}`]),
+          successCriteriaManager.addCriteria(TEST_TASK_ID, [`Criterion ${i}`])
         );
       }
 
@@ -841,7 +841,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
       });
 
       const OPERATIONS = Array.from({ length: 50 }, (_, i) =>
-        successCriteriaManager.addCriteria(TEST_TASK_ID, [`New Criterion ${i}`]),
+        successCriteriaManager.addCriteria(TEST_TASK_ID, [`New Criterion ${i}`])
       );
 
       const RESULTS = await Promise.all(OPERATIONS);
@@ -852,7 +852,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
       // TaskManager should be called for each operation
       expect(mockTaskManager.getTask).toHaveBeenCalledTimes(50);
       expect(mockTaskManager.updateTaskSuccessCriteria).toHaveBeenCalledTimes(
-        50,
+        50
       );
     });
 
@@ -893,7 +893,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
       const TEST_TASK_ID = 'test_1234567890_abcdef';
       const LARGE_CRITERIA_ARRAY = Array.from(
         { length: 1000 },
-        (_, i) => `Criterion ${i}`,
+        (_, i) => `Criterion ${i}`
       );
 
       mockTaskManager.getTask.mockResolvedValue({
@@ -906,7 +906,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
 
       const result = await successCriteriaManager.addCriteria(
         TEST_TASK_ID,
-        LARGE_CRITERIA_ARRAY,
+        LARGE_CRITERIA_ARRAY
       );
 
       expect(result.success).toBe(true);
@@ -933,7 +933,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
 
       const result = await successCriteriaManager.addCriteria(
         TEST_TASK_ID,
-        SPECIAL_CRITERIA,
+        SPECIAL_CRITERIA
       );
 
       expect(result.success).toBe(true);
@@ -945,7 +945,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
 
       // Simulate network failure on task retrieval
       mockTaskManager.getTask.mockRejectedValue(
-        new Error('Network unreachable'),
+        new Error('Network unreachable')
       );
 
       const result = await successCriteriaManager.getCriteria(TEST_TASK_ID);
@@ -976,7 +976,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
       const CALL_ARG = mockWithTimeout.mock.calls[0][0];
       expect(
         typeof CALL_ARG === 'function' ||
-          (CALL_ARG && typeof CALL_ARG.then === 'function'),
+          (CALL_ARG && typeof CALL_ARG.then === 'function')
       ).toBe(true);
     });
 

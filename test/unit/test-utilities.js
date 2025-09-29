@@ -23,7 +23,7 @@ class MockFileSystem {
   }
 
   // Mock FS.access
-  access(_filePath) {
+  async access(_filePath) {
     await new Promise((resolve) => {
       setTimeout(resolve, 0);
     });
@@ -40,7 +40,7 @@ class MockFileSystem {
   }
 
   // Mock FS.readFile
-  readFile(filePath, _encoding = 'utf8') {
+  async readFile(filePath, _encoding = 'utf8') {
     await new Promise((resolve) => {
       setTimeout(resolve, 0);
     });
@@ -59,7 +59,7 @@ class MockFileSystem {
   }
 
   // Mock FS.writeFile
-  writeFile(filePath, data) {
+  async writeFile(filePath, data) {
     await new Promise((resolve) => {
       setTimeout(resolve, 0);
     });
@@ -595,7 +595,7 @@ const testHelpers = {
   /**
    * Assert That an error is thrown with specific message
    */
-  expectError(asyncFn, expectedMessage) {
+  async expectError(asyncFn, expectedMessage) {
     let error = null;
     try {
       await asyncFn();

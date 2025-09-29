@@ -43,7 +43,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         },
 
         _loadCustomValidationRules() {
-          const FS = require('fs').promises;
+          const fsPromises = require('fs').promises;
           const configPath = path.join(
             mockProjectRoot,
             '.claude-validation.json',
@@ -51,7 +51,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
           try {
             if (await this._fileExists(configPath)) {
-              const configData = await FS.readFile(configPath, 'utf8');
+              const configData = await fsPromises.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
 
               if (
@@ -96,7 +96,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
           try {
             if (await this._fileExists(configPath)) {
-              const configData = await FS.readFile(configPath, 'utf8');
+              const configData = await fsPromises.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
 
               if (
@@ -160,7 +160,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
           try {
             if (await this._fileExists(configPath)) {
-              const configData = await FS.readFile(configPath, 'utf8');
+              const configData = await fsPromises.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
 
               if (
@@ -339,7 +339,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
           try {
             if (await this._fileExists(configPath)) {
-              const configData = await FS.readFile(configPath, 'utf8');
+              const configData = await fsPromises.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
 
               if (
@@ -446,7 +446,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
           try {
             if (await this._fileExists(configPath)) {
-              const configData = await FS.readFile(configPath, 'utf8');
+              const configData = await fsPromises.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
 
               if (
@@ -577,7 +577,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
           try {
             if (await this._fileExists(configPath)) {
-              const configData = await FS.readFile(configPath, 'utf8');
+              const configData = await fsPromises.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
 
               if (
@@ -707,7 +707,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
           try {
             if (await this._fileExists(configPath)) {
-              const configData = await FS.readFile(configPath, 'utf8');
+              const configData = await fsPromises.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
 
               if (
@@ -828,7 +828,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
           try {
             if (await this._fileExists(configPath)) {
-              const configData = await FS.readFile(configPath, 'utf8');
+              const configData = await fsPromises.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
 
               if (
@@ -876,7 +876,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
           try {
             if (await this._fileExists(configPath)) {
-              const configData = await FS.readFile(configPath, 'utf8');
+              const configData = await fsPromises.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
 
               if (

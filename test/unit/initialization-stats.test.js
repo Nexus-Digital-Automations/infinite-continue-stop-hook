@@ -55,7 +55,7 @@ describe('Initialization Statistics', () => {
 
   afterEach(() => {
     // Restore original file system
-    const FS = require('fs');
+    // Use existing FS declaration from line 46
     FS.promises = originalFs;
 
     jest.clearAllMocks();

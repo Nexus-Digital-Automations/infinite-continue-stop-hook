@@ -344,7 +344,7 @@ class UltimateLintingOptimizer {
   async runFinalAutofix() {
     console.log('🔧 Running final ESLint autofix...');
     try {
-      async execSync('npx eslint . --fix', { stdio: 'pipe' });
+      execSync('npx eslint . --fix', { stdio: 'pipe' });
       console.log('✅ ESLint autofix completed\n');
     } catch (_error) {
       console.log('⚠️  ESLint autofix completed with remaining issues\n');
@@ -379,10 +379,10 @@ class UltimateLintingOptimizer {
 
     // Get final error count
     try {
-      async execSync('npx eslint . 2>&1', { stdio: 'pipe' });
+      execSync('npx eslint . 2>&1', { stdio: 'pipe' });
       this.results.finalErrorCount = 0;
     } catch (_error) {
-      const output = error.stdout?.toString() || error.message;
+      const output = _error.stdout?.toString() || _error.message;
       const lines = output
         .split('\n')
         .filter((line) => line.includes('error') || line.includes('warning'));
@@ -439,7 +439,7 @@ class UltimateLintingOptimizer {
       const LINT_OUTPUT = execSync('npx eslint . 2>&1', { encoding: 'utf8' });
       console.log('✅ No remaining linting errors!');
     } catch (_error) {
-      const output = error.stdout?.toString() || error.message;
+      const output = _error.stdout?.toString() || _error.message;
 
       // Categorize remaining issues
       const remainingIssues = {
@@ -520,7 +520,7 @@ async function main() {
 }
 
 if (require.main === module) {
-  async main().catch((error) => {
+  main().catch((error) => {
     console.error('❌ Optimization failed:', error.message);
     process.exit(1);
   });

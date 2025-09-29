@@ -101,14 +101,14 @@ class APIExecutor {
           }
           const result = JSON.parse(jsonString);
           resolve(result);
-        } catch (_error) {
+        } catch (_) {
           try {
             const stderrJson = JSON.parse(stderr.trim());
             resolve(stderrJson);
-          } catch (_parseError) {
+          } catch (parseError) {
             reject(
               new Error(
-                `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${_parseError.message}`,
+                `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`,
               ),
             );
           }
@@ -342,7 +342,7 @@ class TestExecution {
     ]);
   }
 
-  static retry(fn, maxRetries = 3, delay = 1000) {
+  static async retry(fn, maxRetries = 3, delay = 1000) {
     let lastError;
 
     for (let i = 0; i < maxRetries; i++) {
@@ -363,7 +363,7 @@ class TestExecution {
     throw lastError;
   }
 
-  static parallel(promises, maxConcurrency = 5) {
+  static async parallel(promises, maxConcurrency = 5) {
     const results = [];
 
     for (let i = 0; i < promises.length; i += maxConcurrency) {
@@ -381,7 +381,7 @@ class TestExecution {
  * Performance testing utilities
  */
 class PerformanceUtils {
-  static measureTime(fn) {
+  static async measureTime(fn) {
     const start = process.hrtime.bigint();
     const result = await fn();
     const end = process.hrtime.bigint();
@@ -390,7 +390,7 @@ class PerformanceUtils {
     return { result, duration };
   }
 
-  static measureMemory(fn) {
+  static async measureMemory(fn) {
     const before = process.memoryUsage();
     const result = await fn();
     const after = process.memoryUsage();

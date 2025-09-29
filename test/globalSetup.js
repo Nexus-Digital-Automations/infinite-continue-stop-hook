@@ -65,7 +65,7 @@ module.exports = () => {
         } catch {
           loggers.stopHook.warn(
             `⚠️  Could not clean up ${entry}:`,
-            error.message,
+            error.message
           );
         }
       }
@@ -99,7 +99,7 @@ module.exports = () => {
   // Memory management for CI environments
   if (process.env.CI === 'true') {
     loggers.stopHook.log(
-      '🏗️  CI environment detected - enabling memory optimizations',
+      '🏗️  CI environment detected - enabling memory optimizations'
     );
 
     // Lower memory thresholds for CI
@@ -117,16 +117,16 @@ module.exports = () => {
   // Test reporting setup
   loggers.stopHook.log('📋 Test reporting configuration:');
   loggers.app.info(
-    `   • Coverage: ${process.env.COVERAGE ? 'enabled' : 'disabled'}`,
+    `   • Coverage: ${process.env.COVERAGE ? 'enabled' : 'disabled'}`
   );
   loggers.stopHook.log(
-    `   • Verbose: ${process.env.VERBOSE ? 'enabled' : 'disabled'}`,
+    `   • Verbose: ${process.env.VERBOSE ? 'enabled' : 'disabled'}`
   );
   loggers.stopHook.log(
-    `   • Watch mode: ${process.env.WATCH ? 'enabled' : 'disabled'}`,
+    `   • Watch mode: ${process.env.WATCH ? 'enabled' : 'disabled'}`
   );
   loggers.stopHook.log(
-    `   • Max workers: ${process.env.MAX_WORKERS || 'auto'}`,
+    `   • Max workers: ${process.env.MAX_WORKERS || 'auto'}`
   );
 
   // Network And external service mocking

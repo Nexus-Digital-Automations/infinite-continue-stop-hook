@@ -25,9 +25,9 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
     }
 
     // Feature 8 performance metrics methods
-    getValidationPerformanceMetrics(options = {}) {
+    async getValidationPerformanceMetrics(options = {}) {
       try {
-        const FS = require('fs').promises;
+        const fsPromises = require('fs').promises;
         const path = require('path');
         const metricsFile = path.join(
           this.PROJECT_ROOT,
@@ -43,7 +43,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
           };
         }
 
-        const data = await FS.readFile(metricsFile, 'utf8');
+        const data = await fsPromises.readFile(metricsFile, 'utf8');
         const metricsData = JSON.parse(data);
 
         // Apply filtering options
@@ -94,7 +94,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       }
     }
 
-    identifyPerformanceBottlenecks(options = {}) {
+    async identifyPerformanceBottlenecks(options = {}) {
       try {
         const path = require('path');
         const metricsFile = path.join(
@@ -110,7 +110,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
           };
         }
 
-        const data = await FS.readFile(metricsFile, 'utf8');
+        const data = await fsPromises.readFile(metricsFile, 'utf8');
         const metricsData = JSON.parse(data);
         const metrics = metricsData.metrics || [];
 
@@ -142,7 +142,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       }
     }
 
-    getPerformanceBenchmarks(options = {}) {
+    async getPerformanceBenchmarks(options = {}) {
       try {
         const path = require('path');
         const metricsFile = path.join(
@@ -158,7 +158,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
           };
         }
 
-        const data = await FS.readFile(metricsFile, 'utf8');
+        const data = await fsPromises.readFile(metricsFile, 'utf8');
         const metricsData = JSON.parse(data);
         const metrics = metricsData.metrics || [];
 

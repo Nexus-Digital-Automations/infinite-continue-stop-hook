@@ -11,7 +11,7 @@
  */
 
 const { spawn } = require('child_process');
-const FS = require('path');
+const path = require('path');
 const { loggers } = require('../lib/logger');
 const FS = require('fs').promises;
 

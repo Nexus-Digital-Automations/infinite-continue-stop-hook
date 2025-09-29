@@ -23,9 +23,9 @@ class FinalSystematicResultFix {
   /**
    * Apply systematic result variable fixes
    */
-  applySystematicFixes() {
+  async applySystematicFixes() {
     console.log(
-      '🔧 Starting final systematic result/result variable pattern fixes...',
+      '🔧 Starting final systematic result/result variable pattern fixes...'
     );
 
     try {
@@ -46,7 +46,7 @@ class FinalSystematicResultFix {
   /**
    * Get all source files that need processing
    */
-  getAllSourceFiles() {
+  async getAllSourceFiles() {
     const extensions = ['.js', '.ts', '.jsx', '.tsx'];
     const excludePatterns = [
       'node_modules',
@@ -340,7 +340,7 @@ class FinalSystematicResultFix {
     // Handle multiline declarations
     fixed = fixed.replace(
       /const result = ([^;]+);\s*([^=\n]+)\s*=\s*result/gm,
-      'const result = $1;\n$2 = result',
+      'const result = $1;\n$2 = result'
     );
 
     // Handle destructuring
@@ -349,7 +349,7 @@ class FinalSystematicResultFix {
     // Handle array destructuring
     fixed = fixed.replace(
       /const \[([^\]]+)\] = result/g,
-      'const [$1] = result',
+      'const [$1] = result'
     );
 
     return fixed;
@@ -367,7 +367,7 @@ class FinalSystematicResultFix {
       (match) => {
         const lines = match.split('\n');
         return lines[lines.length - 1] || match;
-      },
+      }
     );
 
     // Fix spacing issues
@@ -377,7 +377,7 @@ class FinalSystematicResultFix {
     // Ensure consistent semicolons
     cleaned = cleaned.replace(
       /const result = ([^;]+)(?!;)/gm,
-      'const result = $1;',
+      'const result = $1;'
     );
 
     return cleaned;
@@ -394,14 +394,14 @@ class FinalSystematicResultFix {
 
     if (this.fixedFiles > 0) {
       console.log(
-        '\n✅ All result/result variable patterns have been systematically fixed!',
+        '\n✅ All result/result variable patterns have been systematically fixed!'
       );
       console.log(
-        '🎯 Codebase now has consistent lowercase "result" variable naming.',
+        '🎯 Codebase now has consistent lowercase "result" variable naming.'
       );
     } else {
       console.log(
-        '\n✅ No result/result inconsistencies found - codebase is already consistent!',
+        '\n✅ No result/result inconsistencies found - codebase is already consistent!'
       );
     }
   }
