@@ -25,7 +25,7 @@ function findClaudeProjectRoot(startDir = process.cwd(), category = 'general') {
       // Look for TASKS.json in potential project roots
       const segments = currentDir.split(path.sep);
       const claudeIndex = segments.findIndex((segment) =>
-        segment.includes('Claude Coding Projects'),
+        segment.includes('Claude Coding Projects')
       );
 
       if (claudeIndex !== -1 && claudeIndex < segments.length - 1) {
@@ -64,7 +64,7 @@ function generateValidationProgressReport(
   flagData,
   logger,
   _workingDir,
-  category = 'general',
+  _category = 'general'
 ) {
   // Initialize dependency manager for intelligent validation ordering
   const dependencyManager = new VALIDATION_DEPENDENCY_MANAGER(_workingDir);
@@ -73,7 +73,7 @@ function generateValidationProgressReport(
   const configValidation = dependencyManager.validateDependencyConfiguration();
   if (!configValidation.valid) {
     logger.warn(
-      `Validation dependency configuration issues: ${configValidation.issues.map((i) => i.message).join(', ')}`,
+      `Validation dependency configuration issues: ${configValidation.issues.map((i) => i.message).join(', ')}`
     );
   }
 
@@ -169,14 +169,14 @@ function generateValidationProgressReport(
   // Calculate overall progress percentage
   progressReport.overallProgress = Math.round(
     (progressReport.completedValidations / progressReport.totalValidations) *
-      100,
+      100
   );
 
   // Use dependency-aware time estimation for better accuracy
   const completedCriteria = new Set(
     progressReport.validationDetails
       .filter((v) => v.status === 'completed')
-      .map((v) => v.criterion),
+      .map((v) => v.criterion)
   );
 
   // Get intelligent time remaining based on parallel execution potential
@@ -186,7 +186,7 @@ function generateValidationProgressReport(
   // Adjust based on actual completion progress
   if (progressReport.completedValidations > 0) {
     const remainingCriteria = validationCriteria.filter(
-      (criterion) => !completedCriteria.has(criterion),
+      (criterion) => !completedCriteria.has(criterion)
     );
     const remainingDuration = remainingCriteria.reduce((total, criterion) => {
       return (
@@ -198,7 +198,7 @@ function generateValidationProgressReport(
   }
 
   logger.addFlow(
-    `Validation progress: ${progressReport.overallProgress}% complete (${progressReport.completedValidations}/${progressReport.totalValidations})`,
+    `Validation progress: ${progressReport.overallProgress}% complete (${progressReport.completedValidations}/${progressReport.totalValidations})`
   );
 
   return progressReport;
@@ -223,7 +223,7 @@ function checkStopAllowed(workingDir = process.cwd(), category = 'general') {
       const progressReport = generateValidationProgressReport(
         flagData,
         logger,
-        workingDir,
+        workingDir
       );
 
       // Display detailed validation progress
@@ -237,12 +237,12 @@ function checkStopAllowed(workingDir = process.cwd(), category = 'general') {
 
 📋 **DETAILED VALIDATION status:**
 ${progressReport.validationDetails
-    .map(
-      (v) =>
-        `${v.status === 'completed' ? '✅' : v.status === 'failed' ? '❌' : '⏳'} ${v.criterion}: ${v.status.toUpperCase()} (${v.progress}%)
-   Duration: ${v.duration}s | ${v.message}`,
-    )
-    .join('\n')}
+  .map(
+    (v) =>
+      `${v.status === 'completed' ? '✅' : v.status === 'failed' ? '❌' : '⏳'} ${v.criterion}: ${v.status.toUpperCase()} (${v.progress}%)
+   Duration: ${v.duration}s | ${v.message}`
+  )
+  .join('\n')}
 
 🕐 **LAST UPDATE:** ${progressReport.lastValidationTime}
 🎯 **AUTHORIZATION status:** ${flagData.stop_allowed ? 'APPROVED' : 'PENDING'}
@@ -254,7 +254,7 @@ ${progressReport.validationDetails
     } catch (_) {
       // Invalid flag file, remove it
       console.error(
-        `⚠️ Invalid validation progress file detected - cleaning up. Error: ${_error.message}`,
+        `⚠️ Invalid validation progress file detected - cleaning up. Error: ${_error.message}`
       );
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
       FS.unlinkSync(stopFlagPath);
@@ -297,7 +297,7 @@ When running the multi-step authorization protocol, progress will be displayed h
 function cleanupStaleAgentsInProject(
   projectPath,
   logger,
-  category = 'general',
+  category = 'general'
 ) {
   const todoPath = path.join(projectPath, 'TASKS.json');
 
@@ -319,7 +319,7 @@ function cleanupStaleAgentsInProject(
     todoData = JSON.parse(FS.readFileSync(todoPath, 'utf8'));
   } catch (_) {
     logger.addFlow(
-      `Failed to read TASKS.json in ${projectPath}: ${_error.message}`,
+      `Failed to read TASKS.json in ${projectPath}: ${_error.message}`
     );
     return {
       agentsRemoved: 0,
@@ -411,7 +411,7 @@ function cleanupStaleAgentsInProject(
 
         tasksUnassigned++;
         logger.addFlow(
-          `Unassigned item in ${projectPath}: "${item.title}" from stale agent: ${staleAgentId}`,
+          `Unassigned item in ${projectPath}: "${item.title}" from stale agent: ${staleAgentId}`
         );
       }
     }
@@ -425,7 +425,7 @@ function cleanupStaleAgentsInProject(
       logger.addFlow(`Updated ${projectPath}/TASKS.json with cleanup results`);
     } catch (_) {
       logger.addFlow(
-        `Failed to write TASKS.json in ${projectPath}: ${_error.message}`,
+        `Failed to write TASKS.json in ${projectPath}: ${_error.message}`
       );
       return {
         agentsRemoved: 0,
@@ -462,7 +462,7 @@ async function cleanupStaleAgentsAcrossProjects(logger, category = 'general') {
   };
 
   logger.addFlow(
-    `🧹 Starting multi-project stale agent cleanup across ${knownProjects.length} projects...`,
+    `🧹 Starting multi-project stale agent cleanup across ${knownProjects.length} projects...`
   );
 
   // Process projects in parallel for better performance
@@ -474,7 +474,7 @@ async function cleanupStaleAgentsAcrossProjects(logger, category = 'general') {
         return result;
       } else {
         logger.addFlow(
-          `Project path does not exist: ${projectPath} - skipping`,
+          `Project path does not exist: ${projectPath} - skipping`
         );
         return {
           agentsRemoved: 0,
@@ -512,7 +512,7 @@ async function cleanupStaleAgentsAcrossProjects(logger, category = 'general') {
   }
 
   logger.addFlow(
-    `🧹 Multi-project cleanup complete: ${results.totalAgentsRemoved} agents removed, ${results.totalTasksUnassigned} tasks unassigned, ${results.totalOrphanedTasksReset} orphaned tasks reset`,
+    `🧹 Multi-project cleanup complete: ${results.totalAgentsRemoved} agents removed, ${results.totalTasksUnassigned} tasks unassigned, ${results.totalOrphanedTasksReset} orphaned tasks reset`
   );
 
   return results;
@@ -567,7 +567,7 @@ async function autoSortTasksByPriority(_taskManager, category = 'general') {
         // Check if it's actually test-related (should be test_ not error_)
         const testRelated =
           /test.*error|test.*fail|coverage|spec|jest|mocha|cypress/.test(
-            allText,
+            allText
           );
         if (
           testRelated &&
@@ -589,7 +589,7 @@ async function autoSortTasksByPriority(_taskManager, category = 'general') {
         (category && category.startsWith('test-')) ||
         (category &&
           ['missing-test', 'test-setup', 'test-refactor', 'testing'].includes(
-            category,
+            category
           ));
 
       if (isTest) {
@@ -766,7 +766,7 @@ function provideInstructiveTaskGuidance(
   taskManager,
   taskStatus,
   agentId,
-  category = 'general',
+  category = 'general'
 ) {
   return `
 📋 CLAUDE CODE AGENT TASK CONTINUATION PROTOCOL
@@ -931,7 +931,7 @@ process.stdin.on('end', async () => {
     // Log input with event details
     logger.logInput(hookInput);
     logger.addFlow(
-      `Received ${hook_event_name || 'unknown'} event from Claude Code`,
+      `Received ${hook_event_name || 'unknown'} event from Claude Code`
     );
 
     // ========================================================================
@@ -941,7 +941,7 @@ process.stdin.on('end', async () => {
     if (_transcript_path && _transcript_path.trim() !== '') {
       try {
         logger.addFlow(
-          `Checking transcript for DONE command: ${_transcript_path}`,
+          `Checking transcript for DONE command: ${_transcript_path}`
         );
         // eslint-disable-next-line security/detect-non-literal-fs-filename -- transcript path from Claude Code hook
         if (FS.existsSync(_transcript_path)) {
@@ -1032,15 +1032,15 @@ If you want to enable task management for this project:
           operation: 'corruptionCheck',
         });
         console.log(
-          `🔧 STOP HOOK: Automatically fixed TASKS.json corruption - ${corruptionCheck.fixesApplied.join(', ')}`,
+          `🔧 STOP HOOK: Automatically fixed TASKS.json corruption - ${corruptionCheck.fixesApplied.join(', ')}`
         );
       }
     } catch (corruptionError) {
       logger.addFlow(
-        `TASKS.json corruption check failed: ${corruptionError.message}`,
+        `TASKS.json corruption check failed: ${corruptionError.message}`
       );
       console.error(
-        `⚠️ STOP HOOK: Corruption check failed: ${corruptionError.message}`,
+        `⚠️ STOP HOOK: Corruption check failed: ${corruptionError.message}`
       );
     }
 
@@ -1075,7 +1075,7 @@ If you want to enable task management for this project:
 
       if (multiProjectResults.totalAgentsRemoved > 0) {
         logger.addFlow(
-          `✅ Multi-project cleanup: ${multiProjectResults.totalAgentsRemoved} stale agents removed, ${multiProjectResults.totalTasksUnassigned} tasks unassigned, ${multiProjectResults.totalOrphanedTasksReset} orphaned tasks reset across ${multiProjectResults.projectResults.length} projects`,
+          `✅ Multi-project cleanup: ${multiProjectResults.totalAgentsRemoved} stale agents removed, ${multiProjectResults.totalTasksUnassigned} tasks unassigned, ${multiProjectResults.totalOrphanedTasksReset} orphaned tasks reset across ${multiProjectResults.projectResults.length} projects`
         );
 
         logger.info('Multi-project stale agent cleanup completed', {
@@ -1100,12 +1100,12 @@ If you want to enable task management for this project:
 
       if (multiProjectResults.errors.length > 0) {
         logger.addFlow(
-          `Multi-project cleanup errors: ${multiProjectResults.errors.join('; ')}`,
+          `Multi-project cleanup errors: ${multiProjectResults.errors.join('; ')}`
         );
       }
     } catch (multiProjectError) {
       logger.addFlow(
-        `Multi-project cleanup failed: ${multiProjectError.message}`,
+        `Multi-project cleanup failed: ${multiProjectError.message}`
       );
       // Continue with local cleanup even if multi-project cleanup fails
     }
@@ -1131,7 +1131,7 @@ If you want to enable task management for this project:
       const isActive = timeSinceHeartbeat < staleAgentTimeout;
 
       logger.addFlow(
-        `Agent ${agentId}: heartbeat=${lastHeartbeat}, timeSince=${Math.round(timeSinceHeartbeat / 1000)}s, isActive=${isActive}`,
+        `Agent ${agentId}: heartbeat=${lastHeartbeat}, timeSince=${Math.round(timeSinceHeartbeat / 1000)}s, isActive=${isActive}`
       );
 
       if (isActive) {
@@ -1186,7 +1186,7 @@ If you want to enable task management for this project:
 
           tasksUnassigned++;
           logger.addFlow(
-            `Unassigned item "${item.title}" from stale agent: ${staleAgentId}`,
+            `Unassigned item "${item.title}" from stale agent: ${staleAgentId}`
           );
         }
       }
@@ -1227,7 +1227,7 @@ If you want to enable task management for this project:
 
           staleTasksReset++;
           logger.addFlow(
-            `Reset stale item: ${item.title} (${Math.round(timeSinceStart / 60000)} min)`,
+            `Reset stale item: ${item.title} (${Math.round(timeSinceStart / 60000)} min)`
           );
         }
       }
@@ -1290,7 +1290,7 @@ If you want to enable task management for this project:
 
           orphanedTasksReset++;
           logger.addFlow(
-            `Reset orphaned item: ${item.title} (orphaned ${Math.round(timeSinceActivity / 3600000)} hours)`,
+            `Reset orphaned item: ${item.title} (orphaned ${Math.round(timeSinceActivity / 3600000)} hours)`
           );
         }
       }
@@ -1315,7 +1315,7 @@ If you want to enable task management for this project:
       }
       if (orphanedTasksReset > 0) {
         logger.addFlow(
-          `Reset ${orphanedTasksReset} orphaned tasks (unassigned >24 hours)`,
+          `Reset ${orphanedTasksReset} orphaned tasks (unassigned >24 hours)`
         );
       }
     }
@@ -1327,11 +1327,11 @@ If you want to enable task management for this project:
     // Automatic task sorting disabled to prevent validation conflicts
     // The sorting function was causing category validation errors
     logger.addFlow(
-      'Automatic task sorting disabled - using manual task management instead',
+      'Automatic task sorting disabled - using manual task management instead'
     );
 
     logger.addFlow(
-      `Active agents found: ${activeAgents.length}, Stale agents removed: ${agentsRemoved}, Tasks unassigned: ${tasksUnassigned}, Stale tasks reset: ${staleTasksReset}`,
+      `Active agents found: ${activeAgents.length}, Stale agents removed: ${agentsRemoved}, Tasks unassigned: ${tasksUnassigned}, Stale tasks reset: ${staleTasksReset}`
     );
 
     // Enhanced agent status analysis for better messaging
@@ -1340,17 +1340,17 @@ If you want to enable task management for this project:
 
     if (activeAgents.length === 0) {
       logger.addFlow(
-        'No active agents detected - analyzing situation for appropriate guidance',
+        'No active agents detected - analyzing situation for appropriate guidance'
       );
 
       // Differentiate between "no agents ever" vs "only stale agents were found"
       if (hadStaleAgents && totalAgentsBeforeCleanup > 0) {
         logger.addFlow(
-          `Found ${totalAgentsBeforeCleanup} stale agents - providing reactivation guidance`,
+          `Found ${totalAgentsBeforeCleanup} stale agents - providing reactivation guidance`
         );
         logger.logExit(
           2,
-          'Only stale agents found - providing reactivation guidance',
+          'Only stale agents found - providing reactivation guidance'
         );
         logger.save();
 
@@ -1456,7 +1456,7 @@ When ALL TodoWrite tasks are complete And project achieves perfection, agents mu
         logger.addFlow('No agents detected - need fresh agent initialization');
         logger.logExit(
           2,
-          'No agents - providing fresh initialization guidance',
+          'No agents - providing fresh initialization guidance'
         );
         logger.save();
 
@@ -1548,7 +1548,7 @@ When ALL TodoWrite tasks are complete And project achieves perfection, agents mu
     const stopAllowed = checkStopAllowed(workingDir);
     if (stopAllowed) {
       logger.addFlow(
-        'Stop endpoint triggered - allowing ONE stop, then returning to infinite mode',
+        'Stop endpoint triggered - allowing ONE stop, then returning to infinite mode'
       );
       logger.logExit(0, 'Endpoint-triggered stop (single use)');
       logger.save();
@@ -1580,7 +1580,7 @@ node -e "const TASK_MANAGER = require('/Users/jeremyparker/infinite-continue-sto
     } catch (_) {
       // Handle corrupted TASKS.json by using autoFixer
       logger.addFlow(
-        `Task status failed, attempting auto-fix: ${_error.message}`,
+        `Task status failed, attempting auto-fix: ${_error.message}`
       );
       const fixResult = await taskManager.autoFix(todoPath);
       if (fixResult.fixed) {
@@ -1593,13 +1593,13 @@ node -e "const TASK_MANAGER = require('/Users/jeremyparker/infinite-continue-sto
       }
     }
     logger.addFlow(
-      `Task status: ${taskStatus.pending} pending, ${taskStatus.in_progress} in_progress, ${taskStatus.completed} completed`,
+      `Task status: ${taskStatus.pending} pending, ${taskStatus.in_progress} in_progress, ${taskStatus.completed} completed`
     );
 
     // Provide detailed instructive guidance based on current state
     const instructiveGuidance = provideInstructiveTaskGuidance(
       taskManager,
-      taskStatus,
+      taskStatus
     );
 
     // ========================================================================
@@ -1612,7 +1612,7 @@ node -e "const TASK_MANAGER = require('/Users/jeremyparker/infinite-continue-sto
 
       if (archivalResult && archivalResult.migrated > 0) {
         logger.addFlow(
-          `Successfully archived ${archivalResult.migrated} completed tasks to DONE.json`,
+          `Successfully archived ${archivalResult.migrated} completed tasks to DONE.json`
         );
 
         console.error(`
@@ -1641,7 +1641,7 @@ This is non-critical And won't prevent continued operation,
 
     // Always continue - never allow natural stops
     logger.addFlow(
-      'Never-stop mode: Providing instructive task management guidance',
+      'Never-stop mode: Providing instructive task management guidance'
     );
     logger.logExit(2, 'Infinite continue mode - providing task guidance');
     logger.save();
