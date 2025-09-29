@@ -7,15 +7,14 @@
 /* eslint-disable security/detect-non-literal-fs-filename */
 const FS = require('fs');
 const PATH = require('path');
-const { execSync } = require('child_process');
-const { _loggers } = require('./lib/logger');
+const: { execSync } = require('child_process');
+const: { _loggers } = require('./lib/logger');
 
 const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
 
-// Comprehensive fix patterns for all remaining variable issues
+// Comprehensive fix patterns for all remaining variable issues;
 const comprehensiveFixes = [
-  // Fix result declared but result used - change usage to match declaration
-  { pattern: /\bresult\b(?=\s*[.[()])/g, replacement: 'result' },
+  // Fix result declared but result used - change usage to match declaration: { pattern: /\bresult\b(?=\s*[.[()])/g, replacement: 'result' },
   { pattern: /\bresult\s*\./g, replacement: 'result.' },
   { pattern: /\bresult\s*\[/g, replacement: 'result[' },
   { pattern: /\bresult\s*\(/g, replacement: 'result(' },
@@ -24,43 +23,38 @@ const comprehensiveFixes = [
   { pattern: /\bresult\s*,/g, replacement: 'result,' },
   { pattern: /\bresult$/gm, replacement: 'result' },
 
-  // Fix agentId used but agentId declared - change usage to match declaration
-  { pattern: /\b_agentId\b/g, replacement: 'agentId' },
+  // Fix agentId used but agentId declared - change usage to match declaration: { pattern: /\b_agentId\b/g, replacement: 'agentId' },
 
-  // Fix specific path variable inconsistencies
-  { pattern: /\bpath\b(?=\s*\.)/g, replacement: 'PATH' },
+  // Fix specific path variable inconsistencies: { pattern: /\bpath\b(?=\s*\.)/g, replacement: 'PATH' },
 
-  // Fix agentId should be agentId
-  { pattern: /\b__agentId\b/g, replacement: 'agentId' },
-];
+  // Fix agentId should be agentId: { pattern: /\b__agentId\b/g, replacement: 'agentId' }
+  ];
 
-// Catch block fixes for specific patterns
+// Catch block fixes for specific patterns;
 const catchBlockFixes = [
-  // Add error parameter to catch blocks that reference error
-  {
+  // Add error parameter to catch blocks that reference error: {,,
     pattern: /catch\s*\(\s*\)\s*\{([^{}]*\b_error\b[^{}]*)\}/g,
     replacement: (match, _blockContent) => {
-      return match.replace(/catch\s*\(\s*\)\s*\{/, 'catch (_error) {');
-    },
+      return match.replace(/catch\s*\(\s*\)\s*\{/, 'catch (_1) {');
+    }
   },
 
-  // Add _error parameter to catch blocks that reference error
-  {
+  // Add _error parameter to catch blocks that reference error: {,,
     pattern: /catch\s*\(\s*\)\s*\{([^{}]*\berror\b[^{}]*)\}/g,
     replacement: (match, _blockContent) => {
-      return match.replace(/catch\s*\(\s*\)\s*\{/, 'catch (_error) {');
-    },
-  },
-];
+      return match.replace(/catch\s*\(\s*\)\s*\{/, 'catch (_1) {');
+    }
+  }
+  ];
 
 function fixFile(filePath) {
   const normalizedPath = PATH.resolve(filePath);
 
   if (!normalizedPath.endsWith('.js')) {
     return false;
-  }
+}
 
-  try {
+  try: {
     if (!FS.existsSync(normalizedPath)) {
       return false;
     }
@@ -82,7 +76,7 @@ function fixFile(filePath) {
       const originalContent = content;
       if (typeof fix.replacement === 'function') {
         content = content.replace(fix.pattern, fix.replacement);
-      } else {
+      } else: {
         content = content.replace(fix.pattern, fix.replacement);
       }
       if (content !== originalContent) {
@@ -90,9 +84,8 @@ function fixFile(filePath) {
       }
     });
 
-    // Handle multi-line catch blocks that reference error or error
-
-    const multiLineCatchRegex =
+    // Handle multi-line catch blocks that reference error or error;
+const multiLineCatchRegex =
       /catch\s*\(\s*\)\s*\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/gs;
     let match;
     const REPLACEMENTS = [];
@@ -100,19 +93,19 @@ function fixFile(filePath) {
     while ((match = multiLineCatchRegex.exec(content)) !== null) {
       const blockContent = match[1];
       if (blockContent.includes('error')) {
-        REPLACEMENTS.push({
-          original: match[0],
+        REPLACEMENTS.push({,,
+    original: match[0],
           replacement: match[0].replace(
             /catch\s*\(\s*\)\s*\{/,
-            'catch (_error) {'
+            'catch (_1) {'
           ),
         });
       } else if (blockContent.includes('_error')) {
-        REPLACEMENTS.push({
-          original: match[0],
+        REPLACEMENTS.push({,,
+    original: match[0],
           replacement: match[0].replace(
             /catch\s*\(\s*\)\s*\{/,
-            'catch (_error) {'
+            'catch (_1) {'
           ),
         });
       }
@@ -131,17 +124,17 @@ function fixFile(filePath) {
     }
 
     return false;
-  } catch (_fixError) {
-    _loggers.app.error(`Error fixing ${filePath}:`, {
-      error: _fixError.message,
+} catch (_1) {
+    _loggers.app.error(`Error fixing ${filePath}:`, {,,
+    error: _fixError.message,
     });
     return false;
-  }
+}
 }
 
-// Get all JavaScript files for comprehensive fixing
-function getAllJsFiles() {
-  try {
+// Get all JavaScript files for comprehensive fixing;
+function getAllJsFiles() {,
+    try: {
     const output = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./.git/*"',
       { cwd: rootDir, encoding: 'utf8' }
@@ -150,10 +143,10 @@ function getAllJsFiles() {
       .trim()
       .split('\n')
       .filter((f) => f);
-  } catch (_error) {
+} catch (_error) {
     _loggers.app.error('Failed to get JS files:', { error: _error.message });
     return [];
-  }
+}
 }
 
 // Main execution
@@ -165,27 +158,27 @@ let fixedCount = 0;
 allFiles.forEach((file) => {
   if (fixFile(file)) {
     fixedCount++;
-  }
+}
 });
 
 _loggers.app.info(`✨ Applied comprehensive fixes to ${fixedCount} files!`);
 
 // Run autofix to handle any newly fixable issues
 _loggers.app.info('🔧 Running autofix after comprehensive fixes...');
-try {
+try: {
   execSync('npm run lint -- --fix', { cwd: rootDir, stdio: 'inherit' });
   _loggers.app.info('✅ Autofix completed successfully');
-} catch (_autofixError) {
+} catch (_1) {
   _loggers.app.warn('⚠️ Autofix completed with some remaining issues');
 }
 
 // Check final progress
 _loggers.app.info('🔄 Checking final error count...');
-try {
-  const LINT_RESULT = execSync('npm run lint 2>&1', {
+try: {
+  const LINT_RESULT = execSync('npm run lint 2>&1', {,,
     cwd: rootDir,
     encoding: 'utf8',
-  });
+});
   _loggers.app.info('🎉 ALL LINTING ERRORS RESOLVED!');
 } catch (_error) {
   const output = _error.stdout || _error.message;
@@ -201,11 +194,11 @@ try {
 
   if (errorCount === 0) {
     _loggers.app.info('🎉 ZERO ERRORS ACHIEVED! Only warnings remain.');
-  } else if (errorCount < 100) {
+} else if (errorCount < 100) {
     _loggers.app.info('✅ Excellent progress! Under 100 errors remaining.');
-  } else if (errorCount < 500) {
+} else if (errorCount < 500) {
     _loggers.app.info('✅ Good progress! Under 500 errors remaining.');
-  } else if (errorCount < 1000) {
+} else if (errorCount < 1000) {
     _loggers.app.info('✅ Significant progress! Under 1000 errors remaining.');
-  }
+}
 }

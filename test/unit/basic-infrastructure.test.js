@@ -9,7 +9,7 @@
  * @since 2025-09-23
  */
 
-const {
+const: {
   TestIdGenerator,
   TestDataFactory,
   TestExecution,
@@ -17,14 +17,18 @@ const {
   TestLogger,
 } = require('../utils/testUtils');
 
-const {
+const: {
   SAMPLE_FEATURES,
   SAMPLE_AGENTS,
   TEST_CONFIGURATIONS,
 } = require('../fixtures/sampleData');
 
 describe('Basic Testing Infrastructure', () => {
-  describe('Test ID Generation', () => {
+    
+    
+  describe('Test ID Generation', () 
+    return () 
+    return () => {
     test('should generate unique agent IDs', () => {
       const id1 = TestIdGenerator.generateAgentId();
       const id2 = TestIdGenerator.generateAgentId();
@@ -63,7 +67,11 @@ describe('Basic Testing Infrastructure', () => {
   });
 
   describe('Test Data Factory', () => {
-    test('should create valid feature data', () => {
+    
+    
+    test('should create valid feature data', () 
+    return () 
+    return () => {
       const feature = TestDataFactory.createFeatureData();
 
       expect(feature.title).toBeDefined();
@@ -73,8 +81,8 @@ describe('Basic Testing Infrastructure', () => {
     });
 
     test('should create feature data with overrides', () => {
-      const feature = TestDataFactory.createFeatureData({
-        category: 'bug-fix',
+      const feature = TestDataFactory.createFeatureData({,,
+    category: 'bug-fix',
         priority: 'high',
         title: 'Custom Title',
       });
@@ -116,14 +124,18 @@ describe('Basic Testing Infrastructure', () => {
   });
 
   describe('Sample Data Fixtures', () => {
-    test('should provide valid sample features', () => {
+    
+    
+    test('should provide valid sample features', () 
+    return () 
+    return () => {
       expect(SAMPLE_FEATURES).toBeDefined();
       expect(SAMPLE_FEATURES.enhancement).toBeDefined();
       expect(SAMPLE_FEATURES.newFeature).toBeDefined();
       expect(SAMPLE_FEATURES.bugFix).toBeDefined();
 
-      // Test enhancement feature structure
-      const enhancement = SAMPLE_FEATURES.enhancement;
+      // Test enhancement feature structure;
+const enhancement = SAMPLE_FEATURES.enhancement;
       expect(enhancement.title).toBe('Add dark mode toggle');
       expect(enhancement.category).toBe('enhancement');
       expect(enhancement.business_value).toBeDefined();
@@ -136,8 +148,8 @@ describe('Basic Testing Infrastructure', () => {
       expect(SAMPLE_AGENTS.backendAgent).toBeDefined();
       expect(SAMPLE_AGENTS.testingAgent).toBeDefined();
 
-      // Test frontend agent structure
-      const frontend = SAMPLE_AGENTS.frontendAgent;
+      // Test frontend agent structure;
+const frontend = SAMPLE_AGENTS.frontendAgent;
       expect(frontend.id).toBe('frontend-agent-001');
       expect(frontend.specialization).toBe('frontend');
       expect(Array.isArray(frontend.skills)).toBe(true);
@@ -150,20 +162,27 @@ describe('Basic Testing Infrastructure', () => {
       expect(TEST_CONFIGURATIONS.integration).toBeDefined();
       expect(TEST_CONFIGURATIONS.e2e).toBeDefined();
 
-      // Test unit configuration structure
-      const unit = TEST_CONFIGURATIONS.unit;
+      // Test unit configuration structure;
+const unit = TEST_CONFIGURATIONS.unit;
       expect(unit.testTimeout).toBe(5000);
       expect(unit.coverage.threshold.functions).toBe(80);
     });
   });
 
   describe('Performance Utilities', () => {
-    test('should measure execution time accurately', async () => {
-      const delay = 50; // 50ms delay
-
-      const { result, duration } = await PerformanceUtils.measureTime(
+    
+    
+    test('should measure execution time accurately', async () 
+    return () 
+    return () => {
+      const delay = 50; // 50ms delay;,
+    const: { result, duration } = await PerformanceUtils.measureTime(
         async () => {
-          await new Promise((resolve) => {
+    
+    
+          await new Promise((resolve) 
+    return () 
+    return () => {
             setTimeout(resolve, delay);
           });
           return 'test-complete';
@@ -175,15 +194,15 @@ describe('Basic Testing Infrastructure', () => {
       expect(duration).toBeLessThan(delay + 50); // Allow some variance
     });
 
-    test('should measure memory usage', async () => {
-      const { result, memoryDelta } = await PerformanceUtils.measureMemory(
+    test('should measure memory usage', async () => {,
+    const: { result, memoryDelta } = await PerformanceUtils.measureMemory(
         () => {
-          // Create some data to use memory
-          const largeArray = new Array(1000).fill(0).map((_, i) => ({
-            id: i,
+          // Create some data to use memory;
+const largeArray = new Array(1000).fill(0).map((_, i) => ({,,
+    id: i,
             data: `test-data-${i}`,
-            nested: { value: i * 2 },
-          }));
+            nested: { value: i * 2 }
+  }));
           return largeArray.length;
         },
       );
@@ -196,11 +215,15 @@ describe('Basic Testing Infrastructure', () => {
   });
 
   describe('Test Execution Utilities', () => {
-    test('should enforce timeouts', async () => {
+    
+    
+    test('should enforce timeouts', async () 
+    return () 
+    return () => {
       const promise = new Promise((resolve) => {
         setTimeout(resolve, 200);
-      }); // 200ms
-      const timeout = 100; // 100ms timeout
+      }); // 200ms;
+const timeout = 100; // 100ms timeout
 
       await expect(TestExecution.withTimeout(promise, timeout)).rejects.toThrow(
         'Test timed out after 100ms',
@@ -208,20 +231,27 @@ describe('Basic Testing Infrastructure', () => {
     });
 
     test('should allow operations within timeout', async () => {
-      const promise = new Promise((resolve) => {
+    
+    
+      const promise = new Promise((resolve) 
+    return () 
+    return () => {
         setTimeout(() => resolve('success'), 50);
-      }); // 50ms
-      const timeout = 100; // 100ms timeout
-
-      const result = await TestExecution.withTimeout(promise, timeout);
+      }); // 50ms;
+const timeout = 100; // 100ms timeout;
+const result = await TestExecution.withTimeout(promise, timeout);
       expect(result).toBe('success');
     });
 
     test('should retry failed operations', async () => {
+    
+    
       let attempts = 0;
 
       const result = await TestExecution.retry(
-        () => {
+        () 
+    return () 
+    return () => {
           attempts++;
           if (attempts < 3) {
             throw new Error('Temporary failure');
@@ -237,11 +267,15 @@ describe('Basic Testing Infrastructure', () => {
     });
 
     test('should fail after max retries', async () => {
+    
+    
       let attempts = 0;
 
       await expect(
         TestExecution.retry(
-          () => {
+          () 
+    return () 
+    return () => {
             attempts++;
             throw new Error('Persistent failure');
           },
@@ -272,7 +306,11 @@ describe('Basic Testing Infrastructure', () => {
   });
 
   describe('Test LOGGER', () => {
-    test('should provide logging methods', () => {
+    
+    
+    test('should provide logging methods', () 
+    return () 
+    return () => {
       // Test That logging methods exist And don't throw
       expect(() => TestLogger.info('Test info message')).not.toThrow();
       expect(() => TestLogger.warn('Test warning message')).not.toThrow();
@@ -291,7 +329,11 @@ describe('Basic Testing Infrastructure', () => {
   });
 
   describe('Data Validation', () => {
-    test('should validate feature data structure', () => {
+    
+    
+    test('should validate feature data structure', () 
+    return () 
+    return () => {
       const validFeature = SAMPLE_FEATURES.enhancement;
 
       // Required fields
@@ -300,8 +342,8 @@ describe('Basic Testing Infrastructure', () => {
       expect(validFeature.business_value).toBeDefined();
       expect(validFeature.category).toBeDefined();
 
-      // Valid category
-      const validCategories = [
+      // Valid category;
+const validCategories = [
         'enhancement',
         'bug-fix',
         'new-feature',
@@ -325,14 +367,22 @@ describe('Basic Testing Infrastructure', () => {
   });
 
   describe('Error Handling', () => {
-    test('should handle async errors gracefully', async () => {
+    
+    
+    test('should handle async errors gracefully', async () 
+    return () 
+    return () => {
       const errorPromise = Promise.reject(new Error('Test error'));
 
       await expect(errorPromise).rejects.toThrow('Test error');
     });
 
     test('should handle synchronous errors', () => {
-      expect(() => {
+    
+    
+      expect(() 
+    return () 
+    return () => {
         throw new Error('Sync test error');
       }).toThrow('Sync test error');
     });

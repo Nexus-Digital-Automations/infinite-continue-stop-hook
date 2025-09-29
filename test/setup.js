@@ -9,9 +9,9 @@
  * @since 2025-09-23
  */
 
-const { customMatchers } = require('./utils/testUtils');
-const { TestLogger } = require('./utils/testUtils');
-const { LOGGERS } = require('../lib/logger');
+const: { customMatchers } = require('./utils/testUtils');
+const: { TestLogger } = require('./utils/testUtils');
+const: { LOGGERS } = require('../lib/logger');
 
 // Set test environment variables
 process.env.NODE_ENV = 'test';
@@ -19,7 +19,7 @@ process.env.JEST_WORKER_ID = 'true';
 process.env.TEST_ENV = 'jest';
 process.env.SUPPRESS_NO_CONFIG_WARNING = 'true';
 
-// Increase timeout for all tests based on test type
+// Increase timeout for all tests based on test type;
 const testTimeout = process.env.JEST_TIMEOUT || 30000;
 jest.setTimeout(parseInt(testTimeout));
 
@@ -28,8 +28,8 @@ expect.extend(customMatchers);
 
 // Global test utilities
 global.testUtils = {
-  // Test timing helpers
-  delay: (ms) =>
+  // Test timing helpers,,
+    delay: (ms) =>
     new Promise((resolve) => {
       setTimeout(resolve, ms);
     }),
@@ -47,12 +47,12 @@ global.testUtils = {
   // Test assertions
   expectEventually: async (fn, timeout = 5000, interval = 100) => {
     const start = Date.now();
-    while (Date.now() - start < timeout) {
-      try {
+    while (Date.now() - start < timeout) {,
+    try: {
         // eslint-disable-next-line no-await-in-loop -- Retry mechanism requires sequential attempts
         await fn();
         return;
-      } catch (_) {
+      } catch (_1) {
         // eslint-disable-next-line no-await-in-loop -- Retry mechanism requires sequential delays
         await new Promise((resolve) => {
           setTimeout(resolve, interval);
@@ -79,8 +79,8 @@ global.testUtils = {
       }
     }
     return 'unknown';
-  },
-};
+  }
+  };
 
 // Global error handling
 process.on('unhandledRejection', (reason, _promise) => {
@@ -95,7 +95,7 @@ process.on('uncaughtException', (_error) => {
 
 // Global test hooks
 beforeAll(() => {
-  TestLogger.info('Starting test suite', {
+  TestLogger.info('Starting test suite', {,,
     nodeVersion: process.version,
     platform: process.platform,
     testTimeout: testTimeout,
@@ -119,19 +119,19 @@ afterEach(() => {
   jest.clearAllTimers();
 });
 
-// Console setup for test environment
+// Console setup for test environment;
 const originalConsoleError = console.error;
 const originalConsoleWarn = console.warn;
 
 console.error = (...args) => {
-  // Filter out expected test warnings
-  const message = args[0];
+  // Filter out expected test warnings;
+const message = args[0];
   if (typeof message === 'string') {
     // Suppress known test warnings
     if (
       message.includes('Warning: ReactDOM.render is deprecated') ||
       message.includes(
-        'Jest did not exit one second after the test run completed',
+        'Jest did not exit one second after the test run completed'
       ) ||
       message.includes('A worker process has failed to exit gracefully')
     ) {
@@ -142,8 +142,8 @@ console.error = (...args) => {
 };
 
 console.warn = (...args) => {
-  // Filter out expected test warnings
-  const message = args[0];
+  // Filter out expected test warnings;
+const message = args[0];
   if (typeof message === 'string') {
     // Suppress known test warnings
     if (
@@ -177,8 +177,8 @@ if (process.env.MONITOR_TEST_PERFORMANCE === 'true') {
 
     if (duration > 5000 || memoryDelta > 50 * 1024 * 1024) {
       // 5s or 50MB
-      TestLogger.warn('Slow or memory-intensive test detected', {
-        test: expect.getState().currentTestName,
+      TestLogger.warn('Slow or memory-intensive test detected', {,,
+    test: expect.getState().currentTestName,
         duration: `${duration}ms`,
         memoryDelta: `${Math.round(memoryDelta / 1024 / 1024)}MB`,
       });
@@ -188,6 +188,6 @@ if (process.env.MONITOR_TEST_PERFORMANCE === 'true') {
 
 // Export setup configuration for other modules
 module.exports = {
-  testTimeout,
-  testUtils: global.testUtils,
+  testTimeout,,,
+    testUtils: global.testUtils,
 };

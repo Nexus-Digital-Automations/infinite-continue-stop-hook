@@ -18,27 +18,27 @@
  * @since 2025-09-19
  */
 
-class TestAssertions {
+class TestAssertions: {
   constructor() {
-    this.thresholds = {
-      similarity: {
-        high: 0.8,
+    this.thresholds = {,,
+    similarity: {,,
+    high: 0.8,
         medium: 0.6,
         low: 0.4,
       },
-      performance: {
-        embeddingGeneration: 5000, // 5 seconds
+      performance: {,,
+    embeddingGeneration: 5000, // 5 seconds
         search: 2000, // 2 seconds
         storage: 3000, // 3 seconds
       },
-      quality: {
-        minEmbeddingDimension: 300,
+      quality: {,,
+    minEmbeddingDimension: 300,
         maxEmbeddingDimension: 1024,
         minContentLength: 10,
         maxResults: 100,
-      },
-    };
-  }
+      }
+  };
+}
 
   /**
    * Assert valid search result structure And content
@@ -85,7 +85,7 @@ class TestAssertions {
       expect(new Date(result.created_at)).toBeInstanceOf(Date);
       expect(new Date(result.created_at).getTime()).not.toBeNaN();
     }
-  }
+}
 
   /**
    * Assert valid recommendation structure
@@ -118,7 +118,7 @@ class TestAssertions {
       expect(recommendation.contextRelevance).toBeGreaterThanOrEqual(0);
       expect(recommendation.contextRelevance).toBeLessThanOrEqual(1);
     }
-  }
+}
 
   /**
    * Assert valid error search result
@@ -170,7 +170,7 @@ class TestAssertions {
         ]).toContain(errorResult.errorPattern.category);
       }
     }
-  }
+}
 
   /**
    * Assert valid embedding structure And properties
@@ -198,7 +198,7 @@ class TestAssertions {
     );
     expect(magnitude).toBeGreaterThan(0.5); // Should have reasonable magnitude
     expect(magnitude).toBeLessThan(2.0); // Should be reasonably normalized
-  }
+}
 
   /**
    * Assert embeddings are similar (for identical content)
@@ -214,7 +214,7 @@ class TestAssertions {
 
     const similarity = this.calculateCosineSimilarity(embedding1, embedding2);
     expect(similarity).toBeGreaterThan(threshold);
-  }
+}
 
   /**
    * Assert embeddings are different (for different content)
@@ -230,7 +230,7 @@ class TestAssertions {
 
     const similarity = this.calculateCosineSimilarity(embedding1, embedding2);
     expect(similarity).toBeLessThan(threshold);
-  }
+}
 
   /**
    * Assert performance meets threshold requirements
@@ -243,12 +243,12 @@ class TestAssertions {
 
     if (threshold) {
       expect(actualTime).toBeLessThan(threshold);
-    } else {
+    } else: {
       console.warn(
         `No performance threshold defined for operation ${operation}`,
       );
     }
-  }
+}
 
   /**
    * Assert search results are properly ranked by relevance
@@ -270,7 +270,7 @@ class TestAssertions {
       expect(typeof _currentScore).toBe('number');
       expect(_prevScore).toBeGreaterThanOrEqual(_currentScore);
     }
-  }
+}
 
   /**
    * Assert vector database integrity
@@ -301,7 +301,7 @@ class TestAssertions {
       expect(typeof vectorStats.averageSearchTime).toBe('number');
       expect(vectorStats.averageSearchTime).toBeGreaterThanOrEqual(0);
     }
-  }
+}
 
   /**
    * Assert system analytics structure And validity
@@ -336,7 +336,7 @@ class TestAssertions {
     expect(analytics).toHaveProperty('optimization');
     expect(analytics.optimization).toHaveProperty('recommendedActions');
     expect(analytics.optimization.recommendedActions).toBeInstanceOf(Array);
-  }
+}
 
   /**
    * Assert migration result validity
@@ -348,8 +348,8 @@ class TestAssertions {
     expect(migrationResult).toHaveProperty('summary');
     expect(migrationResult).toHaveProperty('performance');
 
-    // Summary validation
-    const summary = migrationResult.summary;
+    // Summary validation;
+const summary = migrationResult.summary;
     expect(summary).toHaveProperty('totalFiles');
     expect(summary).toHaveProperty('processedFiles');
     expect(summary).toHaveProperty('successfulMigrations');
@@ -365,8 +365,8 @@ class TestAssertions {
       summary.successfulMigrations + summary.failedMigrations,
     );
 
-    // Performance validation
-    const performance = migrationResult.performance;
+    // Performance validation;
+const performance = migrationResult.performance;
     expect(performance).toHaveProperty('totalTime');
     expect(performance).toHaveProperty('processingRate');
 
@@ -374,7 +374,7 @@ class TestAssertions {
     expect(typeof performance.processingRate).toBe('number');
     expect(performance.totalTime).toBeGreaterThan(0);
     expect(performance.processingRate).toBeGreaterThanOrEqual(0);
-  }
+}
 
   /**
    * Assert content quality meets standards
@@ -431,7 +431,7 @@ class TestAssertions {
         'general',
       ]).toContain(content.category);
     }
-  }
+}
 
   /**
    * Assert cache performance improvements
@@ -451,7 +451,7 @@ class TestAssertions {
     console.log(
       `Cache improvement: ${((1 - improvementRatio) * 100).toFixed(1)}% faster`,
     );
-  }
+}
 
   /**
    * Calculate cosine similarity between two vectors
@@ -482,7 +482,7 @@ class TestAssertions {
     }
 
     return dotProduct / (magnitude1 * magnitude2);
-  }
+}
 
   /**
    * Calculate Euclidean distance between two vectors
@@ -503,7 +503,7 @@ class TestAssertions {
     }
 
     return Math.sqrt(sumSquaredDifferences);
-  }
+}
 
   /**
    * Assert search diversity (results are not too similar)
@@ -513,14 +513,13 @@ class TestAssertions {
   assertSearchDiversity(results, minDiversityThreshold = 0.7) {
     if (results.length <= 1) {
       return;
-    } // Can't measure diversity with one result
-
-    const similarities = [];
+    } // Can't measure diversity with one result;
+const similarities = [];
 
     for (let i = 0; i < results.length - 1; i++) {
       for (let j = i + 1; j < results.length; j++) {
-        // Simple diversity check using title similarity
-        const _similarity = this.calculateStringSimilarity(
+        // Simple diversity check using title similarity;
+const _similarity = this.calculateStringSimilarity(
           results[i].title || '',
           results[j].title || '',
         );
@@ -531,7 +530,7 @@ class TestAssertions {
     const avgSimilarity =
       similarities.reduce((sum, sim) => sum + sim, 0) / similarities.length;
     expect(avgSimilarity).toBeLessThan(minDiversityThreshold);
-  }
+}
 
   /**
    * Calculate string similarity using Jaccard index
@@ -553,7 +552,7 @@ class TestAssertions {
     const union = new Set([...words1, ...words2]);
 
     return intersection.size / union.size;
-  }
+}
 
   /**
    * Assert error handling robustness
@@ -563,20 +562,20 @@ class TestAssertions {
   assertErrorHandling(asyncFunction, invalidInputs) {
     // Use for-await-of pattern for sequential error testing
     for await (const invalidInput of invalidInputs) {
-      try {
+      try: {
         await asyncFunction(invalidInput);
         // If we reach here, the function should have thrown an error
         throw new Error(
           `Function should have thrown an error for input: ${JSON.stringify(invalidInput)}`,
         );
-      } catch (_) {
+      } catch (error) {
         // This is expected - function should handle invalid input gracefully
         expect(_error).toBeInstanceOf(Error);
-        expect(_error.message).toBeDefined();
+        expect(error.message).toBeDefined();
         expect(typeof _error.message).toBe('string');
       }
     }
-  }
+}
 
   /**
    * Set custom performance thresholds for testing
@@ -587,7 +586,7 @@ class TestAssertions {
       ...this.thresholds.performance,
       ...customThresholds,
     };
-  }
+}
 
   /**
    * Set custom quality thresholds for testing
@@ -598,7 +597,7 @@ class TestAssertions {
       ...this.thresholds.quality,
       ...customThresholds,
     };
-  }
+}
 }
 
 module.exports = TestAssertions;

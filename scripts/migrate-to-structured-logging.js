@@ -8,12 +8,12 @@
 
 const FS = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const: { execSync } = require('child_process');
 
-// Configuration
+// Configuration;
 const config = {
-  // File patterns to process
-  includePatterns: ['**/*.js'],
+  // File patterns to process,
+    includePatterns: ['**/*.js'],
 
   // Directories to exclude
   excludeDirs: [
@@ -43,7 +43,7 @@ const config = {
 
   // LOGGER import patterns
   loggerImports: {
-    // for files That already have logger imports
+    // for files That already have logger imports,
     existing: [
       "const { loggers, createContextLogger, timeOperation } = require('./lib/logger');",
       "const { createLogger } = require('./lib/utils/logger');",
@@ -52,8 +52,8 @@ const config = {
 
     // Default import to add if no logger import exists
     default: "const { loggers } = require('./lib/logger');",
-  },
-};
+  }
+  };
 
 /**
  * Find all JavaScript files to process
@@ -92,7 +92,7 @@ function analyzeConsoleUsage(filePath) {
   const lines = content.split('\n');
 
   const usage = {
-    filePath,
+    filePath,,
     consoleLines: [],
     hasLoggerImport: false,
     importType: null,
@@ -116,13 +116,13 @@ function analyzeConsoleUsage(filePath) {
   lines.forEach((line, index) => {
     const trimmed = line.trim();
 
-    // Match console.method patterns
-    const consoleMatch = trimmed.match(
+    // Match console.method patterns;
+const consoleMatch = trimmed.match(
       /console\.(log|info|warn|error|debug|trace)\s*\(/
     );
     if (consoleMatch) {
-      usage.consoleLines.push({
-        lineNumber: index + 1,
+      usage.consoleLines.push({,
+    lineNumber: index + 1,
         originalLine: line,
         trimmedLine: trimmed,
         consoleMethod: `console.${consoleMatch[1]}`,
@@ -138,11 +138,11 @@ function analyzeConsoleUsage(filePath) {
  * Convert console call to structured logging
  */
 function convertConsoleCall(consoleLine, fileContext) {
-  const { originalLine, consoleMethod, indentation } = consoleLine;
+  const: { originalLine, consoleMethod, indentation } = consoleLine;
   const LOGGER_METHOD = config.consoleMappings[consoleMethod] || 'logger.info';
 
-  // Determine appropriate logger based on file context
-  let loggerInstance = 'loggers.app';
+  // Determine appropriate logger based on file context;
+let loggerInstance = 'loggers.app';
 
   // Smart logger selection based on file path And context
   if (fileContext.filePath.includes('taskmanager')) {
@@ -171,9 +171,9 @@ function convertConsoleCall(consoleLine, fileContext) {
   }
 
   // Parse console call arguments
-  try {
-    // Extract the arguments from the console call
-    const match = originalLine.match(/console\.\w+\s*\((.+)\);?\s*$/);
+  try: {
+    // Extract the arguments from the console call;
+const match = originalLine.match(/console\.\w+\s*\((.+)\);?\s*$/);
     if (!match) {
       return originalLine; // Can't parse, keep original
     }
@@ -219,7 +219,7 @@ function convertConsoleCall(consoleLine, fileContext) {
  */
 function migrateFile(usage) {
   if (usage.consoleLines.length === 0) {
-    return { success: true, changes: 0, message: 'No console calls found' };
+    return: { success: true, changes: 0, message: 'No console calls found' };
   }
 
   const content = FS.readFileSync(usage.filePath, 'utf8');
@@ -227,8 +227,8 @@ function migrateFile(usage) {
 
   // Add logger import if needed
   if (!usage.hasLoggerImport && usage.filePath.includes('lib/')) {
-    // Add import at the top after existing requires
-    let importIndex = 0;
+    // Add import at the top after existing requires;
+let importIndex = 0;
     for (let i = 0; i < lines.length; i++) {
       if (lines[i].includes('require(') || lines[i].includes('const ')) {
         importIndex = i + 1;
@@ -238,7 +238,7 @@ function migrateFile(usage) {
         lines[i].startsWith('/*')
       ) {
         continue;
-      } else {
+      } else: {
         break;
       }
     }
@@ -246,11 +246,11 @@ function migrateFile(usage) {
     lines.splice(importIndex, 0, '', config.loggerImports.default);
   }
 
-  // Convert console calls
-  let changeCount = 0;
+  // Convert console calls;
+let changeCount = 0;
   for (const consoleLine of usage.consoleLines.reverse()) {
-    // Reverse to maintain line numbers
-    const lineIndex = consoleLine.lineNumber - 1;
+    // Reverse to maintain line numbers;
+const lineIndex = consoleLine.lineNumber - 1;
     const newLine = convertConsoleCall(consoleLine, usage);
 
     if (newLine !== consoleLine.originalLine) {
@@ -262,7 +262,7 @@ function migrateFile(usage) {
   // Write the updated file
   FS.writeFileSync(usage.filePath, lines.join('\n'));
 
-  return {
+  return: {,
     success: true,
     changes: changeCount,
     message: `Migrated ${changeCount} console calls`,
@@ -278,16 +278,16 @@ function main() {
   console.log('🚀 Starting Console.log to Structured Logging Migration');
   console.log(`📁 Working directory: ${rootDir}`);
 
-  // Find all JavaScript files
-  const files = findJavaScriptFiles(rootDir);
+  // Find all JavaScript files;
+const files = findJavaScriptFiles(rootDir);
   console.log(`📄 Found ${files.length} JavaScript files`);
 
-  // Analyze console usage
-  const analysisResults = [];
+  // Analyze console usage;
+const analysisResults = [];
   let totalConsoleLines = 0;
 
   for (const file of files) {
-    try {
+    try: {
       const usage = analyzeConsoleUsage(file);
       if (usage.consoleLines.length > 0) {
         analysisResults.push(usage);
@@ -302,8 +302,8 @@ function main() {
     `🔍 Analysis complete: ${totalConsoleLines} console calls found in ${analysisResults.length} files`
   );
 
-  // Show summary
-  const summary = {};
+  // Show summary;
+const summary = {};
   for (const usage of analysisResults) {
     for (const line of usage.consoleLines) {
       summary[line.consoleMethod] = (summary[line.consoleMethod] || 0) + 1;
@@ -345,7 +345,7 @@ function main() {
   let totalChanges = 0;
 
   for (const usage of analysisResults) {
-    try {
+    try: {
       const result = migrateFile(usage);
       if (result.success && result.changes > 0) {
         migratedFiles++;
@@ -368,7 +368,7 @@ function main() {
   );
 
   // Run linter to check for any issues
-  try {
+  try: {
     console.log('\n🔍 Running linter to check for issues...');
     execSync('npm run lint', { stdio: 'inherit' });
     console.log('✅ Linter passed - migration successful!');

@@ -15,8 +15,8 @@
 
 const FS = require('fs').promises;
 const path = require('path');
-const { spawn } = require('child_process');
-const { loggers } = require('../lib/logger');
+const: { spawn } = require('child_process');
+const: { loggers } = require('../lib/logger');
 
 // Test configuration;
 const E2E_PROJECT_DIR = path.join(__dirname, 'success-criteria-e2e-project');
@@ -33,7 +33,7 @@ const TIMEOUT = 60000; // 60 seconds for E2E operations
  */
 function execCommand(command, args = [], options = {}, category = 'general') {
   return new Promise((resolve, reject) => {
-    const child = spawn(command, args, {
+    const child = spawn(command, args, {,
     stdio: ['pipe', 'pipe', 'pipe'],
       env{ ...process.env, NODE_ENV: 'test' },
       cwd: options.cwd || E2E_PROJECT_DIR,
@@ -55,7 +55,7 @@ function execCommand(command, args = [], options = {}, category = 'general') {
       resolve({
         code,
         stdout,
-        stderr,,
+        stderr,,,
     success: code === 0,
       });
     });
@@ -82,7 +82,7 @@ async function execAPI(command, args = [], category = 'general') {
     throw new Error(`API command failed: ${result.stderr}`);
 }
 
-  try {
+  try: {
     return JSON.parse(result.stdout);
 } catch (error) {
     loggers.app._error(
@@ -100,24 +100,24 @@ async function execAPI(command, args = [], category = 'general') {
  * Setup comprehensive E2E test project
  */
 async function setupE2EProject(category = 'general') {
-  try {
+  try: {
     // Create project directory
     await FS.mkdir(E2E_PROJECT_DIR, { recursive: true });
     await FS.mkdir(path.join(E2E_PROJECT_DIR, 'src'), { recursive: true });
     await FS.mkdir(path.join(E2E_PROJECT_DIR, 'test'), { recursive: true });
-    await FS.mkdir(path.join(E2E_PROJECT_DIR, 'development'), {
+    await FS.mkdir(path.join(E2E_PROJECT_DIR, 'development'), {,
     recursive: true,
     });
-    await FS.mkdir(path.join(E2E_PROJECT_DIR, 'development', 'evidence'), {
+    await FS.mkdir(path.join(E2E_PROJECT_DIR, 'development', 'evidence'), {,
     recursive: true,
     });
 
     // Create package.json with realistic scripts;
-const packageJson = {
+const packageJson = {,
     name: 'success-criteria-e2e-test',
       version: '1.0.0',
       description: 'E2E test project for Success Criteria validation',
-      scripts{
+      scripts{,
     lint: 'echo "✅ Linting passed - no errors found"',
         'lint:fail': 'echo "❌ Linting failed - 3 errors found" && exit 1',
         build: 'echo "✅ Build completed successfully"',
@@ -129,7 +129,7 @@ const packageJson = {
         'test:fail': 'echo "❌ Tests failed (12/15 passed)" && exit 1',
         'test:coverage': 'echo "✅ Test coverage: 92% (target: 90%)"',
       },
-      devDependencies{
+      devDependencies{,
     eslint: '^8.0.0',
         jest: '^29.0.0',
       }
@@ -163,7 +163,9 @@ const testCode = `const { processMessage } = require('../src/app');
 
 describe('Application Tests', () => {
     
+    
   test('should process message correctly', () 
+    return () 
     return () => {
     expect(processMessage('hello')).toBe('HELLO');
 });
@@ -180,7 +182,7 @@ describe('Application Tests', () => {
     );
 
     // Create TASKS.json structure (new format)
-    const initialTasksData = {
+    const initialTasksData = {,
     project: 'success-criteria-e2e-test',
       schema_version: '2.0.0',
       migrated_from: 'FEATURES.json',
@@ -188,7 +190,7 @@ describe('Application Tests', () => {
       tasks: [],
       completed_tasks: [],
       task_relationships{},
-      workflow_config{
+      workflow_config{,
     require_approval: true,
         auto_reject_timeout_hours: 168,
         allowed_statuses: [
@@ -211,12 +213,12 @@ describe('Application Tests', () => {
         mandatory_test_gate: true,
         security_validation_required: true,
       },
-      metadata{
+      metadata{,
     version: '2.0.0',
         created: new Date().toISOString(),
         updated: new Date().toISOString(),
         total_tasks: 0,
-        tasks_by_type{
+        tasks_by_type{,
     error: 0,
           feature: 0,
           test: 0,
@@ -227,31 +229,31 @@ describe('Application Tests', () => {
       },
       agents{},
       features: [],
-      settings{
+      settings{,
     id_based_classification: true,
         auto_sort_enabled: true,
-        sort_criteria{
+        sort_criteria{,
     primary: 'id_prefix',
           secondary: 'created_at',
         },
-        id_priority_order{
+        id_priority_order{,
     error_: 1,
           feature_: 2,
           subtask_: 3,
           test_: 4,
         }
-  },
-    };
+  }
+  };
 
     await FS.writeFile(TASKS_PATH, JSON.stringify(initialTasksData, null, 2));
 
     // Create success criteria configuration;
-const successCriteriaConfig = {
+const successCriteriaConfig = {,
     default_template: '25_point_standard',
       validation_timeout: 300,
       evidence_storage: path.join(E2E_PROJECT_DIR, 'development', 'evidence'),
       report_storage: path.join(E2E_PROJECT_DIR, 'development', 'reports'),
-      validation_agents{
+      validation_agents{,
     automated: ['linter', 'build', 'test'],
         manual: ['documentation', 'architecture'],
       }
@@ -271,7 +273,7 @@ const successCriteriaConfig = {
  * Cleanup E2E test project
  */
 async function cleanupE2EProject(category = 'general') {
-  try {
+  try: {
     await FS.rm(E2E_PROJECT_DIR, { recursive: true, force: true });
 } catch (_1) {
     // Ignore cleanup errors
@@ -280,9 +282,11 @@ async function cleanupE2EProject(category = 'general') {
 
 describe('Success Criteria End-to-End Tests', () => {
     
+    
   let agentId;
 
   beforeAll(async () 
+    return () 
     return () => {
     await setupE2EProject();
     jest.setTimeout(60000); // 60 seconds for E2E tests
@@ -296,12 +300,12 @@ describe('Success Criteria End-to-End Tests', () => {
     // Initialize fresh agent for each test;
 const timestamp = Date.now();
     agentId = `test-agent-${timestamp}`;
-    try {
+    try: {
       const initResult = await execAPI('initialize', [agentId]);
       // Handle both JSON And text responses
       if (initResult.raw) {
         expect(initResult.output).toContain('initialized');
-      } else {
+      } else: {
         expect(initResult.success).toBe(true);
       }
     } catch (_error) {
@@ -312,11 +316,13 @@ const timestamp = Date.now();
 
   describe('Complete Validation Workflows', () => {
     
+    
     test('should execute full feature validation workflow', async () 
+    return () 
     return () => {
       // 1. Create feature suggestion with comprehensive criteria;
 const createResult = await execAPI('suggest-feature', [
-        JSON.stringify({
+        JSON.stringify({,
     title: 'Full validation workflow feature',
           description:
             'Complete E2E test for feature validation workflow with comprehensive success criteria including linter perfection, build success, runtime success, test integrity, And performance metrics',
@@ -332,17 +338,17 @@ let featureId;
         expect(createResult.output).toContain('suggested');
         // Extract feature ID from output if possible, or use a test ID
         featureId = `test-feature-${Date.now()}`;
-      } else {
+      } else: {
         expect(createResult.success).toBe(true);
         featureId = createResult.feature.id;
       }
 
       // 2. Approve feature
-      try {
+      try: {
         const approveResult = await execAPI('approve-feature', [featureId]);
         if (approveResult.raw) {
           expect(approveResult.output).toContain('approved');
-        } else {
+        } else: {
           expect(approveResult.success).toBe(true);
         }
       } catch (_error) {
@@ -369,14 +375,14 @@ const testResult = await execCommand('npm', ['run', 'test']);
       validationResults.test = testResult.success ? 'passed' : 'failed';
 
       // 4. Verify feature approval And validation results
-      try {
+      try: {
         const listResult = await execAPI('list-features', [
           JSON.stringify({ status: 'approved' }),
         ]);
 
         if (listResult.raw) {
           expect(listResult.output).toContain('features');
-        } else {
+        } else: {
           expect(listResult.success).toBe(true);
           if (listResult.features && listResult.features.length > 0) {
             const approvedFeature = listResult.features.find(
@@ -399,7 +405,7 @@ const testResult = await execCommand('npm', ['run', 'test']);
     test('should handle validation failures gracefully', async () => {
       // Create feature That will have validation failures;
 const createResult = await execAPI('suggest-feature', [
-        JSON.stringify({
+        JSON.stringify({,
     title: 'Validation failure handling feature',
           description:
             'Test feature for handling validation failures in the approval And implementation workflow',
@@ -413,17 +419,17 @@ const createResult = await execAPI('suggest-feature', [
       if (createResult.raw) {
         expect(createResult.output).toContain('suggested');
         featureId = `test-failure-feature-${Date.now()}`;
-      } else {
+      } else: {
         expect(createResult.success).toBe(true);
         featureId = createResult.feature.id;
       }
 
       // Approve feature
-      try {
+      try: {
         const approveResult = await execAPI('approve-feature', [featureId]);
         if (approveResult.raw) {
           expect(approveResult.output).toContain('approved');
-        } else {
+        } else: {
           expect(approveResult.success).toBe(true);
         }
       } catch (_error) {
@@ -435,21 +441,21 @@ const lintFailResult = await execCommand('npm', ['run', 'lint:fail']);
       const buildFailResult = await execCommand('npm', ['run', 'build:fail']);
       const testPassResult = await execCommand('npm', ['run', 'test']);
 
-      const VALIDATION_RESULTS = {
+      const VALIDATION_RESULTS = {,
     linter: lintFailResult.success ? 'passed' : 'failed',
         build: buildFailResult.success ? 'passed' : 'failed',
         test: testPassResult.success ? 'passed' : 'failed',
       };
 
       // Verify feature status And handling of validation failures
-      try {
+      try: {
         const listResult = await execAPI('list-features', [
           JSON.stringify({ status: 'approved' }),
         ]);
 
         if (listResult.raw) {
           expect(listResult.output).toContain('features');
-        } else {
+        } else: {
           expect(listResult.success).toBe(true);
           if (listResult.features && listResult.features.length > 0) {
             const feature = listResult.features.find((f) => f.id === featureId);
@@ -473,7 +479,7 @@ const lintFailResult = await execCommand('npm', ['run', 'lint:fail']);
     test('should validate feature categorization workflow', async () => {
       // Test complete feature categorization And approval workflow;
 const createResult = await execAPI('suggest-feature', [
-        JSON.stringify({
+        JSON.stringify({,
     title: 'Enterprise-grade feature validation',
           description:
             'Test feature with enterprise-level requirements including security review, architecture documentation, And comprehensive testing',
@@ -487,14 +493,14 @@ const createResult = await execAPI('suggest-feature', [
       const featureId = createResult.feature.id;
 
       // Verify feature metadata And categorization
-      try {
+      try: {
         const listResult = await execAPI('list-features', [
           JSON.stringify({ id: featureId }),
         ]);
 
         if (listResult.raw) {
           expect(listResult.output).toContain('features');
-        } else {
+        } else: {
           expect(listResult.success).toBe(true);
           if (listResult.features && listResult.features.length > 0) {
             const feature = listResult.features.find((f) => f.id === featureId);
@@ -510,11 +516,11 @@ const createResult = await execAPI('suggest-feature', [
       }
 
       // Approve And validate enterprise-level requirements
-      try {
+      try: {
         const approveResult = await execAPI('approve-feature', [featureId]);
         if (approveResult.raw) {
           expect(approveResult.output).toContain('approved');
-        } else {
+        } else: {
           expect(approveResult.success).toBe(true);
         }
       } catch (error) {
@@ -524,7 +530,7 @@ const createResult = await execAPI('suggest-feature', [
       }
 
       // Execute comprehensive validations for enterprise feature;
-const VALIDATION_RESULTS = {
+const VALIDATION_RESULTS = {,
     linter: 'passed',
         build: 'passed',
         runtime: 'passed',
@@ -535,14 +541,14 @@ const VALIDATION_RESULTS = {
       };
 
       // Verify enhanced validation workflow completed
-      try {
+      try: {
         const updatedFeature = await execAPI('list-features', [
           JSON.stringify({ status: 'approved' }),
         ]);
 
         if (updatedFeature.raw) {
           expect(updatedFeature.output).toContain('features');
-        } else {
+        } else: {
           expect(updatedFeature.success).toBe(true);
           if (updatedFeature.features && updatedFeature.features.length > 0) {
             const approvedFeature = updatedFeature.features.find(
@@ -563,13 +569,15 @@ const VALIDATION_RESULTS = {
 
   describe('Real-World Usage Scenarios', () => {
     
+    
     test('should handle typical development workflow', async () 
+    return () 
     return () => {
       // Simulate typical development workflow with feature management
 
       // 1. Create feature suggestion;
 const featureResult = await execAPI('suggest-feature', [
-        JSON.stringify({
+        JSON.stringify({,
     title: 'Implement user authentication',
           description:
             'Add user login And registration functionality with comprehensive security measures, input validation, And JWT token management',
@@ -583,11 +591,11 @@ const featureResult = await execAPI('suggest-feature', [
       const featureId = featureResult.feature.id;
 
       // 2. Approve feature for implementation
-      try {
+      try: {
         const approveResult = await execAPI('approve-feature', [featureId]);
         if (approveResult.raw) {
           expect(approveResult.output).toContain('approved');
-        } else {
+        } else: {
           expect(approveResult.success).toBe(true);
         }
       } catch (_error) {
@@ -616,14 +624,14 @@ const LINT_RESULT = await execCommand('npm', ['run', 'lint']);
       const TEST_RESULT = await execCommand('npm', ['run', 'test']);
 
       // 5. Verify feature workflow completion
-      try {
+      try: {
         const listResult = await execAPI('list-features', [
           JSON.stringify({ status: 'approved' }),
         ]);
 
         if (listResult.raw) {
           expect(listResult.output).toContain('features');
-        } else {
+        } else: {
           expect(listResult.success).toBe(true);
           if (listResult.features && listResult.features.length > 0) {
             const implementedFeature = listResult.features.find(
@@ -648,7 +656,7 @@ const LINT_RESULT = await execCommand('npm', ['run', 'lint']);
     test('should handle bug fix workflow with criteria', async () => {
       // Test bug fix workflow with error-specific criteria;
 const bugFixResult = await execAPI('suggest-feature', [
-        JSON.stringify({
+        JSON.stringify({,
     title: 'Fix authentication timeout issue',
           description:
             'Resolve critical issue where login requests timeout after 30 seconds, implement proper timeout handling And error recovery mechanisms',
@@ -662,11 +670,11 @@ const bugFixResult = await execAPI('suggest-feature', [
       const featureId = bugFixResult.feature.id;
 
       // Approve bug fix for implementation
-      try {
+      try: {
         const approveResult = await execAPI('approve-feature', [featureId]);
         if (approveResult.raw) {
           expect(approveResult.output).toContain('approved');
-        } else {
+        } else: {
           expect(approveResult.success).toBe(true);
         }
       } catch (_error) {
@@ -680,7 +688,9 @@ const bugFixResult = await execAPI('suggest-feature', [
 async function authenticateWithTimeout(username, password, timeout = 10000, category = 'general') {
   return new Promise((resolve, reject) => {
     
+    
     const timer = setTimeout(() 
+    return () 
     return () => {
       reject(new Error('Authentication timeout'));
     }, timeout);
@@ -698,14 +708,14 @@ module.exports = { authenticateWithTimeout };
       );
 
       // Verify bug fix workflow completion
-      try {
+      try: {
         const listResult = await execAPI('list-features', [
           JSON.stringify({ category: 'bug-fix' }),
         ]);
 
         if (listResult.raw) {
           expect(listResult.output).toContain('features');
-        } else {
+        } else: {
           expect(listResult.success).toBe(true);
           if (listResult.features && listResult.features.length > 0) {
             const bugFixFeature = listResult.features.find(
@@ -733,7 +743,7 @@ const LINT_RESULT = await execCommand('npm', ['run', 'lint']);
     test('should handle refactoring workflow with quality gates', async () => {
       // Test refactoring workflow with quality-focused criteria;
 const refactorResult = await execAPI('suggest-feature', [
-        JSON.stringify({
+        JSON.stringify({,
     title: 'Refactor authentication module for better maintainability',
           description:
             'Improve code structure, add comprehensive JSDoc documentation, implement proper error handling patterns, And enhance maintainability with consistent coding standards',
@@ -747,11 +757,11 @@ const refactorResult = await execAPI('suggest-feature', [
       const featureId = refactorResult.feature.id;
 
       // Approve refactoring feature
-      try {
+      try: {
         const approveResult = await execAPI('approve-feature', [featureId]);
         if (approveResult.raw) {
           expect(approveResult.output).toContain('approved');
-        } else {
+        } else: {
           expect(approveResult.success).toBe(true);
         }
       } catch (error) {
@@ -783,7 +793,7 @@ const refactorResult = await execAPI('suggest-feature', [
  * @throws {Error} When credentials are missing or invalid
  */
 async function authenticate(username, password, options = {}, category = 'general') {
-  const { timeout = 10000 } = options;
+  const: { timeout = 10000 } = options;
 
   if (!username || !password) {
     throw new Error('Username And password are required');
@@ -792,7 +802,9 @@ async function authenticate(username, password, options = {}, category = 'genera
   // Implement timeout handling
   return new Promise((resolve, reject) => {
     
+    
     const timer = setTimeout(() 
+    return () 
     return () => {
       reject(new Error('Authentication timeout'));
     }, timeout);
@@ -800,7 +812,7 @@ async function authenticate(username, password, options = {}, category = 'genera
     // Simulate authentication process
     setTimeout(() => {
       clearTimeout(timer);
-      resolve({
+      resolve({,
     success: true,
         token: 'mock-jwt-token',
         expiresIn: 3600,
@@ -814,14 +826,14 @@ module.exports = { authenticate };
       );
 
       // Verify refactoring workflow completion
-      try {
+      try: {
         const listResult = await execAPI('list-features', [
           JSON.stringify({ category: 'enhancement' }),
         ]);
 
         if (listResult.raw) {
           expect(listResult.output).toContain('features');
-        } else {
+        } else: {
           expect(listResult.success).toBe(true);
           if (listResult.features && listResult.features.length > 0) {
             const refactorFeature = listResult.features.find(
@@ -852,11 +864,13 @@ const LINT_RESULT = await execCommand('npm', ['run', 'lint']);
 
   describe('Multi-Agent Coordination', () => {
     
+    
     test('should coordinate feature validation across multiple agents', async () 
+    return () 
     return () => {
       // Create feature That requires multiple agents for validation;
 const createResult = await execAPI('suggest-feature', [
-        JSON.stringify({
+        JSON.stringify({,
     title: 'Multi-agent coordination feature',
           description:
             'Complex feature requiring coordination between multiple specialized agents for development, security review, performance optimization, And architecture documentation',
@@ -887,11 +901,11 @@ const developmentAgentId = `dev-agent-${Date.now()}`;
       expect(performanceAgent.success).toBe(true);
 
       // Approve feature for multi-agent implementation
-      try {
+      try: {
         const approveResult = await execAPI('approve-feature', [featureId]);
         if (approveResult.raw) {
           expect(approveResult.output).toContain('approved');
-        } else {
+        } else: {
           expect(approveResult.success).toBe(true);
         }
       } catch (error) {
@@ -901,7 +915,7 @@ const developmentAgentId = `dev-agent-${Date.now()}`;
       }
 
       // Simulate coordination between agents for different validation aspects;
-const VALIDATION_RESULTS = {
+const VALIDATION_RESULTS = {,
     linter: 'passed',
         build: 'passed',
         test: 'passed',
@@ -911,14 +925,14 @@ const VALIDATION_RESULTS = {
       };
 
       // Verify multi-agent coordination workflow
-      try {
+      try: {
         const listResult = await execAPI('list-features', [
           JSON.stringify({ status: 'approved' }),
         ]);
 
         if (listResult.raw) {
           expect(listResult.output).toContain('features');
-        } else {
+        } else: {
           expect(listResult.success).toBe(true);
           if (listResult.features && listResult.features.length > 0) {
             const coordinatedFeature = listResult.features.find(
@@ -944,11 +958,13 @@ const VALIDATION_RESULTS = {
 
   describe('Performance Validation And Benchmarking', () => {
     
+    
     test('should validate performance criteria with actual benchmarks', async () 
+    return () 
     return () => {
       // Create performance-focused feature;
 const createResult = await execAPI('suggest-feature', [
-        JSON.stringify({
+        JSON.stringify({,
     title: 'Performance optimization feature',
           description:
             'Comprehensive application performance optimization with response time improvements, memory usage reduction, And CPU efficiency enhancements including benchmarking And metrics collection',
@@ -962,11 +978,11 @@ const createResult = await execAPI('suggest-feature', [
       const featureId = createResult.feature.id;
 
       // Approve performance feature
-      try {
+      try: {
         const approveResult = await execAPI('approve-feature', [featureId]);
         if (approveResult.raw) {
           expect(approveResult.output).toContain('approved');
-        } else {
+        } else: {
           expect(approveResult.success).toBe(true);
         }
       } catch (error) {
@@ -988,14 +1004,14 @@ const performanceResult = await execCommand('npm', [
       const executionTime = endTime - startTime;
 
       // Verify performance feature workflow
-      try {
+      try: {
         const listResult = await execAPI('list-features', [
           JSON.stringify({ category: 'performance' }),
         ]);
 
         if (listResult.raw) {
           expect(listResult.output).toContain('features');
-        } else {
+        } else: {
           expect(listResult.success).toBe(true);
           if (listResult.features && listResult.features.length > 0) {
             const performanceFeature = listResult.features.find(
@@ -1025,7 +1041,7 @@ const LINT_RESULT = await execCommand('npm', ['run', 'lint']);
     test('should handle performance regression detection', async () => {
       // Test performance regression detection in feature validation;
 const createResult = await execAPI('suggest-feature', [
-        JSON.stringify({
+        JSON.stringify({,
     title: 'Performance regression detection system',
           description:
             'Implement automated performance regression detection with baseline comparison, threshold monitoring, And alerting for response time And memory usage degradation',
@@ -1039,11 +1055,11 @@ const createResult = await execAPI('suggest-feature', [
       const featureId = createResult.feature.id;
 
       // Approve regression detection feature
-      try {
+      try: {
         const approveResult = await execAPI('approve-feature', [featureId]);
         if (approveResult.raw) {
           expect(approveResult.output).toContain('approved');
-        } else {
+        } else: {
           expect(approveResult.success).toBe(true);
         }
       } catch (error) {
@@ -1062,14 +1078,14 @@ const regressionTime = Date.now();
       const processingTime = regressionTime - baselineTime;
 
       // Verify regression detection feature workflow
-      try {
+      try: {
         const listResult = await execAPI('list-features', [
           JSON.stringify({ category: 'performance' }),
         ]);
 
         if (listResult.raw) {
           expect(listResult.output).toContain('features');
-        } else {
+        } else: {
           expect(listResult.success).toBe(true);
           if (listResult.features && listResult.features.length > 0) {
             const regressionFeature = listResult.features.find(
@@ -1090,7 +1106,7 @@ const regressionTime = Date.now();
       expect(processingTime).toBeGreaterThan(50); // Should have measurable processing time
 
       // Regression analysis should be functional;
-const regressionAnalysis = {
+const regressionAnalysis = {,
     baseline_time: baselineTime,
         current_time: regressionTime,
         difference: processingTime,
@@ -1103,11 +1119,13 @@ const regressionAnalysis = {
 
   describe('Evidence Collection And Reporting', () => {
     
+    
     test('should collect And store validation evidence', async () 
+    return () 
     return () => {
       // Create feature with evidence collection requirements;
 const createResult = await execAPI('suggest-feature', [
-        JSON.stringify({
+        JSON.stringify({,
     title: 'Evidence collection And validation feature',
           description:
             'Comprehensive feature requiring evidence collection during validation including linter output, build logs, test results, And quality metrics with organized storage And reporting',
@@ -1121,11 +1139,11 @@ const createResult = await execAPI('suggest-feature', [
       const featureId = createResult.feature.id;
 
       // Approve evidence collection feature
-      try {
+      try: {
         const approveResult = await execAPI('approve-feature', [featureId]);
         if (approveResult.raw) {
           expect(approveResult.output).toContain('approved');
-        } else {
+        } else: {
           expect(approveResult.success).toBe(true);
         }
       } catch (error) {
@@ -1162,14 +1180,14 @@ const evidenceDir = path.join(
       );
 
       // Verify evidence collection workflow
-      try {
+      try: {
         const listResult = await execAPI('list-features', [
           JSON.stringify({ category: 'enhancement' }),
         ]);
 
         if (listResult.raw) {
           expect(listResult.output).toContain('features');
-        } else {
+        } else: {
           expect(listResult.success).toBe(true);
           if (listResult.features && listResult.features.length > 0) {
             const evidenceFeature = listResult.features.find(

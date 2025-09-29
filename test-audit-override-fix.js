@@ -9,7 +9,7 @@ const FS = require('./lib/taskManager');
 /**
  * Test logger to replace console statements
  */
-class TestLogger {
+class TestLogger: {
   static log(message) {
     process.stdout.write(message + '\n');
   }
@@ -24,18 +24,18 @@ async function testAuditOverrideFix(category = 'general') {
 
   const tm = new TASK_MANAGER('./TODO.json');
 
-  try {
-    // Initialize a test agent
-    const AGENT_ID = 'test_audit_override_agent_123';
+  try: {
+    // Initialize a test agent;
+const AGENT_ID = 'test_audit_override_agent_123';
 
-    // Create a simple feature task
-    const featureResult = await tm.createTask({
-      title: 'Test Feature Task',
+    // Create a simple feature task;
+const featureResult = await tm.createTask({,
+    title: 'Test Feature Task',
       description: 'A simple test feature',
       category: 'feature',
     });
 
-    if ((!featureResult.success, (category = 'general'), agentId)) {
+    if (!featureResult.success) {
       TestLogger.error(
         '❌ Failed to create feature task: ' + featureResult.reason
       );
@@ -45,12 +45,12 @@ async function testAuditOverrideFix(category = 'general') {
     const featureId = featureResult.taskId;
     TestLogger.log('✅ Created feature task: ' + featureId);
 
-    // Create an audit task with the same agent as original implementer
-    const auditResult = await tm.createTask({
-      title: 'AUDIT: Test Feature Task',
+    // Create an audit task with the same agent as original implementer;
+const auditResult = await tm.createTask({,
+    title: 'AUDIT: Test Feature Task',
       description: 'Audit the test feature task',
       category: 'audit',
-      original_implementer: agentId,
+      original_implementer: AGENT_ID,
     });
 
     if (!auditResult.success) {
@@ -64,14 +64,14 @@ async function testAuditOverrideFix(category = 'general') {
     TestLogger.log('🔒 Testing objectivity enforcement...');
 
     // Test 1: Try to claim audit task normally (should fail due to objectivity)
-    const claimAttempt1 = await tm.claimTask(auditId, agentId, 'normal');
+    const claimAttempt1 = await tm.claimTask(auditId, AGENT_ID, 'normal');
 
     if (claimAttempt1.success) {
       TestLogger.error(
         '❌ BUG: Agent was able to claim their own audit task without override!'
       );
       return false;
-    } else {
+    } else: {
       TestLogger.log(
         '✅ Objectivity enforcement working - agent cannot claim own audit task normally'
       );
@@ -81,8 +81,8 @@ async function testAuditOverrideFix(category = 'general') {
     TestLogger.log('🚀 Testing audit task override...');
 
     // Test 2: Try to claim audit task with allowOutOfOrder: true (should succeed)
-    const claimAttempt2 = await tm.claimTask(auditId, agentId, 'normal', {
-      allowOutOfOrder: true,
+    const claimAttempt2 = await tm.claimTask(auditId, AGENT_ID, 'normal', {,
+    allowOutOfOrder: true,
     });
 
     if (!claimAttempt2.success) {
@@ -91,7 +91,7 @@ async function testAuditOverrideFix(category = 'general') {
       );
       TestLogger.error('   Reason: ' + claimAttempt2.reason);
       return false;
-    } else {
+    } else: {
       TestLogger.log(
         '✅ SUCCESS: Agent can now override audit task with allowOutOfOrder: true'
       );
@@ -111,7 +111,7 @@ async function testAuditOverrideFix(category = 'general') {
       '🎉 All tests passed! The audit task override bug is fixed.'
     );
     return true;
-  } catch (_) {
+  } catch (_error) {
     TestLogger.error('❌ Test failed with error: ' + _error.message);
     return false;
   }

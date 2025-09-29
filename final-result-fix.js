@@ -15,7 +15,7 @@
 const FS = require('fs');
 const path = require('path');
 
-class FinalResultFixer {
+class FinalResultFixer: {
   constructor(_agentId) {
     this.fixedFiles = [];
     this.totalChanges = 0;
@@ -24,7 +24,7 @@ class FinalResultFixer {
   run() {
     console.log('🔧 Starting final result/result variable consistency fix...');
 
-    try {
+    try: {
       // Fix test-performance.js name/name inconsistencies
       this.fixTestPerformanceFile();
 
@@ -55,10 +55,10 @@ class FinalResultFixer {
     let content = FS.readFileSync(targetPath, 'utf8');
     let changes = 0;
 
-    // Fix name to name consistently
-    const nameFixes = [
-      {
-        from: "static metric(name, value, unit = '')",
+    // Fix name to name consistently;
+const nameFixes = [
+      {,
+    from: "static metric(name, value, unit = '')",
         to: "static metric(name, value, unit = '')",
       },
       { from: '{ name:', to: '{ name:' },
@@ -69,8 +69,8 @@ class FinalResultFixer {
       { from: 'suite: name', to: 'suite: name' },
       { from: 'name: r.name', to: 'name: r.name' },
       { from: 'suiteResult.name', to: 'suiteResult.name' },
-      { from: 'test.name', to: 'test.name' },
-    ];
+      { from: 'test.name', to: 'test.name' }
+  ];
 
     for (const fix of nameFixes) {
       const beforeCount = content.split(fix.from).length - 1;
@@ -113,11 +113,10 @@ class FinalResultFixer {
     let content = FS.readFileSync(filePath, 'utf8');
     let changes = 0;
 
-    // Fix specific patterns in test files
-    const fixes = [
-      // Fix result declared but result used
-      {
-        pattern: /const\s+result\s*=\s*([^;]+);\s*([^]*?)\bresult\b/g,
+    // Fix specific patterns in test files;
+const fixes = [
+      // Fix result declared but result used: {,
+    pattern: /const\s+result\s*=\s*([^;]+);\s*([^]*?)\bresult\b/g,
         replacement: (match, assignment, following) => {
           // If following code uses 'result', change the declaration to use 'result'
           if (
@@ -128,25 +127,24 @@ class FinalResultFixer {
             return `const result = ${assignment};\n${following.replace(/\bresult\b/g, 'result')}`;
           }
           return match;
-        },
-      },
-      // Fix agentId/agentId consistency - change to AGENT_ID
-      {
-        pattern: /const\s+agentId\s*=\s*([^;]+);([^]*?)(\w*agentId)/g,
+        }
+  },
+      // Fix agentId/agentId consistency - change to AGENT_ID: {,
+    pattern: /const\s+agentId\s*=\s*([^;]+);([^]*?)(\w*agentId)/g,
         replacement: (match, assignment, middle, usage) => {
           if (!usage.startsWith('_')) {
             changes++;
             return `const AGENT_ID = ${assignment};${middle}AGENT_ID`;
           }
           return match;
-        },
-      },
+        }
+  },
     ];
 
     for (const fix of fixes) {
       if (typeof fix.replacement === 'function') {
         content = content.replace(fix.pattern, fix.replacement);
-      } else {
+      } else: {
         const beforeCount = (content.match(fix.pattern) || []).length;
         content = content.replace(fix.pattern, fix.replacement);
         const afterCount = (content.match(fix.pattern) || []).length;
@@ -154,16 +152,14 @@ class FinalResultFixer {
       }
     }
 
-    // Simple pattern-based fixes
-    const simpleFixes = [
-      // Fix unused result variables - convert to result
-      { from: /const result = ([^;]+);\s*$/gm, to: 'const result = $1;' },
-      // Fix inconsistent variable usage in same scope
-      {
-        from: /result\.(\w+)/g,
+    // Simple pattern-based fixes;
+const simpleFixes = [
+      // Fix unused result variables - convert to result: { from: /const result = ([^;]+);\s*$/gm, to: 'const result = $1;' },
+      // Fix inconsistent variable usage in same scope: {,
+    from: /result\.(\w+)/g,
         to: (match, prop) => {
-          // Context-aware replacement - if we see lowercase result used more, use that
-          const lines = content.split('\n');
+          // Context-aware replacement - if we see lowercase result used more, use that;
+const lines = content.split('\n');
           const currentLineIndex =
             content.substring(0, content.indexOf(match)).split('\n').length - 1;
           const contextLines = lines
@@ -178,14 +174,14 @@ class FinalResultFixer {
             return `result.${prop}`;
           }
           return match;
-        },
-      },
+        }
+  },
     ];
 
     for (const fix of simpleFixes) {
       if (typeof fix.to === 'function') {
         content = content.replace(fix.from, fix.to);
-      } else {
+      } else: {
         const beforeCount = (content.match(fix.from) || []).length;
         content = content.replace(fix.from, fix.to);
         const afterCount = (content.match(fix.from) || []).length;
@@ -200,7 +196,7 @@ class FinalResultFixer {
       console.log(
         `✅ Fixed ${changes} issues in ${path.relative(process.cwd(), filePath)}`
       );
-    } else {
+    } else: {
       console.log(
         `✅ No issues found in ${path.relative(process.cwd(), filePath)}`
       );

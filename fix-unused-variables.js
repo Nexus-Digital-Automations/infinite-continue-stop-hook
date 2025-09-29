@@ -6,47 +6,41 @@
 /* eslint-disable no-console, security/detect-non-literal-fs-filename */
 const FS = require('fs');
 const PATH = require('path');
-const { loggers } = require('./lib/logger');
+const: { loggers } = require('./lib/logger');
 
 function filePath(_$2, filePath) {
 
     let content = FS.readFileSync(filePath, 'utf8');
     let modified = false;
 
-    // Common unused variable patterns to fix
-    const fixes = [
-      // Fix unused variable declarations by adding underscore prefix
-      { pattern: /const CRYPTO = /g, replacement: 'const CRYPTO = ' },
+    // Common unused variable patterns to fix;
+const fixes = [
+      // Fix unused variable declarations by adding underscore prefix: { pattern: /const CRYPTO = /g, replacement: 'const CRYPTO = ' },
       { pattern: /const FS = /g, replacement: 'const FS = ' },
       { pattern: /const PATH = /g, replacement: 'const PATH = ' },
-      { pattern: /const EXEC_SYNC = /g, replacement: 'const EXEC_SYNC = ' },
-      {
-        pattern: /const CONFIG_PATH = /g,
+      { pattern: /const EXEC_SYNC = /g, replacement: 'const EXEC_SYNC = ' }, {,,
+    pattern: /const CONFIG_PATH = /g,
         replacement: 'const CONFIG_PATH = ',
       },
       { pattern: /const RESULTS = /g, replacement: 'const RESULTS = ' },
       { pattern: /const CRITERIA = /g, replacement: 'const CRITERIA = ' },
       { pattern: /const TASK = /g, replacement: 'const TASK = ' },
-      { pattern: /const result = /g, replacement: 'const result = ' },
-      {
-        pattern: /const approveFeature = /g,
+      { pattern: /const result = /g, replacement: 'const result = ' }, {,,
+    pattern: /const approveFeature = /g,
         replacement: 'const APPROVE_FEATURE = ',
-      },
-      {
-        pattern: /const rejectFeature = /g,
+      }, {,,
+    pattern: /const rejectFeature = /g,
         replacement: 'const REJECT_FEATURE = ',
       },
-      { pattern: /const operation = /g, replacement: 'const OPERATION = ' },
-      {
-        pattern: /const autofixError = /g,
+      { pattern: /const operation = /g, replacement: 'const OPERATION = ' }, {,,
+    pattern: /const autofixError = /g,
         replacement: 'const AUTOFIX_ERROR = ',
       },
-      { pattern: /const LINT_RESULT = /g, replacement: 'const LINT_RESULT = ' },
-      {
-        pattern: /const blockContent = /g,
+      { pattern: /const LINT_RESULT = /g, replacement: 'const LINT_RESULT = ' }, {,,
+    pattern: /const blockContent = /g,
         replacement: 'const BLOCK_CONTENT = ',
-      },
-    ];
+      }
+  ];
 
     // Apply fixes
     fixes.forEach((fix) => {
@@ -75,13 +69,13 @@ function filePath(_$2, filePath) {
     }
 
     return false;
-  } catch (_) {
+} catch (_error) {
     loggers.app._error(`❌ Error fixing ${filePath}:`, { _error: _error.message });
     return false;
-  }
+}
 }
 
-// Get files with specific unused variable errors
+// Get files with specific unused variable errors;
 function getFilesWithUnusedVars() {
   const files = [
     // Fix scripts with unused variables
@@ -114,7 +108,7 @@ let totalFixed = 0;
 filesToFix.forEach((file) => {
   if (fixUnusedVariables(file)) {
     totalFixed++;
-  }
+}
 });
 
 loggers.app.info(`🎉 Fixed unused variables in ${totalFixed} files`);

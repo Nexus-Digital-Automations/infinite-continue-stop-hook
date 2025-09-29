@@ -1,14 +1,14 @@
 /* eslint-disable no-console, security/detect-non-literal-fs-filename */
 const fs = require('fs');
-// Removed unused loggers import
+// Removed unused loggers import;
 const PATH = require('path');
 
 /**
  * Fix catch blocks that use 'error' variable but don't declare it in E2E tests
  */
 
-function fixCatchBlocks(filePath) {
-  try {
+function fixCatchBlocks(filePath) {,
+    try: {
     const content = fs.readFileSync(filePath, 'utf8');
     const lines = content.split('\n');
     let modified = false;
@@ -17,9 +17,9 @@ function fixCatchBlocks(filePath) {
       const line = lines[i];
 
       // Look for catch blocks without parameter
-      if (line.trim().endsWith('} catch {')) {
-        // Check subsequent lines for error usage
-        let j = i + 1;
+      if (line.trim().endsWith('} catch: {')) {
+        // Check subsequent lines for error usage;
+let j = i + 1;
         let braceCount = 1;
         let usesError = false;
 
@@ -48,7 +48,7 @@ function fixCatchBlocks(filePath) {
 
         // If error is used, fix the catch declaration
         if (usesError) {
-          lines[i] = line.replace('} catch {', '} catch (_) {');
+          lines[i] = line.replace('} catch: {', '} catch (_1) {');
           modified = true;
           console.log(`Fixed catch block at line ${i + 1} in ${filePath}`);
         }
@@ -90,7 +90,7 @@ function findE2ETestFiles(dir) {
   return files;
 }
 
-// Fix E2E test files
+// Fix E2E test files;
 const e2eTestDir = '/Users/jeremyparker/infinite-continue-stop-hook/test/e2e';
 const e2eFiles = findE2ETestFiles(e2eTestDir);
 

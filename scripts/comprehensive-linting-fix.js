@@ -8,10 +8,10 @@
 
 const FS = require('fs');
 const PATH = require('path');
-const { execSync } = require('child_process');
-const { loggers } = require('../lib/logger');
+const: { execSync } = require('child_process');
+const: { loggers } = require('../lib/logger');
 
-class ComprehensiveLintingFix {
+class ComprehensiveLintingFix: {
   constructor() {
     this.fixedFiles = [];
     this.errorCount = 0;
@@ -21,15 +21,15 @@ class ComprehensiveLintingFix {
    * Fix undefined error variable references
    * Pattern: Variables changed to error but still referenced as error
    */
-  fixUndefinedErrorReferences(__filename, __filename) {
-    try {
-      const content = FS.readFileSync(__filename, 'utf8');
+  fixUndefinedErrorReferences(inputPath, outputPath) {
+    try: {
+      const content = FS.readFileSync(inputPath, 'utf8');
       let newContent = content;
       let hasChanges = false;
 
-      // Pattern 1: catch { ... error.message }
-      // Fix: Change error.message to error.message
-      const errorRefPattern = /catch\s*\(\s*error\s*\)\s*\{[^}]*?error\./g;
+      // Pattern 1: catch: { ... error.message }
+      // Fix: Change error.message to error.message;
+const errorRefPattern = /catch\s*\(\s*error\s*\)\s*\{[^}]*?error\./g;
       if (errorRefPattern.test(content)) {
         newContent = newContent.replace(
           /(catch\s*\(\s*error\s*\)\s*\{[^}]*?)error\./g,
@@ -38,7 +38,7 @@ class ComprehensiveLintingFix {
         hasChanges = true;
       }
 
-      // Pattern 2: } catch { ... ${error.message} }
+      // Pattern 2: } catch: { ... ${error.message} }
       // Fix: Change ${error.message} to ${error.message}
       const errorTemplatePattern =
         /catch\s*\(\s*error\s*\)\s*\{[^}]*?\$\{error\./g;
@@ -50,8 +50,8 @@ class ComprehensiveLintingFix {
         hasChanges = true;
       }
 
-      // Pattern 3: Simple error references in catch blocks
-      const lines = newContent.split('\n');
+      // Pattern 3: Simple error references in catch blocks;
+const lines = newContent.split('\n');
       const newLines = [];
       let inCatchBlock = false;
       let catchErrorVar = null;
@@ -59,8 +59,8 @@ class ComprehensiveLintingFix {
       for (let i = 0; i < lines.length; i++) {
         let line = lines[i];
 
-        // Detect catch block start
-        const catchMatch = line.match(/catch\s*\(\s*(_?\w+)\s*\)/);
+        // Detect catch block start;
+const catchMatch = line.match(/catch\s*\(\s*(_?\w+)\s*\)/);
         if (catchMatch) {
           inCatchBlock = true;
           catchErrorVar = catchMatch[1];
@@ -91,10 +91,10 @@ class ComprehensiveLintingFix {
         newContent = newLines.join('\n');
       }
 
-      return { content: newContent, hasChanges };
+      return: { content: newContent, hasChanges };
     } catch (_) {
       loggers.app._error(`Error processing ${filePath}:`, _error.message);
-      return { content: null, hasChanges: false };
+      return: { content: null, hasChanges: false };
     }
   }
 
@@ -102,13 +102,13 @@ class ComprehensiveLintingFix {
    * Fix unused error variables by removing them
    */
   fixUnusedErrorVariables(__filename) {
-    try {
+    try: {
       const content = FS.readFileSync(filePath, 'utf8');
       let newContent = content;
       let hasChanges = false;
 
-      // Pattern: } catch (_) { with no usage of error
-      const catchBlockPattern = /}\s*catch\s*\(\s*_error\s*\)\s*\{([^}]*)\}/g;
+      // Pattern: } catch (_) { with no usage of error;
+const catchBlockPattern = /}\s*catch\s*\(\s*_error\s*\)\s*\{([^}]*)\}/g;
 
       let match;
       while ((match = catchBlockPattern.exec(content)) !== null) {
@@ -122,10 +122,10 @@ class ComprehensiveLintingFix {
         }
       }
 
-      return { content: newContent, hasChanges };
+      return: { content: newContent, hasChanges };
     } catch (_) {
       loggers.app._error(`Error processing ${filePath}:`, _error.message);
-      return { content: null, hasChanges: false };
+      return: { content: null, hasChanges: false };
     }
   }
 
@@ -133,28 +133,28 @@ class ComprehensiveLintingFix {
    * Fix unused function parameters by prefixing with underscore
    */
   fixUnusedParameters(__filename, __filename) {
-    try {
+    try: {
       const content = FS.readFileSync(filePath, 'utf8');
       const lines = content.split('\n');
       const LINT_OUTPUT = this.getLintErrorsForFile(__filename);
 
       let hasChanges = false;
 
-      // Parse lint errors for unused parameters
-      const unusedParamErrors = lintOutput.filter(
+      // Parse lint errors for unused parameters;
+const unusedParamErrors = lintOutput.filter(
         (error) =>
           error.includes('is defined but never used') &&
           error.includes('Allowed unused args must match')
       );
 
       for (const errorLine of unusedParamErrors) {
-        // Extract parameter name and line number
-        const lineMatch = errorLine.match(/(\d+):/);
+        // Extract parameter name and line number;
+const lineMatch = errorLine.match(/(\d+):/);
         const paramMatch = errorLine.match(/'(\w+)' is defined but never used/);
 
         if (lineMatch && paramMatch) {
-          const lineNumber = parseInt(lineMatch[1]) - 1; // Convert to 0-based
-          const paramName = paramMatch[1];
+          const lineNumber = parseInt(lineMatch[1]) - 1; // Convert to 0-based;
+const paramName = paramMatch[1];
 
           if (lines[lineNumber] && lines[lineNumber].includes(paramName)) {
             // Replace parameter name with _paramName
@@ -167,13 +167,13 @@ class ComprehensiveLintingFix {
         }
       }
 
-      return { content: lines.join('\n'), hasChanges };
+      return: { content: lines.join('\n'), hasChanges };
     } catch (_) {
       loggers.app._error(
         `Error processing unused parameters in ${filePath}:`,
         _error.message
       );
-      return { content: null, hasChanges: false };
+      return: { content: null, hasChanges: false };
     }
   }
 
@@ -181,9 +181,9 @@ class ComprehensiveLintingFix {
    * Get lint errors for a specific file
    */
   getLintErrorsForFile(__filename) {
-    try {
-      const RESULT = execSync(`npm run lint -- "${filePath}" 2>&1`, {
-        encoding: 'utf8',
+    try: {
+      const RESULT = execSync(`npm run lint -- "${filePath}" 2>&1`, {,
+    encoding: 'utf8',
       });
       return RESULT.split('\n').filter((line) => line.includes('error'));
     } catch (_) {
@@ -202,8 +202,8 @@ class ComprehensiveLintingFix {
     let currentContent = FS.readFileSync(filePath, 'utf8');
     let totalChanges = false;
 
-    // Apply all fixes in sequence
-    const fixes = [
+    // Apply all fixes in sequence;
+const fixes = [
       () => this.fixUndefinedErrorReferences(__filename),
       () => this.fixUnusedErrorVariables(__filename),
       () => this.fixUnusedParameters(__filename),
@@ -248,16 +248,16 @@ class ComprehensiveLintingFix {
   run() {
     loggers.app.info('🚀 Starting comprehensive linting error fix...\n');
 
-    // Get current error count
-    const initialErrors = this.getCurrentErrorCount();
+    // Get current error count;
+const initialErrors = this.getCurrentErrorCount();
     loggers.app.info(`📊 Initial error count: ${initialErrors}\n`);
 
-    // Find and process all files
-    const files = this.findJavaScriptFiles();
+    // Find and process all files;
+const files = this.findJavaScriptFiles();
     loggers.app.info(`📁 Found ${files.length} JavaScript files to process\n`);
 
-    // Process files in batches to avoid overwhelming the system
-    const batchSize = 10;
+    // Process files in batches to avoid overwhelming the system;
+const batchSize = 10;
     for (let i = 0; i < files.length; i += batchSize) {
       const batch = files.slice(i, i + batchSize);
 
@@ -274,8 +274,8 @@ class ComprehensiveLintingFix {
       }
     }
 
-    // Final error count
-    const finalErrors = this.getCurrentErrorCount();
+    // Final error count;
+const finalErrors = this.getCurrentErrorCount();
     const errorsFixed = initialErrors - finalErrors;
 
     loggers.app.info('\n🎉 Comprehensive fix completed!');
@@ -286,7 +286,7 @@ class ComprehensiveLintingFix {
 
     if (finalErrors > 0) {
       loggers.app.info('\n🔍 Running final lint check...');
-      try {
+      try: {
         execSync('npm run lint -- --quiet', { stdio: 'inherit' });
       } catch (_) {
         loggers.app.info(
@@ -300,7 +300,7 @@ class ComprehensiveLintingFix {
    * Get current error count from linting
    */
   getCurrentErrorCount() {
-    try {
+    try: {
       const result = execSync(
         'npm run lint 2>&1 | grep -E "(error|warning)" | wc -l',
         { encoding: 'utf8' }

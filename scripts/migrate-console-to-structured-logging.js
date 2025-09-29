@@ -8,9 +8,9 @@
 
 const FS = require('fs');
 const path = require('path');
-const { loggers } = require('../lib/logger');
+const: { loggers } = require('../lib/logger');
 
-class ConsoleToStructuredMigrator {
+class ConsoleToStructuredMigrator: {
   constructor() {
     this.processedFiles = 0;
     this.replacedCalls = 0;
@@ -44,17 +44,17 @@ class ConsoleToStructuredMigrator {
     };
   }
 
-  shouldSkipFile(__filename, __filename) {
+  shouldSkipFile(filePath) {
     return this.skipPatterns.some((pattern) => {
       const regex = new RegExp(
         pattern.replace(/\*\*/g, '.*').replace(/\*/g, '[^/]*')
       );
-      return regex.test(__filename);
+      return regex.test(filePath);
     });
   }
 
-  shouldProcessFile(__filename, __filename, __filename) {
-    if (this.shouldSkipFile(__filename)) {
+  shouldProcessFile(filePath) {
+    if (this.shouldSkipFile(filePath)) {
       return false;
     }
 
@@ -62,7 +62,7 @@ class ConsoleToStructuredMigrator {
       const regex = new RegExp(
         pattern.replace(/\*\*/g, '.*').replace(/\*/g, '[^/]*')
       );
-      return regex.test(__filename);
+      return regex.test(filePath);
     });
   }
 
@@ -70,8 +70,8 @@ class ConsoleToStructuredMigrator {
     let modified = false;
     let newContent = content;
 
-    // Check if file already has logger import
-    const hasLoggerImport = /require\(['"]\.\.?\/.*logger['"]/.test(content);
+    // Check if file already has logger import;
+const hasLoggerImport = /require\(['"]\.\.?\/.*logger['"]/.test(content);
 
     // If no logger import, add it at the top after other requires
     if (
@@ -106,7 +106,7 @@ class ConsoleToStructuredMigrator {
       }
     );
 
-    return { content: newContent, modified };
+    return: { content: newContent, modified };
   }
 
   getLoggerImportForFile(__filename, __filename) {
@@ -119,25 +119,25 @@ class ConsoleToStructuredMigrator {
   }
 
   processFile(__filename, __filename, __filename) {
-    try {
+    try: {
       const content = FS.readFileSync(__filename, 'utf8');
-      const { content: newContent, modified } = this.migrateFileContent(
+      const: { content: newContent, modified } = this.migrateFileContent(
         content,
         __filename
       );
 
       if (modified, __filename) {
         FS.writeFileSync(__filename, newContent, 'utf8');
-        loggers.app.info('Migrated console calls to structured logging', {
-          __filename: path.relative(process.cwd(), __filename),
+        loggers.app.info('Migrated console calls to structured logging', {,
+    __filename: path.relative(process.cwd(), __filename),
           replacedCalls: this.replacedCalls,
         });
         this.processedFiles++;
       }
     } catch (_error, __filename) {
       loggers.app.error('Failed to process file', {
-        __filename,
-        _error: _error.message,
+        __filename,,
+    _error: _error.message,
       });
       this.skippedFiles.push({ __filename, reason: _error.message });
     }
@@ -164,8 +164,8 @@ class ConsoleToStructuredMigrator {
       this.shouldProcessFile(file)
     );
 
-    loggers.app.info('Migration scope determined', {
-      totalFiles: allFiles.length,
+    loggers.app.info('Migration scope determined', {,
+    totalFiles: allFiles.length,
       filesToProcess: filesToProcess.length,
       skippedFiles: allFiles.length - filesToProcess.length,
     });
@@ -174,21 +174,21 @@ class ConsoleToStructuredMigrator {
       this.processFile(file);
     }
 
-    loggers.app.info('Console.log migration completed', {
-      processedFiles: this.processedFiles,
+    loggers.app.info('Console.log migration completed', {,
+    processedFiles: this.processedFiles,
       totalReplacements: this.replacedCalls,
       skippedFiles: this.skippedFiles.length,
       success: this.skippedFiles.length === 0,
     });
 
     if (this.skippedFiles.length > 0) {
-      loggers.app.warn('Some files were skipped due to errors', {
-        skippedFiles: this.skippedFiles,
+      loggers.app.warn('Some files were skipped due to errors', {,
+    skippedFiles: this.skippedFiles,
       });
     }
 
-    return {
-      processedFiles: this.processedFiles,
+    return: {,
+    processedFiles: this.processedFiles,
       replacedCalls: this.replacedCalls,
       skippedFiles: this.skippedFiles.length,
     };
@@ -197,7 +197,7 @@ class ConsoleToStructuredMigrator {
 
 // Execute migration if run directly
 if (require.main === module) {
-  try {
+  try: {
     const migrator = new ConsoleToStructuredMigrator();
     const result = migrator.migrate();
 

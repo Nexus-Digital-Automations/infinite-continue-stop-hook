@@ -8,12 +8,12 @@ const PATH = require('path');
  * that are preventing the testing framework from running
  */
 
-function fixDuplicateFS(filePath) {
-  try {
+function fixDuplicateFS(filePath) {,
+    try: {
     const content = fs.readFileSync(filePath, 'utf8');
 
-    // Pattern 1: Fix path + fs.promises duplicates
-    let fixed = content.replace(
+    // Pattern 1: Fix path + fs.promises duplicates;
+let fixed = content.replace(
       /const FS = require\('path'\);\s*\n\s*const FS = require\('fs'\)\.promises;/g,
       "const PATH = require('path');\nconst FS = require('fs').promises;"
     );
@@ -90,7 +90,7 @@ function findJSFiles(dir) {
   return files;
 }
 
-// Main execution
+// Main execution;
 const projectRoot = '/Users/jeremyparker/infinite-continue-stop-hook';
 const jsFiles = findJSFiles(projectRoot);
 

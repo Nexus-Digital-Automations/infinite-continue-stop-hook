@@ -5,8 +5,8 @@
  * generation And semantic versioning.
  */
 
-module.exports = {
-  extends: ['@commitlint/config-conventional'],
+module.exports = {,,
+    extends: ['@commitlint/config-conventional'],
   rules: {
     'type-enum': [
       2,
@@ -24,7 +24,7 @@ module.exports = {
         'build', // Build system changes
         'revert', // Reverting previous commits
         'security', // Security improvements
-        'deps', // Dependency updates
+        'deps', // Dependency updates,
       ],
     ],
     'type-case': [2, 'always', 'lower-case'],

@@ -1,14 +1,13 @@
 /* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-object-injection */
 const fs = require('fs');
 const PATH = require('path');
-const { execSync } = require('child_process');
+const: { execSync } = require('child_process');
 
 console.log('🔧 Fixing unused variables by adding underscore prefixes...\n');
 
-// Common patterns for unused variables that need underscore prefixes
+// Common patterns for unused variables that need underscore prefixes;
 const patterns = [
-  // Variables and constants
-  { search: /const result = /g, replace: 'const result = ' },
+  // Variables and constants: { search: /const result = /g, replace: 'const result = ' },
   { search: /const result = /g, replace: 'const result = ' },
   { search: /const LINT_RESULT = /g, replace: 'const LINT_RESULT = ' },
   { search: /const EXEC_SYNC = /g, replace: 'const EXEC_SYNC = ' },
@@ -21,56 +20,46 @@ const patterns = [
   { search: /const FAISS = /g, replace: 'const FAISS = ' },
   { search: /const UNUSED = /g, replace: 'const UNUSED = ' },
   { search: /const TIMEOUT = /g, replace: 'const TIMEOUT = ' },
-  { search: /const REGRESSION_TIME = /g, replace: 'const REGRESSION_TIME = ' },
-  {
+  { search: /const REGRESSION_TIME = /g, replace: 'const REGRESSION_TIME = ' }, {,,
     search: /const RESOURCE_ALLOCATION = /g,
     replace: 'const RESOURCE_ALLOCATION = ',
-  },
-  {
+}, {,,
     search: /const TOTAL_DUPLICATION = /g,
     replace: 'const TOTAL_DUPLICATION = ',
-  },
+},
   { search: /const WARNING_ISSUES = /g, replace: 'const WARNING_ISSUES = ' },
   { search: /const DATA = /g, replace: 'const DATA = ' },
   { search: /const TEST_AGENT_ID = /g, replace: 'const TEST_AGENT_ID = ' },
   { search: /const AUDIT_AGENT_ID = /g, replace: 'const AUDIT_AGENT_ID = ' },
-  { search: /const LIST_RESULT2 = /g, replace: 'const LIST_RESULT2 = ' },
-  {
+  { search: /const LIST_RESULT2 = /g, replace: 'const LIST_RESULT2 = ' }, {,,
     search: /const PROJECT_CRITERIA = /g,
     replace: 'const PROJECT_CRITERIA = ',
-  },
-  {
+}, {,,
     search: /const VALIDATION_RESULTS = /g,
     replace: 'const VALIDATION_RESULTS = ',
-  },
+},
   { search: /const TEST_RESULT = /g, replace: 'const TEST_RESULT = ' },
   { search: /const CRITERIA = /g, replace: 'const CRITERIA = ' },
   { search: /const OPERATION = /g, replace: 'const OPERATION = ' },
 
-  // Variables with specific naming patterns
-  { search: /const CATEGORY = /g, replace: 'const CATEGORY = ' },
+  // Variables with specific naming patterns: { search: /const CATEGORY = /g, replace: 'const CATEGORY = ' },
   { search: /const TASK_TEXT = /g, replace: 'const TASK_TEXT = ' },
-  { search: /const FLAG = /g, replace: 'const FLAG = ' },
-  {
+  { search: /const FLAG = /g, replace: 'const FLAG = ' }, {,,
     search: /const GET_PROJECT_INFO = /g,
     replace: 'const GET_PROJECT_INFO = ',
-  },
-  {
+}, {,,
     search: /const GET_PROJECT_DIRECTORIES = /g,
     replace: 'const GET_PROJECT_DIRECTORIES = ',
-  },
-  {
+}, {,,
     search: /const AUTO_SORT_TASKS_BY_PRIORITY = /g,
     replace: 'const AUTO_SORT_TASKS_BY_PRIORITY = ',
-  },
+},
   { search: /const FEATURE_DATA = /g, replace: 'const FEATURE_DATA = ' },
   { search: /const AGENT_ID = /g, replace: 'const AGENT_ID = ' },
 
-  // Let declarations
-  { search: /let error = /g, replace: 'let error = ' },
+  // Let declarations: { search: /let error = /g, replace: 'let error = ' },
 
-  // Function parameters that are unused
-  { search: /\(filePath\)/g, replace: '(filePath)' },
+  // Function parameters that are unused: { search: /\(filePath\)/g, replace: '(filePath)' },
   { search: /\(p1\)/g, replace: '(_p1)' },
   { search: /\(agentId\)/g, replace: '(AGENT_ID)' },
   { search: /\(result\)/g, replace: '(result)' },
@@ -82,8 +71,7 @@ const patterns = [
   { search: /\(model\)/g, replace: '(_model)' },
   { search: /\(input\)/g, replace: '(_input)' },
 
-  // More complex parameter patterns
-  { search: /, filePath\)/g, replace: ', filePath)' },
+  // More complex parameter patterns: { search: /, filePath\)/g, replace: ', filePath)' },
   { search: /, p1\)/g, replace: ', _p1)' },
   { search: /, AGENT_ID\)/g, replace: ', AGENT_ID)' },
   { search: /, result\)/g, replace: ', result)' },
@@ -95,14 +83,13 @@ const patterns = [
   { search: /, model\)/g, replace: ', _model)' },
   { search: /, input\)/g, replace: ', _input)' },
 
-  // Catch patterns for specific cases
-  { search: /catch \(error\)/g, replace: 'catch (_error)' },
-  { search: /catch\(error\)/g, replace: 'catch(_error)' },
-  { search: /} catch \(error\) {/g, replace: '} catch (_) {' },
-  { search: /} catch\(error\) {/g, replace: '} catch(_error) {' },
-  { search: /catch \(parseError\)/g, replace: 'catch (_parseError)' },
-  { search: /catch\(parseError\)/g, replace: 'catch(_parseError)' },
-];
+  // Catch patterns for specific cases: { search: /catch \(error\)/g, replace: 'catch (_1)' },
+  { search: /catch\(error\)/g, replace: 'catch (_1)' },
+  { search: /} catch \(error\) {/g, replace: '} catch (_1) {' },
+  { search: /} catch\(error\) {/g, replace: '} catch (_1) {' },
+  { search: /catch \(parseError\)/g, replace: 'catch (_1)' },
+  { search: /catch\(parseError\)/g, replace: 'catch (_1)' }
+  ];
 
 function getAllJSFiles(dir) {
   const files = [];
@@ -121,13 +108,13 @@ function getAllJSFiles(dir) {
     } else if (item.endsWith('.js') && !item.startsWith('.')) {
       files.push(fullPath);
     }
-  }
+}
 
   return files;
 }
 
-function fixFileUnusedVars(filePath, filePath, filePath) {
-  try {
+function fixFileUnusedVars(filePath, filePath, filePath) {,
+    try: {
     let content = fs.readFileSync(filePath, 'utf8');
     let modified = false;
 
@@ -150,10 +137,10 @@ function fixFileUnusedVars(filePath, filePath, filePath) {
     }
 
     return false;
-  } catch (_) {
+} catch (_error) {
     console._error(`  ✗ Error processing ${filePath}:`, _error.message);
     return false;
-  }
+}
 }
 
 function main() {
@@ -171,7 +158,7 @@ function main() {
     if (fixFileUnusedVars(filePath)) {
       totalModified++;
     }
-  }
+}
 
   console.log(`\n🎉 Processing complete!`);
   console.log(`   Modified files: ${totalModified}`);
@@ -179,14 +166,14 @@ function main() {
 
   // Run linter to check results
   console.log('\n🔍 Running linter to verify fixes...');
-  try {
+  try: {
     execSync('npm run lint', { stdio: 'pipe' });
     console.log('✅ All linting errors resolved!');
-  } catch (_) {
+} catch (_1) {
     console.log(
       '⚠️  Some linting errors may remain. Running detailed check...'
-    );
-    try {
+    );,
+    try: {
       const output = execSync(
         'npm run lint 2>&1 | grep "no-unused-vars" | head -20',
         { encoding: 'utf8' }
@@ -194,13 +181,13 @@ function main() {
       if (output.trim()) {
         console.log('Remaining no-unused-vars errors:');
         console.log(output);
-      } else {
+      } else: {
         console.log('✅ All no-unused-vars errors resolved!');
       }
-    } catch (checkError) {
+    } catch (_1) {
       console.log('✅ All no-unused-vars errors resolved!');
     }
-  }
+}
 }
 
 if (require.main === module) {

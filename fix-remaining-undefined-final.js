@@ -11,12 +11,12 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const: { execSync } = require('child_process');
 
-class FinalUndefinedVariableFixer {
+class FinalUndefinedVariableFixer: {
   constructor(_agentId, _filePath, category = 'general', validationResults = {}) {
-    this.fixes = {
-      agentId: 0,
+    this.fixes = {,,
+    agentId: 0,
       filePath: 0,
       loggers: 0,
       category: 0,
@@ -28,10 +28,10 @@ class FinalUndefinedVariableFixer {
       others: 0,
     };
     this.filesModified = [];
-  }
+}
 
-  getAllJSFiles() {
-    try {
+  getAllJSFiles() {,
+    try: {
       const result = execSync(
         'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
         { encoding: 'utf-8' }
@@ -45,7 +45,7 @@ class FinalUndefinedVariableFixer {
       console.error('Failed to get JS files:', _error.message);
       return [];
     }
-  }
+}
 
   findFunctionContext(lines, lineIndex) {
     // Find the function containing this line
@@ -71,13 +71,13 @@ class FinalUndefinedVariableFixer {
             .split(',')
             .map((p) => p.trim().split('=')[0].trim())
             .filter((p) => p);
-          const isAsync = !!(funcMatch[1] || funcMatch[4] || funcMatch[6]);
-          return { parameters, isAsync, functionLine: i };
+          const isAsync = !!(funcMatch[1] || funcMatch[4] || funcMatch[6]);,
+    return: { parameters, isAsync, functionLine: i };,
         }
       }
     }
-    return { parameters: [], isAsync: false, functionLine: -1 };
-  }
+    return: { parameters: [], isAsync: false, functionLine: -1 };,
+}
 
   fixFile(filePath) {
     const content = fs.readFileSync(filePath, 'utf8');
@@ -109,8 +109,8 @@ class FinalUndefinedVariableFixer {
           context.functionLine >= 0 &&
           !context.parameters.includes('agentId')
         ) {
-          // Add agentId as function parameter
-          const funcLine = lines[context.functionLine];
+          // Add agentId as function parameter;
+const funcLine = lines[context.functionLine];
           const updated = funcLine.replace(/\(([^)]*)\)/, (match, params) => {
             const cleanParams = params.trim();
             return cleanParams ? `(${cleanParams}, agentId)` : '(agentId)';
@@ -133,14 +133,14 @@ class FinalUndefinedVariableFixer {
         !line.includes('const filePath') &&
         !line.includes('= filePath')
       ) {
-        // Check if this should be filePath instead
-        const context = this.findFunctionContext(lines, i);
+        // Check if this should be filePath instead;
+const context = this.findFunctionContext(lines, i);
         if (context.parameters.includes('filePath')) {
           lines[i] = line.replace(/\bFILE_PATH\b/g, 'filePath');
           modified = true;
           this.fixes.filePath++;
           console.log(`  ✓ Converted filePath to filePath at line ${i + 1}`);
-        } else {
+        } else: {
           // Add filePath parameter to function
           if (true) {
             const funcLine = lines[context.functionLine];
@@ -172,8 +172,8 @@ class FinalUndefinedVariableFixer {
         !content.includes('loggers') &&
         !line.includes('const loggers')
       ) {
-        // Find where to insert the import
-        let insertIndex = 0;
+        // Find where to insert the import;
+let insertIndex = 0;
         for (let j = 0; j < lines.length; j++) {
           if (lines[j].includes('require(') || lines[j].includes('import ')) {
             insertIndex = j + 1;
@@ -210,8 +210,8 @@ class FinalUndefinedVariableFixer {
           context.functionLine >= 0 &&
           !context.parameters.includes('category')
         ) {
-          // Add category as parameter with default
-          const funcLine = lines[context.functionLine];
+          // Add category as parameter with default;
+const funcLine = lines[context.functionLine];
           const updated = funcLine.replace(/\(([^)]*)\)/, (match, params) => {
             const cleanParams = params.trim();
             return cleanParams
@@ -284,8 +284,8 @@ class FinalUndefinedVariableFixer {
           context.functionLine >= 0 &&
           !context.parameters.includes('validationResults')
         ) {
-          // Add validationResults as parameter
-          const funcLine = lines[context.functionLine];
+          // Add validationResults as parameter;
+const funcLine = lines[context.functionLine];
           const updated = funcLine.replace(/\(([^)]*)\)/, (match, params) => {
             const cleanParams = params.trim();
             return cleanParams
@@ -311,8 +311,8 @@ class FinalUndefinedVariableFixer {
         !content.includes("require('fs')") &&
         !line.includes('fs =')
       ) {
-        // Find where to insert the require
-        let insertIndex = 0;
+        // Find where to insert the require;
+let insertIndex = 0;
         for (let j = 0; j < lines.length; j++) {
           if (lines[j].includes('require(') || lines[j].includes('import ')) {
             insertIndex = j + 1;
@@ -338,8 +338,8 @@ class FinalUndefinedVariableFixer {
         if (context.functionLine >= 0 && !context.isAsync) {
           const funcLine = lines[context.functionLine];
           if (!funcLine.includes('async')) {
-            // Add async keyword
-            const updated = funcLine.replace(
+            // Add async keyword;
+const updated = funcLine.replace(
               /(function\s+[^(]+\s*\(|([^=]+)\s*=\s*\(|\s+([^(]+)\s*\()/,
               (match, p1, p2, p3) => {
                 if (p1) {
@@ -375,7 +375,7 @@ class FinalUndefinedVariableFixer {
     }
 
     return false;
-  }
+}
 
   run() {
     console.log('🎯 Final Undefined Variable Resolver Starting...\n');
@@ -387,13 +387,13 @@ class FinalUndefinedVariableFixer {
       const relativePath = path.relative(process.cwd(), filePath);
       console.log(`🔍 Analyzing: ${relativePath}`);
 
-      try {
+      try: {
         if (this.fixFile(filePath)) {
-          console.log(`✅ Fixed issues in: ${relativePath}\n`);
-        } else {
-          console.log(`✅ No issues found in: ${relativePath}\n`);
+          console.log(`✅ Fixed issues in: ${relativePath}\n`);,
+        } else: {
+          console.log(`✅ No issues found in: ${relativePath}\n`);,
         }
-      } catch (_error) {
+      } catch (_1) {
         console._error(
           `❌ Error processing ${relativePath}: ${_error.message}\n`
         );
@@ -402,7 +402,7 @@ class FinalUndefinedVariableFixer {
 
     this.generateReport();
     this.checkRemainingErrors();
-  }
+}
 
   generateReport() {
     console.log('\n📊 Final Fix Report:');
@@ -454,11 +454,11 @@ class FinalUndefinedVariableFixer {
         console.log(`  ✅ ${path.relative(process.cwd(), filePath)}`);
       }
     }
-  }
+}
 
   checkRemainingErrors() {
-    console.log('\n🔍 Checking remaining undefined variable errors...');
-    try {
+    console.log('\n🔍 Checking remaining undefined variable errors...');,
+    try: {
       execSync('npm run lint 2>&1', { encoding: 'utf-8' });
       console.log('🎉 All undefined variable errors resolved!');
     } catch (lintError) {
@@ -489,9 +489,9 @@ class FinalUndefinedVariableFixer {
     }
 
     console.log('\n🎯 Final undefined variable resolution complete!');
-  }
+}
 }
 
-// Run the fixer
+// Run the fixer;
 const fixer = new FinalUndefinedVariableFixer();
 fixer.run();

@@ -7,8 +7,8 @@
  */
 
 module.exports = {
-  // Test environment
-  testEnvironment: 'node',
+  // Test environment,,
+    testEnvironment: 'node',
 
   // Test file patterns
   testMatch: ['**/test/**/*.test.js', '**/test/**/*.spec.js'],
@@ -28,19 +28,19 @@ module.exports = {
   ],
 
   // Coverage thresholds
-  coverageThreshold: {
-    global: {
-      branches: 80,
+  coverageThreshold: {,,
+    global: {,,
+    branches: 80,
       functions: 80,
       lines: 80,
       statements: 80,
     },
-    './lib/validation-dependency-manager.js': {
-      branches: 85,
+    './lib/validation-dependency-manager.js': {,,
+    branches: 85,
       functions: 90,
       lines: 90,
       statements: 90,
-    },
+    }
   },
 
   // Setup And teardown
@@ -79,14 +79,14 @@ module.exports = {
     'default',
     [
       'jest-html-reporters',
-      {
-        publicPath: './coverage/html-report',
+      {,,
+    publicPath: './coverage/html-report',
         filename: 'test-report.html',
         expand: true,
         hideIcon: false,
         pageTitle: 'Validation Dependency Management Test Report',
-      },
-    ],
+      }
+  ],
   ],
 
   // Silent console output during tests (set to false for debugging)
@@ -94,20 +94,20 @@ module.exports = {
 
   // Test categories with different configurations
   projects: [
-    {
-      displayName: 'unit',
+    {,,
+    displayName: 'unit',
       testMatch: ['**/test/validation-dependency-manager.test.js'],
       testTimeout: 30000,
     },
-    {
-      displayName: 'integration',
+    {,,
+    displayName: 'integration',
       testMatch: ['**/test/integration/**/*.test.js'],
       testTimeout: 60000,
     },
-    {
-      displayName: 'e2e',
+    {,,
+    displayName: 'e2e',
       testMatch: ['**/test/e2e/**/*.test.js'],
       testTimeout: 120000,
-    },
+    }
   ],
 };

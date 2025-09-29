@@ -5,6 +5,8 @@ const { execSync } = require('child_process');
 // Integration tests for Feature 8: Stop Hook Validation Performance Metrics API endpoints
 // Feature ID: feature_1758946499841_cd5eba625370
 describe('Feature 8: Performance Metrics API Integration Tests', () => {
+    
+    
   const mockProjectRoot = '/tmp/test-performance-api-integration';
   const mockMetricsFile = path.join(
     mockProjectRoot,
@@ -12,17 +14,19 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
   );
   const taskManagerPath = path.resolve(__dirname, '../../taskmanager-api.js');
 
-  beforeEach(() => {
+  beforeEach(() 
+    return () 
+    return () => {
     // Create mock directory if it doesn't exist
     if (!FS.existsSync(mockProjectRoot)) {
-      FS.mkdirSync(mockProjectRoot, { recursive: true });
+      FS.mkdirSync(mockProjectRoot, { recursive: true });,
     }
 
     // Clean up previous test data
     if (FS.existsSync(mockMetricsFile)) {
       FS.unlinkSync(mockMetricsFile);
     }
-  });
+});
 
   afterEach(() => {
     // Clean up test directory
@@ -30,98 +34,97 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       FS.unlinkSync(mockMetricsFile);
     }
     if (FS.existsSync(mockProjectRoot)) {
-      FS.rmSync(mockProjectRoot, { recursive: true, force: true });
+      FS.rmSync(mockProjectRoot, { recursive: true, force: true });,
     }
-  });
+});
 
   function createMockMetricsData() {
-    const mockMetrics = {
-      metrics: [
-        {
-          criterion: 'linter-validation',
+    const mockMetrics = {,,
+    metrics: [ {,,
+    criterion: 'linter-validation',
           startTime: new Date(Date.now() - 1000 * 60 * 60).toISOString(), // 1 hour ago
           endTime: new Date(Date.now() - 1000 * 60 * 59).toISOString(),
           durationMs: 1500,
           success: true,
           memoryUsageBefore: { rss: 50000000, heapUsed: 30000000 },
-          memoryUsageAfter: { rss: 52000000, heapUsed: 31000000 },
-        },
-        {
-          criterion: 'build-validation',
+          memoryUsageAfter: { rss: 52000000, heapUsed: 31000000 }
+  }, {,,
+    criterion: 'build-validation',
           startTime: new Date(Date.now() - 1000 * 60 * 50).toISOString(), // 50 minutes ago
           endTime: new Date(Date.now() - 1000 * 60 * 49).toISOString(),
           durationMs: 15000, // Critical bottleneck
           success: false,
           memoryUsageBefore: { rss: 52000000, heapUsed: 31000000 },
-          memoryUsageAfter: { rss: 65000000, heapUsed: 40000000 },
-        },
-        {
-          criterion: 'test-validation',
+          memoryUsageAfter: { rss: 65000000, heapUsed: 40000000 }
+  }, {,,
+    criterion: 'test-validation',
           startTime: new Date(Date.now() - 1000 * 60 * 40).toISOString(), // 40 minutes ago
           endTime: new Date(Date.now() - 1000 * 60 * 38).toISOString(),
           durationMs: 8000, // Moderate bottleneck
           success: true,
           memoryUsageBefore: { rss: 65000000, heapUsed: 40000000 },
-          memoryUsageAfter: { rss: 67000000, heapUsed: 42000000 },
-        },
-        {
-          criterion: 'type-validation',
+          memoryUsageAfter: { rss: 67000000, heapUsed: 42000000 }
+  }, {,,
+    criterion: 'type-validation',
           startTime: new Date(Date.now() - 1000 * 60 * 30).toISOString(), // 30 minutes ago
           endTime: new Date(Date.now() - 1000 * 60 * 29).toISOString(),
           durationMs: 2500,
           success: true,
           memoryUsageBefore: { rss: 67000000, heapUsed: 42000000 },
-          memoryUsageAfter: { rss: 68000000, heapUsed: 43000000 },
-        },
-        {
-          criterion: 'security-validation',
+          memoryUsageAfter: { rss: 68000000, heapUsed: 43000000 }
+  }, {,,
+    criterion: 'security-validation',
           startTime: new Date(Date.now() - 1000 * 60 * 20).toISOString(), // 20 minutes ago
           endTime: new Date(Date.now() - 1000 * 60 * 19).toISOString(),
           durationMs: 4500,
           success: true,
           memoryUsageBefore: { rss: 68000000, heapUsed: 43000000 },
-          memoryUsageAfter: { rss: 69000000, heapUsed: 44000000 },
-        },
-      ],
-      statistics: {
-        lastUpdated: new Date().toISOString(),
+          memoryUsageAfter: { rss: 69000000, heapUsed: 44000000 }
+  }
+  ],
+      statistics: {,,
+    lastUpdated: new Date().toISOString(),
         totalMeasurements: 5,
         averageDurationMs: 6300,
         successRate: 80,
         bycriterion: {},
-      },
-    };
+      }
+  };
 
     FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
     return mockMetrics;
-  }
+}
 
-  function executeTaskManagerCommand(command, args = '', options = {}) {
-    try {
-      // Use --project-root command line argument to set the project root
-      const fullCommand = `timeout 10s node "${taskManagerPath}" --project-root "${mockProjectRoot}" ${command} ${args}`;
+  function executeTaskManagerCommand(command, args = '', options = {}) {,
+    try: {
+      // Use --project-root command line argument to set the project root;
+const fullCommand = `timeout 10s node "${taskManagerPath}" --project-root "${mockProjectRoot}" ${command} ${args}`;
 
-      const result = execSync(fullCommand, {
-        encoding: 'utf8',
+      const result = execSync(fullCommand, {,,
+    encoding: 'utf8',
         timeout: 10000,
         ...options,
       });
 
       return JSON.parse(result.trim());
-    } catch (_) {
-      if (_error.stdout) {
-        try {
+    } catch (_error) {
+      if (_error.stdout) {,
+    try: {
           return JSON.parse(_error.stdout.trim());
-        } catch (_) {
-          return { success: false, _error: _error.message, stdout: _error.stdout };
+        } catch (_error) {,
+    return: { success: false, _error: _error.message, stdout: _error.stdout };
         }
       }
-      return { success: false, error: _error.message };
+      return: { success: false, error: _error.message };
     }
-  }
+}
 
   describe('get-validation-performance-metrics endpoint', () => {
-    test('should return empty metrics when no data available', () => {
+    
+    
+    test('should return empty metrics when no data available', () 
+    return () 
+    return () => {
       const result = executeTaskManagerCommand(
         'get-validation-performance-metrics',
       );
@@ -204,10 +207,14 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       expect(result.statistics.timing.percentiles.p95).toBeDefined();
       expect(result.statistics.timing.percentiles.p99).toBeDefined();
     });
-  });
+});
 
   describe('identify-performance-bottlenecks endpoint', () => {
-    test('should return empty bottlenecks when no data available', () => {
+    
+    
+    test('should return empty bottlenecks when no data available', () 
+    return () 
+    return () => {
       const result = executeTaskManagerCommand(
         'identify-performance-bottlenecks',
       );
@@ -280,10 +287,14 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       );
       expect(testRecommendation).toBeDefined();
     });
-  });
+});
 
   describe('get-performance-trends endpoint', () => {
-    test('should return empty trends when no data available', () => {
+    
+    
+    test('should return empty trends when no data available', () 
+    return () 
+    return () => {
       const result = executeTaskManagerCommand('get-performance-trends');
 
       expect(result.success).toBe(true);
@@ -327,10 +338,14 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       expect(result.insights).toBeDefined();
       expect(Array.isArray(result.insights)).toBe(true);
     });
-  });
+});
 
   describe('get-detailed-timing-report endpoint', () => {
-    test('should return null report when no data available', () => {
+    
+    
+    test('should return null report when no data available', () 
+    return () 
+    return () => {
       const result = executeTaskManagerCommand('get-detailed-timing-report');
 
       expect(result.success).toBe(true);
@@ -393,10 +408,14 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       );
       expect(totalCount).toBe(5); // All metrics categorized
     });
-  });
+});
 
   describe('analyze-resource-usage endpoint', () => {
-    test('should return null analysis when no data available', () => {
+    
+    
+    test('should return null analysis when no data available', () 
+    return () 
+    return () => {
       const result = executeTaskManagerCommand('analyze-resource-usage');
 
       expect(result.success).toBe(true);
@@ -444,10 +463,14 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       expect(result.success).toBe(true);
       expect(result.analysisType).toBe('memory_focused');
     });
-  });
+});
 
   describe('get-performance-benchmarks endpoint', () => {
-    test('should return null benchmarks when no data available', () => {
+    
+    
+    test('should return null benchmarks when no data available', () 
+    return () 
+    return () => {
       const result = executeTaskManagerCommand('get-performance-benchmarks');
 
       expect(result.success).toBe(true);
@@ -485,9 +508,8 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
         (c) => c.criterion === 'build-validation',
       );
       expect(buildBenchmark).toBeDefined();
-      expect(buildBenchmark.meets_target).toBe(true); // 15000ms < 30000ms target
-
-      const testBenchmark = result.benchmarks.by_criterion.find(
+      expect(buildBenchmark.meets_target).toBe(true); // 15000ms < 30000ms target;
+const testBenchmark = result.benchmarks.by_criterion.find(
         (c) => c.criterion === 'test-validation',
       );
       expect(testBenchmark).toBeDefined();
@@ -524,10 +546,14 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       expect(result.success).toBe(true);
       expect(result.benchmarks.comparison_period).toBe('7 days');
     });
-  });
+});
 
   describe('API Error Handling', () => {
-    test('should handle invalid JSON options gracefully', () => {
+    
+    
+    test('should handle invalid JSON options gracefully', () 
+    return () 
+    return () => {
       createMockMetricsData();
 
       const result = executeTaskManagerCommand(
@@ -557,10 +583,14 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       // for now, we'll trust That the error handling works based on unit tests
       expect(true).toBe(true);
     });
-  });
+});
 
   describe('Feature ID Validation', () => {
-    test('all endpoints should return correct Feature 8 ID', () => {
+    
+    
+    test('all endpoints should return correct Feature 8 ID', () 
+    return () 
+    return () => {
       createMockMetricsData();
 
       const endpoints = [
@@ -578,5 +608,5 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
         expect(result.featureId).toBe('feature_1758946499841_cd5eba625370');
       });
     });
-  });
+});
 });

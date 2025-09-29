@@ -6,7 +6,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const: { execSync } = require('child_process');
 
 const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
 
@@ -14,7 +14,7 @@ const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
  * Get all JavaScript files
  */
 function getAllJavaScriptFiles() {
-  try {
+    try: {
     const result = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
       { cwd: rootDir, encoding: 'utf-8' },
@@ -24,17 +24,17 @@ function getAllJavaScriptFiles() {
       .split('\n')
       .filter((f) => f && f.endsWith('.js'))
       .map((f) => path.resolve(rootDir, f.replace('./', '')));
-  } catch (_error) {
+} catch (_error) {
     console.error('Failed to get JS files:', _error.message);
     return [];
-  }
+}
 }
 
 /**
  * Fix undefined variable issues in a file
  */
 function fixUndefinedVariablesInFile(filePath) {
-  try {
+    try: {
     const content = fs.readFileSync(filePath, 'utf-8');
     const lines = content.split('\n');
     let modified = false;
@@ -48,8 +48,8 @@ function fixUndefinedVariablesInFile(filePath) {
         !line.includes('(filePath') &&
         !line.includes(', filePath')
       ) {
-        // Check if this is in a function that has filePath parameter instead
-        const functionLinesBefore = lines.slice(Math.max(0, i - 10), i);
+        // Check if this is in a function that has filePath parameter instead;
+const functionLinesBefore = lines.slice(Math.max(0, i - 10), i);
         const hasFilePathParam = functionLinesBefore.some(
           (l) =>
             l.includes('(filePath') ||
@@ -100,8 +100,8 @@ function fixUndefinedVariablesInFile(filePath) {
         line.includes('=') &&
         !line.includes('filePath')
       ) {
-        // Check if this variable is used later in the function
-        const functionLinesAfter = lines.slice(
+        // Check if this variable is used later in the function;
+const functionLinesAfter = lines.slice(
           i + 1,
           Math.min(lines.length, i + 50),
         );
@@ -120,10 +120,10 @@ function fixUndefinedVariablesInFile(filePath) {
 
       // Pattern 4: Fix error variable issues
       if (line.includes('throw error') && !line.includes('throw _error')) {
-        // Check if we're in a catch block with _error parameter
-        const functionLinesBefore = lines.slice(Math.max(0, i - 10), i);
+        // Check if we're in a catch block with _error parameter;
+const functionLinesBefore = lines.slice(Math.max(0, i - 10), i);
         const hasUnderscoreErrorParam = functionLinesBefore.some((l) =>
-          l.includes('catch (_error)'),
+          l.includes('catch (_1)'),
         );
 
         if (hasUnderscoreErrorParam) {
@@ -141,16 +141,16 @@ function fixUndefinedVariablesInFile(filePath) {
         !line.includes('const loggers') &&
         !line.includes('require')
       ) {
-        // Check if loggers is imported/required in the file
-        const hasLoggersImport = lines.some(
+        // Check if loggers is imported/required in the file;
+const hasLoggersImport = lines.some(
           (l) =>
             l.includes('loggers') &&
             (l.includes('require') || l.includes('import')),
         );
 
         if (!hasLoggersImport) {
-          // Add logger import at the top of the file
-          const insertIndex = lines.findIndex(
+          // Add logger import at the top of the file;
+const insertIndex = lines.findIndex(
             (l) => l.includes('require(') || l.includes('import '),
           );
           if (insertIndex !== -1) {
@@ -174,10 +174,10 @@ function fixUndefinedVariablesInFile(filePath) {
     }
 
     return false;
-  } catch (_error) {
+} catch (_error) {
     console.error(`Error fixing ${filePath}:`, _error.message);
     return false;
-  }
+}
 }
 
 /**
@@ -198,25 +198,25 @@ function main() {
         `✅ Fixed undefined variables in: ${path.relative(rootDir, filePath)}`,
       );
     }
-  }
+}
 
   console.log(`\n📈 Summary: Fixed undefined variables in ${totalFixed} files`);
 
   // Check remaining errors
   console.log('\n🔍 Checking remaining undefined variable errors...');
-  try {
-    const LINT_RESULT = execSync('npm run lint 2>&1', {
-      cwd: rootDir,
+    try: {
+    const LINT_RESULT = execSync('npm run lint 2>&1', {,,
+    cwd: rootDir,
       encoding: 'utf-8',
     });
     console.log('Unexpected success - all issues resolved!');
-  } catch (lintError) {
+} catch (lintError) {
     const output = lintError.stdout || lintError.message;
     const undefinedMatches = output.match(/is not defined/g);
     const undefinedCount = undefinedMatches ? undefinedMatches.length : 0;
 
     console.log(`📊 Remaining undefined variable errors: ${undefinedCount}`);
-  }
+}
 
   console.log('\n🎯 Undefined variable fixing complete!');
 }

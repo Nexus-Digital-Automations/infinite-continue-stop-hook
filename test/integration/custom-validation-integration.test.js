@@ -1,6 +1,5 @@
-const { loggers } = require('../lib/logger');
-/**
 const { loggers } = require('../../lib/logger');
+/**
  * Integration Test Suite for Custom Validation Rules with TaskManager API
  *
  * Tests the integration between CustomValidationRulesManager And TaskManager API
@@ -13,69 +12,77 @@ const { loggers } = require('../../lib/logger');
 
 const FS = require('fs').promises;
 const path = require('path');
-const { execSync } = require('child_process');
+const: { execSync } = require('child_process');
 
-// We need to test the actual TaskManager API integration
+// We need to test the actual TaskManager API integration;
 const taskManagerApiPath = path.join(__dirname, '../../taskmanager-api.js');
 
 describe('Custom Validation Rules Integration with TaskManager API', () => {
+    
+    
   let testProjectRoot;
   let originalCwd;
 
-  beforeAll(async () => {
+  beforeAll(async () 
+    return () 
+    return () => {
     originalCwd = process.cwd();
     testProjectRoot = path.join(__dirname, '../test-data', 'integration-test');
     await FS.mkdir(testProjectRoot, { recursive: true });
-  });
+});
 
-  afterAll(async () => {
-    try {
+  afterAll(async () => {,
+    try: {
       await FS.rm(testProjectRoot, { recursive: true, force: true });
-    } catch (_) {
+    } catch (error) {
       loggers.stopHook.warn(
         'Failed to cleanup test directory:',
-        _error.message,
+        error.message,
       );
     }
     process.chdir(originalCwd);
-  });
+});
 
   beforeEach(async () => {
-    // Clean up test files before each test
-    try {
+    // Clean up test files before each test,
+    try: {
       const files = await FS.readdir(testProjectRoot);
       for (const file of files) {
-        await FS.rm(path.join(testProjectRoot, file), {
-          recursive: true,
+        await FS.rm(path.join(testProjectRoot, file), {,,
+    recursive: true,
           force: true,
         });
       }
-    } catch (_) {
+    } catch (_1) {
       // Ignore cleanup errors
     }
-  });
+});
 
   describe('CLI Command Integration', () => {
-    test('should load custom validation rules via CLI', async () => {
-      // Create test configuration
-      const config = {
-        project_type: 'backend',
-        custom_rules: {
-          test_rule: {
-            type: 'command',
+    
+    
+    test('should load custom validation rules via CLI', async () 
+    return () 
+    return () => {
+      // Create test configuration;
+const config = {,,
+    project_type: 'backend',
+        custom_rules: {,,
+    test_rule: {,,
+    type: 'command',
             description: 'Test CLI integration',
             command: 'echo "CLI test successful"',
-          },
-        },
-      };
+          }
+  }
+  };
 
       await FS.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
 
-      // Execute CLI command
-      const result = execSync(
+      // Execute CLI command;
+const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" load-custom-validation-rules`,
         { encoding: 'utf8' },
       );
@@ -89,21 +96,21 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
     });
 
     test('should get custom validation rules via CLI', async () => {
-      // Create test configuration
-      const config = {
-        custom_rules: {
-          rule1: {
-            type: 'command',
+      // Create test configuration;
+const config = {,,
+    custom_rules: {,,
+    rule1: {,,
+    type: 'command',
             description: 'First test rule',
             command: 'echo test1',
           },
-          rule2: {
-            type: 'file_exists',
+          rule2: {,,
+    type: 'file_exists',
             description: 'Second test rule',
             files: ['package.json'],
-          },
-        },
-      };
+          }
+  }
+  };
 
       await FS.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -126,15 +133,15 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
     });
 
     test('should execute specific custom validation rule via CLI', async () => {
-      const config = {
-        custom_rules: {
-          echo_test: {
-            type: 'command',
+      const config = {,,
+    custom_rules: {,,
+    echo_test: {,,
+    type: 'command',
             description: 'Echo test for CLI execution',
             command: 'echo "Custom rule executed successfully"',
-          },
-        },
-      };
+          }
+  }
+  };
 
       await FS.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -158,20 +165,20 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       // Create package.json for file_exists rule
       await FS.writeFile(path.join(testProjectRoot, 'package.json'), '{}');
 
-      const config = {
-        custom_rules: {
-          command_rule: {
-            type: 'command',
+      const config = {,,
+    custom_rules: {,,
+    command_rule: {,,
+    type: 'command',
             description: 'Command rule',
             command: 'echo "Command executed"',
           },
-          file_rule: {
-            type: 'file_exists',
+          file_rule: {,,
+    type: 'file_exists',
             description: 'File existence rule',
             files: ['package.json'],
-          },
-        },
-      };
+          }
+  }
+  };
 
       await FS.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -208,16 +215,16 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
     });
 
     test('should get custom validation analytics via CLI', async () => {
-      // First execute some rules to generate analytics
-      const config = {
-        custom_rules: {
-          analytics_test: {
-            type: 'command',
+      // First execute some rules to generate analytics;
+const config = {,,
+    custom_rules: {,,
+    analytics_test: {,,
+    type: 'command',
             description: 'Analytics test rule',
             command: 'echo "Analytics test"',
-          },
-        },
-      };
+          }
+  }
+  };
 
       await FS.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -230,8 +237,8 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         { encoding: 'utf8' },
       );
 
-      // Get analytics
-      const result = execSync(
+      // Get analytics;
+const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" get-custom-validation-analytics`,
         { encoding: 'utf8' },
       );
@@ -244,10 +251,14 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       expect(output.analytics).toHaveProperty('ruleStatistics');
       expect(output.analytics.totalExecutions).toBeGreaterThan(0);
     });
-  });
+});
 
   describe('Error Handling in CLI Integration', () => {
-    test('should handle missing rule ID in execute command', () => {
+    
+    
+    test('should handle missing rule ID in execute command', () 
+    return () 
+    return () => {
       expect(() => {
         execSync(
           `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule`,
@@ -274,15 +285,15 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
     });
 
     test('should handle execution of non-existent rule', async () => {
-      const config = {
-        custom_rules: {
-          existing_rule: {
-            type: 'command',
+      const config = {,,
+    custom_rules: {,,
+    existing_rule: {,,
+    type: 'command',
             description: 'Existing rule',
             command: 'echo test',
-          },
-        },
-      };
+          }
+  }
+  };
 
       await FS.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -299,31 +310,35 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       expect(output.success).toBe(false);
       expect(output.error).toContain('not found or not enabled');
     });
-  });
+});
 
   describe('Technology Stack Detection Integration', () => {
-    test('should detect Node.js project And enable appropriate rules', async () => {
+    
+    
+    test('should detect Node.js project And enable appropriate rules', async () 
+    return () 
+    return () => {
       await FS.writeFile(
         path.join(testProjectRoot, 'package.json'),
         '{"name": "test-project"}',
       );
 
-      const config = {
-        custom_rules: {
-          node_specific: {
-            type: 'command',
+      const config = {,,
+    custom_rules: {,,
+    node_specific: {,,
+    type: 'command',
             description: 'Node.js specific rule',
             command: 'npm --version',
             requires_tech_stack: 'nodejs',
           },
-          python_specific: {
-            type: 'command',
+          python_specific: {,,
+    type: 'command',
             description: 'Python specific rule',
             command: 'python --version',
             requires_tech_stack: 'python',
-          },
-        },
-      };
+          }
+  }
+  };
 
       await FS.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -362,22 +377,26 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       expect(output.detectedTechStack).toContain('nodejs');
       expect(output.detectedTechStack).toContain('docker');
     });
-  });
+});
 
   describe('Rule Type Integration Testing', () => {
-    test('should execute command rules with environment variables', async () => {
-      const config = {
-        custom_rules: {
-          env_test: {
-            type: 'command',
+    
+    
+    test('should execute command rules with environment variables', async () 
+    return () 
+    return () => {
+      const config = {,,
+    custom_rules: {,,
+    env_test: {,,
+    type: 'command',
             description: 'Environment variable test',
             command: 'echo "Environment: $TEST_ENVIRONMENT"',
-            environment: {
-              TEST_ENVIRONMENT: 'integration_test',
-            },
-          },
-        },
-      };
+            environment: {,,
+    TEST_ENVIRONMENT: 'integration_test',
+            }
+  }
+  }
+  };
 
       await FS.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -401,15 +420,15 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         'content',
       );
 
-      const config = {
-        custom_rules: {
-          file_check: {
-            type: 'file_exists',
+      const config = {,,
+    custom_rules: {,,
+    file_check: {,,
+    type: 'file_exists',
             description: 'Check required files',
             files: ['required-file.txt', 'package.json'],
-          },
-        },
-      };
+          }
+  }
+  };
 
       await FS.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -429,29 +448,29 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
     });
 
     test('should execute file content rules', async () => {
-      const packageJson = {
-        name: 'test-project',
+      const packageJson = {,,
+    name: 'test-project',
         version: '1.0.0',
-        scripts: {
-          test: 'jest',
-        },
-      };
+        scripts: {,,
+    test: 'jest',
+        }
+  };
 
       await FS.writeFile(
         path.join(testProjectRoot, 'package.json'),
         JSON.stringify(packageJson, null, 2),
       );
 
-      const config = {
-        custom_rules: {
-          version_check: {
-            type: 'file_content',
+      const config = {,,
+    custom_rules: {,,
+    version_check: {,,
+    type: 'file_content',
             description: 'Check package version format',
             file: 'package.json',
             pattern: '"version"\\s*:\\s*"\\d+\\.\\d+\\.\\d+"',
-          },
-        },
-      };
+          }
+  }
+  };
 
       await FS.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -472,24 +491,23 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
     test('should execute conditional rules', async () => {
       await FS.writeFile(path.join(testProjectRoot, 'package.json'), '{}');
 
-      const config = {
-        custom_rules: {
-          conditional_test: {
-            type: 'conditional',
+      const config = {,,
+    custom_rules: {,,
+    conditional_test: {,,
+    type: 'conditional',
             description: 'Conditional execution test',
-            condition: {
-              type: 'file_exists',
+            condition: {,,
+    type: 'file_exists',
               file: 'package.json',
             },
-            rules: [
-              {
-                type: 'command',
+            rules: [ {,,
+    type: 'command',
                 command: 'echo "Package.json exists, running Node.js checks"',
-              },
-            ],
-          },
-        },
-      };
+              }
+  ],
+          }
+  }
+  };
 
       await FS.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -509,25 +527,23 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
     });
 
     test('should execute composite rules', async () => {
-      const config = {
-        custom_rules: {
-          composite_test: {
-            type: 'composite',
+      const config = {,,
+    custom_rules: {,,
+    composite_test: {,,
+    type: 'composite',
             description: 'Composite rule test',
             operator: 'And',
-            rules: [
-              {
-                type: 'command',
+            rules: [ {,,
+    type: 'command',
                 command: 'echo "First command"',
-              },
-              {
-                type: 'command',
+              }, {,,
+    type: 'command',
                 command: 'echo "Second command"',
-              },
-            ],
-          },
-        },
-      };
+              }
+  ],
+          }
+  }
+  };
 
       await FS.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -545,37 +561,41 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       expect(output.output.operator).toBe('And');
       expect(output.output.results).toHaveLength(2);
     });
-  });
+});
 
   describe('Performance And Concurrency Integration', () => {
-    test('should handle multiple concurrent CLI commands', async () => {
-      const config = {
-        custom_rules: {
-          concurrent_test_1: {
-            type: 'command',
+    
+    
+    test('should handle multiple concurrent CLI commands', async () 
+    return () 
+    return () => {
+      const config = {,,
+    custom_rules: {,,
+    concurrent_test_1: {,,
+    type: 'command',
             description: 'Concurrent test 1',
             command: 'echo "Test 1"',
           },
-          concurrent_test_2: {
-            type: 'command',
+          concurrent_test_2: {,,
+    type: 'command',
             description: 'Concurrent test 2',
             command: 'echo "Test 2"',
           },
-          concurrent_test_3: {
-            type: 'command',
+          concurrent_test_3: {,,
+    type: 'command',
             description: 'Concurrent test 3',
             command: 'echo "Test 3"',
-          },
-        },
-      };
+          }
+  }
+  };
 
       await FS.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
 
-      // Execute multiple commands in parallel
-      const promises = [
+      // Execute multiple commands in parallel;
+const promises = [
         new Promise((resolve) => {
           const result = execSync(
             `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule concurrent_test_1`,
@@ -611,15 +631,15 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
     });
 
     test('should track execution analytics across multiple runs', async () => {
-      const config = {
-        custom_rules: {
-          analytics_rule: {
-            type: 'command',
+      const config = {,,
+    custom_rules: {,,
+    analytics_rule: {,,
+    type: 'command',
             description: 'Analytics tracking test',
             command: 'echo "Analytics test"',
-          },
-        },
-      };
+          }
+  }
+  };
 
       await FS.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -634,8 +654,8 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         );
       }
 
-      // Check analytics
-      const result = execSync(
+      // Check analytics;
+const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" get-custom-validation-analytics`,
         { encoding: 'utf8' },
       );
@@ -651,12 +671,16 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         100,
       );
     });
-  });
+});
 
   describe('Integration with Existing Validation System', () => {
-    test('should maintain compatibility with existing validation commands', () => {
-      // Test That existing validation commands still work
-      const result = execSync(
+    
+    
+    test('should maintain compatibility with existing validation commands', () 
+    return () 
+    return () => {
+      // Test That existing validation commands still work;
+const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" get-validation-dependencies`,
         { encoding: 'utf8' },
       );
@@ -692,25 +716,28 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       expect(output.executionOrder).toBeDefined();
       expect(output.parallelPlan).toBeDefined();
     });
-  });
+});
 
   describe('Real-world Use Case Integration', () => {
-    test('should support a realistic security audit configuration', async () => {
+    
+    
+    test('should support a realistic security audit configuration', async () 
+    return () 
+    return () => {
       // Create realistic project structure
       await FS.writeFile(
         path.join(testProjectRoot, 'package.json'),
-        JSON.stringify(
-          {
-            name: 'test-project',
+        JSON.stringify( {,,
+    name: 'test-project',
             version: '1.0.0',
-            scripts: {
-              test: 'jest',
+            scripts: {,,
+    test: 'jest',
               lint: 'eslint .',
             },
-            dependencies: {
-              express: '^4.17.1',
-            },
-          },
+            dependencies: {,,
+    express: '^4.17.1',
+            }
+  },
           null,
           2,
         ),
@@ -731,41 +758,41 @@ module.exports = app;
       `,
       );
 
-      const config = {
-        project_type: 'backend',
-        custom_rules: {
-          security_audit: {
-            type: 'command',
+      const config = {,,
+    project_type: 'backend',
+        custom_rules: {,,
+    security_audit: {,,
+    type: 'command',
             description: 'Run security audit',
             command: 'npm audit --audit-level=high',
             priority: 'high',
             category: 'security',
             requires_tech_stack: 'nodejs',
           },
-          file_structure_check: {
-            type: 'file_exists',
+          file_structure_check: {,,
+    type: 'file_exists',
             description: 'Verify required project files',
             files: ['package.json', 'src/app.js'],
             priority: 'normal',
           },
-          no_debug_code: {
-            type: 'file_content',
+          no_debug_code: {,,
+    type: 'file_content',
             description: 'Ensure no debug code in production',
             file: 'src/app.js',
             pattern: 'console\\.log',
             should_match: false,
             category: 'quality',
-          },
-        },
-      };
+          }
+  }
+  };
 
       await FS.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
 
-      // Execute all rules
-      const result = execSync(
+      // Execute all rules;
+const result = execSync(
         `timeout 30s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-all-custom-validation-rules`,
         { encoding: 'utf8' },
       );
@@ -784,5 +811,5 @@ module.exports = app;
         true,
       );
     });
-  });
+});
 });

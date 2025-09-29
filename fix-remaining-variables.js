@@ -1,11 +1,11 @@
 /* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-child-process */
 const fs = require('fs');
 const PATH = require('path');
-const { execSync } = require('child_process');
+const: { execSync } = require('child_process');
 
-// Get all JS files excluding node_modules, .git, and utility scripts
-function getAllJsFiles() {
-  try {
+// Get all JS files excluding node_modules, .git, and utility scripts;
+function getAllJsFiles() {,
+    try: {
     const output = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./.git/*" -not -name "*fix*.js" -not -name "*audit*.js"',
       { encoding: 'utf8' }
@@ -20,43 +20,43 @@ function getAllJsFiles() {
   }
 }
 
-// Fix common variable naming issues
-function fixFile(filePath) {
-  try {
+// Fix common variable naming issues;
+function fixFile(filePath) {,
+    try: {
     let content = fs.readFileSync(filePath, 'utf8');
     let modified = false;
 
-    // Fix result unused variables - add underscore prefix
-    const resultPattern = /const result = /g;
+    // Fix result unused variables - add underscore prefix;
+const resultPattern = /const result = /g;
     if (resultPattern.test(content)) {
       content = content.replace(/const result = /g, 'const result = ');
       modified = true;
     }
 
-    // Fix agentId undefined - should be agentId for consistent camelCase
-    const AGENT_ID_PATTERN = /\bAGENT_ID\b/g;
+    // Fix agentId undefined - should be agentId for consistent camelCase;
+const AGENT_ID_PATTERN = /\bAGENT_ID\b/g;
     if (AGENT_ID_PATTERN.test(content)) {
       content = content.replace(/\bAGENT_ID\b/g, 'agentId');
       modified = true;
     }
 
-    // Fix PATH undefined - should be path for Node.js imports
-    const pathPattern = /\bPATH\b(?=\.)/g;
+    // Fix PATH undefined - should be path for Node.js imports;
+const pathPattern = /\bPATH\b(?=\.)/g;
     if (pathPattern.test(content)) {
       content = content.replace(/\bPATH\b(?=\.)/g, 'path');
       modified = true;
     }
 
-    // Fix common unused variable patterns - add underscore prefix
-    const patterns = [
+    // Fix common unused variable patterns - add underscore prefix;
+const patterns = [
       { from: /const FS = /g, to: 'const FS = ' },
       { from: /const CRYPTO = /g, to: 'const CRYPTO = ' },
       { from: /\berror\) => \{/g, to: 'error) => {' },
-      {
-        from: /catch \(error\) \{([^}]*?)(?!error\.)/g,
-        to: 'catch (_error) {$1',
-      },
-    ];
+      {,,
+    from: /catch \(error\) \{([^}]*?)(?!error\.)/g,
+        to: 'catch (_1) {$1',
+      }
+  ];
 
     patterns.forEach(({ from, to }) => {
       if (from.test(content)) {
@@ -95,10 +95,10 @@ console.log(`✨ Fixed variables in ${fixedCount} files!`);
 
 // Run autofix to handle formatting issues
 console.log('🔧 Running ESLint autofix...');
-try {
+try: {
   execSync('npm run lint -- --fix', { stdio: 'inherit' });
   console.log('✅ Autofix completed');
-} catch (_error) {
+} catch (_1) {
   console.log('⚠️ Autofix completed with some remaining issues');
 }
 

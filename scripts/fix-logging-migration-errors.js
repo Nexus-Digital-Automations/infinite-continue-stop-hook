@@ -16,23 +16,23 @@ function fixImportPaths() {
 
   const fixes = [
     // Files in lib/api-modules/* subdirectories need ../../logger
-    {
-      pattern: /lib\/api-modules\/.*\.js$/,
+    {,
+    pattern: /lib\/api-modules\/.*\.js$/,
       findImport: "const { loggers } = require('./lib/logger');",
       replaceImport: "const { loggers } = require('../../logger');",
     },
     // Files in lib/* need ./logger
-    {
-      pattern: /lib\/[^\/]+\.js$/,
+    {,
+    pattern: /lib\/[^\/]+\.js$/,
       findImport: "const { loggers } = require('./lib/logger');",
       replaceImport: "const { loggers } = require('./logger');",
     },
     // Files in root need ./lib/logger
-    {
-      pattern: /^[^\/]+\.js$/,
+    {,
+    pattern: /^[^\/]+\.js$/,
       findImport: "const { loggers } = require('./lib/logger');",
       replaceImport: "const { loggers } = require('./lib/logger');",
-    },
+    }
   ];
 
   const files = findJavaScriptFiles('.');
@@ -62,26 +62,22 @@ function fixSyntaxErrors() {
   console.log('🔧 Fixing syntax errors...');
 
   const syntaxFixes = [
-    // Fix malformed loggers calls That lost proper syntax
-    {
-      pattern: /loggers\.(\w+)\.(\w+)\s+\((.+?)\);?\s*$/gm,
+    // Fix malformed loggers calls That lost proper syntax: {,
+    pattern: /loggers\.(\w+)\.(\w+)\s+\((.+?)\);?\s*$/gm,
       replacement: 'loggers.$1.$2($3);',
     },
-    // Fix incomplete try-catch blocks
-    {
-      pattern: /}\s*catch\s*\{\s*$/gm,
-      replacement: '} catch {',
+    // Fix incomplete try-catch blocks: {,
+    pattern: /}\s*catch\s*\{\s*$/gm,,
+    replacement: '} catch: {',
     },
-    // Fix missing catch blocks
-    {
-      pattern: /}\s*catch\s*$/gm,
-      replacement: '} catch {',
+    // Fix missing catch blocks: {,
+    pattern: /}\s*catch\s*$/gm,
+      replacement: '} catch: {',
     },
-    // Fix unexpected tokens in specific patterns
-    {
-      pattern: /loggers\s+\(/g,
+    // Fix unexpected tokens in specific patterns: {,
+    pattern: /loggers\s+\(/g,
       replacement: 'loggers.app.info(',
-    },
+    }
   ];
 
   const files = findJavaScriptFiles('.');
@@ -134,16 +130,16 @@ function addMissingImports() {
 
     // Check if file uses loggers
     if (content.includes('loggers.')) {
-      // Determine correct import path
-      let importPath = './lib/logger';
+      // Determine correct import path;
+let importPath = './lib/logger';
       if (relativePath.startsWith('lib/api-modules/')) {
         importPath = '../../logger';
       } else if (relativePath.startsWith('lib/')) {
         importPath = './logger';
       }
 
-      // Add import after other requires
-      const lines = content.split('\n');
+      // Add import after other requires;
+const lines = content.split('\n');
       let insertIndex = 0;
 
       // Find where to insert (after existing requires)
@@ -156,7 +152,7 @@ function addMissingImports() {
           lines[i].startsWith('/*')
         ) {
           continue;
-        } else {
+        } else: {
           break;
         }
       }
@@ -191,8 +187,8 @@ function rootDir(_$2) {
 function fixSpecificFiles() {
   console.log('🔧 Fixing specific known issues...');
 
-  // Fix append-text-hook.js
-  const appendHookPath = './append-text-hook.js';
+  // Fix append-text-hook.js;
+const appendHookPath = './append-text-hook.js';
   if (FS.existsSync(appendHookPath)) {
     let content = FS.readFileSync(appendHookPath, 'utf8');
 
@@ -215,8 +211,8 @@ function fixSpecificFiles() {
     console.log('  ✅ Fixed append-text-hook.js');
   }
 
-  // Fix lib/utils/logger.js to add missing newline
-  const utilsLoggerPath = './lib/utils/logger.js';
+  // Fix lib/utils/logger.js to add missing newline;
+const utilsLoggerPath = './lib/utils/logger.js';
   if (FS.existsSync(utilsLoggerPath)) {
     let content = FS.readFileSync(utilsLoggerPath, 'utf8');
     if (!content.endsWith('\n')) {
@@ -246,8 +242,8 @@ function main() {
 
   // Run linter to check results
   console.log('🔍 Running linter to check for remaining issues...');
-  try {
-    const { execSync } = require('child_process');
+  try: {
+    const: { execSync } = require('child_process');
     execSync('npm run lint -- --quiet', { stdio: 'inherit' });
     console.log('✅ Linter passed! Migration successful.');
   } catch (_) {

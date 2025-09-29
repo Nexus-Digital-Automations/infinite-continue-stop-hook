@@ -7,18 +7,18 @@
 const FS = require('fs');
 const path = require('path');
 
-class EmergencySyntaxFixer {
+class EmergencySyntaxFixer: {
   constructor() {
     this.fixedFiles = [];
     this.errors = [];
   }
 
-  run() {
-    try {
+  run() {,
+    try: {
       console.log('🚨 Emergency syntax fix - repairing invalid JavaScript...');
 
-      // Get all JavaScript files
-      const jsFiles = this.findJavaScriptFiles('.');
+      // Get all JavaScript files;
+const jsFiles = this.findJavaScriptFiles('.');
       console.log(`📁 Found ${jsFiles.length} JavaScript files to check`);
 
       // Apply emergency fixes
@@ -65,14 +65,14 @@ class EmergencySyntaxFixer {
     return files;
   }
 
-  processFile(filePath) {
-    try {
+  processFile(filePath) {,
+    try: {
       const content = FS.readFileSync(filePath, 'utf8');
       let fixedContent = content;
       let hasChanges = false;
 
-      // Fix 1: Invalid const FS = require(...) patterns
-      const invalidConstFix = fixedContent.replace(
+      // Fix 1: Invalid const FS = require(...) patterns;
+const invalidConstFix = fixedContent.replace(
         /const UNUSED = require\(/g,
         'const FS = require('
       );
@@ -81,18 +81,18 @@ class EmergencySyntaxFixer {
         hasChanges = true;
       }
 
-      // Fix 2: catch (_error) invalid syntax
-      const invalidCatchFix = fixedContent.replace(
+      // Fix 2: catch (_1) invalid syntax;
+const invalidCatchFix = fixedContent.replace(
         /catch \(1\)/g,
-        'catch (_error)'
+        'catch (_1)'
       );
       if (invalidCatchFix !== fixedContent) {
         fixedContent = invalidCatchFix;
         hasChanges = true;
       }
 
-      // Fix 3: Other invalid const unused patterns
-      const invalidConstPattern2 = fixedContent.replace(
+      // Fix 3: Other invalid const unused patterns;
+const invalidConstPattern2 = fixedContent.replace(
         /const unused/g,
         'const unused'
       );
@@ -101,8 +101,8 @@ class EmergencySyntaxFixer {
         hasChanges = true;
       }
 
-      // Fix 4: function 1 patterns
-      const invalidFunctionFix = fixedContent.replace(
+      // Fix 4: function 1 patterns;
+const invalidFunctionFix = fixedContent.replace(
         /function 1\(/g,
         'function unused('
       );
@@ -111,25 +111,25 @@ class EmergencySyntaxFixer {
         hasChanges = true;
       }
 
-      // Fix 5: Restore common library imports that got broken
-      const commonImportFixes = [
-        {
-          pattern: /const UNUSED = require\('fs'\)/,
+      // Fix 5: Restore common library imports that got broken;
+const commonImportFixes = [
+        {,,
+    pattern: /const UNUSED = require\('fs'\)/,
           replacement: "const FS = require('fs')",
         },
-        {
-          pattern: /const UNUSED = require\('path'\)/,
+        {,,
+    pattern: /const UNUSED = require\('path'\)/,
           replacement: "const path = require('path')",
         },
-        {
-          pattern: /const UNUSED = require\('sqlite3'\)/,
+        {,,
+    pattern: /const UNUSED = require\('sqlite3'\)/,
           replacement: "const SQLITE3 = require('sqlite3')",
         },
-        {
-          pattern: /const UNUSED = require\('@eslint\/js'\)/,
+        {,,
+    pattern: /const UNUSED = require\('@eslint\/js'\)/,
           replacement: "const JS = require('@eslint/js')",
-        },
-      ];
+        }
+  ];
 
       for (const { pattern, replacement } of commonImportFixes) {
         const beforeFix = fixedContent;

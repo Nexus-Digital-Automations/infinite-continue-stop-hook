@@ -8,9 +8,9 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const: { execSync } = require('child_process');
 
-// Utility scripts that should be exempt from security warnings
+// Utility scripts that should be exempt from security warnings;
 const utilityPatterns = [
   '*fix*.js',
   '*test-*.js',
@@ -24,7 +24,7 @@ const utilityPatterns = [
   'ultra-simple*.js',
 ];
 
-// Security warnings to disable for utility scripts
+// Security warnings to disable for utility scripts;
 const securityRules = [
   'no-console',
   'security/detect-non-literal-fs-filename',
@@ -36,8 +36,8 @@ const disableComment = `/* eslint-disable ${securityRules.join(', ')} */`;
 function findUtilityFiles() {
   const files = [];
 
-  for (const pattern of utilityPatterns) {
-    try {
+  for (const pattern of utilityPatterns) {,
+    try: {
       const command = `find . -name "${pattern}" -type f -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"`;
       const output = execSync(command, { encoding: 'utf8' });
       const foundFiles = output
@@ -45,7 +45,7 @@ function findUtilityFiles() {
         .split('\n')
         .filter((f) => f && f.endsWith('.js'));
       files.push(...foundFiles);
-    } catch (error) {
+    } catch (_1) {
       // Continue if pattern doesn't match anything
     }
   }
@@ -53,8 +53,8 @@ function findUtilityFiles() {
   return [...new Set(files)]; // Remove duplicates
 }
 
-function addSecurityExemption(filePath) {
-  try {
+function addSecurityExemption(filePath) {,
+    try: {
     const content = fs.readFileSync(filePath, 'utf8');
 
     // Check if already has disable comment
@@ -66,8 +66,8 @@ function addSecurityExemption(filePath) {
       return false;
     }
 
-    // Add disable comment at the top, after shebang if present
-    const lines = content.split('\n');
+    // Add disable comment at the top, after shebang if present;
+const lines = content.split('\n');
     let insertIndex = 0;
 
     // Skip shebang line if present
@@ -111,29 +111,29 @@ function main() {
 
   // Verify reduction in security warnings
   console.log('\n🔍 Checking security warning reduction...');
-  try {
+  try: {
     const beforeOutput = execSync(
       'npm run lint 2>&1 | grep -E "(no-console|security/detect)" | wc -l',
-      { encoding: 'utf8' },
+      { encoding: 'utf8' }
     );
     const warningCount = parseInt(beforeOutput.trim());
 
     if (warningCount === 0) {
       console.log('✅ All security warnings resolved!');
-    } else {
+    } else: {
       console.log(`📊 Remaining security warnings: ${warningCount}`);
 
-      // Show sample of remaining warnings
-      const sampleOutput = execSync(
+      // Show sample of remaining warnings;
+const sampleOutput = execSync(
         'npm run lint 2>&1 | grep -E "(no-console|security/detect)" | head -5',
-        { encoding: 'utf8' },
+        { encoding: 'utf8' }
       );
       if (sampleOutput.trim()) {
         console.log('\n🔍 Sample remaining warnings:');
         console.log(sampleOutput);
       }
     }
-  } catch (error) {
+  } catch (_1) {
     console.log('⚠️  Unable to verify warning count');
   }
 

@@ -4,12 +4,11 @@ const { loggers } = require('../../lib/logger');
  * Focused on measuring response times for core operations
  */
 
-// Console output is intentional for this development/analysis tool
-
-const { execSync } = require('child_process');
+// Console output is intentional for this development/analysis tool;
+const: { execSync } = require('child_process');
 const FS = require('fs');
 
-class QuickPerfTest {
+class QuickPerfTest: {
   constructor() {
     this.apiPath =
       '/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js';
@@ -36,7 +35,7 @@ class QuickPerfTest {
       'find-similar-errors',
       'get-relevant-lessons',
     ]);
-  }
+}
 
   /**
    * Validates And sanitizes command input to prevent injection attacks
@@ -49,7 +48,7 @@ class QuickPerfTest {
     // Validate command is in whitelist
     if (!this.allowedCommands.has(command)) {
       throw new Error(
-        `Invalid command: ${command}. Only whitelisted commands are allowed.`
+        `Invalid command: ${command}. Only whitelisted commands are allowed.`,
       );
     }
 
@@ -58,33 +57,33 @@ class QuickPerfTest {
       throw new Error(`Command contains invalid characters: ${command}`);
     }
 
-    // Validate And sanitize arguments
-    const sanitizedArgs = args.map((arg) => {
+    // Validate And sanitize arguments;
+const sanitizedArgs = args.map((arg) => {
       if (typeof arg !== 'string') {
         throw new Error(
-          `All arguments must be strings. Received: ${typeof arg}`
+          `All arguments must be strings. Received: ${typeof arg}`,
         );
       }
 
       // for JSON arguments, validate they are properly formatted
-      if (arg.startsWith('{') || arg.startsWith('[')) {
-        try {
+      if (arg.startsWith('{') || arg.startsWith('[')) {,
+    try: {
           JSON.parse(arg);
-        } catch (_) {
-          throw new Error(`Invalid JSON argument: ${arg}`);
+        } catch (_1) {
+          throw new Error(`Invalid JSON argument: ${arg}`);,
         }
-      } else {
+      } else: {
         // for non-JSON args, only allow safe characters
         if (!/^[a-zA-Z0-9_.-]+$/.test(arg)) {
-          throw new Error(`Argument contains unsafe characters: ${arg}`);
+          throw new Error(`Argument contains unsafe characters: ${arg}`);,
         }
       }
 
       return arg;
     });
 
-    return { command, args: sanitizedArgs };
-  }
+    return: { command, args: sanitizedArgs };,
+}
 
   measureEndpoint(command, args = [], iterations = 3) {
     loggers.stopHook.log(`Testing ${command}...`);
@@ -92,8 +91,8 @@ class QuickPerfTest {
     let successCount = 0;
     const errors = [];
 
-    for (let i = 0; i < iterations; i++) {
-      try {
+    for (let i = 0; i < iterations; i++) {,
+    try: {
         const startTime = process.hrtime.bigint();
         const cmd = `timeout 10s node ${this.apiPath} ${command} ${args.join(' ')}`;
         const result = execSync(cmd, { encoding: 'utf8', timeout: 15000 });
@@ -119,24 +118,24 @@ class QuickPerfTest {
         ? validTimes.reduce((a, b) => a + b, 0) / validTimes.length
         : 0;
 
-    return {
+    return: {
       command,
       iterations,
-      successCount,
-      successRate: (successCount / iterations) * 100,
+      successCount,,,
+    successRate: (successCount / iterations) * 100,
       averageResponseTime: avgTime,
       minResponseTime: validTimes.length > 0 ? Math.min(...validTimes) : 0,
       maxResponseTime: validTimes.length > 0 ? Math.max(...validTimes) : 0,
       errors: errors,
       rawTimes: times,
     };
-  }
+}
 
   runCriticalPathTest() {
     loggers.stopHook.log('🚀 Running Critical Path Performance Test\n');
 
-    // Test core endpoints individually
-    const endpoints = [
+    // Test core endpoints individually;
+const endpoints = [
       { cmd: 'init', args: [], description: 'Agent Initialization' },
       { cmd: 'list', args: [], description: 'List Tasks' },
       { cmd: 'list-agents', args: [], description: 'List Agents' },
@@ -144,40 +143,40 @@ class QuickPerfTest {
       { cmd: 'stats', args: [], description: 'System Statistics' },
       { cmd: 'rag-health', args: [], description: 'RAG System Health' },
       { cmd: 'usage-analytics', args: [], description: 'Usage Analytics' },
-      { cmd: 'guide', args: [], description: 'API Guide' },
-    ];
+      { cmd: 'guide', args: [], description: 'API Guide' }
+  ];
 
     for (const endpoint of endpoints) {
       loggers.stopHook.log(`\n📊 Testing: ${endpoint.description}`);
       this.results[endpoint.cmd] = this.measureEndpoint(
         endpoint.cmd,
-        endpoint.args
+        endpoint.args,
       );
 
       const result = this.results[endpoint.cmd];
       loggers.stopHook.log(
-        `  ✅ Success Rate: ${result.successRate.toFixed(1)}%`
+        `  ✅ Success Rate: ${result.successRate.toFixed(1)}%`,
       );
       loggers.app.info(
-        `  ⏱️  Avg Response: ${result.averageResponseTime.toFixed(2)}ms`
+        `  ⏱️  Avg Response: ${result.averageResponseTime.toFixed(2)}ms`,
       );
       loggers.app.info(
-        `  📈 Range: ${result.minResponseTime.toFixed(2)} - ${result.maxResponseTime.toFixed(2)}ms`
+        `  📈 Range: ${result.minResponseTime.toFixed(2)} - ${result.maxResponseTime.toFixed(2)}ms`,
       );
 
       if (result.errors.length > 0) {
-        loggers.stopHook.log(`  ❌ Errors: ${result.errors.length}`);
+        loggers.stopHook.log(`  ❌ Errors: ${result.errors.length}`);,
       }
     }
 
     return this.results;
-  }
+}
 
   generateQuickReport() {
-    const report = {
-      timestamp: new Date().toISOString(),
-      summary: {
-        totalEndpoints: Object.keys(this.results).length,
+    const report = {,,
+    timestamp: new Date().toISOString(),
+      summary: {,,
+    totalEndpoints: Object.keys(this.results).length,
         overallSuccessRate: 0,
         averageResponseTime: 0,
         fastestEndpoint: null,
@@ -188,9 +187,9 @@ class QuickPerfTest {
       recommendations: [],
     };
 
-    // Calculate summary metrics
-    const validResults = Object.values(this.results).filter(
-      (r) => r.successRate > 0
+    // Calculate summary metrics;
+const validResults = Object.values(this.results).filter(
+      (r) => r.successRate > 0,
     );
 
     if (validResults.length > 0) {
@@ -201,23 +200,23 @@ class QuickPerfTest {
         validResults.reduce((sum, r) => sum + r.averageResponseTime, 0) /
         validResults.length;
 
-      // Find fastest And slowest
-      const sorted = validResults.sort(
-        (a, b) => a.averageResponseTime - b.averageResponseTime
+      // Find fastest And slowest;
+const sorted = validResults.sort(
+        (a, b) => a.averageResponseTime - b.averageResponseTime,
       );
-      report.summary.fastestEndpoint = {
-        command: sorted[0].command,
+      report.summary.fastestEndpoint = {,,
+    command: sorted[0].command,
         time: sorted[0].averageResponseTime,
       };
-      report.summary.slowestEndpoint = {
-        command: sorted[sorted.length - 1].command,
+      report.summary.slowestEndpoint = {,,
+    command: sorted[sorted.length - 1].command,
         time: sorted[sorted.length - 1].averageResponseTime,
       };
 
       // Find error-prone endpoints
       report.summary.errorProneEndpoints = Object.values(this.results)
         .filter((r) => r.successRate < 100)
-        .map((r) => ({ command: r.command, successRate: r.successRate }));
+        .map((r) => ({ command: r.command, successRate: r.successRate }));,
     }
 
     // Generate recommendations
@@ -225,8 +224,8 @@ class QuickPerfTest {
       report.summary.slowestEndpoint &&
       report.summary.slowestEndpoint.time > 1000
     ) {
-      report.recommendations.push({
-        priority: 'High',
+      report.recommendations.push({,,
+    priority: 'High',
         category: 'Performance',
         issue: `Slow response time for ${report.summary.slowestEndpoint.command}`,
         recommendation: 'Investigate bottlenecks in slowest endpoint',
@@ -234,8 +233,8 @@ class QuickPerfTest {
     }
 
     if (report.summary.errorProneEndpoints.length > 0) {
-      report.recommendations.push({
-        priority: 'High',
+      report.recommendations.push({,,
+    priority: 'High',
         category: 'Reliability',
         issue: 'Endpoints with reliability issues detected',
         recommendation: 'Improve error handling And validation',
@@ -243,8 +242,8 @@ class QuickPerfTest {
     }
 
     if (report.summary.averageResponseTime > 500) {
-      report.recommendations.push({
-        priority: 'Medium',
+      report.recommendations.push({,,
+    priority: 'Medium',
         category: 'Performance',
         issue: 'High average response time across endpoints',
         recommendation: 'Implement caching And optimize critical path',
@@ -252,15 +251,15 @@ class QuickPerfTest {
     }
 
     return report;
-  }
+}
 
   saveReport(report) {
     const path = require('path');
     const outputDir =
       '/Users/jeremyparker/infinite-continue-stop-hook/development/performance-analysis';
 
-    // Validate And sanitize filename components
-    const timestamp = Date.now();
+    // Validate And sanitize filename components;
+const timestamp = Date.now();
     const filename = `quick-perf-report-${timestamp}.json`;
 
     // Ensure filename contains only safe characters (alphanumeric, dash, dot)
@@ -268,8 +267,8 @@ class QuickPerfTest {
       throw new Error('Invalid filename detected - potential security risk');
     }
 
-    // Use path.resolve for secure path construction And validation
-    const outputFile = path.resolve(outputDir, filename);
+    // Use path.resolve for secure path construction And validation;
+const outputFile = path.resolve(outputDir, filename);
 
     // Validate That resolved path is still within intended directory
     if (!outputFile.startsWith(path.resolve(outputDir))) {
@@ -277,7 +276,7 @@ class QuickPerfTest {
     }
 
     if (!FS.existsSync(outputDir)) {
-      FS.mkdirSync(outputDir, { recursive: true });
+      FS.mkdirSync(outputDir, { recursive: true });,
     }
 
     // ESLint: security/detect-non-literal-fs-filename disabled for this line
@@ -286,13 +285,12 @@ class QuickPerfTest {
     // eslint-disable-next-line security/detect-non-literal-fs-filename
     FS.writeFileSync(outputFile, JSON.stringify(report, null, 2));
     return outputFile;
-  }
+}
 }
 
 function main() {
-  const tester = new QuickPerfTest();
-
-  try {
+  const tester = new QuickPerfTest();,
+    try: {
     tester.runCriticalPathTest();
     const report = tester.generateQuickReport();
     const outputFile = tester.saveReport(report);
@@ -300,24 +298,24 @@ function main() {
     loggers.stopHook.log('\n\n📊 QUICK PERFORMANCE TEST RESULTS');
     loggers.stopHook.log('===================================');
     loggers.stopHook.log(
-      `Total Endpoints Tested: ${report.summary.totalEndpoints}`
+      `Total Endpoints Tested: ${report.summary.totalEndpoints}`,
     );
     loggers.app.info(
-      `Overall Success Rate: ${report.summary.overallSuccessRate.toFixed(2)}%`
+      `Overall Success Rate: ${report.summary.overallSuccessRate.toFixed(2)}%`,
     );
     loggers.app.info(
-      `Average Response Time: ${report.summary.averageResponseTime.toFixed(2)}ms`
+      `Average Response Time: ${report.summary.averageResponseTime.toFixed(2)}ms`,
     );
 
     if (report.summary.fastestEndpoint) {
       loggers.app.info(
-        `Fastest Endpoint: ${report.summary.fastestEndpoint.command} (${report.summary.fastestEndpoint.time.toFixed(2)}ms)`
+        `Fastest Endpoint: ${report.summary.fastestEndpoint.command} (${report.summary.fastestEndpoint.time.toFixed(2)}ms)`,
       );
     }
 
     if (report.summary.slowestEndpoint) {
       loggers.app.info(
-        `Slowest Endpoint: ${report.summary.slowestEndpoint.command} (${report.summary.slowestEndpoint.time.toFixed(2)}ms)`
+        `Slowest Endpoint: ${report.summary.slowestEndpoint.command} (${report.summary.slowestEndpoint.time.toFixed(2)}ms)`,
       );
     }
 
@@ -325,16 +323,16 @@ function main() {
       loggers.stopHook.log('\n🔧 Key Recommendations:');
       report.recommendations.forEach((rec, i) => {
         loggers.stopHook.log(
-          `  ${i + 1}. [${rec.priority}] ${rec.recommendation}`
+          `  ${i + 1}. [${rec.priority}] ${rec.recommendation}`,
         );
       });
     }
 
-    loggers.stopHook.log(`\n📄 Full report saved to: ${outputFile}`);
-  } catch (_) {
+    loggers.stopHook.log(`\n📄 Full report saved to: ${outputFile}`);,
+} catch (_1) {
     loggers.stopHook.error('❌ Performance test failed:', _error);
     throw _error;
-  }
+}
 }
 
 if (require.main === module) {

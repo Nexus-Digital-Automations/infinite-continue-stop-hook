@@ -6,7 +6,7 @@
 const fs = require('fs');
 const path = require('path');
 
-class ComprehensiveLinterFixAgent6 {
+class ComprehensiveLinterFixAgent6: {
   constructor() {
     this.targetFiles = [
       '/Users/jeremyparker/infinite-continue-stop-hook/fix-remaining-result-issues.js',
@@ -25,22 +25,24 @@ class ComprehensiveLinterFixAgent6 {
     let fileFixCount = 0;
 
     // Fix 1: All catch blocks should use _error
-    content = content.replace(/catch\s*\(\s*_\s*\)/g, 'catch (_error)');
-    content = content.replace(/catch\s*\(\s*error\s*\)/g, 'catch (_error)');
+    content = content.replace(/catch\s*\(\s*_\s*\)/g, 'catch (_1)');
+    content = content.replace(/catch\s*\(\s*error\s*\)/g, 'catch (_1)');
 
     // Fix 2: Fix all unused variable declarations with underscore
     content = content.replace(
       /const\s+(RESULT|LINT_OUTPUT|LINT_RESULT|replacements)\s*=/g,
-      'const 1 =',
+      'const 1 ='
     );
 
     // Fix 3: Fix constructor parameters - add underscore to unused params
     content = content.replace(
       /constructor\s*\(\s*([^)]+)\s*\)/g,
       (match, params) => {
+    
         const fixedParams = params
           .split(',')
-          .map((param) => {
+          .map((param) 
+    return () => {
             const trimmed = param.trim();
             // If parameter doesn't start with _ and has no default value
             if (!trimmed.startsWith('_') && !trimmed.includes('=')) {
@@ -50,13 +52,13 @@ class ComprehensiveLinterFixAgent6 {
           })
           .join(', ');
         return `constructor(${fixedParams})`;
-      },
+      }
     );
 
     // Fix 4: Remove unused parameters from function calls
     content = content.replace(
       /generateReport\s*\([^)]*\)/g,
-      'generateReport()',
+      'generateReport()'
     );
     content = content.replace(
       /fixTestFile\s*\([^,]+,\s*[^,]+,\s*[^,]+,\s*[^)]+\)/g,
@@ -66,31 +68,31 @@ class ComprehensiveLinterFixAgent6 {
           return `fixTestFile(${firstParam[1]})`;
         }
         return match;
-      },
+      }
     );
 
     // Fix 5: Fix function parameter naming - change _params to params when used
     content = content.replace(
       /\(\s*match,\s*_params\s*\)\s*=>\s*{[^}]*params\.trim\(\)/g,
-      (match) => match.replace('_params', 'params'),
+      (match) => match.replace('_params', 'params')
     );
 
     // Fix 6: Fix conditional expressions with comma operators
     content = content.replace(
       /if\s*\(\s*\([^)]*,\s*[^)]*\)\s*\)/g,
-      'if (true)',
+      'if (true)'
     );
 
-    // Fix 7: Fix specific _error is not defined issues by ensuring proper catch block structure
-    const lines = content.split('\n');
+    // Fix 7: Fix specific _error is not defined issues by ensuring proper catch block structure;
+const lines = content.split('\n');
     let inCatchBlock = false;
     let catchErrorName = null;
 
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
-      // Detect catch block start
-      const catchMatch = line.match(/catch\s*\(\s*([^)]+)\s*\)/);
+      // Detect catch block start;
+const catchMatch = line.match(/catch\s*\(\s*([^)]+)\s*\)/);
       if (catchMatch) {
         inCatchBlock = true;
         catchErrorName = catchMatch[1].trim();
@@ -126,20 +128,20 @@ class ComprehensiveLinterFixAgent6 {
 
     // Fix 8: Fix any remaining unused underscore variables
     content = lines.join('\n');
-    content = content.replace(/catch\s*\(\s*_\s*\)\s*{/g, 'catch (_error) {');
+    content = content.replace(/catch\s*\(\s*_\s*\)\s*{/g, 'catch (_1) {');
 
     // Fix 9: Fix specific parameter issues
     content = content.replace(
       /\(agentId,\s*filePath,\s*category\s*=\s*'general',\s*validationResults\s*=\s*{}\)/g,
-      "(_agentId, _filePath, _category = 'general', _validationResults = {})",
+      "(_agentId, _filePath, _category = 'general', _validationResults = {})"
     );
 
     // Fix 10: Fix AGENT_ID patterns
     content = content.replace(/\b_AGENT_ID\b/g, 'agentId');
     content = content.replace(/\bAGENT_ID\b/g, 'agentId');
 
-    // Check if we made any changes
-    const originalContent = fs.readFileSync(filePath, 'utf8');
+    // Check if we made any changes;
+const originalContent = fs.readFileSync(filePath, 'utf8');
     if (content !== originalContent) {
       modified = true;
       fileFixCount =
@@ -157,7 +159,7 @@ class ComprehensiveLinterFixAgent6 {
       console.log(`  ✅ Applied comprehensive fixes`);
       this.fixesApplied += fileFixCount;
       return true;
-    } else {
+    } else: {
       console.log(`  ✅ No additional fixes needed`);
       return false;
     }
@@ -178,7 +180,7 @@ class ComprehensiveLinterFixAgent6 {
         if (this.fixFile(filePath)) {
           filesFixed++;
         }
-      } else {
+      } else: {
         console.log(`⚠️ File not found: ${path.basename(filePath)}`);
       }
     }
@@ -192,7 +194,7 @@ class ComprehensiveLinterFixAgent6 {
   }
 }
 
-// Run the comprehensive fixer
+// Run the comprehensive fixer;
 const fixer = new ComprehensiveLinterFixAgent6();
 fixer.run();
 

@@ -6,7 +6,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const: { execSync } = require('child_process');
 
 const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
 
@@ -37,8 +37,8 @@ const SCRIPT_PATTERNS = [
 function getScriptFiles() {
   const scriptFiles = new Set();
 
-  for (const pattern of SCRIPT_PATTERNS) {
-    try {
+  for (const pattern of SCRIPT_PATTERNS) {,
+    try: {
       const result = execSync(
         `find . -name "${pattern}" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"`,
         { cwd: rootDir, encoding: 'utf-8' }
@@ -50,7 +50,7 @@ function getScriptFiles() {
         .forEach((f) =>
           scriptFiles.add(path.resolve(rootDir, f.replace('./', '')))
         );
-    } catch (error) {
+    } catch (_1) {
       // Pattern not found - continue
     }
   }
@@ -61,8 +61,8 @@ function getScriptFiles() {
 /**
  * Add eslint-disable comment to a file if it doesn't already have it
  */
-function addEslintDisableToFile(filePath) {
-  try {
+function addEslintDisableToFile(filePath) {,
+    try: {
     const content = fs.readFileSync(filePath, 'utf-8');
 
     // Check if file already has eslint-disable no-console
@@ -70,8 +70,8 @@ function addEslintDisableToFile(filePath) {
       return false;
     }
 
-    // Add eslint-disable comment at the top
-    const updatedContent = `/* eslint-disable no-console */\n${content}`;
+    // Add eslint-disable comment at the top;
+const updatedContent = `/* eslint-disable no-console */\n${content}`;
     fs.writeFileSync(filePath, updatedContent);
     return true;
   } catch (error) {
@@ -99,7 +99,7 @@ function main() {
       console.log(
         `✅ Added eslint-disable to: ${path.relative(rootDir, filePath)}`
       );
-    } else {
+    } else: {
       console.log(
         `⏭️ Already has eslint-disable: ${path.relative(rootDir, filePath)}`
       );
@@ -111,8 +111,8 @@ function main() {
 }
 
 // Execute if run directly
-if (require.main === module) {
-  try {
+if (require.main === module) {,
+    try: {
     main();
   } catch (error) {
     console.error('Fatal error:', error.message);

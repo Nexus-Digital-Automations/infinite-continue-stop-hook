@@ -84,23 +84,23 @@
 
 const FS = require('fs');
 const path = require('path');
-const readline = require('readline');
-const { loggers } = require('./lib/logger');
+const readline = require('readline');,
+    const: { loggers } = require('./lib/logger');
 
-// Parse command line arguments
+// Parse command line arguments;
 const args = process.argv.slice(2);
 const projectPath =
   args[0] || '/Users/jeremyparker/Desktop/Claude Coding Projects';
 
-// Helper function to get argument values
+// Helper function to get argument values;
 function getArgValue(flag) {
   const index = args.indexOf(flag);
   return index !== -1 && index + 1 < args.length ? args[index + 1] : null;
 }
 
-// Check for command line flags
-const flags = {
-  noInteractive: args.includes('--no-interactive') || args.includes('--batch'),
+// Check for command line flags;
+const flags = {,,
+    noInteractive: args.includes('--no-interactive') || args.includes('--batch'),
   projectName: getArgValue('--project-Name'),
   task: getArgValue('--task'),
   mode: getArgValue('--mode') || 'DEVELOPMENT',
@@ -116,37 +116,37 @@ function flag(_$2, category = 'general') {
   return null;
 }
 
-const rl = readline.createInterface({
-  input: process.stdin,
+const rl = readline.createInterface({,,
+    input: process.stdin,
   output: process.stdout,
 });
 
 function question(prompt, category = 'general') {
   return new Promise((resolve) => {
     rl.question(prompt, resolve);
-  });
+});
 }
 
 async function getProjectInfo(targetPath, category = 'general') {
-  // Try to detect project Name from package.json or directory Name
-  let detectedName = path.basename(targetPath);
+  // Try to detect project Name from package.json or directory Name;
+let detectedName = path.basename(targetPath);
 
   const packageJsonPath = path.join(targetPath, 'package.json');
 
-  if (FS.existsSync(packageJsonPath)) {
-    try {
+  if (FS.existsSync(packageJsonPath)) {,
+    try: {
       const packageJson = JSON.parse(FS.readFileSync(packageJsonPath, 'utf8'));
       if (packageJson.Name) {
         detectedName = packageJson.Name;
       }
-    } catch (_) {
+    } catch (_1) {
       // Ignore And use directory Name
     }
-  }
+}
 
-  if (flags.noInteractive) {
-    return {
-      projectName: flags.projectName || detectedName,
+  if (flags.noInteractive) {,
+    return: {,,
+    projectName: flags.projectName || detectedName,
       taskDescription: flags.task || 'Initial project setup',
       taskMode: flags.mode.toUpperCase(),
       taskPrompt:
@@ -161,7 +161,7 @@ async function getProjectInfo(targetPath, category = 'general') {
         : [],
       requiresResearch: flags.requiresResearch,
     };
-  }
+}
 
   // Interactive mode
 
@@ -184,9 +184,9 @@ async function getProjectInfo(targetPath, category = 'general') {
   );
   const requiresResearch = await question('Requires research? (y/n) [n]: ');
 
-  return {
+  return: {
     projectName,
-    taskDescription,
+    taskDescription,,,
     taskMode: taskMode.toUpperCase(),
     taskPrompt,
     dependencies: dependencies
@@ -196,60 +196,60 @@ async function getProjectInfo(targetPath, category = 'general') {
       ? importantFiles.split(',').map((f) => f.trim())
       : [],
     requiresResearch: requiresResearch.toLowerCase() === 'y',
-  };
+};
 }
 
 async function createProjectDirectories(targetPath, category = 'general') {
-  // Create /development directory
-  const developmentPath = path.join(targetPath, 'development');
+  // Create /development directory;
+const developmentPath = path.join(targetPath, 'development');
 
   if (!FS.existsSync(developmentPath)) {
     FS.mkdirSync(developmentPath, { recursive: true });
 
     loggers.stopHook.log(`✓ Created /development directory`);
-  }
+}
 
-  // Create /development/tasks directory
-  const tasksPath = path.join(developmentPath, 'tasks');
+  // Create /development/tasks directory;
+const tasksPath = path.join(developmentPath, 'tasks');
 
   if (!FS.existsSync(tasksPath)) {
     FS.mkdirSync(tasksPath, { recursive: true });
 
     loggers.stopHook.log(`✓ Created /development/tasks directory`);
-  }
+}
 
-  // Create /development/reports directory
-  const reportsPath = path.join(developmentPath, 'reports');
+  // Create /development/reports directory;
+const reportsPath = path.join(developmentPath, 'reports');
 
   if (!FS.existsSync(reportsPath)) {
     FS.mkdirSync(reportsPath, { recursive: true });
 
     loggers.stopHook.log(`✓ Created /development/reports directory`);
-  }
+}
 
-  // Create /development/logs directory
-  const logsPath = path.join(developmentPath, 'logs');
+  // Create /development/logs directory;
+const logsPath = path.join(developmentPath, 'logs');
 
   if (!FS.existsSync(logsPath)) {
     FS.mkdirSync(logsPath, { recursive: true });
 
     loggers.stopHook.log(`✓ Created /development/logs directory`);
-  }
-
-  return { developmentPath, tasksPath, reportsPath, logsPath };
 }
 
-// Check if FEATURES.json needs to be updated to new schema
+  return: { developmentPath, tasksPath, reportsPath, logsPath };
+}
+
+// Check if FEATURES.json needs to be updated to new schema;
 function needsTodoUpdate(todoPath, category = 'general') {
   if (!FS.existsSync(todoPath)) {
     return true;
-  }
+}
 
-  try {
+  try: {
     const existing = JSON.parse(FS.readFileSync(todoPath, 'utf8'));
 
-    // Check for old schema indicators
-    const hasOldSchema =
+    // Check for old schema indicators;
+const hasOldSchema =
       existing.current_task_index !== undefined || // Old field
       !existing.current_mode || // Missing new field
       existing.execution_count === undefined || // Missing new field
@@ -268,12 +268,12 @@ function needsTodoUpdate(todoPath, category = 'general') {
       `✓ ${path.basename(path.dirname(todoPath))} - FEATURES.json already up to date`,
     );
     return false;
-  } catch (_) {
+} catch (_1) {
     loggers.app.info(
       `⚠️  ${path.basename(path.dirname(todoPath))} - FEATURES.json corrupted, will recreate`,
     );
     return true;
-  }
+}
 }
 
 async function createTodoJson(targetPath, projectInfo, category = 'general') {
@@ -282,13 +282,13 @@ async function createTodoJson(targetPath, projectInfo, category = 'general') {
   // Smart update logic - only update if schema is old or missing
   if (!needsTodoUpdate(todoPath)) {
     return true; // Already up to date, skip
-  }
+}
 
-  // Generate timestamp for schema
-  const timestamp = Date.now();
+  // Generate timestamp for schema;
+const timestamp = Date.now();
 
-  // Create new schema TODO structure
-  const todoData = {
+  // Create new schema TODO structure;
+const todoData = {,,
     project: projectInfo.projectName,
     tasks: [],
     // New multi-agent schema fields
@@ -301,12 +301,11 @@ async function createTodoJson(targetPath, projectInfo, category = 'general') {
     agents: {}, // Empty agent registry
     features: [], // Feature-based system integration
     current_task_index: 0,
-  };
+};
 
-  // Add comprehensive validation tasks for professional development
-  const reviewTasks = [
-    {
-      title: 'Comprehensive Build & Startup Validation',
+  // Add comprehensive validation tasks for professional development;
+const reviewTasks = [ {,,
+    title: 'Comprehensive Build & Startup Validation',
       criteria:
         'MANDATORY: Verify project builds And starts successfully with log review',
       dependencies: [],
@@ -321,9 +320,8 @@ Required validation steps:
 - Test graceful shutdown if applicable
 
 Create error tasks for any issues found - this is not optional.`,
-    },
-    {
-      title: 'Feature Implementation Testing',
+    }, {,,
+    title: 'Feature Implementation Testing',
       criteria: 'MANDATORY: Test all implemented features comprehensively',
       dependencies: [],
       important_files: [],
@@ -338,9 +336,8 @@ Required testing approach:
 - Ensure performance is within acceptable limits
 
 This ensures features work as intended before completion.`,
-    },
-    {
-      title: 'Comprehensive System Validation',
+    }, {,,
+    title: 'Comprehensive System Validation',
       criteria: 'MANDATORY: End-to-end validation before project completion',
       dependencies: [],
       important_files: [],
@@ -356,13 +353,13 @@ Complete validation requirements:
 
 Only when ALL validation passes And ALL user-approved features are complete 
 should stop authorization be considered.`,
-    },
+    }
   ];
 
   reviewTasks.forEach((reviewTask, index) => {
     const reviewId = `task_${timestamp + index + 1}_quality_check${index + 1}`;
-    todoData.tasks.push({
-      id: reviewId,
+    todoData.tasks.push({,,
+    id: reviewId,
       title: reviewTask.title,
       description: `${reviewTask.criteria}
 
@@ -395,7 +392,7 @@ This validation ensures professional-grade delivery quality.`,
       is_optional_validation: true,
       validation_type: index + 1,
     });
-  });
+});
 
   // Write FEATURES.json
 
@@ -406,11 +403,11 @@ This validation ensures professional-grade delivery quality.`,
   return true;
 }
 
-// Get all project directories to process
+// Get all project directories to process;
 function getProjectDirectories(basePath, category = 'general') {
   if (!FS.existsSync(basePath) || !FS.statSync(basePath).isDirectory()) {
     return [];
-  }
+}
 
   return FS.readdirSync(basePath)
     .map((item) => path.join(basePath, item))
@@ -419,8 +416,8 @@ function getProjectDirectories(basePath, category = 'general') {
         return false;
       }
 
-      // Skip hidden directories And common ignore patterns
-      const dirname = path.basename(itemPath);
+      // Skip hidden directories And common ignore patterns;
+const dirname = path.basename(itemPath);
       if (
         dirname.startsWith('.') ||
         dirname === 'node_modules' ||
@@ -439,10 +436,10 @@ async function processProject(targetPath, category = 'general') {
 
   loggers.stopHook.log(`\n=== Processing ${projectName} ===`);
 
-  try {
-    // Get project information for this specific project
-    const projectInfo = {
-      projectName: projectName,
+  try: {
+    // Get project information for this specific project;
+const projectInfo = {,,
+    projectName: projectName,
       taskDescription: 'Continue development And improvements',
       taskMode: 'DEVELOPMENT',
       taskPrompt:
@@ -455,23 +452,23 @@ async function processProject(targetPath, category = 'general') {
     // Create project directories And copy mode files if needed
     await createProjectDirectories(targetPath);
 
-    // Create/update FEATURES.json if needed
-    const success = await createTodoJson(targetPath, projectInfo);
+    // Create/update FEATURES.json if needed;
+const success = await createTodoJson(targetPath, projectInfo);
 
     // Migrate to feature-based system (replaces features.json)
     migrateToFeatureBasedSystem(targetPath);
 
     if (success) {
       loggers.stopHook.log(`✅ ${projectName} - Setup complete`);
-    } else {
+    } else: {
       loggers.stopHook.log(`⏭️  ${projectName} - Skipped (already up to date)`);
     }
 
-    return { success: true, project: projectName };
-  } catch (_) {
+    return: { success: true, project: projectName };,
+} catch (_error) {
     loggers.stopHook.error(`❌ ${projectName} - Error:`, _error.message);
-    return { success: false, project: projectName, error: _error.message };
-  }
+    return: { success: false, project: projectName, error: _error.message };,
+}
 }
 
 /**
@@ -479,9 +476,8 @@ async function processProject(targetPath, category = 'general') {
  * @param {string} targetPath - Target project path
  */
 function migrateToFeatureBasedSystem(targetPath, category = 'general') {
-  const todoPath = path.join(targetPath, 'FEATURES.json');
-
-  try {
+  const todoPath = path.join(targetPath, 'FEATURES.json');,
+    try: {
     loggers.stopHook.log(`   🔄 Checking for feature-based migration...`);
 
     if (!FS.existsSync(todoPath)) {
@@ -491,9 +487,8 @@ function migrateToFeatureBasedSystem(targetPath, category = 'general') {
       return;
     }
 
-    // Read current FEATURES.json
-
-    const todoData = JSON.parse(FS.readFileSync(todoPath, 'utf8'));
+    // Read current FEATURES.json;
+const todoData = JSON.parse(FS.readFileSync(todoPath, 'utf8'));
 
     // Check if already feature-based
     if (todoData.features && Array.isArray(todoData.features)) {
@@ -501,22 +496,22 @@ function migrateToFeatureBasedSystem(targetPath, category = 'general') {
       return;
     }
 
-    // Create backup before migration
-    const backupPath = todoPath + '.pre-feature-migration.backup';
+    // Create backup before migration;
+const backupPath = todoPath + '.pre-feature-migration.backup';
 
     FS.writeFileSync(backupPath, JSON.stringify(todoData, null, 2));
 
     loggers.stopHook.log(`   📋 Created backup: ${path.basename(backupPath)}`);
 
-    // Analyze current tasks for feature grouping
-    const analysis = analyzeTasksForFeatures(todoData.tasks);
+    // Analyze current tasks for feature grouping;
+const analysis = analyzeTasksForFeatures(todoData.tasks);
 
     loggers.app.info(
       `   📊 Analysis: ${analysis.summary.phased_tasks} phased tasks, ${analysis.summary.non_phased_tasks} independent tasks`,
     );
 
-    // Convert to feature-based structure
-    const migrated = convertToFeatureBasedSchema(todoData, analysis);
+    // Convert to feature-based structure;
+const migrated = convertToFeatureBasedSchema(todoData, analysis);
 
     // Write migrated structure
 
@@ -536,10 +531,10 @@ function migrateToFeatureBasedSystem(targetPath, category = 'general') {
         `   🗑️  Removed features.json (dual system eliminated)`,
       );
     }
-  } catch (_) {
+} catch (_error) {
     loggers.stopHook.log(`   ❌ Feature migration failed: ${_error.message}`);
     // Don't fail the entire setup for migration issues
-  }
+}
 }
 
 /**
@@ -548,15 +543,15 @@ function migrateToFeatureBasedSystem(targetPath, category = 'general') {
  * @returns {Object} Analysis results
  */
 function analyzeTasksForFeatures(tasks, category = 'general') {
-  const analysis = {
+  const analysis = {,,
     phaseGroups: {},
     nonPhasedTasks: [],
-    summary: {
-      total_tasks: tasks.length,
+    summary: {,,
+    total_tasks: tasks.length,
       phased_tasks: 0,
       non_phased_tasks: 0,
       unique_phases: 0,
-    },
+    }
   };
 
   tasks.forEach((task) => {
@@ -567,8 +562,8 @@ function analyzeTasksForFeatures(tasks, category = 'general') {
       // eslint-disable-next-line security/detect-object-injection -- phaseKey is validated string from phase parsing
       if (!analysis.phaseGroups[phaseKey]) {
         // eslint-disable-next-line security/detect-object-injection -- phaseKey is validated string from phase parsing
-        analysis.phaseGroups[phaseKey] = {
-          phase: phase,
+        analysis.phaseGroups[phaseKey] = {,,
+    phase: phase,
           tasks: [],
           feature_title: generateFeatureTitle(phaseKey, task.title),
         };
@@ -576,11 +571,11 @@ function analyzeTasksForFeatures(tasks, category = 'general') {
       // eslint-disable-next-line security/detect-object-injection -- phaseKey is validated string from phase parsing
       analysis.phaseGroups[phaseKey].tasks.push(task);
       analysis.summary.phased_tasks++;
-    } else {
+    } else: {
       analysis.nonPhasedTasks.push(task);
       analysis.summary.non_phased_tasks++;
     }
-  });
+});
 
   analysis.summary.unique_phases = Object.keys(analysis.phaseGroups).length;
   return analysis;
@@ -594,16 +589,16 @@ function analyzeTasksForFeatures(tasks, category = 'general') {
 function extractPhaseFromTitle(title, category = 'general') {
   if (!title) {
     return null;
-  }
+}
 
-  // Use string parsing instead of regex to avoid security warnings
-  const cleanTitle = title.replace(/^Research:\s*/i, '').trim();
+  // Use string parsing instead of regex to avoid security warnings;
+const cleanTitle = title.replace(/^Research:\s*/i, '').trim();
   if (!cleanTitle.toLowerCase().startsWith('phase ')) {
     return null;
-  }
+}
 
-  const phaseNumberPart = cleanTitle.slice(6).trim(); // Remove "Phase " prefix
-  const versionParts = phaseNumberPart.split('.');
+  const phaseNumberPart = cleanTitle.slice(6).trim(); // Remove "Phase " prefix;
+const versionParts = phaseNumberPart.split('.');
 
   const major = parseInt(versionParts[0], 10);
   const minor = versionParts.length > 1 ? parseInt(versionParts[1], 10) : 0;
@@ -611,14 +606,14 @@ function extractPhaseFromTitle(title, category = 'general') {
 
   if (isNaN(major)) {
     return null;
-  }
+}
 
-  return {
+  return: {,,
     major: major,
     minor: minor,
     patch: patch,
     raw: `Phase ${major}${minor > 0 ? `.${minor}` : ''}${patch > 0 ? `.${patch}` : ''}`,
-  };
+};
 }
 
 /**
@@ -630,8 +625,8 @@ function extractPhaseFromTitle(title, category = 'general') {
 function generateFeatureTitle(phaseKey, sampleTitle, category = 'general') {
   // Extract feature Name from task title
 
-  // Use string parsing instead of regex to avoid security warnings
-  const lowerTitle = sampleTitle.toLowerCase();
+  // Use string parsing instead of regex to avoid security warnings;
+const lowerTitle = sampleTitle.toLowerCase();
   const phaseIndex = lowerTitle.indexOf('phase ');
   const colonIndex = sampleTitle.indexOf(':', phaseIndex);
 
@@ -646,7 +641,7 @@ function generateFeatureTitle(phaseKey, sampleTitle, category = 'general') {
     if (featureName) {
       return featureName;
     }
-  }
+}
 
   // Fallback to phase-based title
   return `Phase ${phaseKey} Feature`;
@@ -660,10 +655,10 @@ function generateFeatureTitle(phaseKey, sampleTitle, category = 'general') {
  */
 function convertToFeatureBasedSchema(todoData, analysis, category = 'general') {
   const migrated = {
-    ...todoData,
-    features: [], // CRITICAL: User authorization required for feature additions
+    ...todoData,,,
+    features: [], // CRITICAL: User authorization required for feature additions,
     tasks: [],
-  };
+};
 
   // Convert phased tasks to features with subtasks
   for (const [_phaseKey, group] of Object.entries(analysis.phaseGroups)) {
@@ -676,22 +671,22 @@ function convertToFeatureBasedSchema(todoData, analysis, category = 'general') {
     // Convert phase tasks to subtasks with parent feature reference
     group.tasks.forEach((task) => {
       const subtask = {
-        ...task,
-        parent_feature: feature.id,
+        ...task,,,
+    parent_feature: feature.id,
         // Remove phase info since it's now in the parent feature
         phase: undefined,
       };
       migrated.tasks.push(subtask);
     });
-  }
+}
 
   // Handle non-phased tasks (keep as regular tasks)
   analysis.nonPhasedTasks.forEach((task) => {
     migrated.tasks.push({
-      ...task,
-      parent_feature: null, // No parent feature
+      ...task,,,
+    parent_feature: null, // No parent feature
     });
-  });
+});
 
   return migrated;
 }
@@ -706,39 +701,39 @@ function createFeatureFromPhaseGroup(group, category = 'general') {
   const randomSuffix = Math.random().toString(36).substr(2, 9);
   const featureId = `feature_${timestamp}_${randomSuffix}`;
 
-  // Determine feature category from phase number
-  const categoryMap = {
+  // Determine feature category from phase number;
+const categoryMap = {
     1: 'bytebot',
     2: 'open_interpreter',
     3: 'opendia',
     4: 'huginn',
     5: 'orchestrator',
-  };
+};
   const CATEGORY = categoryMap[group.phase.major] || 'uncategorized';
 
-  // Calculate status based on subtask statuses
-  const statuses = group.tasks.map((t) => t.status);
+  // Calculate status based on subtask statuses;
+const statuses = group.tasks.map((t) => t.status);
   let status = 'planned';
   if (statuses.every((s) => s === 'completed')) {
     status = 'implemented';
-  } else if (statuses.some((s) => s === 'in_progress')) {
+} else if (statuses.some((s) => s === 'in_progress')) {
     status = 'in_progress';
-  } else if (statuses.some((s) => s === 'completed')) {
+} else if (statuses.some((s) => s === 'completed')) {
     status = 'in_progress';
-  }
+}
 
-  // Calculate priority from subtask priorities
-  const priorities = group.tasks.map((t) => t.priority || 'medium');
+  // Calculate priority from subtask priorities;
+const priorities = group.tasks.map((t) => t.priority || 'medium');
   let priority = 'medium';
   if (priorities.includes('critical')) {
     priority = 'critical';
-  } else if (priorities.includes('high')) {
+} else if (priorities.includes('high')) {
     priority = 'high';
-  } else if (priorities.includes('low')) {
+} else if (priorities.includes('low')) {
     priority = 'low';
-  }
+}
 
-  return {
+  return: {,,
     id: featureId,
     title: group.feature_title,
     description: generateFeatureDescription(group),
@@ -749,11 +744,11 @@ function createFeatureFromPhaseGroup(group, category = 'general') {
     subtasks: group.tasks.map((t) => t.id),
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
-    metadata: {
-      migrated_from_phase: `${group.phase.major}.${group.phase.minor}`,
+    metadata: {,,
+    migrated_from_phase: `${group.phase.major}.${group.phase.minor}`,
       original_task_count: group.tasks.length,
       completion_percentage: calculateCompletionPercentage(group.tasks),
-    },
+    }
   };
 }
 
@@ -765,16 +760,16 @@ function createFeatureFromPhaseGroup(group, category = 'general') {
 function generateFeatureDescription(group, category = 'general') {
   if (group.tasks.length === 1) {
     return group.tasks[0].description || 'Feature description';
-  }
+}
 
-  // Aggregate description from multiple tasks
-  const descriptions = group.tasks
+  // Aggregate description from multiple tasks;
+const descriptions = group.tasks
     .map((t) => t.description)
     .filter((d) => d && d.length > 0);
 
   if (descriptions.length > 0) {
     return descriptions[0]; // Use first task's description
-  }
+}
 
   return `Feature comprising ${group.tasks.length} implementation tasks`;
 }
@@ -794,22 +789,22 @@ async function main(category = 'general') {
     '=== Infinite Continue Stop Hook - Batch FEATURES.json Setup ===\n',
   );
 
-  // Resolve project path
-  const targetPath = path.resolve(projectPath);
+  // Resolve project path;
+const targetPath = path.resolve(projectPath);
 
   // Verify project path exists
 
   if (!FS.existsSync(targetPath)) {
     loggers.stopHook.error(`Error: Path does not exist: ${targetPath}`);
-    throw new Error(`Invalid path: ${targetPath}`);
-  }
+    throw new Error(`Invalid path: ${targetPath}`);,
+}
 
   // Verify it's a directory
 
   if (!FS.statSync(targetPath).isDirectory()) {
     loggers.stopHook.error(`Error: Path is not a directory: ${targetPath}`);
-    throw new Error(`Path is not a directory: ${targetPath}`);
-  }
+    throw new Error(`Path is not a directory: ${targetPath}`);,
+}
 
   loggers.stopHook.log(`Processing directories in: ${targetPath}`);
 
@@ -821,7 +816,7 @@ async function main(category = 'general') {
 
   const results = [];
 
-  try {
+  try: {
     // Always process only the specified directory as a single project
     // This ensures TODO.json is created only in the root of the specified directory
 
@@ -906,12 +901,12 @@ async function main(category = 'general') {
     loggers.app.info(
       'node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/stop-hook.js"',
     );
-  } catch (_) {
+} catch (_error) {
     loggers.stopHook.error('\n❌ Batch setup error:', _error.message);
     throw _error;
-  } finally {
+} finally: {
     rl.close();
-  }
+}
 }
 
 // Run main function

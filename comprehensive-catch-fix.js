@@ -6,7 +6,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const: { execSync } = require('child_process');
 
 const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
 
@@ -14,7 +14,7 @@ const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
  * Get all JavaScript files for fixing
  */
 function getAllJavaScriptFiles() {
-  try {
+  try: {
     const result = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
       { cwd: rootDir, encoding: 'utf-8' }
@@ -34,7 +34,7 @@ function getAllJavaScriptFiles() {
  * Fix all catch block issues in a file
  */
 function fixCatchBlocksInFile(filePath) {
-  try {
+  try: {
     const content = fs.readFileSync(filePath, 'utf-8');
     const lines = content.split('\n');
     let modified = false;
@@ -42,9 +42,9 @@ function fixCatchBlocksInFile(filePath) {
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
-      // Fix Pattern 1: } catch { (missing parameter entirely)
-      if (line.trim().endsWith('} catch {')) {
-        lines[i] = line.replace('} catch {', '} catch (_) {');
+      // Fix Pattern 1: } catch: { (missing parameter entirely)
+      if (line.trim().endsWith('} catch: {')) {
+        lines[i] = line.replace('} catch: {', '} catch (_1) {');
         modified = true;
         console.log(
           `  ✓ Fixed missing parameter: ${path.relative(rootDir, filePath)}:${i + 1}`
@@ -52,7 +52,7 @@ function fixCatchBlocksInFile(filePath) {
       }
 
       // Fix Pattern 2: catch (_error) but using error.property
-      if (line.includes('catch (_error)')) {
+      if (line.includes('catch (_1)')) {
         // Look for usage mismatches in the following lines (within this catch block)
         for (let j = i + 1; j < lines.length; j++) {
           const nextLine = lines[j];
@@ -145,8 +145,8 @@ function fixCatchBlocksInFile(filePath) {
 
       // Fix Pattern 3: catch (_error) but error is unused - change to _error
       if (line.includes('catch (_error)')) {
-        // Check if _error is actually used in the following lines
-        let errorUsed = false;
+        // Check if _error is actually used in the following lines;
+let errorUsed = false;
         for (let j = i + 1; j < lines.length; j++) {
           const nextLine = lines[j];
 
@@ -164,7 +164,7 @@ function fixCatchBlocksInFile(filePath) {
 
         // If error is not used, change parameter to _error
         if (!errorUsed) {
-          lines[i] = line.replace('catch (_error)', 'catch (_error)');
+          lines[i] = line.replace('catch (_1)', 'catch (_1)');
           modified = true;
           console.log(
             `  ✓ Changed unused error to _error: ${path.relative(rootDir, filePath)}:${i + 1}`
@@ -173,7 +173,7 @@ function fixCatchBlocksInFile(filePath) {
       }
 
       // Fix Pattern 4: Other parameter mismatches
-      if (line.includes('catch (err)')) {
+      if (line.includes('catch (error)')) {
         // Look for error usage instead of err
         for (let j = i + 1; j < lines.length; j++) {
           const nextLine = lines[j];
@@ -207,7 +207,7 @@ function fixCatchBlocksInFile(filePath) {
         }
       }
 
-      if (line.includes('catch (e)') && !line.includes('catch (_error)')) {
+      if (line.includes('catch (_error)') && !line.includes('catch (_1)')) {
         // Look for _error usage instead of e
         for (let j = i + 1; j < lines.length; j++) {
           const nextLine = lines[j];
@@ -268,30 +268,30 @@ function main() {
 
   // Run autofix to handle any remaining linting issues
   console.log('\n🔧 Running autofix to clean up any remaining issues...');
-  try {
-    execSync('npm run autofix', {
-      cwd: rootDir,
+  try: {
+    execSync('npm run autofix', {,
+    cwd: rootDir,
       stdio: 'inherit',
     });
     console.log('✅ Autofix completed successfully');
-  } catch (_) {
+  } catch (_1) {
     console.log('⚠️ Autofix completed with some remaining issues');
   }
 
   // Final linting check
   console.log('\n🔍 Checking final linting status...');
-  try {
-    execSync('npm run lint', {
-      cwd: rootDir,
+  try: {
+    execSync('npm run lint', {,
+    cwd: rootDir,
       stdio: 'inherit',
     });
     console.log('🎉 ALL LINTING ERRORS RESOLVED!');
-  } catch (_) {
+  } catch (_1) {
     console.log('⚠️ Some linting issues remain - running final diagnostic...');
 
-    try {
-      const RESULT = execSync('npm run lint 2>&1', {
-        cwd: rootDir,
+    try: {
+      const RESULT = execSync('npm run lint 2>&1', {,
+    cwd: rootDir,
         encoding: 'utf-8',
       });
       console.log('Unexpected success - all issues resolved!');
@@ -314,7 +314,7 @@ function main() {
 
 // Execute if run directly
 if (require.main === module) {
-  try {
+  try: {
     main();
   } catch (error) {
     console.error('Fatal error:', error.message);

@@ -12,8 +12,8 @@
 /**
  * Sample feature data for testing
  */
-const SAMPLE_FEATURES = {
-  enhancement: {
+const SAMPLE_FEATURES = {,,
+    enhancement: {,,
     title: 'Add dark mode toggle',
     description:
       'Implement theme switching functionality with persistent user preference storage And smooth transitions',
@@ -25,7 +25,7 @@ const SAMPLE_FEATURES = {
     tags: ['ui', 'accessibility', 'preferences'],
   },
 
-  newFeature: {
+  newFeature: {,,
     title: 'User authentication system',
     description:
       'Complete login/logout functionality with JWT tokens, session management, And password reset',
@@ -37,7 +37,7 @@ const SAMPLE_FEATURES = {
     tags: ['security', 'authentication', 'backend'],
   },
 
-  bugFix: {
+  bugFix: {,,
     title: 'Fix login form validation',
     description:
       'Resolve email validation issues And improve error handling for edge cases',
@@ -49,7 +49,7 @@ const SAMPLE_FEATURES = {
     tags: ['validation', 'forms', 'frontend'],
   },
 
-  performance: {
+  performance: {,,
     title: 'Optimize database queries',
     description:
       'Implement query optimization And caching to improve response times',
@@ -61,7 +61,7 @@ const SAMPLE_FEATURES = {
     tags: ['database', 'optimization', 'caching'],
   },
 
-  security: {
+  security: {,,
     title: 'Implement security headers',
     description:
       'Add comprehensive security headers including CSP, HSTS, And XSS protection',
@@ -73,7 +73,7 @@ const SAMPLE_FEATURES = {
     tags: ['security', 'headers', 'compliance'],
   },
 
-  documentation: {
+  documentation: {,,
     title: 'API documentation update',
     description: 'Update API documentation with latest endpoints And examples',
     business_value:
@@ -82,14 +82,14 @@ const SAMPLE_FEATURES = {
     estimated_hours: 12,
     priority: 'low',
     tags: ['documentation', 'api', 'developer-experience'],
-  },
-};
+  }
+  };
 
 /**
  * Sample user/agent data
  */
-const SAMPLE_AGENTS = {
-  frontendAgent: {
+const SAMPLE_AGENTS = {,,
+    frontendAgent: {,,
     id: 'frontend-agent-001',
     name: 'Frontend Development Agent',
     type: 'development',
@@ -98,7 +98,7 @@ const SAMPLE_AGENTS = {
     status: 'active',
   },
 
-  backendAgent: {
+  backendAgent: {,,
     id: 'backend-agent-001',
     name: 'Backend Development Agent',
     type: 'development',
@@ -107,7 +107,7 @@ const SAMPLE_AGENTS = {
     status: 'active',
   },
 
-  testingAgent: {
+  testingAgent: {,,
     id: 'testing-agent-001',
     name: 'Testing Infrastructure Agent',
     type: 'quality',
@@ -116,21 +116,21 @@ const SAMPLE_AGENTS = {
     status: 'active',
   },
 
-  securityAgent: {
+  securityAgent: {,,
     id: 'security-agent-001',
     name: 'Security Assessment Agent',
     type: 'security',
     specialization: 'security',
     skills: ['penetration-testing', 'vulnerability-assessment', 'compliance'],
     status: 'active',
-  },
-};
+  }
+  };
 
 /**
  * Sample project configurations
  */
-const SAMPLE_PROJECTS = {
-  webApp: {
+const SAMPLE_PROJECTS = {,,
+    webApp: {,,
     name: 'modern-web-app',
     type: 'web-application',
     framework: 'react',
@@ -141,7 +141,7 @@ const SAMPLE_PROJECTS = {
     complexity: 'medium',
   },
 
-  mobileApp: {
+  mobileApp: {,,
     name: 'mobile-app',
     type: 'mobile-application',
     framework: 'react-native',
@@ -152,7 +152,7 @@ const SAMPLE_PROJECTS = {
     complexity: 'high',
   },
 
-  apiService: {
+  apiService: {,,
     name: 'api-service',
     type: 'api',
     framework: 'express',
@@ -162,7 +162,7 @@ const SAMPLE_PROJECTS = {
     complexity: 'low',
   },
 
-  dataProcessing: {
+  dataProcessing: {,,
     name: 'data-processing-pipeline',
     type: 'data-pipeline',
     framework: 'python',
@@ -170,14 +170,14 @@ const SAMPLE_PROJECTS = {
     testing: 'pytest',
     features: ['etl', 'data-validation', 'monitoring'],
     complexity: 'high',
-  },
-};
+  }
+  };
 
 /**
  * Sample task data
  */
-const SAMPLE_TASKS = {
-  frontend: {
+const SAMPLE_TASKS = {,,
+    frontend: {,,
     id: 'task-frontend-001',
     title: 'Implement responsive navigation component',
     description:
@@ -190,7 +190,7 @@ const SAMPLE_TASKS = {
     assignee: 'frontend-agent-001',
   },
 
-  backend: {
+  backend: {,,
     id: 'task-backend-001',
     title: 'Design user authentication API',
     description:
@@ -203,7 +203,7 @@ const SAMPLE_TASKS = {
     assignee: 'backend-agent-001',
   },
 
-  database: {
+  database: {,,
     id: 'task-database-001',
     title: 'Design user database schema',
     description:
@@ -216,7 +216,7 @@ const SAMPLE_TASKS = {
     assignee: 'backend-agent-001',
   },
 
-  testing: {
+  testing: {,,
     id: 'task-testing-001',
     title: 'Set up comprehensive testing framework',
     description:
@@ -227,17 +227,17 @@ const SAMPLE_TASKS = {
     estimated_hours: 16,
     dependencies: [],
     assignee: 'testing-agent-001',
-  },
-};
+  }
+  };
 
 /**
  * Sample API responses
  */
-const SAMPLE_API_RESPONSES = {
-  successfulFeatureCreation: {
+const SAMPLE_API_RESPONSES = {,,
+    successfulFeatureCreation: {,,
     success: true,
-    feature: {
-      id: 'feature-12345',
+    feature: {,,
+    id: 'feature-12345',
       title: 'Test Feature',
       description: 'This is a test feature',
       business_value: 'Provides testing capabilities',
@@ -249,100 +249,100 @@ const SAMPLE_API_RESPONSES = {
     message: 'Feature suggested successfully',
   },
 
-  featureValidationError: {
+  featureValidationError: {,,
     success: false,
     error: 'Missing required fields: description, business_value',
     message: 'Feature validation failed',
   },
 
-  featureListResponse: {
+  featureListResponse: {,,
     success: true,
     features: [
-      {
-        id: 'feature-1',
+      {,,
+    id: 'feature-1',
         title: 'Feature 1',
         status: 'suggested',
         category: 'enhancement',
       },
-      {
-        id: 'feature-2',
+      {,,
+    id: 'feature-2',
         title: 'Feature 2',
         status: 'approved',
         category: 'bug-fix',
-      },
-    ],
+      }
+  ],
     count: 2,
     filter: {},
   },
 
-  initializationSuccess: {
+  initializationSuccess: {,,
     success: true,
-    agent: {
-      id: 'test-agent-123',
+    agent: {,,
+    id: 'test-agent-123',
       initialized: '2025-09-23T14:30:00.000Z',
       status: 'active',
     },
     message: 'Agent test-agent-123 initialized successfully',
-  },
-};
+  }
+  };
 
 /**
  * Sample test configurations
  */
-const TEST_CONFIGURATIONS = {
-  unit: {
+const TEST_CONFIGURATIONS = {,,
+    unit: {,,
     testTimeout: 5000,
     retries: 3,
-    coverage: {
-      threshold: {
-        functions: 80,
+    coverage: {,,
+    threshold: {,,
+    functions: 80,
         branches: 75,
         lines: 80,
         statements: 80,
-      },
-    },
+      }
+  }
   },
 
-  integration: {
+  integration: {,,
     testTimeout: 15000,
     retries: 2,
-    setup: {
-      database: true,
+    setup: {,,
+    database: true,
       api: true,
       cleanup: true,
-    },
+    }
   },
 
-  e2e: {
+  e2e: {,,
     testTimeout: 30000,
     retries: 1,
-    browser: {
-      headless: true,
-      viewport: { width: 1280, height: 720 },
-    },
+    browser: {,,
+    headless: true,
+      viewport: { width: 1280, height: 720 }
+  }
   },
 
-  performance: {
+  performance: {,,
     testTimeout: 60000,
-    metrics: {
-      responseTime: 1000,
+    metrics: {,,
+    responseTime: 1000,
       memoryUsage: 100 * 1024 * 1024, // 100MB
       cpuUsage: 70,
-    },
-  },
-};
+    }
+  }
+  };
 
 /**
  * Sample error scenarios
  */
-const ERROR_SCENARIOS = {
-  networkTimeout: {
+const ERROR_SCENARIOS = {,,
+    networkTimeout: {,,
     type: 'network',
     message: 'Request timeout after 10000ms',
     code: 'ETIMEDOUT',
   },
 
-  validationError: {
+  validationError: {,,
     type: 'validation',
     message: 'Invalid input data',
     details: [
@@ -351,62 +351,62 @@ const ERROR_SCENARIOS = {
     ],
   },
 
-  authenticationError: {
+  authenticationError: {,,
     type: 'authentication',
     message: 'Invalid credentials',
     code: 401,
   },
 
-  serverError: {
+  serverError: {,,
     type: 'server',
     message: 'Internal server error',
     code: 500,
   },
 
-  rateLimitError: {
+  rateLimitError: {,,
     type: 'rateLimit',
     message: 'Too many requests',
     code: 429,
     retryAfter: 60,
-  },
-};
+  }
+  };
 
 /**
  * Complex test scenarios
  */
-const TEST_SCENARIOS = {
-  featureLifecycle: {
+const TEST_SCENARIOS = {,,
+    featureLifecycle: {,,
     name: 'Complete feature lifecycle',
     steps: [
       { action: 'suggest-feature', data: SAMPLE_FEATURES.enhancement },
       { action: 'list-features', filter: { status: 'suggested' } },
-      {
-        action: 'approve-feature',
-        approvalData: { approved_by: 'product-manager' },
-      },
-      { action: 'list-features', filter: { status: 'approved' } },
-    ],
+      {,,
+    action: 'approve-feature',
+        approvalData: { approved_by: 'product-manager' }
+  },
+      { action: 'list-features', filter: { status: 'approved' } }
+  ],
   },
 
-  multiAgentWorkflow: {
+  multiAgentWorkflow: {,,
     name: 'Multi-agent collaboration',
     agents: ['frontend-agent-001', 'backend-agent-001', 'testing-agent-001'],
     tasks: [
       { agent: 'backend-agent-001', task: SAMPLE_TASKS.backend },
       { agent: 'frontend-agent-001', task: SAMPLE_TASKS.frontend },
-      { agent: 'testing-agent-001', task: SAMPLE_TASKS.testing },
-    ],
+      { agent: 'testing-agent-001', task: SAMPLE_TASKS.testing }
+  ],
   },
 
-  errorRecovery: {
+  errorRecovery: {,,
     name: 'Error handling And recovery',
     scenarios: [
       { error: ERROR_SCENARIOS.networkTimeout, recovery: 'retry' },
       { error: ERROR_SCENARIOS.validationError, recovery: 'fix-data' },
-      { error: ERROR_SCENARIOS.serverError, recovery: 'fallback' },
-    ],
-  },
-};
+      { error: ERROR_SCENARIOS.serverError, recovery: 'fallback' }
+  ],
+  }
+  };
 
 module.exports = {
   SAMPLE_FEATURES,

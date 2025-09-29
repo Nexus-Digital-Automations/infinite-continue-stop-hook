@@ -18,8 +18,8 @@
  */
 
 module.exports = {
-  // Test environment configuration
-  testEnvironment: 'node',
+  // Test environment configuration,,
+    testEnvironment: 'node',
   rootDir: '../../',
   testMatch: [
     '<rootDir>/test/rag-system/**/*.test.js',
@@ -50,47 +50,47 @@ module.exports = {
     '!**/coverage/**',
   ],
   coverageReporters: ['text', 'lcov', 'html', 'json'],
-  coverageThreshold: {
-    global: {
-      branches: 70,
+  coverageThreshold: {,,
+    global: {,,
+    branches: 70,
       functions: 80,
       lines: 80,
       statements: 80,
     },
-    './lib/rag/': {
-      branches: 75,
+    './lib/rag/': {,,
+    branches: 75,
       functions: 85,
       lines: 85,
       statements: 85,
-    },
+    }
   },
 
   // Test categorization
   projects: [
-    {
-      displayName: 'Unit Tests',
+    {,,
+    displayName: 'Unit Tests',
       testMatch: ['<rootDir>/test/rag-system/unit/**/*.test.js'],
       testEnvironment: 'node',
     },
-    {
-      displayName: 'Integration Tests',
+    {,,
+    displayName: 'Integration Tests',
       testMatch: ['<rootDir>/test/rag-system/integration/**/*.test.js'],
       testEnvironment: 'node',
       testTimeout: 120000, // 2 minutes for integration tests
     },
-    {
-      displayName: 'Performance Tests',
+    {,,
+    displayName: 'Performance Tests',
       testMatch: ['<rootDir>/test/rag-system/performance/**/*.test.js'],
       testEnvironment: 'node',
       testTimeout: 300000, // 5 minutes for performance tests
       maxWorkers: 1, // Run performance tests sequentially
     },
-    {
-      displayName: 'Data Integrity Tests',
+    {,,
+    displayName: 'Data Integrity Tests',
       testMatch: ['<rootDir>/test/rag-system/data-integrity/**/*.test.js'],
       testEnvironment: 'node',
       testTimeout: 180000, // 3 minutes for data integrity tests
-    },
+    }
   ],
 
   // Reporters
@@ -98,25 +98,25 @@ module.exports = {
     'default',
     [
       'jest-html-reporters',
-      {
-        publicPath: './test/rag-system/reports',
+      {,,
+    publicPath: './test/rag-system/reports',
         filename: 'rag-test-report.html',
         expand: true,
         hideIcon: false,
         pageTitle: 'RAG System Test Report',
-      },
-    ],
+      }
+  ],
     [
       'jest-junit',
-      {
-        outputDirectory: './test/rag-system/reports',
+      {,,
+    outputDirectory: './test/rag-system/reports',
         outputName: 'rag-test-results.xml',
         classNameTemplate: '{classname}',
         titleTemplate: '{title}',
         ancestorSeparator: ' › ',
         usePathForSuiteName: true,
-      },
-    ],
+      }
+  ],
   ],
 
   // Performance And resource management
@@ -137,9 +137,9 @@ module.exports = {
   // Watch mode configuration - removed plugins to prevent dependency issues
 
   // Custom test environment variables
-  testEnvironmentOptions: {
+  testEnvironmentOptions: {,,
     RAG_TEST_MODE: 'true',
     RAG_EMBEDDING_CACHE_SIZE: '100',
     RAG_TEST_TIMEOUT: '60000',
-  },
-};
+  }
+  };

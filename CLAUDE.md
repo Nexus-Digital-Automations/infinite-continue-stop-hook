@@ -328,16 +328,6 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 - Previous step completion verified before allowing next step
 - Direct `authorize-stop` command disabled - returns error with multi-step instructions
 
-**LANGUAGE-AGNOSTIC VALIDATION CRITERIA:**
-
-1. **focused-codebase**: Validates only user-outlined features exist in FEATURES.json
-2. **security-validation**: Runs language-appropriate security tools (semgrep, bandit, trivy, npm audit, safety, etc.)
-3. **linter-validation**: Attempts language-appropriate linting (eslint, pylint, rubocop, go fmt, cargo clippy, etc.)
-4. **type-validation**: Runs language-appropriate type checking (tsc, mypy, go build, cargo check, etc.)
-5. **build-validation**: Attempts language-appropriate builds (npm/yarn build, make, cargo build, mvn compile, etc.)
-6. **start-validation**: Tests application start commands (npm start, etc.) with timeout
-7. **test-validation**: Runs language-appropriate tests (npm test, pytest, go test, cargo test, etc.)
-
 **MANDATORY VALIDATION REQUIREMENTS:**
 
 - **FOCUSED CODEBASE**: Verify codebase contains ONLY user-outlined features, nothing extra
@@ -349,6 +339,8 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 - **TEST PERFECTION**: ALL tests pass with defined project standard coverage (>80%) throughout ENTIRE codebase
 - **GIT PERFECTION**: Clean working directory AND up-to-date with remote
 - **VALIDATION HONESTY**: Double-check ALL validations - follow core principle #2
+
+*Language-agnostic tools: semgrep, bandit, trivy, npm audit (security); eslint, pylint, rubocop (linting); tsc, mypy, go build (typing); npm/yarn build, make, cargo build (builds); npm test, pytest, go test (testing)*
 
 **STOP AUTHORIZATION EFFECTS:**
 
@@ -872,8 +864,6 @@ git status  # Verify clean/up-to-date
 
 **SPECIALIZATIONS:** Sequential handoffs between Development → Testing → Documentation → Validation agents
 
-**FORBIDDEN:** Concurrent agents for feature work, overlapping file modifications, shared dependency changes
-
 ## PREPARATION & CONTEXT
 
 ### CONTEXT PREPARATION
@@ -1007,19 +997,19 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 
 ### Task Creation Examples
 ```bash
+# Base command pattern
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task '{"title":"[TITLE]", "description":"[DESCRIPTION]", "type":"error|feature|test|audit", "priority":"low|normal|high|urgent"}'
+
 # Error Tasks
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task '{"title":"Fix ESLint errors in auth.js", "description":"Resolve 5 ESLint violations: unused imports, missing semicolons, inconsistent quotes", "type":"error", "priority":"high"}'
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task '{"title":"Fix TypeScript compilation errors", "description":"Resolve type errors in UserService.ts and AuthManager.ts", "type":"error", "priority":"high"}'
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task '{"title":"Fix null pointer exception in login", "description":"Handle undefined user object in authentication flow", "type":"error", "priority":"urgent"}'
+create-task '{"title":"Fix ESLint errors in auth.js", "description":"Resolve 5 ESLint violations: unused imports, missing semicolons, inconsistent quotes", "type":"error", "priority":"high"}'
+create-task '{"title":"Fix TypeScript compilation errors", "description":"Resolve type errors in UserService.ts and AuthManager.ts", "type":"error", "priority":"high"}'
 
 # Feature Tasks
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task '{"title":"Implement user registration", "description":"Create user registration form with validation", "type":"feature", "priority":"normal"}'
+create-task '{"title":"Implement user registration", "description":"Create user registration form with validation", "type":"feature", "priority":"normal"}'
 
-# Test Tasks
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task '{"title":"Add unit tests for auth module", "description":"Create comprehensive test coverage for authentication functions", "type":"test", "priority":"normal"}'
-
-# Audit Tasks
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task '{"title":"Security audit for payment processing", "description":"Review payment flow for security vulnerabilities", "type":"audit", "priority":"high"}'
+# Test/Audit Tasks
+create-task '{"title":"Add unit tests for auth module", "description":"Create comprehensive test coverage for authentication functions", "type":"test", "priority":"normal"}'
+create-task '{"title":"Security audit for payment processing", "description":"Review payment flow for security vulnerabilities", "type":"audit", "priority":"high"}'
 ```
 
 ### Task Management Commands

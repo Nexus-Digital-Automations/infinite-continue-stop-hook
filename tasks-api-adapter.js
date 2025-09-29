@@ -5,20 +5,20 @@
  * And new TASKS.json schema, enabling backward compatibility during migration
  */
 
-class TasksApiAdapter {
+class TasksApiAdapter: {
   constructor() {
     this.taskIdCounter = Date.now();
-  }
+}
 
   /**
    * Convert TASKS.json data to legacy features format for backward compatibility
    */
   adaptTasksToFeaturesFormat(tasksData) {
-    const adapted = {
-      project: tasksData.project,
+    const adapted = {,,
+    project: tasksData.project,
       features: [],
-      metadata: {
-        version: tasksData.metadata?.version || '2.0.0',
+      metadata: {,,
+    version: tasksData.metadata?.version || '2.0.0',
         created: tasksData.metadata?.created || new Date().toISOString(),
         updated: tasksData.metadata?.updated || new Date().toISOString(),
         total_features: 0,
@@ -35,8 +35,8 @@ class TasksApiAdapter {
     if (tasksData.tasks) {
       for (const task of tasksData.tasks) {
         if (task.type === 'feature') {
-          const feature = {
-            id: task.id,
+          const feature = {,,
+    id: task.id,
             title: task.title,
             description: task.description,
             business_value: task.business_value,
@@ -62,7 +62,7 @@ class TasksApiAdapter {
           }
 
           adapted.features.push(feature);
-        } else {
+        } else: {
           // Non-feature tasks go to tasks array
           adapted.tasks.push(task);
         }
@@ -71,7 +71,7 @@ class TasksApiAdapter {
 
     adapted.metadata.total_features = adapted.features.length;
     return adapted;
-  }
+}
 
   /**
    * Convert feature data to new task format
@@ -79,8 +79,8 @@ class TasksApiAdapter {
   adaptFeatureToTask(featureData, taskType = 'feature') {
     const taskId = `task_${this.taskIdCounter++}_${this.generateHash()}`;
 
-    return {
-      id: taskId,
+    return: {,,
+    id: taskId,
       type: taskType,
       parent_id: null,
       linked_tasks: [],
@@ -91,8 +91,8 @@ class TasksApiAdapter {
       status: 'suggested',
       priority: this.mapPriorityFromCategory(featureData.category),
       auto_generated: false,
-      auto_generation_rules: {
-        generate_test_task: taskType === 'feature',
+      auto_generation_rules: {,,
+    generate_test_task: taskType === 'feature',
         generate_audit_task: taskType === 'feature',
         test_coverage_requirement: 80,
       },
@@ -107,8 +107,8 @@ class TasksApiAdapter {
       assigned_to: null,
       assigned_at: null,
       completed_at: null,
-      validation_requirements: {
-        security_scan: true,
+      validation_requirements: {,,
+    security_scan: true,
         test_coverage: true,
         linter_pass: true,
         type_check: true,
@@ -116,7 +116,7 @@ class TasksApiAdapter {
       },
       metadata: {},
     };
-  }
+}
 
   /**
    * Generate auto-tasks for a feature task
@@ -126,9 +126,9 @@ class TasksApiAdapter {
     const testTaskId = `task_${this.taskIdCounter++}_${this.generateHash()}`;
     const auditTaskId = `task_${this.taskIdCounter++}_${this.generateHash()}`;
 
-    // Generate test task
-    const testTask = {
-      id: testTaskId,
+    // Generate test task;
+const testTask = {,,
+    id: testTaskId,
       type: 'test',
       parent_id: featureTask.id,
       linked_tasks: [featureTask.id],
@@ -139,8 +139,8 @@ class TasksApiAdapter {
       status: 'suggested',
       priority: 'high',
       auto_generated: true,
-      auto_generation_rules: {
-        generate_test_task: false,
+      auto_generation_rules: {,,
+    generate_test_task: false,
         generate_audit_task: false,
         test_coverage_requirement: 80,
       },
@@ -153,22 +153,22 @@ class TasksApiAdapter {
       assigned_to: null,
       assigned_at: null,
       completed_at: null,
-      validation_requirements: {
-        security_scan: false,
+      validation_requirements: {,,
+    security_scan: false,
         test_coverage: true,
         linter_pass: true,
         type_check: true,
         build_success: true,
       },
-      metadata: {
-        auto_generated_for: featureTask.id,
+      metadata: {,,
+    auto_generated_for: featureTask.id,
         generation_rule: 'mandatory_test_gate',
-      },
-    };
+      }
+  };
 
-    // Generate audit task
-    const auditTask = {
-      id: auditTaskId,
+    // Generate audit task;
+const auditTask = {,,
+    id: auditTaskId,
       type: 'audit',
       parent_id: featureTask.id,
       linked_tasks: [featureTask.id],
@@ -179,8 +179,8 @@ class TasksApiAdapter {
       status: 'suggested',
       priority: 'high',
       auto_generated: true,
-      auto_generation_rules: {
-        generate_test_task: false,
+      auto_generation_rules: {,,
+    generate_test_task: false,
         generate_audit_task: false,
         test_coverage_requirement: 80,
       },
@@ -193,18 +193,18 @@ class TasksApiAdapter {
       assigned_to: null,
       assigned_at: null,
       completed_at: null,
-      validation_requirements: {
-        security_scan: true,
+      validation_requirements: {,,
+    security_scan: true,
         test_coverage: false,
         linter_pass: true,
         type_check: true,
         build_success: true,
       },
-      metadata: {
-        auto_generated_for: featureTask.id,
+      metadata: {,,
+    auto_generated_for: featureTask.id,
         generation_rule: 'mandatory_security_audit',
-      },
-    };
+      }
+  };
 
     autoTasks.push(testTask, auditTask);
 
@@ -213,8 +213,8 @@ class TasksApiAdapter {
       tasksData.task_relationships = {};
     }
 
-    tasksData.task_relationships[featureTask.id] = {
-      auto_generated_test: testTaskId,
+    tasksData.task_relationships[featureTask.id] = {,,
+    auto_generated_test: testTaskId,
       auto_generated_audit: auditTaskId,
       dependencies: [],
       dependents: [testTaskId, auditTaskId],
@@ -236,38 +236,38 @@ class TasksApiAdapter {
     }
 
     return autoTasks;
-  }
+}
 
   /**
    * Sort tasks by priority order (CLAUDE.md compliant)
    */
   sortTasksByPriority(tasks) {
-    const priorityOrder = {
-      USER_REQUESTS: 0,
+    const priorityOrder = {,,
+    USER_REQUESTS: 0,
       error: 1,
       audit: 2,
       feature: 3,
       test: 4,
     };
 
-    const priorityWeight = {
-      critical: 0,
+    const priorityWeight = {,,
+    critical: 0,
       high: 1,
       normal: 2,
       low: 3,
     };
 
     return tasks.sort((a, b) => {
-      // First sort by task type
-      const typeA = priorityOrder[a.type] || 999;
+      // First sort by task type;
+const typeA = priorityOrder[a.type] || 999;
       const typeB = priorityOrder[b.type] || 999;
 
       if (typeA !== typeB) {
         return typeA - typeB;
       }
 
-      // Then sort by priority within same type
-      const priorityA = priorityWeight[a.priority] || 999;
+      // Then sort by priority within same type;
+const priorityA = priorityWeight[a.priority] || 999;
       const priorityB = priorityWeight[b.priority] || 999;
 
       if (priorityA !== priorityB) {
@@ -277,16 +277,16 @@ class TasksApiAdapter {
       // Finally sort by creation date (newest first)
       return new Date(b.created_at) - new Date(a.created_at);
     });
-  }
+}
 
   // Helper methods
   generateHash() {
     return Math.random().toString(36).substring(2, 10);
-  }
+}
 
   mapPriorityFromCategory(category) {
-    const priorityMap = {
-      security: 'high',
+    const priorityMap = {,,
+    security: 'high',
       'bug-fix': 'high',
       performance: 'normal',
       enhancement: 'normal',
@@ -294,11 +294,11 @@ class TasksApiAdapter {
       documentation: 'low',
     };
     return priorityMap[category] || 'normal';
-  }
+}
 
   inferCapabilitiesFromCategory(category) {
-    const capabilityMap = {
-      security: ['security', 'backend'],
+    const capabilityMap = {,,
+    security: ['security', 'backend'],
       'bug-fix': ['general'],
       performance: ['performance', 'analysis'],
       enhancement: ['general'],
@@ -306,7 +306,7 @@ class TasksApiAdapter {
       documentation: ['documentation'],
     };
     return capabilityMap[category] || ['general'];
-  }
+}
 }
 
 module.exports = TasksApiAdapter;

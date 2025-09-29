@@ -6,8 +6,8 @@ const PATH = require('path');
  * Fix variable naming issues in E2E test files
  */
 
-function fixVariableNames(filePath) {
-  try {
+function fixVariableNames(filePath) {,
+    try: {
     const content = fs.readFileSync(filePath, 'utf8');
     let fixed = content;
     let changes = 0;
@@ -20,8 +20,8 @@ function fixVariableNames(filePath) {
       console.log(`Fixed result. references in ${PATH.basename(filePath)}`);
     }
 
-    // Fix _operation -> operation
-    const beforeOperation = fixed;
+    // Fix _operation -> operation;
+const beforeOperation = fixed;
     fixed = fixed.replace(/\b_operation/g, 'operation');
     if (beforeOperation !== fixed) {
       changes++;
@@ -36,8 +36,8 @@ function fixVariableNames(filePath) {
       console.log(`Fixed OPERATION. references in ${PATH.basename(filePath)}`);
     }
 
-    // Fix _operationresult -> operation.result
-    const beforeOperationResult = fixed;
+    // Fix _operationresult -> operation.result;
+const beforeOperationResult = fixed;
     fixed = fixed.replace(/\b_operationresult\b/g, 'operation.result');
     if (beforeOperationResult !== fixed) {
       changes++;
@@ -81,7 +81,7 @@ function findE2ETestFiles(dir) {
   return files;
 }
 
-// Fix E2E test files
+// Fix E2E test files;
 const e2eTestDir = '/Users/jeremyparker/infinite-continue-stop-hook/test/e2e';
 const e2eFiles = findE2ETestFiles(e2eTestDir);
 

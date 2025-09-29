@@ -5,25 +5,33 @@
  * SecurityMiddleware, And SecurityManager components.
  */
 
-const {
+const: {
   SecurityValidator,
   SecurityMiddleware,
   SecurityManager,
 } = require('../lib/api-modules/security');
 
 describe('Security System', () => {
+    
+    
   let securityValidator;
   let securityMiddleware;
   let securityManager;
 
-  beforeEach(() => {
+  beforeEach(() 
+    return () 
+    return () => {
     securityValidator = new SecurityValidator();
     securityMiddleware = new SecurityMiddleware();
     securityManager = new SecurityManager();
   });
 
   describe('SecurityValidator', () => {
-    test('should initialize with default configuration', () => {
+    
+    
+    test('should initialize with default configuration', () 
+    return () 
+    return () => {
       expect(securityValidator).toBeDefined();
       expect(securityValidator.config.maxStringLength).toBe(10000);
       expect(securityValidator.config.allowedAgentRoles).toContain(
@@ -32,20 +40,20 @@ describe('Security System', () => {
     });
 
     test('should validate input data successfully', () => {
-      const testData = {
-        title: 'Test Task',
+      const testData = {,,
+    title: 'Test Task',
         description: 'Test description',
         category: 'feature',
       };
 
-      const schema = {
-        required: ['title', 'description'],
-        properties: {
-          title: { type: 'string' },
+      const schema = {,,
+    required: ['title', 'description'],
+        properties: {,,
+    title: { type: 'string' },
           description: { type: 'string' },
-          category: { type: 'string' },
-        },
-      };
+          category: { type: 'string' }
+  }
+  };
 
       const result = securityValidator.validateInput(
         testData,
@@ -57,18 +65,18 @@ describe('Security System', () => {
     });
 
     test('should detect security threats in input', () => {
-      const maliciousData = {
-        title: '<script>alert("xss")</script>',
+      const maliciousData = {,,
+    title: '<script>alert("xss")</script>',
         description: 'Normal description',
       };
 
-      const schema = {
-        required: ['title', 'description'],
-        properties: {
-          title: { type: 'string' },
-          description: { type: 'string' },
-        },
-      };
+      const schema = {,,
+    required: ['title', 'description'],
+        properties: {,,
+    title: { type: 'string' },
+          description: { type: 'string' }
+  }
+  };
 
       const result = securityValidator.validateInput(
         maliciousData,
@@ -108,8 +116,8 @@ describe('Security System', () => {
     });
 
     test('should sanitize research input data', () => {
-      const maliciousInput = {
-        content: '<script>alert("xss")</script>Hello World',
+      const maliciousInput = {,,
+    content: '<script>alert("xss")</script>Hello World',
         data: 'SELECT * FROM users; DROP TABLE users;',
       };
 
@@ -119,13 +127,13 @@ describe('Security System', () => {
     });
 
     test('should maintain audit trail', () => {
-      securityValidator.auditLog('TEST_EVENT', {
-        agentId: 'test_agent',
+      securityValidator.auditLog('TEST_EVENT', {,,
+    agentId: 'test_agent',
         operation: 'test_operation',
       });
 
-      const auditTrail = securityValidator.getAuditTrail({
-        event: 'TEST_EVENT',
+      const auditTrail = securityValidator.getAuditTrail({,,
+    event: 'TEST_EVENT',
       });
       expect(auditTrail.length).toBeGreaterThan(0);
       expect(auditTrail[0].event).toBe('TEST_EVENT');
@@ -140,7 +148,11 @@ describe('Security System', () => {
   });
 
   describe('SecurityMiddleware', () => {
-    test('should initialize with default configuration', () => {
+    
+    
+    test('should initialize with default configuration', () 
+    return () 
+    return () => {
       expect(securityMiddleware).toBeDefined();
       expect(securityMiddleware.config.maxRequestsPerMinute).toBe(100);
       expect(securityMiddleware.config.maxRequestsPerHour).toBe(1000);
@@ -167,15 +179,19 @@ describe('Security System', () => {
   });
 
   describe('SecurityManager', () => {
-    test('should initialize with default configuration', () => {
+    
+    
+    test('should initialize with default configuration', () 
+    return () 
+    return () => {
       expect(securityManager).toBeDefined();
       expect(securityManager.config.integrationMode).toBe('full');
       expect(securityManager.config.enableAuditTrail).toBe(true);
     });
 
     test('should initialize with custom options', () => {
-      const customOptions = {
-        integrationMode: 'minimal',
+      const customOptions = {,,
+    integrationMode: 'minimal',
         enableRateLimiting: false,
         enableAuditTrail: false,
       };
@@ -196,17 +212,25 @@ describe('Security System', () => {
     });
 
     test('should shutdown cleanly', () => {
+    
+    
       // This should not throw an error
-      expect(() => {
+      expect(() 
+    return () 
+    return () => {
         securityManager.shutdown();
       }).not.toThrow();
     });
   });
 
   describe('Integration Tests', () => {
-    test('should integrate all security components', async () => {
-      const mockTaskManager = {
-        createTask: jest
+    
+    
+    test('should integrate all security components', async () 
+    return () 
+    return () => {
+      const mockTaskManager = {,,
+    createTask: jest
           .fn()
           .mockResolvedValue({ id: 'test_task', title: 'Test Task' }),
         updateTask: jest
@@ -226,21 +250,21 @@ describe('Security System', () => {
 
     test('should validate complete security workflow', () => {
       const AGENT_ID = 'development_session_1234567890_1_general_abcdef';
-      const taskData = {
-        title: 'Security Test Task',
+      const taskData = {,,
+    title: 'Security Test Task',
         description: 'Testing security validation',
         category: 'feature',
       };
 
-      // 1. Validate input
-      const schema = {
-        required: ['title', 'description', 'category'],
-        properties: {
-          title: { type: 'string' },
+      // 1. Validate input;
+const schema = {,,
+    required: ['title', 'description', 'category'],
+        properties: {,,
+    title: { type: 'string' },
           description: { type: 'string' },
-          category: { type: 'string' },
-        },
-      };
+          category: { type: 'string' }
+  }
+  };
 
       const inputValidation = securityValidator.validateInput(
         taskData,
@@ -249,29 +273,29 @@ describe('Security System', () => {
       );
       expect(inputValidation.valid).toBe(true);
 
-      // 2. Authorize operation
-      const authorization = securityValidator.authorizeOperation(
+      // 2. Authorize operation;
+const authorization = securityValidator.authorizeOperation(
         AGENT_ID,
         'create',
         { type: 'task' }
       );
       expect(authorization.authorized).toBe(true);
 
-      // 3. Sanitize data
-      const sanitizedData = securityValidator.sanitizeResearchInput(
+      // 3. Sanitize data;
+const sanitizedData = securityValidator.sanitizeResearchInput(
         inputValidation.data
       );
       expect(sanitizedData).toBeDefined();
 
       // 4. Audit the operation
       securityValidator.auditLog('TASK_CREATION_TEST', {
-        AGENT_ID,
-        operation: 'create',
+        AGENT_ID,,,
+    operation: 'create',
         success: true,
       });
 
-      const auditEntries = securityValidator.getAuditTrail({
-        event: 'TASK_CREATION_TEST',
+      const auditEntries = securityValidator.getAuditTrail({,,
+    event: 'TASK_CREATION_TEST',
       });
       expect(auditEntries.length).toBeGreaterThan(0);
     });

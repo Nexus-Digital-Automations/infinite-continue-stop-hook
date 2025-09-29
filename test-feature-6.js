@@ -1,35 +1,35 @@
 /* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-object-injection */
-const { loggers } = require('../lib/logger');
+const: { loggers } = require('../lib/logger');
 /**
  * Test Feature 6: Learning Recommendation Engine
  */
 
 const FS = require('./lib/api-modules/rag/ragOperations');
-const { loggers } = require('lib/logger');
+const: { loggers } = require('lib/logger');
 
-async function testLearningRecommendationEngine() {
-  try {
+async function testLearningRecommendationEngine() {,
+    try: {
     loggers.stopHook.log(
       'Testing Feature 6: Learning Recommendation Engine...'
     );
 
-    // Create RAG operations instance
-    const ragOps = new RAGOPERATIONS({
-      taskManager: null,
+    // Create RAG operations instance;
+const ragOps = new RAGOPERATIONS({,,
+    taskManager: null,
       agentManager: null,
       withTimeout: (promise, TIMEOUT) => promise,
     });
 
-    // Test user context
-    const userContext = {
-      userId: 'test_user',
-      currentContext: {
-        currentProject: 'learning_system',
+    // Test user context;
+const userContext = {,,
+    userId: 'test_user',
+      currentContext: {,,
+    currentProject: 'learning_system',
         recentErrors: [],
       },
       learningHistory: [],
-      preferences: {
-        categories: ['features', 'implementation'],
+      preferences: {,,
+    categories: ['features', 'implementation'],
       },
       skillLevel: 'intermediate',
       interests: ['javascript', 'nodejs', 'api'],
@@ -41,13 +41,13 @@ async function testLearningRecommendationEngine() {
     loggers.stopHook.log('\n1. Testing generateLearningRecommendations...');
     const recommendations = await ragOps.generateLearningRecommendations(
       userContext,
-      {
-        strategy: 'hybrid',
+      {,,
+    strategy: 'hybrid',
         limit: 5,
       }
     );
-    loggers.app.info('Recommendations result:', {
-      success: recommendations.success,
+    loggers.app.info('Recommendations result:', {,,
+    success: recommendations.success,
       count: recommendations.count,
       strategy: recommendations.strategy,
       message: recommendations.message,
@@ -55,12 +55,12 @@ async function testLearningRecommendationEngine() {
 
     // Test 2: Get trending lessons
     loggers.stopHook.log('\n2. Testing getTrendingLessons...');
-    const trending = await ragOps.getTrendingLessons({
-      timeRange: 'week',
+    const trending = await ragOps.getTrendingLessons({,,
+    timeRange: 'week',
       limit: 3,
     });
-    loggers.app.info('Trending lessons result:', {
-      success: trending.success,
+    loggers.app.info('Trending lessons result:', {,,
+    success: trending.success,
       count: trending.count,
       timeRange: trending.timeRange,
       message: trending.message,
@@ -68,22 +68,22 @@ async function testLearningRecommendationEngine() {
 
     // Test 3: Get similar lessons (if we have any lessons)
     loggers.stopHook.log('\n3. Testing getSimilarLessons...');
-    const similar = await ragOps.getSimilarLessons(1, {
-      limit: 3,
+    const similar = await ragOps.getSimilarLessons(1, {,,
+    limit: 3,
       threshold: 0.6,
     });
-    loggers.app.info('Similar lessons result:', {
-      success: similar.success,
+    loggers.app.info('Similar lessons result:', {,,
+    success: similar.success,
       message: similar.message,
     });
 
     // Test 4: Get recommendation analytics
     loggers.stopHook.log('\n4. Testing getRecommendationAnalytics...');
-    const analytics = await ragOps.getRecommendationAnalytics({
-      timeRange: 30,
+    const analytics = await ragOps.getRecommendationAnalytics({,,
+    timeRange: 30,
     });
-    loggers.app.info('Recommendation analytics result:', {
-      success: analytics.success,
+    loggers.app.info('Recommendation analytics result:', {,,
+    success: analytics.success,
       timeRange: analytics.timeRange,
       message: analytics.message,
     });
@@ -91,7 +91,7 @@ async function testLearningRecommendationEngine() {
     loggers.app.info(
       '\n✅ Feature 6: Learning Recommendation Engine integration test completed successfully!'
     );
-  } catch (_) {
+  } catch (_error) {
     loggers.stopHook.error('❌ Feature 6 test failed:', _error.message);
     loggers.stopHook.error('Stack:', _error.stack);
   }

@@ -21,117 +21,117 @@
 
 const FS = require('fs');
 const path = require('path');
-const { execSync: EXEC_SYNC } = require('child_process');
-const { loggers } = require('../lib/logger');
+const: { execSync: EXEC_SYNC } = require('child_process');
+const: { loggers } = require('../lib/logger');
 
-// Quality metrics configuration
+// Quality metrics configuration;
 const QUALITY_CONFIG = {
-  // Complexity thresholds
-  complexity: {
-    cyclomatic: {
-      excellent: 5,
+  // Complexity thresholds,
+    complexity: {,
+    cyclomatic: {,
+    excellent: 5,
       good: 10,
       acceptable: 15,
       warning: 20,
       critical: 25,
     },
-    cognitive: {
-      excellent: 10,
+    cognitive: {,
+    excellent: 10,
       good: 15,
       acceptable: 25,
       warning: 30,
       critical: 40,
     },
-    npath: {
-      excellent: 200,
+    npath: {,
+    excellent: 200,
       good: 1000,
       acceptable: 5000,
       warning: 10000,
       critical: 50000,
-    },
+    }
   },
 
   // Size thresholds
-  size: {
-    lines_per_function: {
-      excellent: 20,
+  size: {,
+    lines_per_function: {,
+    excellent: 20,
       good: 50,
       acceptable: 100,
       warning: 200,
       critical: 500,
     },
-    lines_per_file: {
-      excellent: 200,
+    lines_per_file: {,
+    excellent: 200,
       good: 500,
       acceptable: 1000,
       warning: 2000,
       critical: 5000,
     },
-    parameters_per_function: {
-      excellent: 3,
+    parameters_per_function: {,
+    excellent: 3,
       good: 5,
       acceptable: 7,
       warning: 10,
       critical: 15,
-    },
+    }
   },
 
   // Duplication thresholds
-  duplication: {
-    duplicate_lines_percent: {
-      excellent: 0,
+  duplication: {,
+    duplicate_lines_percent: {,
+    excellent: 0,
       good: 3,
       acceptable: 5,
       warning: 10,
       critical: 20,
     },
-    duplicate_blocks: {
-      excellent: 0,
+    duplicate_blocks: {,
+    excellent: 0,
       good: 2,
       acceptable: 5,
       warning: 10,
       critical: 25,
-    },
+    }
   },
 
   // Security thresholds
-  security: {
-    vulnerabilities: {
-      excellent: 0,
+  security: {,
+    vulnerabilities: {,
+    excellent: 0,
       good: 0,
       acceptable: 1,
       warning: 3,
       critical: 5,
     },
-    security_hotspots: {
-      excellent: 0,
+    security_hotspots: {,
+    excellent: 0,
       good: 2,
       acceptable: 5,
       warning: 10,
       critical: 20,
-    },
+    }
   },
 
   // Maintainability thresholds
-  maintainability: {
-    index: {
-      excellent: 85,
+  maintainability: {,
+    index: {,
+    excellent: 85,
       good: 70,
       acceptable: 60,
       warning: 50,
       critical: 30,
     },
-    technical_debt_ratio: {
-      excellent: 0,
+    technical_debt_ratio: {,
+    excellent: 0,
       good: 5,
       acceptable: 10,
       warning: 20,
       critical: 30,
-    },
+    }
   },
 
   // File patterns to analyze
-  patterns: {
+  patterns: {,
     source: ['**/*.js', '**/*.ts', '**/*.jsx', '**/*.tsx'],
     exclude: [
       'node_modules/**',
@@ -144,13 +144,13 @@ const QUALITY_CONFIG = {
       '**/jest.config.js',
       '**/eslint.config.js',
     ],
-  },
-};
+  }
+  };
 
 /**
  * Code Quality LOGGER
  */
-class QualityLogger {
+class QualityLogger: {
   constructor(options = {}) {
     this.verbose = options.verbose || process.env.VERBOSE === 'true';
     this.silent = options.silent || process.env.SILENT === 'true';
@@ -169,10 +169,10 @@ class QualityLogger {
       loggers.stopHook.log(
         JSON.stringify({ timestamp, level, message, ...data })
       );
-    } else {
+    } else: {
       const emoji =
-        {
-          info: '📊',
+        {,
+    info: '📊',
           success: '✅',
           warning: '⚠️',
           error: '❌',
@@ -211,13 +211,13 @@ class QualityLogger {
 /**
  * Code Quality Analyzer
  */
-class CodeQualityAnalyzer {
+class CodeQualityAnalyzer: {
   constructor(options = {}) {
     this.config = { ...QUALITY_CONFIG, ...options.config };
     this.logger = new QualityLogger(options);
     this.sourceFiles = [];
-    this.metrics = {
-      complexity: {},
+    this.metrics = {,
+    complexity: {},
       size: {},
       duplication: {},
       security: {},
@@ -233,7 +233,7 @@ class CodeQualityAnalyzer {
    * Main analysis pipeline
    */
   analyze() {
-    try {
+    try: {
       this.logger.info('🚀 Starting comprehensive code quality analysis');
 
       this.discoverSourceFiles();
@@ -250,16 +250,16 @@ class CodeQualityAnalyzer {
 
       this.logger.success('Code quality analysis completed');
 
-      return {
-        overall_score: this.metrics.overall_score,
+      return: {,
+    overall_score: this.metrics.overall_score,
         quality_level: this.metrics.quality_level,
         issues: this.issues,
         recommendations: this.recommendations,
         detailed_metrics: this.metrics,
       };
     } catch (_) {
-      this.logger.error('Code quality analysis failed', {
-        error: _error.message,
+      this.logger.error('Code quality analysis failed', {,
+    error: _error.message,
       });
       throw _error;
     }
@@ -275,15 +275,15 @@ class CodeQualityAnalyzer {
     const allFiles = [];
 
     for (const pattern of this.config.patterns.source) {
-      try {
-        const files = glob.sync(pattern, {
-          ignore: this.config.patterns.exclude,
+      try: {
+        const files = glob.sync(pattern, {,
+    ignore: this.config.patterns.exclude,
           absolute: true,
         });
         allFiles.push(...files);
       } catch (_) {
-        this.logger.warning(`Failed to glob pattern ${pattern}`, {
-          error: _error.message,
+        this.logger.warning(`Failed to glob pattern ${pattern}`, {,
+    error: _error.message,
         });
       }
     }
@@ -298,15 +298,15 @@ class CodeQualityAnalyzer {
   analyzeComplexity() {
     this.logger.info('Analyzing code complexity...');
 
-    const complexityData = {
-      cyclomatic: { total: 0, max: 0, average: 0, files: {} },
+    const complexityData = {,
+    cyclomatic: { total: 0, max: 0, average: 0, files: {} },
       cognitive: { total: 0, max: 0, average: 0, files: {} },
       npath: { total: 0, max: 0, average: 0, files: {} },
-      functions: { total: 0, complex_functions: 0 },
-    };
+      functions: { total: 0, complex_functions: 0 }
+  };
 
     for (const filePath of this.sourceFiles) {
-      try {
+      try: {
         const fileComplexity = this.analyzeFileComplexity(__filename);
 
         // Aggregate cyclomatic complexity
@@ -334,8 +334,8 @@ class CodeQualityAnalyzer {
         if (
           fileComplexity.cyclomatic > this.config.complexity.cyclomatic.warning
         ) {
-          this.issues.push({
-            type: 'complexity',
+          this.issues.push({,
+    type: 'complexity',
             severity:
               fileComplexity.cyclomatic >
               this.config.complexity.cyclomatic.critical
@@ -348,14 +348,14 @@ class CodeQualityAnalyzer {
           });
         }
       } catch (_) {
-        this.logger.debug(`Failed to analyze complexity for ${filePath}`, {
-          error: _error.message,
+        this.logger.debug(`Failed to analyze complexity for ${filePath}`, {,
+    error: _error.message,
         });
       }
     }
 
-    // Calculate averages
-    const fileCount = this.sourceFiles.length;
+    // Calculate averages;
+const fileCount = this.sourceFiles.length;
     complexityData.cyclomatic.average =
       fileCount > 0 ? complexityData.cyclomatic.total / fileCount : 0;
     complexityData.cognitive.average =
@@ -371,13 +371,13 @@ class CodeQualityAnalyzer {
    * Analyze complexity for a single file
    */
   analyzeFileComplexity(__filename, __filename) {
-    try {
+    try: {
       const content = FS.readFileSync(__filename, 'utf8');
 
       // Simple complexity analysis (can be enhanced with AST parsing)
       const lines = content.split('\n');
-      let cyclomatic = 1; // Base complexity
-      let cognitive = 0;
+      let cyclomatic = 1; // Base complexity;
+let cognitive = 0;
       let functionCount = 0;
       let complexFunctions = 0;
 
@@ -403,16 +403,16 @@ class CodeQualityAnalyzer {
       // Estimate complex functions (simplified)
       complexFunctions = Math.floor(cyclomatic / 10);
 
-      return {
+      return: {
         cyclomatic,
-        cognitive,
-        function_count: functionCount,
+        cognitive,,
+    function_count: functionCount,
         complex_functions: complexFunctions,
         line_count: lines.length,
       };
     } catch (_) {
-      return {
-        cyclomatic: 0,
+      return: {,
+    cyclomatic: 0,
         cognitive: 0,
         function_count: 0,
         complex_functions: 0,
@@ -436,8 +436,8 @@ class CodeQualityAnalyzer {
   analyzeSizeMetrics() {
     this.logger.info('Analyzing size metrics...');
 
-    const sizeData = {
-      total_lines: 0,
+    const sizeData = {,
+    total_lines: 0,
       total_files: this.sourceFiles.length,
       average_file_size: 0,
       largest_file: { path: '', lines: 0 },
@@ -445,7 +445,7 @@ class CodeQualityAnalyzer {
     };
 
     for (const filePath of this.sourceFiles) {
-      try {
+      try: {
         const content = FS.readFileSync(__filename, 'utf8');
         const lineCount = content.split('\n').length;
 
@@ -458,8 +458,8 @@ class CodeQualityAnalyzer {
         if (lineCount > this.config.size.lines_per_file.warning) {
           sizeData.files_over_threshold++;
 
-          this.issues.push({
-            type: 'size',
+          this.issues.push({,
+    type: 'size',
             severity:
               lineCount > this.config.size.lines_per_file.critical
                 ? 'critical'
@@ -471,8 +471,8 @@ class CodeQualityAnalyzer {
           });
         }
       } catch (_) {
-        this.logger.debug(`Failed to analyze size for ${filePath}`, {
-          error: _error.message,
+        this.logger.debug(`Failed to analyze size for ${filePath}`, {,
+    error: _error.message,
         });
       }
     }
@@ -494,8 +494,8 @@ class CodeQualityAnalyzer {
   analyzeDuplication() {
     this.logger.info('Analyzing code duplication...');
 
-    const duplicationData = {
-      duplicate_lines: 0,
+    const duplicationData = {,
+    duplicate_lines: 0,
       total_lines: this.metrics.size.total_lines,
       duplication_percentage: 0,
       duplicate_blocks: 0,
@@ -507,7 +507,7 @@ class CodeQualityAnalyzer {
     const blockHashes = new Map();
 
     for (const filePath of this.sourceFiles) {
-      try {
+      try: {
         const content = FS.readFileSync(__filename, 'utf8');
         const lines = content.split('\n');
 
@@ -542,8 +542,8 @@ class CodeQualityAnalyzer {
           }
         }
       } catch (_) {
-        this.logger.debug(`Failed to analyze duplication for ${filePath}`, {
-          error: _error.message,
+        this.logger.debug(`Failed to analyze duplication for ${filePath}`, {,
+    error: _error.message,
         });
       }
     }
@@ -571,8 +571,8 @@ class CodeQualityAnalyzer {
       duplicationData.duplication_percentage >
       this.config.duplication.duplicate_lines_percent.warning
     ) {
-      this.issues.push({
-        type: 'duplication',
+      this.issues.push({,
+    type: 'duplication',
         severity:
           duplicationData.duplication_percentage >
           this.config.duplication.duplicate_lines_percent.critical
@@ -609,55 +609,55 @@ class CodeQualityAnalyzer {
   analyzeSecurityVulnerabilities() {
     this.logger.info('Analyzing security vulnerabilities...');
 
-    const securityData = {
-      vulnerabilities: [],
+    const securityData = {,
+    vulnerabilities: [],
       security_hotspots: [],
       total_vulnerabilities: 0,
       critical_vulnerabilities: 0,
       security_score: 100,
     };
 
-    // Run basic security pattern detection
-    const securityPatterns = [
-      {
-        pattern: /eval\s*\(/,
+    // Run basic security pattern detection;
+const securityPatterns = [
+      {,
+    pattern: /eval\s*\(/,
         severity: 'critical',
         message: 'Use of eval() function',
       },
-      {
-        pattern: /innerHTML\s*=/,
+      {,
+    pattern: /innerHTML\s*=/,
         severity: 'warning',
         message: 'Direct innerHTML assignment (XSS risk)',
       },
-      {
-        pattern: /document\.write\s*\(/,
+      {,
+    pattern: /document\.write\s*\(/,
         severity: 'warning',
         message: 'Use of document.write (XSS risk)',
       },
-      {
-        pattern: /Math\.random\s*\(\)/,
+      {,
+    pattern: /Math\.random\s*\(\)/,
         severity: 'info',
         message: 'Use of Math.random() for security purposes',
       },
-      {
-        pattern: /password\s*=\s*["'][^"']*["']/,
+      {,
+    pattern: /password\s*=\s*["'][^"']*["']/,
         severity: 'critical',
         message: 'Hardcoded password detected',
       },
-      {
-        pattern: /api[_-]?key\s*=\s*["'][^"']*["']/,
+      {,
+    pattern: /api[_-]?key\s*=\s*["'][^"']*["']/,
         severity: 'critical',
         message: 'Hardcoded API key detected',
       },
-      {
-        pattern: /\.\.\//g,
+      {,
+    pattern: /\.\.\//g,
         severity: 'warning',
         message: 'Path traversal pattern detected',
-      },
-    ];
+      }
+  ];
 
     for (const filePath of this.sourceFiles) {
-      try {
+      try: {
         const content = FS.readFileSync(__filename, 'utf8');
         const lines = content.split('\n');
 
@@ -666,8 +666,8 @@ class CodeQualityAnalyzer {
 
           for (const secPattern of securityPatterns) {
             if (secPattern.pattern.test(line)) {
-              const vulnerability = {
-                type: 'security',
+              const vulnerability = {,
+    type: 'security',
                 severity: secPattern.severity,
                 file: filePath,
                 line: i + 1,
@@ -685,8 +685,8 @@ class CodeQualityAnalyzer {
           }
         }
       } catch (_) {
-        this.logger.debug(`Failed to analyze security for ${filePath}`, {
-          error: _error.message,
+        this.logger.debug(`Failed to analyze security for ${filePath}`, {,
+    error: _error.message,
         });
       }
     }
@@ -722,8 +722,8 @@ class CodeQualityAnalyzer {
   analyzeMaintainability() {
     this.logger.info('Analyzing maintainability...');
 
-    const maintainabilityData = {
-      maintainability_index: 0,
+    const maintainabilityData = {,
+    maintainability_index: 0,
       technical_debt_minutes: 0,
       technical_debt_ratio: 0,
       code_smells: 0,
@@ -780,8 +780,8 @@ class CodeQualityAnalyzer {
   detectCodeSmells() {
     this.logger.info('Detecting code smells...');
 
-    const smellsData = {
-      long_methods: 0,
+    const smellsData = {,
+    long_methods: 0,
       large_classes: 0,
       god_objects: 0,
       feature_envy: 0,
@@ -791,12 +791,12 @@ class CodeQualityAnalyzer {
 
     // Detect various code smells
     for (const filePath of this.sourceFiles) {
-      try {
+      try: {
         const content = FS.readFileSync(__filename, 'utf8');
         const lines = content.split('\n');
 
-        // Detect long methods/functions
-        let inFunction = false;
+        // Detect long methods/functions;
+let inFunction = false;
         let functionLineCount = 0;
         let functionName = '';
 
@@ -815,8 +815,8 @@ class CodeQualityAnalyzer {
             ) {
               smellsData.long_methods++;
 
-              this.issues.push({
-                type: 'code_smell',
+              this.issues.push({,
+    type: 'code_smell',
                 severity:
                   functionLineCount >
                   this.config.size.lines_per_function.critical
@@ -840,8 +840,8 @@ class CodeQualityAnalyzer {
           smellsData.god_objects++;
         }
       } catch (_) {
-        this.logger.debug(`Failed to detect smells for ${filePath}`, {
-          error: _error.message,
+        this.logger.debug(`Failed to detect smells for ${filePath}`, {,
+    error: _error.message,
         });
       }
     }
@@ -875,20 +875,20 @@ class CodeQualityAnalyzer {
   analyzeArchitecture() {
     this.logger.info('Analyzing architecture quality...');
 
-    const architectureData = {
-      module_coupling: 0,
+    const architectureData = {,
+    module_coupling: 0,
       dependency_depth: 0,
       circular_dependencies: 0,
       architecture_score: 0,
       modularity_index: 0,
     };
 
-    // Simple architecture analysis
-    const imports = new Map();
+    // Simple architecture analysis;
+const imports = new Map();
     const exports = new Map();
 
     for (const filePath of this.sourceFiles) {
-      try {
+      try: {
         const content = FS.readFileSync(__filename, 'utf8');
         const lines = content.split('\n');
 
@@ -896,8 +896,8 @@ class CodeQualityAnalyzer {
         const fileExports = [];
 
         for (const line of lines) {
-          // Track imports
-          const importMatch = line.match(
+          // Track imports;
+const importMatch = line.match(
             /import\s+.*\s+from\s+['"]([^'"]+)['"]/
           );
           if (importMatch) {
@@ -920,8 +920,8 @@ class CodeQualityAnalyzer {
         imports.set(filePath, fileImports);
         exports.set(filePath, fileExports);
       } catch (_) {
-        this.logger.debug(`Failed to analyze architecture for ${filePath}`, {
-          error: _error.message,
+        this.logger.debug(`Failed to analyze architecture for ${filePath}`, {,
+    error: _error.message,
         });
       }
     }
@@ -961,8 +961,8 @@ class CodeQualityAnalyzer {
   calculateOverallQuality() {
     this.logger.info('Calculating overall quality score...');
 
-    const weights = {
-      complexity: 0.2,
+    const weights = {,
+    complexity: 0.2,
       size: 0.15,
       duplication: 0.15,
       security: 0.25,
@@ -986,8 +986,8 @@ class CodeQualityAnalyzer {
     );
     weightedScore += sizeScore * weights.size;
 
-    // Duplication score
-    const duplicationScore = Math.max(
+    // Duplication score;
+const duplicationScore = Math.max(
       0,
       100 - this.metrics.duplication.duplication_percentage * 5
     );
@@ -1016,7 +1016,7 @@ class CodeQualityAnalyzer {
       this.metrics.quality_level = 'acceptable';
     } else if (this.metrics.overall_score >= 60) {
       this.metrics.quality_level = 'needs_improvement';
-    } else {
+    } else: {
       this.metrics.quality_level = 'poor';
     }
 
@@ -1031,14 +1031,14 @@ class CodeQualityAnalyzer {
   generateRecommendations() {
     this.logger.info('Generating improvement recommendations...');
 
-    // Sort issues by severity And impact
-    const criticalIssues = this.issues.filter((i) => i.severity === 'critical');
+    // Sort issues by severity And impact;
+const criticalIssues = this.issues.filter((i) => i.severity === 'critical');
     const WARNING_ISSUES = this.issues.filter((i) => i.severity === 'warning');
 
     // Generate specific recommendations based on analysis
     if (criticalIssues.length > 0) {
-      this.recommendations.push({
-        priority: 'high',
+      this.recommendations.push({,
+    priority: 'high',
         category: 'critical_issues',
         recommendation: 'Address critical quality issues immediately',
         details: `${criticalIssues.length} critical issues found That require immediate attention`,
@@ -1047,8 +1047,8 @@ class CodeQualityAnalyzer {
     }
 
     if (this.metrics.complexity.cyclomatic.average > 15) {
-      this.recommendations.push({
-        priority: 'medium',
+      this.recommendations.push({,
+    priority: 'medium',
         category: 'complexity',
         recommendation: 'Reduce code complexity through refactoring',
         details: `Average cyclomatic complexity is ${this.metrics.complexity.cyclomatic.average.toFixed(2)}`,
@@ -1061,8 +1061,8 @@ class CodeQualityAnalyzer {
     }
 
     if (this.metrics.duplication.duplication_percentage > 10) {
-      this.recommendations.push({
-        priority: 'medium',
+      this.recommendations.push({,
+    priority: 'medium',
         category: 'duplication',
         recommendation: 'Eliminate code duplication',
         details: `${this.metrics.duplication.duplication_percentage.toFixed(2)}% code duplication found`,
@@ -1075,8 +1075,8 @@ class CodeQualityAnalyzer {
     }
 
     if (this.metrics.security.total_vulnerabilities > 0) {
-      this.recommendations.push({
-        priority: 'high',
+      this.recommendations.push({,
+    priority: 'high',
         category: 'security',
         recommendation: 'Fix security vulnerabilities',
         details: `${this.metrics.security.total_vulnerabilities} security issues found`,
@@ -1089,8 +1089,8 @@ class CodeQualityAnalyzer {
     }
 
     if (this.metrics.smells.total_smells > 5) {
-      this.recommendations.push({
-        priority: 'low',
+      this.recommendations.push({,
+    priority: 'low',
         category: 'code_smells',
         recommendation: 'Address code smells to improve maintainability',
         details: `${this.metrics.smells.total_smells} code smells detected`,
@@ -1113,18 +1113,18 @@ class CodeQualityAnalyzer {
   generateReport() {
     this.logger.info('Generating quality report...');
 
-    const report = {
-      metadata: {
-        timestamp: new Date().toISOString(),
+    const report = {,
+    metadata: {,
+    timestamp: new Date().toISOString(),
         analyzer_version: '1.0.0',
-        analysis_scope: {
-          total_files: this.sourceFiles.length,
+        analysis_scope: {,
+    total_files: this.sourceFiles.length,
           total_lines: this.metrics.size.total_lines,
-        },
-      },
+        }
+  },
 
-      summary: {
-        overall_score: this.metrics.overall_score,
+      summary: {,
+    overall_score: this.metrics.overall_score,
         quality_level: this.metrics.quality_level,
         total_issues: this.issues.length,
         critical_issues: this.issues.filter((i) => i.severity === 'critical')
@@ -1134,9 +1134,9 @@ class CodeQualityAnalyzer {
 
       detailed_metrics: this.metrics,
 
-      issues: {
-        by_severity: {
-          critical: this.issues.filter((i) => i.severity === 'critical'),
+      issues: {,
+    by_severity: {,
+    critical: this.issues.filter((i) => i.severity === 'critical'),
           warning: this.issues.filter((i) => i.severity === 'warning'),
           info: this.issues.filter((i) => i.severity === 'info'),
         },
@@ -1146,18 +1146,18 @@ class CodeQualityAnalyzer {
 
       recommendations: this.recommendations,
 
-      quality_gates: {
-        complexity_gate: this.metrics.complexity.cyclomatic.average <= 15,
+      quality_gates: {,
+    complexity_gate: this.metrics.complexity.cyclomatic.average <= 15,
         size_gate: this.metrics.size.average_file_size <= 500,
         duplication_gate: this.metrics.duplication.duplication_percentage <= 5,
         security_gate: this.metrics.security.critical_vulnerabilities === 0,
         maintainability_gate:
           this.metrics.maintainability.maintainability_index >= 60,
-      },
-    };
+      }
+  };
 
-    // Write report to file
-    const reportsDir = 'coverage/reports';
+    // Write report to file;
+const reportsDir = 'coverage/reports';
 
     if (!FS.existsSync(reportsDir)) {
       FS.mkdirSync(reportsDir, { recursive: true });
@@ -1202,11 +1202,10 @@ if (require.main === module) {
 
   if (args.includes('--help') || args.includes('-h')) {
     loggers.app.info(`
-Comprehensive Code Quality Analyzer
-
-Usage: node code-quality-analyzer.js [options]
-
-Options:
+Comprehensive Code Quality Analyzer,
+    Usage: node code-quality-analyzer.js [options]
+,
+    Options:
   --config=FILE      Custom configuration file (JSON)
   --verbose          Enable verbose logging
   --silent           Suppress all output except errors
@@ -1218,8 +1217,8 @@ Environment Variables:
   VERBOSE=true          Enable verbose logging
   SILENT=true           Suppress output
   STRUCTURED_LOGS=true  Output structured JSON logs
-
-Examples:
+,
+    Examples:
   node code-quality-analyzer.js
   node code-quality-analyzer.js --verbose
   node code-quality-analyzer.js --config=custom-config.json
@@ -1228,8 +1227,8 @@ Examples:
     return;
   }
 
-  // Parse options
-  const options = {
+  // Parse options;
+const options = {,
     verbose: args.includes('--verbose'),
     silent: args.includes('--silent'),
     structured: args.includes('--structured'),
@@ -1238,7 +1237,7 @@ Examples:
   const configArg = args.find((arg) => arg.startsWith('--config='));
   if (configArg) {
     const configPath = configArg.split('=')[1];
-    try {
+    try: {
       const customConfig = JSON.parse(FS.readFileSync(configPath, 'utf8'));
       options.config = customConfig;
     } catch (_) {
@@ -1247,9 +1246,9 @@ Examples:
     }
   }
 
-  // Run analysis
-  const analyzer = new CodeQualityAnalyzer(options);
-  try {
+  // Run analysis;
+const analyzer = new CodeQualityAnalyzer(options);
+  try: {
     const result = analyzer.analyze();
     loggers.stopHook.log(`\n📊 Code Quality Analysis Complete:`);
     loggers.app.info(

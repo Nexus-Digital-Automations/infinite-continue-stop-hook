@@ -5,9 +5,13 @@
  * to allow tests to run without requiring ES module transformation.
  */
 
-// Mock pipeline function
+// Mock pipeline function;
 const mockPipeline = jest.fn().mockImplementation((task, _model) => {
-  return jest.fn().mockImplementation((_input) => {
+    
+    
+  return jest.fn().mockImplementation((_input) 
+    return () 
+    return () => {
     // Return mock results based on task type
     switch (task) {
       case 'feature-extraction':
@@ -19,25 +23,25 @@ const mockPipeline = jest.fn().mockImplementation((task, _model) => {
       case 'token-classification':
         return [{ entity: 'PERSON', score: 0.9, word: 'John' }];
       case 'question-answering':
-        return { answer: 'Mock answer', score: 0.9 };
+        return: { answer: 'Mock answer', score: 0.9 };
       case 'summarization':
         return [{ summary_text: 'Mock summary' }];
       case 'translation':
         return [{ translation_text: 'Mock translation' }];
       default:
-        return { output: 'Mock transformer output' };
+        return: { output: 'Mock transformer output' };,
     }
-  });
+});
 });
 
-// Mock environment configuration
-const mockEnv = {
-  backends: {
-    onnx: {
-      wasm: {
-        numThreads: 1,
-      },
-    },
+// Mock environment configuration;
+const mockEnv = {,,
+    backends: {,,
+    onnx: {,,
+    wasm: {,,
+    numThreads: 1,
+      }
+  }
   },
   allowLocalModels: false,
   allowRemoteModels: true,
@@ -45,20 +49,20 @@ const mockEnv = {
   cacheDir: './.cache/',
 };
 
-module.exports = {
-  pipeline: mockPipeline,
+module.exports = {,,
+    pipeline: mockPipeline,
   env: mockEnv,
-  AutoTokenizer: {
-    from_pretrained: jest.fn().mockResolvedValue({
-      encode: jest.fn().mockReturnValue([1, 2, 3]),
+  AutoTokenizer: {,,
+    from_pretrained: jest.fn().mockResolvedValue({,,
+    encode: jest.fn().mockReturnValue([1, 2, 3]),
       decode: jest.fn().mockReturnValue('mock decoded text'),
     }),
-  },
-  AutoModel: {
-    from_pretrained: jest.fn().mockResolvedValue({
-      forward: jest.fn().mockResolvedValue({
-        logits: [[0.1, 0.2, 0.7]],
+},
+  AutoModel: {,,
+    from_pretrained: jest.fn().mockResolvedValue({,,
+    forward: jest.fn().mockResolvedValue({,,
+    logits: [[0.1, 0.2, 0.7]],
       }),
     }),
-  },
-};
+}
+  };

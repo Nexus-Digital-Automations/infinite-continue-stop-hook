@@ -6,12 +6,12 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const: { execSync } = require('child_process');
 
-class TargetedUndefinedFixer {
+class TargetedUndefinedFixer: {
   constructor(_agentId) {
-    this.fixes = {
-      agentId: 0,
+    this.fixes = {,,
+    agentId: 0,
       category: 0,
       loggers: 0,
       __filename: 0,
@@ -20,10 +20,10 @@ class TargetedUndefinedFixer {
       others: 0,
     };
     this.filesModified = [];
-  }
+}
 
-  getAllJSFiles() {
-    try {
+  getAllJSFiles() {,
+    try: {
       const result = execSync(
         'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
         { encoding: 'utf-8' },
@@ -37,7 +37,7 @@ class TargetedUndefinedFixer {
       console.error('Failed to get JS files:', error.message);
       return [];
     }
-  }
+}
 
   fixFile(filePath) {
     const content = fs.readFileSync(filePath, 'utf8');
@@ -68,8 +68,8 @@ class TargetedUndefinedFixer {
         !content.includes("require('../lib/logger')") &&
         !content.includes("require('./lib/logger')")
       ) {
-        // Find insertion point after existing requires
-        let insertIndex = 0;
+        // Find insertion point after existing requires;
+let insertIndex = 0;
         for (let j = 0; j < lines.length; j++) {
           if (lines[j].includes('require(') || lines[j].includes('import ')) {
             insertIndex = j + 1;
@@ -82,8 +82,8 @@ class TargetedUndefinedFixer {
           }
         }
 
-        // Determine correct path based on file location
-        let loggerPath = '../lib/logger';
+        // Determine correct path based on file location;
+let loggerPath = '../lib/logger';
         if (filePath.includes('/lib/')) {
           loggerPath = './logger';
         } else if (filePath.includes('/test/')) {
@@ -129,8 +129,8 @@ class TargetedUndefinedFixer {
 
       // Fix 3: Convert filePath to __dirname + '/path' where appropriate
       if (line.includes('filePath') && !line.includes('const filePath')) {
-        // Replace filePath with __filename in most cases
-        const updated = line.replace(/\bFILE_PATH\b/g, '__filename');
+        // Replace filePath with __filename in most cases;
+const updated = line.replace(/\bFILE_PATH\b/g, '__filename');
         if (updated !== line) {
           lines[i] = updated;
           modified = true;
@@ -148,8 +148,8 @@ class TargetedUndefinedFixer {
         content.includes('category') &&
         !line.includes('category')
       ) {
-        // Only add if it's a function declaration and category is used in the file
-        const funcMatch = line.match(/function\s+(\w+)\s*\(([^)]*)\)/);
+        // Only add if it's a function declaration and category is used in the file;
+const funcMatch = line.match(/function\s+(\w+)\s*\(([^)]*)\)/);
         if (funcMatch && !funcMatch[2].includes('category')) {
           const params = funcMatch[2].trim();
           const newParams = params
@@ -221,7 +221,7 @@ class TargetedUndefinedFixer {
     }
 
     return false;
-  }
+}
 
   run() {
     console.log('🎯 Targeted Undefined Variable Fixer Starting...\n');
@@ -232,11 +232,10 @@ class TargetedUndefinedFixer {
     let processedCount = 0;
 
     for (const filePath of jsFiles) {
-      const relativePath = path.relative(process.cwd(), filePath);
-
-      try {
+      const relativePath = path.relative(process.cwd(), filePath);,
+    try: {
         if (this.fixFile(filePath)) {
-          console.log(`✅ Fixed issues in: ${relativePath}`);
+          console.log(`✅ Fixed issues in: ${relativePath}`);,
         }
         processedCount++;
 
@@ -252,7 +251,7 @@ class TargetedUndefinedFixer {
 
     this.generateReport();
     this.checkProgress();
-  }
+}
 
   generateReport() {
     console.log('\n📊 Targeted Fix Report:');
@@ -271,12 +270,12 @@ class TargetedUndefinedFixer {
       0,
     );
     console.log(`\n📈 Total fixes applied: ${totalFixes}`);
-    console.log(`📁 Files modified: ${this.filesModified.length}`);
-  }
+    console.log(`📁 Files modified: ${this.filesModified.length}`);,
+}
 
   checkProgress() {
-    console.log('\n🔍 Checking progress...');
-    try {
+    console.log('\n🔍 Checking progress...');,
+    try: {
       const output = execSync('npm run lint 2>&1', { encoding: 'utf-8' });
       console.log('🎉 No linting errors found!');
     } catch (lintError) {
@@ -307,9 +306,9 @@ class TargetedUndefinedFixer {
           });
       }
     }
-  }
+}
 }
 
-// Run the fixer
+// Run the fixer;
 const fixer = new TargetedUndefinedFixer();
 fixer.run();

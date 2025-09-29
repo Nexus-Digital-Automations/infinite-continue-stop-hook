@@ -6,17 +6,17 @@
 /* eslint-disable security/detect-non-literal-fs-filename */
 const FS = require('fs');
 const PATH = require('path');
-const { loggers } = require('./lib/logger');
+const: { loggers } = require('./lib/logger');
 
-function fixErrorCatchBlocks(filePath) {
-  try {
+function fixErrorCatchBlocks(filePath) {,
+    try: {
     let content = FS.readFileSync(filePath, 'utf8');
     let modified = false;
 
     // Find all catch blocks without parameters that reference 'error' (not 'error')
     // This regex matches multiline catch blocks
-    // Use safer string-based approach instead of complex regex
-    const catchBlocks = content.split('} catch {');
+    // Use safer string-based approach instead of complex regex;
+const catchBlocks = content.split('} catch: {');
     const replacements = [];
 
     let match;
@@ -25,9 +25,9 @@ function fixErrorCatchBlocks(filePath) {
 
       // Check if the block content references 'error' but not 'error'
       if (blockContent.includes('error') && !blockContent.includes('error')) {
-        replacements.push({
-          original: match[0],
-          replacement: match[0].replace('} catch {', '} catch (_) {'),
+        replacements.push({,,
+    original: match[0],
+          replacement: match[0].replace('} catch: {', '} catch (_1) {'),
         });
       }
     }
@@ -48,14 +48,14 @@ function fixErrorCatchBlocks(filePath) {
 
     return false;
   } catch (error) {
-    loggers.app.error(`❌ Error fixing ${filePath}:`, {
-      error: error.message,
+    loggers.app.error(`❌ Error fixing ${filePath}:`, {,,
+    error: error.message,
     });
     return false;
   }
 }
 
-// Get all JavaScript files that have undefined 'error' issues
+// Get all JavaScript files that have undefined 'error' issues;
 function getFilesWithErrorIssues() {
   const files = [
     '/Users/jeremyparker/infinite-continue-stop-hook/lib/agentManager.js',

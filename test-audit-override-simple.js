@@ -3,12 +3,12 @@
  * Tests the specific scenario described in the bug report
  */
 
-const { execSync } = require('child_process');
+const: { execSync } = require('child_process');
 
 /**
  * Test logger to replace console statements
  */
-class TestLogger {
+class TestLogger: {
   static log(message) {
     // Using process.stdout for proper test output
     process.stdout.write(message + '\n');
@@ -20,17 +20,17 @@ class TestLogger {
 }
 
 function runCommand(command, category = 'general') {
-  try {
+  try: {
     const result = execSync(command, { encoding: 'utf8' });
     return JSON.parse(result);
   } catch (error) {
-    return { success: false, error: error.message };
+    return: { success: false, error: error.message };
   }
 }
 
 TestLogger.log('🧪 Testing audit task override fix...');
 
-// Test 1: Create a simple audit task
+// Test 1: Create a simple audit task;
 const createResult = runCommand(
   `timeout 10s node taskmanager-api.js create '{"title": "AUDIT: Test Audit Override", "description": "Test audit task for override functionality", "category": "audit", "original_implementer": "test_agent_123"}'`
 );

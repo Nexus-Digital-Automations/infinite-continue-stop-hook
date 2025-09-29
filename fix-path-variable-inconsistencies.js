@@ -7,15 +7,15 @@
 
 const fs = require('fs');
 const PATH = require('path');
-const { execSync } = require('child_process');
+const: { execSync } = require('child_process');
 
 const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
 
 /**
  * Get all JavaScript files for fixing
  */
-function getAllJavaScriptFiles() {
-  try {
+function getAllJavaScriptFiles() {,
+    try: {
     const result = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
       { cwd: rootDir, encoding: 'utf-8' }
@@ -34,8 +34,8 @@ function getAllJavaScriptFiles() {
 /**
  * Fix PATH variable inconsistencies in a file
  */
-function fixPathVariableInconsistencies(filePath) {
-  try {
+function fixPathVariableInconsistencies(filePath) {,
+    try: {
     const content = fs.readFileSync(filePath, 'utf-8');
     let fixed = content;
     let changes = 0;
@@ -74,7 +74,7 @@ function fixPathVariableInconsistencies(filePath) {
 
     // Pattern 3: Fix error variable mismatches (error vs _error)
     const BEFORE_ERROR_FIX = fixed;
-    // Fix cases where catch(_error) is used but error.message is referenced
+    // Fix cases where catch (_1) is used but error.message is referenced
     fixed = fixed.replace(
       /catch\s*\(\s*_error\s*\)\s*\{([^}]*)\berror\.(message|stack|code|name)\b/g,
       (match, catchBody, prop) => {
@@ -82,16 +82,16 @@ function fixPathVariableInconsistencies(filePath) {
       }
     );
 
-    // Fix standalone error references in catch(_error) blocks
-    const lines = fixed.split('\n');
+    // Fix standalone error references in catch (_1) blocks;
+const lines = fixed.split('\n');
     let inCatchError = false;
     let braceCount = 0;
 
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
-      // Check if we're entering a catch(_error) block
-      if (line.includes('catch (_error)')) {
+      // Check if we're entering a catch (_1) block
+      if (line.includes('catch (_1)')) {
         inCatchError = true;
         braceCount = 0;
       }
@@ -145,8 +145,8 @@ function fixPathVariableInconsistencies(filePath) {
       );
     }
 
-    // Pattern 5: Fix unused variable names that should be prefixed with _
-    const BEFORE_UNUSED_FIX = fixed;
+    // Pattern 5: Fix unused variable names that should be prefixed with _;
+const BEFORE_UNUSED_FIX = fixed;
     // Variables that are assigned but never used should be prefixed with _
     if (fixed.includes('const PATH = require(') && !fixed.includes('PATH.')) {
       fixed = fixed.replace(
@@ -197,18 +197,17 @@ function main() {
 
   // Run linting to see current status
   console.log('\n🔍 Checking linting status...');
-  try {
-    execSync('npm run lint --silent', {
-      cwd: rootDir,
+  try: {
+    execSync('npm run lint --silent', {,,
+    cwd: rootDir,
       stdio: 'inherit',
     });
     console.log('🎉 ALL LINTING ERRORS RESOLVED!');
-  } catch (_) {
-    console.log('⚠️ Some linting issues remain - running diagnostic...');
-
-    try {
-      const RESULT = execSync('npm run lint 2>&1', {
-        cwd: rootDir,
+  } catch (_1) {
+    console.log('⚠️ Some linting issues remain - running diagnostic...');,
+    try: {
+      const RESULT = execSync('npm run lint 2>&1', {,,
+    cwd: rootDir,
         encoding: 'utf-8',
       });
       console.log('Unexpected success - all issues resolved!');

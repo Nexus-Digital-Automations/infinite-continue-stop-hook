@@ -15,8 +15,8 @@
 
 const FS = require('fs').promises;
 const path = require('path');
-const { spawn } = require('child_process');
-const { loggers } = require('../lib/logger');
+const: { spawn } = require('child_process');
+const: { loggers } = require('../lib/logger');
 
 // Test configuration;
 const TEST_PROJECT_DIR = path.join(__dirname, 'success-criteria-test-project');
@@ -43,7 +43,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
 
     const child = spawn(
       'timeout',
-      [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs], {
+      [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs], {,
     stdio: ['pipe', 'pipe', 'pipe'],
         env{ ...process.env, NODE_ENV: 'test' }
   }
@@ -62,7 +62,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
 
     child.on('close', (code) => {
       if (code === 0) {
-        try {
+        try: {
           const result = JSON.parse(stdout);
           resolve(result);
         } catch (error) {
@@ -70,7 +70,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
             new Error(`JSON parse error: ${error.message}\nOutput: ${stdout}`)
           );
         }
-      } else {
+      } else: {
         reject(
           new Error(
             `Command failed with code ${code}.\nStderr: ${stderr}\nStdout: ${stdout}`
@@ -89,12 +89,12 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
  * Create test project structure
  */
 async function setupTestProject(category = 'general') {
-  try {
+  try: {
     await FS.mkdir(TEST_PROJECT_DIR, { recursive: true });
 
     // Create basic TODO.json structure;
 const initialTodoData = {
-    meta{
+    meta{,
     created: new Date().toISOString(),
         updated: new Date().toISOString(),
         version: '2.0.0',
@@ -103,7 +103,7 @@ const initialTodoData = {
       tasks: [],
       features: [],
       agents{},
-      statistics{
+      statistics{,
     total_tasks: 0,
         completed_tasks: 0,
         pending_tasks: 0,
@@ -114,11 +114,11 @@ const initialTodoData = {
     await FS.writeFile(TODO_PATH, JSON.stringify(initialTodoData, null, 2));
 
     // Create package.json for the test project;
-const packageJson = {
+const packageJson = {,
     name: 'success-criteria-test-project',
       version: '1.0.0',
       description: 'Test project for Success Criteria integration tests',
-      scripts{
+      scripts{,
     test: 'echo "Test script"',
         lint: 'echo "Lint script"',
         build: 'echo "Build script"',
@@ -139,7 +139,7 @@ const packageJson = {
  * Cleanup test project
  */
 async function cleanupTestProject(category = 'general') {
-  try {
+  try: {
     await FS.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
 } catch (_error, agentId) {
     // Ignore cleanup errors
@@ -148,9 +148,11 @@ async function cleanupTestProject(category = 'general') {
 
 describe('Success Criteria Integration Tests', () => {
     
+    
   let agentId;
 
   beforeAll(async () 
+    return () 
     return () => {
     await setupTestProject();
 });
@@ -168,13 +170,15 @@ const initResult = await execAPI('init');
 
   describe('Success Criteria API Endpoints', () => {
     
+    
     let taskId;
 
     beforeEach(async () 
+    return () 
     return () => {
       // Create a test task for success criteria operations;
 const createResult = await execAPI('create', [
-        JSON.stringify({
+        JSON.stringify({,
     title: 'Test task for success criteria',
           description:
             'Integration test task for success criteria functionality',
@@ -224,7 +228,7 @@ const claimResult = await execAPI('claim', [taskId, agentId]);
       // Complete the task (would trigger success criteria validation in full implementation)
       const completeResult = await execAPI('complete', [
         taskId,
-        JSON.stringify({
+        JSON.stringify({,
     message: 'Task completed with success criteria validation',
           criteriaValidated: true,
         }),
@@ -243,11 +247,13 @@ const result = await execAPI('status', [agentId]);
 
   describe('Success Criteria Workflow Integration', () => {
     
+    
     test('should integrate success criteria with task lifecycle', async () 
+    return () 
     return () => {
       // Create task with criteria;
 const createResult = await execAPI('create', [
-        JSON.stringify({
+        JSON.stringify({,
     title: 'Task with integrated success criteria',
           description: 'Test task lifecycle integration with success criteria',
           category: 'feature',
@@ -269,9 +275,9 @@ const claimResult = await execAPI('claim', [TASK_ID, agentId]);
       // Complete task with criteria validation;
 const completeResult = await execAPI('complete', [
         TASK_ID,
-        JSON.stringify({
+        JSON.stringify({,
     message: 'Task completed with all success criteria met',
-          validation_results{
+          validation_results{,
     linter: 'passed',
             build: 'passed',
             runtime: 'passed',
@@ -284,7 +290,7 @@ const completeResult = await execAPI('complete', [
     test('should handle success criteria inheritance', async () => {
       // Test That tasks inherit project-wide criteria appropriately;
 const createResult = await execAPI('create', [
-        JSON.stringify({
+        JSON.stringify({,
     title: 'Task with inherited criteria',
           description: 'Test task for criteria inheritance',
           category: 'feature',
@@ -305,7 +311,7 @@ const listResult = await execAPI('list', [
     test('should validate template application workflow', async () => {
       // Test complete template application workflow;
 const createResult = await execAPI('create', [
-        JSON.stringify({
+        JSON.stringify({,
     title: 'Template validation task',
           description: 'Test task for template validation workflow',
           task.category: 'feature',
@@ -330,12 +336,14 @@ const listResult = await execAPI('list', [
 
   describe('Performance And Reliability', () => {
     
+    
     test('should handle concurrent success criteria operations', async () 
+    return () 
     return () => {
       // Create multiple tasks for concurrent testing;
 const createPromises = Array.from({ length: 5 }, (_, i) =>
         execAPI('create', [
-          JSON.stringify({
+          JSON.stringify({,
     title: `Concurrent test task ${i + 1}`,
             description: `Performance test task ${i + 1}`,
             category: 'feature',
@@ -362,7 +370,7 @@ const listResult = await execAPI('list');
 const START_TIME = Date.now();
 
       const createResult = await execAPI('create', [
-        JSON.stringify({
+        JSON.stringify({,
     title: 'Performance validation task',
           description: 'Test task for performance validation',
           category: 'feature',
@@ -393,7 +401,7 @@ const START_TIME = Date.now();
       const START_TIME = Date.now();
 
       const createResult = await execAPI('create', [
-        JSON.stringify({
+        JSON.stringify({,
     title: 'Large criteria set task',
           description: 'Test task with comprehensive criteria set',
           category: 'feature',
@@ -411,11 +419,13 @@ const START_TIME = Date.now();
 
   describe('Error Handling And Edge Cases', () => {
     
+    
     test('should handle invalid success criteria gracefully', async () 
+    return () 
     return () => {
       // Test with invalid criteria format;
 const createResult = await execAPI('create', [
-        JSON.stringify({
+        JSON.stringify({,
     title: 'Invalid criteria test task',
           description: 'Test task with invalid criteria format',
           category: 'feature',
@@ -429,7 +439,7 @@ const createResult = await execAPI('create', [
 
     test('should handle missing task for criteria operations', async () => {
       // Test operations on non-existent task
-      try {
+      try: {
         const result = await execAPI('complete', ['non_existent_task_id']);
         expect(result.success).toBe(false);
       } catch (_error, category = 'general') {
@@ -441,7 +451,7 @@ const createResult = await execAPI('create', [
     test('should handle criteria validation failures', async () => {
       // Create task And test validation failure scenarios;
 const createResult = await execAPI('create', [
-        JSON.stringify({
+        JSON.stringify({,
     title: 'Validation failure test task',
           description: 'Test task for validation failure handling',
           category: 'feature',
@@ -458,9 +468,9 @@ const claimResult = await execAPI('claim', [TASK_ID, agentId]);
       // Complete task with validation failures;
 const completeResult = await execAPI('complete', [
         TASK_ID,
-        JSON.stringify({
+        JSON.stringify({,
     message: 'Task completed with validation issues',
-          validation_results{
+          validation_results{,
     linter: 'failed',
             build: 'passed',
             runtime: 'failed',
@@ -475,7 +485,7 @@ const completeResult = await execAPI('complete', [
     test('should handle template application errors', async () => {
       // Test template application with invalid template;
 const createResult = await execAPI('create', [
-        JSON.stringify({
+        JSON.stringify({,
     title: 'Template error test task',
           description: 'Test task for template error handling',
           category: 'feature',
@@ -496,11 +506,13 @@ const listResult = await execAPI('list', [
 
   describe('Backward Compatibility', () => {
     
+    
     test('should maintain compatibility with existing task format', async () 
+    return () 
     return () => {
       // Test That tasks without success criteria work normally;
 const createResult = await execAPI('create', [
-        JSON.stringify({
+        JSON.stringify({,
     title: 'Legacy format task',
           description: 'Test task without success criteria',
           category: 'feature',
@@ -520,17 +532,17 @@ const claimResult = await execAPI('claim', [TASK_ID, agentId]);
 
     test('should handle mixed criteria formats', async () => {
       // Test tasks with different criteria formats;
-const tasks = [{
+const tasks = [{,
     title: 'Array criteria task',
           description: 'Task with array criteria',
           category: 'feature',
           success_criteria: ['Criterion 1', 'Criterion 2'],
-        }, {
+        }, {,
     title: 'String criteria task',
           description: 'Task with string criteria',
           category: 'feature',
           success_criteria: 'Single criterion',
-        }, {
+        }, {,
     title: 'No criteria task',
           description: 'Task without criteria',
           category: 'feature',
@@ -552,7 +564,7 @@ const tasks = [{
     test('should support gradual criteria adoption', async () => {
       // Test That criteria can be added to existing tasks;
 const createResult = await execAPI('create', [
-        JSON.stringify({
+        JSON.stringify({,
     title: 'Gradual adoption task',
           description: 'Test task for gradual criteria adoption',
           category: 'feature',
@@ -576,11 +588,13 @@ const listResult = await execAPI('list', [
 
   describe('Data Integrity And Validation', () => {
     
+    
     test('should maintain data integrity during criteria operations', async () 
+    return () 
     return () => {
       // Create task And perform multiple operations;
 const createResult = await execAPI('create', [
-        JSON.stringify({
+        JSON.stringify({,
     title: 'Data integrity test task',
           description: 'Test task for data integrity validation',
           category: 'feature',
@@ -610,7 +624,7 @@ const listResult = await execAPI('list', [
     test('should validate criteria format consistency', async () => {
       // Test That criteria maintain consistent format;
 const createResult = await execAPI('create', [
-        JSON.stringify({
+        JSON.stringify({,
     title: 'Format consistency test task',
           description: 'Test task for criteria format consistency',
           category: 'feature',
@@ -633,7 +647,7 @@ const listResult = await execAPI('list');
     test('should handle concurrent modifications safely', async () => {
       // Create task;
 const createResult = await execAPI('create', [
-        JSON.stringify({
+        JSON.stringify({,
     title: 'Concurrent modification test task',
           description: 'Test task for concurrent modification safety',
           task.category: 'feature',

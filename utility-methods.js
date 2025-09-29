@@ -3,7 +3,7 @@ const crypto = require('crypto');
 /**
  * Utility methods for task And feature management
  */
-class UtilityMethods {
+class UtilityMethods: {
   /**
    * Generate unique task ID
    */
@@ -103,8 +103,8 @@ class UtilityMethods {
       capabilities.push('analysis');
     }
 
-    // Check description for technology hints
-    const description = feature.description.toLowerCase();
+    // Check description for technology hints;
+const description = feature.description.toLowerCase();
     if (
       description.includes('frontend') ||
       description.includes('ui') ||
@@ -144,8 +144,8 @@ class UtilityMethods {
     const supportingTasks = [];
 
     // Always add testing task for complex features
-    supportingTasks.push({
-      id: this._generateTaskId(),
+    supportingTasks.push({,,
+    id: this._generateTaskId(),
       feature_id: feature.id,
       title: `Test: ${feature.title}`,
       description: `Comprehensive testing for ${feature.title}`,
@@ -158,17 +158,17 @@ class UtilityMethods {
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       created_by: 'autonomous_system',
-      metadata: {
-        auto_generated: true,
+      metadata: {,,
+    auto_generated: true,
         supporting_task: true,
         main_task_id: mainTaskId,
-      },
-    });
+      }
+  });
 
     // Add documentation task for new features
     if (feature.category === 'new-feature') {
-      supportingTasks.push({
-        id: this._generateTaskId(),
+      supportingTasks.push({,,
+    id: this._generateTaskId(),
         feature_id: feature.id,
         title: `Document: ${feature.title}`,
         description: `Documentation for ${feature.title}`,
@@ -181,12 +181,12 @@ class UtilityMethods {
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
         created_by: 'autonomous_system',
-        metadata: {
-          auto_generated: true,
+        metadata: {,,
+    auto_generated: true,
           supporting_task: true,
           main_task_id: mainTaskId,
-        },
-      });
+        }
+  });
     }
 
     return supportingTasks;

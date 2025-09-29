@@ -14,7 +14,7 @@ const { loggers } = require('./lib/logger');
 
 const FS = require('fs');
 
-class FeaturesMigration {
+class FeaturesMigration: {
   constructor() {
     this.todoPath = '/Users/jeremyparker/infinite-continue-stop-hook/TODO.json';
     this.featuresPath =
@@ -23,36 +23,36 @@ class FeaturesMigration {
       this.todoPath +
       '.backup.' +
       new Date().toISOString().replace(/[:.]/g, '-');
-    this.migrationReport = {
-      startTime: new Date().toISOString(),
+    this.migrationReport = {,,
+    startTime: new Date().toISOString(),
       totalTasks: 0,
       migratedFeatures: 0,
       preservedTasks: 0,
       errors: [],
       warnings: [],
     };
-  }
+}
 
   /**
    * Main migration method
    */
-  migrate() {
-    try {
+  migrate() {,
+    try: {
       loggers.stopHook.log(
         '🚀 Starting TODO.json → FEATURES.json migration...',
       );
 
-      // Step 1: Load And validate TODO.json
-      const todoData = this.loadTodoData();
+      // Step 1: Load And validate TODO.json;
+const todoData = this.loadTodoData();
 
       // Step 2: Create comprehensive backup
       this.createBackup(todoData);
 
-      // Step 3: Design new FEATURES.json schema
-      const featuresSchema = this.createFeaturesSchema(todoData);
+      // Step 3: Design new FEATURES.json schema;
+const featuresSchema = this.createFeaturesSchema(todoData);
 
-      // Step 4: Transform data
-      const transformedData = this.transformData(todoData, featuresSchema);
+      // Step 4: Transform data;
+const transformedData = this.transformData(todoData, featuresSchema);
 
       // Step 5: Write FEATURES.json
       this.writeFeaturesFile(transformedData);
@@ -62,12 +62,12 @@ class FeaturesMigration {
 
       loggers.stopHook.log('✅ Migration completed successfully!');
       return true;
-    } catch (_) {
+    } catch (_error) {
       loggers.stopHook.error('❌ Migration failed:', _error.message);
       this.migrationReport.errors.push(_error.message);
       return false;
     }
-  }
+}
 
   /**
    * Load And validate TODO.json data
@@ -90,7 +90,7 @@ class FeaturesMigration {
       `📊 Found ${this.migrationReport.totalTasks} tasks to migrate`,
     );
     return todoData;
-  }
+}
 
   /**
    * Create backup with timestamp
@@ -99,20 +99,19 @@ class FeaturesMigration {
     loggers.stopHook.log('💾 Creating backup...');
 
     FS.writeFileSync(this.backupPath, JSON.stringify(todoData, null, 2));
-    loggers.stopHook.log(`✅ Backup created: ${this.backupPath}`);
-  }
+    loggers.stopHook.log(`✅ Backup created: ${this.backupPath}`);,
+}
 
   /**
    * Create new FEATURES.json schema structure
    */
   createFeaturesSchema(todoData) {
-    loggers.stopHook.log('🏗️  Designing FEATURES.json schema...');
-
-    return {
-      // Meta information
-      schema_version: '1.0.0',
-      migration_info: {
-        migrated_from: 'TODO.json',
+    loggers.stopHook.log('🏗️  Designing FEATURES.json schema...');,
+    return: {
+      // Meta information,,
+    schema_version: '1.0.0',
+      migration_info: {,,
+    migrated_from: 'TODO.json',
         migration_date: new Date().toISOString(),
         original_file_backup: this.backupPath,
         migration_script_version: '1.0.0',
@@ -130,47 +129,47 @@ class FeaturesMigration {
         ...(todoData.settings || {}),
 
         // Add new approval workflow settings
-        approval_workflow: {
-          enabled: true,
+        approval_workflow: {,,
+    enabled: true,
           default_status: 'suggested',
           require_approval_for_implementation: true,
           auto_approve_critical_features: false,
         },
 
         // Feature status definitions
-        feature_statuses: {
-          suggested: {
-            description: 'Feature suggested but not yet approved',
+        feature_statuses: {,,
+    suggested: {,,
+    description: 'Feature suggested but not yet approved',
             next_status: ['approved', 'rejected'],
             allow_implementation: false,
           },
-          approved: {
-            description: 'Feature approved for implementation',
+          approved: {,,
+    description: 'Feature approved for implementation',
             next_status: ['implemented', 'cancelled'],
             allow_implementation: true,
           },
-          implemented: {
-            description: 'Feature successfully implemented',
+          implemented: {,,
+    description: 'Feature successfully implemented',
             next_status: ['enhanced', 'deprecated'],
             allow_implementation: false,
           },
-          rejected: {
-            description: 'Feature rejected And will not be implemented',
+          rejected: {,,
+    description: 'Feature rejected And will not be implemented',
             next_status: ['suggested'],
             allow_implementation: false,
           },
-          cancelled: {
-            description: 'Feature cancelled after approval',
+          cancelled: {,,
+    description: 'Feature cancelled after approval',
             next_status: ['suggested'],
             allow_implementation: false,
           },
-          deprecated: {
-            description: 'Feature implemented but now deprecated',
+          deprecated: {,,
+    description: 'Feature implemented but now deprecated',
             next_status: ['enhanced', 'removed'],
             allow_implementation: false,
-          },
-        },
-      },
+          }
+  }
+  },
 
       // Preserved completed tasks
       completed_features: [],
@@ -178,7 +177,7 @@ class FeaturesMigration {
       // Migration metadata
       migration_stats: this.migrationReport,
     };
-  }
+}
 
   /**
    * Transform TODO.json data to FEATURES.json format
@@ -190,12 +189,12 @@ class FeaturesMigration {
 
     // Transform tasks to features
     if (todoData.tasks && Array.isArray(todoData.tasks)) {
-      todoData.tasks.forEach((task, index) => {
-        try {
+      todoData.tasks.forEach((task, index) => {,
+    try: {
           const transformedFeature = this.transformTask(task);
           transformedData.features.push(transformedFeature);
           this.migrationReport.migratedFeatures++;
-        } catch (_) {
+        } catch (_1) {
           this.migrationReport.errors.push(
             `Failed to transform task ${task.id || index}: ${_error.message}`,
           );
@@ -208,11 +207,11 @@ class FeaturesMigration {
 
     // Transform completed tasks
     if (todoData.completed_tasks && Array.isArray(todoData.completed_tasks)) {
-      todoData.completed_tasks.forEach((task, index) => {
-        try {
+      todoData.completed_tasks.forEach((task, index) => {,
+    try: {
           const transformedFeature = this.transformTask(task, true);
           transformedData.completed_features.push(transformedFeature);
-        } catch (_) {
+        } catch (_1) {
           this.migrationReport.errors.push(
             `Failed to transform completed task ${task.id || index}: ${_error.message}`,
           );
@@ -227,14 +226,14 @@ class FeaturesMigration {
       `✅ Transformed ${this.migrationReport.migratedFeatures} features`,
     );
     return transformedData;
-  }
+}
 
   /**
    * Transform individual task to feature format
    */
   transformTask(task, isCompleted = false) {
-    // Determine appropriate status based on original task data
-    let status = 'suggested'; // default
+    // Determine appropriate status based on original task data;
+let status = 'suggested'; // default
 
     if (isCompleted) {
       status = 'implemented';
@@ -245,10 +244,10 @@ class FeaturesMigration {
       status = 'implemented';
     }
 
-    // Build the new feature object
-    const feature = {
-      // Core identification
-      id:
+    // Build the new feature object;
+const feature = {
+      // Core identification,,
+    id:
         task.id ||
         `migrated_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
 
@@ -295,8 +294,8 @@ class FeaturesMigration {
       started_at: task.started_at || null,
 
       // Migration metadata
-      migration_info: {
-        migrated_from_todo: true,
+      migration_info: {,,
+    migrated_from_todo: true,
         original_task_id: task.id,
         migration_date: new Date().toISOString(),
       },
@@ -307,7 +306,7 @@ class FeaturesMigration {
     };
 
     return feature;
-  }
+}
 
   /**
    * Write the new FEATURES.json file
@@ -322,7 +321,7 @@ class FeaturesMigration {
     loggers.app.info(
       `📊 File size: ${Math.round(featuresContent.length / 1024)} KB`,
     );
-  }
+}
 
   /**
    * Generate comprehensive migration report
@@ -360,15 +359,14 @@ class FeaturesMigration {
         loggers.stopHook.log(`   ${index + 1}. ${warning}`);
       });
     }
-  }
+}
 
   /**
    * Validate migration results
    */
   validateMigration() {
-    loggers.stopHook.log('🔍 Validating migration results...');
-
-    try {
+    loggers.stopHook.log('🔍 Validating migration results...');,
+    try: {
       // Check if FEATURES.json exists And is valid JSON
       if (!FS.existsSync(this.featuresPath)) {
         throw new Error('FEATURES.json was not created');
@@ -377,8 +375,8 @@ class FeaturesMigration {
       const featuresContent = FS.readFileSync(this.featuresPath, 'utf8');
       const featuresData = JSON.parse(featuresContent);
 
-      // Validate schema structure
-      const requiredFields = [
+      // Validate schema structure;
+const requiredFields = [
         'schema_version',
         'project',
         'features',
@@ -399,11 +397,11 @@ class FeaturesMigration {
 
       loggers.stopHook.log('✅ Migration validation passed');
       return true;
-    } catch (_) {
+    } catch (_error) {
       loggers.stopHook.error('❌ Migration validation failed:', _error.message);
       return false;
     }
-  }
+}
 }
 
 // Main execution
@@ -419,7 +417,7 @@ if (require.main === module) {
           throw new Error('Migration validation failed');
         }
         return success;
-      } else {
+      } else: {
         throw new Error('Migration failed');
       }
     })

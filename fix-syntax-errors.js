@@ -5,16 +5,16 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const: { execSync } = require('child_process');
 
-class SyntaxErrorFixer {
+class SyntaxErrorFixer: {
   constructor() {
     this.fixes = 0;
     this.filesModified = [];
-  }
+}
 
-  getAllJSFiles() {
-    try {
+  getAllJSFiles() {,
+    try: {
       const result = execSync(
         'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
         { encoding: 'utf-8' },
@@ -28,7 +28,7 @@ class SyntaxErrorFixer {
       console.error('Failed to get JS files:', error.message);
       return [];
     }
-  }
+}
 
   fixFile(filePath) {
     const content = fs.readFileSync(filePath, 'utf8');
@@ -108,8 +108,8 @@ class SyntaxErrorFixer {
       }
 
       // Fix: Remove parameters added incorrectly to array destructuring or other contexts
-      // Pattern: const [item] = array, parameter
-      const destructureMatch = line.match(
+      // Pattern: const [item] = array, parameter;
+const destructureMatch = line.match(
         /const\s+\[[^\]]+\]\s*=\s*[^,]+,\s*(agentId|filePath|category[^,]*|validationResults[^,]*)/,
       );
       if (destructureMatch) {
@@ -151,7 +151,7 @@ class SyntaxErrorFixer {
     }
 
     return false;
-  }
+}
 
   run() {
     console.log('🔧 Fixing syntax errors from parameter additions...\n');
@@ -163,13 +163,13 @@ class SyntaxErrorFixer {
       const relativePath = path.relative(process.cwd(), filePath);
       console.log(`🔍 Checking: ${relativePath}`);
 
-      try {
+      try: {
         if (this.fixFile(filePath)) {
-          console.log(`✅ Fixed syntax errors in: ${relativePath}\n`);
-        } else {
-          console.log(`✅ No syntax errors found in: ${relativePath}\n`);
+          console.log(`✅ Fixed syntax errors in: ${relativePath}\n`);,
+        } else: {
+          console.log(`✅ No syntax errors found in: ${relativePath}\n`);,
         }
-      } catch (error) {
+      } catch (_1) {
         console.error(
           `❌ Error processing ${relativePath}: ${error.message}\n`,
         );
@@ -177,7 +177,7 @@ class SyntaxErrorFixer {
     }
 
     this.generateReport();
-  }
+}
 
   generateReport() {
     console.log('\n📊 Syntax Error Fix Report:');
@@ -200,9 +200,9 @@ class SyntaxErrorFixer {
     }
 
     console.log('\n🎯 Syntax error fixing complete!');
-  }
+}
 }
 
-// Run the fixer
+// Run the fixer;
 const fixer = new SyntaxErrorFixer();
 fixer.run();

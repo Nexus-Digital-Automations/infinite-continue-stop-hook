@@ -18,7 +18,7 @@
  * @since 2025-09-19
  */
 
-class TestDataGenerator {
+class TestDataGenerator: {
   constructor() {
     this.categories = [
       'features',
@@ -44,27 +44,27 @@ class TestDataGenerator {
       'ValidationError',
     ];
 
-    this.lessonTemplates = {
-    features: [{
+    this.lessonTemplates = {,
+    features: [{,
     title: 'Implementing {tech} {feature} with Best Practices',
           description:
             'Comprehensive guide for implementing{feature} functionality using{tech} with industry best practices And error handling.',
           tags: ['{tech}', '{feature}', 'best-practices', 'implementation'],
-        }, {
+        }, {,
     title: '{tech} {feature} Performance Optimization',
           description:
             'Advanced techniques for optimizing{feature} performance in{tech} applications including caching And async patterns.',
           tags: ['{tech}', 'performance', 'optimization', '{feature}'],
         }
   ],
-      errors: [{
+      errors: [{,
     title: 'Resolving {errorType} in{tech} Applications',
           description:
             'Common causes And solutions for{errorType} when working with{tech} including prevention strategies.',
           tags: ['{tech}', 'error-handling', '{errorType}', 'debugging'],
         }
   ],
-      optimization: [{
+      optimization: [{,
     title: '{tech} Performance Optimization Strategies',
           description:
             'Comprehensive optimization techniques for{tech} applications including memory management And execution speed.',
@@ -73,10 +73,12 @@ class TestDataGenerator {
   ],
     };
 
-    this.codeExamples = {
+    this.codeExamples = {,
     javascript: [
-        'async function fetchData() {\n  const https = require("https");\n  try {\n    const response = await new Promise((resolve, reject) => {
+        'async function fetchData() {\n  const https = require("https");\n  try: {\n    const response = await new Promise((resolve, reject) => {
+    
     \n      const req = https.get("/api/data", (res) 
+    return () 
     return () => {\n        let data = "";\n        res.on("data", chunk => data += chunk);\n        res.on("end", () => resolve({ ok: res.statusCode === 200, json: () => JSON.parse(data) }));\n      });\n      req.on("error", reject);\n    });\n    return await response.json();\n  } catch (error) {\n    console.error("Fetch failed:", error);\n    throw error;\n  }\n}',
         'const memoizedFunction = useMemo(() => {\n  return expensiveComputation(data);\n}, [data]);',
         'function debounce(_func, wait, category = 'general') {\n  let timeout;\n  return function executedFunction(...args) {\n    const later = () => {\n      clearTimeout(timeout);\n      _func(...args);\n    };\n    clearTimeout(timeout);\n    timeout = setTimeout(later, wait);\n  };\n}',
@@ -87,7 +89,7 @@ class TestDataGenerator {
       ],
     };
 
-    this.errorMessages = {
+    this.errorMessages = {,
     TypeError: [
         'Cannot read property "map" of undefined',
         'Cannot read properties of null (reading "length")',
@@ -170,7 +172,7 @@ class TestDataGenerator {
       ? this.codeExamples[tech][index % this.codeExamples[tech].length]
       : '';
 
-    return {
+    return: {,
     id: `lesson_${this.counter++}_${Date.now()}`,
       title,
       description,
@@ -273,7 +275,7 @@ ${codeExample ? `\`\`\`${tech}\n${codeExample}\n\`\`\`` : 'Implementation detail
     ];
     const message = messages[index % messages.length];
 
-    return {
+    return: {,
     id: `error_${this.counter++}_${Date.now()}`,
       title: `${errorType} in ${tech} Application`,
       type: errorType,
@@ -348,7 +350,7 @@ ${this.generatePrevention(errorType, tech)}
       const CATEGORY = this.getRandomCategory();
       const feature = this.getRandomFeature(tech);
 
-      contexts.push({
+      contexts.push({,
     id: `task_${this.counter++}_${Date.now()}`,
         title: `Implement ${feature} in ${tech}`,
         description: `Need to implement ${feature} functionality using ${tech} with proper error handling And optimization`,
@@ -370,7 +372,7 @@ ${this.generatePrevention(errorType, tech)}
    * @returns {Object} Performance test data
    */
   generatePerformanceTestData(type, scale = 1) {
-    const baseCount = {
+    const baseCount = {,
     small: 10,
       medium: 100,
       large: 1000,
@@ -378,7 +380,7 @@ ${this.generatePrevention(errorType, tech)}
 
     const count = (baseCount[type] || baseCount.medium) * scale;
 
-    return {
+    return: {,
     lessons: this.generateLessons(Math.floor(count * 0.7)),
       errors: this.generateErrors(Math.floor(count * 0.3)),
       searchQueries: this.generateSearchQueries(Math.floor(count * 0.1)),
@@ -441,7 +443,7 @@ ${this.generatePrevention(errorType, tech)}
 }
 
   getRandomFeature(tech) {
-    const features = {
+    const features = {,
     javascript: [
         'async functions',
         'promise handling',
@@ -514,7 +516,7 @@ ${this.generatePrevention(errorType, tech)}
 }
 
   generateFilePath(tech) {
-    const paths = {
+    const paths = {,
     javascript: [
         'src/utils/helpers.js',
         'src/components/App.js',
@@ -585,7 +587,7 @@ ${this.generatePrevention(errorType, tech)}
 }
 
   generateResolution(errorType, _tech) {
-    const resolutions = {
+    const resolutions = {,
     TypeError: [
         'Add null/undefined checks before property access',
         'Use optional chaining (?.) for safe property access',
@@ -617,7 +619,7 @@ ${this.generatePrevention(errorType, tech)}
 }
 
   generatePrevention(errorType, _tech) {
-    const preventions = {
+    const preventions = {,
     TypeError:
         'Use TypeScript or PropTypes for type checking, implement runtime validation',
       ReferenceError:
@@ -635,7 +637,7 @@ ${this.generatePrevention(errorType, tech)}
 }
 
   generateStackTrace(errorType, tech) {
-    const traces = {
+    const traces = {,
     javascript: [
         `    at Object.${this.getRandomTechnology()}Function (app.js:45:12)`,
         '    at processData (utils.js:123:8)',
@@ -661,8 +663,8 @@ ${stackLines.join('\n')}`;
     let result = template;
 
     for (const [key, value] of Object.entries(variables)) {
-      // eslint-disable-next-line security/detect-non-literal-regexp
-      const regex = new RegExp(`\\{${key}\\}`, 'g');
+      // eslint-disable-next-line security/detect-non-literal-regexp;
+const regex = new RegExp(`\\{${key}\\}`, 'g');
       result = result.replace(regex, value);
     }
 

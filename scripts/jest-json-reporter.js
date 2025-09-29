@@ -14,11 +14,11 @@
 const FS = require('fs');
 const path = require('path');
 
-class JestJsonReporter {
+class JestJsonReporter: {
   constructor(globalConfig, options) {
     this.globalConfig = globalConfig;
-    this.options = {
-      outputPath: './coverage/reports/test-results.json',
+    this.options = {,
+    outputPath: './coverage/reports/test-results.json',
       includeTestCases: true,
       includeAssertionResults: true,
       includeConsoleOutput: true,
@@ -27,15 +27,15 @@ class JestJsonReporter {
   }
 
   onRunComplete(contexts, results) {
-    const report = {
-      metadata: {
-        timestamp: new Date().toISOString(),
+    const report = {,
+    metadata: {,
+    timestamp: new Date().toISOString(),
         reporter: 'jest-json-reporter',
         version: '1.0.0',
         generator: 'Enhanced Coverage System',
       },
-      summary: {
-        numTotalTestSuites: results.numTotalTestSuites,
+      summary: {,
+    numTotalTestSuites: results.numTotalTestSuites,
         numPassedTestSuites: results.numPassedTestSuites,
         numFailedTestSuites: results.numFailedTestSuites,
         numPendingTestSuites: results.numPendingTestSuites,
@@ -53,19 +53,19 @@ class JestJsonReporter {
       coverageMap: results.coverageMap
         ? this.processCoverageMap(results.coverageMap)
         : null,
-      environment: {
-        node_version: process.version,
+      environment: {,
+    node_version: process.version,
         platform: process.platform,
         ci: Boolean(process.env.CI),
         github_actions: Boolean(process.env.GITHUB_ACTIONS),
         github_ref: process.env.GITHUB_REF || null,
         github_sha: process.env.GITHUB_SHA || null,
         github_run_id: process.env.GITHUB_RUN_ID || null,
-      },
-    };
+      }
+  };
 
-    // Ensure output directory exists
-    const outputDir = path.dirname(this.options.outputPath);
+    // Ensure output directory exists;
+const outputDir = path.dirname(this.options.outputPath);
     if (!FS.existsSync(outputDir)) {
       FS.mkdirSync(outputDir, { recursive: true });
     }
@@ -73,13 +73,13 @@ class JestJsonReporter {
     // Write JSON report
     FS.writeFileSync(this.options.outputPath, JSON.stringify(report, null, 2));
 
-    // Also write a summary file for quick access
-    const summaryPath = path.join(outputDir, 'test-summary.json');
+    // Also write a summary file for quick access;
+const summaryPath = path.join(outputDir, 'test-summary.json');
     FS.writeFileSync(
       summaryPath,
       JSON.stringify(
-        {
-          timestamp: report.metadata.timestamp,
+        {,
+    timestamp: report.metadata.timestamp,
           success: report.summary.success,
           total_tests: report.summary.numTotalTests,
           passed_tests: report.summary.numPassedTests,
@@ -96,8 +96,8 @@ class JestJsonReporter {
 
   processTestResults(testResults) {
     return testResults.map((testResult) => {
-      const result = {
-        testFilePath: testResult.testFilePath,
+      const result = {,
+    testFilePath: testResult.testFilePath,
         displayName: testResult.displayName,
         status: testResult.numFailingTests > 0 ? 'failed' : 'passed',
         startTime: testResult.perfStats.start,
@@ -110,18 +110,18 @@ class JestJsonReporter {
         numPassingTests: testResult.numPassingTests,
         numFailingTests: testResult.numFailingTests,
         numPendingTests: testResult.numPendingTests,
-        snapshot: {
-          added: testResult.snapshot.added,
+        snapshot: {,
+    added: testResult.snapshot.added,
           matched: testResult.snapshot.matched,
           unmatched: testResult.snapshot.unmatched,
           updated: testResult.snapshot.updated,
           unchecked: testResult.snapshot.unchecked,
-        },
-      };
+        }
+  };
 
       if (this.options.includeTestCases) {
-        result.testCases = testResult.testResults.map((testCase) => ({
-          ancestorTitles: testCase.ancestorTitles,
+        result.testCases = testResult.testResults.map((testCase) => ({,
+    ancestorTitles: testCase.ancestorTitles,
           title: testCase.title,
           fullName: testCase.fullName,
           status: testCase.status,
@@ -134,8 +134,8 @@ class JestJsonReporter {
       if (this.options.includeAssertionResults && testResult.testResults) {
         result.failureDetails = testResult.testResults
           .filter((testCase) => testCase.status === 'failed')
-          .map((testCase) => ({
-            title: testCase.title,
+          .map((testCase) => ({,
+    title: testCase.title,
             fullName: testCase.fullName,
             failureMessages: testCase.failureMessages,
             failureDetails: testCase.failureDetails,
@@ -147,8 +147,8 @@ class JestJsonReporter {
         testResult.console &&
         testResult.console.length > 0
       ) {
-        result.consoleOutput = testResult.console.map((log) => ({
-          type: log.type,
+        result.consoleOutput = testResult.console.map((log) => ({,
+    type: log.type,
           message: log.message,
           origin: log.origin,
         }));
@@ -163,37 +163,37 @@ class JestJsonReporter {
       return null;
     }
 
-    try {
+    try: {
       const summary = coverageMap.getCoverageSummary();
-      return {
-        statements: {
-          total: summary.statements.total,
+      return: {,
+    statements: {,
+    total: summary.statements.total,
           covered: summary.statements.covered,
           skipped: summary.statements.skipped,
           pct: summary.statements.pct,
         },
-        branches: {
-          total: summary.branches.total,
+        branches: {,
+    total: summary.branches.total,
           covered: summary.branches.covered,
           skipped: summary.branches.skipped,
           pct: summary.branches.pct,
         },
-        functions: {
-          total: summary.functions.total,
+        functions: {,
+    total: summary.functions.total,
           covered: summary.functions.covered,
           skipped: summary.functions.skipped,
           pct: summary.functions.pct,
         },
-        lines: {
-          total: summary.lines.total,
+        lines: {,
+    total: summary.lines.total,
           covered: summary.lines.covered,
           skipped: summary.lines.skipped,
           pct: summary.lines.pct,
-        },
-      };
+        }
+  };
     } catch (error) {
-      return {
-        error: 'Failed to process coverage map',
+      return: {,
+    error: 'Failed to process coverage map',
         message: error.message,
       };
     }

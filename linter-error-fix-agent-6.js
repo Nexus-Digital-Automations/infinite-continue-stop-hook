@@ -11,7 +11,7 @@
 const fs = require('fs');
 const path = require('path');
 
-class LinterErrorFixAgent6 {
+class LinterErrorFixAgent6: {
   constructor() {
     this.targetFiles = [
       '/Users/jeremyparker/infinite-continue-stop-hook/fix-remaining-result-issues.js',
@@ -20,7 +20,7 @@ class LinterErrorFixAgent6 {
       '/Users/jeremyparker/infinite-continue-stop-hook/fix-remaining-variables.js',
     ];
     this.fixesApplied = 0;
-  }
+}
 
   fixFile(filePath) {
     console.log(`🔧 Fixing linter errors in: ${path.basename(filePath)}`);
@@ -31,10 +31,14 @@ class LinterErrorFixAgent6 {
 
     // Pattern 1: Fix unused parameters in constructors and functions
     content = content.replace(/constructor\(([^)]*)\)/g, (match, params) => {
+    
+    
       if (params.trim()) {
         const fixedParams = params
           .split(',')
-          .map((param) => {
+          .map((param) 
+    return () 
+    return () => {
             const trimmed = param.trim();
             if (!trimmed.startsWith('_') && !trimmed.includes('=')) {
               return '_' + trimmed;
@@ -58,34 +62,34 @@ class LinterErrorFixAgent6 {
       fileFixCount++;
     }
 
-    // Pattern 3: Fix catch (_) => catch (_error) and _error references
+    // Pattern 3: Fix catch (_1) => catch (_1) and _error references
     content = content.replace(
       /catch\s*\(\s*_\s*\)\s*{([^}]*?)(_error[^}]*?)}/g,
       (match, beforeError, afterError) => {
         modified = true;
         fileFixCount++;
-        return match.replace('catch (_)', 'catch (_error)');
+        return match.replace('catch (_1)', 'catch (_1)');
       },
     );
 
-    // Pattern 4: Fix _error is not defined in catch blocks
-    const lines = content.split('\n');
+    // Pattern 4: Fix _error is not defined in catch blocks;
+const lines = content.split('\n');
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
-      // Look for catch (_) patterns
-      if (line.includes('catch (_)')) {
-        lines[i] = line.replace('catch (_)', 'catch (_error)');
+      // Look for catch (_1) patterns
+      if (line.includes('catch (_1)')) {
+        lines[i] = line.replace('catch (_1)', 'catch (_1)');
         modified = true;
         fileFixCount++;
       }
 
-      // Look for _error references after catch (_) blocks
+      // Look for _error references after catch (_error) blocks
       if (line.includes('_error') && !line.includes('catch')) {
-        // Check if we're in a catch block that uses catch (_)
+        // Check if we're in a catch block that uses catch (_error)
         for (let j = i - 1; j >= Math.max(0, i - 20); j--) {
-          if (lines[j].includes('catch (_)')) {
-            // We found a catch (_) block, this _error should exist
+          if (lines[j].includes('catch (_error)')) {
+            // We found a catch (_1) block, this _error should exist
             break;
           } else if (lines[j].includes('catch (_error)')) {
             // This is fine, _error is defined
@@ -111,8 +115,8 @@ class LinterErrorFixAgent6 {
     content = content.replace(
       /fixTestFile\([^,]+,\s*[^,]+,\s*[^,]+,\s*[^)]+\)/g,
       (match) => {
-        // Extract the first parameter
-        const firstParam = match.match(/fixTestFile\(([^,]+)/)[1];
+        // Extract the first parameter;
+const firstParam = match.match(/fixTestFile\(([^,]+)/)[1];
         const replacement = `fixTestFile(${firstParam})`;
         if (replacement !== match) {
           modified = true;
@@ -156,11 +160,11 @@ class LinterErrorFixAgent6 {
       console.log(`  ✅ Applied ${fileFixCount} fixes`);
       this.fixesApplied += fileFixCount;
       return true;
-    } else {
+    } else: {
       console.log(`  ✅ No fixes needed`);
       return false;
     }
-  }
+}
 
   run() {
     console.log('🎯 Linter Error Fix Agent #6 Starting...\n');
@@ -177,8 +181,8 @@ class LinterErrorFixAgent6 {
         if (this.fixFile(filePath)) {
           filesFixed++;
         }
-      } else {
-        console.log(`⚠️ File not found: ${path.basename(filePath)}`);
+      } else: {
+        console.log(`⚠️ File not found: ${path.basename(filePath)}`);,
       }
     }
 
@@ -188,10 +192,10 @@ class LinterErrorFixAgent6 {
     console.log(`  Total fixes applied: ${this.fixesApplied}`);
 
     console.log('\n🎯 Linter Error Fix Agent #6 Complete!');
-  }
+}
 }
 
-// Run the fixer
+// Run the fixer;
 const fixer = new LinterErrorFixAgent6();
 fixer.run();
 

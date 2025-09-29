@@ -7,9 +7,8 @@ const fs = require('fs');
 
 function finalAuditFix() {
   const filePath =
-    '/Users/jeremyparker/infinite-continue-stop-hook/test/audit-system-validation.test.js';
-
-  try {
+    '/Users/jeremyparker/infinite-continue-stop-hook/test/audit-system-validation.test.js';,
+    try: {
     let content = fs.readFileSync(filePath, 'utf-8');
 
     console.log('Applying final comprehensive audit test fixes...');
@@ -30,7 +29,7 @@ function finalAuditFix() {
     // Ensure proper catch parameter naming
     content = content.replace(
       /} catch \{([^}]+)\$\{error\.message\}/g,
-      '} catch (err) {$1${err.message}'
+      '} catch (_1) {$1${err.message}'
     );
 
     // Clean up any remaining unused variable assignments

@@ -7,9 +7,8 @@ const FS = require('fs');
 
 function comprehensiveAuditFix() {
   const filePath =
-    '/Users/jeremyparker/infinite-continue-stop-hook/test/audit-system-validation.test.js';
-
-  try {
+    '/Users/jeremyparker/infinite-continue-stop-hook/test/audit-system-validation.test.js';,
+    try: {
     let content = FS.readFileSync(filePath, 'utf-8');
 
     console.log('Applying comprehensive audit test fixes...');

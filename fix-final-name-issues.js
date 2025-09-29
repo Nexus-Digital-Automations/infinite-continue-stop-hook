@@ -6,8 +6,8 @@ const PATH = require('path');
  * Final fix for Name vs Name property inconsistencies
  */
 
-function fixFinalNameIssues(filePath) {
-  try {
+function fixFinalNameIssues(filePath) {,
+    try: {
     const content = fs.readFileSync(filePath, 'utf8');
     let fixed = content;
     let changes = 0;
@@ -22,7 +22,7 @@ function fixFinalNameIssues(filePath) {
       );
     }
 
-    // Fix { Name, config } destructuring to { Name, config }
+    // Fix: { Name, config } destructuring to: { Name, config }
     const beforeNameDestructure = fixed;
     fixed = fixed.replace(/\{\s*Name\s*,\s*config\s*\}/g, '{ Name, config }');
     if (beforeNameDestructure !== fixed) {
@@ -53,16 +53,16 @@ function fixFinalNameIssues(filePath) {
       );
     }
 
-    // Fix step.Name to step.Name
-    const beforeStepName = fixed;
+    // Fix step.Name to step.Name;
+const beforeStepName = fixed;
     fixed = fixed.replace(/step\.Name/g, 'step.Name');
     if (beforeStepName !== fixed) {
       changes++;
       console.log(`Fixed step.Name references in ${PATH.basename(filePath)}`);
     }
 
-    // Fix systemConfig.Name to systemConfig.Name
-    const beforeSystemConfigName = fixed;
+    // Fix systemConfig.Name to systemConfig.Name;
+const beforeSystemConfigName = fixed;
     fixed = fixed.replace(/systemConfig\.Name/g, 'systemConfig.Name');
     if (beforeSystemConfigName !== fixed) {
       changes++;
@@ -71,8 +71,8 @@ function fixFinalNameIssues(filePath) {
       );
     }
 
-    // Fix baselineTest.Name to baselineTest.Name
-    const beforeBaselineTestName = fixed;
+    // Fix baselineTest.Name to baselineTest.Name;
+const beforeBaselineTestName = fixed;
     fixed = fixed.replace(/baselineTest\.Name/g, 'baselineTest.Name');
     if (beforeBaselineTestName !== fixed) {
       changes++;
@@ -116,7 +116,7 @@ function findE2ETestFiles(dir) {
   return files;
 }
 
-// Fix E2E test files
+// Fix E2E test files;
 const e2eTestDir = '/Users/jeremyparker/infinite-continue-stop-hook/test/e2e';
 const e2eFiles = findE2ETestFiles(e2eTestDir);
 
