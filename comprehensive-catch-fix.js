@@ -32,9 +32,9 @@ function getAllJavaScriptFiles() {
 /**
  * Fix all catch block issues in a file
  */
-function fixCatchBlocksInFile(_filePath) {
+function fixCatchBlocksInFile(FILE_PATH) {
   try {
-    const content = fs.readFileSync(_filePath, 'utf-8');
+    const content = fs.readFileSync(FILE_PATH, 'utf-8');
     const lines = content.split('\n');
     let modified = false;
 
@@ -46,7 +46,7 @@ function fixCatchBlocksInFile(_filePath) {
         lines[i] = line.replace('} catch {', '} catch (_error) {');
         modified = true;
         console.log(
-          `  ✓ Fixed missing parameter: ${PATH.relative(rootDir, _filePath)}:${i + 1}`
+          `  ✓ Fixed missing parameter: ${PATH.relative(rootDir, FILE_PATH)}:${i + 1}`
         );
       }
 
@@ -237,8 +237,8 @@ function fixCatchBlocksInFile(_filePath) {
     }
 
     return false;
-  } catch (_error) {
-    console.error(`Error fixing ${FILE_PATH}:`, _error.message);
+  } catch (error) {
+    console.error(`Error fixing ${FILE_PATH}:`, error.message);
     return false;
   }
 }
@@ -254,11 +254,11 @@ function main() {
 
   let totalFixed = 0;
 
-  for (const filePath of jsFiles) {
-    if (fixCatchBlocksInFile(filePath)) {
+  for (const FILE_PATH of jsFiles) {
+    if (fixCatchBlocksInFile(FILE_PATH)) {
       totalFixed++;
       console.log(
-        `✅ Fixed catch blocks in: ${PATH.relative(rootDir, filePath)}`
+        `✅ Fixed catch blocks in: ${PATH.relative(rootDir, FILE_PATH)}`
       );
     }
   }
