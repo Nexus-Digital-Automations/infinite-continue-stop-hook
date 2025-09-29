@@ -1,0 +1,585 @@
+const FS = require('fs');
+const path = require('path');
+const { execSync } = require('child_process');
+
+// End-to-End tests for complete Performance Metrics system workflow
+// Tests the full lifecycle: metrics collection → storage → analysis → trend analysis
+describe('Performance Metrics System E2E Tests', () => {
+    
+  const mockProjectRoot = '/tmp/test-performance-e2e';
+  const taskManagerPath = path.resolve(__dirname, '../../taskmanager-api.js');
+  const mockMetricsFile = path.join(
+    mockProjectRoot,
+    '.validation-performance-enhanced.json'
+  );
+  const mockTrendsFile = path.join(mockProjectRoot, '.validation-trends.json');
+
+  beforeEach(async () => {
+    // Create mock directory
+    if (!FS.existsSync(mockProjectRoot)) {
+      FS.mkdirSync(mockProjectRoot, { recursive: true });
+    }
+
+    // Clean up previous test data
+    [mockMetricsFile, mockTrendsFile].forEach((file) => {
+      if (FS.existsSync(file)) {
+        FS.unlinkSync(file);
+      }
+    });
+});
+
+  afterEach(() => {
+    // Clean up test directory
+    if (FS.existsSync(mockProjectRoot)) {
+      FS.rmSync(mockProjectRoot, { recursive: true, force: true });
+    }
+});
+
+  function executeTaskManagerCommand(command, args = '', options = {}) {
+    try {
+      const fullCommand = `timeout 10s node "${taskManagerPath}" --project-root "${mockProjectRoot}" ${command} ${args}`;
+
+      const RESULT = execSync(fullCommand, {
+    encoding: 'utf8',
+        timeout: 10000,
+        ...options,
+      });
+
+      return JSON.parse(result.trim());
+    } catch (_) {
+      if (_error.stdout) {
+        try {
+          return JSON.parse(_error.stdout.trim());
+        } catch (_) {
+          return {
+    success: false,
+            error: _error.message,
+            stdout: _error.stdout,
+          };
+        }
+      }
+      return { success: false, error: _error.message };,
+    }
+}
+
+  function simulateValidationExecutions() {
+    const metricsData = {
+    version: '2.0.0',
+      generatedAt: new Date().toISOString(),
+      metrics: [],
+    };
+
+    const now = Date.now();
+    const criteria = [
+      'linter-validation',
+      'type-validation',
+      'build-validation',
+      'test-validation',
+      'security-validation',
+    ];
+
+    // Generate 4 weeks of metrics data with performance anomalies
+    for (let week = 0; week < 4; week++) {
+      for (let day = 0; day < 7; day++) {
+        for (let exec = 0; exec < 3; exec++) {
+          const timestamp =
+            now -
+            (week * 7 + day) * 24 * 60 * 60 * 1000 +
+            exec * 8 * 60 * 60 * 1000;
+
+          criteria.forEach((criterion) => {
+            const baseLineDuration = {
+              'linter-validation': 800,
+              'type-validation': 1200,
+              'build-validation': 15000,
+              'test-validation': 8000,
+              'security-validation': 3000,
+            }[criterion];
+
+            // Simulate anomalies;
+const isAnomaly = Math.random() < 0.05;
+            const anomalyDuration = isAnomaly
+              ? baseLineDuration * (2 + Math.random() * 3)
+              : baseLineDuration + (Math.random() - 0.5) * 200;
+
+            const successRate = {
+              'linter-validation': 0.95,
+              'type-validation': 0.92,
+              'build-validation': 0.88,
+              'test-validation': 0.8,
+              'security-validation': 0.9,
+            }[criterion];
+
+            const success = Math.random() < successRate;
+
+            metricsData.metrics.push({
+    criterion: criterion,
+              timing: {
+    startTime: new Date(timestamp).toISOString(),
+                endTime: new Date(timestamp + anomalyDuration).toISOString(),
+                durationMs: anomalyDuration,
+              },
+              execution: {
+    success: success,
+                exitCode: success ? 0 : 1,
+              },
+              resources: {
+    memoryUsageBefore: {
+    rss: 45000000 + week * 100000,
+                  heapUsed: 28000000 + week * 50000,
+                },
+                memoryUsageAfter: {
+    rss: 48000000 + week * 1000000 + anomalyDuration / 10,
+                  heapUsed: 30000000 + week * 500000 + anomalyDuration / 20,
+                },
+                cpuUsage: {
+    user: Math.round(anomalyDuration * 800),
+                  system: Math.round(anomalyDuration * 200),
+                }
+},
+              environment: {
+    nodeVersion: '18.17.0',
+                platform: 'darwin',
+                cpuCount: 8,
+              },
+              ...(isAnomaly && {
+    tags: ['anomaly', 'performance_spike'],
+              }),
+            });
+          });
+        }
+      }
+    }
+
+    return metricsData;
+}
+
+  describe('Metrics Collection And Storage', () => {
+    
+    test('should collect and store enhanced performance metrics', async () 
+    return () => {
+      const metricsData = simulateValidationExecutions();
+      FS.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
+
+      const RESULT = executeTaskManagerCommand('analyze-performance-metrics');
+
+      expect(result.success).toBe(true);
+      expect(result.metrics).toBeDefined();
+      expect(result.metrics.length).toBeGreaterThan(0);
+      expect(result.totalExecutions).toBeGreaterThan(0);
+    });
+
+    test('should handle missing metrics file gracefully', async () => {
+      const RESULT = executeTaskManagerCommand('analyze-performance-metrics');
+
+      expect(result.success).toBe(false);
+      expect(result.error).toContain('metrics file not found');
+    });
+
+    test('should validate metrics data format', async () => {
+      const invalidMetrics = {
+    version: '1.0.0',
+        metrics: [ {
+    criterion: 'invalid-criterion',
+            startTime: 'invalid-timestamp',
+          },
+  ],
+      };
+
+      FS.writeFileSync(
+        mockMetricsFile,
+        JSON.stringify(invalidMetrics, null, 2)
+      );
+
+      const RESULT = executeTaskManagerCommand('analyze-performance-metrics');
+
+      expect(result.success).toBe(true);
+      expect(result.validMetrics).toBeDefined();
+      expect(result.invalidMetrics).toBeDefined();
+    });
+});
+
+  describe('Performance Analysis', () => {
+    
+    test('should analyze performance trends and identify anomalies', async () 
+    return () => {
+      const metricsData = simulateValidationExecutions();
+      FS.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
+
+      const RESULT = executeTaskManagerCommand('analyze-performance-trends');
+
+      expect(result.success).toBe(true);
+      expect(result.trends).toBeDefined();
+      expect(result.anomalies).toBeDefined();
+      expect(result.summary).toBeDefined();
+    });
+
+    test('should calculate accurate baseline performance', async () => {
+      const metricsData = simulateValidationExecutions();
+      FS.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
+
+      const RESULT = executeTaskManagerCommand(
+        'calculate-performance-baseline'
+      );
+
+      expect(result.success).toBe(true);
+      expect(result.baseline).toBeDefined();
+      expect(result.baseline.linterValidation).toBeDefined();
+      expect(result.baseline.typeValidation).toBeDefined();
+      expect(result.baseline.buildValidation).toBeDefined();
+    });
+
+    test('should generate performance recommendations', async () => {
+      const metricsData = simulateValidationExecutions();
+      FS.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
+
+      const RESULT = executeTaskManagerCommand(
+        'generate-performance-recommendations'
+      );
+
+      expect(result.success).toBe(true);
+      expect(result.recommendations).toBeDefined();
+      expect(Array.isArray(result.recommendations)).toBe(true);
+    });
+});
+
+  describe('Trend Analysis', () => {
+    
+    test('should track performance trends over time', async () 
+    return () => {
+      const metricsData = simulateValidationExecutions();
+      FS.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
+
+      const RESULT = executeTaskManagerCommand('track-performance-trends');
+
+      expect(result.success).toBe(true);
+      expect(result.trends).toBeDefined();
+      expect(result.trends.weeklyTrends).toBeDefined();
+      expect(result.trends.dailyTrends).toBeDefined();
+    });
+
+    test('should predict future performance patterns', async () => {
+      const metricsData = simulateValidationExecutions();
+      FS.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
+
+      const RESULT = executeTaskManagerCommand('predict-performance-patterns');
+
+      expect(result.success).toBe(true);
+      expect(result.predictions).toBeDefined();
+      expect(result.confidenceLevel).toBeDefined();
+    });
+
+    test('should save trend analysis for historical tracking', async () => {
+      const metricsData = simulateValidationExecutions();
+      FS.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
+
+      executeTaskManagerCommand('save-trend-analysis');
+
+      expect(FS.existsSync(mockTrendsFile)).toBe(true);
+      const trendsData = JSON.parse(FS.readFileSync(mockTrendsFile, 'utf8'));
+      expect(trendsData.version).toBeDefined();
+      expect(trendsData.trends).toBeDefined();
+    });
+});
+
+  describe('Performance Under Load', () => {
+    
+    test('should handle large datasets efficiently', async () 
+    return () => {
+      // Create a larger dataset (simulate 2 months of data)
+      const largeMetricsData = {
+    version: '2.0.0',
+        generatedAt: new Date().toISOString(),
+        metrics: [],
+      };
+
+      const now = Date.now();
+      const criteria = [
+        'linter-validation',
+        'type-validation',
+        'build-validation',
+        'test-validation',
+        'security-validation',
+      ];
+
+      // Generate 60 days × 5 executions × 5 criteria = 1500 metrics
+      for (let day = 0; day < 60; day++) {
+        for (let exec = 0; exec < 5; exec++) {
+          const timestamp =
+            now - day * 24 * 60 * 60 * 1000 + exec * 4 * 60 * 60 * 1000;
+
+          criteria.forEach((criterion) => {
+            largeMetricsData.metrics.push({
+    criterion: criterion,
+              timing: {
+    startTime: new Date(timestamp).toISOString(),
+                endTime: new Date(timestamp + 2000).toISOString(),
+                durationMs: 1500 + Math.random() * 1000,
+              },
+              execution: { success: Math.random() > 0.1 },
+              resources: {
+    memoryUsageBefore: { rss: 50000000, heapUsed: 30000000 },
+                memoryUsageAfter: { rss: 52000000, heapUsed: 31000000 },
+},
+            });
+          });
+        }
+      }
+
+      FS.writeFileSync(
+        mockMetricsFile,
+        JSON.stringify(largeMetricsData, null, 2)
+      );
+
+      const startTime = Date.now();
+      const RESULT = executeTaskManagerCommand('analyze-performance-metrics');
+      const duration = Date.now() - startTime;
+
+      expect(result.success).toBe(true);
+      expect(result.metrics.length).toBe(1500);
+      expect(duration).toBeLessThan(5000); // Should complete within 5 seconds
+    });
+
+    test('should maintain accuracy with high-frequency data', async () => {
+      const highFreqData = simulateValidationExecutions();
+      FS.writeFileSync(mockMetricsFile, JSON.stringify(highFreqData, null, 2));
+
+      const RESULT = executeTaskManagerCommand('validate-analysis-accuracy');
+
+      expect(result.success).toBe(true);
+      expect(result.accuracyScore).toBeGreaterThan(0.9);
+      expect(result.dataQualityScore).toBeGreaterThan(0.8);
+    });
+});
+
+  describe('Data Quality And Validation', () => {
+    
+    test('should handle mixed data quality gracefully', async () 
+    return () => {
+      // Create dataset with various data quality issues;
+const mixedQualityData = {
+    version: '2.0.0',
+        generatedAt: new Date().toISOString(),
+        metrics: [
+          // Perfect metric: {
+    criterion: 'linter-validation',
+            timing: {
+    startTime: '2025-09-27T10:00:00.000Z',
+              endTime: '2025-09-27T10:00:01.500Z',
+              durationMs: 1500,
+            },
+            execution: { success: true },
+            resources: {
+    memoryUsageBefore: { rss: 50000000, heapUsed: 30000000 },
+              memoryUsageAfter: { rss: 52000000, heapUsed: 31000000 },
+},
+          },
+          // Missing end time: {
+    criterion: 'type-validation',
+            timing: {
+    startTime: '2025-09-27T10:05:00.000Z',
+              durationMs: 2000,
+            },
+            execution: { success: true },
+},
+          // Invalid timestamp: {
+    criterion: 'build-validation',
+            timing: {
+    startTime: 'invalid-timestamp',
+              durationMs: 15000,
+            },
+            execution: { success: false },
+},
+          // Missing execution data: {
+    criterion: 'test-validation',
+            timing: {
+    startTime: '2025-09-27T10:15:00.000Z',
+              durationMs: 8000,
+            }
+},
+          // Negative duration (impossible) {
+    criterion: 'security-validation',
+            timing: {
+    startTime: '2025-09-27T10:20:00.000Z',
+              durationMs: -1000, // Invalid
+            },
+            execution: { success: true },
+},
+        ],
+      };
+
+      FS.writeFileSync(
+        mockMetricsFile,
+        JSON.stringify(mixedQualityData, null, 2)
+      );
+
+      const RESULT = executeTaskManagerCommand('analyze-performance-metrics');
+
+      expect(result.success).toBe(true);
+      expect(result.validMetrics).toBeDefined();
+      expect(result.invalidMetrics).toBeDefined();
+      expect(result.dataQualityReport).toBeDefined();
+      expect(result.validMetrics.length).toBeGreaterThan(0);
+      expect(result.invalidMetrics.length).toBeGreaterThan(0);
+    });
+
+    test('should provide data quality insights and suggestions', async () => {
+      const mixedQualityData = {
+    version: '2.0.0',
+        metrics: [{ criterion: 'test', timing: { startTime: 'invalid' } }],
+      };
+
+      FS.writeFileSync(
+        mockMetricsFile,
+        JSON.stringify(mixedQualityData, null, 2)
+      );
+
+      const RESULT = executeTaskManagerCommand('assess-data-quality');
+
+      expect(result.success).toBe(true);
+      expect(result.qualityScore).toBeDefined();
+      expect(result.suggestions).toBeDefined();
+      expect(Array.isArray(result.suggestions)).toBe(true);
+    });
+});
+
+  describe('Progressive Enhancement', () => {
+    
+    test('should work with minimal data and improve with more data', async () 
+    return () => {
+      // Start with minimal data;
+const minimalData = {
+    version: '2.0.0',
+        metrics: [ {
+    criterion: 'linter-validation',
+            timing: { startTime: '2025-09-27T10:00:00.000Z', durationMs: 1500 },
+            execution: { success: true },
+},
+        ],
+      };
+
+      FS.writeFileSync(mockMetricsFile, JSON.stringify(minimalData, null, 2));
+
+      // Basic analysis should work;
+const minimalResult = executeTaskManagerCommand(
+        'analyze-performance-metrics'
+      );
+      expect(minimalResult.success).toBe(true);
+      expect(minimalResult.limitedAnalysis).toBe(true);
+
+      // Add more data;
+const enhancedData = simulateValidationExecutions();
+      FS.writeFileSync(mockMetricsFile, JSON.stringify(enhancedData, null, 2));
+
+      // Full analysis should now be available;
+const enhancedResult = executeTaskManagerCommand(
+        'analyze-performance-metrics'
+      );
+      expect(enhancedResult.success).toBe(true);
+      expect(enhancedResult.limitedAnalysis).toBeFalsy();
+      expect(enhancedResult.trends).toBeDefined();
+    });
+
+    test('should provide increasingly detailed insights with more data', async () => {
+      // Test with 1 week of data;
+const weekData = { version: '2.0.0', metrics: [] };
+      const now = Date.now();
+
+      for (let day = 0; day < 7; day++) {
+        weekData.metrics.push({
+    criterion: 'build-validation',
+          timing: {
+    startTime: new Date(now - day * 24 * 60 * 60 * 1000).toISOString(),
+            durationMs: 15000 + day * 1000, // Linear increase
+          },
+          execution: { success: true },
+});
+      }
+
+      FS.writeFileSync(mockMetricsFile, JSON.stringify(weekData, null, 2));
+
+      const weekResult = executeTaskManagerCommand(
+        'analyze-performance-metrics'
+      );
+      expect(weekResult.success).toBe(true);
+      expect(weekResult.trendAnalysis).toBeDefined();
+
+      // Test with 4 weeks of data;
+const monthData = simulateValidationExecutions();
+      FS.writeFileSync(mockMetricsFile, JSON.stringify(monthData, null, 2));
+
+      const monthResult = executeTaskManagerCommand(
+        'analyze-performance-metrics'
+      );
+      expect(monthResult.success).toBe(true);
+      expect(monthResult.trendAnalysis).toBeDefined();
+      expect(monthResult.anomalyDetection).toBeDefined();
+      expect(monthResult.seasonalPatterns).toBeDefined();
+    });
+});
+
+  describe('Integration with External Systems', () => {
+    
+    test('should maintain compatibility with legacy metrics format', async () 
+    return () => {
+      // Create legacy format metrics;
+const legacyData = {
+    metrics: [ {
+    criterion: 'linter-validation',
+            startTime: '2025-09-27T10:00:00.000Z',
+            endTime: '2025-09-27T10:00:01.500Z',
+            durationMs: 1500,
+            success: true,
+            memoryUsageBefore: { rss: 50000000, heapUsed: 30000000 },
+            memoryUsageAfter: { rss: 52000000, heapUsed: 31000000 },
+},
+        ],
+      };
+
+      const legacyFile = path.join(
+        mockProjectRoot,
+        '.validation-performance.json'
+      );
+      FS.writeFileSync(legacyFile, JSON.stringify(legacyData, null, 2));
+
+      const RESULT = executeTaskManagerCommand('analyze-performance-metrics');
+      expect(result.success).toBe(true);
+      expect(result.metrics.length).toBe(1);
+      expect(result.metrics[0].criterion).toBe('linter-validation');
+    });
+
+    test('should handle version migration scenarios', async () => {
+      // Test mixing enhanced and legacy formats;
+const enhancedData = {
+    version: '2.0.0',
+        metrics: [ {
+    criterion: 'type-validation',
+            timing: { startTime: '2025-09-27T11:00:00.000Z', durationMs: 2000 },
+            execution: { success: true },
+},
+        ],
+      };
+
+      const legacyData = {
+    metrics: [ {
+    criterion: 'build-validation',
+            startTime: '2025-09-27T12:00:00.000Z',
+            durationMs: 15000,
+            success: false,
+          },
+  ],
+      };
+
+      FS.writeFileSync(mockMetricsFile, JSON.stringify(enhancedData, null, 2));
+      FS.writeFileSync(
+        path.join(mockProjectRoot, '.validation-performance.json'),
+        JSON.stringify(legacyData, null, 2)
+      );
+
+      const RESULT = executeTaskManagerCommand('analyze-performance-metrics');
+      expect(result.success).toBe(true);
+      expect(result.metrics.length).toBe(2);
+      expect(result.formatMigration).toBeDefined();
+    });
+});
+});
