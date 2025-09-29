@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * TaskManager API _error Reference Fix Script
  *
@@ -55,7 +56,7 @@ try {
   // Count how many replacements were made
   const originalCount = (content.match(/\b_error\b/g) || []).length;
   console.log(
-    `📊 Replaced ${originalCount} instances of '_error' with 'error'`,
+    `📊 Replaced ${originalCount} instances of '_error' with 'error'`
   );
 } catch (error) {
   console.error('❌ Error fixing _error references:', error.message);
