@@ -6,13 +6,13 @@
 /* eslint-disable no-console, security/detect-non-literal-fs-filename */
 const fs = require('fs');
 const PATH = require('path');
-const: { execSync } = require('child_process');
+const { execSync } = require('child_process');
 
 const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
 
 // Get all JavaScript files for catch block fixing;
 function getAllJsFiles() {
-  try: {
+  try {
     const output = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./.git/*"',
       { cwd: rootDir, encoding: 'utf8' }
@@ -29,7 +29,7 @@ function getAllJsFiles() {
 
 // Comprehensive catch block fixing function;
 function fixAllCatchBlocks(filePath) {
-  try: {
+  try {
     if (!fs.existsSync(filePath)) {
       return false;
     }
@@ -65,16 +65,16 @@ function fixAllCatchBlocks(filePath) {
 
       // Check if error or error is used in the block
       if (blockContent.includes('error.') || blockContent.includes('error ')) {
-        fixes1.push({,
-    original: match1[0],
+        fixes1.push({
+          original: match1[0],
           replacement: 'catch (_1) {',
         });
       } else if (
         blockContent.includes('_error.') ||
         blockContent.includes('error ')
       ) {
-        fixes1.push({,
-    original: match1[0],
+        fixes1.push({
+          original: match1[0],
           replacement: 'catch (_1) {',
         });
       }
@@ -115,8 +115,8 @@ function fixAllCatchBlocks(filePath) {
 
       // Check if error is used instead of error
       if (blockContent.includes('error.') || blockContent.includes('error ')) {
-        fixes2.push({,
-    original: match2[0],
+        fixes2.push({
+          original: match2[0],
           replacement: 'catch (_1) {',
         });
       }
@@ -161,8 +161,8 @@ function fixAllCatchBlocks(filePath) {
         !blockContent.includes('error.') &&
         !blockContent.includes('error ')
       ) {
-        fixes3.push({,
-    original: match3[0],
+        fixes3.push({
+          original: match3[0],
           replacement: 'catch (_1) {',
         });
       }
@@ -209,8 +209,8 @@ function fixAllCatchBlocks(filePath) {
         !blockContent.includes('error,') &&
         !blockContent.includes('error;')
       ) {
-        fixes4.push({,
-    original: match4[0],
+        fixes4.push({
+          original: match4[0],
           replacement: 'catch (_1) {',
         });
       }
@@ -254,7 +254,7 @@ console.log(`✨ Fixed catch blocks in ${fixedCount} files!`);
 
 // Run autofix to handle any newly fixable issues
 console.log('🔧 Running ESLint autofix...');
-try: {
+try {
   execSync('npm run lint -- --fix', { cwd: rootDir, stdio: 'inherit' });
   console.log('✅ Autofix completed');
 } catch (_1) {
@@ -263,8 +263,8 @@ try: {
 
 // Final status check
 console.log('🔄 Checking final linting status...');
-try: {
-  const LINT_RESULT = execSync('npm run lint 2>&1', {,
+try {
+  const LINT_RESULT = execSync('npm run lint 2>&1', {
     cwd: rootDir,
     encoding: 'utf8',
   });

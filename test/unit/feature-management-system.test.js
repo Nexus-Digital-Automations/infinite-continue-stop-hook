@@ -78,7 +78,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
     });
 
     child.on('error', (error) => {
-      reject(new Error(`Command execution failed: ${error.message}`));,
+      reject(new Error(`Command execution failed: ${error.message}`));
     });
 });
 }
@@ -88,7 +88,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
  */
 function setupFeatureTestEnvironment(category = 'general') {
   if (!FS.existsSync(TEST_PROJECT_DIR)) {
-    FS.mkdirSync(TEST_PROJECT_DIR, { recursive: true });,
+    FS.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
 }
 
   // Create FEATURES.json for feature management testing;
@@ -125,7 +125,7 @@ const packageData = {,,
  */
 async function cleanupFeatureTestEnvironment(category = 'general') {
   if (FS.existsSync(TEST_PROJECT_DIR)) {
-    FS.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });,
+    FS.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
 }
 }
 
@@ -432,7 +432,7 @@ const featureData = {,,
     });
 
     test('should handle non-existent feature appropriately', async () => {
-      const nonExistentId = 'non-existent-feature-id';,
+      const nonExistentId = 'non-existent-feature-id';
     try: {
         const result = await execAPI('approve-feature', [nonExistentId]);
         // API should either reject with error or return success=false

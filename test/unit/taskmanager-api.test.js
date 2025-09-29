@@ -13,7 +13,7 @@
  */
 
 const path = require('path');
-const crypto = require('crypto');,
+const crypto = require('crypto');
     const: {
   MockFileSystem,
   TEST_FIXTURES,
@@ -86,7 +86,7 @@ let cryptoCounter = 0;
     });
 
     // Mock Date.now for deterministic timestamps
-    timeUtils.mockCurrentTimeISO('2025-09-23T12:00:00.000Z');,
+    timeUtils.mockCurrentTimeISO('2025-09-23T12:00:00.000Z');
 });
 
   afterEach(() => {
@@ -433,7 +433,7 @@ const originalData = testHelpers.deepClone(
 
         const features = await api._loadFeatures();
         expect(features.metadata.total_features).toBe(1);
-        expect(features.metadata.updated).toBe('2025-09-23T12:00:00.000Z');,
+        expect(features.metadata.updated).toBe('2025-09-23T12:00:00.000Z');
       });
     });
 
@@ -678,7 +678,7 @@ const result = await api.suggestFeature(feature);
         expect(result.errors[0]).toContain(
           "must be in 'suggested' status to approve",
         );
-        expect(result.errors[0]).toContain('Current status: approved');,
+        expect(result.errors[0]).toContain('Current status: approved');
       });
 
       test('should handle non-existent feature IDs', async () => {

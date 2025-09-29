@@ -5,14 +5,14 @@
 
 const fs = require('fs');
 const path = require('path');
-const: { execSync } = require('child_process');
+const { execSync } = require('child_process');
 
 console.log('🔧 Critical Formatting Fix Script\n');
 
-// Get all JS files;
+// Get all JS files
 const jsFiles = execSync(
   'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
-  { encoding: 'utf-8' },
+  { encoding: 'utf-8' }
 )
   .split('\n')
   .filter((f) => f && f.endsWith('.js'))
@@ -22,8 +22,8 @@ console.log(`📊 Found ${jsFiles.length} JavaScript files\n`);
 
 let totalFixes = 0;
 
-jsFiles.forEach((filePath) => {,
-    try: {
+jsFiles.forEach((filePath) => {
+  try {
     let content = fs.readFileSync(filePath, 'utf8');
     const originalContent = content;
     let fixes = 0;
@@ -32,7 +32,7 @@ jsFiles.forEach((filePath) => {,
     // Replace unused variables with underscore prefix
     content = content.replace(
       /\bcatch\s*\(\s*([a-zA-Z_$][a-zA-Z0-9_$]*)\s*\)/g,
-      'catch (_1)',
+      'catch (_1)'
     );
 
     // Fix 2: Fix undefined _error variables in catch blocks
@@ -40,19 +40,19 @@ jsFiles.forEach((filePath) => {,
       /catch\s*\(\s*_\s*\)\s*{[^}]*_error[^}]*}/g,
       (match) => {
         return match.replace(/_error/g, '_');
-      },
+      }
     );
 
     // Fix 3: Fix basic indentation issues (convert tabs to spaces, fix common indentation)
     const lines = content.split('\n');
     const fixedLines = lines.map((line, index) => {
-      // Convert tabs to 2 spaces;
-let fixedLine = line.replace(/\t/g, '  ');
+      // Convert tabs to 2 spaces
+      let fixedLine = line.replace(/\t/g, '  ');
 
       // Basic indentation fix for common patterns
       if (fixedLine.trim().startsWith('}') && fixedLine.match(/^\s{2}/)) {
-        // Closing brace should be aligned with opening statement;
-const indent = fixedLine.match(/^(\s*)/)[1];
+        // Closing brace should be aligned with opening statement
+        const indent = fixedLine.match(/^(\s*)/)[1];
         if (indent.length === 2) {
           fixedLine = fixedLine.replace(/^\s{2}/, '');
         }
@@ -78,7 +78,7 @@ const indent = fixedLine.match(/^(\s*)/)[1];
           return `${keyword} _${varName} =`;
         }
         return match;
-      },
+      }
     );
 
     // Fix 6: Fix function parameters that are unused
@@ -89,7 +89,7 @@ const indent = fixedLine.match(/^(\s*)/)[1];
           return match.replace(param, `_${param}`);
         }
         return match;
-      },
+      }
     );
 
     // Fix 7: Add trailing commas for multiline objects/arrays
@@ -102,17 +102,17 @@ const indent = fixedLine.match(/^(\s*)/)[1];
       totalFixes += fixes;
       console.log(`✓ Fixed ${path.basename(filePath)} (${fixes} changes)`);
     }
-} catch (_1) {
+  } catch (error) {
     console.error(
-      `❌ Error processing ${path.basename(filePath)}: ${error.message}`,
+      `❌ Error processing ${path.basename(filePath)}: ${error.message}`
     );
-}
+  }
 });
 
 console.log(`\n🎯 Completed formatting fixes: ${totalFixes} total changes`);
 
 // Run ESLint to check remaining issues
-try: {
+try {
   console.log('\n📊 Checking remaining ESLint issues...');
   const lintOutput = execSync('npm run lint 2>&1', { encoding: 'utf-8' });
   const errorMatch = lintOutput.match(/✖ (\d+) problems/);
@@ -121,11 +121,11 @@ try: {
     console.log(`📈 Remaining ESLint problems: ${remainingProblems}`);
 
     if (remainingProblems < 1000) {
-      console.log('🎯 SUCCESS: Significantly reduced ESLint problems!');,
-    } else: {
-      console.log('🎯 Progress: Continue fixing remaining issues...');,
+      console.log('🎯 SUCCESS: Significantly reduced ESLint problems!');
+    } else {
+      console.log('🎯 Progress: Continue fixing remaining issues...');
     }
-}
+  }
 } catch (_1) {
   console.log('📊 ESLint check completed');
 }

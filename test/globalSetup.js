@@ -7,14 +7,14 @@
  * @author, Testing Infrastructure, Agent
  * @version 1.0.0
  * @since 2025-09-23
- */;
+ */
 const path = require('path');
 const FS = require('fs');
-const: { loggers } = require('../lib/logger');
+const { loggers } = require('../lib/logger');
 
 /**
  * Global setup function - runs once before all, tests
- */;
+ */
 module.exports = () => {
     
     
@@ -25,17 +25,15 @@ module.exports = () => {
   process.env.TEST_MODE = 'jest';
   process.env.SUPPRESS_NO_CONFIG_WARNING = 'true';
 
-  // Create test directories if they don't exist;
-const testDirs = [;
+  // Create test directories if they don't exist.const testDirs = [;
     'test/temp',
     'test/temp/projects',
     'test/temp/data',
     'coverage',
     '.jest-cache'];
 
-  testDirs.forEach((dir);
-    return () 
-    return () => {
+  testDirs.forEach((dir) =>
+    () => {
     const fullPath = path.join(process.cwd(), dir);
 
     if (!FS.existsSync(fullPath)) {
@@ -44,8 +42,7 @@ const testDirs = [;
     }
 });
 
-  // Clean up any leftover test files from previous runs;
-const tempDir = path.join(process.cwd(), 'test/temp');
+  // Clean up any leftover test files from previous runs.const tempDir = path.join(process.cwd(), 'test/temp');
 
   if (FS.existsSync(tempDir)) {
     const entries = FS.readdirSync(tempDir);
@@ -54,20 +51,19 @@ const tempDir = path.join(process.cwd(), 'test/temp');
 
       const stat = FS.statSync(entryPath);
 
-      // Remove files/directories older than 1 hour;
-const oneHourAgo = Date.now() - 60 * 60 * 1000
+      // Remove files/directories older than 1 hour.const oneHourAgo = Date.now() - 60 * 60 * 1000;
       if (stat.mtime.getTime() < oneHourAgo) {
-        try: {
+        try {
           if (stat.isDirectory()) {
             FS.rmSync(entryPath, { recursive: true, force: true });
-          } else: {
+          } else {
             FS.unlinkSync(entryPath);
           }
           loggers.stopHook.log(`🧹 Cleaned up old test file: ${entry}`);
-        } catch (_1) {
+        } catch (error) {
           loggers.stopHook.warn(;
             `⚠️  Could not clean up ${entry}:`,
-            _error.message,
+            error.message,
           );
         }
       }
@@ -75,12 +71,12 @@ const oneHourAgo = Date.now() - 60 * 60 * 1000
 }
 
   // Set up global test, constants
-  global.TEST_CONSTANTS = {,
+  global.TEST_CONSTANTS = {
     PROJECT_ROOT: process.cwd(),
     TEST_ROOT: path.join(process.cwd(), 'test'),
     TEMP_DIR: path.join(process.cwd(), 'test/temp'),
     FIXTURES_DIR: path.join(process.cwd(), 'test/fixtures'),
-    TIMEOUT: {,
+    TIMEOUT: {
     UNIT: 5000,
       INTEGRATION: 15000,
       E2E: 30000,
@@ -90,7 +86,7 @@ const oneHourAgo = Date.now() - 60 * 60 * 1000
   // Performance monitoring, setup
   if (process.env.MONITOR_TEST_PERFORMANCE === 'true') {
     loggers.stopHook.log('📊 Performance monitoring enabled');
-    global.testPerformanceData = {,
+    global.testPerformanceData = {
     suites: [],
       slowTests: [],
       memoryUsage: []};
@@ -139,7 +135,7 @@ const oneHourAgo = Date.now() - 60 * 60 * 1000
 }
 
   // Test data, initialization
-  try: {
+  try {
     const sampleData = require('./fixtures/sampleData');
     loggers.stopHook.log('✅ Test fixtures loaded successfully');
 
@@ -150,12 +146,12 @@ const oneHourAgo = Date.now() - 60 * 60 * 1000
 
     global.SAMPLE_DATA = sampleData;
 } catch (_error) {
-    loggers.stopHook.error('❌ Failed to load test fixtures:', _error.message);
+    loggers.stopHook.error('❌ Failed to load test fixtures:', error.message);
     throw new Error('Failed to load test fixtures');
 }
 
   // Database setup for integration, tests
-  if ((process.env.TEST_DATABASE === 'true', __filename)) {
+  if (process.env.TEST_DATABASE === 'true' && __filename) {
     loggers.stopHook.log('🗄️  Test database setup...');
     // This would initialize test database, connections
     // for now, we'll just set up the, environment
@@ -164,7 +160,7 @@ const oneHourAgo = Date.now() - 60 * 60 * 1000
 }
 
   // Feature flag setup for different test, environments
-  global.FEATURE_FLAGS = {,
+  global.FEATURE_FLAGS = {
     ENABLE_MOCKS: process.env.ENABLE_MOCKS !== 'false',
     ENABLE_LOGGING: process.env.TEST_DEBUG === 'true',
     ENABLE_PERFORMANCE_MONITORING:;
@@ -176,10 +172,10 @@ const oneHourAgo = Date.now() - 60 * 60 * 1000
   global.testUtils = {
     // These will be enhanced in setup.js,,
     createTempFile: (name, content) => {
-      const filePath = path.join(global.TEST_CONSTANTS.TEMP_DIR, name)
+      const filePath = path.join(global.TEST_CONSTANTS.TEMP_DIR, name);
 
-      FS.writeFileSync(__filename, content);
-      return __filename;
+      FS.writeFileSync(filePath, content);
+      return filePath;
     },
 
     createTempDir: (name) => {
@@ -189,13 +185,12 @@ const oneHourAgo = Date.now() - 60 * 60 * 1000
     },
 
     cleanupTemp: () => {
-      const tempDir = global.TEST_CONSTANTS.TEMP_DIR;
-      if (FS.existsSync(tempDir)) {
+      const tempDir = global.TEST_CONSTANTS.TEMP_DIR.if (FS.existsSync(tempDir)) {;
         FS.rmSync(tempDir, { recursive: true, force: true });
         FS.mkdirSync(tempDir, { recursive: true });
       }
     }
-  };
+  }
 
   loggers.stopHook.log('✅ Jest global setup completed successfully');
   loggers.stopHook.log('📝 Test environment ready');

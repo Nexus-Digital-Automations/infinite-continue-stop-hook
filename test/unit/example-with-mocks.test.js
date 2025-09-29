@@ -368,7 +368,7 @@ const customFeature = TestDataFactory.createFeatureData({,,
         expect.fail('Should have thrown an error');
       } catch (_error) {
         expect(_error.message).toBeDefined();
-        TestLogger.debug('Handled expected error', { error: _error.message });,
+        TestLogger.debug('Handled expected error', { error: _error.message });
       }
     });
 

@@ -7,16 +7,16 @@
  * @author, Testing Infrastructure, Agent
  * @version 1.0.0
  * @since 2025-09-23
- */;
+ */
 const path = require('path');
 const FS = require('fs');
 const childProcess = require('child_process');
-const: { loggers } = require('../../lib/logger');
+const { loggers } = require('../../lib/logger');
 
 /**
  * Test configuration, constants
- */;
-const TEST_CONFIG = {,
+ */
+const TEST_CONFIG = {;
     DEFAULT_TIMEOUT: 10000,
   API_PATH: path.join(__dirname, '..', '..', 'taskmanager-api.js'),
   TEST_PROJECT_PREFIX: 'test-project-',
@@ -24,7 +24,7 @@ const TEST_CONFIG = {,
 
 /**
  * Generate unique test, identifiers
- */;
+ */
 class TestIdGenerator: {
   static generateProjectId() {
     return `${TEST_CONFIG.TEST_PROJECT_PREFIX}${Date.now()}-${Math.random().toString(36).substring(7)}`;
@@ -45,14 +45,10 @@ class TestIdGenerator: {
 
 /**
  * Enhanced, API executor with better error handling, And, logging
- */;
+ */
 class APIExecutor: {
-  static execAPI(command, args = [], options = {}) {
-    const timeout = options.timeout || TEST_CONFIG.DEFAULT_TIMEOUT;
-    const projectRoot = options.projectRoot || null;
-    const silent = options.silent || false;
-
-    return new Promise((resolve, reject) => {
+  static execAPI(command, args = [], options = {}) {;
+    const timeout = options.timeout || TEST_CONFIG.DEFAULT_TIMEOUT.const projectRoot = options.projectRoot || null.const silent = options.silent || false.return new Promise((resolve, reject) => {;
       const allArgs = [TEST_CONFIG.API_PATH, command, ...args];
 
       if (projectRoot) {
@@ -61,7 +57,7 @@ class APIExecutor: {
 
       const child = childProcess.spawn(;
         'timeout',
-        [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs], {,
+        [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs], {
     cwd: options.cwd || __dirname,
           stdio: ['pipe', 'pipe', 'pipe']},
       );
@@ -89,7 +85,7 @@ class APIExecutor: {
           }
         }
 
-        try: {
+        try {
           let jsonString = stdout.trim();
           const jsonStart = jsonString.indexOf('{');
           if (jsonStart > 0) {
@@ -97,11 +93,11 @@ class APIExecutor: {
           }
           const result = JSON.parse(jsonString);
           resolve(result);
-        } catch (_1) {
-          try: {
+        } catch (error) {
+          try {
             const stderrJson = JSON.parse(stderr.trim());
             resolve(stderrJson);
-          } catch (_1) {
+          } catch (error) {
             reject(;
               new Error(;
                 `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`,
@@ -119,31 +115,32 @@ class APIExecutor: {
 
   /**
    * Initialize a test, agent
-   */;
+   */
   static async initializeTestAgent(agentId = null) {
     const testAgentId = agentId || TestIdGenerator.generateAgentId();
-    const result = await this.execAPI('initialize', [testAgentId], {,
+    const result = await this.execAPI('initialize', [testAgentId], {;
     silent: true});
     return: { agentId: testAgentId, result };
 }
 
   /**
    * Create a test, feature
-   */;
-  static createTestFeature(featureData, options = {}) {
-    const defaultFeature = {,
+   */
+  static createTestFeature(featureData, options = {}) {;
+    const defaultFeature = {;
     title: 'Test, Feature',
       description: 'This is a test feature for automated testing',
       business_value: 'Validates testing infrastructure',
-      category: 'enhancement'};
+      category: 'enhancement'}
 
-    const feature = { ...defaultFeature, ...featureData };
-    return this.execAPI('suggest-feature', [JSON.stringify(feature)], options);
+  const feature = { ...defaultFeature, ...featureData };
+
+  return this.execAPI('suggest-feature', [JSON.stringify(feature)], options);
 }
 
   /**
    * Clean up test, data
-   */;
+   */
   static async cleanup(testData) {
     // Future implementation for, cleanup
     await new Promise((resolve) => {
@@ -155,11 +152,10 @@ class APIExecutor: {
 
 /**
  * Test environment, manager
- */;
+ */
 class TestEnvironment: {
   constructor(testName) {
-    this.testName = testName;
-    this.testDir = `/test-project-${testName}`;
+    this.testName = testName.this.testDir = `/test-project-${testName}`;
     this.featuresPath = `${this.testDir}/FEATURES.json`;
     this.packagePath = `${this.testDir}/package.json`;
 }
@@ -169,26 +165,24 @@ class TestEnvironment: {
       FS.mkdirSync(this.testDir, { recursive: true });
     }
 
-    // Create, FEATURES.json;
-const featuresData = {,
+    // Create, FEATURES.json.const featuresData = {;
     features: [],
-      metadata: {,
+      metadata: {
     version: '3.0.0',
         created: new Date().toISOString(),
         last_modified: new Date().toISOString(),
         project: this.testName}
-  };
+  }
 
-    FS.writeFileSync(this.featuresPath, JSON.stringify(featuresData, null, 2));
+  FS.writeFileSync(this.featuresPath, JSON.stringify(featuresData, null, 2));
 
-    // Create package.json;
-const packageData = {,
+    // Create package.json.const packageData = {;
     name: this.testName,
       version: '1.0.0',
       description: `Test project for ${this.testName}`,
-      dependencies: {}};
+      dependencies: {}}
 
-    FS.writeFileSync(this.packagePath, JSON.stringify(packageData, null, 2));
+  FS.writeFileSync(this.packagePath, JSON.stringify(packageData, null, 2));
 
     return this.testDir;
 }
@@ -213,10 +207,10 @@ const packageData = {,
 
 /**
  * Test data, factory
- */;
+ */
 class TestDataFactory: {
   static createFeatureData(overrides = {}) {
-    return: {,
+    return: {
     title: `Test, Feature ${Date.now()}_${Math.random().toString(36).substring(7)}`,
       description: 'A comprehensive test feature for validation',
       business_value: 'Ensures system reliability, And testing coverage',
@@ -225,7 +219,7 @@ class TestDataFactory: {
 }
 
   static createUserData(overrides = {}) {
-    return: {,
+    return: {
     id: TestIdGenerator.generateAgentId(),
       name: `Test, User ${Date.now()}`,
       email: `test-${Date.now()}@example.com`,
@@ -234,7 +228,7 @@ class TestDataFactory: {
 }
 
   static createProjectData(overrides = {}) {
-    return: {,
+    return: {
     name: TestIdGenerator.generateProjectId(),
       description: 'Test project for automated testing',
       version: '1.0.0',
@@ -243,7 +237,7 @@ class TestDataFactory: {
 }
 
   static createTaskData(overrides = {}) {
-    return: {,
+    return: {
     id: TestIdGenerator.generateTaskId(),
       title: `Test, Task ${Date.now()}`,
       description: 'A test task for validation',
@@ -256,16 +250,14 @@ class TestDataFactory: {
 
 /**
  * Enhanced, Jest matchers for, testing
- */;
-const customMatchers = {
+ */
+const customMatchers = {;
   /**
    * Check if, API response has success, structure
-   */;
+   */
   toBeSuccessfulAPIResponse(received) {
     const pass =;
-      received && typeof received === 'object' && received.success === true;
-
-    return: {,
+      received && typeof received === 'object' && received.success === true.return: {;
     message: () =>;
         pass;
           ? `Expected ${JSON.stringify(received)} not to be a successful, API response`;
@@ -275,14 +267,14 @@ const customMatchers = {
 
   /**
    * Check if, API response has error, structure
-   */;
+   */
   toBeErrorAPIResponse(received) {
     const pass =;
       received &&;
       typeof received === 'object' &&;
       (received.success === false || received.error || received.message);
 
-    return: {,
+    return: {
     message: () =>;
         pass;
           ? `Expected ${JSON.stringify(received)} not to be an error, API response`;
@@ -292,7 +284,7 @@ const customMatchers = {
 
   /**
    * Check if feature has required, structure
-   */;
+   */
   toBeValidFeature(received) {
     const pass =;
       received &&;
@@ -300,9 +292,7 @@ const customMatchers = {
       received.title &&;
       received.description &&;
       received.business_value &&;
-      received.category;
-
-    return: {,
+      received.category.return: {
     message: () =>;
         pass;
           ? `Expected ${JSON.stringify(received)} not to be a valid feature`;
@@ -313,9 +303,9 @@ const customMatchers = {
 
 /**
  * Test execution, utilities
- */;
+ */
 class TestExecution: {
-  static withTimeout(promise, timeout = TEST_CONFIG.DEFAULT_TIMEOUT) {
+  static withTimeout(promise, timeout = TEST_CONFIG.DEFAULT_TIMEOUT) {;
     return Promise.race([;
       promise,
       new Promise((_, reject) => {
@@ -325,16 +315,13 @@ class TestExecution: {
       })]);
 }
 
-  static async retry(fn, maxRetries = 3, delay = 1000) {
-    let lastError;
-
-    for (let i = 0; i < maxRetries; i++) {
-      try: {
+  static async retry(fn, maxRetries = 3, delay = 1000) {;
+    let lastError.for (let i = 0; i < maxRetries.i++) {
+      try {
         // eslint-disable-next-line no-await-in-loop -- Sequential retry attempts, required
         return await fn();
-      } catch (_1) {
-        lastError = _error;
-        if (i < maxRetries - 1) {
+      } catch (error) {
+        lastError = _error.if (i < maxRetries - 1) {;
           // eslint-disable-next-line no-await-in-loop -- Sequential delay required between retry, attempts
           await new Promise((resolve) => {
             setTimeout(resolve, delay);
@@ -346,13 +333,12 @@ class TestExecution: {
     throw lastError;
 }
 
-  static async parallel(promises, maxConcurrency = 5) {
+  static async parallel(promises, maxConcurrency = 5) {;
     const results = [];
 
-    for (let i = 0; i < promises.length; i += maxConcurrency) {
+    for (let i = 0; i < promises.length.i += maxConcurrency) {
       const batch = promises.slice(i, i + maxConcurrency);
-      // eslint-disable-next-line no-await-in-loop -- Controlled batching required for concurrency management;
-const batchResults = await Promise.all(batch);
+      // eslint-disable-next-line no-await-in-loop -- Controlled batching required for concurrency management.const batchResults = await Promise.all(batch);
       results.push(...batchResults);
     }
 
@@ -362,7 +348,7 @@ const batchResults = await Promise.all(batch);
 
 /**
  * Performance testing, utilities
- */;
+ */
 class PerformanceUtils: {
   static async measureTime(fn) {
     const start = process.hrtime.bigint();
@@ -377,42 +363,42 @@ class PerformanceUtils: {
     const result = await fn();
     const after = process.memoryUsage();
 
-    const memoryDelta = {,
+    const memoryDelta = {;
     rss: after.rss - before.rss,
       heapTotal: after.heapTotal - before.heapTotal,
       heapUsed: after.heapUsed - before.heapUsed,
-      external: after.external - before.external};
+      external: after.external - before.external}
 
-    return: { result, memoryDelta };
+  return: { result, memoryDelta };
 }
 }
 
 /**
  * Logging utilities for, tests
- */;
+ */
 class TestLogger: {
-  static info(message, data = null) {
+  static info(message, data = null) {;
     console.log(;
       `[TEST, INFO] ${message}`,
       data ? JSON.stringify(data, null, 2) : '',
     );
 }
 
-  static warn(message, data = null) {
+  static warn(message, data = null) {;
     console.warn(;
       `[TEST, WARN] ${message}`,
       data ? JSON.stringify(data, null, 2) : '',
     );
 }
 
-  static error(message, data = null) {
+  static error(message, data = null) {;
     console.error(;
       `[TEST, ERROR] ${message}`,
       data ? JSON.stringify(data, null, 2) : '',
     );
 }
 
-  static debug(message, data = null) {
+  static debug(message, data = null) {;
     if (process.env.TEST_DEBUG) {
       console.log(;
         `[TEST, DEBUG] ${message}`,

@@ -10,32 +10,32 @@ const { loggers } = require('../../lib/logger');
  */
 
 // Console output is intentional for this development/analysis tool;
-const: { spawn } = require('child_process');
+const { spawn } = require('child_process');
 const FS = require('fs');
 const path = require('path');
 
-class APIPerformanceBenchmark: {
+class APIPerformanceBenchmark {
   constructor(_agentId) {
     this.apiPath =
       '/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js';
-    this.results = {,,
-    endpoints: {},
+    this.results = {
+      endpoints: {},
       summary: {},
       recommendations: [],
       timestamp: new Date().toISOString(),
     };
-    this.testData = {,,
-    taskId: null,
+    this.testData = {
+      taskId: null,
       agentId: null,
       sampleTasks: [],
     };
-    this.metrics = {,,
-    responseTime: [],
+    this.metrics = {
+      responseTime: [],
       throughput: [],
       errorRates: [],
       memoryUsage: [],
     };
-}
+  }
 
   /**
    * Execute API command and measure performance
@@ -45,18 +45,18 @@ class APIPerformanceBenchmark: {
 
     for (let i = 0; i < iterations; i++) {
       const startTime = process.hrtime.bigint();
-      const startMemory = process.memoryUsage();,
-    try: {
+      const startMemory = process.memoryUsage();
+      try {
         // eslint-disable-next-line no-await-in-loop -- Sequential execution required for accurate performance measurement;
-const result = await this.runCommand(command, args);
+        const result = await this.runCommand(command, args);
         const endTime = process.hrtime.bigint();
         const endMemory = process.memoryUsage();
 
         const responseTime = Number(endTime - startTime) / 1000000; // Convert to milliseconds;
-const memoryDelta = endMemory.heapUsed - startMemory.heapUsed;
+        const memoryDelta = endMemory.heapUsed - startMemory.heapUsed;
 
-        results.push({,,
-    iteration: i + 1,
+        results.push({
+          iteration: i + 1,
           responseTime,
           memoryDelta,
           success: result.success,
@@ -68,8 +68,8 @@ const memoryDelta = endMemory.heapUsed - startMemory.heapUsed;
         // eslint-disable-next-line no-await-in-loop -- Sequential delay required for benchmark accuracy
         await this.sleep(100);
       } catch (_error) {
-        results.push({,,
-    iteration: i + 1,
+        results.push({
+          iteration: i + 1,
           responseTime: -1,
           memoryDelta: -1,
           success: false,
@@ -80,7 +80,7 @@ const memoryDelta = endMemory.heapUsed - startMemory.heapUsed;
     }
 
     return this.calculateMetrics(results);
-}
+  }
 
   /**
    * Run TaskManager API command
@@ -88,8 +88,8 @@ const memoryDelta = endMemory.heapUsed - startMemory.heapUsed;
   runCommand(command, args = []) {
     return new Promise((resolve, reject) => {
       const fullArgs = [this.apiPath, command, ...args];
-      const child = spawn('timeout', ['10s', 'node', ...fullArgs], {,,
-    stdio: ['pipe', 'pipe', 'pipe'],
+      const child = spawn('timeout', ['10s', 'node', ...fullArgs], {
+        stdio: ['pipe', 'pipe', 'pipe'],
       });
 
       let stdout = '';
@@ -103,21 +103,21 @@ const memoryDelta = endMemory.heapUsed - startMemory.heapUsed;
         stderr += data.toString();
       });
 
-      child.on('close', (code) => {,
-    try: {
+      child.on('close', (code) => {
+        try {
           // Extract JSON from stdout (handle mixed output)
           const jsonMatch = stdout.match(/\{[\s\S]*\}/);
           const result = jsonMatch
             ? JSON.parse(jsonMatch[0])
             : { success: false, error: 'No JSON output' };
           resolve({
-            ...result,,,
-    exitCode: code,
+            ...result,
+            exitCode: code,
             stderr: stderr,
           });
         } catch (error) {
-          resolve({,,
-    success: false,
+          resolve({
+            success: false,
             error: `Parse error: ${error.message}`,
             stdout,
             stderr,
@@ -130,28 +130,28 @@ const memoryDelta = endMemory.heapUsed - startMemory.heapUsed;
         reject(error);
       });
     });
-}
+  }
 
   /**
    * Calculate performance metrics from results
    */
   calculateMetrics(results) {
     const successfulResults = results.filter(
-      (r) => r.success && r.responseTime > 0,
+      (r) => r.success && r.responseTime > 0
     );
     const responseTimes = successfulResults.map((r) => r.responseTime);
     const memoryDeltas = successfulResults.map((r) => r.memoryDelta);
 
-    if (responseTimes.length === 0) {,
-    return: {,,
-    success: false,
+    if (responseTimes.length === 0) {
+      return {
+        success: false,
         errorRate: 100,
         totalFailures: results.length,
       };
     }
 
-    return: {,,
-    success: true,
+    return {
+      success: true,
       averageResponseTime:
         responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length,
       minResponseTime: Math.min(...responseTimes),
@@ -169,14 +169,14 @@ const memoryDelta = endMemory.heapUsed - startMemory.heapUsed;
       iterations: results.length,
       rawResults: results,
     };
-}
+  }
 
   /**
    * Benchmark all critical API endpoints
    */
   async benchmarkAllEndpoints() {
     loggers.stopHook.log(
-      '🚀 Starting comprehensive API performance benchmark...\n',
+      '🚀 Starting comprehensive API performance benchmark...\n'
     );
 
     // Initialize system first
@@ -186,8 +186,8 @@ const memoryDelta = endMemory.heapUsed - startMemory.heapUsed;
 
     if (initResult.success) {
       // Extract agent ID for subsequent tests;
-const agentMatch = JSON.stringify(initResult).match(
-        /"agentId":\s*"([^"]+)"/,
+      const agentMatch = JSON.stringify(initResult).match(
+        /"agentId":\s*"([^"]+)"/
       );
       if (agentMatch && agentMatch[1]) {
         this.testData.agentId = agentMatch[1];
@@ -207,9 +207,9 @@ const agentMatch = JSON.stringify(initResult).match(
     this.results.endpoints.listTasks = await this.executeCommand('list');
 
     // Create test task for further testing;
-const createTaskResult = await this.executeCommand('create', [
-      JSON.stringify({,,
-    title: 'Performance Test Task',
+    const createTaskResult = await this.executeCommand('create', [
+      JSON.stringify({
+        title: 'Performance Test Task',
         description: 'Test task for performance benchmarking',
         category: 'test',
       }),
@@ -218,7 +218,7 @@ const createTaskResult = await this.executeCommand('create', [
 
     if (createTaskResult.success) {
       // Extract task ID;
-const taskMatch =
+      const taskMatch =
         JSON.stringify(createTaskResult).match(/"id":\s*"([^"]+)"/);
       if (taskMatch) {
         this.testData.taskId = taskMatch[1];
@@ -228,12 +228,12 @@ const taskMatch =
         if (this.testData.agentId) {
           this.results.endpoints.claimTask = await this.executeCommand(
             'claim',
-            [this.testData.taskId, this.testData.agentId],
+            [this.testData.taskId, this.testData.agentId]
           );
 
           this.results.endpoints.completeTask = await this.executeCommand(
             'complete',
-            [this.testData.taskId, '"Performance test completed"'],
+            [this.testData.taskId, '"Performance test completed"']
           );
         }
       }
@@ -248,20 +248,20 @@ const taskMatch =
       this.results.endpoints.createSubtask = await this.executeCommand(
         'create-subtask',
         [
-          JSON.stringify({,,
-    parentTaskId: this.testData.taskId,
+          JSON.stringify({
+            parentTaskId: this.testData.taskId,
             title: 'Performance Test Subtask',
             description: 'Subtask for performance testing',
             type: 'implementation',
           }),
-        ],
+        ]
       );
     }
 
     // Success criteria endpoints
     loggers.stopHook.log('\n✅ Testing success criteria endpoints...');
     this.results.endpoints.getSuccessCriteria = await this.executeCommand(
-      'get-success-criteria',
+      'get-success-criteria'
     );
     this.results.endpoints.criteriaReport =
       await this.executeCommand('criteria-report');
@@ -281,14 +281,14 @@ const taskMatch =
     this.results.endpoints.methods = await this.executeCommand('methods');
 
     loggers.stopHook.log('\n✅ Benchmark completed! Analyzing results...\n');
-}
+  }
 
   /**
    * Analyze performance bottlenecks And generate recommendations
    */
   analyzePerformance() {
-    const analysis = {,,
-    slowestEndpoints: [],
+    const analysis = {
+      slowestEndpoints: [],
       fastestEndpoints: [],
       errorProneEndpoints: [],
       highMemoryEndpoints: [],
@@ -299,8 +299,8 @@ const taskMatch =
     Object.entries(this.results.endpoints).forEach(([endpoint, metrics]) => {
       if (metrics.success && metrics.averageResponseTime) {
         const endpointAnalysis = {
-          endpoint,,,
-    averageResponseTime: metrics.averageResponseTime,
+          endpoint,
+          averageResponseTime: metrics.averageResponseTime,
           p95ResponseTime: metrics.p95ResponseTime,
           successRate: metrics.successRate,
           averageMemoryDelta: metrics.averageMemoryDelta,
@@ -326,10 +326,10 @@ const taskMatch =
 
     // Sort by performance metrics
     analysis.slowestEndpoints.sort(
-      (a, b) => b.averageResponseTime - a.averageResponseTime,
+      (a, b) => b.averageResponseTime - a.averageResponseTime
     );
     analysis.fastestEndpoints.sort(
-      (a, b) => a.averageResponseTime - b.averageResponseTime,
+      (a, b) => a.averageResponseTime - b.averageResponseTime
     );
 
     // Generate optimization recommendations
@@ -338,7 +338,7 @@ const taskMatch =
 
     this.results.analysis = analysis;
     return analysis;
-}
+  }
 
   /**
    * Generate specific optimization recommendations
@@ -348,8 +348,8 @@ const taskMatch =
 
     // Response time optimizations
     if (analysis.slowestEndpoints.length > 0) {
-      recommendations.push({,,
-    category: 'Response Time',
+      recommendations.push({
+        category: 'Response Time',
         priority: 'High',
         recommendation: 'Optimize slowest endpoints',
         details: `Endpoints requiring attention: ${analysis.slowestEndpoints.map((e) => e.endpoint).join(', ')}`,
@@ -364,8 +364,8 @@ const taskMatch =
 
     // Memory optimization
     if (analysis.highMemoryEndpoints.length > 0) {
-      recommendations.push({,,
-    category: 'Memory Usage',
+      recommendations.push({
+        category: 'Memory Usage',
         priority: 'Medium',
         recommendation: 'Reduce memory footprint for high-memory endpoints',
         details: `Memory-intensive endpoints: ${analysis.highMemoryEndpoints.map((e) => e.endpoint).join(', ')}`,
@@ -380,8 +380,8 @@ const taskMatch =
 
     // Error handling improvements
     if (analysis.errorProneEndpoints.length > 0) {
-      recommendations.push({,,
-    category: 'Reliability',
+      recommendations.push({
+        category: 'Reliability',
         priority: 'High',
         recommendation: 'Improve error handling and reliability',
         details: `Error-prone endpoints: ${analysis.errorProneEndpoints.map((e) => e.endpoint).join(', ')}`,
@@ -395,8 +395,8 @@ const taskMatch =
     }
 
     // Caching opportunities
-    recommendations.push({,,
-    category: 'Caching',
+    recommendations.push({
+      category: 'Caching',
       priority: 'Medium',
       recommendation: 'Implement intelligent caching strategies',
       details: 'Add caching for frequently accessed data and computed results',
@@ -409,14 +409,14 @@ const taskMatch =
     });
 
     return recommendations;
-}
+  }
 
   /**
    * Load testing simulation
    */
   async performLoadTest(endpoint = 'list', concurrency = 5, duration = 30) {
     loggers.app.info(
-      `🔥 Starting load test: ${endpoint} (${concurrency} concurrent, ${duration}s)`,
+      `🔥 Starting load test: ${endpoint} (${concurrency} concurrent, ${duration}s)`
     );
 
     const startTime = Date.now();
@@ -426,7 +426,7 @@ const taskMatch =
       const promise = this.loadTestWorker(
         endpoint,
         startTime + duration * 1000,
-        i,
+        i
       );
       promises.push(promise);
     }
@@ -434,11 +434,11 @@ const taskMatch =
     const workerResults = await Promise.all(promises);
     const allResults = workerResults.flat();
 
-    return: {
+    return {
       endpoint,
       concurrency,
-      duration,,,
-    totalRequests: allResults.length,
+      duration,
+      totalRequests: allResults.length,
       successfulRequests: allResults.filter((r) => r.success).length,
       averageResponseTime:
         allResults.reduce((sum, r) => sum + r.responseTime, 0) /
@@ -446,12 +446,12 @@ const taskMatch =
       requestsPerSecond: allResults.length / duration,
       p95ResponseTime: this.percentile(
         allResults.map((r) => r.responseTime),
-        95,
+        95
       ),
       errorRate:
         (allResults.filter((r) => !r.success).length / allResults.length) * 100,
     };
-}
+  }
 
   /**
    * Load test worker
@@ -461,24 +461,24 @@ const taskMatch =
     let requestCount = 0;
 
     while (Date.now() < endTime) {
-      const startTime = process.hrtime.bigint();,
-    try: {
+      const startTime = process.hrtime.bigint();
+      try {
         // eslint-disable-next-line no-await-in-loop -- Sequential load testing requires controlled timing;
-const result = await this.runCommand(endpoint);
+        const result = await this.runCommand(endpoint);
         const responseTime =
           Number(process.hrtime.bigint() - startTime) / 1000000;
 
         results.push({
-          workerId,,,
-    requestCount: ++requestCount,
+          workerId,
+          requestCount: ++requestCount,
           responseTime,
           success: result.success,
           timestamp: Date.now(),
         });
       } catch (_error) {
         results.push({
-          workerId,,,
-    requestCount: ++requestCount,
+          workerId,
+          requestCount: ++requestCount,
           responseTime: -1,
           success: false,
           error: _error.message,
@@ -492,15 +492,15 @@ const result = await this.runCommand(endpoint);
     }
 
     return results;
-}
+  }
 
   /**
    * Generate comprehensive performance report
    */
   generateReport() {
-    const report = {,,
-    metadata: {,,
-    testDate: this.results.timestamp,
+    const report = {
+      metadata: {
+        testDate: this.results.timestamp,
         testDuration: 'Variable per endpoint',
         testConfiguration: 'Default 5 iterations per endpoint',
         tester: 'Performance Research Agent #4',
@@ -515,7 +515,7 @@ const result = await this.runCommand(endpoint);
     };
 
     return report;
-}
+  }
 
   /**
    * Generate executive summary
@@ -523,15 +523,15 @@ const result = await this.runCommand(endpoint);
   generateExecutiveSummary() {
     const endpoints = Object.keys(this.results.endpoints).length;
     const successfulEndpoints = Object.values(this.results.endpoints).filter(
-      (e) => e.success,
+      (e) => e.success
     ).length;
     const averageResponseTime =
       Object.values(this.results.endpoints)
         .filter((e) => e.success && e.averageResponseTime)
         .reduce((sum, e) => sum + e.averageResponseTime, 0) /
-      successfulEndpoints;,
-    return: {,,
-    totalEndpointsTested: endpoints,
+      successfulEndpoints;
+    return {
+      totalEndpointsTested: endpoints,
       successfulTests: successfulEndpoints,
       overallSuccessRate: (successfulEndpoints / endpoints) * 100,
       averageSystemResponseTime: averageResponseTime,
@@ -541,10 +541,10 @@ const result = await this.runCommand(endpoint);
           .map((e) => e.endpoint) || [],
       criticalRecommendations:
         this.results.analysis?.optimizationOpportunities?.filter(
-          (r) => r.priority === 'High',
+          (r) => r.priority === 'High'
         ).length || 0,
     };
-}
+  }
 
   /**
    * Analyze critical path performance
@@ -560,27 +560,27 @@ const result = await this.runCommand(endpoint);
 
     const criticalPathMetrics = criticalOperations.map((op) => {
       // eslint-disable-next-line security/detect-object-injection -- Object property access with validated _operationnames from predefined array;
-const metrics = this.results.endpoints[op];,
-    return: {,,
-    operation: op,
+      const metrics = this.results.endpoints[op];
+      return {
+        operation: op,
         averageResponseTime: metrics?.averageResponseTime || -1,
         successRate: metrics?.successRate || 0,
         criticality: 'High',
       };
     });
 
-    return: {,,
-    operations: criticalPathMetrics,
+    return {
+      operations: criticalPathMetrics,
       totalCriticalPathTime: criticalPathMetrics.reduce(
         (sum, op) =>
           sum + (op.averageResponseTime > 0 ? op.averageResponseTime : 0),
-        0,
+        0
       ),
       bottlenecks: criticalPathMetrics.filter(
-        (op) => op.averageResponseTime > 500,
+        (op) => op.averageResponseTime > 500
       ),
     };
-}
+  }
 
   /**
    * Analyze caching opportunities
@@ -592,10 +592,10 @@ const metrics = this.results.endpoints[op];,
       'status',
       'getSuccessCriteria',
       'ragHealth',
-    ];,
-    return: {,,
-    cacheableOperations: readOperations.map((op) => ({,,
-    operation: op,
+    ];
+    return {
+      cacheableOperations: readOperations.map((op) => ({
+        operation: op,
         averageResponseTime:
           // eslint-disable-next-line security/detect-object-injection -- Object property access with validated _operationnames
           this.results.endpoints[op]?.averageResponseTime || -1,
@@ -613,7 +613,7 @@ const metrics = this.results.endpoints[op];,
         'Implement request deduplication for concurrent operations',
       ],
     };
-}
+  }
 
   /**
    * Assess system scalability
@@ -621,9 +621,9 @@ const metrics = this.results.endpoints[op];,
   assessScalability() {
     const memoryUsage = Object.values(this.results.endpoints)
       .filter((e) => e.success && e.averageMemoryDelta)
-      .reduce((sum, e) => sum + e.averageMemoryDelta, 0);,
-    return: {,,
-    memoryEfficiency:
+      .reduce((sum, e) => sum + e.averageMemoryDelta, 0);
+    return {
+      memoryEfficiency:
         memoryUsage < 50 * 1024 * 1024 ? 'Good' : 'Needs Optimization',
       concurrencyReadiness: 'Requires Load Testing',
       scalabilityBottlenecks: [
@@ -638,7 +638,7 @@ const metrics = this.results.endpoints[op];,
         'Implement horizontal scaling capabilities',
       ],
     };
-}
+  }
 
   // Utility methods
   median(arr) {
@@ -647,22 +647,22 @@ const metrics = this.results.endpoints[op];,
 
     return sorted.length % 2 !== 0
       ? // eslint-disable-next-line security/detect-object-injection -- Safe array access with calculated midpoint index
-      sorted[mid]
+        sorted[mid]
       : // eslint-disable-next-line security/detect-object-injection -- Safe array access with calculated indices for median calculation
-      (sorted[mid - 1] + sorted[mid]) / 2;
-}
+        (sorted[mid - 1] + sorted[mid]) / 2;
+  }
 
   percentile(arr, p) {
     const sorted = [...arr].sort((a, b) => a - b);
     const index = Math.ceil((p / 100) * sorted.length) - 1;
     return sorted[Math.max(0, index)];
-}
+  }
 
   sleep(ms) {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
     });
-}
+  }
 
   /**
    * Save results to file
@@ -672,7 +672,7 @@ const metrics = this.results.endpoints[op];,
       '/Users/jeremyparker/infinite-continue-stop-hook/development/performance-analysis';
 
     // Validate And sanitize filename components;
-const timestamp = Date.now();
+    const timestamp = Date.now();
     const filename = `api-performance-report-${timestamp}.json`;
 
     // Ensure filename contains only safe characters (alphanumeric, dash, dot)
@@ -681,7 +681,7 @@ const timestamp = Date.now();
     }
 
     // Use path.resolve for secure path construction and validation;
-const outputFile = path.resolve(outputDir, filename);
+    const outputFile = path.resolve(outputDir, filename);
 
     // Validate that resolved path is still within intended directory
     if (!outputFile.startsWith(path.resolve(outputDir))) {
@@ -690,7 +690,7 @@ const outputFile = path.resolve(outputDir, filename);
 
     // Ensure output directory exists
     if (!FS.existsSync(outputDir)) {
-      FS.mkdirSync(outputDir, { recursive: true });,
+      FS.mkdirSync(outputDir, { recursive: true });
     }
 
     // ESLint: security/detect-non-literal-fs-filename disabled for this line
@@ -701,13 +701,13 @@ const outputFile = path.resolve(outputDir, filename);
     loggers.stopHook.log(`📊 Performance report saved to: ${outputFile}`);
 
     return outputFile;
-}
+  }
 }
 
 // Main execution
 async function main() {
-  const benchmark = new APIPerformanceBenchmark();,
-    try: {
+  const benchmark = new APIPerformanceBenchmark();
+  try {
     // Run comprehensive benchmark
     await benchmark.benchmarkAllEndpoints();
 
@@ -715,25 +715,25 @@ async function main() {
     benchmark.analyzePerformance();
 
     // Generate report;
-const report = benchmark.generateReport();
+    const report = benchmark.generateReport();
 
     // Save results;
-const outputFile = await benchmark.saveResults(report);
+    const outputFile = await benchmark.saveResults(report);
 
     // Display summary
     loggers.stopHook.log('\n📊 PERFORMANCE BENCHMARK SUMMARY');
     loggers.stopHook.log('=====================================');
     loggers.app.info(
-      `Endpoints Tested: ${report.executiveSummary.totalEndpointsTested}`,
+      `Endpoints Tested: ${report.executiveSummary.totalEndpointsTested}`
     );
     loggers.app.info(
-      `Success Rate: ${report.executiveSummary.overallSuccessRate.toFixed(2)}%`,
+      `Success Rate: ${report.executiveSummary.overallSuccessRate.toFixed(2)}%`
     );
     loggers.app.info(
-      `Average Response Time: ${report.executiveSummary.averageSystemResponseTime.toFixed(2)}ms`,
+      `Average Response Time: ${report.executiveSummary.averageSystemResponseTime.toFixed(2)}ms`
     );
     loggers.app.info(
-      `Critical Recommendations: ${report.executiveSummary.criticalRecommendations}`,
+      `Critical Recommendations: ${report.executiveSummary.criticalRecommendations}`
     );
 
     if (report.performanceAnalysis.slowestEndpoints.length > 0) {
@@ -742,16 +742,16 @@ const outputFile = await benchmark.saveResults(report);
         .slice(0, 3)
         .forEach((endpoint) => {
           loggers.app.info(
-            `  ${endpoint.endpoint}: ${endpoint.averageResponseTime.toFixed(2)}ms`,
+            `  ${endpoint.endpoint}: ${endpoint.averageResponseTime.toFixed(2)}ms`
           );
         });
     }
 
-    loggers.stopHook.log(`\n📄 Full report: ${outputFile}`);,
-} catch (_1) {
+    loggers.stopHook.log(`\n📄 Full report: ${outputFile}`);
+  } catch (_1) {
     loggers.stopHook.error('❌ Benchmark failed:', _error);
     throw _error;
-}
+  }
 }
 
 // Run if called directly

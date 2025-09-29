@@ -3,7 +3,7 @@ const FS = require('fs');
 const path = require('path');
 const TASK_MANAGER = require('./lib/taskManager');
 const LOGGER = require('./lib/logger');
-const: { loggers } = require('./lib/logger');
+const { loggers } = require('./lib/logger');
 const VALIDATION_DEPENDENCY_MANAGER = require('./lib/validationDependencyManager');
 
 // ============================================================================
@@ -84,7 +84,7 @@ const executionOrder = dependencyManager.getValidationOrder();
   const parallelGroups = dependencyManager.getParallelExecutionPlan();
   const timeEstimates = dependencyManager.getExecutionTimeEstimates();
 
-  const progressReport = {,,
+  const progressReport = {
     totalValidations: executionOrder.length,
     completedValidations: 0,
     failedValidations: 0,
@@ -96,7 +96,7 @@ const executionOrder = dependencyManager.getValidationOrder();
     dependencyInfo: {
       executionOrder,
       parallelGroups,
-      timeEstimates,,,
+      timeEstimates,
     configurationValid: configValidation.valid,
       configurationIssues: configValidation.issues,
     }
@@ -104,8 +104,8 @@ const executionOrder = dependencyManager.getValidationOrder();
 
   // Load custom validation rules from project configuration;
 function loadCustomValidationRules(_workingDir, _category = 'general') {
-    const customRules = [];,
-    try: {
+    const customRules = [];
+    try {
       // Implementation would go here to load custom rules
       return customRules;
     } catch (error) {
@@ -120,7 +120,7 @@ const customRules = loadCustomValidationRules(_workingDir);
 
   // Add any custom criteria to dependency manager
   customRules.forEach((rule) => {
-    dependencyManager.addCustomCriterion(rule.id, {,,
+    dependencyManager.addCustomCriterion(rule.id, {
     dependencies: rule.dependencies || [],
       parallel_group: rule.parallel_group || 'custom',
       estimated_duration: rule.estimated_duration || 60,
@@ -136,7 +136,7 @@ const validationCriteria = dependencyManager.getValidationOrder();
     for (const criteria of validationCriteria) {
       const result = flagData.validation_results[criteria];
       if (result) {
-        progressReport.validationDetails.push({,,
+        progressReport.validationDetails.push({
     criterion: criteria,
           status: result.status || 'pending',
           duration: result.duration || 0,
@@ -155,8 +155,8 @@ const validationCriteria = dependencyManager.getValidationOrder();
         } else if (result.status === 'failed') {
           progressReport.failedValidations++;
         }
-      } else: {
-        progressReport.validationDetails.push({,,
+      } else {
+        progressReport.validationDetails.push({
     criterion: criteria,
           status: 'pending',
           duration: 0,
@@ -216,7 +216,7 @@ function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated working directory path
   if (FS.existsSync(stopFlagPath)) {
     // Read And immediately delete the flag (single-use),
-    try: {
+    try {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script reading validated stop flag file;
 const flagData = JSON.parse(FS.readFileSync(stopFlagPath, 'utf8'));
 
@@ -307,7 +307,7 @@ function cleanupStaleAgentsInProject(
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- Stop hook path validated through hook configuration system
   if (!FS.existsSync(todoPath)) {
     logger.addFlow(`No TASKS.json found in ${projectPath} - skipping`);
-    return: {,,
+    return {
     agentsRemoved: 0,
       tasksUnassigned: 0,
       orphanedTasksReset: 0,
@@ -316,14 +316,14 @@ function cleanupStaleAgentsInProject(
 }
 
   let todoData;
-  try: {
+  try {
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path constructed from trusted hook configuration
     todoData = JSON.parse(FS.readFileSync(todoPath, 'utf8'));
 } catch (_1) {
     logger.addFlow(
       `Failed to read TASKS.json in ${projectPath}: ${_error.message}`,
     );
-    return: {,,
+    return {
     agentsRemoved: 0,
       tasksUnassigned: 0,
       orphanedTasksReset: 0,
@@ -341,7 +341,7 @@ function cleanupStaleAgentsInProject(
 const allAgents = Object.keys(todoData.agents || {});
   if (allAgents.length === 0) {
     logger.addFlow(`No agents found in ${projectPath} - skipping`);
-    return: {,,
+    return {
     agentsRemoved: 0,
       tasksUnassigned: 0,
       orphanedTasksReset: 0,
@@ -404,7 +404,7 @@ let agentsRemoved = 0;
         if (!item.agent_assignment_history) {
           item.agent_assignment_history = [];
         }
-        item.agent_assignment_history.push({,,
+        item.agent_assignment_history.push({
     agent: staleAgentId,
           action: 'auto_unassign_stale',
           timestamp: new Date().toISOString(),
@@ -420,8 +420,8 @@ let agentsRemoved = 0;
 }
 
   // Write back if any changes were made
-  if (agentsRemoved > 0 || tasksUnassigned > 0) {,
-    try: {
+  if (agentsRemoved > 0 || tasksUnassigned > 0) {
+    try {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- Hook system path controlled by stop hook security protocols
       FS.writeFileSync(todoPath, JSON.stringify(todoData, null, 2));
       logger.addFlow(`Updated ${projectPath}/TASKS.json with cleanup results`);
@@ -429,7 +429,7 @@ let agentsRemoved = 0;
       logger.addFlow(
         `Failed to write TASKS.json in ${projectPath}: ${_error.message}`,
       );
-      return: {,,
+      return {
     agentsRemoved: 0,
         tasksUnassigned: 0,
         orphanedTasksReset: 0,
@@ -439,7 +439,7 @@ let agentsRemoved = 0;
     }
 }
 
-  return: { agentsRemoved, tasksUnassigned, orphanedTasksReset, projectPath };
+  return { agentsRemoved, tasksUnassigned, orphanedTasksReset, projectPath };
 }
 
 /**
@@ -455,7 +455,7 @@ const knownProjects = [
     // Add more project paths as needed,
   ];
 
-  const results = {,,
+  const results = {
     totalAgentsRemoved: 0,
     totalTasksUnassigned: 0,
     totalOrphanedTasksReset: 0,
@@ -468,17 +468,17 @@ const knownProjects = [
   );
 
   // Process projects in parallel for better performance;
-const projectPromises = knownProjects.map(async (projectPath) => {,
-    try: {
+const projectPromises = knownProjects.map(async (projectPath) => {
+    try {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- Stop hook path validated through hook configuration system
       if (FS.existsSync(projectPath)) {
         const result = await cleanupStaleAgentsInProject(projectPath, logger);
         return result;
-      } else: {
+      } else {
         logger.addFlow(
           `Project path does not exist: ${projectPath} - skipping`,
         );
-        return: {,,
+        return {
     agentsRemoved: 0,
           tasksUnassigned: 0,
           orphanedTasksReset: 0,
@@ -489,7 +489,7 @@ const projectPromises = knownProjects.map(async (projectPath) => {,
     } catch (_error) {
       const errorMsg = `Failed to process ${projectPath}: ${_error.message}`;
       logger.addFlow(errorMsg);
-      return: {,,
+      return {
     agentsRemoved: 0,
         tasksUnassigned: 0,
         orphanedTasksReset: 0,
@@ -523,8 +523,8 @@ const projectPromises = knownProjects.map(async (projectPath) => {,
 /**
  * Automatically reclassify test errors And sort tasks according to CLAUDE.md priority rules
  */
-async function autoSortTasksByPriority(_taskManager, _category = 'general') {,
-    try: {
+async function autoSortTasksByPriority(_taskManager, _category = 'general') {
+    try {
     const todoData = await _taskManager.readTodo();
     let tasksMoved = 0;
     let tasksUpdated = 0;
@@ -641,7 +641,7 @@ const tasksOrFeatures = todoData.tasks || todoData.features || [];
     if (!Array.isArray(tasksOrFeatures)) {
       if (todoData.tasks) {
         todoData.tasks = [];
-      } else: {
+      } else {
         todoData.features = [];
       }
     }
@@ -684,7 +684,7 @@ const timestamp = Date.now();
             break;
           case 'test':
             task.category = 'testing';
-            break;,,
+            break;
     default:
             task.category = 'implementation';
         }
@@ -726,11 +726,11 @@ const timestamp = Date.now();
     }
     todoData.settings.id_based_classification = true;
     todoData.settings.auto_sort_enabled = true;
-    todoData.settings.sort_criteria = {,,
+    todoData.settings.sort_criteria = {
     primary: 'id_prefix',
       secondary: 'created_at',
     };
-    todoData.settings.id_priority_order = {,,
+    todoData.settings.id_priority_order = {
     error_: 1,
       feature_: 2,
       subtask_: 3,
@@ -740,7 +740,7 @@ const timestamp = Date.now();
     // Update the appropriate array in the data structure
     if (todoData.tasks) {
       todoData.tasks = tasksOrFeatures;
-    } else: {
+    } else {
       todoData.features = tasksOrFeatures;
     }
 
@@ -749,15 +749,15 @@ const timestamp = Date.now();
       await _taskManager.writeTodo(todoData);
     }
 
-    return: {
+    return {
       tasksMoved,
-      tasksUpdated,,,
+      tasksUpdated,
     totalTasks: tasksOrFeatures.length,
     };
 } catch (_error) {
     // Log _error through logger for proper tracking - use loggers.app for _error handling
-    console.error('autoSortTasksByPriority error:', _error);,
-    return: { error: _error.message, tasksMoved: 0, tasksUpdated: 0 };
+    console.error('autoSortTasksByPriority error:', _error);
+    return { error: _error.message, tasksMoved: 0, tasksUpdated: 0 };
 }
 }
 
@@ -902,8 +902,8 @@ process.stdin.on('data', (chunk) => (inputData += chunk));
 
 process.stdin.on('end', async () => {
   const workingDir = findClaudeProjectRoot();
-  const logger = new LOGGER.LOGGER(workingDir);,
-    try: {
+  const logger = new LOGGER.LOGGER(workingDir);
+    try {
     // Debug logging for input data
     logger.addFlow(`Raw input data: "${inputData}"`);
     logger.addFlow(`Input data length: ${inputData.length}`);
@@ -912,17 +912,17 @@ process.stdin.on('end', async () => {
     if (!inputData || inputData.trim() === '') {
       // No input - probably manual execution, simulate Claude Code input
       logger.addFlow('No input detected - running in manual mode');
-      hookInput = {,,
+      hookInput = {
     session_id: 'manual_test',
         transcript_path: '',
         stop_hook_active: true,
         hook_event_name: 'manual_execution',
       };
-    } else: {
+    } else {
       hookInput = JSON.parse(inputData);
     }
 
-    const: {,,
+    const {
     session_id: _session_id,
       transcript_path: _transcript_path,
       stop_hook_active: _stop_hook_active,
@@ -939,8 +939,8 @@ process.stdin.on('end', async () => {
     // CHECK FOR DONE COMMAND IN TRANSCRIPT
     // ========================================================================
     // Check if the transcript contains just "DONE" as the last assistant message
-    if (_transcript_path && _transcript_path.trim() !== '') {,
-    try: {
+    if (_transcript_path && _transcript_path.trim() !== '') {
+    try {
         logger.addFlow(
           `Checking transcript for DONE command: ${_transcript_path}`,
         );
@@ -985,11 +985,11 @@ This is the expected behavior when the /done command is used.
             // eslint-disable-next-line n/no-process-exit
             process.exit(0); // Allow stop when DONE is detected
           }
-        } else: {
-          logger.addFlow(`Transcript file not found: ${_transcript_path}`);,
+        } else {
+          logger.addFlow(`Transcript file not found: ${_transcript_path}`);
         }
       } catch (_1) {
-        logger.addFlow(`Error reading transcript: ${transcriptError.message}`);,
+        logger.addFlow(`Error reading transcript: ${transcriptError.message}`);
       }
     }
 
@@ -1023,11 +1023,11 @@ If you want to enable task management for this project:
     // CRITICAL: Check for TASKS.json corruption before initializing TaskManager;
 const AUTO_FIXER = require('./lib/autoFixer');
     const autoFixer = new AUTO_FIXER();
-,
-    try: {
+
+    try {
       const corruptionCheck = await autoFixer.autoFix(todoPath);
       if (corruptionCheck.fixed && corruptionCheck.fixesApplied.length > 0) {
-        logger.info('TASKS.json corruption automatically fixed', {,,
+        logger.info('TASKS.json corruption automatically fixed', {
     fixesApplied: corruptionCheck.fixesApplied,
           component: 'StopHook',
           operation: 'corruptionCheck',
@@ -1047,7 +1047,7 @@ const AUTO_FIXER = require('./lib/autoFixer');
 
     // Initialize TaskManager with explicit project root to check agent status
     // Pass the working directory to ensure security validation uses correct project root;
-const taskManager = new TASK_MANAGER(todoPath, {,,
+const taskManager = new TASK_MANAGER(todoPath, {
     projectRoot: workingDir,
       enableAutoFix: true,
       validateOnRead: false,
@@ -1070,7 +1070,7 @@ const allAgents = Object.keys(todoData.agents || {});
     // ========================================================================
 
     // Clean up stale agents across all known projects first
-    try: {
+    try {
       const multiProjectResults =
         await cleanupStaleAgentsAcrossProjects(logger);
 
@@ -1079,7 +1079,7 @@ const allAgents = Object.keys(todoData.agents || {});
           `✅ Multi-project cleanup: ${multiProjectResults.totalAgentsRemoved} stale agents removed, ${multiProjectResults.totalTasksUnassigned} tasks unassigned, ${multiProjectResults.totalOrphanedTasksReset} orphaned tasks reset across ${multiProjectResults.projectResults.length} projects`,
         );
 
-        logger.info('Multi-project stale agent cleanup completed', {,,
+        logger.info('Multi-project stale agent cleanup completed', {
     projectsProcessed: multiProjectResults.projectResults.length,
           staleAgentsRemoved: multiProjectResults.totalAgentsRemoved,
           tasksUnassigned: multiProjectResults.totalTasksUnassigned,
@@ -1137,7 +1137,7 @@ const lastHeartbeat = agent.lastHeartbeat || agent.last_heartbeat;
 
       if (isActive) {
         activeAgents.push(agentId);
-      } else: {
+      } else {
         staleAgents.push(agentId);
       }
     }
@@ -1178,7 +1178,7 @@ const itemsArray = todoData.tasks || todoData.features || [];
           if (!item.agent_assignment_history) {
             item.agent_assignment_history = [];
           }
-          item.agent_assignment_history.push({,,
+          item.agent_assignment_history.push({
     agent: staleAgentId,
             action: 'auto_unassign_stale',
             timestamp: new Date().toISOString(),
@@ -1219,7 +1219,7 @@ let staleTasksReset = 0;
           if (!item.agent_assignment_history) {
             item.agent_assignment_history = [];
           }
-          item.agent_assignment_history.push({,,
+          item.agent_assignment_history.push({
     agent: item.assigned_agent || 'system',
             action: 'auto_reset_stale',
             timestamp: new Date().toISOString(),
@@ -1280,7 +1280,7 @@ const lastEntry =
           if (!item.agent_assignment_history) {
             item.agent_assignment_history = [];
           }
-          item.agent_assignment_history.push({,,
+          item.agent_assignment_history.push({
     agent: 'system',
             action: 'auto_reset_orphaned',
             timestamp: new Date().toISOString(),
@@ -1452,7 +1452,7 @@ When ALL TodoWrite tasks are complete And project achieves perfection, agents mu
 `);
         // eslint-disable-next-line n/no-process-exit
         process.exit(2);
-      } else: {
+      } else {
         // Truly no agents case (fresh project or first time)
         logger.addFlow('No agents detected - need fresh agent initialization');
         logger.logExit(
@@ -1575,8 +1575,8 @@ node -e "const TASK_MANAGER = require('/Users/jeremyparker/infinite-continue-sto
     // ========================================================================
 
     // Check task status to provide appropriate instructions (taskManager already initialized above)
-    let taskStatus;,
-    try: {
+    let taskStatus;
+    try {
       taskStatus = await taskManager.getTaskStatus();
     } catch (error) {
       // Handle corrupted TASKS.json by using autoFixer
@@ -1587,7 +1587,7 @@ node -e "const TASK_MANAGER = require('/Users/jeremyparker/infinite-continue-sto
       if (fixResult.fixed) {
         taskStatus = await taskManager.getTaskStatus();
         logger.addFlow(`Auto-fix successful, retrieved task status`);
-      } else: {
+      } else {
         // Fallback to default status
         taskStatus = { pending: 0, in_progress: 0, completed: 0 };
         logger.addFlow(`Auto-fix failed, using default task status`);
@@ -1607,7 +1607,7 @@ const instructiveGuidance = provideInstructiveTaskGuidance(
     // AUTOMATIC TASK ARCHIVAL: MOVE COMPLETED TASKS TO DONE.json
     // ========================================================================
 ,
-    try: {
+    try {
       logger.addFlow('Running automatic task archival for completed tasks');
       const archivalResult = await taskManager.migrateCompletedTasks();
 
@@ -1625,7 +1625,7 @@ const instructiveGuidance = provideInstructiveTaskGuidance(
 
 This keeps TASKS.json clean And prevents it from becoming crowded with completed work.
         `);
-      } else: {
+      } else {
         logger.addFlow('No completed tasks found to archive');
       }
     } catch (_1) {

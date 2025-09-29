@@ -14,7 +14,7 @@
  * of the FeatureManagerAPI with detailed lifecycle testing.
  */
 
-const path = require('path');,
+const path = require('path');
     const: {
   MockFileSystem,
   TEST_FIXTURES,
@@ -78,7 +78,7 @@ const FS = require('fs');
     );
 
     // Mock time for consistent testing
-    timeUtils.mockCurrentTimeISO('2025-09-23T12:00:00.000Z');,
+    timeUtils.mockCurrentTimeISO('2025-09-23T12:00:00.000Z');
 });
 
   afterEach(() => {
@@ -377,7 +377,7 @@ const result = await api.suggestFeature(invalidFeature);
         expect(result.success).toBe(true);
 
         const features = await api._loadFeatures();
-        expect(features.metadata.updated).toBe('2025-09-23T12:00:00.000Z');,
+        expect(features.metadata.updated).toBe('2025-09-23T12:00:00.000Z');
       });
 
       test('should preserve existing features when adding new ones', async () => {
@@ -456,14 +456,14 @@ const suggestResult = await api.suggestFeature(
         expect(result.feature.status).toBe('approved');
         expect(result.feature.approved_by).toBe('system');
         expect(result.feature.approval_notes).toBe('');
-        expect(result.feature.approval_date).toBe('2025-09-23T12:00:00.000Z');,
+        expect(result.feature.approval_date).toBe('2025-09-23T12:00:00.000Z');
       });
 
       test('should update feature timestamps on approval', async () => {
         const result = await api.approveFeature(suggestedFeatureId);
         expect(result.success).toBe(true);
         expect(result.feature.updated_at).toBe('2025-09-23T12:00:00.000Z');
-        expect(result.feature.approval_date).toBe('2025-09-23T12:00:00.000Z');,
+        expect(result.feature.approval_date).toBe('2025-09-23T12:00:00.000Z');
       });
 
       test('should maintain original feature data during approval', async () => {
@@ -512,7 +512,7 @@ const suggestResult = await api.suggestFeature(
         expect(history[0].notes).toBe(
           'Technical review complete. Architecture approved.',
         );
-        expect(history[0].timestamp).toBe('2025-09-23T12:00:00.000Z');,
+        expect(history[0].timestamp).toBe('2025-09-23T12:00:00.000Z');
       });
 
       test('should handle multiple feature approvals in history', async () => {
@@ -593,7 +593,7 @@ const secondResult = await api.approveFeature(suggestedFeatureId);
         expect(secondResult.error).toContain(
           "Feature must be in 'suggested' status to approve",
         );
-        expect(secondResult.error).toContain('Current status: approved');,
+        expect(secondResult.error).toContain('Current status: approved');
       });
 
       test('should reject approval of rejected feature', async () => {
@@ -608,7 +608,7 @@ const approveResult = await api.approveFeature(suggestedFeatureId);
         expect(approveResult.error).toContain(
           "Feature must be in 'suggested' status to approve",
         );
-        expect(approveResult.error).toContain('Current status: rejected');,
+        expect(approveResult.error).toContain('Current status: rejected');
       });
     });
 });
@@ -665,14 +665,14 @@ const suggestResult = await api.suggestFeature(
         expect(result.feature.status).toBe('rejected');
         expect(result.feature.rejected_by).toBe('system');
         expect(result.feature.rejection_reason).toBe('No reason provided');
-        expect(result.feature.rejection_date).toBe('2025-09-23T12:00:00.000Z');,
+        expect(result.feature.rejection_date).toBe('2025-09-23T12:00:00.000Z');
       });
 
       test('should update feature timestamps on rejection', async () => {
         const result = await api.rejectFeature(suggestedFeatureId);
         expect(result.success).toBe(true);
         expect(result.feature.updated_at).toBe('2025-09-23T12:00:00.000Z');
-        expect(result.feature.rejection_date).toBe('2025-09-23T12:00:00.000Z');,
+        expect(result.feature.rejection_date).toBe('2025-09-23T12:00:00.000Z');
       });
     });
 
@@ -704,7 +704,7 @@ const suggestResult = await api.suggestFeature(
         expect(history[0].reason).toBe(
           'Feature does not align with current product strategy And user research findings.',
         );
-        expect(history[0].timestamp).toBe('2025-09-23T12:00:00.000Z');,
+        expect(history[0].timestamp).toBe('2025-09-23T12:00:00.000Z');
       });
     });
 
@@ -735,7 +735,7 @@ const rejectResult = await api.rejectFeature(suggestedFeatureId);
         expect(rejectResult.error).toContain(
           "Feature must be in 'suggested' status to reject",
         );
-        expect(rejectResult.error).toContain('Current status: approved');,
+        expect(rejectResult.error).toContain('Current status: approved');
       });
 
       test('should reject rejection of already rejected feature', async () => {
@@ -750,7 +750,7 @@ const secondResult = await api.rejectFeature(suggestedFeatureId);
         expect(secondResult.error).toContain(
           "Feature must be in 'suggested' status to reject",
         );
-        expect(secondResult.error).toContain('Current status: rejected');,
+        expect(secondResult.error).toContain('Current status: rejected');
       });
     });
 });

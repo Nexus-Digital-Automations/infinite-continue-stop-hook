@@ -37,7 +37,7 @@ class SecurityUtils {
     }
 
     // Resolve paths to prevent directory traversal;
-const resolvedBase = path.resolve(basePath);
+    const resolvedBase = path.resolve(basePath);
     const resolvedPath = path.resolve(basePath, path.basename(filePath));
 
     // Ensure the resolved path is within the base directory
@@ -46,12 +46,12 @@ const resolvedBase = path.resolve(basePath);
       resolvedPath !== resolvedBase
     ) {
       throw new Error(
-        `Path ${filePath} is outside allowed directory ${basePath}`,
+        `Path ${filePath} is outside allowed directory ${basePath}`
       );
     }
 
     return resolvedPath;
-}
+  }
 
   /**
    * Safely read file with path validation
@@ -64,7 +64,7 @@ const resolvedBase = path.resolve(basePath);
     const safePath = this.validatePath(basePath, filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
     return FS.readFile(safePath, encoding);
-}
+  }
 
   /**
    * Safely write file with path validation
@@ -79,7 +79,7 @@ const resolvedBase = path.resolve(basePath);
     await FS.mkdir(path.dirname(safePath), { recursive: true });
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
     return FS.writeFile(safePath, content, 'utf-8');
-}
+  }
 
   /**
    * Safely append to file with path validation
@@ -94,7 +94,7 @@ const resolvedBase = path.resolve(basePath);
     await FS.mkdir(path.dirname(safePath), { recursive: true });
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
     return FS.appendFile(safePath, content);
-}
+  }
 }
 
 /**
@@ -103,32 +103,32 @@ const resolvedBase = path.resolve(basePath);
 class AuditLogger {
   constructor(__agentId) {
     this.logs = [];
-}
+  }
 
   log(message) {
     const logEntry = {
-    timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString(),
       level: 'info',
       message,
     };
     this.logs.push(logEntry);
     // for audit system, we'll use process.stdout to maintain output
     process.stdout.write(`[AUDIT] ${message}\n`);
-}
+  }
 
   error(message) {
     const logEntry = {
-    timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString(),
       level: 'error',
       message,
     };
     this.logs.push(logEntry);
     process.stderr.write(`[AUDIT ERROR] ${message}\n`);
-}
+  }
 
   getLogs() {
     return this.logs;
-}
+  }
 }
 
 class AUDIT_INTEGRATION {
@@ -140,7 +140,7 @@ class AUDIT_INTEGRATION {
 
     // Integration configuration
     this.config = {
-    enableAutoAudit: true,
+      enableAutoAudit: true,
       auditTimeoutMs: 10000,
       objectivityEnforcement: true,
       mandatoryAuditCategories: ['feature'],
@@ -150,11 +150,11 @@ class AUDIT_INTEGRATION {
 
     // Agent role patterns for objectivity enforcement
     this.agentRolePatterns = {
-    implementation: ['development', 'feature', 'implementation'],
+      implementation: ['development', 'feature', 'implementation'],
       audit: ['audit', 'quality', 'review'],
       research: ['research', 'analysis', 'investigation'],
     };
-}
+  }
 
   /**
    * Create comprehensive audit task for completed feature implementation
@@ -165,29 +165,29 @@ class AUDIT_INTEGRATION {
    */
   async createAuditTask(originalTaskId, implementerAgentId, taskDetails = {}) {
     this.logger.log(
-      `🔍 Creating audit task for completed feature: ${originalTaskId}`,
+      `🔍 Creating audit task for completed feature: ${originalTaskId}`
     );
 
     // Generate audit task definition;
-const auditTaskData = await this.generateAuditTaskDefinition(
+    const auditTaskData = await this.generateAuditTaskDefinition(
       originalTaskId,
       implementerAgentId,
-      taskDetails,
+      taskDetails
     );
 
     // Create audit task via TaskManager API;
-const auditTask = await this.createTaskViaApi(auditTaskData);
+    const auditTask = await this.createTaskViaApi(auditTaskData);
 
     // Log audit task creation
     await this.logAuditTaskCreation(
       originalTaskId,
       auditTask.taskId,
-      implementerAgentId,
+      implementerAgentId
     );
 
     this.logger.log(`✅ Audit task created: ${auditTask.taskId}`);
     return auditTask;
-}
+  }
 
   /**
    * Generate comprehensive audit task definition with 25-point criteria
@@ -199,23 +199,23 @@ const auditTask = await this.createTaskViaApi(auditTaskData);
   async generateAuditTaskDefinition(
     originalTaskId,
     implementerAgentId,
-    taskDetails,
+    taskDetails
   ) {
     // Load project-specific success criteria;
-const projectCriteria = await this.loadProjectSuccessCriteria();
+    const projectCriteria = await this.loadProjectSuccessCriteria();
 
     // Generate audit task definition;
-const auditTaskData = {
-    title: `AUDIT: ${taskDetails.title || 'Feature Implementation'} - 25-Point Quality Review`,
+    const auditTaskData = {
+      title: `AUDIT: ${taskDetails.title || 'Feature Implementation'} - 25-Point Quality Review`,
       description: this.generateAuditDescription(
         originalTaskId,
         taskDetails,
-        projectCriteria,
+        projectCriteria
       ),
       category: 'subtask',
       success_criteria: this.generate25PointSuccessCriteria(projectCriteria),
       audit_metadata: {
-    audit_type: 'comprehensive_25_point',
+        audit_type: 'comprehensive_25_point',
         original_task_id: originalTaskId,
         original_implementer: implementerAgentId,
         prevents_self_review: true,
@@ -244,7 +244,7 @@ const auditTaskData = {
     };
 
     return auditTaskData;
-}
+  }
 
   /**
    * Generate detailed audit task description with context
@@ -284,7 +284,7 @@ const auditTaskData = {
 5. Remediation task generation for any failures
 
 Refer to development/essentials/audit-criteria.md for complete criteria definitions And validation procedures.`;
-}
+  }
 
   /**
    * Generate 25-point success criteria integrated with project requirements
@@ -332,54 +332,54 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
       'PROJECT INTEGRATION: Agent coordination capabilities preserved',
       'PROJECT INTEGRATION: Multi-agent development standards met',
     ];
-}
+  }
 
   /**
    * Load project-specific success criteria from task-requirements.md
    * @returns {Object} Parsed project success criteria
    */
   async loadProjectSuccessCriteria() {
-    try: {
+    try {
       // Use safe file reading with path validation;
-const content = await SecurityUtils.safeReadFile(
+      const content = await SecurityUtils.safeReadFile(
         this.essentialsDir,
-        'task-requirements.md',
+        'task-requirements.md'
       );
 
       // Parse criteria from markdown (simplified extraction)
-      const criteria = {,
-    build_requirements: this.extractCriteria(
+      const criteria = {
+        build_requirements: this.extractCriteria(
           content,
-          '### **Build Requirements**',
+          '### **Build Requirements**'
         ),
         runtime_requirements: this.extractCriteria(
           content,
-          '### **Runtime Requirements**',
+          '### **Runtime Requirements**'
         ),
         code_quality: this.extractCriteria(
           content,
-          '### **Code Quality Requirements**',
+          '### **Code Quality Requirements**'
         ),
         test_requirements: this.extractCriteria(
           content,
-          '### **Test Requirements**',
+          '### **Test Requirements**'
         ),
         git_requirements: this.extractCriteria(
           content,
-          '### **Git Integration Requirements**',
+          '### **Git Integration Requirements**'
         ),
         project_specific: this.extractCriteria(
           content,
-          '### **TaskManager API Integration**',
+          '### **TaskManager API Integration**'
         ),
       };
 
       return criteria;
     } catch (error) {
       this.logger.log(`⚠️ Could not load task requirements: ${error.message}`);
-      return: {};
+      return {};
     }
-}
+  }
 
   /**
    * Extract criteria items from markdown section
@@ -401,21 +401,21 @@ const content = await SecurityUtils.safeReadFile(
         : sectionContent.substring(0, nextSection);
 
     // Extract checklist items;
-const items = section.match(/- \[ \] \*\*([^*]+)\*\*/g) || [];
+    const items = section.match(/- \[ \] \*\*([^*]+)\*\*/g) || [];
     return items.map((item) => item.replace(/- \[ \] \*\*([^*]+)\*\*.*/, '$1'));
-}
+  }
 
   /**
    * Generate validation commands for the current project
    * @returns {Array} Array of validation command objects
    */
   async generateValidationCommands() {
-    let hasPackageJson = false;,
-    try: {
+    let hasPackageJson = false;
+    try {
       // Use safe path validation for package.json check;
-const packageJsonPath = SecurityUtils.validatePath(
+      const packageJsonPath = SecurityUtils.validatePath(
         this.projectRoot,
-        'package.json',
+        'package.json'
       );
       await FS.access(packageJsonPath);
       hasPackageJson = true;
@@ -424,37 +424,43 @@ const packageJsonPath = SecurityUtils.validatePath(
     }
 
     if (hasPackageJson) {
-      return [ {,,
-    command: 'npm run lint',
+      return [
+        {
+          command: 'npm run lint',
           description: 'Execute linting validation',
           timeout: 30000,
-        }, {,,
-    command: 'npm run build',
+        },
+        {
+          command: 'npm run build',
           description: 'Execute build validation',
           timeout: 60000,
-        }, {,,
-    command: 'npm test',
+        },
+        {
+          command: 'npm test',
           description: 'Execute test suite validation',
           timeout: 120000,
-        }, {,,
-    command: 'timeout 10s npm start',
+        },
+        {
+          command: 'timeout 10s npm start',
           description: 'Execute runtime validation',
           timeout: 15000,
-        }, {,,
-    command: 'npm audit',
+        },
+        {
+          command: 'npm audit',
           description: 'Execute security audit',
           timeout: 30000,
-        }
-  ];
-    } else: {
-      return [ {,,
-    command: 'echo "Manual validation required - no package.json found"',
+        },
+      ];
+    } else {
+      return [
+        {
+          command: 'echo "Manual validation required - no package.json found"',
           description: 'Manual validation',
           timeout: 1000,
-        }
-  ];
+        },
+      ];
     }
-}
+  }
 
   /**
    * Create audit task via TaskManager API
@@ -464,23 +470,23 @@ const packageJsonPath = SecurityUtils.validatePath(
   createTaskViaApi(auditTaskData) {
     const command = `timeout ${this.config.auditTimeoutMs / 1000}s node "${this.taskManagerApiPath}" create '${JSON.stringify(auditTaskData)}'`;
 
-    try: {
-      const output = execSync(command, {,,
-    encoding: 'utf-8',
+    try {
+      const output = execSync(command, {
+        encoding: 'utf-8',
         cwd: this.projectRoot,
       });
       const result = JSON.parse(output);
 
       if (result.success) {
         return result;
-      } else: {
+      } else {
         throw new Error(`TaskManager API error: ${JSON.stringify(result)}`);
       }
     } catch (error) {
       this.logger.error(`❌ Failed to create audit task: ${error.message}`);
       throw error;
     }
-}
+  }
 
   /**
    * Validate agent objectivity for audit assignment
@@ -496,7 +502,7 @@ const packageJsonPath = SecurityUtils.validatePath(
     // Basic check: different agent IDs
     if (implementerAgentId === auditAgentId) {
       this.logger.error(
-        `🚨 OBJECTIVITY VIOLATION: Agent ${auditAgentId} cannot audit their own work`,
+        `🚨 OBJECTIVITY VIOLATION: Agent ${auditAgentId} cannot audit their own work`
       );
       return false;
     }
@@ -507,15 +513,15 @@ const packageJsonPath = SecurityUtils.validatePath(
 
     if (implementerRole && auditRole && implementerRole === auditRole) {
       this.logger.log(
-        `⚠️ ROLE OVERLAP WARNING: Both agents appear to have ${implementerRole} role`,
+        `⚠️ ROLE OVERLAP WARNING: Both agents appear to have ${implementerRole} role`
       );
     }
 
     this.logger.log(
-      `✅ Objectivity validated: ${implementerAgentId} ≠ ${auditAgentId}`,
+      `✅ Objectivity validated: ${implementerAgentId} ≠ ${auditAgentId}`
     );
     return true;
-}
+  }
 
   /**
    * Detect agent role from agent ID pattern
@@ -532,7 +538,7 @@ const packageJsonPath = SecurityUtils.validatePath(
     }
 
     return null;
-}
+  }
 
   /**
    * Log audit task creation for tracking And debugging
@@ -541,8 +547,8 @@ const packageJsonPath = SecurityUtils.validatePath(
    * @param {string} implementerAgentId - Implementer agent ID
    */
   async logAuditTaskCreation(originalTaskId, auditTaskId, implementerAgentId) {
-    const logEntry = {,,
-    timestamp: new Date().toISOString(),
+    const logEntry = {
+      timestamp: new Date().toISOString(),
       event: 'audit_task_created',
       original_task_id: originalTaskId,
       audit_task_id: auditTaskId,
@@ -551,17 +557,17 @@ const packageJsonPath = SecurityUtils.validatePath(
       objectivity_enforced: this.config.objectivityEnforcement,
     };
 
-    try: {
+    try {
       // Use safe file append with path validation
       await SecurityUtils.safeAppendFile(
         this.projectRoot,
         'development/logs/audit_integration.log',
-        JSON.stringify(logEntry) + '\n',
+        JSON.stringify(logEntry) + '\n'
       );
     } catch (error) {
-      this.logger.log(`⚠️ Failed to log audit task creation: ${error.message}`);,
+      this.logger.log(`⚠️ Failed to log audit task creation: ${error.message}`);
     }
-}
+  }
 
   /**
    * Check if task requires audit based on configuration
@@ -574,17 +580,17 @@ const packageJsonPath = SecurityUtils.validatePath(
     }
 
     return this.config.mandatoryAuditCategories.includes(
-      taskDetails.task.category,
+      taskDetails.task.category
     );
-}
+  }
 
   /**
    * Get audit system configuration
    * @returns {Object} Current configuration
    */
-  getConfiguration() {,
-    return: { ...this.config };
-}
+  getConfiguration() {
+    return { ...this.config };
+  }
 
   /**
    * Update audit system configuration
@@ -593,7 +599,7 @@ const packageJsonPath = SecurityUtils.validatePath(
   updateConfiguration(newConfig) {
     this.config = { ...this.config, ...newConfig };
     this.logger.log(`🔧 Audit integration configuration updated`);
-}
+  }
 }
 
 // CLI Interface
@@ -610,7 +616,7 @@ if (require.main === module) {
 
       if (!originalTaskId || !implementerAgent) {
         integration.logger.error(
-          'Usage: node audit-integration.js create-audit <originalTaskId> <implementerAgent> [taskTitle]',
+          'Usage: node audit-integration.js create-audit <originalTaskId> <implementerAgent> [taskTitle]'
         );
         throw new Error('Missing required arguments for create-audit command');
       }
@@ -623,12 +629,12 @@ if (require.main === module) {
           integration.logger.log(`Audit Task: ${result.taskId}`);
           integration.logger.log(`Implementer: ${implementerAgent}`);
           integration.logger.log(
-            `\nNext: Assign different agent to audit task for objectivity`,
+            `\nNext: Assign different agent to audit task for objectivity`
           );
         })
         .catch((error) => {
           integration.logger.error(
-            `❌ Failed to create audit task: ${error.message}`,
+            `❌ Failed to create audit task: ${error.message}`
           );
           throw error;
         });
@@ -641,19 +647,19 @@ if (require.main === module) {
 
       if (!implementer || !auditor) {
         integration.logger.error(
-          'Usage: node audit-integration.js validate-objectivity <implementerAgent> <auditorAgent>',
+          'Usage: node audit-integration.js validate-objectivity <implementerAgent> <auditorAgent>'
         );
         throw new Error(
-          'Missing required arguments for validate-objectivity command',
+          'Missing required arguments for validate-objectivity command'
         );
       }
 
       const isObjective = integration.validateAgentObjectivity(
         implementer,
-        auditor,
+        auditor
       );
       integration.logger.log(
-        `Objectivity Check: ${isObjective ? '✅ PASSED' : '❌ FAILED'}`,
+        `Objectivity Check: ${isObjective ? '✅ PASSED' : '❌ FAILED'}`
       );
       if (!isObjective) {
         throw new Error('Objectivity validation failed');
@@ -664,7 +670,7 @@ if (require.main === module) {
     case 'config':
       integration.logger.log('Current Audit Integration Configuration:');
       integration.logger.log(
-        JSON.stringify(integration.getConfiguration(), null, 2),
+        JSON.stringify(integration.getConfiguration(), null, 2)
       );
       break;
 
@@ -677,8 +683,8 @@ USAGE:
   node audit-integration.js create-audit <originalTaskId> <implementerAgent> [taskTitle]
   node audit-integration.js validate-objectivity <implementerAgent> <auditorAgent>
   node audit-integration.js config
-,
-    EXAMPLES:
+
+EXAMPLES:
   # Create comprehensive audit task
   node audit-integration.js create-audit task_123 agent_dev "User Authentication Feature"
   
@@ -687,8 +693,8 @@ USAGE:
   
   # View configuration
   node audit-integration.js config
-,
-    FEATURES:
+
+FEATURES:
   ✅ Automatic audit task creation after feature completion
   ✅ 25-point quality criteria integration
   ✅ Objectivity enforcement (prevents self-audit)
@@ -705,7 +711,7 @@ PROJECT INTEGRATION:
   And integrates with the infinite-continue-stop-hook project standards.
 `);
       break;
-}
+  }
 }
 
 module.exports = AUDIT_INTEGRATION;

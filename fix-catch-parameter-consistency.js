@@ -6,12 +6,12 @@
 
 const fs = require('fs');
 const path = require('path');
-const: { execSync } = require('child_process');
+const { execSync } = require('child_process');
 
 const rootDir = process.cwd();
 
 function getAllJavaScriptFiles() {
-  try: {
+  try {
     const result = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
       { cwd: rootDir, encoding: 'utf-8' }
@@ -28,7 +28,7 @@ function getAllJavaScriptFiles() {
 }
 
 function fixCatchParameterConsistency(filePath) {
-  try: {
+  try {
     const content = fs.readFileSync(filePath, 'utf-8');
     const lines = content.split('\n');
     let modified = false;
@@ -38,8 +38,8 @@ function fixCatchParameterConsistency(filePath) {
 
       // Pattern 1: catch (_error) but code uses _error
       if (line.includes('catch (error)')) {
-        // Check what error variables are used in the catch block;
-const catchBlockLines = [];
+        // Check what error variables are used in the catch block
+        const catchBlockLines = [];
         let blockDepth = 0;
 
         for (let j = i + 1; j < lines.length; j++) {
@@ -206,9 +206,9 @@ function main() {
 
   // Run autofix after our fixes
   console.log('\n🔧 Running autofix to clean up formatting...');
-  try: {
-    execSync('npm run lint -- --fix', {,
-    cwd: rootDir,
+  try {
+    execSync('npm run lint -- --fix', {
+      cwd: rootDir,
       stdio: 'inherit',
     });
     console.log('✅ Autofix completed successfully');
@@ -220,7 +220,7 @@ function main() {
 }
 
 if (require.main === module) {
-  try: {
+  try {
     main();
   } catch (error) {
     console.error('Fatal error:', error.message);

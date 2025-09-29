@@ -20,42 +20,42 @@ module.exports = [
 
   // Node.js plugin recommended rules
   NODE_PLUGIN.configs['flat/recommended-script'],
-  {,
-    languageOptions: {,
-    ecmaVersion: 2022,
+  {
+    languageOptions: {
+      ecmaVersion: 2022,
       sourceType: 'commonjs',
       globals: {
         ...GLOBALS.node,
         // Jest globals for test files
         ...GLOBALS.jest,
-      }
-  },
+      },
+    },
 
-    plugins: {,
-    n: NODE_PLUGIN,
+    plugins: {
+      n: NODE_PLUGIN,
       security: SECURITY_PLUGIN,
     },
 
     rules: {
-      // === SEMICOLONS & QUOTES ===,
-    semi: ['error', 'always'],
+      // === SEMICOLONS & QUOTES ===
+      semi: ['error', 'always'],
       quotes: [
         'error',
         'single',
-        {,
-    avoidEscape: true,
+        {
+          avoidEscape: true,
           allowTemplateLiterals: true,
-        }
-  ],
+        },
+      ],
 
       // === CODE QUALITY ===
       'no-unused-vars': [
         'error',
-        {,
-    argsIgnorePattern: '^_',
+        {
+          argsIgnorePattern: '^_',
           varsIgnorePattern: '^_',
-        }
-  ],
+        },
+      ],
       'no-var': 'error',
       'prefer-const': 'error',
       'no-console': 'warn', // TaskManager legitimately uses console
@@ -93,20 +93,20 @@ module.exports = [
       indent: [
         'error',
         2,
-        {,
-    SwitchCase: 1,
+        {
+          SwitchCase: 1,
           VariableDeclarator: 1,
           outerIIFEBody: 1,
-        }
-  ],
+        },
+      ],
       'space-before-function-paren': [
         'error',
-        {,
-    anonymous: 'always',
+        {
+          anonymous: 'always',
           named: 'never',
           asyncArrow: 'always',
-        }
-  ],
+        },
+      ],
       'comma-dangle': ['error', 'always-multiline'],
       'object-curly-spacing': ['error', 'always'],
       'array-bracket-spacing': ['error', 'never'],
@@ -124,16 +124,17 @@ module.exports = [
       'no-multiple-empty-lines': ['error', { max: 2, maxEOF: 1 }],
       'no-trailing-spaces': 'error',
       'eol-last': ['error', 'always'],
-    }
+    },
   },
 
-  // Configuration specific to test files: {,
+  // Configuration specific to test files
+  {
     files: ['**/*.test.js', '**/*.spec.js', '**/test/**/*.js'],
-    languageOptions: {,
-    globals: {
+    languageOptions: {
+      globals: {
         ...GLOBALS.jest,
-        // Additional test globals that may be missing,
-    describe: 'readonly',
+        // Additional test globals that may be missing
+        describe: 'readonly',
         it: 'readonly',
         test: 'readonly',
         expect: 'readonly',
@@ -142,18 +143,19 @@ module.exports = [
         beforeAll: 'readonly',
         afterAll: 'readonly',
         jest: 'readonly',
-      }
-  },
+      },
+    },
     rules: {
       // Relax some rules for tests
       'no-console': 'off',
       'security/detect-object-injection': 'off',
       'security/detect-non-literal-fs-filename': 'off',
       'n/no-unpublished-require': 'off',
-    }
+    },
   },
 
-  // Configuration specific to development/temp-scripts directory: {,
+  // Configuration specific to development/temp-scripts directory
+  {
     files: ['development/temp-scripts/**/*.js'],
     rules: {
       // Allow console statements in temp scripts
@@ -175,10 +177,11 @@ module.exports = [
       'no-promise-executor-return': 'warn',
       // Allow redundant await on return values in test scripts
       'no-return-await': 'warn',
-    }
+    },
   },
 
-  // Ignore patterns: {,
+  // Ignore patterns
+  {
     ignores: [
       'node_modules/**',
       '.node-modules-backup/**', // Backup directories
@@ -209,5 +212,5 @@ module.exports = [
       'final-audit-fix.js',
       'fix-remaining-variables.js',
     ],
-  }
-  ];
+  },
+];

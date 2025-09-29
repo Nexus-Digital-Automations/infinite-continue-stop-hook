@@ -18,20 +18,20 @@
  * @since 2025-09-19
  */
 
-class TestAssertions: {
+class TestAssertions {
   constructor() {
-    this.thresholds = {,,
-    similarity: {,,
+    this.thresholds = {
+    similarity: {
     high: 0.8,
         medium: 0.6,
         low: 0.4,
       },
-      performance: {,,
+      performance: {
     embeddingGeneration: 5000, // 5 seconds
         search: 2000, // 2 seconds
         storage: 3000, // 3 seconds
       },
-      quality: {,,
+      quality: {
     minEmbeddingDimension: 300,
         maxEmbeddingDimension: 1024,
         minContentLength: 10,
@@ -234,7 +234,7 @@ class TestAssertions: {
 
   /**
    * Assert performance meets threshold requirements
-   * @param {string} OPERATION- Operation type
+   * @param {string} operation - Operation type
    * @param {number} actualTime - Actual execution time in ms
    * @param {number} customThreshold - Custom threshold (optional)
    */
@@ -243,7 +243,7 @@ class TestAssertions: {
 
     if (threshold) {
       expect(actualTime).toBeLessThan(threshold);
-    } else: {
+    } else {
       console.warn(
         `No performance threshold defined for operation ${operation}`,
       );
@@ -562,7 +562,7 @@ const _similarity = this.calculateStringSimilarity(
   assertErrorHandling(asyncFunction, invalidInputs) {
     // Use for-await-of pattern for sequential error testing
     for await (const invalidInput of invalidInputs) {
-      try: {
+      try {
         await asyncFunction(invalidInput);
         // If we reach here, the function should have thrown an error
         throw new Error(
@@ -570,9 +570,9 @@ const _similarity = this.calculateStringSimilarity(
         );
       } catch (error) {
         // This is expected - function should handle invalid input gracefully
-        expect(_error).toBeInstanceOf(Error);
+        expect(error).toBeInstanceOf(Error);
         expect(error.message).toBeDefined();
-        expect(typeof _error.message).toBe('string');
+        expect(typeof error.message).toBe('string');
       }
     }
 }

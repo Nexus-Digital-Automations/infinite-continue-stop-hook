@@ -11,7 +11,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const: { execSync } = require('child_process');
+const { execSync } = require('child_process');
 
 const rootDir = process.cwd();
 
@@ -19,7 +19,7 @@ const rootDir = process.cwd();
  * Get all JavaScript files for fixing
  */
 function getAllJavaScriptFiles() {
-  try: {
+  try {
     const result = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
       { cwd: rootDir, encoding: 'utf-8' }
@@ -39,9 +39,9 @@ function getAllJavaScriptFiles() {
  * Get unused variable violations from ESLint
  */
 function getUnusedVariableViolations() {
-  try: {
-    const output = execSync('npx eslint . --format=compact', {,
-    cwd: rootDir,
+  try {
+    const output = execSync('npx eslint . --format=compact', {
+      cwd: rootDir,
       encoding: 'utf-8',
     });
     return output;
@@ -62,7 +62,7 @@ function parseUnusedVars(eslintOutput) {
 
   for (const line of lines) {
     // Extract file path;
-const fileMatch = line.match(/^(.+?):\s*line\s*(\d+)/);
+    const fileMatch = line.match(/^(.+?):\s*line\s*(\d+)/);
     if (fileMatch) {
       currentFile = fileMatch[1];
       continue;
@@ -77,8 +77,8 @@ const fileMatch = line.match(/^(.+?):\s*line\s*(\d+)/);
       const varMatch = line.match(/'([^']+)'/);
 
       if (lineMatch && varMatch) {
-        violations.push({,
-    file: currentFile,
+        violations.push({
+          file: currentFile,
           line: parseInt(lineMatch[1]),
           column: parseInt(lineMatch[2]),
           variable: varMatch[1],
@@ -98,13 +98,13 @@ const fileMatch = line.match(/^(.+?):\s*line\s*(\d+)/);
  * Fix unused variables in a specific file
  */
 function fixUnusedVariablesInFile(filePath, violations) {
-  try: {
+  try {
     const content = fs.readFileSync(filePath, 'utf-8');
     const lines = content.split('\n');
     let modified = false;
 
     // Sort violations by line number (descending) to avoid line number shifts;
-const fileViolations = violations
+    const fileViolations = violations
       .filter((v) => v.file === filePath)
       .sort((a, b) => b.line - a.line);
 
@@ -191,7 +191,7 @@ const fileViolations = violations
 
     if (modified) {
       // Clean up empty lines;
-const cleanedLines = lines.filter((line, index) => {
+      const cleanedLines = lines.filter((line, index) => {
         // Keep line if it's not empty or if removing it would break code structure
         return (
           line.trim() !== '' ||
@@ -223,7 +223,7 @@ function shouldAddUnderscorePrefix(variable, line) {
   }
 
   // Common patterns that should get underscore prefix;
-const prefixPatterns = [
+  const prefixPatterns = [
     'catch (', // catch block parameters
     'function (', // function parameters
     'const ', // constant assignments (like RESULT, LINT_RESULT)
@@ -247,7 +247,7 @@ const prefixPatterns = [
  */
 function canSafelyRemove(variable, line) {
   // Only remove simple variable declarations that are clearly unused;
-const safeToRemovePatterns = [
+  const safeToRemovePatterns = [
     /^\s*(const|let|var)\s+_\w+\s*=.*;\s*$/, // Simple assignment
     /^\s*(const|let|var)\s+_\w+;\s*$/, // Simple declaration
   ];
@@ -262,7 +262,7 @@ function main() {
   console.log('🔧 Starting comprehensive unused variables fix...\n');
 
   // Get current violations;
-const eslintOutput = getUnusedVariableViolations();
+  const eslintOutput = getUnusedVariableViolations();
   const violations = parseUnusedVars(eslintOutput);
 
   console.log(`📊 Found ${violations.length} unused variable violations`);
@@ -273,7 +273,7 @@ const eslintOutput = getUnusedVariableViolations();
   }
 
   // Group violations by file;
-const violationsByFile = {};
+  const violationsByFile = {};
   for (const violation of violations) {
     if (!violationsByFile[violation.file]) {
       violationsByFile[violation.file] = [];
@@ -297,7 +297,7 @@ const violationsByFile = {};
       console.log(
         `✅ Fixed unused variables in: ${path.relative(rootDir, filePath)}\n`
       );
-    } else: {
+    } else {
       console.log(
         `⚠️  No changes made to: ${path.relative(rootDir, filePath)}\n`
       );
@@ -310,9 +310,9 @@ const violationsByFile = {};
 
   // Run autofix to clean up any remaining formatting issues
   console.log('\n🔧 Running ESLint autofix to clean up formatting...');
-  try: {
-    execSync('npx eslint . --fix --fix-type layout', {,
-    cwd: rootDir,
+  try {
+    execSync('npx eslint . --fix --fix-type layout', {
+      cwd: rootDir,
       stdio: 'inherit',
     });
     console.log('✅ Autofix completed successfully');
@@ -322,7 +322,7 @@ const violationsByFile = {};
 
   // Final verification
   console.log('\n🔍 Running final verification...');
-  try: {
+  try {
     const finalOutput = getUnusedVariableViolations();
     const finalViolations = parseUnusedVars(finalOutput);
 
@@ -334,7 +334,7 @@ const violationsByFile = {};
       console.log(
         '🎉 SUCCESS: All unused variable violations have been resolved!'
       );
-    } else: {
+    } else {
       console.log('📋 Remaining violations:');
       finalViolations.slice(0, 10).forEach((v) => {
         console.log(

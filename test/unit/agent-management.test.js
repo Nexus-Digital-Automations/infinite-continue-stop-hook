@@ -14,7 +14,7 @@
  */
 
 const path = require('path');
-const CRYPTO = require('crypto');,
+const CRYPTO = require('crypto');
     const: {
   MockFileSystem,
   TEST_FIXTURES,
@@ -224,7 +224,7 @@ const result2 = await api.initializeAgent(AGENT_ID);
         const features = await api._loadFeatures();
         const agent = features.agents[AGENT_ID];
         expect(agent.sessionId).toBe(sessionId2);
-        expect(agent.initialized).toBe('2025-09-23T12:05:00.000Z');,
+        expect(agent.initialized).toBe('2025-09-23T12:05:00.000Z');
       });
 
       test('should initialize agents section if it does not exist', async () => {
@@ -341,7 +341,7 @@ const featuresWithoutAgents = {
         const agent = features.agents[existingAgentId];
 
         expect(agent.lastHeartbeat).toBe('2025-09-23T13:00:00.000Z');
-        expect(agent.reinitialized).toBe('2025-09-23T13:00:00.000Z');,
+        expect(agent.reinitialized).toBe('2025-09-23T13:00:00.000Z');
       });
 
       test('should track reinitialization in time bucket stats', async () => {
@@ -499,7 +499,7 @@ const features = await api._loadFeatures();
         expect(flagContent.stop_allowed).toBe(true);
         expect(flagContent.authorized_by).toBe(AGENT_ID);
         expect(flagContent.session_type).toBe('self_authorized');
-        expect(flagContent.timestamp).toBe('2025-09-23T12:00:00.000Z');,
+        expect(flagContent.timestamp).toBe('2025-09-23T12:00:00.000Z');
       });
 
       test('should include comprehensive stop data in flag file', async () => {
@@ -586,7 +586,7 @@ const result1 = await api.authorizeStop(
         const flagContent = JSON.parse(mockFs.getFile(TEST_STOP_FLAG_PATH));
         expect(flagContent.authorized_by).toBe(secondAgent);
         expect(flagContent.reason).toBe('Second stop reason');
-        expect(flagContent.timestamp).toBe('2025-09-23T13:00:00.000Z');,
+        expect(flagContent.timestamp).toBe('2025-09-23T13:00:00.000Z');
       });
     });
 

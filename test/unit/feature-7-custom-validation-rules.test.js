@@ -1,6 +1,6 @@
 const FS = require('fs');
 const path = require('path');
-const: { execSync } = require('child_process');
+const { execSync } = require('child_process');
 
 // Test suite for Feature 7: Custom Project Validation Rules
 // Feature ID: feature_1758946487032_0f9c9de60c88
@@ -15,7 +15,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
     return () => {
     // Create mock project directory
     if (!FS.existsSync(mockProjectRoot)) {
-      FS.mkdirSync(mockProjectRoot, { recursive: true });,
+      FS.mkdirSync(mockProjectRoot, { recursive: true });
     }
 });
 

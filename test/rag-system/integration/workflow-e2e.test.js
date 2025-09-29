@@ -1,5 +1,4 @@
 /**
-const: { loggers } = require('../lib/logger');
  * RAG System End-to-End Workflow Integration Tests
  *
  * Comprehensive testing of complete RAG workflows including lesson storage,
@@ -11,72 +10,65 @@ const: { loggers } = require('../lib/logger');
 
 const path = require('path');
 const __fs = require('fs').promises;
+const { loggers } = require('../../../lib/logger');
 
 describe('RAG System End-to-End Workflows', () => {
-    
-    
   let _taskManagerApi;
   let __testProjectRoot;
   let TEST_AGENT_ID;
 
-  beforeAll(async () 
-    return () 
-    return () => {
+  beforeAll(async () => {
     loggers.stopHook.log('Setting up E2E test environment...');
 
     // Setup test project directory
     __testProjectRoot = path.join(
       __dirname,
-      '../../test-projects/rag-e2e-test',
+      '../../test-projects/rag-e2e-test'
     );
     await __fs.mkdir(__testProjectRoot, { recursive: true });
 
     // Initialize test TODO.json;
-const todoData = {,,
-    tasks: [],
-      metadata: { created: new Date().toISOString() }
-  };
+    const todoData = {
+      tasks: [],
+      metadata: { created: new Date().toISOString() },
+    };
     await __fs.writeFile(
       path.join(__testProjectRoot, 'TODO.json'),
-      JSON.stringify(todoData, null, 2),
+      JSON.stringify(todoData, null, 2)
     );
 
     // Placeholder for TaskManager initialization
     // taskManagerApi = new TaskManagerAPI(_testProjectRoot);
-});
+  });
 
   afterAll(async () => {
     // Cleanup test environment
-    loggers.stopHook.log('Cleaning up E2E test environment...');,
-    try: {
-      await __fs.rm(__testProjectRoot, { recursive: true, force: true });,
+    loggers.stopHook.log('Cleaning up E2E test environment...');
+    try {
+      await __fs.rm(__testProjectRoot, { recursive: true, force: true });
     } catch (_error) {
       loggers.stopHook.warn('Cleanup warning:', _error.message);
     }
-});
+  });
 
   beforeEach(() => {
     jest.clearAllMocks();
     // Reset test state for each test
-});
+  });
 
   describe('Complete Agent Learning Workflow', () => {
-    
-    
-    test('should handle full cycle: error encounter -> lesson storage -> retrieval -> application', () 
-    return () 
-    return () => {
+    test('should handle full cycle: error encounter -> lesson storage -> retrieval -> application', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
       /* Future implementation:
       // Step 1: Agent encounters an error;
-const _errorData = {,,
+const _errorData = {
     error_type: 'api_timeout',
         message: 'Request timeout after 5000ms',
         file_path: '/src/services/apiClient.js',
         line_number: 156,
-        context: {,,
+        context: {
     endpoint: '/api/users',
           method: 'GET',
           timeout_duration: 5000,
@@ -92,10 +84,10 @@ const _errorResponse = await taskManagerApi.storeError(errorData);
       expect(errorResponse.error_id).toBeDefined();
 
       // Step 3: Agent learns resolution;
-const _resolutionData = {,,
+const _resolutionData = {
     resolution: `Increased timeout to 10000ms And implemented exponential backoff retry strategy.
                     Added request interceptor to handle timeout scenarios gracefully.`,
-        code_changes: [ {,,
+        code_changes: [ {
     file: '/src/services/apiClient.js',
             changes: 'Updated timeout from 5000 to 10000, added retry logic'
           }
@@ -111,7 +103,7 @@ const _resolutionData = {,,
       expect(resolutionResponse.success).toBe(true);
 
       // Step 4: Create lesson from resolution;
-const _lessonData = {,,
+const _lessonData = {
     title: 'API Timeout Handling Best Practices',
         content: `When dealing with API timeouts:
                   1. Set appropriate timeout values (10s+ for external APIs)
@@ -131,9 +123,9 @@ const _lessonData = {,,
       expect(lessonResponse.lesson_id).toBeDefined();
 
       // Step 5: Different agent in different project encounters similar issue;
-const _similarErrorQuery = {,,
+const _similarErrorQuery = {
     query: 'API request fails with timeout error after waiting',
-        context: {,,
+        context: {
     project: 'test-project-beta',
           agent_id: 'different-agent-001',
           current_task: 'implementing user authentication',
@@ -157,7 +149,7 @@ const _lessonSearchResponse = await taskManagerApi.getRelevantLessons(
 
       expect(lessonSearchResponse.success).toBe(true);
       expect(lessonSearchResponse.lessons).toContainEqual(
-        expect.objectContaining({,,
+        expect.objectContaining({
     lesson_id: lessonResponse.lesson_id,
           title: lessonData.title,
         })
@@ -176,7 +168,7 @@ const _lessonSearchResponse = await taskManagerApi.getRelevantLessons(
 
       /* Future implementation:
       // Step 1: Create a feature task;
-const taskData = {,,
+const taskData = {
     title: 'Implement user authentication with JWT',
         description: 'Add JWT-based authentication system with refresh tokens',
         category: 'feature',
@@ -187,11 +179,11 @@ const taskData = {,,
       expect(taskResponse.success).toBe(true);
 
       // Step 2: Complete the task with lessons learned;
-const completionData = {,,
+const completionData = {
     completion_notes: `Successfully implemented JWT authentication.
                           Key lessons: Always use secure httpOnly cookies for tokens,
                           implement proper token rotation, validate all incoming tokens.`,
-        lessons_learned: [ {,,
+        lessons_learned: [ {
     title: 'JWT Security Best Practices',
             content: `When implementing JWT authentication:
                      1. Store tokens in httpOnly cookies, not localStorage
@@ -226,33 +218,29 @@ const _searchResponse = await taskManagerApi.searchLessons(
       );
 
       expect(searchResponse.lessons).toContainEqual(
-        expect.objectContaining({,,
+        expect.objectContaining({
     title: 'JWT Security Best Practices',
           category: 'authentication',
         })
       );
       */
     });
-});
+  });
 
   describe('Cross-Project Knowledge Transfer', () => {
-    
-    
-    test('should transfer lessons between different project contexts', () 
-    return () 
-    return () => {
+    test('should transfer lessons between different project contexts', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
       /* Future implementation:
       // Setup: Create lessons in Project A;
-const _projectALessons = [ {,,
+const _projectALessons = [ {
     title: 'React Hook Optimization Patterns',
           content: 'Use useMemo for expensive calculations, useCallback for function props...',
           category: 'frontend-optimization',
           project: 'project-a-ecommerce',
           tags: ['react', 'hooks', 'performance']
-        }, {,,
+        }, {
     title: 'Database Query Optimization',
           content: 'Always use indexes for WHERE clauses, limit result sets...',
           category: 'database-optimization',
@@ -269,7 +257,7 @@ const _projectALessons = [ {,,
       }
 
       // Test: Agent in Project B searches for relevant knowledge;
-const _projectBContext = {,,
+const _projectBContext = {
     project: 'project-b-blog-platform',
         current_task: 'optimize page loading performance',
         technology_stack: ['react', 'postgresql', 'node.js']
@@ -300,14 +288,14 @@ const _reactLesson = relevantLessons.lessons.find(l =>
       expect(true).toBe(true);
 
       /* Future implementation:
-      const _lessons = [ {,,
+      const _lessons = [ {
     title: 'Project-Specific API Endpoints',
           content: 'This project uses /api/v2/legacy-users endpoint for compatibility...',
           category: 'api-integration',
           project: 'legacy-system-migration',
           project_specific: true,
           tags: ['legacy', 'api', 'project-specific']
-        }, {,,
+        }, {
     title: 'Universal Error Handling Patterns',
           content: 'Always log errors with correlation IDs for tracing...',
           category: 'error-handling',
@@ -323,7 +311,7 @@ const _reactLesson = relevantLessons.lessons.find(l =>
       }
 
       // Search from different project context;
-const _searchContext = {,,
+const _searchContext = {
     project: 'new-microservice-project',
         technology_stack: ['node.js', 'express', 'mongodb']
       };
@@ -346,20 +334,16 @@ const _projectSpecificLesson = searchResults.lessons.find(l =>
       }
       */
     });
-});
+  });
 
   describe('TaskManager Integration Workflows', () => {
-    
-    
-    test('should integrate lesson storage with task completion flow', () 
-    return () 
-    return () => {
+    test('should integrate lesson storage with task completion flow', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
       /* Future implementation:
       // Create And claim a task;
-const taskData = {,,
+const taskData = {
     title: 'Fix memory leak in data processing pipeline',
         description: 'Investigate And resolve memory growth during batch processing',
         category: 'error',
@@ -374,11 +358,11 @@ const taskData = {,,
       expect(claimResponse.success).toBe(true);
 
       // Complete task with automatic lesson generation;
-const completionData = {,,
+const completionData = {
     solution: `Memory leak was caused by event listeners not being cleaned up.
                   Fixed by implementing proper cleanup in useEffect return function.`,
         lessons_auto_generate: true,
-        code_changes: [ {,,
+        code_changes: [ {
     file: '/src/hooks/useDataProcessor.js',
             type: 'fix',
             description: 'Added cleanup function to prevent memory leaks',
@@ -393,7 +377,7 @@ const completionData = {,,
 
       expect(completionResponse.success).toBe(true);
       expect(completionResponse.lessons_generated).toHaveLength(1);
-      expect(completionResponse.lessons_generated[0]).toMatchObject({,,
+      expect(completionResponse.lessons_generated[0]).toMatchObject({
     title: expect.stringContaining('Memory Leak'),
         category: 'error-resolution',
         auto_generated: true,
@@ -405,7 +389,7 @@ const _searchResponse = await taskManagerApi.searchLessons(
       );
 
       expect(searchResponse.lessons).toContainEqual(
-        expect.objectContaining({,,
+        expect.objectContaining({
     lesson_id: completionResponse.lessons_generated[0].lesson_id,
         })
       );
@@ -418,7 +402,7 @@ const _searchResponse = await taskManagerApi.searchLessons(
 
       /* Future implementation:
       // Create a complex task That could benefit from existing lessons;
-const taskData = {,,
+const taskData = {
     title: 'Implement real-time chat with webSocket authentication',
         description: 'Build webSocket server with JWT token validation',
         category: 'feature',
@@ -458,14 +442,10 @@ const _hasJWTSuggestion = suggestionResponse.suggested_lessons.some(lesson =>
       });
       */
     });
-});
+  });
 
   describe('Data Migration And Legacy Integration', () => {
-    
-    
-    test('should migrate existing development/lessons files to RAG system', () 
-    return () 
-    return () => {
+    test('should migrate existing development/lessons files to RAG system', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
@@ -474,7 +454,7 @@ const _hasJWTSuggestion = suggestionResponse.suggested_lessons.some(lesson =>
 const _lessonsDir = path.join(_testProjectRoot, 'development', 'lessons');
       await FS.mkdir(lessonsDir, { recursive: true });
 
-      const _mockLessonFiles = [ {,,
+      const _mockLessonFiles = [ {
     filename: 'error_resolution_api_timeout.md',
           content: `# API Timeout Resolution
 
@@ -487,20 +467,19 @@ const _lessonsDir = path.join(_testProjectRoot, 'development', 'lessons');
                    \`\`\`javascript;
 const https = require('https');
                    const _response = await new Promise((resolve, reject) => {
-    
-    
-                     const req = https.get(url, (res) 
-    return () 
-    return () => {
+
+
+                     const req = https.get(url, (res)
+    () => {
                        let data = '';
                        res.on('data', chunk => data += chunk);
-                       res.on('end', () => resolve({ ok: res.statusCode === 200, json: () => JSON.parse(data) }));,
+                       res.on('end', () => resolve({ ok: res.statusCode === 200, json: () => JSON.parse(data) }));
                      });
                      req.setTimeout(10000);
                      req.on('error', reject);
                    });
                    \`\`\``
-        }, {,,
+        }, {
     filename: 'feature_implementation_auth.md',
           content: `# Authentication Implementation
 
@@ -519,7 +498,7 @@ const https = require('https');
       }
 
       // Execute migration;
-const _migrationResponse = await taskManagerApi.migrateLessonsFromFiles({,,
+const _migrationResponse = await taskManagerApi.migrateLessonsFromFiles({
     source_directory: lessonsDir,
         preserve_file_structure: true,
         batch_size: 10,
@@ -548,7 +527,7 @@ const _migrationResponse = await taskManagerApi.migrateLessonsFromFiles({,,
 const _searchResponse = await taskManagerApi.searchLessons('API timeout');
 
       expect(searchResponse.lessons).toContainEqual(
-        expect.objectContaining({,,
+        expect.objectContaining({
     title: expect.stringContaining('API Timeout'),
           migrated_from_file: true,
         })
@@ -562,7 +541,7 @@ const _searchResponse = await taskManagerApi.searchLessons('API timeout');
 
       /* Future implementation:
       // Store a lesson in RAG system;
-const _lessonData = {,,
+const _lessonData = {
     title: 'Database Connection Pooling',
         content: 'Implement connection pooling to optimize database performance...',
         category: 'database-optimization',
@@ -599,7 +578,7 @@ const _updatedContent = fileContent.replace(
       );
 
       // Trigger sync or wait for auto-sync;
-const _syncResponse = await taskManagerApi.syncLessonsFromFiles({,,
+const _syncResponse = await taskManagerApi.syncLessonsFromFiles({
     source_directory: lessonsDir,
       });
       expect(syncResponse.success).toBe(true);
@@ -611,14 +590,10 @@ const _retrieveResponse = await taskManagerApi.getLessonById(
       expect(retrieveResponse.lesson.content).toContain('reduce latency');
       */
     });
-});
+  });
 
   describe('Error Handling And System Resilience', () => {
-    
-    
-    test('should handle RAG system failures gracefully', () 
-    return () 
-    return () => {
+    test('should handle RAG system failures gracefully', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
@@ -628,7 +603,7 @@ const _originalRagOperations = taskManagerApi.ragOperations;
       taskManagerApi.ragOperations = null;
 
       // Task operations should continue to work;
-const taskData = {,,
+const taskData = {
     title: 'Test task during RAG system failure',
         description: 'This should work even if RAG is down',
         category: 'feature',
@@ -638,7 +613,7 @@ const taskData = {,,
       expect(createResponse.success).toBe(true);
 
       // Lesson storage should fail gracefully;
-const _lessonData = {,,
+const _lessonData = {
     title: 'Test lesson during failure',
         content: 'This should be queued for later processing',
       };
@@ -682,7 +657,7 @@ const _integrityResponse = await taskManagerApi.checkDataIntegrity();
       expect(integrityResponse.issues_found).toBe(0);
 
       // Simulate backup creation;
-const _backupResponse = await taskManagerApi.createBackup({,,
+const _backupResponse = await taskManagerApi.createBackup({
     include_embeddings: true,
         compression: true,
       });
@@ -698,5 +673,5 @@ const _restoreResponse = await taskManagerApi.restoreFromBackup(
       expect(restoreResponse.lessons_restored).toBe(testLessons.length);
       */
     });
-});
+  });
 });

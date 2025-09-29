@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-class SemicolonCommaFixer: {
+class SemicolonCommaFixer {
   constructor() {
     this.fixedCount = 0;
     this.processedFiles = 0;
@@ -13,11 +13,11 @@ class SemicolonCommaFixer: {
    * @returns {boolean} - True if changes were made
    */
   fixFile(filePath) {
-    try: {
+    try {
       const content = fs.readFileSync(filePath, 'utf8');
 
-      // Pattern to match semicolons followed by commas;
-const fixedContent = content.replace(/;,/g, ';');
+      // Pattern to match semicolons followed by commas
+      const fixedContent = content.replace(/;,/g, ';');
 
       if (content !== fixedContent) {
         fs.writeFileSync(filePath, fixedContent, 'utf8');
@@ -37,8 +37,8 @@ const fixedContent = content.replace(/;,/g, ';');
   async fixAllFiles() {
     console.log('🔧 Starting comprehensive semicolon-comma syntax fix...\n');
 
-    // List of files known to have semicolon-comma issues;
-const filesToFix = [
+    // List of files known to have semicolon-comma issues
+    const filesToFix = [
       'test/rag-system/performance/load-testing.test.js',
       'test/success-criteria-performance.test.js',
       'stop-hook.js',
@@ -143,12 +143,12 @@ const filesToFix = [
         this.processedFiles++;
         if (this.fixFile(filePath)) {
           console.log(`✅ Fixed semicolon-comma issues in: ${relativePath}`);
-        } else: {
+        } else {
           console.log(
             `ℹ️  No semicolon-comma issues found in: ${relativePath}`
           );
         }
-      } else: {
+      } else {
         console.log(`⚠️  File not found: ${relativePath}`);
       }
     }
@@ -164,13 +164,13 @@ const filesToFix = [
       console.log(
         '🎯 SUCCESS: All semicolon-comma syntax errors have been fixed!'
       );
-    } else: {
+    } else {
       console.log('✨ All files were already clean of semicolon-comma issues.');
     }
   }
 }
 
-// Run the fixer;
+// Run the fixer
 const fixer = new SemicolonCommaFixer();
 fixer.fixAllFiles().catch((error) => {
   console.error('❌ Script execution failed:', error.message);
