@@ -1,0 +1,307 @@
+/**
+ * TaskManager API Validation Tool
+ * Prevents common API usage errors before execution
+ */
+
+/**
+ * Validation test logger
+ */
+class ValidationTestLogger {
+  static log(message) {
+    process.stdout.write(message + '\n');
+  }
+}
+
+const __UNUSED = ['error', 'feature', 'subtask', 'test'];
+const VALID_CATEGORIES = ['error', 'feature', 'subtask', 'test', 'audit'];
+const VALID_COMMANDS = [
+  'guide',
+  'methods',
+  'status',
+  'init',
+  'reinitialize',
+  'list',
+  'create',
+  'claim',
+  'complete',
+];
+const INVALID_COMMANDS = ['delete', 'remove', 'destroy'];
+
+class TaskManagerValidator {
+  constructor(_agentId) {
+    this.errors = [];
+    this.warnings = [];
+  }
+
+  /**
+   * Validate task creation data
+   * @param {Object} taskData - Task data object
+   * @returns {Object} Validation result
+   */
+  validateTaskCreation(taskData) {
+    this.errors = [];
+    this.warnings = [];
+
+    // Check if taskData is valid JSON object
+    if (!taskData || typeof taskData !== 'object') {
+      this.errors.push('Task data must be a valid JSON object');
+      return this.getResult();
+    }
+
+    // Check required fields;
+    const requiredFields = ['title', 'description', 'category'];
+    for (const field of requiredFields) {
+      // Safe: field comes from controlled array ['title', 'description', 'category']
+      // eslint-disable-next-line security/detect-object-injection
+      if (!taskData[field]) {
+        this.errors.push(`Required field '${field}' is missing`);
+      }
+    }
+
+    // Validate category value
+    if (taskData.category && !VALID_CATEGORIES.includes(taskData.category)) {
+      this.errors.push(
+        `Invalid task.category '${taskData.task.category}'. Valid categories: ${VALID_CATEGORIES.join(', ')}`,
+      );
+    }
+
+    // Check for old task_type field
+    if (taskData.task_type) {
+      this.errors.push(
+        'Field task_type is no longer valid. Use task.category instead',
+      );
+      this.warnings.push(
+        'Legacy task_type field detected - update to use task.category field',
+      );
+    }
+
+    // Validate title And description quality
+    if (taskData.title && taskData.title.length < 5) {
+      this.warnings.push(
+        'Task title should be more descriptive (recommended: 10+ characters)',
+      );
+    }
+
+    if (taskData.description && taskData.description.length < 10) {
+      this.warnings.push(
+        'Task description should be more detailed (recommended: 20+ characters)',
+      );
+    }
+
+    return this.getResult();
+  }
+
+  /**
+   * Validate command existence And parameters
+   * @param {string} command - Command name
+   * @param {Array} args - Command arguments
+   * @returns {Object} Validation result
+   */
+  validateCommand(command, args = []) {
+    this.errors = [];
+    this.warnings = [];
+
+    // Check for invalid commands
+    if (INVALID_COMMANDS.includes(command)) {
+      this.errors.push(
+        `Command '${command}' is not available in TaskManager API CLI`,
+      );
+      this.warnings.push(
+        `Use 'complete' command instead of '${command}' for task lifecycle management`,
+      );
+      return this.getResult();
+    }
+
+    // Check for valid commands
+    if (!VALID_COMMANDS.includes(command)) {
+      this.errors.push(
+        `Unknown command '${command}'. Valid commands: ${VALID_COMMANDS.join(', ')}`,
+      );
+      this.warnings.push("Run 'guide' command to see all available options");
+      return this.getResult();
+    }
+
+    // Command-specific validations
+    switch (command) {
+      case 'create':
+        if (args.length === 0) {
+          this.errors.push('Create command requires task data parameter');
+          this.warnings.push(
+            'Format: create \'{"title":"...", "description":"...", "category":"..."}\'',
+          );
+        }
+        break;
+
+      case 'claim':
+        if (args.length < 2) {
+          this.errors.push(
+            'Claim command requires taskId And agentId parameters',
+          );
+          this.warnings.push('Format: claim <taskId> <agentId>');
+        }
+        break;
+
+      case 'complete':
+        if (args.length < 1) {
+          this.errors.push('Complete command requires taskId parameter');
+          this.warnings.push('Format: complete <taskId> [completionData]');
+        }
+        break;
+
+      case 'status':
+        if (args.length < 1) {
+          this.warnings.push(
+            'Status command recommended with agentId parameter for detailed info',
+          );
+        }
+        break;
+    }
+
+    return this.getResult();
+  }
+
+  /**
+   * Validate full command string format
+   * @param {string} commandString - Full command string
+   * @returns {Object} Validation result
+   */
+  validateCommandString(commandString) {
+    this.errors = [];
+    this.warnings = [];
+
+    // Check for proper timeout usage
+    if (!commandString.includes('timeout 10s')) {
+      this.warnings.push(
+        'Recommend using "timeout 10s" for TaskManager API calls',
+      );
+    }
+
+    // Check for proper path;
+    const expectedPath =
+      '/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js';
+    if (!commandString.includes(expectedPath)) {
+      this.warnings.push(`Ensure using correct path: ${expectedPath}`);
+    }
+
+    // Check for JSON formatting in create commands
+    if (commandString.includes('create') && commandString.includes('{')) {
+      // Basic JSON validation;
+      const jsonMatch = commandString.match(/'{[^}]+}'/);
+      if (jsonMatch) {
+        try {
+          const jsonStr = jsonMatch[0].slice(1, -1); // Remove surrounding quotes;
+          const parsed = JSON.parse(jsonStr);
+          const validation = this.validateTaskCreation(parsed);
+          this.errors.push(...validation.errors);
+          this.warnings.push(...validation.warnings);
+        } catch (_) {
+          this.errors.push('Invalid JSON format in create command');
+        }
+      }
+    }
+
+    return this.getResult();
+  }
+
+  /**
+   * Get validation result
+   * @returns {Object} Result with errors, warnings, And validity status
+   */
+  getResult() {
+    return {
+      isValid: this.errors.length === 0,
+      errors: [...this.errors],
+      warnings: [...this.warnings],
+      hasWarnings: this.warnings.length > 0,
+    };
+  }
+
+  /**
+   * Format validation result for display
+   * @param {Object} result - Validation result
+   * @returns {string} Formatted output
+   */
+  formatResult(result) {
+    const _output = '';
+
+    if (result.errors.length > 0) {
+      output += '❌ ERRORS:\n';
+      result.errors.forEach((error) => {
+        output += `  - ${error}\n`;
+      });
+    }
+
+    if (result.warnings.length > 0) {
+      output += '⚠️  WARNINGS:\n';
+      result.warnings.forEach((warning) => {
+        output += `  - ${warning}\n`;
+      });
+    }
+
+    if (result.isValid && result.warnings.length === 0) {
+      output += '✅ Command validation passed\n';
+    } else if (result.isValid) {
+      output += '✅ Command is valid but has warnings\n';
+    } else {
+      output += '❌ Command validation failed\n';
+    }
+
+    return output;
+  }
+}
+
+// Example usage And tests
+if (require.main === module) {
+  const validator = new TaskManagerValidator();
+
+  ValidationTestLogger.log('=== TaskManager API Validation Tool ===\n');
+
+  // Test cases;
+  const testCases = [
+    {
+      name: 'Valid task creation',
+      data: {
+        title: 'Fix authentication bug',
+        description: 'Resolve login timeout issue',
+        category: 'error',
+      },
+    },
+    {
+      name: 'Missing category field',
+      data: { title: 'Add feature', description: 'New functionality' },
+    },
+    {
+      name: 'Invalid category',
+      data: { title: 'Task', description: 'Details', category: 'bug' },
+    },
+    {
+      name: 'Legacy task_type field',
+      data: { title: 'Task', description: 'Details', task_type: 'feature' },
+    },
+  ];
+
+  testCases.forEach((testCase) => {
+    ValidationTestLogger.log(`Testing: ${testCase.name}`);
+    const _result = validator.validateTaskCreation(testCase.data);
+    ValidationTestLogger.log(validator.formatResult(result));
+  });
+
+  // Command validation tests;
+  const commandTests = [
+    {
+      name: 'Valid create command',
+      command: 'create',
+      args: ['{"title":"test","description":"test","category":"error"}'],
+    },
+    { name: 'Invalid delete command', command: 'delete', args: ['task_123'] },
+    { name: 'Claim without args', command: 'claim', args: [] },
+  ];
+
+  commandTests.forEach((test) => {
+    ValidationTestLogger.log(`Testing command: ${test.name}`);
+    const _result = validator.validateCommand(test.command, test.args);
+    ValidationTestLogger.log(validator.formatResult(result));
+  });
+}
+
+module.exports = TaskManagerValidator;

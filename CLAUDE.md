@@ -121,8 +121,18 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 - **❌ NEVER IMPLEMENT**: Features not explicitly listed in `development/essentials/features.md`
 - **❌ NEVER EXPAND**: Feature scope beyond what's defined in the file
 - **❌ NEVER ASSUME**: Additional features are needed without user approval
+- **❌ NEVER BYPASS**: Quality framework enforcement - all features MUST pass pre-commit hooks and CI/CD pipeline
+- **❌ NEVER CIRCUMVENT**: Automated quality gates, linting standards, or security validations
 - **✅ STRICTLY FOLLOW**: Only implement features exactly as defined in features.md
+- **✅ QUALITY COMPLIANCE**: ALL feature implementations MUST pass two-stage quality framework
 - **✅ SUGGEST ADDITIONS**: May propose new features for user approval and addition to file
+
+**MANDATORY QUALITY ENFORCEMENT:**
+
+- **UNBREAKABLE RULE**: Every feature implementation MUST pass Stage 1 (Pre-Commit Hooks) and Stage 2 (CI/CD Pipeline)
+- **NO EXCEPTIONS**: Quality framework cannot be bypassed, disabled, or circumvented for any reason
+- **QUALITY FIRST**: If feature implementation conflicts with quality standards, quality standards take precedence
+- **AUTOMATIC REJECTION**: Any feature that cannot pass automated quality gates MUST be redesigned or rejected
 
 **FEATURES.MD MANAGEMENT COMMANDS:**
 
