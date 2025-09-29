@@ -458,7 +458,7 @@ const totalResourceRequirement = this.calculateTotalResourceRequirement();
       );
     });
 
-    return { memory: totalMemory, cpu: totalCPU };,
+    return { memory: totalMemory, cpu: totalCPU };
 }
 
   /**

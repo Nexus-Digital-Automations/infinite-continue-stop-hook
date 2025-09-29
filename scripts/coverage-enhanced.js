@@ -1535,7 +1535,7 @@ const options = {};
 }
 
   if (args.includes('--no-badges')) {
-    options.badges = { ...ENHANCED_CONFIG.badges, enabled: false };,
+    options.badges = { ...ENHANCED_CONFIG.badges, enabled: false };
 }
 
   if (args.includes('--no-trends')) {

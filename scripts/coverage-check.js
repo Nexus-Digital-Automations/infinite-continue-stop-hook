@@ -457,7 +457,7 @@ const overallStatus = passed ? '✅ PASSED' : '❌ FAILED';
         }).trim(),
       };
     } catch (_) {
-      return { commit: 'unknown', branch: 'unknown' };,
+      return { commit: 'unknown', branch: 'unknown' };
     }
 }
 }

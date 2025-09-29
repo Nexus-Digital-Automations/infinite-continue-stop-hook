@@ -133,10 +133,10 @@ const originalSpawn = require('child_process').spawn;
           result = this.taskManagerAPI.getMethods();
           break;
         default:
-          result = { success: false, error: `Unknown command: ${apiCommand}` };,
+          result = { success: false, error: `Unknown command: ${apiCommand}` };
       }
     } catch (_) {
-      result = { success: false, error: _error.message };,
+      result = { success: false, error: _error.message };
     }
 
     // Create mock EventEmitter-like object;

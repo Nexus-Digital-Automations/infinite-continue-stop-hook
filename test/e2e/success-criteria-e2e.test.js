@@ -595,7 +595,7 @@ function authenticate(username, password, category = 'general') {
     throw new Error('Username And password required');
 }
   // Simulate authentication logic
-  return{ success: true, token: 'mock-jwt-token' };,
+  return{ success: true, token: 'mock-jwt-token' };
 }
 
 module.exports = { authenticate };
