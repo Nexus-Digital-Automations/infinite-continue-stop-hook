@@ -7,7 +7,7 @@
 
 const { execSync } = require('child_process');
 const FS = require('fs').promises;
-const path = require('path');
+const _path = require('path');
 
 describe('Dependency Management E2E Tests - Complete Workflows', () => {
   const PROJECT_ROOT = process.cwd();
@@ -28,7 +28,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
       });
 
       return JSON.parse(output.trim());
-    } catch (_) {
+    } catch (_error) {
       if (_error.stdout) {
         try {
           return JSON.parse(_error.stdout.trim());

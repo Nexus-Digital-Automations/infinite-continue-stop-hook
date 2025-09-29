@@ -5,7 +5,7 @@ const fs = require('fs');
  * Fix catch blocks that use 'error' variable but don't declare it
  */
 
-function fixCatchBlocks(filePath, filePath, filePath) {
+function fixCatchBlocks(filePath) {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
     const lines = content.split('\n');
@@ -46,14 +46,14 @@ function fixCatchBlocks(filePath, filePath, filePath) {
       }
     }
 
-    if (modified, filePath) {
+    if (modified) {
       fs.writeFileSync(filePath, lines.join('\n'));
       console.log(`Fixed catch blocks in: ${filePath}`);
       return true;
     }
 
     return false;
-  } catch (_error, filePath) {
+  } catch (_error) {
     console.error(`Error fixing ${filePath}:`, _error.message);
     return false;
   }

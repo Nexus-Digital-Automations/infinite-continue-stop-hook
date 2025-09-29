@@ -1,4 +1,4 @@
-/* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-object-injection */
+/* eslint-disable security/detect-non-literal-fs-filename, security/detect-object-injection */
 /**
  * Test Performance Monitoring Script
  *
@@ -77,7 +77,7 @@ class PerformanceLogger {
 /**
  * System resource monitor
  */
-class RESOURCE_MONITOR {
+class ResourceMonitor {
   constructor() {
     this.startTime = Date.now();
     this.startMemory = process.memoryUsage();
@@ -187,7 +187,7 @@ class TestPerformanceMonitor {
     this.startTime = Date.now();
     this.testResults = [];
     this.suiteResults = [];
-    this.resourceMonitor = new RESOURCE_MONITOR();
+    this.resourceMonitor = new ResourceMonitor();
     this.warnings = [];
     this.errors = [];
   }
@@ -195,7 +195,7 @@ class TestPerformanceMonitor {
   /**
    * Main execution method
    */
-  run() {
+  async run() {
     try {
       PerformanceLogger.info('Starting test performance monitoring...');
 
@@ -247,7 +247,7 @@ class TestPerformanceMonitor {
   /**
    * Run test suites And collect performance data
    */
-  runTestSuites() {
+  async runTestSuites() {
     PerformanceLogger.info(
       'Running test suites with performance monitoring...',
     );
@@ -281,7 +281,7 @@ class TestPerformanceMonitor {
   /**
    * Run individual test suite with performance monitoring
    */
-  runTestSuite(testSuite) {
+  async runTestSuite(testSuite) {
     PerformanceLogger.info(`Running ${testSuite.name}...`);
 
     const suiteStartTime = Date.now();

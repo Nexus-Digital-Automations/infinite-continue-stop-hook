@@ -1,4 +1,4 @@
-/* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-object-injection */
+/* eslint-disable security/detect-non-literal-fs-filename */
 /**
  * Test Notification System for CI/CD Integration
  *
@@ -41,7 +41,7 @@ class TestNotificationSystem {
   /**
    * Main notification processing method
    */
-  processNotifications() {
+  async processNotifications() {
     try {
       loggers.stopHook.log('🔔 Processing test notifications...');
 
@@ -306,7 +306,7 @@ class TestNotificationSystem {
   /**
    * Send notifications to configured channels
    */
-  sendNotifications(notifications) {
+  async sendNotifications(notifications) {
     const promises = [];
 
     for (const notification of notifications) {
@@ -576,7 +576,7 @@ class TestNotificationSystem {
     return null;
   }
 
-  updateNotificationHistory(notifications) {
+  async updateNotificationHistory(notifications) {
     try {
       const entry = {
         timestamp: new Date().toISOString(),

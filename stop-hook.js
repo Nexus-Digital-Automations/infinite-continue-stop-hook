@@ -227,7 +227,7 @@ function checkStopAllowed(workingDir = process.cwd(), category = 'general') {
       );
 
       // Display detailed validation progress
-      loggers.app.error(`
+      console.error(`
 🔍 **VALIDATION PROGRESS REPORT - STOP AUTHORIZATION**
 
 📊 **OVERALL PROGRESS:** ${progressReport.overallProgress}% Complete
@@ -253,7 +253,7 @@ ${progressReport.validationDetails
       return flagData.stop_allowed === true;
     } catch (_) {
       // Invalid flag file, remove it
-      loggers.app._error(
+      console.error(
         `⚠️ Invalid validation progress file detected - cleaning up. Error: ${_error.message}`,
       );
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
@@ -263,7 +263,7 @@ ${progressReport.validationDetails
   }
 
   // No authorization found - provide progress guidance
-  loggers.app.error(`
+  console.error(`
 🔍 **VALIDATION PROGRESS MONITORING**
 
 📊 **status:** No active validation process detected
@@ -754,7 +754,7 @@ async function autoSortTasksByPriority(_taskManager, category = 'general') {
     };
   } catch (_) {
     // Log _error through logger for proper tracking - use loggers.app for _error handling
-    loggers.app.error('autoSortTasksByPriority error:', _error);
+    console.error('autoSortTasksByPriority error:', _error);
     return { error: _error.message, tasksMoved: 0, tasksUpdated: 0 };
   }
 }
@@ -973,7 +973,7 @@ process.stdin.on('end', async () => {
             logger.logExit(0, 'DONE command detected - allowing stop');
             logger.save();
 
-            loggers.app.error(`
+            console.error(`
 ✅ DONE COMMAND DETECTED
 
 The assistant has written "DONE" as instructed.
@@ -1000,7 +1000,7 @@ This is the expected behavior when the /done command is used.
       logger.logExit(2, 'No TASKS.json found - continuing infinite mode');
       logger.save();
 
-      loggers.app.error(`
+      console.error(`
 🚫 NO TASKMANAGER PROJECT DETECTED
 
 This directory does not contain a TASKS.json file, which means it's not a TaskManager project.
@@ -1031,19 +1031,16 @@ If you want to enable task management for this project:
           component: 'StopHook',
           operation: 'corruptionCheck',
         });
-        loggers.app.info(
+        console.log(
           `🔧 STOP HOOK: Automatically fixed TASKS.json corruption - ${corruptionCheck.fixesApplied.join(', ')}`,
         );
       }
     } catch (corruptionError) {
-      logger.error('TASKS.json corruption check failed', {
-        error: corruptionError.message,
-        component: 'StopHook',
-        operation: 'corruptionCheck',
-      });
-      loggers.app.error(
-        `⚠️ STOP HOOK: Corruption check failed:`,
-        corruptionError.message,
+      logger.addFlow(
+        `TASKS.json corruption check failed: ${corruptionError.message}`,
+      );
+      console.error(
+        `⚠️ STOP HOOK: Corruption check failed: ${corruptionError.message}`,
       );
     }
 
@@ -1091,7 +1088,7 @@ If you want to enable task management for this project:
           operation: 'multiProjectCleanup',
         });
 
-        loggers.app.error(`
+        console.error(`
 🧹 **MULTI-PROJECT STALE AGENT CLEANUP COMPLETED:**
 - Projects processed: ${multiProjectResults.projectResults.length}
 - Total stale agents removed: ${multiProjectResults.totalAgentsRemoved}
@@ -1357,7 +1354,7 @@ If you want to enable task management for this project:
         );
         logger.save();
 
-        loggers.app.error(`
+        console.error(`
 🔄 STALE AGENTS DETECTED AND CLEANED UP
 
 Working Directory: ${workingDir}
@@ -1407,7 +1404,7 @@ To recover And continue work from the previous stale agents:
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [agentId]
 
 2. **Check for unfinished tasks from previous agents:**
-   node -e 'const TASK_MANAGER = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TASKS.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); loggers.app.info("Pending tasks to continue:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
+   node -e 'const TASK_MANAGER = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TASKS.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Pending tasks to continue:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
 
 3. **Continue the most important unfinished work first**
 
@@ -1463,7 +1460,7 @@ When ALL TodoWrite tasks are complete And project achieves perfection, agents mu
         );
         logger.save();
 
-        loggers.app.error(`
+        console.error(`
 🤖 NO AGENTS DETECTED - FRESH PROJECT SETUP
 
 Working Directory: ${workingDir}
@@ -1494,7 +1491,7 @@ To start working with this TaskManager project:
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" initialize [agentId]
 
 2. **Check for any existing tasks to work on:**
-   node -e 'const TASK_MANAGER = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TASKS.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); loggers.app.info("Available tasks:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
+   node -e 'const TASK_MANAGER = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TASKS.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Available tasks:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
 
 3. **Begin working on the highest priority tasks**
 
@@ -1556,7 +1553,7 @@ When ALL TodoWrite tasks are complete And project achieves perfection, agents mu
       logger.logExit(0, 'Endpoint-triggered stop (single use)');
       logger.save();
 
-      loggers.app.error(`
+      console.error(`
 🛑 ENDPOINT-TRIGGERED STOP AUTHORIZED
 
 A stop request was authorized via the stop endpoint.
@@ -1566,7 +1563,7 @@ This is a single-use authorization.
 ⚡ Future stop hook triggers will return to infinite continue mode.
 
 To trigger another stop, use the TaskManager API:
-node -e "const TASK_MANAGER = require('/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TASKS.json'); tm.authorizeStopHook('agent_id', 'Reason for stopping').then(result => loggers.app.info(JSON.stringify(result, null, 2)));"
+node -e "const TASK_MANAGER = require('/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TASKS.json'); tm.authorizeStopHook('agent_id', 'Reason for stopping').then(result => console.log(JSON.stringify(result, null, 2)));"
 `);
       // eslint-disable-next-line n/no-process-exit
       process.exit(0); // Allow stop only when endpoint triggered
@@ -1618,7 +1615,7 @@ node -e "const TASK_MANAGER = require('/Users/jeremyparker/infinite-continue-sto
           `Successfully archived ${archivalResult.migrated} completed tasks to DONE.json`,
         );
 
-        loggers.app.error(`
+        console.error(`
 ✅ AUTOMATIC TASK ARCHIVAL COMPLETED
 
 📁 Archived ${archivalResult.migrated} completed tasks to DONE.json
@@ -1633,7 +1630,7 @@ This keeps TASKS.json clean And prevents it from becoming crowded with completed
     } catch (archivalError) {
       logger.addFlow(`Task archival failed: ${archivalError.message}`);
 
-      loggers.app.error(`
+      console.error(`
 ⚠️ AUTOMATIC TASK ARCHIVAL WARNING
 
 Task archival encountered an issue: ${archivalError.message}
@@ -1651,7 +1648,7 @@ This is non-critical And won't prevent continued operation,
 
     // Output detailed instructions to Claude
 
-    loggers.app.error(`
+    console.error(`
 🔄 INFINITE CONTINUE MODE ACTIVE
 
 🚨 **AGENT WORKFLOW MANDATES - PROFESSIONAL DEVELOPER PROTOCOL:**
@@ -1687,15 +1684,13 @@ This system operates in infinite continue mode. To authorize a stop, use:
 
     // eslint-disable-next-line n/no-process-exit
     process.exit(2); // Always continue - never allow natural stops
-  } catch (_) {
+  } catch (_error) {
     console.error('DETAILED ERROR DEBUG:', _error.name, ':', _error.message);
     console.error('STACK TRACE:', _error.stack);
-    loggers.app.error('stop-hook-main error:', _error);
-    loggers.app.info(
-      `Error handled - continuing infinite mode: ${_error.message}`,
-    );
+    console.error('stop-hook-main error:', _error);
+    console.log(`Error handled - continuing infinite mode: ${_error.message}`);
 
-    loggers.app._error(`
+    console.error(`
 ⚠️ STOP HOOK ERROR - CONTINUING ANYWAY
 
 Error encountered: ${_error.message}

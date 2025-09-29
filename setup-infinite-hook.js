@@ -199,7 +199,7 @@ async function getProjectInfo(targetPath, category = 'general') {
   };
 }
 
-function createProjectDirectories(targetPath, category = 'general') {
+async function createProjectDirectories(targetPath, category = 'general') {
   // Create /development directory
   const developmentPath = path.join(targetPath, 'development');
 
@@ -276,7 +276,7 @@ function needsTodoUpdate(todoPath, category = 'general') {
   }
 }
 
-function createTodoJson(targetPath, projectInfo, category = 'general') {
+async function createTodoJson(targetPath, projectInfo, category = 'general') {
   const todoPath = path.join(targetPath, 'FEATURES.json');
 
   // Smart update logic - only update if schema is old or missing

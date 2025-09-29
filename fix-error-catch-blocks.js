@@ -15,7 +15,8 @@ function fixErrorCatchBlocks(filePath) {
 
     // Find all catch blocks without parameters that reference 'error' (not 'error')
     // This regex matches multiline catch blocks
-    const catchBlockRegex = /} catch \{\s*((?:[^{}]|\{[^{}]*\})*?)\s*\}/gs;
+    // Use safer string-based approach instead of complex regex
+    const catchBlocks = content.split('} catch {');
     const replacements = [];
 
     let match;

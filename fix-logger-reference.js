@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 const fs = require('fs');
-const { loggers } = require('./lib/logger');
 
 /**
  * Fix incorrect logger reference in TaskManager API

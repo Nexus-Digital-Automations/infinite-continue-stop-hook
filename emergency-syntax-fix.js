@@ -23,7 +23,7 @@ class EmergencySyntaxFixer {
 
       // Apply emergency fixes
       for (const filePath of jsFiles) {
-        this.processFile(__filename);
+        this.processFile(filePath);
       }
 
       console.log(`✅ Fixed ${this.fixedFiles.length} files`);
@@ -33,7 +33,7 @@ class EmergencySyntaxFixer {
         console.log('\n❌ Errors encountered:');
         this.errors.forEach((error) => console.log(`  - ${error}`));
       }
-    } catch (_) {
+    } catch (_error) {
       console.error('❌ Emergency fix failed:', _error.message);
       throw _error;
     }
@@ -44,7 +44,7 @@ class EmergencySyntaxFixer {
     const items = FS.readdirSync(dir);
 
     for (const item of items) {
-      const fullPath = PATH.join(dir, item);
+      const fullPath = path.join(dir, item);
       const stat = FS.statSync(fullPath);
 
       if (stat.isDirectory()) {
@@ -65,9 +65,9 @@ class EmergencySyntaxFixer {
     return files;
   }
 
-  processFile(__filename, __filename) {
+  processFile(filePath) {
     try {
-      const content = FS.readFileSync(__filename, 'utf8');
+      const content = FS.readFileSync(filePath, 'utf8');
       let fixedContent = content;
       let hasChanges = false;
 
@@ -140,12 +140,12 @@ class EmergencySyntaxFixer {
       }
 
       // Write file if changes were made
-      if ((hasChanges, __filename)) {
-        FS.writeFileSync(__filename, fixedContent, 'utf8');
-        this.fixedFiles.push(__filename);
+      if (hasChanges) {
+        FS.writeFileSync(filePath, fixedContent, 'utf8');
+        this.fixedFiles.push(filePath);
       }
-    } catch (_) {
-      this.errors.push(`${__filename}: ${_error.message}`);
+    } catch (_error) {
+      this.errors.push(`${filePath}: ${_error.message}`);
     }
   }
 }

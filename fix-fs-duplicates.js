@@ -51,7 +51,7 @@ function fixDuplicateFS(filePath) {
     fixed = fixed.replace(/FS\.dirname\(/g, 'PATH.dirname(');
     fixed = fixed.replace(/FS\.basename\(/g, 'PATH.basename(');
 
-    if ((content !== fixed, filePath)) {
+    if (content !== fixed) {
       fs.writeFileSync(filePath, fixed);
       console.log(`Fixed: ${filePath}`);
       return true;

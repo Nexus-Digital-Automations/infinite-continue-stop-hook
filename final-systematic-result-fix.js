@@ -26,7 +26,7 @@ class FinalSystematicResultFix {
    */
   async applySystematicFixes() {
     console.log(
-      '🔧 Starting final systematic result/result variable pattern fixes...'
+      '🔧 Starting final systematic result/result variable pattern fixes...',
     );
 
     try {
@@ -47,7 +47,7 @@ class FinalSystematicResultFix {
   /**
    * Get all source files that need processing
    */
-  getAllSourceFiles() {
+  async getAllSourceFiles() {
     const extensions = ['.js', '.ts', '.jsx', '.tsx'];
     const excludePatterns = [
       'node_modules',
@@ -89,7 +89,7 @@ class FinalSystematicResultFix {
     // Skip if file doesn't exist or is not readable
     try {
       fs.accessSync(filePath, fs.constants.R_OK | fs.constants.W_OK);
-    } catch (_) {
+    } catch {
       return false;
     }
 
@@ -99,7 +99,7 @@ class FinalSystematicResultFix {
   /**
    * Process individual file
    */
-  processFile(filePath) {
+  async processFile(filePath) {
     this.processedFiles++;
 
     try {
@@ -119,9 +119,8 @@ class FinalSystematicResultFix {
   /**
    * Apply all result variable fixes
    */
-  applyResultFixes(content, filePath) {
+  applyResultFixes(content, _filePath) {
     let fixed = content;
-    let replacements = 0;
 
     // Apply systematic fixes
     const fixes = this.getSystematicFixes();
@@ -132,7 +131,6 @@ class FinalSystematicResultFix {
 
       if (fixed !== before) {
         const count = (before.match(fix.pattern) || []).length;
-        replacements += count;
         this.totalReplacements += count;
       }
     }
@@ -341,7 +339,7 @@ class FinalSystematicResultFix {
     // Handle multiline declarations
     fixed = fixed.replace(
       /const result = ([^;]+);\s*([^=\n]+)\s*=\s*result/gm,
-      'const result = $1;\n$2 = result'
+      'const result = $1;\n$2 = result',
     );
 
     // Handle destructuring
@@ -350,7 +348,7 @@ class FinalSystematicResultFix {
     // Handle array destructuring
     fixed = fixed.replace(
       /const \[([^\]]+)\] = result/g,
-      'const [$1] = result'
+      'const [$1] = result',
     );
 
     return fixed;
@@ -368,7 +366,7 @@ class FinalSystematicResultFix {
       (match) => {
         const lines = match.split('\n');
         return lines[lines.length - 1] || match;
-      }
+      },
     );
 
     // Fix spacing issues
@@ -378,7 +376,7 @@ class FinalSystematicResultFix {
     // Ensure consistent semicolons
     cleaned = cleaned.replace(
       /const result = ([^;]+)(?!;)/gm,
-      'const result = $1;'
+      'const result = $1;',
     );
 
     return cleaned;
@@ -395,14 +393,14 @@ class FinalSystematicResultFix {
 
     if (this.fixedFiles > 0) {
       console.log(
-        '\n✅ All result/result variable patterns have been systematically fixed!'
+        '\n✅ All result/result variable patterns have been systematically fixed!',
       );
       console.log(
-        '🎯 Codebase now has consistent lowercase "result" variable naming.'
+        '🎯 Codebase now has consistent lowercase "result" variable naming.',
       );
     } else {
       console.log(
-        '\n✅ No result/result inconsistencies found - codebase is already consistent!'
+        '\n✅ No result/result inconsistencies found - codebase is already consistent!',
       );
     }
   }

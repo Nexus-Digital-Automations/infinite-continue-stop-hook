@@ -31,7 +31,7 @@ class ComprehensiveLinterFixAgent6 {
     // Fix 2: Fix all unused variable declarations with underscore
     content = content.replace(
       /const\s+(RESULT|LINT_OUTPUT|LINT_RESULT|replacements)\s*=/g,
-      'const 1 ='
+      'const 1 =',
     );
 
     // Fix 3: Fix constructor parameters - add underscore to unused params
@@ -50,13 +50,13 @@ class ComprehensiveLinterFixAgent6 {
           })
           .join(', ');
         return `constructor(${fixedParams})`;
-      }
+      },
     );
 
     // Fix 4: Remove unused parameters from function calls
     content = content.replace(
       /generateReport\s*\([^)]*\)/g,
-      'generateReport()'
+      'generateReport()',
     );
     content = content.replace(
       /fixTestFile\s*\([^,]+,\s*[^,]+,\s*[^,]+,\s*[^)]+\)/g,
@@ -66,19 +66,19 @@ class ComprehensiveLinterFixAgent6 {
           return `fixTestFile(${firstParam[1]})`;
         }
         return match;
-      }
+      },
     );
 
     // Fix 5: Fix function parameter naming - change _params to params when used
     content = content.replace(
       /\(\s*match,\s*_params\s*\)\s*=>\s*{[^}]*params\.trim\(\)/g,
-      (match) => match.replace('_params', 'params')
+      (match) => match.replace('_params', 'params'),
     );
 
     // Fix 6: Fix conditional expressions with comma operators
     content = content.replace(
       /if\s*\(\s*\([^)]*,\s*[^)]*\)\s*\)/g,
-      'if (true)'
+      'if (true)',
     );
 
     // Fix 7: Fix specific _error is not defined issues by ensuring proper catch block structure
@@ -131,7 +131,7 @@ class ComprehensiveLinterFixAgent6 {
     // Fix 9: Fix specific parameter issues
     content = content.replace(
       /\(agentId,\s*filePath,\s*category\s*=\s*'general',\s*validationResults\s*=\s*{}\)/g,
-      "(_agentId, _filePath, _category = 'general', _validationResults = {})"
+      "(_agentId, _filePath, _category = 'general', _validationResults = {})",
     );
 
     // Fix 10: Fix AGENT_ID patterns
@@ -145,8 +145,7 @@ class ComprehensiveLinterFixAgent6 {
       fileFixCount =
         content.split('_error').length - originalContent.split('_error').length;
       fileFixCount +=
-        content.split('_RESULT').length -
-        originalContent.split('_RESULT').length;
+        content.split('RESULT').length - originalContent.split('RESULT').length;
       fileFixCount +=
         content.split('_agentId').length -
         originalContent.split('_agentId').length;

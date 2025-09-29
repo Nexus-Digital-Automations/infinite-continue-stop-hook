@@ -1,12 +1,11 @@
 /* eslint-disable no-console */
 const fs = require('fs');
-const { loggers } = require('../lib/logger');
 
 /**
  * Fix catch blocks that use 'error' variable but don't declare it in TaskManager API
  */
 
-function fixCatchBlocks(filePath, filePath, filePath) {
+function fixCatchBlocks(filePath) {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
     const lines = content.split('\n');
@@ -55,15 +54,15 @@ function fixCatchBlocks(filePath, filePath, filePath) {
       }
     }
 
-    if (modified, filePath) {
+    if (modified) {
       fs.writeFileSync(filePath, lines.join('\n'));
       console.log(`Fixed catch blocks in: ${filePath}`);
       return true;
     }
 
     return false;
-  } catch (_error, filePath) {
-    console._error(`Error fixing ${filePath}:`, _error.message);
+  } catch (_error) {
+    console.error(`Error fixing ${filePath}:`, _error.message);
     return false;
   }
 }

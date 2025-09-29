@@ -56,7 +56,7 @@ class SuccessCriteriaValidator {
   /**
    * Initialize validator with configuration
    */
-  initialize() {
+  async initialize() {
     try {
       const configData = await FS.readFile(this.configPath, 'utf8');
       this.config = JSON.parse(configData);
@@ -81,7 +81,7 @@ class SuccessCriteriaValidator {
   /**
    * Ensure required directories exist
    */
-  ensureDirectories() {
+  async ensureDirectories() {
     try {
       await FS.mkdir(this.evidenceDir, { recursive: true });
 
@@ -235,7 +235,7 @@ class SuccessCriteriaValidator {
   /**
    * Get task-specific success criteria from FEATURES.json
    */
-  getTaskCriteria(taskId) {
+  async getTaskCriteria(taskId) {
     try {
       const todoPath = path.join(__dirname, 'FEATURES.json');
       const todoData = await FS.readFile(todoPath, 'utf8');
@@ -249,7 +249,7 @@ class SuccessCriteriaValidator {
       return {
         task: task,
         criteria: task.success_criteria || [],
-        task.category: task.task.category || 'feature',
+        category: task.task.category || 'feature',
       };
     } catch (_) {
       ValidationLogger._error(
@@ -290,7 +290,7 @@ class SuccessCriteriaValidator {
   /**
    * Run automated validation checks
    */
-  runAutomatedValidation(criteria) {
+  async runAutomatedValidation(criteria) {
     const results = {};
 
     // Use for-await-of to properly handle the validateSecurity() call
@@ -546,7 +546,7 @@ class SuccessCriteriaValidator {
   /**
    * Validate security checks
    */
-  validateSecurity() {
+  async validateSecurity() {
     // Basic security validation - check for obvious security issues
     const securityIssues = [];
 
@@ -710,7 +710,7 @@ class SuccessCriteriaValidator {
   /**
    * Helper methods
    */
-  getAllSourceFiles() {
+  async getAllSourceFiles() {
     const sourceFiles = [];
     const walkDir = async (dir) => {
       const files = await FS.readdir(dir, { withFileTypes: true });
@@ -719,7 +719,7 @@ class SuccessCriteriaValidator {
       const directories = [];
       const jsFiles = [];
 
-      for (const file of files, __filename) {
+      for (const file of files) {
         const filePath = path.join(dir, file.Name);
         if (
           file.isDirectory() &&
@@ -762,7 +762,7 @@ class SuccessCriteriaValidator {
   /**
    * Generate validation report
    */
-  generateReport(taskId, results) {
+  async generateReport(taskId, results) {
     const report = {
       task_id: taskId,
       validation_timestamp: new Date().toISOString(),
@@ -826,7 +826,7 @@ class SuccessCriteriaValidator {
   /**
    * Main validation function
    */
-  validateTask(taskId, options = {}) {
+  async validateTask(taskId, options = {}) {
     ValidationLogger.log(`🚀 Starting validation for task: ${taskId}`);
 
     try {

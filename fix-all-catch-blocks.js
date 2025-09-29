@@ -257,7 +257,7 @@ console.log('🔧 Running ESLint autofix...');
 try {
   execSync('npm run lint -- --fix', { cwd: rootDir, stdio: 'inherit' });
   console.log('✅ Autofix completed');
-} catch (_error) {
+} catch (_) {
   console.log('⚠️ Autofix completed with some remaining issues');
 }
 

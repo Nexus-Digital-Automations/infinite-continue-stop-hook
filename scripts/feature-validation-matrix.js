@@ -111,7 +111,7 @@ class FeatureValidationMatrix {
   /**
    * Validate TaskManager API functionality
    */
-  validateTaskManagerAPI() {
+  async validateTaskManagerAPI() {
     const result = {
       name: 'TaskManager API',
       status: 'unknown',
@@ -157,7 +157,7 @@ class FeatureValidationMatrix {
   /**
    * Validate RAG System functionality
    */
-  validateRAGSystem() {
+  async validateRAGSystem() {
     const result = {
       name: 'RAG System',
       status: 'unknown',

@@ -207,7 +207,7 @@ function fixUnusedVariablesInFile(filePath, violations) {
     }
 
     return false;
-  } catch (_error) {
+  } catch (_) {
     console.error(`Error fixing file ${filePath}:`, _error.message);
     return false;
   }
@@ -316,7 +316,7 @@ function main() {
       stdio: 'inherit',
     });
     console.log('✅ Autofix completed successfully');
-  } catch (_error) {
+  } catch (_) {
     console.log('⚠️  Autofix completed with some remaining issues');
   }
 
@@ -345,7 +345,7 @@ function main() {
         console.log(`  ... and ${finalViolations.length - 10} more`);
       }
     }
-  } catch (_error) {
+  } catch (_) {
     console.log('⚠️  Could not run final verification');
   }
 

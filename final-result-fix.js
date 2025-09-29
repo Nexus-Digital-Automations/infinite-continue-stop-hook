@@ -16,7 +16,7 @@ const FS = require('fs');
 const path = require('path');
 
 class FinalResultFixer {
-  constructor(agentId) {
+  constructor(_agentId) {
     this.fixedFiles = [];
     this.totalChanges = 0;
   }
@@ -41,7 +41,7 @@ class FinalResultFixer {
     }
   }
 
-  fixTestPerformanceFile(filePath) {
+  fixTestPerformanceFile(_filePath) {
     const targetPath =
       '/Users/jeremyparker/infinite-continue-stop-hook/scripts/test-performance.js';
 
@@ -224,7 +224,7 @@ class FinalResultFixer {
       console.log('\n📁 Modified Files:');
       for (const file of this.fixedFiles) {
         console.log(
-          `  ✅ ${PATH.relative(process.cwd(), file.path)} (${file.changes} changes)`
+          `  ✅ ${path.relative(process.cwd(), file.path)} (${file.changes} changes)`
         );
       }
     }

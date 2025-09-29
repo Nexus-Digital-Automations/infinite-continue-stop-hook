@@ -26,7 +26,7 @@ const TIMEOUT = 12000; // 12 seconds for audit operations
 /**
  * Execute TaskManager API command for audit testing
  */
-function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
+function execAPI(command, args = [], timeout = TIMEOUT, _category = 'general') {
   return new Promise((resolve, reject) => {
     const allArgs = [
       API_PATH,

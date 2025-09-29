@@ -102,7 +102,7 @@ function fixFileUnusedVars(filePath) {
     }
 
     if (modified) {
-      fs.writeFileSync(__filename, content, 'utf8');
+      fs.writeFileSync(filePath, content, 'utf8');
       return true;
     }
 

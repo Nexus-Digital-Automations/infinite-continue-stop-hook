@@ -73,7 +73,7 @@ function fixPathVariableInconsistencies(filePath) {
     }
 
     // Pattern 3: Fix error variable mismatches (error vs _error)
-    const _beforeErrorFix = fixed;
+    const BEFORE_ERROR_FIX = fixed;
     // Fix cases where catch(_error) is used but error.message is referenced
     fixed = fixed.replace(
       /catch\s*\(\s*_error\s*\)\s*\{([^}]*)\berror\.(message|stack|code|name)\b/g,
@@ -111,7 +111,7 @@ function fixPathVariableInconsistencies(filePath) {
         }
 
         // Exit catch block when braces are balanced
-        if ((braceCount <= 0, filePath, filePath, filePath)) {
+        if (braceCount <= 0) {
           inCatchError = false;
         }
       }
@@ -146,7 +146,7 @@ function fixPathVariableInconsistencies(filePath) {
     }
 
     // Pattern 5: Fix unused variable names that should be prefixed with _
-    const beforeUnusedFix = fixed;
+    const BEFORE_UNUSED_FIX = fixed;
     // Variables that are assigned but never used should be prefixed with _
     if (fixed.includes('const PATH = require(') && !fixed.includes('PATH.')) {
       fixed = fixed.replace(
@@ -168,7 +168,7 @@ function fixPathVariableInconsistencies(filePath) {
     }
 
     return false;
-  } catch (_) {
+  } catch (_error) {
     console.error(`Error fixing ${filePath}:`, _error.message);
     return false;
   }
@@ -177,7 +177,7 @@ function fixPathVariableInconsistencies(filePath) {
 /**
  * Main execution
  */
-async function main() {
+function main() {
   console.log('🔧 Starting PATH variable inconsistency fixes...');
 
   const jsFiles = getAllJavaScriptFiles();
@@ -203,11 +203,11 @@ async function main() {
       stdio: 'inherit',
     });
     console.log('🎉 ALL LINTING ERRORS RESOLVED!');
-  } catch (_) {
+  } catch {
     console.log('⚠️ Some linting issues remain - running diagnostic...');
 
     try {
-      const result = execSync('npm run lint 2>&1', {
+      const RESULT = execSync('npm run lint 2>&1', {
         cwd: rootDir,
         encoding: 'utf-8',
       });
@@ -231,10 +231,7 @@ async function main() {
 
 // Execute if run directly
 if (require.main === module) {
-  main().catch((_error) => {
-    console.error('Fatal error:', _error.message);
-    process.exit(1);
-  });
+  main();
 }
 
 module.exports = { fixPathVariableInconsistencies, getAllJavaScriptFiles };

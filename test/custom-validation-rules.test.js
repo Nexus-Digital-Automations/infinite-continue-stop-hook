@@ -16,7 +16,7 @@
 
 const FS = require('fs').promises;
 const path = require('path');
-const { execSync: EXEC_SYNC } = require('child_process');
+const { execSync: _EXEC_SYNC } = require('child_process');
 const { loggers } = require('../lib/logger');
 const {
   CustomValidationRulesManager,

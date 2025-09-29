@@ -24,7 +24,7 @@ function getAllJavaScriptFiles() {
       .split('\n')
       .filter((f) => f && f.endsWith('.js'))
       .map((f) => path.resolve(rootDir, f.replace('./', '')));
-  } catch (_) {
+  } catch (_error) {
     console.error('Failed to get JS files:', _error.message);
     return [];
   }
@@ -174,7 +174,7 @@ function fixUndefinedVariablesInFile(filePath) {
     }
 
     return false;
-  } catch (_) {
+  } catch (_error) {
     console.error(`Error fixing ${filePath}:`, _error.message);
     return false;
   }
