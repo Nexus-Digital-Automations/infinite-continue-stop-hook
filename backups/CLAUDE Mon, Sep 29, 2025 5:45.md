@@ -82,27 +82,6 @@ All work must be committed and pushed before a task is marked as complete.
 - **❌ NEVER SUGGEST**: Automatic improvements or enhancements without user request
 - **✅ IMPLEMENT EXACTLY**: Only what user specifically requested - nothing more, nothing less
 
-## 🚨 PROACTIVE TASK DECOMPOSITION
-
-**MANDATORY TASK BREAKDOWN FOR COMPLEX REQUESTS:**
-
-**PROACTIVE TASK DECOMPOSITION**: For any large or multi-step user request, you MUST use the `create-project-task` command to break down the request into smaller, manageable tasks. Each task should represent a logical unit of work that can be independently implemented and verified.
-
-**DECOMPOSITION REQUIREMENTS:**
-
-- **COMPLEX REQUESTS**: Multi-step implementations, feature sets, or requests spanning multiple files/components
-- **LOGICAL UNITS**: Each task must be independently implementable and testable
-- **CLEAR SCOPE**: Each task has specific, measurable completion criteria
-- **PROPER SEQUENCING**: Tasks ordered by dependencies and logical implementation flow
-- **COMPREHENSIVE COVERAGE**: All aspects of user request captured across task breakdown
-
-**TASK CREATION PROTOCOL:**
-
-```bash
-# Create tasks for complex user requests
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-project-task '{"title":"Specific Task Title", "description":"Detailed description with acceptance criteria", "type":"feature|error|test|audit", "priority":"normal|high|urgent"}'
-```
-
 ## 🚨 HUMBLE CODE VERIFICATION PROTOCOL
 
 **THE DEFINING CHARACTERISTIC OF TOP DEVELOPERS:**
