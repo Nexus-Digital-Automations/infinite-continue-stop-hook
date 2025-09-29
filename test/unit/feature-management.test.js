@@ -146,7 +146,7 @@ const FS = require('fs');
 const results = await Promise.all(
           categories.map(async (_category) => {
             const featureData = {
-              ...TEST_FIXTURES.validFeature,,,
+              ...TEST_FIXTURES.validFeature,
     title: `${category} Feature Test`,
               category: category,
             };
@@ -176,7 +176,7 @@ const results = await Promise.all(
 const results = await Promise.all(
           Array.from({ length: numFeatures }, (_, i) => {
             const featureData = {
-              ...TEST_FIXTURES.validFeature,,,
+              ...TEST_FIXTURES.validFeature,
     title: `Test Feature Number ${i + 1} Implementation`,
             };
 
@@ -211,7 +211,7 @@ const featureIds = new Set(results.map((result) => result.feature.id));
         };
 
         const featureData = {
-          ...TEST_FIXTURES.validFeature,,,
+          ...TEST_FIXTURES.validFeature,
     metadata: customMetadata,
         };
 
@@ -229,7 +229,7 @@ const featureIds = new Set(results.map((result) => result.feature.id));
     
       test('should enforce minimum title length requirements', async () => {
         const invalidFeature = {
-          ...TEST_FIXTURES.validFeature,,,
+          ...TEST_FIXTURES.validFeature,
     title: 'Short', // Only 5 characters, minimum is 10
         };
 
@@ -243,7 +243,7 @@ const featureIds = new Set(results.map((result) => result.feature.id));
 
       test('should enforce maximum title length requirements', async () => {
         const invalidFeature = {
-          ...TEST_FIXTURES.validFeature,,,
+          ...TEST_FIXTURES.validFeature,
     title: 'A'.repeat(201), // 201 characters, maximum is 200
         };
 
@@ -257,7 +257,7 @@ const featureIds = new Set(results.map((result) => result.feature.id));
 
       test('should enforce minimum description length requirements', async () => {
         const invalidFeature = {
-          ...TEST_FIXTURES.validFeature,,,
+          ...TEST_FIXTURES.validFeature,
     description: 'Too short', // Only 9 characters, minimum is 20
         };
 
@@ -271,7 +271,7 @@ const featureIds = new Set(results.map((result) => result.feature.id));
 
       test('should enforce maximum description length requirements', async () => {
         const invalidFeature = {
-          ...TEST_FIXTURES.validFeature,,,
+          ...TEST_FIXTURES.validFeature,
     description: 'A'.repeat(2001), // 2001 characters, maximum is 2000
         };
 
@@ -299,7 +299,7 @@ const _result = await api.suggestFeature(invalidFeature);
 
         // Test empty business value separately with different error message;
 const emptyBusinessValueFeature = {
-          ...TEST_FIXTURES.validFeature,,,
+          ...TEST_FIXTURES.validFeature,
     business_value: '',
         };
         const _result = await api.suggestFeature(emptyBusinessValueFeature);
@@ -311,7 +311,7 @@ const emptyBusinessValueFeature = {
 
       test('should validate category field against allowed values', async () => {
         const invalidFeature = {
-          ...TEST_FIXTURES.validFeature,,,
+          ...TEST_FIXTURES.validFeature,
     category: 'invalid-category',
         };
 
@@ -371,13 +371,13 @@ const _result = await api.suggestFeature(invalidFeature);
       test('should preserve existing features when adding new ones', async () => {
         // Add first feature;
 const firstResult = await api.suggestFeature({
-          ...TEST_FIXTURES.validFeature,,,
+          ...TEST_FIXTURES.validFeature,
     title: 'First Feature Suggestion',
         });
 
         // Add second feature;
 const secondResult = await api.suggestFeature({
-          ...TEST_FIXTURES.validFeature,,,
+          ...TEST_FIXTURES.validFeature,
     title: 'Second Feature Suggestion',
         });
 
@@ -500,18 +500,18 @@ const suggestResult = await api.suggestFeature(
       test('should handle multiple feature approvals in history', async () => {
         // Create And approve multiple features;
 const feature1Result = await api.suggestFeature({
-          ...TEST_FIXTURES.validFeature,,,
+          ...TEST_FIXTURES.validFeature,
     title: 'First Feature for History Test',
         });
         const feature2Result = await api.suggestFeature({
-          ...TEST_FIXTURES.validFeature,,,
+          ...TEST_FIXTURES.validFeature,
     title: 'Second Feature for History Test',
         });
 
-        await api.approveFeature(feature1Result.feature.id, {,
+        await api.approveFeature(feature1Result.feature.id, {
     approved_by: 'approver-1',
         });
-        await api.approveFeature(feature2Result.feature.id, {,
+        await api.approveFeature(feature2Result.feature.id, {
     approved_by: 'approver-2',
         });
 
@@ -527,7 +527,7 @@ const feature1Result = await api.suggestFeature({
         // Create features file without proper metadata;
 const invalidFeatures = {
     project: 'test',
-          features: [ {,
+          features: [ {
     id: suggestedFeatureId,
               status: 'suggested',
               title: 'Test Feature',
@@ -753,7 +753,7 @@ const secondResult = await api.rejectFeature(suggestedFeatureId);
       for (const title of featureTitles) {
         // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup;
 const _result = await api.suggestFeature({
-          ...TEST_FIXTURES.validFeature,,,
+          ...TEST_FIXTURES.validFeature,
     title: title,
         });
         suggestedFeatureIds.push(result.feature.id);
@@ -925,7 +925,7 @@ const _result = await api.listFeatures({ category });
 
       test('should handle combined filters', async () => {
         // This would require features That match both criteria;
-const _result = await api.listFeatures({,
+const _result = await api.listFeatures({
     status: 'approved',
           category: 'new-feature',
         });
@@ -960,12 +960,12 @@ const _result = await api.listFeatures({,
 
         const stats = result.stats;
         expect(stats.total).toBe(3);
-        expect(stats.by_status).toEqual({,
+        expect(stats.by_status).toEqual({
     suggested: 1,
           approved: 1,
           rejected: 1,
         });
-        expect(stats.by_category).toEqual({,
+        expect(stats.by_category).toEqual({
     enhancement: 1,
           'new-feature': 1,
           documentation: 1,
@@ -1010,11 +1010,11 @@ const _result = await api.listFeatures({,
       test('should handle features with duplicate categories', async () => {
         // Add more features with duplicate categories;
 const additionalFeatures = [ {
-            ...TEST_FIXTURES.validFeature,,,
+            ...TEST_FIXTURES.validFeature,
     title: 'Additional Enhancement Feature',
             category: 'enhancement',
           }, {
-            ...TEST_FIXTURES.validFeature,,,
+            ...TEST_FIXTURES.validFeature,
     title: 'Another Enhancement Feature',
             category: 'enhancement',
           },

@@ -492,7 +492,7 @@ const _result = await api.approveFeature(testFeatureId);
         // Create a features file without metadata structure;
 const invalidFeatures = {
     project: 'test',
-          features: [ {,
+          features: [ {
     id: testFeatureId,
               status: 'suggested',
               title: 'Test',
@@ -594,13 +594,13 @@ const _result = await api.rejectFeature(testFeatureId);
       beforeEach(async () => {
         // Create multiple suggested features;
 const features = [ {
-            ...TEST_FIXTURES.validFeature,,,
+            ...TEST_FIXTURES.validFeature,
     title: 'Feature 1 for bulk approval',
           }, {
-            ...TEST_FIXTURES.validFeature,,,
+            ...TEST_FIXTURES.validFeature,
     title: 'Feature 2 for bulk approval',
           }, {
-            ...TEST_FIXTURES.validFeature,,,
+            ...TEST_FIXTURES.validFeature,
     title: 'Feature 3 for bulk approval',
           },
   ];

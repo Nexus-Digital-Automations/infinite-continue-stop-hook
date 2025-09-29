@@ -80,8 +80,7 @@ describe('Initialization Statistics', () => {
           '2025-09-23T11:59:59.999Z',
         ];
 
-        morningTimes.forEach((timeStr) 
-    return () => {
+        morningTimes.forEach((timeStr) => {
           timeUtils.mockCurrentTimeISO(timeStr);
           const bucket = api._getCurrentTimeBucket();
           expect(bucket).toBe('07:00-11:59');
@@ -250,11 +249,10 @@ describe('Initialization Statistics', () => {
   // =================== TIME BUCKET TRACKING TESTS ===================
 
   describe('Time Bucket Tracking', () => {
-    
-    
-    beforeEach(() 
-    return () => {
-      timeUtils.mockCurrentTimeISO('2025-09-23T14:30:00.000Z'); // Afternoon bucket,
+
+
+    beforeEach(() => {
+      timeUtils.mockCurrentTimeISO('2025-09-23T14:30:00.000Z'); // Afternoon bucket
     });
 
     describe('Initialization Tracking', () => {
@@ -498,10 +496,9 @@ const oldestEntry = stats.daily_history[0];
   // =================== STATISTICS RETRIEVAL TESTS ===================
 
   describe('Statistics Retrieval', () => {
-    
-    
-    beforeEach(() 
-    return () => {
+
+
+    beforeEach(() => {
       // Setup some test data
       mockFs.setFile(
         TEST_TASKS_PATH,
@@ -688,10 +685,9 @@ const updatedStats = await api.getInitializationStats();
     describe('Data Recovery', () => {
     
     
-      test('should recover from missing metadata structure', async () 
-    return () => {
+      test('should recover from missing metadata structure', async () => {
         const corruptedFeatures = {
-    project: 'test',
+          project: 'test',
           features: [],
           // Missing metadata
         };
