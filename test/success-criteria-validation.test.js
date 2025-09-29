@@ -1272,7 +1272,7 @@ describe('FEATURES.json System Validation Tests', () => {
       const testResult = VALIDATION_RESULT.results.find(
         (r) => r.criterionId === 'test-validation',
       );
-      const _LINT_RESULT = VALIDATION_RESULT.results.find(
+      const LINT_RESULT = VALIDATION_RESULT.results.find(
         (r) => r.criterionId === 'lint-validation',
       );
 

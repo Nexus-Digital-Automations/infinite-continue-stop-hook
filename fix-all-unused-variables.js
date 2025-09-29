@@ -29,7 +29,7 @@ function getAllJavaScriptFiles() {
       .split('\n')
       .filter((f) => f && f.endsWith('.js'))
       .map((f) => path.resolve(rootDir, f.replace('./', '')));
-  } catch (_) {
+  } catch (_error) {
     console.error('Failed to get JS files:', _error.message);
     return [];
   }
@@ -45,7 +45,7 @@ function getUnusedVariableViolations() {
       encoding: 'utf-8',
     });
     return output;
-  } catch (_) {
+  } catch (_error) {
     // ESLint returns non-zero exit code when there are errors
     return _error.stdout || '';
   }
@@ -97,15 +97,15 @@ function parseUnusedVars(eslintOutput) {
 /**
  * Fix unused variables in a specific file
  */
-function fixUnusedVariablesInFile(_filePath, violations) {
+function fixUnusedVariablesInFile(filePath, violations) {
   try {
-    const content = fs.readFileSync(_filePath, 'utf-8');
+    const content = fs.readFileSync(filePath, 'utf-8');
     const lines = content.split('\n');
     let modified = false;
 
     // Sort violations by line number (descending) to avoid line number shifts
     const fileViolations = violations
-      .filter((v) => v.file === _filePath)
+      .filter((v) => v.file === filePath)
       .sort((a, b) => b.line - a.line);
 
     for (const violation of fileViolations) {
@@ -202,13 +202,13 @@ function fixUnusedVariablesInFile(_filePath, violations) {
         );
       });
 
-      fs.writeFileSync(_filePath, cleanedLines.join('\n'));
+      fs.writeFileSync(filePath, cleanedLines.join('\n'));
       return true;
     }
 
     return false;
-  } catch (_) {
-    console.error(`Error fixing file ${_filePath}:`, _error.message);
+  } catch (_error) {
+    console.error(`Error fixing file ${filePath}:`, _error.message);
     return false;
   }
 }
@@ -234,7 +234,7 @@ function shouldAddUnderscorePrefix(variable, line) {
     'agentId', // common unused parameter
     'params', // common unused parameter
     'category', // common unused parameter
-    '_filePath', // common unused parameter
+    'filePath', // common unused parameter
   ];
 
   return prefixPatterns.some(
@@ -287,19 +287,19 @@ function main() {
 
   let totalFixed = 0;
 
-  for (const [_filePath, fileViolations] of Object.entries(violationsByFile)) {
+  for (const [filePath, fileViolations] of Object.entries(violationsByFile)) {
     console.log(
-      `🔍 Processing: ${path.relative(rootDir, _filePath)} (${fileViolations.length} violations)`,
+      `🔍 Processing: ${path.relative(rootDir, filePath)} (${fileViolations.length} violations)`,
     );
 
-    if (fixUnusedVariablesInFile(_filePath, fileViolations)) {
+    if (fixUnusedVariablesInFile(filePath, fileViolations)) {
       totalFixed++;
       console.log(
-        `✅ Fixed unused variables in: ${path.relative(rootDir, _filePath)}\n`,
+        `✅ Fixed unused variables in: ${path.relative(rootDir, filePath)}\n`,
       );
     } else {
       console.log(
-        `⚠️  No changes made to: ${path.relative(rootDir, _filePath)}\n`,
+        `⚠️  No changes made to: ${path.relative(rootDir, filePath)}\n`,
       );
     }
   }
@@ -316,7 +316,7 @@ function main() {
       stdio: 'inherit',
     });
     console.log('✅ Autofix completed successfully');
-  } catch (_) {
+  } catch (_error) {
     console.log('⚠️  Autofix completed with some remaining issues');
   }
 
@@ -345,7 +345,7 @@ function main() {
         console.log(`  ... and ${finalViolations.length - 10} more`);
       }
     }
-  } catch (_) {
+  } catch (_error) {
     console.log('⚠️  Could not run final verification');
   }
 

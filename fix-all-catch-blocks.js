@@ -21,20 +21,20 @@ function getAllJsFiles() {
       .trim()
       .split('\n')
       .filter((f) => f && f.endsWith('.js'));
-  } catch (_) {
+  } catch (_error) {
     console.error('Failed to get JS files:', _error.message);
     return [];
   }
 }
 
 // Comprehensive catch block fixing function
-function fixAllCatchBlocks(FILE_PATH, FILE_PATH, FILE_PATH, FILE_PATH) {
+function fixAllCatchBlocks(filePath) {
   try {
-    if (!fs.existsSync(FILE_PATH)) {
+    if (!fs.existsSync(filePath)) {
       return false;
     }
 
-    let content = fs.readFileSync(FILE_PATH, 'utf8');
+    let content = fs.readFileSync(filePath, 'utf8');
     let modified = false;
     const originalContent = content;
 
@@ -224,15 +224,15 @@ function fixAllCatchBlocks(FILE_PATH, FILE_PATH, FILE_PATH, FILE_PATH) {
       }
     });
 
-    if ((modified && content !== originalContent, FILE_PATH)) {
-      fs.writeFileSync(FILE_PATH, content, 'utf8');
+    if ((modified && content !== originalContent, filePath)) {
+      fs.writeFileSync(filePath, content, 'utf8');
       console.log(`Fixed catch blocks in: ${PATH.relative(rootDir)}`);
       return true;
     }
 
     return false;
-  } catch (_) {
-    console.error(`Error fixing catch blocks in ${FILE_PATH}:`, _error.message);
+  } catch (_error) {
+    console.error(`Error fixing catch blocks in ${filePath}:`, _error.message);
     return false;
   }
 }
@@ -257,19 +257,19 @@ console.log('🔧 Running ESLint autofix...');
 try {
   execSync('npm run lint -- --fix', { cwd: rootDir, stdio: 'inherit' });
   console.log('✅ Autofix completed');
-} catch (_) {
+} catch (_error) {
   console.log('⚠️ Autofix completed with some remaining issues');
 }
 
 // Final status check
 console.log('🔄 Checking final linting status...');
 try {
-  const _LINT_RESULT = execSync('npm run lint 2>&1', {
+  const LINT_RESULT = execSync('npm run lint 2>&1', {
     cwd: rootDir,
     encoding: 'utf8',
   });
   console.log('🎉 ALL LINTING ERRORS RESOLVED!');
-} catch (_) {
+} catch (_error) {
   const output = _error.stdout || _error.message;
   const errorMatches = output.match(/(\d+) errors/);
   const warningMatches = output.match(/(\d+) warnings/);

@@ -26,19 +26,19 @@ class FinalSystematicResultFix {
    */
   async applySystematicFixes() {
     console.log(
-      '🔧 Starting final systematic result/result variable pattern fixes...',
+      '🔧 Starting final systematic result/result variable pattern fixes...'
     );
 
     try {
       // Get all relevant files
       const sourceFiles = await this.getAllSourceFiles();
 
-      for (const _filePath of sourceFiles) {
-        await this.processFile(_filePath);
+      for (const filePath of sourceFiles) {
+        await this.processFile(filePath);
       }
 
       this.reportResults();
-    } catch (_) {
+    } catch (_error) {
       console.error('❌ Error during systematic fixes:', _error.message);
       throw new Error(`Systematic fixes failed: ${_error.message}`);
     }
@@ -75,7 +75,7 @@ class FinalSystematicResultFix {
           files.push(file);
         }
       }
-    } catch (_) {
+    } catch (_error) {
       console.error('Error finding files:', _error.message);
     }
 
@@ -85,10 +85,10 @@ class FinalSystematicResultFix {
   /**
    * Check if file should be processed
    */
-  shouldProcessFile(_filePath) {
+  shouldProcessFile(filePath) {
     // Skip if file doesn't exist or is not readable
     try {
-      fs.accessSync(_filePath, fs.constants.R_OK | fs.constants.W_OK);
+      fs.accessSync(filePath, fs.constants.R_OK | fs.constants.W_OK);
     } catch (_) {
       return false;
     }
@@ -99,27 +99,27 @@ class FinalSystematicResultFix {
   /**
    * Process individual file
    */
-  processFile(_filePath) {
+  processFile(filePath) {
     this.processedFiles++;
 
     try {
-      const originalContent = fs.readFileSync(_filePath, 'utf8');
-      const fixedContent = this.applyResultFixes(originalContent, _filePath);
+      const originalContent = fs.readFileSync(filePath, 'utf8');
+      const fixedContent = this.applyResultFixes(originalContent, filePath);
 
       if (fixedContent !== originalContent) {
-        fs.writeFileSync(_filePath, fixedContent);
+        fs.writeFileSync(filePath, fixedContent);
         this.fixedFiles++;
-        console.log(`✅ Fixed: ${path.relative(this.projectRoot, _filePath)}`);
+        console.log(`✅ Fixed: ${path.relative(this.projectRoot, filePath)}`);
       }
-    } catch (_) {
-      console.error(`❌ Error processing ${_filePath}:`, _error.message);
+    } catch (_error) {
+      console.error(`❌ Error processing ${filePath}:`, _error.message);
     }
   }
 
   /**
    * Apply all result variable fixes
    */
-  applyResultFixes(content, _filePath) {
+  applyResultFixes(content, filePath) {
     let fixed = content;
     let replacements = 0;
 
@@ -244,20 +244,20 @@ class FinalSystematicResultFix {
   /**
    * Apply context-specific fixes
    */
-  applyContextSpecificFixes(content, _filePath) {
+  applyContextSpecificFixes(content, filePath) {
     let fixed = content;
 
     // Handle test files specifically
     if (
-      _filePath.includes('/test/') ||
-      _filePath.includes('.test.') ||
-      _filePath.includes('.spec.')
+      filePath.includes('/test/') ||
+      filePath.includes('.test.') ||
+      filePath.includes('.spec.')
     ) {
       fixed = this.applyTestFileFixes(fixed);
     }
 
     // Handle API files specifically
-    if (_filePath.includes('api') || _filePath.includes('API')) {
+    if (filePath.includes('api') || filePath.includes('API')) {
       fixed = this.applyApiFixes(fixed);
     }
 
@@ -341,7 +341,7 @@ class FinalSystematicResultFix {
     // Handle multiline declarations
     fixed = fixed.replace(
       /const result = ([^;]+);\s*([^=\n]+)\s*=\s*result/gm,
-      'const result = $1;\n$2 = result',
+      'const result = $1;\n$2 = result'
     );
 
     // Handle destructuring
@@ -350,7 +350,7 @@ class FinalSystematicResultFix {
     // Handle array destructuring
     fixed = fixed.replace(
       /const \[([^\]]+)\] = result/g,
-      'const [$1] = result',
+      'const [$1] = result'
     );
 
     return fixed;
@@ -368,7 +368,7 @@ class FinalSystematicResultFix {
       (match) => {
         const lines = match.split('\n');
         return lines[lines.length - 1] || match;
-      },
+      }
     );
 
     // Fix spacing issues
@@ -378,7 +378,7 @@ class FinalSystematicResultFix {
     // Ensure consistent semicolons
     cleaned = cleaned.replace(
       /const result = ([^;]+)(?!;)/gm,
-      'const result = $1;',
+      'const result = $1;'
     );
 
     return cleaned;
@@ -395,14 +395,14 @@ class FinalSystematicResultFix {
 
     if (this.fixedFiles > 0) {
       console.log(
-        '\n✅ All result/result variable patterns have been systematically fixed!',
+        '\n✅ All result/result variable patterns have been systematically fixed!'
       );
       console.log(
-        '🎯 Codebase now has consistent lowercase "result" variable naming.',
+        '🎯 Codebase now has consistent lowercase "result" variable naming.'
       );
     } else {
       console.log(
-        '\n✅ No result/result inconsistencies found - codebase is already consistent!',
+        '\n✅ No result/result inconsistencies found - codebase is already consistent!'
       );
     }
   }

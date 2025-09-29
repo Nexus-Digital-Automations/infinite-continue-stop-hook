@@ -9,7 +9,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 class TargetedUndefinedFixer {
-  constructor(agentId) {
+  constructor(_agentId) {
     this.fixes = {
       agentId: 0,
       category: 0,
@@ -39,13 +39,13 @@ class TargetedUndefinedFixer {
     }
   }
 
-  fixFile(_filePath) {
-    const content = fs.readFileSync(_filePath, 'utf8');
+  fixFile(filePath) {
+    const content = fs.readFileSync(filePath, 'utf8');
     const lines = content.split('\n');
     let modified = false;
 
     // Skip files that are our own fixers to avoid recursion
-    if (_filePath.includes('fix-') || _filePath.includes('fixer')) {
+    if (filePath.includes('fix-') || filePath.includes('fixer')) {
       return false;
     }
 
@@ -84,9 +84,9 @@ class TargetedUndefinedFixer {
 
         // Determine correct path based on file location
         let loggerPath = '../lib/logger';
-        if (_filePath.includes('/lib/')) {
+        if (filePath.includes('/lib/')) {
           loggerPath = './logger';
-        } else if (_filePath.includes('/test/')) {
+        } else if (filePath.includes('/test/')) {
           loggerPath = '../lib/logger';
         }
 
@@ -97,7 +97,7 @@ class TargetedUndefinedFixer {
         );
         modified = true;
         this.fixes.loggers++;
-        console.log(`  ✓ Added loggers import in ${path.basename(_filePath)}`);
+        console.log(`  ✓ Added loggers import in ${path.basename(filePath)}`);
         break; // Exit to avoid index issues
       }
 
@@ -123,20 +123,20 @@ class TargetedUndefinedFixer {
         lines.splice(insertIndex, 0, "const fs = require('fs');");
         modified = true;
         this.fixes.fs++;
-        console.log(`  ✓ Added fs import in ${path.basename(_filePath)}`);
+        console.log(`  ✓ Added fs import in ${path.basename(filePath)}`);
         break;
       }
 
-      // Fix 3: Convert FILE_PATH to __dirname + '/path' where appropriate
-      if (line.includes('FILE_PATH') && !line.includes('const FILE_PATH')) {
-        // Replace FILE_PATH with __filename in most cases
+      // Fix 3: Convert filePath to __dirname + '/path' where appropriate
+      if (line.includes('filePath') && !line.includes('const filePath')) {
+        // Replace filePath with __filename in most cases
         const updated = line.replace(/\bFILE_PATH\b/g, '__filename');
         if (updated !== line) {
           lines[i] = updated;
           modified = true;
           this.fixes.__filename++;
           console.log(
-            `  ✓ Converted __filename to __filename in ${path.basename(_filePath)}`,
+            `  ✓ Converted __filename to __filename in ${path.basename(filePath)}`,
           );
         }
       }
@@ -162,7 +162,7 @@ class TargetedUndefinedFixer {
             modified = true;
             this.fixes.category++;
             console.log(
-              `  ✓ Added category parameter to function in ${path.basename(_filePath)}`,
+              `  ✓ Added category parameter to function in ${path.basename(filePath)}`,
             );
           }
         }
@@ -181,7 +181,7 @@ class TargetedUndefinedFixer {
             modified = true;
             this.fixes._error++;
             console.log(
-              `  ✓ Fixed error to _error in catch block in ${path.basename(_filePath)}`,
+              `  ✓ Fixed error to _error in catch block in ${path.basename(filePath)}`,
             );
           }
         }
@@ -189,13 +189,13 @@ class TargetedUndefinedFixer {
 
       // Fix 6: Simple agentId fixes - just add as parameter to constructor-like functions
       if (
-        line.includes('constructor(', agentId) &&
+        line.includes('constructor(') &&
         content.includes('agentId') &&
         !line.includes('agentId')
       ) {
         const updated = line.replace(
           /constructor\s*\(([^)]*)\)/,
-          (match, _params) => {
+          (match, params) => {
             const cleanParams = params.trim();
             return cleanParams
               ? `constructor(${cleanParams}, agentId)`
@@ -208,15 +208,15 @@ class TargetedUndefinedFixer {
           modified = true;
           this.fixes.agentId++;
           console.log(
-            `  ✓ Added agentId to constructor in ${path.basename(_filePath)}`,
+            `  ✓ Added agentId to constructor in ${path.basename(filePath)}`,
           );
         }
       }
     }
 
     if (modified) {
-      fs.writeFileSync(_filePath, lines.join('\n'));
-      this.filesModified.push(_filePath);
+      fs.writeFileSync(filePath, lines.join('\n'));
+      this.filesModified.push(filePath);
       return true;
     }
 
@@ -231,11 +231,11 @@ class TargetedUndefinedFixer {
 
     let processedCount = 0;
 
-    for (const _filePath of jsFiles) {
-      const relativePath = path.relative(process.cwd(), _filePath);
+    for (const filePath of jsFiles) {
+      const relativePath = path.relative(process.cwd(), filePath);
 
       try {
-        if (this.fixFile(_filePath)) {
+        if (this.fixFile(filePath)) {
           console.log(`✅ Fixed issues in: ${relativePath}`);
         }
         processedCount++;

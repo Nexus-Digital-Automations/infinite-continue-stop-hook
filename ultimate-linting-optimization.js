@@ -74,9 +74,9 @@ class UltimateLintingOptimizer {
     const jsFiles = this.getAllJavaScriptFiles();
     let fixed = 0;
 
-    for (const _filePath of jsFiles) {
+    for (const filePath of jsFiles) {
       try {
-        let content = fs.readFileSync(_filePath, 'utf8');
+        let content = fs.readFileSync(filePath, 'utf8');
         let modified = false;
 
         // Pattern 1: catch (_error) where _error is truly unused
@@ -98,11 +98,11 @@ class UltimateLintingOptimizer {
         }
 
         if (modified) {
-          fs.writeFileSync(_filePath, content);
-          console.log(`  ✓ Fixed ${path.relative(this.rootDir, _filePath)}`);
+          fs.writeFileSync(filePath, content);
+          console.log(`  ✓ Fixed ${path.relative(this.rootDir, filePath)}`);
         }
       } catch (_) {
-        console.log(`  ⚠️  Error processing ${_filePath}: ${_error.message}`);
+        console.log(`  ⚠️  Error processing ${filePath}: ${_error.message}`);
       }
     }
 
@@ -143,9 +143,9 @@ class UltimateLintingOptimizer {
 
     const jsFiles = this.getAllJavaScriptFiles();
 
-    for (const _filePath of jsFiles) {
+    for (const filePath of jsFiles) {
       try {
-        let content = fs.readFileSync(_filePath, 'utf8');
+        let content = fs.readFileSync(filePath, 'utf8');
         let fileModified = false;
 
         for (const fix of undefinedFixes) {
@@ -163,13 +163,13 @@ class UltimateLintingOptimizer {
         }
 
         if (fileModified) {
-          fs.writeFileSync(_filePath, content);
+          fs.writeFileSync(filePath, content);
           console.log(
-            `  ✓ Fixed undefined vars in ${path.relative(this.rootDir, _filePath)}`,
+            `  ✓ Fixed undefined vars in ${path.relative(this.rootDir, filePath)}`,
           );
         }
       } catch (_) {
-        console.log(`  ⚠️  Error processing ${_filePath}: ${_error.message}`);
+        console.log(`  ⚠️  Error processing ${filePath}: ${_error.message}`);
       }
     }
 
@@ -185,9 +185,9 @@ class UltimateLintingOptimizer {
     const jsFiles = this.getAllJavaScriptFiles();
     let fixed = 0;
 
-    for (const _filePath of jsFiles) {
+    for (const filePath of jsFiles) {
       try {
-        let content = fs.readFileSync(_filePath, 'utf8');
+        let content = fs.readFileSync(filePath, 'utf8');
         let modified = false;
 
         // Pattern: async function with no await
@@ -213,10 +213,10 @@ class UltimateLintingOptimizer {
         );
 
         if (modified) {
-          fs.writeFileSync(_filePath, content);
+          fs.writeFileSync(filePath, content);
         }
       } catch (_) {
-        console.log(`  ⚠️  Error processing ${_filePath}: ${_error.message}`);
+        console.log(`  ⚠️  Error processing ${filePath}: ${_error.message}`);
       }
     }
 
@@ -232,9 +232,9 @@ class UltimateLintingOptimizer {
     const jsFiles = this.getAllJavaScriptFiles();
     let fixed = 0;
 
-    for (const _filePath of jsFiles) {
+    for (const filePath of jsFiles) {
       try {
-        let content = fs.readFileSync(_filePath, 'utf8');
+        let content = fs.readFileSync(filePath, 'utf8');
         let modified = false;
 
         // Add eslint-disable comments for false positive security warnings
@@ -270,13 +270,13 @@ class UltimateLintingOptimizer {
         }
 
         if (modified) {
-          fs.writeFileSync(_filePath, content);
+          fs.writeFileSync(filePath, content);
           console.log(
-            `  ✓ Added security disables to ${path.relative(this.rootDir, _filePath)}`,
+            `  ✓ Added security disables to ${path.relative(this.rootDir, filePath)}`,
           );
         }
       } catch (_) {
-        console.log(`  ⚠️  Error processing ${_filePath}: ${_error.message}`);
+        console.log(`  ⚠️  Error processing ${filePath}: ${_error.message}`);
       }
     }
 
@@ -305,9 +305,9 @@ class UltimateLintingOptimizer {
       'indexError',
     ];
 
-    for (const _filePath of jsFiles) {
+    for (const filePath of jsFiles) {
       try {
-        let content = fs.readFileSync(_filePath, 'utf8');
+        let content = fs.readFileSync(filePath, 'utf8');
         let modified = false;
 
         for (const varName of commonUnusedVars) {
@@ -324,13 +324,13 @@ class UltimateLintingOptimizer {
         }
 
         if (modified) {
-          fs.writeFileSync(_filePath, content);
+          fs.writeFileSync(filePath, content);
           console.log(
-            `  ✓ Prefixed unused vars in ${path.relative(this.rootDir, _filePath)}`,
+            `  ✓ Prefixed unused vars in ${path.relative(this.rootDir, filePath)}`,
           );
         }
       } catch (_) {
-        console.log(`  ⚠️  Error processing ${_filePath}: ${_error.message}`);
+        console.log(`  ⚠️  Error processing ${filePath}: ${_error.message}`);
       }
     }
 

@@ -203,14 +203,14 @@ class NodeVersionPerformanceBenchmark {
     // File write operations
     const writePromises = [];
     for (let i = 0; i < 100; i++) {
-      const _filePath = path.join(tempDir, `test-file-${i}.json`);
+      const filePath = path.join(tempDir, `test-file-${i}.json`);
       const data = JSON.stringify({
         id: i,
         data: new Array(100).fill(i),
         timestamp: Date.now(),
       });
 
-      writePromises.push(FS.promises.writeFile(_filePath, data, 'utf8'));
+      writePromises.push(FS.promises.writeFile(filePath, data, 'utf8'));
     }
 
     await Promise.all(writePromises);

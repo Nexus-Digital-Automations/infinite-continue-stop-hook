@@ -22,7 +22,7 @@ class EmergencySyntaxFixer {
       console.log(`📁 Found ${jsFiles.length} JavaScript files to check`);
 
       // Apply emergency fixes
-      for (const _filePath of jsFiles) {
+      for (const filePath of jsFiles) {
         this.processFile(__filename);
       }
 

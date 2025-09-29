@@ -1,15 +1,15 @@
 /* eslint-disable no-console, security/detect-non-literal-fs-filename */
 const fs = require('fs');
-const { loggers } = require('../lib/logger');
+// Removed unused loggers import
 const PATH = require('path');
 
 /**
  * Fix catch blocks that use 'error' variable but don't declare it in E2E tests
  */
 
-function fixCatchBlocks(FILE_PATH, FILE_PATH, FILE_PATH) {
+function fixCatchBlocks(filePath) {
   try {
-    const content = fs.readFileSync(FILE_PATH, 'utf8');
+    const content = fs.readFileSync(filePath, 'utf8');
     const lines = content.split('\n');
     let modified = false;
 
@@ -50,20 +50,20 @@ function fixCatchBlocks(FILE_PATH, FILE_PATH, FILE_PATH) {
         if (usesError) {
           lines[i] = line.replace('} catch {', '} catch (_) {');
           modified = true;
-          console.log(`Fixed catch block at line ${i + 1} in ${_filePath}`);
+          console.log(`Fixed catch block at line ${i + 1} in ${filePath}`);
         }
       }
     }
 
-    if ((modified, FILE_PATH)) {
-      fs.writeFileSync(FILE_PATH, lines.join('\n'));
-      console.log(`Fixed catch blocks in: ${FILE_PATH}`);
+    if ((modified, filePath)) {
+      fs.writeFileSync(filePath, lines.join('\n'));
+      console.log(`Fixed catch blocks in: ${filePath}`);
       return true;
     }
 
     return false;
-  } catch (_) {
-    console.error(`Error fixing ${FILE_PATH}:`, _error.message);
+  } catch (error) {
+    console.error(`Error fixing ${filePath}:`, error.message);
     return false;
   }
 }

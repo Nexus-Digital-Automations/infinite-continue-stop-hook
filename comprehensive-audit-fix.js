@@ -3,14 +3,14 @@
  * Comprehensive fix for audit-system-validation.test.js undefined variables
  */
 
-const fs = require('fs');
+const _fs = require('fs');
 
-function comprehensiveAuditFix(__filename, __filename) {
-  const _filePath =
+function comprehensiveAuditFix() {
+  const filePath =
     '/Users/jeremyparker/infinite-continue-stop-hook/test/audit-system-validation.test.js';
 
   try {
-    let content = fs.readFileSync(__filename, 'utf-8');
+    let content = _fs.readFileSync(filePath, 'utf-8');
 
     console.log('Applying comprehensive audit test fixes...');
 
@@ -47,9 +47,9 @@ function comprehensiveAuditFix(__filename, __filename) {
       'expect(result.success).toBe(true);'
     );
 
-    fs.writeFileSync(__filename, content);
+    _fs.writeFileSync(filePath, content);
     console.log('Applied comprehensive audit test fixes successfully');
-  } catch (_) {
+  } catch (_error) {
     console.error('Error applying comprehensive fixes:', _error.message);
     throw _error;
   }

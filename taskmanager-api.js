@@ -88,8 +88,8 @@ class FileLock {
     this.retryDelay = 5; // milliseconds
   }
 
-  async acquire(_filePath) {
-    const lockPath = `${_filePath}.lock`;
+  async acquire(filePath) {
+    const lockPath = `${filePath}.lock`;
 
     for (let attempt = 0; attempt < this.maxRetries; attempt++) {
       try {
@@ -146,7 +146,7 @@ class FileLock {
     }
 
     throw new Error(
-      `Could not acquire lock for ${_filePath} after ${this.maxRetries} attempts`
+      `Could not acquire lock for ${filePath} after ${this.maxRetries} attempts`
     );
   }
 }
@@ -4056,12 +4056,12 @@ class AutonomousTaskManagerAPI {
       ];
 
       const backupPromises = criticalFiles.map(async (file) => {
-        const _filePath = path.join(PROJECT_ROOT, file);
+        const filePath = path.join(PROJECT_ROOT, file);
         try {
-          await FS.access(_filePath);
+          await FS.access(filePath);
           const backupPath = path.join(snapshotDir, file);
           await FS.mkdir(path.dirname(backupPath), { recursive: true });
-          await FS.copyFile(_filePath, backupPath);
+          await FS.copyFile(filePath, backupPath);
         } catch (_) {
           // File doesn't exist, skip backup
         }
@@ -4639,14 +4639,14 @@ class AutonomousTaskManagerAPI {
 
       // Key files modification times based on validation type
       const keyFiles = this._getKeyFilesForValidation(criterion);
-      for (const _filePath of keyFiles) {
+      for (const filePath of keyFiles) {
         try {
-          const fullPath = path.join(PROJECT_ROOT, _filePath);
+          const fullPath = path.join(PROJECT_ROOT, filePath);
           const stats = await FS.stat(fullPath);
-          cacheInputs.push(`file:${_filePath}:${stats.mtime.getTime()}`);
+          cacheInputs.push(`file:${filePath}:${stats.mtime.getTime()}`);
         } catch (_) {
           // File doesn't exist, include in cache key
-          cacheInputs.push(`file:${_filePath}:missing`);
+          cacheInputs.push(`file:${filePath}:missing`);
         }
       }
 
@@ -4860,12 +4860,12 @@ class AutonomousTaskManagerAPI {
         }
 
         try {
-          const _filePath = path.join(cacheDir, file);
-          const stats = await FS.stat(_filePath);
+          const filePath = path.join(cacheDir, file);
+          const stats = await FS.stat(filePath);
           const age = Date.now() - stats.mtime.getTime();
 
           if (age > maxAge) {
-            await FS.unlink(_filePath);
+            await FS.unlink(filePath);
             cleanedCount++;
           }
         } catch (_) {
@@ -5076,8 +5076,8 @@ class AutonomousTaskManagerAPI {
       // Check file existence conditions
       if (rule.conditions.fileExists) {
         for (const file of rule.conditions.fileExists) {
-          const _filePath = path.join(PROJECT_ROOT, file);
-          if (!(await this._fileExists(_filePath))) {
+          const filePath = path.join(PROJECT_ROOT, file);
+          if (!(await this._fileExists(filePath))) {
             return false;
           }
         }
@@ -5167,10 +5167,10 @@ class AutonomousTaskManagerAPI {
 
       // Check file contents
       if (rule.conditions.fileContains) {
-        for (const [_filePath, patterns] of Object.entries(
+        for (const [filePath, patterns] of Object.entries(
           rule.conditions.fileContains
         )) {
-          const fullPath = path.join(PROJECT_ROOT, _filePath);
+          const fullPath = path.join(PROJECT_ROOT, filePath);
           if (await this._fileExists(fullPath)) {
             const content = await FS.readFile(fullPath, 'utf8');
             for (const pattern of patterns) {
@@ -5313,8 +5313,8 @@ class AutonomousTaskManagerAPI {
     // Check file existence (post-execution)
     if (criteria.fileExists) {
       for (const file of criteria.fileExists) {
-        const _filePath = path.join(PROJECT_ROOT, file);
-        if (!FS.existsSync(_filePath)) {
+        const filePath = path.join(PROJECT_ROOT, file);
+        if (!FS.existsSync(filePath)) {
           return false;
         }
       }
@@ -5322,10 +5322,10 @@ class AutonomousTaskManagerAPI {
 
     // Check file contents (post-execution)
     if (criteria.fileContains) {
-      for (const [_filePath, patterns] of Object.entries(
+      for (const [filePath, patterns] of Object.entries(
         criteria.fileContains
       )) {
-        const fullPath = path.join(PROJECT_ROOT, _filePath);
+        const fullPath = path.join(PROJECT_ROOT, filePath);
         if (FS.existsSync(fullPath)) {
           const content = FS.readFileSync(fullPath, 'utf8');
           for (const pattern of patterns) {
@@ -6156,9 +6156,9 @@ class AutonomousTaskManagerAPI {
     };
   }
 
-  async _fileExists(_filePath) {
+  async _fileExists(filePath) {
     try {
-      await FS.access(_filePath);
+      await FS.access(filePath);
       return true;
     } catch (_) {
       return false;
@@ -6197,8 +6197,8 @@ class AutonomousTaskManagerAPI {
 
       for (const [type, files] of Object.entries(indicators)) {
         for (const file of files) {
-          const _filePath = path.join(PROJECT_ROOT, file);
-          if (await this._fileExists(_filePath)) {
+          const filePath = path.join(PROJECT_ROOT, file);
+          if (await this._fileExists(filePath)) {
             return type;
           }
         }
@@ -11052,9 +11052,9 @@ async function main(category = 'general') {
             for (const file of files) {
               if (file.startsWith('emergency_') && file.endsWith('.json')) {
                 try {
-                  const _filePath = path.join(emergencyDir, file);
+                  const filePath = path.join(emergencyDir, file);
                   const record = JSON.parse(
-                    await FS.readFile(_filePath, 'utf8')
+                    await FS.readFile(filePath, 'utf8')
                   );
                   overrides.push({
                     emergencyKey: record.emergencyKey,
@@ -11904,9 +11904,9 @@ async function main(category = 'general') {
         break;
       }
       case 'save-dependency-config': {
-        const _filePath = args[1] || null;
+        const filePath = args[1] || null;
         const savedPath =
-          await api.dependencyManager.saveDependencyConfig(_filePath);
+          await api.dependencyManager.saveDependencyConfig(filePath);
         result = {
           success: true,
           savedPath,
@@ -11915,9 +11915,9 @@ async function main(category = 'general') {
         break;
       }
       case 'load-dependency-config': {
-        const _filePath = args[1] || null;
+        const filePath = args[1] || null;
         const config =
-          await api.dependencyManager.loadDependencyConfig(_filePath);
+          await api.dependencyManager.loadDependencyConfig(filePath);
         result = {
           success: true,
           config,

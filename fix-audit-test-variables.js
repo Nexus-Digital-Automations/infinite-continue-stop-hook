@@ -6,12 +6,12 @@
 const fs = require('fs');
 const PATH = require('path');
 
-function fixAuditTestVariables(FILE_PATH, FILE_PATH) {
-  const _filePath =
+function fixAuditTestVariables(filePath, filePath) {
+  const filePath =
     '/Users/jeremyparker/infinite-continue-stop-hook/test/audit-system-validation.test.js';
 
   try {
-    let content = fs.readFileSync(FILE_PATH, 'utf-8');
+    let content = fs.readFileSync(filePath, 'utf-8');
 
     console.log('Fixing audit test file variables...');
 
@@ -42,7 +42,7 @@ function fixAuditTestVariables(FILE_PATH, FILE_PATH) {
       );
     }
 
-    fs.writeFileSync(FILE_PATH, content);
+    fs.writeFileSync(filePath, content);
     console.log('Fixed audit test file variables successfully');
   } catch (_) {
     console.error('Error fixing audit test file:', _error.message);

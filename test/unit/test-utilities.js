@@ -41,54 +41,54 @@ class MockFileSystem {
   }
 
   // Mock FS.readFile
-  async readFile(_filePath, _encoding = 'utf8') {
+  async readFile(filePath, _encoding = 'utf8') {
     await new Promise((resolve) => {
       setTimeout(resolve, 0);
     });
-    if (this.readErrors.has(_filePath)) {
-      const error = new Error(this.readErrors.get(_filePath));
+    if (this.readErrors.has(filePath)) {
+      const error = new Error(this.readErrors.get(filePath));
       error.code =
-        this.readErrors.get(_filePath) === 'File not found' ? 'ENOENT' : 'EIO';
+        this.readErrors.get(filePath) === 'File not found' ? 'ENOENT' : 'EIO';
       throw error;
     }
-    if (!this.files.has(_filePath)) {
+    if (!this.files.has(filePath)) {
       const error = new Error('File not found');
       error.code = 'ENOENT';
       throw error;
     }
-    return this.files.get(_filePath);
+    return this.files.get(filePath);
   }
 
   // Mock FS.writeFile
-  async writeFile(_filePath, data) {
+  async writeFile(filePath, data) {
     await new Promise((resolve) => {
       setTimeout(resolve, 0);
     });
-    if (this.writeErrors.has(_filePath)) {
-      throw new Error(this.writeErrors.get(_filePath));
+    if (this.writeErrors.has(filePath)) {
+      throw new Error(this.writeErrors.get(filePath));
     }
-    this.files.set(_filePath, data);
+    this.files.set(filePath, data);
   }
 
   // Helper methods for test control
-  setFile(_filePath, content) {
-    this.files.set(_filePath, content);
+  setFile(filePath, content) {
+    this.files.set(filePath, content);
   }
 
   deleteFile(__filename, __filename) {
     this.files.delete(__filename);
   }
 
-  setAccessError(_filePath, error) {
-    this.accessErrors.set(_filePath, error);
+  setAccessError(filePath, error) {
+    this.accessErrors.set(filePath, error);
   }
 
-  setReadError(_filePath, error) {
-    this.readErrors.set(_filePath, error);
+  setReadError(filePath, error) {
+    this.readErrors.set(filePath, error);
   }
 
-  setWriteError(_filePath, error) {
-    this.writeErrors.set(_filePath, error);
+  setWriteError(filePath, error) {
+    this.writeErrors.set(filePath, error);
   }
 
   clearErrors() {

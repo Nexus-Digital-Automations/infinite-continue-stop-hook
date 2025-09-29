@@ -3,8 +3,8 @@
  * Fixes the most common unused variable patterns efficiently
  */
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { execSync } = require('child_process');
 
 /**
@@ -17,11 +17,11 @@ function quickFixUnusedVars() {
   console.log('📋 Fixing catch blocks with unused parameters...');
   try {
     execSync(
-      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/} catch (_) {/} catch (_) {/g' {} \\;`,
+      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/} catch {/} catch {/g' {} \\;`,
       { cwd: process.cwd() },
     );
     console.log('✅ Fixed catch blocks');
-  } catch (_) {
+  } catch {
     console.log('⚠️ Some catch blocks may need manual review');
   }
 
@@ -29,11 +29,11 @@ function quickFixUnusedVars() {
   console.log('📋 Fixing RESULT variables...');
   try {
     execSync(
-      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/const _RESULT =/const _RESULT =/g' {} \\;`,
+      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/const RESULT =/const RESULT =/g' {} \\;`,
       { cwd: process.cwd() },
     );
     console.log('✅ Fixed RESULT variables');
-  } catch (_) {
+  } catch {
     console.log('⚠️ Some RESULT variables may need manual review');
   }
 
@@ -41,11 +41,11 @@ function quickFixUnusedVars() {
   console.log('📋 Fixing LINT_RESULT variables...');
   try {
     execSync(
-      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/const _LINT_RESULT =/const _LINT_RESULT =/g' {} \\;`,
+      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/const LINT_RESULT =/const LINT_RESULT =/g' {} \\;`,
       { cwd: process.cwd() },
     );
     console.log('✅ Fixed LINT_RESULT variables');
-  } catch (_) {
+  } catch {
     console.log('⚠️ Some LINT_RESULT variables may need manual review');
   }
 
@@ -53,11 +53,11 @@ function quickFixUnusedVars() {
   console.log('📋 Fixing common unused parameters...');
   try {
     execSync(
-      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/, _params)/, _params)/g; s/(params)/(params)/g; s/_filePath/__filePath/g; s/, _category)/, _category)/g' {} \\;`,
+      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/, _params)/, _params)/g; s/(params)/(params)/g; s/filePath/__filePath/g; s/, _category)/, _category)/g' {} \\;`,
       { cwd: process.cwd() },
     );
     console.log('✅ Fixed common parameters');
-  } catch (_) {
+  } catch {
     console.log('⚠️ Some parameters may need manual review');
   }
 
@@ -65,11 +65,11 @@ function quickFixUnusedVars() {
   console.log('📋 Fixing unused assignments...');
   try {
     execSync(
-      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/const REPLACEMENTS =/const REPLACEMENTS =/g; s/const CHECK_ERROR =/const CHECK_ERROR =/g; s/const _LINT_RESULT =/const _LINT_RESULT =/g' {} \\;`,
+      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/const REPLACEMENTS =/const REPLACEMENTS =/g; s/const CHECK_ERROR =/const CHECK_ERROR =/g; s/const LINT_RESULT =/const LINT_RESULT =/g' {} \\;`,
       { cwd: process.cwd() },
     );
     console.log('✅ Fixed unused assignments');
-  } catch (_) {
+  } catch {
     console.log('⚠️ Some assignments may need manual review');
   }
 
@@ -81,7 +81,7 @@ function quickFixUnusedVars() {
       { cwd: process.cwd() },
     );
     console.log('✅ Fixed logger variables');
-  } catch (_) {
+  } catch {
     console.log('⚠️ Some logger variables may need manual review');
   }
 
@@ -92,7 +92,7 @@ function quickFixUnusedVars() {
       stdio: 'inherit',
     });
     console.log('✅ Layout autofix completed');
-  } catch (_) {
+  } catch {
     console.log('⚠️ Layout autofix completed with some issues');
   }
 }
@@ -121,7 +121,7 @@ if (require.main === module) {
       );
       console.log(violations);
     }
-  } catch (_) {
+  } catch {
     console.log('⚠️ Could not check final status');
   }
 

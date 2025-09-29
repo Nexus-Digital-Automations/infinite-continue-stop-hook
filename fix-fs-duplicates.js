@@ -8,9 +8,9 @@ const PATH = require('path');
  * that are preventing the testing framework from running
  */
 
-function fixDuplicateFS(FILE_PATH, FILE_PATH, FILE_PATH) {
+function fixDuplicateFS(filePath) {
   try {
-    const content = fs.readFileSync(FILE_PATH, 'utf8');
+    const content = fs.readFileSync(filePath, 'utf8');
 
     // Pattern 1: Fix path + fs.promises duplicates
     let fixed = content.replace(
@@ -51,15 +51,15 @@ function fixDuplicateFS(FILE_PATH, FILE_PATH, FILE_PATH) {
     fixed = fixed.replace(/FS\.dirname\(/g, 'PATH.dirname(');
     fixed = fixed.replace(/FS\.basename\(/g, 'PATH.basename(');
 
-    if ((content !== fixed, FILE_PATH)) {
-      fs.writeFileSync(FILE_PATH, fixed);
-      console.log(`Fixed: ${FILE_PATH}`);
+    if ((content !== fixed, filePath)) {
+      fs.writeFileSync(filePath, fixed);
+      console.log(`Fixed: ${filePath}`);
       return true;
     }
 
     return false;
-  } catch (_) {
-    console.error(`Error fixing ${FILE_PATH}:`, _error.message);
+  } catch (_error) {
+    console.error(`Error fixing ${filePath}:`, _error.message);
     return false;
   }
 }

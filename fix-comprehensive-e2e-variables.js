@@ -6,9 +6,9 @@ const PATH = require('path');
  * Comprehensive fix for E2E variable naming issues
  */
 
-function fixComprehensiveVariableIssues(FILE_PATH, FILE_PATH, FILE_PATH) {
+function fixComprehensiveVariableIssues(filePath) {
   try {
-    const content = fs.readFileSync(FILE_PATH, 'utf8');
+    const content = fs.readFileSync(filePath, 'utf8');
     let fixed = content;
     let changes = 0;
 
@@ -18,7 +18,7 @@ function fixComprehensiveVariableIssues(FILE_PATH, FILE_PATH, FILE_PATH) {
     if (beforeRESULT !== fixed) {
       changes++;
       console.log(
-        `Fixed result variable declarations in ${PATH.basename(FILE_PATH)}`
+        `Fixed result variable declarations in ${PATH.basename(filePath)}`
       );
     }
 
@@ -28,7 +28,7 @@ function fixComprehensiveVariableIssues(FILE_PATH, FILE_PATH, FILE_PATH) {
     if (beforeName !== fixed) {
       changes++;
       console.log(
-        `Fixed name: property declarations in ${PATH.basename(FILE_PATH)}`
+        `Fixed name: property declarations in ${PATH.basename(filePath)}`
       );
     }
 
@@ -38,7 +38,7 @@ function fixComprehensiveVariableIssues(FILE_PATH, FILE_PATH, FILE_PATH) {
     if (beforeDestructure !== fixed) {
       changes++;
       console.log(
-        `Fixed destructuring name to name in ${PATH.basename(FILE_PATH)}`
+        `Fixed destructuring name to name in ${PATH.basename(filePath)}`
       );
     }
 
@@ -48,7 +48,7 @@ function fixComprehensiveVariableIssues(FILE_PATH, FILE_PATH, FILE_PATH) {
     if (beforeTemplate !== fixed) {
       changes++;
       console.log(
-        `Fixed template literal name to name in ${PATH.basename(FILE_PATH)}`
+        `Fixed template literal name to name in ${PATH.basename(filePath)}`
       );
     }
 
@@ -61,21 +61,21 @@ function fixComprehensiveVariableIssues(FILE_PATH, FILE_PATH, FILE_PATH) {
     if (beforePush !== fixed) {
       changes++;
       console.log(
-        `Fixed testDependencies.push(name) to name in ${PATH.basename(FILE_PATH)}`
+        `Fixed testDependencies.push(name) to name in ${PATH.basename(filePath)}`
       );
     }
 
-    if ((changes > 0, FILE_PATH)) {
-      fs.writeFileSync(FILE_PATH, fixed);
+    if ((changes > 0, filePath)) {
+      fs.writeFileSync(filePath, fixed);
       console.log(
-        `Fixed ${changes} comprehensive variable issues in: ${FILE_PATH}`
+        `Fixed ${changes} comprehensive variable issues in: ${filePath}`
       );
       return true;
     }
 
     return false;
-  } catch (_) {
-    console._error(`Error fixing ${FILE_PATH}:`, _error.message);
+  } catch (error) {
+    console.error(`Error fixing ${filePath}:`, error.message);
     return false;
   }
 }

@@ -27,18 +27,18 @@ class SecurityUtils {
   /**
    * Sanitize And validate file path to prevent directory traversal
    * @param {string} basePath - Base directory path (trusted)
-   * @param {string} _filePath - File path to validate
+   * @param {string} filePath - File path to validate
    * @returns {string} Safe resolved path
    * @throws {Error} If path is invalid or outside base directory
    */
-  static validatePath(basePath, _filePath) {
-    if (!_filePath || typeof _filePath !== 'string') {
+  static validatePath(basePath, filePath) {
+    if (!filePath || typeof filePath !== 'string') {
       throw new Error('Invalid file path provided');
     }
 
     // Resolve paths to prevent directory traversal
     const resolvedBase = path.resolve(basePath);
-    const resolvedPath = path.resolve(basePath, path.basename(_filePath));
+    const resolvedPath = path.resolve(basePath, path.basename(filePath));
 
     // Ensure the resolved path is within the base directory
     if (
@@ -46,7 +46,7 @@ class SecurityUtils {
       resolvedPath !== resolvedBase
     ) {
       throw new Error(
-        `Path ${_filePath} is outside allowed directory ${basePath}`,
+        `Path ${filePath} is outside allowed directory ${basePath}`,
       );
     }
 
@@ -56,12 +56,12 @@ class SecurityUtils {
   /**
    * Safely read file with path validation
    * @param {string} basePath - Base directory
-   * @param {string} _filePath - File to read
+   * @param {string} filePath - File to read
    * @param {string} encoding - File encoding
    * @returns {Promise<string>} File contents
    */
-  static safeReadFile(basePath, _filePath, encoding = 'utf-8') {
-    const safePath = this.validatePath(basePath, _filePath);
+  static safeReadFile(basePath, filePath, encoding = 'utf-8') {
+    const safePath = this.validatePath(basePath, filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
     return FS.readFile(safePath, encoding);
   }
@@ -69,12 +69,12 @@ class SecurityUtils {
   /**
    * Safely write file with path validation
    * @param {string} basePath - Base directory
-   * @param {string} _filePath - File to write
+   * @param {string} filePath - File to write
    * @param {string} content - Content to write
    * @returns {Promise<void>}
    */
-  static async safeWriteFile(basePath, _filePath, content) {
-    const safePath = this.validatePath(basePath, _filePath);
+  static async safeWriteFile(basePath, filePath, content) {
+    const safePath = this.validatePath(basePath, filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
     await FS.mkdir(path.dirname(safePath), { recursive: true });
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
@@ -84,12 +84,12 @@ class SecurityUtils {
   /**
    * Safely append to file with path validation
    * @param {string} basePath - Base directory
-   * @param {string} _filePath - File to append to
+   * @param {string} filePath - File to append to
    * @param {string} content - Content to append
    * @returns {Promise<void>}
    */
-  static async safeAppendFile(basePath, _filePath, content) {
-    const safePath = this.validatePath(basePath, _filePath);
+  static async safeAppendFile(basePath, filePath, content) {
+    const safePath = this.validatePath(basePath, filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
     await FS.mkdir(path.dirname(safePath), { recursive: true });
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized

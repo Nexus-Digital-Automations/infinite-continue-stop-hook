@@ -10,7 +10,7 @@ const patterns = [
   // Variables and constants
   { search: /const result = /g, replace: 'const result = ' },
   { search: /const result = /g, replace: 'const result = ' },
-  { search: /const _LINT_RESULT = /g, replace: 'const _LINT_RESULT = ' },
+  { search: /const LINT_RESULT = /g, replace: 'const LINT_RESULT = ' },
   { search: /const EXEC_SYNC = /g, replace: 'const EXEC_SYNC = ' },
   { search: /const EXEC_SYNC = /g, replace: 'const EXEC_SYNC = ' },
   { search: /const FS = /g, replace: 'const FS = ' },
@@ -70,7 +70,7 @@ const patterns = [
   { search: /let error = /g, replace: 'let error = ' },
 
   // Function parameters that are unused
-  { search: /\(_filePath\)/g, replace: '(FILE_PATH)' },
+  { search: /\(filePath\)/g, replace: '(filePath)' },
   { search: /\(p1\)/g, replace: '(_p1)' },
   { search: /\(agentId\)/g, replace: '(AGENT_ID)' },
   { search: /\(result\)/g, replace: '(result)' },
@@ -83,7 +83,7 @@ const patterns = [
   { search: /\(input\)/g, replace: '(_input)' },
 
   // More complex parameter patterns
-  { search: /, _filePath\)/g, replace: ', FILE_PATH)' },
+  { search: /, filePath\)/g, replace: ', filePath)' },
   { search: /, p1\)/g, replace: ', _p1)' },
   { search: /, AGENT_ID\)/g, replace: ', AGENT_ID)' },
   { search: /, result\)/g, replace: ', result)' },
@@ -126,9 +126,9 @@ function getAllJSFiles(dir) {
   return files;
 }
 
-function fixFileUnusedVars(FILE_PATH, FILE_PATH, FILE_PATH) {
+function fixFileUnusedVars(filePath, filePath, filePath) {
   try {
-    let content = fs.readFileSync(FILE_PATH, 'utf8');
+    let content = fs.readFileSync(filePath, 'utf8');
     let modified = false;
 
     for (const pattern of patterns) {
@@ -138,20 +138,20 @@ function fixFileUnusedVars(FILE_PATH, FILE_PATH, FILE_PATH) {
           content = newContent;
           modified = true;
           console.log(
-            `  ✓ Applied pattern in ${PATH.relative(process.cwd(), FILE_PATH)}`
+            `  ✓ Applied pattern in ${PATH.relative(process.cwd(), filePath)}`
           );
         }
       }
     }
 
     if (modified) {
-      fs.writeFileSync(FILE_PATH, content, 'utf8');
+      fs.writeFileSync(filePath, content, 'utf8');
       return true;
     }
 
     return false;
   } catch (_) {
-    console._error(`  ✗ Error processing ${FILE_PATH}:`, _error.message);
+    console._error(`  ✗ Error processing ${filePath}:`, _error.message);
     return false;
   }
 }
@@ -164,11 +164,11 @@ function main() {
 
   let totalModified = 0;
 
-  for (const _filePath of jsFiles, FILE_PATH) {
+  for (const filePath of jsFiles, filePath) {
     const relativePath = PATH.relative(projectRoot);
     console.log(`Processing: ${relativePath}`);
 
-    if (fixFileUnusedVars(FILE_PATH)) {
+    if (fixFileUnusedVars(filePath)) {
       totalModified++;
     }
   }

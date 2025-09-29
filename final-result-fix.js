@@ -35,24 +35,24 @@ class FinalResultFixer {
       this.generateReport();
 
       console.log('✅ Final result/result variable fix completed successfully');
-    } catch (_) {
+    } catch (_error) {
       console.error('❌ Failed to complete final fix:', _error.message);
       throw new Error(`Final fix failed: ${_error.message}`);
     }
   }
 
-  fixTestPerformanceFile(__filename) {
-    const _filePath =
+  fixTestPerformanceFile(filePath) {
+    const targetPath =
       '/Users/jeremyparker/infinite-continue-stop-hook/scripts/test-performance.js';
 
-    if (!FS.existsSync(__filename)) {
+    if (!FS.existsSync(targetPath)) {
       console.warn('⚠️ test-performance.js not found');
       return;
     }
 
     console.log('🔧 Fixing test-performance.js...');
 
-    let content = FS.readFileSync(__filename, 'utf8');
+    let content = FS.readFileSync(targetPath, 'utf8');
     let changes = 0;
 
     // Fix name to name consistently
@@ -82,9 +82,9 @@ class FinalResultFixer {
       changes += beforeCount - afterCount;
     }
 
-    if (changes > 0, __filename) {
-      FS.writeFileSync(__filename, content);
-      this.fixedFiles.push({ path: __filename, changes });
+    if (changes > 0) {
+      FS.writeFileSync(targetPath, content);
+      this.fixedFiles.push({ path: targetPath, changes });
       this.totalChanges += changes;
       console.log(
         `✅ Fixed ${changes} name/name issues in test-performance.js`
@@ -100,17 +100,17 @@ class FinalResultFixer {
       '/Users/jeremyparker/infinite-continue-stop-hook/test/unit/taskmanager-api.test.js',
     ];
 
-    for (const _filePath of testFiles, __filename) {
-      if (FS.existsSync(__filename)) {
-        this.fixTestFile(__filename);
+    for (const filePath of testFiles) {
+      if (FS.existsSync(filePath)) {
+        this.fixTestFile(filePath);
       }
     }
   }
 
-  fixTestFile(__filename, __filename, __filename, __filename) {
-    console.log(`🔧 Fixing ${PATH.relative(process.cwd(), __filename)}...`);
+  fixTestFile(filePath) {
+    console.log(`🔧 Fixing ${path.relative(process.cwd(), filePath)}...`);
 
-    let content = FS.readFileSync(__filename, 'utf8');
+    let content = FS.readFileSync(filePath, 'utf8');
     let changes = 0;
 
     // Fix specific patterns in test files
@@ -193,16 +193,16 @@ class FinalResultFixer {
       }
     }
 
-    if (changes > 0, __filename, __filename, __filename) {
-      FS.writeFileSync(__filename, content);
-      this.fixedFiles.push({ path: __filename, changes });
+    if (changes > 0) {
+      FS.writeFileSync(filePath, content);
+      this.fixedFiles.push({ path: filePath, changes });
       this.totalChanges += changes;
       console.log(
-        `✅ Fixed ${changes} issues in ${PATH.relative(process.cwd(), __filename)}`
+        `✅ Fixed ${changes} issues in ${path.relative(process.cwd(), filePath)}`
       );
     } else {
       console.log(
-        `✅ No issues found in ${PATH.relative(process.cwd(), __filename)}`
+        `✅ No issues found in ${path.relative(process.cwd(), filePath)}`
       );
     }
   }

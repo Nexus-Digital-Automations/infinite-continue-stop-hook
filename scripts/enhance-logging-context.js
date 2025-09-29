@@ -225,7 +225,7 @@ module.exports = {
     );
 
     loggers.app.info('Created enhanced logging utilities', {
-      _filePath: 'lib/logging-utilities.js',
+      filePath: 'lib/logging-utilities.js',
     });
   }
 }

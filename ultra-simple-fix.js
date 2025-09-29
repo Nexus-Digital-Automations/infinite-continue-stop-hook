@@ -23,18 +23,18 @@ console.log(`📊 Found ${jsFiles.length} JavaScript files\n`);
 
 let totalFixes = 0;
 
-jsFiles.forEach((_filePath) => {
+jsFiles.forEach((filePath) => {
   // Skip our own fixer files
   if (
-    _filePath.includes('fix-') ||
-    _filePath.includes('fixer') ||
-    _filePath.includes('targeted-undefined-fix')
+    filePath.includes('fix-') ||
+    filePath.includes('fixer') ||
+    filePath.includes('targeted-undefined-fix')
   ) {
     return;
   }
 
   try {
-    const content = fs.readFileSync(_filePath, 'utf8');
+    const content = fs.readFileSync(filePath, 'utf8');
     const lines = content.split('\n');
     let modified = false;
 
@@ -61,7 +61,7 @@ jsFiles.forEach((_filePath) => {
 
       // Determine correct path
       let loggerPath = '../lib/logger';
-      if (_filePath.includes('/lib/')) {
+      if (filePath.includes('/lib/')) {
         loggerPath = './logger';
       }
 
@@ -72,7 +72,7 @@ jsFiles.forEach((_filePath) => {
       );
       modified = true;
       totalFixes++;
-      console.log(`  ✓ Added loggers import to ${path.basename(_filePath)}`);
+      console.log(`  ✓ Added loggers import to ${path.basename(filePath)}`);
     }
 
     // Fix 2: Simple fs import if fs.something is used but not imported
@@ -97,7 +97,7 @@ jsFiles.forEach((_filePath) => {
       lines.splice(insertIndex, 0, "const fs = require('fs');");
       modified = true;
       totalFixes++;
-      console.log(`  ✓ Added fs import to ${path.basename(_filePath)}`);
+      console.log(`  ✓ Added fs import to ${path.basename(filePath)}`);
     }
 
     // Fix 3: Simple path import if path.something is used but not imported
@@ -122,13 +122,13 @@ jsFiles.forEach((_filePath) => {
       lines.splice(insertIndex, 0, "const path = require('path');");
       modified = true;
       totalFixes++;
-      console.log(`  ✓ Added path import to ${path.basename(_filePath)}`);
+      console.log(`  ✓ Added path import to ${path.basename(filePath)}`);
     }
 
     if (modified) {
-      fs.writeFileSync(_filePath, lines.join('\n'));
+      fs.writeFileSync(filePath, lines.join('\n'));
     }
-  } catch (error) {
+  } catch {
     // Skip files with errors
   }
 });
@@ -138,7 +138,7 @@ console.log(`\n📈 Applied ${totalFixes} simple fixes\n`);
 // Check current status
 console.log('🔍 Checking current undefined variable status...');
 try {
-  const output = execSync('npm run lint 2>&1', { encoding: 'utf-8' });
+  const OUTPUT = execSync('npm run lint 2>&1', { encoding: 'utf-8' });
   console.log('🎉 No linting errors found!');
 } catch (lintError) {
   const output = lintError.stdout || lintError.message;

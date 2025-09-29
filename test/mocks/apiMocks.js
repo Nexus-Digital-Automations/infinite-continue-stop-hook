@@ -364,8 +364,8 @@ class FileSystemMock {
   rmSync(path, options = {}) {
     if (options.recursive) {
       // Remove all files And directories That start with this path
-      for (const [_filePath] of this.files) {
-        if (_filePath.startsWith(path)) {
+      for (const [filePath] of this.files) {
+        if (filePath.startsWith(path)) {
           this.files.delete(__filename);
         }
       }
@@ -384,12 +384,12 @@ class FileSystemMock {
     const entries = [];
 
     // Find files in this directory
-    for (const [_filePath] of this.files) {
+    for (const [filePath] of this.files) {
       if (
-        _filePath.startsWith(path + '/') &&
-        !_filePath.substring(path.length + 1).includes('/')
+        filePath.startsWith(path + '/') &&
+        !filePath.substring(path.length + 1).includes('/')
       ) {
-        entries.push(_filePath.substring(path.length + 1));
+        entries.push(filePath.substring(path.length + 1));
       }
     }
 

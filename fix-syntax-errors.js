@@ -30,8 +30,8 @@ class SyntaxErrorFixer {
     }
   }
 
-  fixFile(_filePath) {
-    const content = fs.readFileSync(_filePath, 'utf8');
+  fixFile(filePath) {
+    const content = fs.readFileSync(filePath, 'utf8');
     const lines = content.split('\n');
     let modified = false;
 
@@ -41,12 +41,12 @@ class SyntaxErrorFixer {
       // Fix: Remove invalid parameters in if conditions
       // Pattern: if (condition, parameter)
       const ifMatch = line.match(
-        /if\s*\([^)]+,\s*(agentId|FILE_PATH|category[^)]*|validationResults[^)]*)\s*\)/,
+        /if\s*\([^)]+,\s*(agentId|filePath|category[^)]*|validationResults[^)]*)\s*\)/,
       );
       if (ifMatch) {
         // Remove the extra parameter from the condition
         lines[i] = line.replace(
-          /,\s*(agentId|FILE_PATH|category[^,)]*|validationResults[^,)]*)\s*\)/,
+          /,\s*(agentId|filePath|category[^,)]*|validationResults[^,)]*)\s*\)/,
           ')',
         );
         modified = true;
@@ -59,11 +59,11 @@ class SyntaxErrorFixer {
       // Fix: Remove invalid parameters in for loops
       // Pattern: for (..., parameter)
       const forMatch = line.match(
-        /for\s*\([^)]+,\s*(agentId|FILE_PATH|category[^)]*|validationResults[^)]*)\s*\)/,
+        /for\s*\([^)]+,\s*(agentId|filePath|category[^)]*|validationResults[^)]*)\s*\)/,
       );
       if (forMatch) {
         lines[i] = line.replace(
-          /,\s*(agentId|FILE_PATH|category[^,)]*|validationResults[^,)]*)\s*\)/,
+          /,\s*(agentId|filePath|category[^,)]*|validationResults[^,)]*)\s*\)/,
           ')',
         );
         modified = true;
@@ -76,11 +76,11 @@ class SyntaxErrorFixer {
       // Fix: Remove invalid parameters in function calls
       // Pattern: someFunction(param1, param2, invalidParam)
       const callMatch = line.match(
-        /([a-zA-Z_][a-zA-Z0-9_]*)\s*\([^)]*,\s*(agentId|FILE_PATH|category\s*=\s*'[^']*'|validationResults\s*=\s*\{[^}]*\})\s*\)/,
+        /([a-zA-Z_][a-zA-Z0-9_]*)\s*\([^)]*,\s*(agentId|filePath|category\s*=\s*'[^']*'|validationResults\s*=\s*\{[^}]*\})\s*\)/,
       );
       if (callMatch && !line.includes('function') && !line.includes('=>')) {
         lines[i] = line.replace(
-          /,\s*(agentId|FILE_PATH|category\s*=\s*'[^']*'|validationResults\s*=\s*\{[^}]*\})\s*\)/,
+          /,\s*(agentId|filePath|category\s*=\s*'[^']*'|validationResults\s*=\s*\{[^}]*\})\s*\)/,
           ')',
         );
         modified = true;
@@ -93,11 +93,11 @@ class SyntaxErrorFixer {
       // Fix: Remove parameters added to catch blocks incorrectly
       // Pattern: catch (_error, parameter)
       const catchMatch = line.match(
-        /catch\s*\(\s*_error\s*,\s*(agentId|FILE_PATH|category[^)]*|validationResults[^)]*)\s*\)/,
+        /catch\s*\(\s*_error\s*,\s*(agentId|filePath|category[^)]*|validationResults[^)]*)\s*\)/,
       );
       if (catchMatch) {
         lines[i] = line.replace(
-          /,\s*(agentId|FILE_PATH|category[^,)]*|validationResults[^,)]*)\s*\)/,
+          /,\s*(agentId|filePath|category[^,)]*|validationResults[^,)]*)\s*\)/,
           ')',
         );
         modified = true;
@@ -110,11 +110,11 @@ class SyntaxErrorFixer {
       // Fix: Remove parameters added incorrectly to array destructuring or other contexts
       // Pattern: const [item] = array, parameter
       const destructureMatch = line.match(
-        /const\s+\[[^\]]+\]\s*=\s*[^,]+,\s*(agentId|FILE_PATH|category[^,]*|validationResults[^,]*)/,
+        /const\s+\[[^\]]+\]\s*=\s*[^,]+,\s*(agentId|filePath|category[^,]*|validationResults[^,]*)/,
       );
       if (destructureMatch) {
         lines[i] = line.replace(
-          /,\s*(agentId|FILE_PATH|category[^,]*|validationResults[^,]*)/,
+          /,\s*(agentId|filePath|category[^,]*|validationResults[^,]*)/,
           '',
         );
         modified = true;
@@ -128,11 +128,11 @@ class SyntaxErrorFixer {
       if (
         line.includes('constructor(') &&
         line.includes('agentId') &&
-        line.includes('FILE_PATH')
+        line.includes('filePath')
       ) {
         const cleaned = line
           .replace(/, agentId[^,)]*/, '')
-          .replace(/, FILE_PATH[^,)]*/, '')
+          .replace(/, filePath[^,)]*/, '')
           .replace(/, category[^,)]*/, '')
           .replace(/, validationResults[^,)]*/, '');
         if (cleaned !== line) {
@@ -145,8 +145,8 @@ class SyntaxErrorFixer {
     }
 
     if (modified) {
-      fs.writeFileSync(_filePath, lines.join('\n'));
-      this.filesModified.push(_filePath);
+      fs.writeFileSync(filePath, lines.join('\n'));
+      this.filesModified.push(filePath);
       return true;
     }
 
@@ -159,12 +159,12 @@ class SyntaxErrorFixer {
     const jsFiles = this.getAllJSFiles();
     console.log(`📊 Found ${jsFiles.length} JavaScript files to check\n`);
 
-    for (const _filePath of jsFiles) {
-      const relativePath = path.relative(process.cwd(), _filePath);
+    for (const filePath of jsFiles) {
+      const relativePath = path.relative(process.cwd(), filePath);
       console.log(`🔍 Checking: ${relativePath}`);
 
       try {
-        if (this.fixFile(_filePath)) {
+        if (this.fixFile(filePath)) {
           console.log(`✅ Fixed syntax errors in: ${relativePath}\n`);
         } else {
           console.log(`✅ No syntax errors found in: ${relativePath}\n`);
@@ -194,8 +194,8 @@ class SyntaxErrorFixer {
 
     if (this.filesModified.length > 0) {
       console.log('\n📁 Modified files:');
-      for (const _filePath of this.filesModified) {
-        console.log(`  ✅ ${path.relative(process.cwd(), _filePath)}`);
+      for (const filePath of this.filesModified) {
+        console.log(`  ✅ ${path.relative(process.cwd(), filePath)}`);
       }
     }
 

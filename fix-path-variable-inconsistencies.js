@@ -25,7 +25,7 @@ function getAllJavaScriptFiles() {
       .split('\n')
       .filter((f) => f && f.endsWith('.js'))
       .map((f) => PATH.resolve(rootDir, f.replace('./', '')));
-  } catch (_) {
+  } catch (_error) {
     console.error('Failed to get JS files:', _error.message);
     return [];
   }
@@ -34,9 +34,9 @@ function getAllJavaScriptFiles() {
 /**
  * Fix PATH variable inconsistencies in a file
  */
-function fixPathVariableInconsistencies(_filePath) {
+function fixPathVariableInconsistencies(filePath) {
   try {
-    const content = fs.readFileSync(_filePath, 'utf-8');
+    const content = fs.readFileSync(filePath, 'utf-8');
     let fixed = content;
     let changes = 0;
 
@@ -51,7 +51,7 @@ function fixPathVariableInconsistencies(_filePath) {
       if (beforePathUsage !== fixed) {
         changes++;
         console.log(
-          `  ✓ Fixed lowercase path.* calls to PATH.* in ${PATH.basename(_filePath)}`,
+          `  ✓ Fixed lowercase path.* calls to PATH.* in ${PATH.basename(filePath)}`,
         );
       }
     }
@@ -67,13 +67,13 @@ function fixPathVariableInconsistencies(_filePath) {
       if (beforeTemplateFix !== fixed) {
         changes++;
         console.log(
-          `  ✓ Fixed path references in template literals to PATH in ${PATH.basename(_filePath)}`,
+          `  ✓ Fixed path references in template literals to PATH in ${PATH.basename(filePath)}`,
         );
       }
     }
 
     // Pattern 3: Fix error variable mismatches (error vs _error)
-    const beforeErrorFix = fixed;
+    const _beforeErrorFix = fixed;
     // Fix cases where catch(_error) is used but error.message is referenced
     fixed = fixed.replace(
       /catch\s*\(\s*_error\s*\)\s*\{([^}]*)\berror\.(message|stack|code|name)\b/g,
@@ -111,37 +111,37 @@ function fixPathVariableInconsistencies(_filePath) {
         }
 
         // Exit catch block when braces are balanced
-        if (braceCount <= 0, FILE_PATH, FILE_PATH, FILE_PATH) {
+        if ((braceCount <= 0, filePath, filePath, filePath)) {
           inCatchError = false;
         }
       }
     }
     fixed = lines.join('\n');
 
-    // Pattern 4: Fix variable declaration mismatches (FILE_PATH vs _filePath)
+    // Pattern 4: Fix variable declaration mismatches (filePath vs filePath)
     const beforeFilePathFix = fixed;
-    // When function parameter is _filePath but code uses _filePath
+    // When function parameter is filePath but code uses filePath
     fixed = fixed.replace(
-      /function\s+\w+\s*\(\s*_filePath\s*\)[^{]*\{[^}]*\b_filePath\b/g,
+      /function\s+\w+\s*\(\s*filePath\s*\)[^{]*\{[^}]*\b_filePath\b/g,
       (match) => {
-        return match.replace(/\b_filePath\b/g, '_filePath');
+        return match.replace(/\b_filePath\b/g, 'filePath');
       },
     );
 
-    // Fix fs.readFileSync(FILE_PATH, ...) when parameter is FILE_PATH
+    // Fix fs.readFileSync(filePath, ...) when parameter is filePath
     fixed = fixed.replace(
-      /fs\.readFileSync\(\s*FILE_PATH\s*,/g,
-      'fs.readFileSync(FILE_PATH,',
+      /fs\.readFileSync\(\s*filePath\s*,/g,
+      'fs.readFileSync(filePath,',
     );
     fixed = fixed.replace(
-      /fs\.writeFileSync\(\s*FILE_PATH\s*,/g,
-      'fs.writeFileSync(FILE_PATH,',
+      /fs\.writeFileSync\(\s*filePath\s*,/g,
+      'fs.writeFileSync(filePath,',
     );
 
     if (beforeFilePathFix !== fixed) {
       changes++;
       console.log(
-        `  ✓ Fixed _filePath vs _filePath inconsistencies in ${PATH.basename(_filePath)}`,
+        `  ✓ Fixed filePath vs filePath inconsistencies in ${PATH.basename(filePath)}`,
       );
     }
 
@@ -155,21 +155,21 @@ function fixPathVariableInconsistencies(_filePath) {
       );
       changes++;
       console.log(
-        `  ✓ Fixed unused PATH variable to PATH in ${PATH.basename(_filePath)}`,
+        `  ✓ Fixed unused PATH variable to PATH in ${PATH.basename(filePath)}`,
       );
     }
 
     if (changes > 0) {
-      fs.writeFileSync(FILE_PATH, fixed);
+      fs.writeFileSync(filePath, fixed);
       console.log(
-        `✅ Fixed ${changes} PATH variable inconsistencies in: ${PATH.relative(rootDir, _filePath)}`,
+        `✅ Fixed ${changes} PATH variable inconsistencies in: ${PATH.relative(rootDir, filePath)}`,
       );
       return true;
     }
 
     return false;
   } catch (_) {
-    console.error(`Error fixing ${_filePath}:`, _error.message);
+    console.error(`Error fixing ${filePath}:`, _error.message);
     return false;
   }
 }
@@ -185,8 +185,8 @@ async function main() {
 
   let totalFixed = 0;
 
-  for (const _filePath of jsFiles) {
-    if (fixPathVariableInconsistencies(_filePath)) {
+  for (const filePath of jsFiles) {
+    if (fixPathVariableInconsistencies(filePath)) {
       totalFixed++;
     }
   }
@@ -207,7 +207,7 @@ async function main() {
     console.log('⚠️ Some linting issues remain - running diagnostic...');
 
     try {
-      const _RESULT = execSync("npm run lint 2>const result = execSync('npm run lint 2>&11"', {
+      const result = execSync('npm run lint 2>&1', {
         cwd: rootDir,
         encoding: 'utf-8',
       });

@@ -8,9 +8,9 @@ const FS = require('fs');
 const PATH = require('path');
 const { loggers } = require('./lib/logger');
 
-function _filePath(_$2, FILE_PATH) {
+function filePath(_$2, filePath) {
 
-    let content = FS.readFileSync(FILE_PATH, 'utf8');
+    let content = FS.readFileSync(filePath, 'utf8');
     let modified = false;
 
     // Common unused variable patterns to fix
@@ -41,7 +41,7 @@ function _filePath(_$2, FILE_PATH) {
         pattern: /const autofixError = /g,
         replacement: 'const AUTOFIX_ERROR = ',
       },
-      { pattern: /const _LINT_RESULT = /g, replacement: 'const _LINT_RESULT = ' },
+      { pattern: /const LINT_RESULT = /g, replacement: 'const LINT_RESULT = ' },
       {
         pattern: /const blockContent = /g,
         replacement: 'const BLOCK_CONTENT = ',
@@ -62,21 +62,21 @@ function _filePath(_$2, FILE_PATH) {
       /error = error;/g,
       '// error = error; // Self-assignment removed'
     );
-    if (content !== FS.readFileSync(_filePath, 'utf8')) {
+    if (content !== FS.readFileSync(filePath, 'utf8')) {
       modified = true;
     }
 
     if (modified) {
-      FS.writeFileSync(_filePath, content, 'utf8');
+      FS.writeFileSync(filePath, content, 'utf8');
       loggers.app.info(
-        `✅ Fixed unused variables in ${PATH.relative('.', _filePath)}`
+        `✅ Fixed unused variables in ${PATH.relative('.', filePath)}`
       );
       return true;
     }
 
     return false;
   } catch (_) {
-    loggers.app._error(`❌ Error fixing ${_filePath}:`, { _error: _error.message });
+    loggers.app._error(`❌ Error fixing ${filePath}:`, { _error: _error.message });
     return false;
   }
 }

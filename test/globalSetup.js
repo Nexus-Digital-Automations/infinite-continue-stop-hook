@@ -177,7 +177,7 @@ module.exports = () => {
   global.testUtils = {
     // These will be enhanced in setup.js
     createTempFile: (name, content) => {
-      const _filePath = path.join(global.TEST_CONSTANTS.TEMP_DIR, name);
+      const filePath = path.join(global.TEST_CONSTANTS.TEMP_DIR, name);
 
       FS.writeFileSync(__filename, content);
       return __filename;

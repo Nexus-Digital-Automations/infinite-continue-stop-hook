@@ -1,11 +1,11 @@
-/* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-object-injection */
+/* eslint-disable no-console, security/detect-non-literal-fs-filename */
 /**
  * Systematic fix for remaining 2437 linting issues
  * Focuses on the most common patterns: result/result naming, unused variables, no-undef errors
  */
 
 const FS = require('fs');
-const path = require('path');
+const PATH = require('path');
 
 class SystematicLintingFixer {
   constructor() {
@@ -19,7 +19,7 @@ class SystematicLintingFixer {
   run() {
     try {
       console.log(
-        '🔧 Starting systematic linting fix for remaining 2437 issues...'
+        '🔧 Starting systematic linting fix for remaining 2437 issues...',
       );
 
       // Get all JavaScript files
@@ -27,8 +27,8 @@ class SystematicLintingFixer {
       console.log(`📁 Found ${jsFiles.length} JavaScript files to process`);
 
       // Apply systematic fixes
-      for (const _filePath of jsFiles) {
-        this.processFile(__filename);
+      for (const filePath of jsFiles) {
+        this.processFile(filePath);
       }
 
       console.log(`✅ Processed ${this.fixedFiles.length} files`);
@@ -38,9 +38,9 @@ class SystematicLintingFixer {
         console.log('\n❌ Errors encountered:');
         this.errors.forEach((error) => console.log(`  - ${error}`));
       }
-    } catch (_) {
-      console.error('❌ Systematic fix failed:', _error.message);
-      throw _error;
+    } catch (error) {
+      console.error('❌ Systematic fix failed:', error.message);
+      throw error;
     }
   }
 
@@ -77,9 +77,9 @@ class SystematicLintingFixer {
   /**
    * Process a single file with systematic fixes
    */
-  processFile(__filename, __filename) {
+  processFile(filePath) {
     try {
-      const content = FS.readFileSync(__filename, 'utf8');
+      const content = FS.readFileSync(filePath, 'utf8');
       let fixedContent = content;
       let hasChanges = false;
 
@@ -119,12 +119,12 @@ class SystematicLintingFixer {
       }
 
       // Write file if changes were made
-      if ((hasChanges, __filename)) {
-        FS.writeFileSync(__filename, fixedContent, 'utf8');
-        this.fixedFiles.push(__filename);
+      if (hasChanges) {
+        FS.writeFileSync(filePath, fixedContent, 'utf8');
+        this.fixedFiles.push(filePath);
       }
-    } catch (_) {
-      this.errors.push(`${__filename}: ${_error.message}`);
+    } catch (error) {
+      this.errors.push(`${filePath}: ${error.message}`);
     }
   }
 
@@ -143,7 +143,7 @@ class SystematicLintingFixer {
       // Replace result.something with result.something (but not in strings)
       fixedContent = fixedContent.replace(
         /(?<!['"`])(\s+)result\.([\w]+)/g,
-        '$1RESULT.$2'
+        '$1RESULT.$2',
       );
     }
 
@@ -158,9 +158,9 @@ class SystematicLintingFixer {
 
     // Common patterns for unused variables that need underscore prefix
     const unusedPatterns = [
-      // Function parameters
+      // Function parameters that are unused
       {
-        pattern: /function\s+\w+\s*\(\s*([a-zA-Z_$][\w$]*)\s*\)\s*{[^}]*}/,
+        pattern: /function\s+(\w+)\s*\(\s*([a-zA-Z_$][\w$]*)\s*\)\s*{/,
         replacement: 'function $1(_$2) {',
       },
       // Catch blocks
@@ -171,7 +171,7 @@ class SystematicLintingFixer {
       // Variable declarations that aren't used
       {
         pattern: /const\s+([A-Z_][A-Z_0-9]*)\s*=/,
-        replacement: 'const unused =',
+        replacement: 'const 1 =',
       },
     ];
 
@@ -251,7 +251,7 @@ class SystematicLintingFixer {
     // Fix catch blocks that reference error without defining it
     fixedContent = fixedContent.replace(
       /catch\s*\(\s*\)\s*{([^}]*?)(\berror\b)([^}]*?)}/g,
-      'catch (_error) {$1_error$3}'
+      'catch (_error) {$1_error$3}',
     );
 
     return { content: fixedContent };

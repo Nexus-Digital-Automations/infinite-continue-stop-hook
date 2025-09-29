@@ -1,4 +1,4 @@
-/* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-object-injection */
+/* eslint-disable security/detect-non-literal-fs-filename */
 /**
  * Systematic fix for 2866 remaining linting errors
  * Zero tolerance approach to achieve perfect linting
@@ -37,16 +37,19 @@ const systematicFixes = [
   { pattern: /\bPATH\b(?=.*\))/g, replacement: 'PATH' },
 ];
 
-function _filePath(_$2) {`);
+function applySystematicFixes(filePath) {
+  if (!filePath || typeof filePath !== 'string') {
     return false;
   }
 
+  const normalizedPath = path.resolve(rootDir, filePath);
+
   try {
-    if (!FS.existsSync(normalizedPath)) {
+    if (!fs.existsSync(normalizedPath)) {
       return false;
     }
 
-    let content = FS.readFileSync(normalizedPath, 'utf8');
+    let content = fs.readFileSync(normalizedPath, 'utf8');
     let modified = false;
 
     // Apply systematic fixes
@@ -69,7 +72,7 @@ function _filePath(_$2) {`);
         const errorVar = blockContent.includes('error') ? 'error' : 'error';
         const replacement = match[0].replace(
           /catch\s*\(\s*\)\s*\{/,
-          `catch (${errorVar}) {`
+          `catch (${errorVar}) {`,
         );
         content = content.replace(match[0], replacement);
         modified = true;
@@ -91,8 +94,8 @@ function _filePath(_$2) {`);
     content = content.replace(/\b_PATH\./g, 'PATH.');
 
     if (modified) {
-      FS.writeFileSync(normalizedPath, content, 'utf8');
-      loggers.app.info(`✅ Fixed: ${PATH.relative(rootDir)}`);
+      fs.writeFileSync(normalizedPath, content, 'utf8');
+      loggers.app.info(`✅ Fixed: ${path.relative(rootDir, normalizedPath)}`);
       return true;
     }
 
@@ -110,14 +113,14 @@ function getAllJsFiles() {
   try {
     const output = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./.git/*"',
-      { cwd: rootDir, encoding: 'utf8' }
+      { cwd: rootDir, encoding: 'utf8' },
     );
     return output
       .trim()
       .split('\n')
       .filter((f) => f);
-  } catch (_) {
-    loggers.app.error('Failed to get JS files:', { error: _error.message });
+  } catch (error) {
+    loggers.app.error('Failed to get JS files:', { error: error.message });
     return [];
   }
 }
@@ -139,13 +142,13 @@ loggers.app.info(`✨ Applied fixes to ${fixedCount} files!`);
 // Check progress
 loggers.app.info('🔄 Checking error reduction...');
 try {
-  const _LINT_RESULT = execSync("npm run lint 2>const _LINT_RESULT = execSync('npm run lint 2>&11"', {
+  const LINT_RESULT = execSync('npm run lint 2>&1', {
     cwd: rootDir,
     encoding: 'utf8',
   });
   loggers.app.info('🎉 ALL LINTING ERRORS RESOLVED!');
-} catch (_) {
-  const output = _error.stdout || _error.message;
+} catch (error) {
+  const output = error.stdout || error.message;
   const errorMatches = output.match(/(\d+) errors/);
   const warningMatches = output.match(/(\d+) warnings/);
 
@@ -153,7 +156,7 @@ try {
   const warningCount = warningMatches ? parseInt(warningMatches[1]) : 0;
 
   loggers.app.info(
-    `📊 Progress: ${errorCount} errors, ${warningCount} warnings remaining`
+    `📊 Progress: ${errorCount} errors, ${warningCount} warnings remaining`,
   );
 
   if (errorCount === 0) {

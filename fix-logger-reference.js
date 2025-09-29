@@ -1,14 +1,14 @@
 /* eslint-disable no-console */
 const fs = require('fs');
-const { loggers } = require('../lib/logger');
+const { loggers } = require('./lib/logger');
 
 /**
  * Fix incorrect logger reference in TaskManager API
  */
 
-const FILE_PATH =
+const filePath =
   '/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js';
-const content = fs.readFileSync(FILE_PATH, 'utf8');
+const content = fs.readFileSync(filePath, 'utf8');
 
 // Fix the specific logger reference issue
 const fixed = content.replace(
@@ -17,7 +17,7 @@ const fixed = content.replace(
 );
 
 if (content !== fixed) {
-  fs.writeFileSync(FILE_PATH, fixed);
+  fs.writeFileSync(filePath, fixed);
   console.log('Fixed logger reference in TaskManager API');
 } else {
   console.log('No logger reference fix needed');

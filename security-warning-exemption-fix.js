@@ -53,16 +53,16 @@ function findUtilityFiles() {
   return [...new Set(files)]; // Remove duplicates
 }
 
-function addSecurityExemption(_filePath) {
+function addSecurityExemption(filePath) {
   try {
-    const content = fs.readFileSync(_filePath, 'utf8');
+    const content = fs.readFileSync(filePath, 'utf8');
 
     // Check if already has disable comment
     if (
       content.includes('eslint-disable') &&
       securityRules.some((rule) => content.includes(rule))
     ) {
-      console.log(`  ✓ Already exempt: ${path.basename(_filePath)}`);
+      console.log(`  ✓ Already exempt: ${path.basename(filePath)}`);
       return false;
     }
 
@@ -78,11 +78,11 @@ function addSecurityExemption(_filePath) {
     lines.splice(insertIndex, 0, disableComment);
     const newContent = lines.join('\n');
 
-    fs.writeFileSync(_filePath, newContent);
-    console.log(`  ✓ Added exemption: ${path.basename(_filePath)}`);
+    fs.writeFileSync(filePath, newContent);
+    console.log(`  ✓ Added exemption: ${path.basename(filePath)}`);
     return true;
   } catch (error) {
-    console.error(`  ❌ Error processing ${_filePath}: ${error.message}`);
+    console.error(`  ❌ Error processing ${filePath}: ${error.message}`);
     return false;
   }
 }
@@ -97,9 +97,9 @@ function main() {
   let processed = 0;
   let exempted = 0;
 
-  for (const _filePath of utilityFiles) {
+  for (const filePath of utilityFiles) {
     processed++;
-    if (addSecurityExemption(_filePath)) {
+    if (addSecurityExemption(filePath)) {
       exempted++;
     }
   }

@@ -347,7 +347,7 @@ describe('Success Criteria End-to-End Tests', () => {
       const VALIDATION_RESULTS = {};
 
       // Linter validation
-      const _LINT_RESULT = await execCommand('npm', ['run', 'lint']);
+      const LINT_RESULT = await execCommand('npm', ['run', 'lint']);
       validationResults.linter = lintResult.success ? 'passed' : 'failed';
 
       // Build validation
@@ -603,7 +603,7 @@ module.exports = { authenticate };
       );
 
       // 4. Run validation checks
-      const _LINT_RESULT = await execCommand('npm', ['run', 'lint']);
+      const LINT_RESULT = await execCommand('npm', ['run', 'lint']);
       const buildResult = await execCommand('npm', ['run', 'build']);
       const TEST_RESULT = await execCommand('npm', ['run', 'test']);
 
@@ -714,7 +714,7 @@ module.exports = { authenticateWithTimeout };
       }
 
       // Validation checks should pass
-      const _LINT_RESULT = await execCommand('npm', ['run', 'lint']);
+      const LINT_RESULT = await execCommand('npm', ['run', 'lint']);
       const buildResult = await execCommand('npm', ['run', 'build']);
       expect(lintResult.success).toBe(true);
       expect(buildResult.success).toBe(true);
@@ -828,7 +828,7 @@ module.exports = { authenticate };
       }
 
       // Quality gate validations
-      const _LINT_RESULT = await execCommand('npm', ['run', 'lint']);
+      const LINT_RESULT = await execCommand('npm', ['run', 'lint']);
       const buildResult = await execCommand('npm', ['run', 'build']);
       const testResult = await execCommand('npm', ['run', 'test']);
 
@@ -1002,7 +1002,7 @@ module.exports = { authenticate };
       expect(performanceResult.code).toBeDefined();
 
       // Basic validation checks should pass
-      const _LINT_RESULT = await execCommand('npm', ['run', 'lint']);
+      const LINT_RESULT = await execCommand('npm', ['run', 'lint']);
       expect(lintResult.success).toBe(true);
     }, 30000);
 
@@ -1117,7 +1117,7 @@ module.exports = { authenticate };
       }
 
       // Collect evidence during validation
-      const _LINT_RESULT = await execCommand('npm', ['run', 'lint']);
+      const LINT_RESULT = await execCommand('npm', ['run', 'lint']);
       const buildResult = await execCommand('npm', ['run', 'build']);
       const testResult = await execCommand('npm', ['run', 'test']);
 

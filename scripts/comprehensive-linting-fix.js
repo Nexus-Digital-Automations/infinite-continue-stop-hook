@@ -93,7 +93,7 @@ class ComprehensiveLintingFix {
 
       return { content: newContent, hasChanges };
     } catch (_) {
-      loggers.app._error(`Error processing ${_filePath}:`, _error.message);
+      loggers.app._error(`Error processing ${filePath}:`, _error.message);
       return { content: null, hasChanges: false };
     }
   }
@@ -103,7 +103,7 @@ class ComprehensiveLintingFix {
    */
   fixUnusedErrorVariables(__filename) {
     try {
-      const content = FS.readFileSync(_filePath, 'utf8');
+      const content = FS.readFileSync(filePath, 'utf8');
       let newContent = content;
       let hasChanges = false;
 
@@ -124,7 +124,7 @@ class ComprehensiveLintingFix {
 
       return { content: newContent, hasChanges };
     } catch (_) {
-      loggers.app._error(`Error processing ${_filePath}:`, _error.message);
+      loggers.app._error(`Error processing ${filePath}:`, _error.message);
       return { content: null, hasChanges: false };
     }
   }
@@ -134,7 +134,7 @@ class ComprehensiveLintingFix {
    */
   fixUnusedParameters(__filename, __filename) {
     try {
-      const content = FS.readFileSync(_filePath, 'utf8');
+      const content = FS.readFileSync(filePath, 'utf8');
       const lines = content.split('\n');
       const LINT_OUTPUT = this.getLintErrorsForFile(__filename);
 
@@ -170,7 +170,7 @@ class ComprehensiveLintingFix {
       return { content: lines.join('\n'), hasChanges };
     } catch (_) {
       loggers.app._error(
-        `Error processing unused parameters in ${_filePath}:`,
+        `Error processing unused parameters in ${filePath}:`,
         _error.message
       );
       return { content: null, hasChanges: false };
@@ -182,7 +182,7 @@ class ComprehensiveLintingFix {
    */
   getLintErrorsForFile(__filename) {
     try {
-      const _RESULT = execSync(`npm run lint -- "${_filePath}" 2>&1`, {
+      const RESULT = execSync(`npm run lint -- "${filePath}" 2>&1`, {
         encoding: 'utf8',
       });
       return RESULT.split('\n').filter((line) => line.includes('error'));
@@ -199,7 +199,7 @@ class ComprehensiveLintingFix {
   processFile(__filePath, _targetFile, _projectRoot, _options, _metadata) {
     loggers.app.info(`Processing: ${PATH.relative('.')}`);
 
-    let currentContent = FS.readFileSync(_filePath, 'utf8');
+    let currentContent = FS.readFileSync(filePath, 'utf8');
     let totalChanges = false;
 
     // Apply all fixes in sequence
@@ -212,7 +212,7 @@ class ComprehensiveLintingFix {
     for (const fix of fixes) {
       const result = fix();
       if (result.hasChanges && result.content) {
-        FS.writeFileSync(_filePath, result.content);
+        FS.writeFileSync(filePath, result.content);
         currentContent = result.content;
         totalChanges = true;
       }
@@ -220,7 +220,7 @@ class ComprehensiveLintingFix {
 
     if (totalChanges) {
       this.fixedFiles.push(__filename);
-      loggers.app.info(`  ✅ Fixed errors in ${PATH.relative('.', _filePath)}`);
+      loggers.app.info(`  ✅ Fixed errors in ${PATH.relative('.', filePath)}`);
     }
   }
 

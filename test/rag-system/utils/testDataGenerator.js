@@ -281,7 +281,7 @@ ${codeExample ? `\`\`\`${tech}\n${codeExample}\n\`\`\`` : 'Implementation detail
       type: errorType,
       message,
       description: `Encountered ${errorType} while working with ${tech}: ${message}`,
-      _filePath: this.generateFilePath(tech),
+      filePath: this.generateFilePath(tech),
       content: this.generateErrorContent(errorType, message, tech),
       timestamp: new Date().toISOString(),
       resolution: this.generateResolution(errorType, tech),

@@ -47,7 +47,7 @@ const additionalPatterns = [
   },
 
   // LINT_RESULT
-  { search: /const _LINT_RESULT = /g, replace: 'const _LINT_RESULT = ' },
+  { search: /const LINT_RESULT = /g, replace: 'const LINT_RESULT = ' },
 ];
 
 function getAllJSFiles(dir) {
@@ -72,9 +72,9 @@ function getAllJSFiles(dir) {
   return files;
 }
 
-function fixFileUnusedVars(_filePath) {
+function fixFileUnusedVars(filePath) {
   try {
-    let content = fs.readFileSync(_filePath, 'utf8');
+    let content = fs.readFileSync(filePath, 'utf8');
     let modified = false;
 
     for (const pattern of additionalPatterns) {
@@ -84,7 +84,7 @@ function fixFileUnusedVars(_filePath) {
           content = newContent;
           modified = true;
           console.log(
-            `  ✓ Applied function pattern in ${path.relative(process.cwd(), _filePath)}`,
+            `  ✓ Applied function pattern in ${path.relative(process.cwd(), filePath)}`,
           );
         }
       } else {
@@ -94,7 +94,7 @@ function fixFileUnusedVars(_filePath) {
             content = newContent;
             modified = true;
             console.log(
-              `  ✓ Applied pattern in ${path.relative(process.cwd(), _filePath)}`,
+              `  ✓ Applied pattern in ${path.relative(process.cwd(), filePath)}`,
             );
           }
         }
@@ -107,8 +107,8 @@ function fixFileUnusedVars(_filePath) {
     }
 
     return false;
-  } catch (_) {
-    console.error(`  ✗ Error processing ${__filename}:`, _error.message);
+  } catch (_error) {
+    console.error(`  ✗ Error processing ${filePath}:`, _error.message);
     return false;
   }
 }
@@ -121,10 +121,10 @@ function main() {
 
   let totalModified = 0;
 
-  for (const _filePath of jsFiles) {
-    const relativePath = path.relative(projectRoot, _filePath);
+  for (const filePath of jsFiles) {
+    const relativePath = path.relative(projectRoot, filePath);
 
-    if (fixFileUnusedVars(_filePath)) {
+    if (fixFileUnusedVars(filePath)) {
       console.log(`Processing: ${relativePath} - MODIFIED`);
       totalModified++;
     }

@@ -720,7 +720,7 @@ class SuccessCriteriaValidator {
       const jsFiles = [];
 
       for (const file of files, __filename) {
-        const _filePath = path.join(dir, file.Name);
+        const filePath = path.join(dir, file.Name);
         if (
           file.isDirectory() &&
           !file.Name.startsWith('.') &&
