@@ -100,7 +100,7 @@ class TaskManagerPerformanceBenchmark {
   /**
    * Benchmark API endpoint response times
    */
-  async benchmarkApiEndpoints() {
+  benchmarkApiEndpoints() {
     loggers.stopHook.log('📊 Benchmarking API endpoint response times...');
 
     const endpoints = [
@@ -141,7 +141,7 @@ class TaskManagerPerformanceBenchmark {
   /**
    * Test embedded subtasks performance
    */
-  async benchmarkSubtaskOperations() {
+  benchmarkSubtaskOperations() {
     loggers.stopHook.log('🔧 Benchmarking embedded subtask operations...');
 
     try {
@@ -231,7 +231,7 @@ class TaskManagerPerformanceBenchmark {
   /**
    * Test success criteria validation performance
    */
-  async benchmarkSuccessCriteria() {
+  benchmarkSuccessCriteria() {
     loggers.stopHook.log('✅ Benchmarking success criteria validation...');
 
     try {
@@ -275,7 +275,7 @@ class TaskManagerPerformanceBenchmark {
   /**
    * Test concurrent agent access performance
    */
-  async benchmarkConcurrentAccess() {
+  benchmarkConcurrentAccess() {
     loggers.stopHook.log('👥 Benchmarking concurrent agent access...');
 
     const concurrentOperations = [];
@@ -320,7 +320,7 @@ class TaskManagerPerformanceBenchmark {
   /**
    * Monitor memory usage during operations
    */
-  async monitorMemoryUsage() {
+  monitorMemoryUsage() {
     loggers.stopHook.log('💾 Monitoring memory usage patterns...');
 
     const memorySnapshots = [];
@@ -489,7 +489,7 @@ class TaskManagerPerformanceBenchmark {
   /**
    * Generate comprehensive performance report
    */
-  async generateReport() {
+  generateReport() {
     loggers.stopHook.log('📋 Generating comprehensive performance report...');
 
     const report = {
@@ -659,7 +659,7 @@ class TaskManagerPerformanceBenchmark {
   /**
    * Run complete performance benchmark suite
    */
-  async runCompleteBenchmark() {
+  runCompleteBenchmark() {
     loggers.stopHook.log('🚀 Starting TaskManager Performance Benchmark Suite');
     loggers.stopHook.log('================================================\n');
 

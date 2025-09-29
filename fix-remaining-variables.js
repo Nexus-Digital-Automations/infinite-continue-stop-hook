@@ -27,9 +27,9 @@ function fixFile(_filePath) {
     let modified = false;
 
     // Fix result unused variables - add underscore prefix
-    const resultPattern = /const RESULT = /g;
+    const resultPattern = /const result = /g;
     if (resultPattern.test(content)) {
-      content = content.replace(/const RESULT = /g, 'const RESULT = ');
+      content = content.replace(/const result = /g, 'const result = ');
       modified = true;
     }
 

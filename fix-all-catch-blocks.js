@@ -130,7 +130,7 @@ function fixAllCatchBlocks(_filePath) {
       }
     });
 
-    // Fix Pattern 3: catch(error) {} but error is used inside - change parameter to error
+    // Fix Pattern 3: catch(_error) {} but error is used inside - change parameter to error
     const pattern3 = /catch\s*\(\s*error\s*\)\s*\{/g;
     let match3;
     const fixes3 = [];

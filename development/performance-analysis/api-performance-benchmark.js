@@ -8,7 +8,6 @@
  * @date 2025-09-21
  */
 
-
 // Console output is intentional for this development/analysis tool
 
 const { spawn } = require('child_process');
@@ -42,7 +41,7 @@ class APIPerformanceBenchmark {
   /**
    * Execute API command and measure performance
    */
-  async executeCommand(command, args = [], iterations = 5) {
+  executeCommand(command, args = [], iterations = 5) {
     const results = [];
 
     for (let i = 0; i < iterations; i++) {
@@ -177,7 +176,7 @@ class APIPerformanceBenchmark {
   /**
    * Benchmark all critical API endpoints
    */
-  async benchmarkAllEndpoints() {
+  benchmarkAllEndpoints() {
     loggers.stopHook.log(
       '🚀 Starting comprehensive API performance benchmark...\n',
     );
@@ -417,7 +416,7 @@ class APIPerformanceBenchmark {
   /**
    * Load testing simulation
    */
-  async performLoadTest(endpoint = 'list', concurrency = 5, duration = 30) {
+  performLoadTest(endpoint = 'list', concurrency = 5, duration = 30) {
     loggers.app.info(
       `🔥 Starting load test: ${endpoint} (${concurrency} concurrent, ${duration}s)`,
     );
@@ -459,7 +458,7 @@ class APIPerformanceBenchmark {
   /**
    * Load test worker
    */
-  async loadTestWorker(endpoint, endTime, workerId) {
+  loadTestWorker(endpoint, endTime, workerId) {
     const results = [];
     let requestCount = 0;
 

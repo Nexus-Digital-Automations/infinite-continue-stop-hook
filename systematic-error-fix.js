@@ -138,7 +138,7 @@ loggers.app.info(`✨ Applied fixes to ${fixedCount} files!`);
 // Check progress
 loggers.app.info('🔄 Checking error reduction...');
 try {
-  const lintResult = execSync('npm run lint 2>&1', {
+  const LINT_RESULT = execSync("npm run lint 2>const lintResult = execSync('npm run lint 2>&11"', {
     cwd: rootDir,
     encoding: 'utf8',
   });

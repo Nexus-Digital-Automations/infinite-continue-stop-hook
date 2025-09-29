@@ -112,7 +112,7 @@ class FeaturesTestApp {
     this.features = [];
   }
 
-  async start() {
+  start() {
     this.status = 'running';
     loggers.stopHook.log('Features application is running');
     return this.status;
@@ -123,7 +123,7 @@ class FeaturesTestApp {
     loggers.stopHook.log(\`Feature added: \${feature.title}\`);
   }
 
-  async stop() {
+  stop() {
     this.status = 'stopped';
     loggers.stopHook.log('Features application stopped');
     return this.status;

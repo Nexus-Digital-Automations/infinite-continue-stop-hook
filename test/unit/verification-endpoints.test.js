@@ -12,7 +12,7 @@
 
 const FS = require('fs');
 const path = require('path');
-const { execSync: EXEC_SYNC } = require('child_process');
+const { execSync: _EXEC_SYNC } = require('child_process');
 const AutonomousTaskManagerAPI = require('../../taskmanager-api');
 
 // Mock fs module for controlled testing
@@ -138,7 +138,9 @@ describe('Verification Endpoints', () => {
       expect(result.verificationGate.requirements).toHaveLength(2);
       expect(result.verificationGate.requirements[0].type).toBe('file');
       expect(result.verificationGate.requirements[1].type).toBe('function');
-      expect(result.message).toBe('Verification requirements retrieved successfully');
+      expect(result.message).toBe(
+        'Verification requirements retrieved successfully',
+      );
     });
 
     it('should throw error when task ID does not exist', async () => {
@@ -158,8 +160,11 @@ describe('Verification Endpoints', () => {
       mockFs.readFile.mockResolvedValue(JSON.stringify(mockTasksData));
 
       // Execute test and expect error
-      await expect(api.getVerificationRequirements('nonexistent_task'))
-        .rejects.toThrow('Failed to get verification requirements: Task with ID nonexistent_task not found');
+      await expect(
+        api.getVerificationRequirements('nonexistent_task'),
+      ).rejects.toThrow(
+        'Failed to get verification requirements: Task with ID nonexistent_task not found',
+      );
     });
 
     it('should throw error when task has no verification gate', async () => {
@@ -179,8 +184,9 @@ describe('Verification Endpoints', () => {
       mockFs.readFile.mockResolvedValue(JSON.stringify(mockTasksData));
 
       // Execute test and expect error
-      await expect(api.getVerificationRequirements('task_123'))
-        .rejects.toThrow('Failed to get verification requirements: Task task_123 does not have verification requirements');
+      await expect(api.getVerificationRequirements('task_123')).rejects.toThrow(
+        'Failed to get verification requirements: Task task_123 does not have verification requirements',
+      );
     });
 
     it('should throw error when no tasks exist in system', async () => {
@@ -194,8 +200,9 @@ describe('Verification Endpoints', () => {
       mockFs.readFile.mockResolvedValue(JSON.stringify(mockTasksData));
 
       // Execute test and expect error
-      await expect(api.getVerificationRequirements('task_123'))
-        .rejects.toThrow('Failed to get verification requirements: No tasks exist in the system');
+      await expect(api.getVerificationRequirements('task_123')).rejects.toThrow(
+        'Failed to get verification requirements: No tasks exist in the system',
+      );
     });
   });
 
@@ -235,7 +242,8 @@ describe('Verification Endpoints', () => {
             details: 'Examined existing API structure and conventions',
           },
         ],
-        summary: 'Successfully reviewed existing codebase patterns and API conventions',
+        summary:
+          'Successfully reviewed existing codebase patterns and API conventions',
       };
 
       // Mock file system operations
@@ -244,7 +252,10 @@ describe('Verification Endpoints', () => {
       mockFs.writeFile.mockResolvedValue(undefined);
 
       // Execute test
-      const result = await api.submitVerificationEvidence('task_123', validEvidence);
+      const result = await api.submitVerificationEvidence(
+        'task_123',
+        validEvidence,
+      );
 
       // Verify results
       expect(result.success).toBe(true);
@@ -253,11 +264,14 @@ describe('Verification Endpoints', () => {
       expect(result.verificationGate.evidence).toEqual(validEvidence);
       expect(result.verificationGate.verifiedBy).toBe('test_agent_001');
       expect(result.verificationGate.verifiedAt).toBeTruthy();
-      expect(result.message).toBe('Verification evidence submitted successfully');
+      expect(result.message).toBe(
+        'Verification evidence submitted successfully',
+      );
 
       // Verify file write was called for the tasks file (not the lock file)
-      const tasksWriteCall = mockFs.writeFile.mock.calls.find(call =>
-        call[0] === testTasksPath && call[1].includes('"status":"passed"'),
+      const tasksWriteCall = mockFs.writeFile.mock.calls.find(
+        (call) =>
+          call[0] === testTasksPath && call[1].includes('"status":"passed"'),
       );
       expect(tasksWriteCall).toBeDefined();
       expect(tasksWriteCall[1]).toContain('"status":"passed"');
@@ -298,8 +312,11 @@ describe('Verification Endpoints', () => {
       };
 
       // Execute test and expect error
-      await expect(api.submitVerificationEvidence('task_123', validEvidence))
-        .rejects.toThrow('Failed to submit verification evidence: Task task_123 verification gate has already passed');
+      await expect(
+        api.submitVerificationEvidence('task_123', validEvidence),
+      ).rejects.toThrow(
+        'Failed to submit verification evidence: Task task_123 verification gate has already passed',
+      );
     });
 
     it('should reject evidence missing required fields', async () => {
@@ -337,8 +354,11 @@ describe('Verification Endpoints', () => {
         summary: 'Some summary',
       };
 
-      await expect(api.submitVerificationEvidence('task_123', invalidEvidence1))
-        .rejects.toThrow('Failed to submit verification evidence: Verification evidence validation failed: Evidence must include agentId');
+      await expect(
+        api.submitVerificationEvidence('task_123', invalidEvidence1),
+      ).rejects.toThrow(
+        'Failed to submit verification evidence: Verification evidence validation failed: Evidence must include agentId',
+      );
 
       // Test missing reviewedItems
       const invalidEvidence2 = {
@@ -347,8 +367,11 @@ describe('Verification Endpoints', () => {
         summary: 'Some summary',
       };
 
-      await expect(api.submitVerificationEvidence('task_123', invalidEvidence2))
-        .rejects.toThrow('Failed to submit verification evidence: Verification evidence validation failed: Evidence must include reviewedItems array');
+      await expect(
+        api.submitVerificationEvidence('task_123', invalidEvidence2),
+      ).rejects.toThrow(
+        'Failed to submit verification evidence: Verification evidence validation failed: Evidence must include reviewedItems array',
+      );
 
       // Test missing summary
       const invalidEvidence3 = {
@@ -357,8 +380,11 @@ describe('Verification Endpoints', () => {
         // Missing summary
       };
 
-      await expect(api.submitVerificationEvidence('task_123', invalidEvidence3))
-        .rejects.toThrow('Failed to submit verification evidence: Verification evidence validation failed: Evidence must include summary of verification work');
+      await expect(
+        api.submitVerificationEvidence('task_123', invalidEvidence3),
+      ).rejects.toThrow(
+        'Failed to submit verification evidence: Verification evidence validation failed: Evidence must include summary of verification work',
+      );
     });
 
     it('should reject evidence with invalid reviewedItems format', async () => {
@@ -396,8 +422,11 @@ describe('Verification Endpoints', () => {
         summary: 'Some summary',
       };
 
-      await expect(api.submitVerificationEvidence('task_123', invalidEvidence))
-        .rejects.toThrow('Failed to submit verification evidence: Verification evidence validation failed: Evidence must include reviewedItems array');
+      await expect(
+        api.submitVerificationEvidence('task_123', invalidEvidence),
+      ).rejects.toThrow(
+        'Failed to submit verification evidence: Verification evidence validation failed: Evidence must include reviewedItems array',
+      );
     });
 
     it('should reject null or undefined evidence data', async () => {
@@ -423,12 +452,18 @@ describe('Verification Endpoints', () => {
       mockFs.readFile.mockResolvedValue(JSON.stringify(mockTasksData));
 
       // Test null evidence
-      await expect(api.submitVerificationEvidence('task_123', null))
-        .rejects.toThrow('Failed to submit verification evidence: Verification evidence validation failed: Evidence data is required');
+      await expect(
+        api.submitVerificationEvidence('task_123', null),
+      ).rejects.toThrow(
+        'Failed to submit verification evidence: Verification evidence validation failed: Evidence data is required',
+      );
 
       // Test undefined evidence
-      await expect(api.submitVerificationEvidence('task_123', undefined))
-        .rejects.toThrow('Failed to submit verification evidence: Verification evidence validation failed: Evidence data is required');
+      await expect(
+        api.submitVerificationEvidence('task_123', undefined),
+      ).rejects.toThrow(
+        'Failed to submit verification evidence: Verification evidence validation failed: Evidence data is required',
+      );
     });
 
     it('should handle task without verification gate', async () => {
@@ -453,8 +488,11 @@ describe('Verification Endpoints', () => {
         summary: 'Some summary',
       };
 
-      await expect(api.submitVerificationEvidence('task_123', validEvidence))
-        .rejects.toThrow('Failed to submit verification evidence: Task task_123 does not have a verification gate');
+      await expect(
+        api.submitVerificationEvidence('task_123', validEvidence),
+      ).rejects.toThrow(
+        'Failed to submit verification evidence: Task task_123 does not have a verification gate',
+      );
     });
   });
 
@@ -500,20 +538,24 @@ describe('Verification Endpoints', () => {
           {
             type: 'file',
             description: 'Reviewed taskmanager-api.js structure and patterns',
-            details: 'Examined class structure, method organization, and file patterns',
+            details:
+              'Examined class structure, method organization, and file patterns',
           },
           {
             type: 'function',
             description: 'Reviewed API endpoint patterns and error handling',
-            details: 'Analyzed error response formats, status codes, and exception handling',
+            details:
+              'Analyzed error response formats, status codes, and exception handling',
           },
           {
             type: 'convention',
             description: 'Reviewed naming conventions and code style',
-            details: 'Verified camelCase usage, consistent indentation, and comment style',
+            details:
+              'Verified camelCase usage, consistent indentation, and comment style',
           },
         ],
-        summary: 'Comprehensive review of all required verification areas completed successfully',
+        summary:
+          'Comprehensive review of all required verification areas completed successfully',
       };
 
       mockFs.access.mockResolvedValue(undefined);
@@ -521,7 +563,10 @@ describe('Verification Endpoints', () => {
       mockFs.writeFile.mockResolvedValue(undefined);
 
       // Execute test
-      const result = await api.submitVerificationEvidence('task_123', comprehensiveEvidence);
+      const result = await api.submitVerificationEvidence(
+        'task_123',
+        comprehensiveEvidence,
+      );
 
       // Verify comprehensive evidence is accepted
       expect(result.success).toBe(true);
@@ -561,7 +606,8 @@ describe('Verification Endpoints', () => {
       mockFs.writeFile.mockResolvedValue(undefined);
 
       // Step 1: Get verification requirements
-      const requirements = await api.getVerificationRequirements('workflow_task');
+      const requirements =
+        await api.getVerificationRequirements('workflow_task');
       expect(requirements.success).toBe(true);
       expect(requirements.verificationGate.status).toBe('pending');
 
@@ -578,14 +624,21 @@ describe('Verification Endpoints', () => {
         summary: 'Workflow verification completed successfully',
       };
 
-      const submitResult = await api.submitVerificationEvidence('workflow_task', evidence);
+      const submitResult = await api.submitVerificationEvidence(
+        'workflow_task',
+        evidence,
+      );
       expect(submitResult.success).toBe(true);
       expect(submitResult.verificationGate.status).toBe('passed');
       expect(submitResult.verificationGate.verifiedBy).toBe('workflow_agent');
 
       // Verify the verification data is properly structured
-      expect(submitResult.verificationGate.evidence.agentId).toBe('workflow_agent');
-      expect(submitResult.verificationGate.evidence.reviewedItems).toHaveLength(1);
+      expect(submitResult.verificationGate.evidence.agentId).toBe(
+        'workflow_agent',
+      );
+      expect(submitResult.verificationGate.evidence.reviewedItems).toHaveLength(
+        1,
+      );
       expect(submitResult.verificationGate.verifiedAt).toBeTruthy();
     });
   });

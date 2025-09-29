@@ -144,7 +144,7 @@ class ResultVariableFixer {
       ];
 
       for (const fix of fixes) {
-        const RESULT = fix(content, _filePath);
+        const result = fix(content, _filePath);
         if (result.modified) {
           content = result.content;
           modified = true;
@@ -264,7 +264,7 @@ class ResultVariableFixer {
             .split('\n');
           const lastLines = lines.slice(-10).join('\n');
           return (
-            lastLines.includes('const RESULT = {') ||
+            lastLines.includes('const result = {') ||
             lastLines.includes('result.')
           );
         },
@@ -318,7 +318,7 @@ class ResultVariableFixer {
       const line = lines[i];
 
       // If we see a result declaration, check following lines for inconsistent usage
-      if (line.includes('const RESULT = ')) {
+      if (line.includes('const result = ')) {
         // Look ahead for inconsistent usage in the same scope
         for (let j = i + 1; j < Math.min(i + 20, lines.length); j++) {
           const followingLine = lines[j];

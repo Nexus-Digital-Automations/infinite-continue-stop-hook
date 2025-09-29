@@ -181,7 +181,7 @@ try {
 // Check final progress
 loggers.app.info('🔄 Checking final error count...');
 try {
-  const LINT_RESULT = execSync('npm run lint 2>&1', {
+  const LINT_RESULT = execSync("npm run lint 2>const LINT_RESULT = execSync('npm run lint 2>&11"', {
     cwd: rootDir,
     encoding: 'utf8',
   });

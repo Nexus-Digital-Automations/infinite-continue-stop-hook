@@ -73,7 +73,7 @@ class SecurityUtils {
    * @param {string} content - Content to write
    * @returns {Promise<void>}
    */
-  static async safeWriteFile(basePath, filePath, content) {
+  static safeWriteFile(basePath, filePath, content) {
     const safePath = this.validatePath(basePath, _filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
     await FS.mkdir(path.dirname(safePath), { recursive: true });
@@ -88,7 +88,7 @@ class SecurityUtils {
    * @param {string} content - Content to append
    * @returns {Promise<void>}
    */
-  static async safeAppendFile(basePath, filePath, content) {
+  static safeAppendFile(basePath, filePath, content) {
     const safePath = this.validatePath(basePath, _filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
     await FS.mkdir(path.dirname(safePath), { recursive: true });
@@ -163,7 +163,7 @@ class AUDIT_INTEGRATION {
    * @param {Object} taskDetails - Original task details
    * @returns {Object} Created audit task information
    */
-  async createAuditTask(originalTaskId, implementerAgentId, taskDetails = {}) {
+  createAuditTask(originalTaskId, implementerAgentId, taskDetails = {}) {
     this.logger.log(
       `🔍 Creating audit task for completed feature: ${originalTaskId}`,
     );
@@ -196,7 +196,7 @@ class AUDIT_INTEGRATION {
    * @param {Object} taskDetails - Task details
    * @returns {Object} Complete audit task definition
    */
-  async generateAuditTaskDefinition(
+  generateAuditTaskDefinition(
     originalTaskId,
     implementerAgentId,
     taskDetails,
@@ -338,7 +338,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
    * Load project-specific success criteria from task-requirements.md
    * @returns {Object} Parsed project success criteria
    */
-  async loadProjectSuccessCriteria() {
+  loadProjectSuccessCriteria() {
     try {
       // Use safe file reading with path validation
       const content = await SecurityUtils.safeReadFile(
@@ -409,7 +409,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
    * Generate validation commands for the current project
    * @returns {Array} Array of validation command objects
    */
-  async generateValidationCommands() {
+  generateValidationCommands() {
     let hasPackageJson = false;
 
     try {
@@ -421,7 +421,6 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
       await FS.access(packageJsonPath);
       hasPackageJson = true;
     } catch (_error) {
-
       // Package.json not found or access denied
     }
 
@@ -548,7 +547,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
    * @param {string} auditTaskId - Created audit task ID
    * @param {string} implementerAgentId - Implementer agent ID
    */
-  async logAuditTaskCreation(originalTaskId, auditTaskId, implementerAgentId) {
+  logAuditTaskCreation(originalTaskId, auditTaskId, implementerAgentId) {
     const logEntry = {
       timestamp: new Date().toISOString(),
       event: 'audit_task_created',
@@ -633,7 +632,9 @@ if (require.main === module) {
           );
         })
         .catch((error) => {
-          integration.logger.error(`❌ Failed to create audit task: ${error.message}`);
+          integration.logger.error(
+            `❌ Failed to create audit task: ${error.message}`,
+          );
           throw error;
         });
       break;
@@ -667,7 +668,9 @@ if (require.main === module) {
 
     case 'config':
       integration.logger.log('Current Audit Integration Configuration:');
-      integration.logger.log(JSON.stringify(integration.getConfiguration(), null, 2));
+      integration.logger.log(
+        JSON.stringify(integration.getConfiguration(), null, 2),
+      );
       break;
 
     case 'help':

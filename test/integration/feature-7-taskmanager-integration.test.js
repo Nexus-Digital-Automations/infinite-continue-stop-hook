@@ -42,7 +42,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           return FS.existsSync(_filePath);
         },
 
-        async _loadCustomValidationRules() {
+        _loadCustomValidationRules() {
           const FS = require('fs').promises;
           const configPath = path.join(
             mockProjectRoot,
@@ -88,7 +88,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           return FS.existsSync(_filePath);
         },
 
-        async _loadCustomValidationRules() {
+        _loadCustomValidationRules() {
           const configPath = path.join(
             '/nonexistent',
             '.claude-validation.json',
@@ -152,7 +152,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           return FS.existsSync(_filePath);
         },
 
-        async _loadCustomValidationRules() {
+        _loadCustomValidationRules() {
           const configPath = path.join(
             mockProjectRoot,
             '.claude-validation.json',
@@ -183,7 +183,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           return [];
         },
 
-        async _performLanguageAgnosticValidationCore(criterion) {
+        _performLanguageAgnosticValidationCore(criterion) {
           const { execSync } = require('child_process');
 
           try {
@@ -331,7 +331,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           return FS.existsSync(_filePath);
         },
 
-        async _loadCustomValidationRules() {
+        _loadCustomValidationRules() {
           const configPath = path.join(
             mockProjectRoot,
             '.claude-validation.json',
@@ -362,7 +362,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           return [];
         },
 
-        async _performLanguageAgnosticValidationCore(criterion) {
+        _performLanguageAgnosticValidationCore(criterion) {
           const { execSync } = require('child_process');
 
           try {
@@ -438,7 +438,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           return FS.existsSync(_filePath);
         },
 
-        async _loadCustomValidationRules() {
+        _loadCustomValidationRules() {
           const configPath = path.join(
             mockProjectRoot,
             '.claude-validation.json',
@@ -469,7 +469,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           return [];
         },
 
-        async _performLanguageAgnosticValidationCore(criterion) {
+        _performLanguageAgnosticValidationCore(criterion) {
           const { execSync } = require('child_process');
 
           try {
@@ -569,7 +569,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           return FS.existsSync(_filePath);
         },
 
-        async _loadCustomValidationRules() {
+        _loadCustomValidationRules() {
           const configPath = path.join(
             mockProjectRoot,
             '.claude-validation.json',
@@ -600,7 +600,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           return [];
         },
 
-        async _performLanguageAgnosticValidationCore(criterion) {
+        _performLanguageAgnosticValidationCore(criterion) {
           const { execSync } = require('child_process');
 
           try {
@@ -699,7 +699,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           return FS.existsSync(_filePath);
         },
 
-        async _loadCustomValidationRules() {
+        _loadCustomValidationRules() {
           const configPath = path.join(
             mockProjectRoot,
             '.claude-validation.json',
@@ -730,7 +730,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           return [];
         },
 
-        async _performLanguageAgnosticValidationCore(criterion) {
+        _performLanguageAgnosticValidationCore(criterion) {
           const { execSync } = require('child_process');
 
           try {
@@ -820,7 +820,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           return FS.existsSync(_filePath);
         },
 
-        async _loadCustomValidationRules() {
+        _loadCustomValidationRules() {
           const configPath = path.join(
             mockProjectRoot,
             '.claude-validation.json',
@@ -868,7 +868,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           return FS.existsSync(_filePath);
         },
 
-        async _loadCustomValidationRules() {
+        _loadCustomValidationRules() {
           const configPath = path.join(
             mockProjectRoot,
             '.claude-validation.json',

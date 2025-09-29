@@ -106,10 +106,9 @@ class APIExecutor {
             const stderrJson = JSON.parse(stderr.trim());
             resolve(stderrJson);
           } catch (_parseError) {
-
             reject(
               new Error(
-                `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`,
+                `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${_parseError.message}`,
               ),
             );
           }
@@ -343,7 +342,7 @@ class TestExecution {
     ]);
   }
 
-  static async retry(fn, maxRetries = 3, delay = 1000) {
+  static retry(fn, maxRetries = 3, delay = 1000) {
     let lastError;
 
     for (let i = 0; i < maxRetries; i++) {
@@ -351,8 +350,7 @@ class TestExecution {
         // eslint-disable-next-line no-await-in-loop -- Sequential retry attempts required
         return await fn();
       } catch (_error) {
-
-        lastError = error;
+        lastError = _error;
         if (i < maxRetries - 1) {
           // eslint-disable-next-line no-await-in-loop -- Sequential delay required between retry attempts
           await new Promise((resolve) => {
@@ -365,7 +363,7 @@ class TestExecution {
     throw lastError;
   }
 
-  static async parallel(promises, maxConcurrency = 5) {
+  static parallel(promises, maxConcurrency = 5) {
     const results = [];
 
     for (let i = 0; i < promises.length; i += maxConcurrency) {
@@ -383,7 +381,7 @@ class TestExecution {
  * Performance testing utilities
  */
 class PerformanceUtils {
-  static async measureTime(fn) {
+  static measureTime(fn) {
     const start = process.hrtime.bigint();
     const result = await fn();
     const end = process.hrtime.bigint();
@@ -392,7 +390,7 @@ class PerformanceUtils {
     return { result, duration };
   }
 
-  static async measureMemory(fn) {
+  static measureMemory(fn) {
     const before = process.memoryUsage();
     const result = await fn();
     const after = process.memoryUsage();

@@ -511,11 +511,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       // Create sample lesson files
       const sampleLessons = [
         {
-          path: path.join(
-            testLessonsPath,
-            'features',
-            'react-optimization.md',
-          ),
+          path: path.join(testLessonsPath, 'features', 'react-optimization.md'),
           content:
             '# React Performance Optimization\n\nBest practices for optimizing React applications...',
         },
@@ -528,9 +524,7 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // Write all sample lesson files in parallel
       await Promise.all(
-        sampleLessons.map((lesson) =>
-          FS.writeFile(lesson.path, lesson.content),
-        ),
+        sampleLessons.map((lesson) => FS.writeFile(lesson.path, lesson.content)),
       );
 
       // Verify files were created

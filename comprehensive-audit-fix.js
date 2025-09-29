@@ -33,7 +33,7 @@ function comprehensiveAuditFix() {
     content = content.replace(/result\.taskId/g, 'result.taskId');
 
     // Remove ALL unused result assignments
-    content = content.replace(/\s*const RESULT = [^;]+;\s*/g, '\n');
+    content = content.replace(/\s*const result = [^;]+;\s*/g, '\n');
 
     // Fix specific patterns where result is still missing
     content = content.replace(

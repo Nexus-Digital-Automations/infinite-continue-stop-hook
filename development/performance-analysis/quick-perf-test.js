@@ -3,7 +3,6 @@
  * Focused on measuring response times for core operations
  */
 
-
 // Console output is intentional for this development/analysis tool
 
 const { execSync } = require('child_process');
@@ -72,7 +71,6 @@ class QuickPerfTest {
         try {
           JSON.parse(arg);
         } catch (_error) {
-
           throw new Error(`Invalid JSON argument: ${arg}`);
         }
       } else {
@@ -334,7 +332,6 @@ function main() {
 
     loggers.stopHook.log(`\n📄 Full report saved to: ${outputFile}`);
   } catch (_error) {
-
     loggers.stopHook.error('❌ Performance test failed:', error);
     throw error;
   }

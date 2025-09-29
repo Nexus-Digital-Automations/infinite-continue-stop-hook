@@ -22,10 +22,7 @@ describe('RAG System Data Migration And Integrity', () => {
     loggers.stopHook.log('Setting up data integrity test environment...');
 
     // Setup test migration directory
-    _testMigrationPath = path.join(
-      __dirname,
-      '../../test-data/migration-test',
-    );
+    _testMigrationPath = path.join(__dirname, '../../test-data/migration-test');
     await FS.mkdir(_testMigrationPath, { recursive: true });
 
     // Create test development/lessons structure

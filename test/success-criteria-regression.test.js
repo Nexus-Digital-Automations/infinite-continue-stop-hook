@@ -181,7 +181,7 @@ class RegressionApp {
     this.status = 'initialized';
   }
   
-  async start() {
+  start() {
     this.status = 'running';
     loggers.stopHook.log('Regression app is running');
     return this.status;

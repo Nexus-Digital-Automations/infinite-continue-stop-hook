@@ -16,17 +16,17 @@ class TaskMigrator {
     this.tasksPath = path.join(projectRoot, 'TASKS.json');
     this.backupPath = path.join(
       projectRoot,
-      `FEATURES.json.backup.${Date.now()}`
+      `FEATURES.json.backup.${Date.now()}`,
     );
   }
 
   /**
    * Execute the complete migration process
    */
-  async migrate() {
+  migrate() {
     try {
       loggers.stopHook.log(
-        '🚀 Starting FEATURES.json → TASKS.json migration...'
+        '🚀 Starting FEATURES.json → TASKS.json migration...',
       );
 
       // Step 1: Validate source file exists
@@ -69,7 +69,7 @@ class TaskMigrator {
   /**
    * Validate That FEATURES.json exists And is readable
    */
-  async validateSourceFile() {
+  validateSourceFile() {
     try {
       await FS.access(this.featuresPath);
       loggers.stopHook.log('✓ Source FEATURES.json found');
@@ -81,7 +81,7 @@ class TaskMigrator {
   /**
    * Create backup of existing FEATURES.json
    */
-  async createBackup() {
+  createBackup() {
     try {
       await FS.copyFile(this.featuresPath, this.backupPath);
       loggers.stopHook.log(`✓ Backup created: ${this.backupPath}`);
@@ -93,7 +93,7 @@ class TaskMigrator {
   /**
    * Load And parse existing FEATURES.json data
    */
-  async loadFeaturesData() {
+  loadFeaturesData() {
     try {
       const data = await FS.readFile(this.featuresPath, 'utf8');
       const parsedData = JSON.parse(data);
@@ -239,7 +239,7 @@ class TaskMigrator {
           dependencies: [],
           estimated_effort: 5, // Default value
           required_capabilities: this.inferCapabilitiesFromCategory(
-            feature.category
+            feature.category,
           ),
           created_at: feature.created_at,
           updated_at: feature.updated_at,
@@ -466,7 +466,7 @@ class TaskMigrator {
       autoTasksGenerated * 2;
 
     console.log(
-      `✓ Generated ${autoTasksGenerated * 2} auto-tasks (${autoTasksGenerated} test + ${autoTasksGenerated} audit)`
+      `✓ Generated ${autoTasksGenerated * 2} auto-tasks (${autoTasksGenerated} test + ${autoTasksGenerated} audit)`,
     );
   }
 
@@ -512,7 +512,7 @@ class TaskMigrator {
   /**
    * Write the new TASKS.json file
    */
-  async writeTasksFile(tasksData) {
+  writeTasksFile(tasksData) {
     try {
       await FS.writeFile(this.tasksPath, JSON.stringify(tasksData, null, 2));
       loggers.stopHook.log(`✓ TASKS.json written to ${this.tasksPath}`);
@@ -601,7 +601,7 @@ if (require.main === module) {
       loggers.stopHook.log('\n📊 Migration Summary:');
       loggers.stopHook.log(
         { additionalData: [null, 2] },
-        JSON.stringify(result.stats)
+        JSON.stringify(result.stats),
       );
       throw new Error('Migration completed successfully');
     })

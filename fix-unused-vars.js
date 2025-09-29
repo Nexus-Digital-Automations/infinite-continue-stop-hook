@@ -7,8 +7,8 @@ console.log('🔧 Fixing unused variables by adding underscore prefixes...\n');
 // Common patterns for unused variables that need underscore prefixes
 const patterns = [
   // Variables and constants
-  { search: /const RESULT = /g, replace: 'const RESULT = ' },
-  { search: /const RESULT = /g, replace: 'const RESULT = ' },
+  { search: /const result = /g, replace: 'const result = ' },
+  { search: /const result = /g, replace: 'const result = ' },
   { search: /const LINT_RESULT = /g, replace: 'const LINT_RESULT = ' },
   { search: /const EXEC_SYNC = /g, replace: 'const EXEC_SYNC = ' },
   { search: /const EXEC_SYNC = /g, replace: 'const EXEC_SYNC = ' },
@@ -95,10 +95,10 @@ const patterns = [
   { search: /, input\)/g, replace: ', _input)' },
 
   // Catch patterns for specific cases
-  { search: /catch \(error\)/g, replace: 'catch (error)' },
-  { search: /catch\(error\)/g, replace: 'catch(error)' },
+  { search: /catch \(error\)/g, replace: 'catch (_error)' },
+  { search: /catch\(error\)/g, replace: 'catch(_error)' },
   { search: /} catch \(error\) {/g, replace: '} catch (_error) {' },
-  { search: /} catch\(error\) {/g, replace: '} catch(error) {' },
+  { search: /} catch\(error\) {/g, replace: '} catch(_error) {' },
   { search: /catch \(parseError\)/g, replace: 'catch (_parseError)' },
   { search: /catch\(parseError\)/g, replace: 'catch(_parseError)' },
 ];

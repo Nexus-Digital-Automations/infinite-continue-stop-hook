@@ -560,7 +560,7 @@ class TestAssertions {
    * @param {Function} asyncFunction - Function to test
    * @param {Array} invalidInputs - Array of invalid inputs to test
    */
-  async assertErrorHandling(asyncFunction, invalidInputs) {
+  assertErrorHandling(asyncFunction, invalidInputs) {
     // Use for-await-of pattern for sequential error testing
     for await (const invalidInput of invalidInputs) {
       try {

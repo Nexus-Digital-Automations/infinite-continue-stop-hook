@@ -31,7 +31,7 @@ function fixAuditTestVariables() {
     content = content.replace(/result\.taskId/g, 'result.taskId');
 
     // Remove unused result assignments
-    content = content.replace(/\s*const RESULT = [^;]+;/g, '');
+    content = content.replace(/\s*const result = [^;]+;/g, '');
 
     // Fix testAgentId usage (make sure it's declared)
     if (!content.includes('let testAgentId')) {

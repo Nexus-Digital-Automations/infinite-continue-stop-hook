@@ -25,7 +25,7 @@ class TestNotificationSystem {
       coverageThreshold: parseFloat(process.env.COVERAGE_THRESHOLD || '80'),
       testFailureThreshold: parseInt(process.env.TEST_FAILURE_THRESHOLD || '0'),
       coverageDropThreshold: parseFloat(
-        process.env.COVERAGE_DROP_THRESHOLD || '5'
+        process.env.COVERAGE_DROP_THRESHOLD || '5',
       ),
       notificationLevel: process.env.NOTIFICATION_LEVEL || 'all', // all, failures-only, critical-only
       historyFile: './coverage/notifications/history.json',
@@ -40,7 +40,7 @@ class TestNotificationSystem {
   /**
    * Main notification processing method
    */
-  async processNotifications() {
+  processNotifications() {
     try {
       loggers.stopHook.log('🔔 Processing test notifications...');
 
@@ -51,12 +51,12 @@ class TestNotificationSystem {
       const notifications = await this.analyzeAndGenerateNotifications(
         testResults,
         coverageData,
-        cicdData
+        cicdData,
       );
 
       if (notifications.length === 0) {
         loggers.stopHook.log(
-          '✅ No notifications needed - all quality gates passed'
+          '✅ No notifications needed - all quality gates passed',
         );
         return;
       }
@@ -68,7 +68,7 @@ class TestNotificationSystem {
     } catch {
       loggers.stopHook.error(
         '❌ Failed to process notifications:',
-        error.message
+        error.message,
       );
       if (process.env.DEBUG) {
         loggers.stopHook.error(error.stack);
@@ -94,7 +94,7 @@ class TestNotificationSystem {
     // Coverage threshold notifications
     if (coverageData && this.isCoverageBelowThreshold(coverageData)) {
       notifications.push(
-        this.createCoverageThresholdNotification(coverageData)
+        this.createCoverageThresholdNotification(coverageData),
       );
     }
 
@@ -305,7 +305,7 @@ class TestNotificationSystem {
   /**
    * Send notifications to configured channels
    */
-  async sendNotifications(notifications) {
+  sendNotifications(notifications) {
     const promises = [];
 
     for (const notification of notifications) {
@@ -561,7 +561,7 @@ class TestNotificationSystem {
     } catch {
       loggers.stopHook.warn(
         '⚠️ Could not load notification history:',
-        error.message
+        error.message,
       );
     }
     return [];
@@ -575,7 +575,7 @@ class TestNotificationSystem {
     return null;
   }
 
-  async updateNotificationHistory(notifications) {
+  updateNotificationHistory(notifications) {
     try {
       const entry = {
         timestamp: new Date().toISOString(),
@@ -601,12 +601,12 @@ class TestNotificationSystem {
 
       FS.writeFileSync(
         this.options.historyFile,
-        JSON.stringify(this.notificationHistory, null, 2)
+        JSON.stringify(this.notificationHistory, null, 2),
       );
     } catch {
       loggers.stopHook.warn(
         '⚠️ Could not update notification history:',
-        error.message
+        error.message,
       );
     }
   }
@@ -626,7 +626,7 @@ class TestNotificationSystem {
       } else {
         loggers.app.info(
           `❌ Notification ${index + 1} failed:`,
-          result.reason.message
+          result.reason.message,
         );
       }
     });

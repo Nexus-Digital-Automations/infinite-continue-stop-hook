@@ -25,7 +25,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
     }
 
     // Feature 8 performance metrics methods
-    async getValidationPerformanceMetrics(options = {}) {
+    getValidationPerformanceMetrics(options = {}) {
       try {
         const FS = require('fs').promises;
         const path = require('path');
@@ -94,7 +94,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       }
     }
 
-    async identifyPerformanceBottlenecks(options = {}) {
+    identifyPerformanceBottlenecks(options = {}) {
       try {
         const path = require('path');
         const metricsFile = path.join(
@@ -142,7 +142,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       }
     }
 
-    async getPerformanceBenchmarks(options = {}) {
+    getPerformanceBenchmarks(options = {}) {
       try {
         const path = require('path');
         const metricsFile = path.join(

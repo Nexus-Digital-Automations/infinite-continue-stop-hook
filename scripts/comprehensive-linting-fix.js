@@ -135,7 +135,7 @@ class ComprehensiveLintingFix {
     try {
       const content = FS.readFileSync(filePath, 'utf8');
       const lines = content.split('\n');
-      const lintOutput = this.getLintErrorsForFile(_filePath);
+      const LINT_OUTPUT = this.getLintErrorsForFile(_filePath);
 
       let hasChanges = false;
 
@@ -181,10 +181,10 @@ class ComprehensiveLintingFix {
    */
   getLintErrorsForFile(_filePath) {
     try {
-      const RESULT = execSync(`npm run lint -- "${_filePath}" 2>&1`, {
+      const RESULT = execSync("npm run lint 2>const result = execSync(`npm run lint -- "${_filePath}" 2>&11"`, {
         encoding: 'utf8',
       });
-      return RESULT.split('\n').filter((line) => line.includes('error'));
+      return result.split('\n').filter((line) => line.includes('error'));
     } catch (_error) {
       return _error.stdout
         ? _error.stdout.split('\n').filter((line) => line.includes('error'))
@@ -209,7 +209,7 @@ class ComprehensiveLintingFix {
     ];
 
     for (const fix of fixes) {
-      const RESULT = fix();
+      const result = fix();
       if (result.hasChanges && result.content) {
         FS.writeFileSync(filePath, result.content);
         currentContent = result.content;
@@ -300,7 +300,7 @@ class ComprehensiveLintingFix {
    */
   getCurrentErrorCount() {
     try {
-      const RESULT = execSync(
+      const result = execSync(
         'npm run lint 2>&1 | grep -E "(error|warning)" | wc -l',
         { encoding: 'utf8' }
       );

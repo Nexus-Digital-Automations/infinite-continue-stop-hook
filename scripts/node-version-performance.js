@@ -141,7 +141,7 @@ class NodeVersionPerformanceBenchmark {
   /**
    * Asynchronous operations benchmark
    */
-  async benchmarkAsyncOperations() {
+  benchmarkAsyncOperations() {
     loggers.stopHook.log('⚡ Running async operations benchmark...');
 
     const start = process.hrtime.bigint();
@@ -190,7 +190,7 @@ class NodeVersionPerformanceBenchmark {
   /**
    * File system operations benchmark
    */
-  async benchmarkFileOperations() {
+  benchmarkFileOperations() {
     loggers.stopHook.log('📁 Running file operations benchmark...');
 
     const tempDir = path.join(this.outputDir, 'temp-benchmark');
@@ -604,7 +604,7 @@ ${this.results.recommendations?.map((r) => `- ${r}`).join('\n')}
   /**
    * Run complete benchmark suite
    */
-  async run() {
+  run() {
     loggers.stopHook.log(
       '🚀 Starting Node.js Performance Benchmark Suite...\n'
     );

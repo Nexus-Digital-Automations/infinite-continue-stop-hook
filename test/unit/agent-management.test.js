@@ -433,7 +433,9 @@ describe('Agent Management', () => {
         expect(result.authorization.reason).toBe(reason);
         expect(result.authorization.timestamp).toBe('2025-09-23T12:00:00.000Z');
         expect(result.authorization.stop_flag_created).toBe(true);
-        expect(result.message).toContain(`Stop authorized by agent ${AGENT_ID}`);
+        expect(result.message).toContain(
+          `Stop authorized by agent ${AGENT_ID}`,
+        );
       });
 
       test('should authorize stop with default reason when none provided', async () => {
@@ -731,7 +733,9 @@ describe('Agent Management', () => {
         const agents = ['concurrent-1', 'concurrent-2', 'concurrent-3'];
 
         // Simulate concurrent operations
-        const promises = agents.map((_AGENT_ID) => api.initializeAgent(_AGENT_ID));
+        const promises = agents.map((_AGENT_ID) =>
+          api.initializeAgent(_AGENT_ID),
+        );
         const results = await Promise.all(promises);
 
         // All operations should succeed

@@ -38,7 +38,7 @@ class E2EEnvironment {
   /**
    * Initialize test environment with clean directory structure
    */
-  async setup() {
+  setup() {
     // Create test directory
     await FS.mkdir(this.testDir, { recursive: true });
 
@@ -57,7 +57,7 @@ class E2EEnvironment {
   /**
    * Create initial FEATURES.json file
    */
-  async createFeaturesFile() {
+  createFeaturesFile() {
     const initialFeatures = {
       project: `e2e-test-${this.testName}`,
       schema_version: '2.0.0',
@@ -107,7 +107,7 @@ class E2EEnvironment {
   /**
    * Create realistic package.json for testing
    */
-  async createPackageJson() {
+  createPackageJson() {
     const packageJson = {
       name: `e2e-test-${this.testName}`,
       version: '1.0.0',
@@ -132,7 +132,7 @@ class E2EEnvironment {
   /**
    * Clean up test environment
    */
-  async cleanup() {
+  cleanup() {
     for (const task of this.cleanupTasks.reverse()) {
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential cleanup required for proper teardown order
@@ -146,7 +146,7 @@ class E2EEnvironment {
   /**
    * Remove directory recursively
    */
-  async removeDirectory(dirPath) {
+  removeDirectory(dirPath) {
     try {
       const stats = await FS.stat(dirPath);
       if (stats.isDirectory()) {
@@ -168,7 +168,7 @@ class E2EEnvironment {
   /**
    * Get current features using TaskManager API
    */
-  async getFeatures() {
+  getFeatures() {
     try {
       const result = await CommandExecutor.executeAPI('list-features', [], {
         projectRoot: this.testDir,
@@ -199,7 +199,7 @@ class E2EEnvironment {
   /**
    * Update FEATURES.json content
    */
-  async updateFeatures(features) {
+  updateFeatures(features) {
     await FS.writeFile(this.featuresPath, JSON.stringify(features, null, 2));
   }
 }
@@ -396,7 +396,7 @@ class FeatureTestHelpers {
   /**
    * Suggest a feature via API
    */
-  static async suggestFeature(environment, featureData) {
+  static suggestFeature(environment, featureData) {
     const data = this.createFeatureData(featureData);
 
     // Format as JSON for the API
@@ -481,7 +481,7 @@ class FeatureTestHelpers {
   /**
    * Validate feature status in FEATURES.json
    */
-  static async validateFeatureStatus(environment, featureId, expectedStatus) {
+  static validateFeatureStatus(environment, featureId, expectedStatus) {
     const features = await environment.getFeatures();
     const feature = features.features.find((f) => f.id === featureId);
 
@@ -507,7 +507,7 @@ class StopHookTestHelpers {
   /**
    * Simulate agent execution with stop hook
    */
-  static async simulateAgentExecution(
+  static simulateAgentExecution(
     environment,
     agentId = 'e2e-test-agent',
     duration = 1000,
@@ -532,7 +532,7 @@ class StopHookTestHelpers {
   /**
    * Test infinite continue mode
    */
-  static async testInfiniteContinue(environment, maxIterations = 3) {
+  static testInfiniteContinue(environment, maxIterations = 3) {
     const iterations = [];
 
     for (let i = 0; i < maxIterations; i++) {
@@ -569,7 +569,7 @@ class PerformanceTestHelpers {
   /**
    * Measure command execution time
    */
-  static async measurePerformance(command, iterations = 5) {
+  static measurePerformance(command, iterations = 5) {
     const results = [];
 
     for (let i = 0; i < iterations; i++) {
@@ -622,7 +622,7 @@ class MultiAgentTestHelpers {
   /**
    * Simulate concurrent agent operations
    */
-  static async simulateConcurrentAgents(
+  static simulateConcurrentAgents(
     environment,
     agentCount = 3,
     operationsPerAgent = 2,

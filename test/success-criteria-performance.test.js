@@ -59,7 +59,7 @@ class PerformanceMonitor {
     }
   }
 
-  async measureOperation(operationName, OPERATION) {
+  measureOperation(operationName, OPERATION) {
     const startTime = performance.now();
     const startMemory = process.memoryUsage();
 
@@ -99,7 +99,7 @@ class PerformanceMonitor {
 
   getAverageTime(operationName) {
     const OPS = this.measurements.filter(
-      (m) => m.operationName === operationName && !m.error
+      (m) => m.operationName === operationName && !m.error,
     );
     if (OPS.length === 0) {
       return 0;
@@ -151,10 +151,10 @@ class PerformanceMonitor {
     ];
     operationTypes.forEach((opType) => {
       const OPS = this.measurements.filter(
-        (m) => m.operationName === opType && !m.error
+        (m) => m.operationName === opType && !m.error,
       );
       const ERRORS = this.measurements.filter(
-        (m) => m.operationName === opType && m.error
+        (m) => m.operationName === opType && m.error,
       );
 
       if (OPS.length > 0) {
@@ -204,7 +204,7 @@ function execAPIWithMonitoring(
   monitor,
   command,
   args = [],
-  timeout = PERFORMANCE_TIMEOUT
+  timeout = PERFORMANCE_TIMEOUT,
 ) {
   return monitor.measureOperation(`api_${command}`, () => {
     return new Promise((resolve, reject) => {
@@ -221,7 +221,7 @@ function execAPIWithMonitoring(
         {
           stdio: ['pipe', 'pipe', 'pipe'],
           env: { ...process.env, NODE_ENV: 'test' },
-        }
+        },
       );
 
       let stdout = '';
@@ -245,7 +245,7 @@ function execAPIWithMonitoring(
           }
         } else {
           reject(
-            new Error(`Command failed with code ${code}: ${stderr || stdout}`)
+            new Error(`Command failed with code ${code}: ${stderr || stdout}`),
           );
         }
       });
@@ -284,7 +284,7 @@ async function setupPerformanceTestProject() {
 
     await FS.writeFile(
       path.join(TEST_PROJECT_DIR, 'package.json'),
-      JSON.stringify(packageJson, null, 2)
+      JSON.stringify(packageJson, null, 2),
     );
 
     // Create main application file
@@ -357,7 +357,7 @@ async function cleanupPerformanceTestProject() {
   } catch {
     loggers.stopHook.error(
       'Failed to cleanup performance test project:',
-      error
+      error,
     );
   }
 }
@@ -391,17 +391,17 @@ describe('Success Criteria Performance Tests', () => {
       async () => {
         const { result, measurement } = await execAPIWithMonitoring(
           monitor,
-          'success-criteria:init'
+          'success-criteria:init',
         );
 
         expect(measurement.duration).toBeLessThan(30000); // 30 second requirement
         expect(result).toBeDefined();
 
         loggers.app.info(
-          `Initialize duration: ${measurement.duration.toFixed(2)}ms`
+          `Initialize duration: ${measurement.duration.toFixed(2)}ms`,
         );
       },
-      PERFORMANCE_TIMEOUT
+      PERFORMANCE_TIMEOUT,
     );
 
     test(
@@ -435,17 +435,17 @@ describe('Success Criteria Performance Tests', () => {
         const { result, MEASUREMENT } = await execAPIWithMonitoring(
           monitor,
           'success-criteria:create-template',
-          [TEMPLATE_DATA]
+          [TEMPLATE_DATA],
         );
 
         expect(MEASUREMENT.duration).toBeLessThan(30000);
         expect(result).toBeDefined();
 
         loggers.app.info(
-          `Create template duration: ${MEASUREMENT.duration.toFixed(2)}ms`
+          `Create template duration: ${MEASUREMENT.duration.toFixed(2)}ms`,
         );
       },
-      PERFORMANCE_TIMEOUT
+      PERFORMANCE_TIMEOUT,
     );
 
     test(
@@ -467,29 +467,29 @@ describe('Success Criteria Performance Tests', () => {
         await execAPIWithMonitoring(
           monitor,
           'success-criteria:create-template',
-          [TEMPLATE_DATA]
+          [TEMPLATE_DATA],
         );
         await execAPIWithMonitoring(
           monitor,
           'success-criteria:apply-template',
-          ['Validation Test Template']
+          ['Validation Test Template'],
         );
 
         // Validate - this is the critical performance test
         const { result, MEASUREMENT } = await execAPIWithMonitoring(
           monitor,
-          'success-criteria:validate'
+          'success-criteria:validate',
         );
 
         expect(MEASUREMENT.duration).toBeLessThan(30000); // Critical 30-second requirement
         expect(result).toBeDefined();
 
         loggers.app.info(
-          `Validation duration: ${MEASUREMENT.duration.toFixed(2)}ms`
+          `Validation duration: ${MEASUREMENT.duration.toFixed(2)}ms`,
         );
         loggers.stopHook.log(`Validation result:`, result);
       },
-      PERFORMANCE_TIMEOUT
+      PERFORMANCE_TIMEOUT,
     );
 
     test(
@@ -514,17 +514,17 @@ describe('Success Criteria Performance Tests', () => {
         const { result, MEASUREMENT } = await execAPIWithMonitoring(
           monitor,
           'success-criteria:create-template',
-          [LARGE_TEMPLATE_DATA]
+          [LARGE_TEMPLATE_DATA],
         );
 
         expect(MEASUREMENT.duration).toBeLessThan(30000);
         expect(result).toBeDefined();
 
         loggers.app.info(
-          `Large template creation duration: ${MEASUREMENT.duration.toFixed(2)}ms`
+          `Large template creation duration: ${MEASUREMENT.duration.toFixed(2)}ms`,
         );
       },
-      PERFORMANCE_TIMEOUT
+      PERFORMANCE_TIMEOUT,
     );
 
     test(
@@ -554,7 +554,7 @@ describe('Success Criteria Performance Tests', () => {
           OPERATIONS.push(
             execAPIWithMonitoring(monitor, 'success-criteria:create-template', [
               TEMPLATE_DATA,
-            ])
+            ]),
           );
         }
 
@@ -570,13 +570,13 @@ describe('Success Criteria Performance Tests', () => {
         });
 
         loggers.stopHook.log(
-          `Rapid operations total time: ${TOTAL_TIME.toFixed(2)}ms`
+          `Rapid operations total time: ${TOTAL_TIME.toFixed(2)}ms`,
         );
         loggers.stopHook.log(
-          `Average per OPERATION ${(TOTAL_TIME / 10).toFixed(2)}ms`
+          `Average per OPERATION ${(TOTAL_TIME / 10).toFixed(2)}ms`,
         );
       },
-      PERFORMANCE_TIMEOUT
+      PERFORMANCE_TIMEOUT,
     );
   });
 
@@ -601,12 +601,12 @@ describe('Success Criteria Performance Tests', () => {
         await execAPIWithMonitoring(
           monitor,
           'success-criteria:create-template',
-          [TEMPLATE_DATA]
+          [TEMPLATE_DATA],
         );
         await execAPIWithMonitoring(
           monitor,
           'success-criteria:apply-template',
-          ['Memory Test Template']
+          ['Memory Test Template'],
         );
         await execAPIWithMonitoring(monitor, 'success-criteria:validate');
 
@@ -624,13 +624,13 @@ describe('Success Criteria Performance Tests', () => {
         expect(monitor.detectMemoryLeaks()).toBe(false);
 
         loggers.app.info(
-          `Memory increase: ${(MEMORY_INCREASE / 1024 / 1024).toFixed(2)}MB`
+          `Memory increase: ${(MEMORY_INCREASE / 1024 / 1024).toFixed(2)}MB`,
         );
         loggers.stopHook.log(
-          `Peak usage: ${(PEAK_USAGE / 1024 / 1024).toFixed(2)}MB`
+          `Peak usage: ${(PEAK_USAGE / 1024 / 1024).toFixed(2)}MB`,
         );
       },
-      PERFORMANCE_TIMEOUT
+      PERFORMANCE_TIMEOUT,
     );
 
     test(
@@ -670,7 +670,7 @@ describe('Success Criteria Performance Tests', () => {
           await execAPIWithMonitoring(
             monitor,
             'success-criteria:create-template',
-            [data]
+            [data],
           );
           GC_STATS.push({
             phase: `template-${index}`,
@@ -699,7 +699,7 @@ describe('Success Criteria Performance Tests', () => {
 
         expect(FINAL_HEAP).toBeLessThan(MAX_HEAP * 1.5); // Final memory shouldn't be too much higher than max
       },
-      PERFORMANCE_TIMEOUT
+      PERFORMANCE_TIMEOUT,
     );
   });
 
@@ -731,7 +731,7 @@ describe('Success Criteria Performance Tests', () => {
           const { MEASUREMENT } = await execAPIWithMonitoring(
             monitor,
             'success-criteria:create-template',
-            [templateData]
+            [templateData],
           );
 
           RUN_TIMES.push(MEASUREMENT.duration);
@@ -749,7 +749,7 @@ describe('Success Criteria Performance Tests', () => {
         const VARIANCE =
           RUN_TIMES.reduce(
             (sum, time) => sum + Math.pow(time - AVG_TIME, 2),
-            0
+            0,
           ) / RUN_TIMES.length;
         const STD_DEV = Math.sqrt(VARIANCE);
 
@@ -763,10 +763,10 @@ describe('Success Criteria Performance Tests', () => {
         loggers.stopHook.log(`  Max: ${MAX_TIME.toFixed(2)}ms`);
         loggers.stopHook.log(`  Std Dev: ${STD_DEV.toFixed(2)}ms`);
         loggers.app.info(
-          `  Coefficient of variation: ${((STD_DEV / AVG_TIME) * 100).toFixed(2)}%`
+          `  Coefficient of variation: ${((STD_DEV / AVG_TIME) * 100).toFixed(2)}%`,
         );
       },
-      PERFORMANCE_TIMEOUT * 2
+      PERFORMANCE_TIMEOUT * 2,
     );
 
     test(
@@ -801,7 +801,7 @@ describe('Success Criteria Performance Tests', () => {
                 estimatedTime: i * 10,
                 dependencies: Array.from(
                   { length: i % 10 },
-                  (_, k) => `dep-${k}`
+                  (_, k) => `dep-${k}`,
                 ),
               },
             })),
@@ -810,7 +810,7 @@ describe('Success Criteria Performance Tests', () => {
           const { MEASUREMENT } = await execAPIWithMonitoring(
             monitor,
             'success-criteria:create-template',
-            [MASSIVE_TEMPLATE_DATA]
+            [MASSIVE_TEMPLATE_DATA],
           );
 
           // Generate performance report
@@ -818,7 +818,7 @@ describe('Success Criteria Performance Tests', () => {
 
           loggers.app.info(
             'Performance stress test report:',
-            JSON.stringify(REPORT, null, 2)
+            JSON.stringify(REPORT, null, 2),
           );
 
           // Even under stress, should not exceed 30 seconds
@@ -832,21 +832,21 @@ describe('Success Criteria Performance Tests', () => {
           const REPORT = monitor.generateReport();
           loggers.app.info(
             'Performance stress test failed with report:',
-            JSON.stringify(REPORT, null, 2)
+            JSON.stringify(REPORT, null, 2),
           );
 
           // Even if the _operationfails, it should fail quickly
           if (REPORT.operationSummary['api_success-criteria:create-template']) {
             expect(
               REPORT.operationSummary['api_success-criteria:create-template']
-                .maxTime
+                .maxTime,
             ).toBeLessThan(30000);
           }
 
           throw error;
         }
       },
-      PERFORMANCE_TIMEOUT
+      PERFORMANCE_TIMEOUT,
     );
   });
 
@@ -907,7 +907,7 @@ describe('Success Criteria Performance Tests', () => {
         loggers.stopHook.log('Comprehensive performance metrics:');
         loggers.stopHook.log(
           { additionalData: [null, 2] },
-          JSON.stringify(REPORT)
+          JSON.stringify(REPORT),
         );
 
         // Save report for analysis
@@ -915,7 +915,7 @@ describe('Success Criteria Performance Tests', () => {
         await FS.writeFile(REPORT_PATH, JSON.stringify(REPORT, null, 2));
         loggers.stopHook.log(`Performance report saved to: ${REPORT_PATH}`);
       },
-      PERFORMANCE_TIMEOUT
+      PERFORMANCE_TIMEOUT,
     );
 
     test(
@@ -966,7 +966,7 @@ describe('Success Criteria Performance Tests', () => {
         const { measurement } = await execAPIWithMonitoring(
           monitor,
           'success-criteria:create-template',
-          [TEMPLATE_DATA]
+          [TEMPLATE_DATA],
         );
 
         const BENCHMARK_RESULTS = {
@@ -989,11 +989,11 @@ describe('Success Criteria Performance Tests', () => {
         const BENCHMARK_PATH = path.join(__dirname, 'benchmark-results.json');
         await FS.writeFile(
           BENCHMARK_PATH,
-          JSON.stringify(BENCHMARK_RESULTS, null, 2)
+          JSON.stringify(BENCHMARK_RESULTS, null, 2),
         );
         loggers.stopHook.log(`Benchmark results saved to: ${BENCHMARK_PATH}`);
       },
-      PERFORMANCE_TIMEOUT
+      PERFORMANCE_TIMEOUT,
     );
   });
 });

@@ -176,7 +176,7 @@ class RemainingResultFixer {
       // Fix unused result variables - convert to result
       {
         pattern: /const\s+result\s*=\s*([^;]+);\s*([^}]*?)result\s*=/g,
-        replacement: 'const RESULT = $1;\n$2result =',
+        replacement: 'const result = $1;\n$2result =',
         description: 'Convert result to result for consistency',
       },
       // Fix agentId/AGENT_ID inconsistencies
@@ -211,11 +211,11 @@ class RemainingResultFixer {
 
       // Look for result declaration followed by result usage
       if (
-        line.includes('const RESULT = ') ||
-        line.includes('const RESULT = ')
+        line.includes('const result = ') ||
+        line.includes('const result = ')
       ) {
-        const isResultDeclaration = line.includes('const RESULT = ');
-        const isresultDeclaration = line.includes('const RESULT = ');
+        const isResultDeclaration = line.includes('const result = ');
+        const isresultDeclaration = line.includes('const result = ');
 
         // Look ahead for inconsistent usage
         for (let j = i + 1; j < Math.min(i + 10, lines.length); j++) {

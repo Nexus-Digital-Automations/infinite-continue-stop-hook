@@ -320,9 +320,9 @@ describe('API Workflow Integration Tests', () => {
 
       // 5. Verify reinitialization is recorded
       const updatedFeaturesData = await readFeaturesFile(testDir);
-      expect(updatedFeaturesData.agents[AGENT_ID].previousSessions).toHaveLength(
-        1,
-      );
+      expect(
+        updatedFeaturesData.agents[AGENT_ID].previousSessions,
+      ).toHaveLength(1);
 
       // 6. Check updated initialization statistics
       const updatedInitStatsResult = await execAPI(
@@ -710,7 +710,7 @@ describe('API Workflow Integration Tests', () => {
         await execAPI('invalid-command', [], { projectRoot: testDir });
         // Should not reach here
         expect(true).toBe(false);
-      } catch (error) {
+      } catch (_error) {
         expect(error.message).toContain('Command failed');
       }
     });

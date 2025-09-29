@@ -14,7 +14,7 @@ function fixComprehensiveVariableIssues(_filePath) {
 
     // Fix result variable declarations to result
     const beforeRESULT = fixed;
-    fixed = fixed.replace(/const RESULT = /g, 'const RESULT = ');
+    fixed = fixed.replace(/const result = /g, 'const result = ');
     if (beforeRESULT !== fixed) {
       changes++;
       console.log(
