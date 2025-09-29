@@ -3,14 +3,14 @@
  * Comprehensive fix for audit-system-validation.test.js undefined variables
  */
 
-const _fs = require('fs');
+const FS = require('fs');
 
 function comprehensiveAuditFix() {
   const filePath =
     '/Users/jeremyparker/infinite-continue-stop-hook/test/audit-system-validation.test.js';
 
   try {
-    let content = _fs.readFileSync(filePath, 'utf-8');
+    let content = FS.readFileSync(filePath, 'utf-8');
 
     console.log('Applying comprehensive audit test fixes...');
 
@@ -29,8 +29,8 @@ function comprehensiveAuditFix() {
       '$1\n  let testAgentId = null;\n  let auditAgentId = null;'
     );
 
-    // Fix ALL instances of result.taskId to result.taskId
-    content = content.replace(/result\.taskId/g, 'result.taskId');
+    // Fix ALL instances of result.taskId to _result.taskId
+    content = content.replace(/result\.taskId/g, '_result.taskId');
 
     // Remove ALL unused result assignments
     content = content.replace(/\s*const result = [^;]+;\s*/g, '\n');
@@ -38,16 +38,16 @@ function comprehensiveAuditFix() {
     // Fix specific patterns where result is still missing
     content = content.replace(
       /const TASK = listResult\.tasks\.find\(\(t\) => t\.id === result\.taskId\);/g,
-      'const TASK = listResult.tasks.find((t) => t.id === result.taskId);'
+      'const TASK = listResult.tasks.find((t) => t.id === _result.taskId);'
     );
 
     // Fix any remaining undefined result references in test expectations
     content = content.replace(
       /expect\(result\.success\)\.toBe\(true\);/g,
-      'expect(result.success).toBe(true);'
+      'expect(_result.success).toBe(true);'
     );
 
-    _fs.writeFileSync(filePath, content);
+    FS.writeFileSync(filePath, content);
     console.log('Applied comprehensive audit test fixes successfully');
   } catch (_error) {
     console.error('Error applying comprehensive fixes:', _error.message);

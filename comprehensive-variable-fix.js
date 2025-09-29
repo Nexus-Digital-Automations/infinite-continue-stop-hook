@@ -52,8 +52,8 @@ const catchBlockFixes = [
   },
 ];
 
-function fixFile(__filename, __filename, __filename) {
-  const normalizedPath = PATH.resolve(__filename);
+function fixFile(filePath) {
+  const normalizedPath = PATH.resolve(filePath);
 
   if (!normalizedPath.endsWith('.js')) {
     return false;
@@ -99,15 +99,15 @@ function fixFile(__filename, __filename, __filename) {
     while ((match = multiLineCatchRegex.exec(content)) !== null) {
       const blockContent = match[1];
       if (blockContent.includes('error')) {
-        _REPLACEMENTS.push({
+        REPLACEMENTS.push({
           original: match[0],
           replacement: match[0].replace(
             /catch\s*\(\s*\)\s*\{/,
             'catch (_error) {'
           ),
         });
-      } else if (blockContent.includes('error')) {
-        _REPLACEMENTS.push({
+      } else if (blockContent.includes('_error')) {
+        REPLACEMENTS.push({
           original: match[0],
           replacement: match[0].replace(
             /catch\s*\(\s*\)\s*\{/,
@@ -118,20 +118,20 @@ function fixFile(__filename, __filename, __filename) {
     }
 
     // Apply replacements
-    _REPLACEMENTS.forEach(({ original, replacement }) => {
+    REPLACEMENTS.forEach(({ original, replacement }) => {
       content = content.replace(original, replacement);
       modified = true;
     });
 
     if (modified) {
       FS.writeFileSync(normalizedPath, content, 'utf8');
-      _loggers.app.info(`Fixed: ${PATH.relative(rootDir)}`);
+      _loggers.app.info(`Fixed: ${PATH.relative(rootDir, normalizedPath)}`);
       return true;
     }
 
     return false;
   } catch (_fixError) {
-    _loggers.app.error(`Error fixing ${__filename}:`, {
+    _loggers.app.error(`Error fixing ${filePath}:`, {
       error: _fixError.message,
     });
     return false;
