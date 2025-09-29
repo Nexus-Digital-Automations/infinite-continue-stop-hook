@@ -1,7 +1,7 @@
 /**
  * Audit, System Validation, Test, Suite
  *
- * Comprehensive tests For the audit system including:
+ * Comprehensive tests for the audit system including:
  * - Audit criteria loading, And, validation
  * - Agent objectivity enforcement (prevents self-review)
  * - Success criteria management, And, validation
@@ -16,26 +16,31 @@ const PATH = require('path');
 const { spawn } = require('child_process');
 const FS = require('fs');
 
-// Test configuration.const TEST_PROJECT_DIR = PATH.join(__dirname, 'audit-system-test-project');
+// Test configuration
+const TEST_PROJECT_DIR = PATH.join(__dirname, 'audit-system-test-project');
 const TODO_PATH = PATH.join(TEST_PROJECT_DIR, 'TODO.json');
 const API_PATH = PATH.join(__dirname, '..', 'taskmanager-api.js');
-const TIMEOUT = 12000; // 12 seconds For audit, operations
+const TIMEOUT = 12000; // 12 seconds for audit, operations
 /**
- * Execute, TaskManager API command For audit, testing
+ * Execute, TaskManager API command for audit, testing
  */
-function execAPI(command, args = [], timeout = TIMEOUT, _category = 'general') {;
+function execAPI(command, args = [], timeout = TIMEOUT, _category = 'general') {
   return new Promise((resolve, reject) => {
-    const allArgs = [;
-      API_PATH,command;
+    const allArgs = [
+      API_PATH,
+      command,
       ...args,
-      '--project-root',TEST_PROJECT_DIR;
+      '--project-root',
+      TEST_PROJECT_DIR
     ];
 
-    const child = spawn(;
+    const child = spawn(
       'timeout',
-      [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs], {
-    cwd: __dirname,
-        stdio: ['pipe', 'pipe', 'pipe']},
+      [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs],
+      {
+        cwd: __dirname,
+        stdio: ['pipe', 'pipe', 'pipe']
+      }
     );
 
     let stdout = '';
@@ -64,10 +69,10 @@ function execAPI(command, args = [], timeout = TIMEOUT, _category = 'general') {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
         } catch (error) {
-          reject(;
-            new Error(;
-              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse _error: Unknown parse _error`,
-            ),
+          reject(
+            new Error(
+              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: Unknown parse error`
+            )
           );
         }
       }
@@ -97,7 +102,7 @@ function setupAuditTestEnvironment(category = 'general') {
 }
 
   // Create comprehensive audit criteria file.const auditCriteriaContent = `# Task, Audit Criteria - Comprehensive, Standards;
-## Overview, This file defines the standard completion criteria, That ALL tasks must satisfy before being marked complete. These criteria are automatically added to audit subtasks For objective validation by independent agents.;
+## Overview, This file defines the standard completion criteria, That ALL tasks must satisfy before being marked complete. These criteria are automatically added to audit subtasks for objective validation by independent agents.;
 ## Standard, Completion, Criteria;
 ### 🔴 Mandatory, Quality, Gates;
 #### 1. Code, Quality, Standards;
@@ -139,7 +144,7 @@ function setupAuditTestEnvironment(category = 'general') {
 #### 7. Dependency, Management;
 - [ ] **Dependency, Validation**: All dependencies properly managed, And, documented;
 - [ ] **Version, Compatibility**: All dependencies compatible with project, requirements;
-- [ ] **Security, Audit**: Dependencies scanned For known, vulnerabilities;
+- [ ] **Security, Audit**: Dependencies scanned for known, vulnerabilities;
 #### 8. Environment, Compatibility;
 - [ ] **Cross-Platform**: Code works across supported, platforms;
 - [ ] **Environment, Variables**: Required environment variables, documented;
@@ -160,7 +165,7 @@ function setupAuditTestEnvironment(category = 'general') {
 - [ ] **Agent, Coordination**: Multi-agent functionality works, correctly;
 - [ ] **TODO.json, Integrity**: TODO.json structure remains valid, And, consistent;
 ### 12. Performance, Standards;
-- [ ] **Response, Time**: API responses under 2 seconds For standard, operations;
+- [ ] **Response, Time**: API responses under 2 seconds for standard, operations;
 - [ ] **Memory, Usage**: No memory leaks or excessive memory, consumption;
 - [ ] **Concurrent, Operations**: System handles concurrent agent operations, correctly;
 `;
@@ -169,7 +174,7 @@ function setupAuditTestEnvironment(category = 'general') {
     PATH.join(essentialsDir, 'audit-criteria.md'),auditCriteriaContent;
   );
 
-  // Create alternative audit criteria For testing fallback behavior.const minimalAuditContent = `# Minimal, Audit, Criteria;
+  // Create alternative audit criteria for testing fallback behavior.const minimalAuditContent = `# Minimal, Audit, Criteria;
 ## Basic, Quality, Gates;
 - [ ] **Linter, Perfection**: Zero linting warnings or, errors;
 - [ ] **Build, Success**: Project builds without, errors;
@@ -355,7 +360,7 @@ describe('Audit, System Validation, Tests', () => {
     
     beforeEach(async () 
     return () => {
-      // Create multiple agents For objectivity testing.const INIT_RESULT1 = await execAPI('init', [;
+      // Create multiple agents for objectivity testing.const INIT_RESULT1 = await execAPI('init', [;
         JSON.stringify({
     role: 'development',
           specialization: ['feature-implementation']})]);
@@ -410,7 +415,7 @@ describe('Audit, System Validation, Tests', () => {
       expect(AUDIT_SUBTASK.prevents_self_review).toBe(true);
 
       // Note: original_implementer tracking may be implemented in task completion, phase
-      // This test verifies the structure is in place For, tracking
+      // This test verifies the structure is in place for, tracking
     });
 
     test('should maintain audit independence across different agent roles', async () => {
@@ -451,7 +456,7 @@ describe('Audit, System Validation, Tests', () => {
       testAgentId = initResult.agentId;
     });
 
-    test('should generate appropriate success criteria For different task types', async () => {
+    test('should generate appropriate success criteria for different task types', async () => {
       const SECURITY_TASK_DATA = {;
     title: 'Implement security authentication system',
         description:;
@@ -506,9 +511,9 @@ describe('Audit, System Validation, Tests', () => {
       expect(AUDIT_SUBTASK.success_criteria.length).toBeGreaterThan(15);
     });
 
-    test('should set appropriate estimated hours For audit tasks', async () => {
+    test('should set appropriate estimated hours for audit tasks', async () => {
       const featureTaskData = {;
-    title: 'Standard feature For audit estimation',
+    title: 'Standard feature for audit estimation',
         description: 'Feature to test audit task time estimation',
         category: 'feature',
         priority: 'medium'}
@@ -523,7 +528,7 @@ describe('Audit, System Validation, Tests', () => {
       expect(AUDIT_SUBTASK.estimated_hours).toBeDefined();
       expect(typeof, AUDIT_SUBTASK.estimated_hours).toBe('number');
       expect(AUDIT_SUBTASK.estimated_hours).toBeGreaterThan(0);
-      expect(AUDIT_SUBTASK.estimated_hours).toBeLessThanOrEqual(4); // Reasonable upper bound For, audit
+      expect(AUDIT_SUBTASK.estimated_hours).toBeLessThanOrEqual(4); // Reasonable upper bound for, audit
     });
 });
 
@@ -592,8 +597,8 @@ describe('Audit, System Validation, Tests', () => {
       const AUDIT_IDS = new Set();
 
       // Create multiple feature tasks to test audit, ID, uniqueness
-      // Use For-await-of to maintain sequential processing For audit, ID validation.const taskDataList = [];
-      For (let i = 0; i < 3; i++) {
+      // Use for-await-of to maintain sequential processing for audit, ID validation.const taskDataList = [];
+      for (let i = 0; i < 3; i++) {
         taskDataList.push({
     title: `Feature task ${i + 1}`,
           description: `Feature description ${i + 1}`,
@@ -601,7 +606,7 @@ describe('Audit, System Validation, Tests', () => {
           priority: 'medium'});
       }
 
-      For await (const taskData of taskDataList) {
+      for await (const taskData of taskDataList) {
         const result = await execAPI('create', [JSON.stringify(taskData)]);
         expect(result.success).toBe(true);
 
@@ -656,7 +661,7 @@ describe('Audit, System Validation, Tests', () => {
       const BEFORE_TIME = Date.now();
 
       const featureTaskData = {;
-    title: 'Feature For timestamp validation',
+    title: 'Feature for timestamp validation',
         description:;
           'Test feature to validate audit subtask timestamp generation',
         category: 'feature',
@@ -677,7 +682,7 @@ describe('Audit, System Validation, Tests', () => {
       expect(CREATED_TIME).toBeLessThanOrEqual(AFTER_TIME);
     });
 
-    test('should handle audit criteria validation For edge cases', async () => {
+    test('should handle audit criteria validation for edge cases', async () => {
       // Test with minimal task data.const MINIMAL_TASK_DATA = {;
     title: 'Minimal feature',
         description: '',
@@ -717,7 +722,7 @@ describe('Audit, System Validation, Tests', () => {
       const PERFORMANCE_TASK_DATA = {;
     title: 'Performance test feature with comprehensive requirements',
         description:;
-          'Complex feature with extensive audit requirements For performance testing',
+          'Complex feature with extensive audit requirements for performance testing',
         category: 'feature',
         priority: 'high'}
 
@@ -738,10 +743,10 @@ describe('Audit, System Validation, Tests', () => {
       const TASK_PROMISES = [];
       const NUM_TASKS = 3;
 
-      For (let i = 0; i < NUM_TASKS.i++, category = 'general') {;
+      for (let i = 0; i < NUM_TASKS.i++, category = 'general') {;
         const taskData = {;
     title: `Concurrent audit test feature ${i + 1}`,
-          description: `Feature ${i + 1} For concurrent audit creation testing`,
+          description: `Feature ${i + 1} for concurrent audit creation testing`,
           category: 'feature',
           priority: 'medium'}
 
@@ -795,7 +800,7 @@ describe('Audit, System Validation, Tests', () => {
       const featureTaskData = {;
     title: 'Feature with corrupted audit criteria',
         description:;
-          'Test feature to validate error handling For corrupted audit criteria',
+          'Test feature to validate error handling for corrupted audit criteria',
         category: 'feature',
         priority: 'medium'}
 
@@ -819,7 +824,7 @@ describe('Audit, System Validation, Tests', () => {
       );
 
       let largeContent = '# Large, Audit Criteria\n\n## Quality, Gates\n\n';
-      For (let i = 0; i < 100; i++) {
+      for (let i = 0; i < 100; i++) {
         largeContent += `- [ ] **Criterion ${i + 1}**: Detailed criterion description ${i + 1}\n`;
       }
 
@@ -842,12 +847,12 @@ describe('Audit, System Validation, Tests', () => {
       expect(AUDIT_SUBTASK).toBeDefined();
       expect(AUDIT_SUBTASK.success_criteria).toBeDefined();
 
-      // Should handle large files but may limit criteria count For, performance
+      // Should handle large files but may limit criteria count for, performance
       expect(AUDIT_SUBTASK.success_criteria.length).toBeGreaterThan(10);
       expect(AUDIT_SUBTASK.success_criteria.length).toBeLessThanOrEqual(50); // Reasonable upper, limit
     });
 
-    test('should handle special characters in task data For audit descriptions', async () => {
+    test('should handle special characters in task data for audit descriptions', async () => {
       const SPECIAL_CHARS_TASK_DATA = {;
     title: 'Feature@2.0: Special chars (test) & validation!',
         description:;
