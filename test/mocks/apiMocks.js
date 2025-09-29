@@ -295,18 +295,18 @@ class TaskManagerAPIMock {
   getCurrentTimeBucket() {
     const hour = new Date().getHours();
     if (hour >= 7 && hour < 12) {
-      return '07:00-11:59';,
+      return '07:00-11:59';
     }
     if (hour >= 12 && hour < 17) {
-      return '12:00-16:59';,
+      return '12:00-16:59';
     }
     if (hour >= 17 && hour < 22) {
-      return '17:00-21:59';,
+      return '17:00-21:59';
     }
     if (hour >= 22 || hour < 3) {
-      return '22:00-02:59';,
+      return '22:00-02:59';
     }
-    return '03:00-06:59';,
+    return '03:00-06:59';
 }
 
   /**

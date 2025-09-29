@@ -36,7 +36,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {;
     const allArgs = [;
       API_PATH,command;
       ...args,
-      '--project-root',TEST_PROJECT_DIR;,
+      '--project-root',TEST_PROJECT_DIR;
     ];
 
     const child = spawn(;
@@ -821,7 +821,7 @@ describe('Embedded, Subtasks System - Comprehensive, Integration Tests', () => {
       expect(STATS_RESULT.statistics.tasks.total).toBeGreaterThan(0);
 
       // 7. Claim the main feature task.const claimResult = await execAPI('claim', [;
-        testFeatureTaskId,testAgentId;,
+        testFeatureTaskId,testAgentId;
       ]);
       expect(claimResult.success).toBe(true);
       expect(claimResult.task.status).toBe('in_progress');
@@ -879,7 +879,7 @@ describe('Embedded, Subtasks System - Comprehensive, Integration Tests', () => {
       }
 
       // Implementation agent claims main task.const claimResult = await execAPI('claim', [;
-        testFeatureTaskId,IMPLEMENTATION_AGENT;,
+        testFeatureTaskId,IMPLEMENTATION_AGENT;
       ]);
       expect(claimResult.success).toBe(true);
 

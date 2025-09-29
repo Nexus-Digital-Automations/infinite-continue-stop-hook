@@ -39,7 +39,7 @@ function fixStringSyntaxErrors(filePath) {
     });
 
     // Fix 2: Extra commas in specific error patterns
-    content = content.replace(/(`[^`]*`)\s*;,/g, '$1;');
+    content = content.replace(/(`[^`]*`)\s*;/g, '$1;');
     if (content !== originalContent) {
       modified = true;
       fixCount++;

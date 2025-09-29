@@ -482,7 +482,7 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
         return ['critical', 'high'].includes(notification.priority);
       case 'all':,
     default:
-        return true;,
+        return true;
     }
 }
 

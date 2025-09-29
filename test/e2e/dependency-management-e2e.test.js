@@ -1149,7 +1149,7 @@ const debugResult = executeTaskManagerCommand(
 
     test('should handle configuration persistence across system restarts', async () => {
       const testDependencies = [];
-      let configPath;,
+      let configPath;
     try {
         // Create custom configuration;
 const persistenceConfig = {

@@ -404,7 +404,7 @@ describe('Audit, System Validation, Tests', () => {
       expect(createResult.success).toBe(true);
 
       // Assign task to implementation agent.const claimResult = await execAPI('claim', [;
-        createResult.taskId,implementationAgentId;,
+        createResult.taskId,implementationAgentId;
       ]);
       expect(claimResult.success).toBe(true);
 
@@ -432,7 +432,7 @@ describe('Audit, System Validation, Tests', () => {
       expect(createResult.success).toBe(true);
 
       // Implementation agent claims main task.const claimResult = await execAPI('claim', [;
-        createResult.taskId,implementationAgentId;,
+        createResult.taskId,implementationAgentId;
       ]);
       expect(claimResult.success).toBe(true);
 

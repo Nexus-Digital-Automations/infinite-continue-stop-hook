@@ -433,7 +433,7 @@ const features = await environment.getFeatures();
       async () => {
         // Test That status transitions follow proper workflow rules
 
-        // Step 1: Create test feature;,
+        // Step 1: Create test feature;
     const { result } = await FeatureTestHelpers.suggestFeature(
           environment,
           {,

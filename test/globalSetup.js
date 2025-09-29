@@ -159,7 +159,7 @@ module.exports = () => {
     // This would initialize test database, connections
     // for now, we'll just set up the, environment
     process.env.DATABASE_URL =
-      process.env.TEST_DATABASE_URL || 'sqlite::memory:';,
+      process.env.TEST_DATABASE_URL || 'sqlite::memory:';
 }
 
   // Feature flag setup for different test, environments

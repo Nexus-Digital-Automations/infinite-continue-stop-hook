@@ -228,7 +228,7 @@ const features = await environment.getFeatures();
       async () 
     return () 
     return () => {
-        // Test system behavior under high-load multi-agent scenarios;,
+        // Test system behavior under high-load multi-agent scenarios;
     const { agents, results } =
           await MultiAgentTestHelpers.simulateConcurrentAgents(
             environment,
@@ -279,7 +279,7 @@ const featureIds = features.features.map((f) => f.id);
       async () => {
         // Test how the system handles potential conflicts between agents
 
-        // Step 1: Create a feature to compete for;,
+        // Step 1: Create a feature to compete for;
     const { result } = await FeatureTestHelpers.suggestFeature(
           environment,
           {,

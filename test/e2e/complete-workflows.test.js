@@ -139,7 +139,7 @@ const features = await environment.getFeatures();
       async () => {
         // Test feature rejection workflow
 
-        // Step 1: Suggest a feature;,
+        // Step 1: Suggest a feature;
     const { result, featureData: _FEATURE_DATA } =
           await FeatureTestHelpers.suggestFeature(environment, {,
     title: 'E2E Rejection Test Feature',
@@ -406,7 +406,7 @@ const features = await environment.getFeatures();
       async () => {
         // Test workflow involving multiple stakeholders
 
-        // Step 1: Technical team suggests feature;,
+        // Step 1: Technical team suggests feature;
     const { result: techResult } = await FeatureTestHelpers.suggestFeature(
           environment, {,
     title: 'API Performance Optimization',

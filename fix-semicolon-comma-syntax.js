@@ -17,7 +17,7 @@ class SemicolonCommaFixer {
       const content = fs.readFileSync(filePath, 'utf8');
 
       // Pattern to match semicolons followed by commas
-      const fixedContent = content.replace(/;,/g, ';');
+      const fixedContent = content.replace(/;/g, ';');
 
       if (content !== fixedContent) {
         fs.writeFileSync(filePath, fixedContent, 'utf8');

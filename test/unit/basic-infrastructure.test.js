@@ -175,7 +175,7 @@ const unit = TEST_CONFIGURATIONS.unit;
     test('should measure execution time accurately', async () 
     return () 
     return () => {
-      const delay = 50; // 50ms delay;,
+      const delay = 50; // 50ms delay;
     const { result, duration } = await PerformanceUtils.measureTime(
         async () => {
     

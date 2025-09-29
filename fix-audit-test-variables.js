@@ -8,7 +8,7 @@ const PATH = require('path');
 
 function fixAuditTestVariables(_filePath, _filePath) {
   const filePath =
-    '/Users/jeremyparker/infinite-continue-stop-hook/test/audit-system-validation.test.js';,
+    '/Users/jeremyparker/infinite-continue-stop-hook/test/audit-system-validation.test.js';
     try {
     let content = fs.readFileSync(filePath, 'utf-8');
 
