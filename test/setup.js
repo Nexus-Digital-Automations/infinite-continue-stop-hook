@@ -29,7 +29,7 @@ expect.extend(customMatchers);
 // Global test utilities
 global.testUtils = {
   // Test timing helpers,,
-    delay: (ms) =>
+  delay: (ms) =>
     new Promise((resolve) => {
       setTimeout(resolve, ms);
     }),
@@ -48,7 +48,7 @@ global.testUtils = {
   expectEventually: async (fn, timeout = 5000, interval = 100) => {
     const start = Date.now();
     while (Date.now() - start < timeout) {
-    try {
+      try {
         // eslint-disable-next-line no-await-in-loop -- Retry mechanism requires sequential attempts
         await fn();
         return;
@@ -60,7 +60,7 @@ global.testUtils = {
       }
     }
     throw new Error(`Assertion failed within ${timeout}ms`);
-},
+  },
 
   // Test environment helpers
   isCI: () => process.env.CI === 'true',
@@ -79,7 +79,7 @@ global.testUtils = {
       }
     }
     return 'unknown';
-}
+  },
 };
 
 // Global error handling
@@ -111,7 +111,7 @@ beforeEach(() => {
   // Reset any global state before each test
   if (global.mockManager) {
     global.mockManager.resetAll();
-}
+  }
 });
 
 afterEach(() => {
@@ -125,7 +125,7 @@ const originalConsoleWarn = console.warn;
 
 console.error = (...args) => {
   // Filter out expected test warnings;
-const message = args[0];
+  const message = args[0];
   if (typeof message === 'string') {
     // Suppress known test warnings
     if (
@@ -137,13 +137,13 @@ const message = args[0];
     ) {
       return;
     }
-}
+  }
   originalConsoleError.apply(console, args);
 };
 
 console.warn = (...args) => {
   // Filter out expected test warnings;
-const message = args[0];
+  const message = args[0];
   if (typeof message === 'string') {
     // Suppress known test warnings
     if (
@@ -152,7 +152,7 @@ const message = args[0];
     ) {
       return;
     }
-}
+  }
   originalConsoleWarn.apply(console, args);
 };
 
@@ -160,7 +160,7 @@ const message = args[0];
 if (global.testUtils.isCI()) {
   beforeEach(() => {
     global.gc && global.gc();
-});
+  });
 }
 
 // Test performance monitoring
@@ -168,7 +168,7 @@ if (process.env.MONITOR_TEST_PERFORMANCE === 'true') {
   beforeEach(() => {
     global.testStartTime = Date.now();
     global.testStartMemory = process.memoryUsage();
-});
+  });
 
   afterEach(() => {
     const duration = Date.now() - global.testStartTime;
@@ -177,17 +177,17 @@ if (process.env.MONITOR_TEST_PERFORMANCE === 'true') {
 
     if (duration > 5000 || memoryDelta > 50 * 1024 * 1024) {
       // 5s or 50MB
-      TestLogger.warn('Slow or memory-intensive test detected', {,
-    test: expect.getState().currentTestName,
+      TestLogger.warn('Slow or memory-intensive test detected', {
+        test: expect.getState().currentTestName,
         duration: `${duration}ms`,
         memoryDelta: `${Math.round(memoryDelta / 1024 / 1024)}MB`,
       });
     }
-});
+  });
 }
 
 // Export setup configuration for other modules
 module.exports = {
-  testTimeout,,,
-    testUtils: global.testUtils,
+  testTimeout,
+  testUtils: global.testUtils,
 };

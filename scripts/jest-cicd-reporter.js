@@ -17,7 +17,7 @@ class JestCiCdReporter {
   constructor(globalConfig, options) {
     this.globalConfig = globalConfig;
     this.options = {
-    outputPath: './coverage/reports/ci-cd-results.json',
+      outputPath: './coverage/reports/ci-cd-results.json',
       includeGitInfo: true,
       includeEnvironmentInfo: true,
       includeTimingData: true,
@@ -30,7 +30,7 @@ class JestCiCdReporter {
     this.startTime = Date.now();
     this.gitInfo = null;
     this.environmentInfo = null;
-}
+  }
 
   onRunStart() {
     this.startTime = Date.now();
@@ -42,15 +42,15 @@ class JestCiCdReporter {
     if (this.options.includeEnvironmentInfo) {
       this.environmentInfo = this.getEnvironmentInformation();
     }
-}
+  }
 
   onRunComplete(contexts, results) {
     const endTime = Date.now();
     const duration = endTime - this.startTime;
 
     const report = {
-    metadata: {
-    timestamp: new Date().toISOString(),
+      metadata: {
+        timestamp: new Date().toISOString(),
         reporter: 'jest-cicd-reporter',
         version: '1.0.0',
         generator: 'Enhanced Coverage System',
@@ -59,7 +59,7 @@ class JestCiCdReporter {
 
       // CI/CD specific summary
       cicd_summary: {
-    pipeline_status: results.success ? 'SUCCESS' : 'FAILURE',
+        pipeline_status: results.success ? 'SUCCESS' : 'FAILURE',
         total_duration_ms: duration,
         should_block_deployment: this.shouldBlockDeployment(results),
         quality_gate_status: this.evaluateQualityGate(results),
@@ -68,8 +68,8 @@ class JestCiCdReporter {
 
       // Enhanced test results with CI/CD context
       test_execution: {
-    summary: {
-    total_suites: results.numTotalTestSuites,
+        summary: {
+          total_suites: results.numTotalTestSuites,
           passed_suites: results.numPassedTestSuites,
           failed_suites: results.numFailedTestSuites,
           total_tests: results.numTotalTests,
@@ -84,7 +84,7 @@ class JestCiCdReporter {
         },
 
         performance_metrics: {
-    average_test_duration: duration / results.numTotalTests,
+          average_test_duration: duration / results.numTotalTests,
           slowest_suite: this.findSlowestSuite(results.testResults),
           memory_usage: this.getMemoryUsage(),
           parallel_efficiency: this.calculateParallelEfficiency(results),
@@ -102,7 +102,7 @@ class JestCiCdReporter {
 
       // Coverage integration
       coverage_integration: {
-    coverage_available: Boolean(results.coverageMap),
+        coverage_available: Boolean(results.coverageMap),
         coverage_summary: results.coverageMap
           ? this.extractCoverageSummary(results.coverageMap)
           : null,
@@ -126,7 +126,7 @@ class JestCiCdReporter {
 
     // Write additional CI/CD specific files
     this.writeStatusFiles(report);
-}
+  }
 
   shouldBlockDeployment(results) {
     // Define deployment blocking criteria
@@ -135,11 +135,11 @@ class JestCiCdReporter {
       results.numFailedTests > 0 ||
       (results.coverageMap && this.isCoverageBelowCritical(results.coverageMap))
     );
-}
+  }
 
   evaluateQualityGate(results) {
     const criteria = {
-    tests_passing: results.success,
+      tests_passing: results.success,
       no_failed_tests: results.numFailedTests === 0,
       coverage_adequate: this.isCoverageAdequate(results.coverageMap),
       performance_acceptable: this.isPerformanceAcceptable(results),
@@ -148,22 +148,22 @@ class JestCiCdReporter {
     const passed = Object.values(criteria).every(Boolean);
 
     return {
-    status: passed ? 'PASSED' : 'FAILED',
+      status: passed ? 'PASSED' : 'FAILED',
       criteria,
       blocking_issues: this.identifyBlockingIssues(criteria, results),
     };
-}
+  }
 
   calculateTestHealthScore(results) {
     // Calculate a health score (0-100) based on multiple factors;
-let score = 100;
+    let score = 100;
 
     // Deduct for failed tests;
-const failureRate = results.numFailedTests / results.numTotalTests;
+    const failureRate = results.numFailedTests / results.numTotalTests;
     score -= failureRate * 50;
 
     // Deduct for slow tests;
-const avgDuration = (Date.now() - this.startTime) / results.numTotalTests;
+    const avgDuration = (Date.now() - this.startTime) / results.numTotalTests;
     if (avgDuration > 1000) {
       score -= 10;
     } // Slow tests
@@ -180,7 +180,7 @@ const avgDuration = (Date.now() - this.startTime) / results.numTotalTests;
     }
 
     return Math.max(0, Math.min(100, Math.round(score)));
-}
+  }
 
   findSlowestSuite(testResults) {
     let slowest = null;
@@ -191,7 +191,7 @@ const avgDuration = (Date.now() - this.startTime) / results.numTotalTests;
       if (duration > maxDuration) {
         maxDuration = duration;
         slowest = {
-    path: result.testFilePath,
+          path: result.testFilePath,
           duration_ms: duration,
           num_tests: result.numPassingTests + result.numFailingTests,
         };
@@ -199,19 +199,18 @@ const avgDuration = (Date.now() - this.startTime) / results.numTotalTests;
     });
 
     return slowest;
-}
+  }
 
   analyzeFailures(results) {
     const failures = [];
     const failurePatterns = new Map();
 
     results.testResults.forEach((testResult) => {
-    
       if (testResult.numFailingTests > 0) {
         testResult.testResults.forEach((test) => {
           if (test.status === 'failed') {
             failures.push({
-    suite: testResult.testFilePath,
+              suite: testResult.testFilePath,
               test: test.fullName,
               duration: test.duration,
               error:
@@ -219,7 +218,7 @@ const avgDuration = (Date.now() - this.startTime) / results.numTotalTests;
             });
 
             // Track failure patterns;
-const errorType = this.categorizeError(
+            const errorType = this.categorizeError(
               test.failureMessages?.[0] || ''
             );
             failurePatterns.set(
@@ -232,7 +231,7 @@ const errorType = this.categorizeError(
     });
 
     return {
-    total_failures: failures.length,
+      total_failures: failures.length,
       failed_suites: results.numFailedTestSuites,
       failure_details: failures.slice(0, 10), // Limit to first 10
       failure_patterns: Object.fromEntries(failurePatterns),
@@ -241,7 +240,7 @@ const errorType = this.categorizeError(
           ? [...failurePatterns.entries()].sort((a, b) => b[1] - a[1])[0][0]
           : 'none',
     };
-}
+  }
 
   categorizeError(errorMessage) {
     if (!errorMessage) {
@@ -249,7 +248,7 @@ const errorType = this.categorizeError(
     }
 
     const patterns = {
-    timeout: /timeout|timed out/i,
+      timeout: /timeout|timed out/i,
       assertion: /expect|assertion|toBe|toEqual/i,
       reference: /ReferenceError|is not defined/i,
       type: /TypeError|Cannot read|undefined/i,
@@ -264,33 +263,33 @@ const errorType = this.categorizeError(
     }
 
     return 'other';
-}
+  }
 
   detectFlakyTests(_RESULTS) {
     // Placeholder for flaky test detection
     // In a real implementation, this would compare with historical data
     return {
-    potentially_flaky: [],
+      potentially_flaky: [],
       confidence: 'low',
       note: 'Flaky test detection requires historical data analysis',
     };
-}
+  }
 
   getGitInformation() {
     try {
       const info = {
-    commit_sha: execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(),
+        commit_sha: execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(),
         branch: execSync('git rev-parse --abbrev-ref HEAD', {
-    encoding: 'utf8',
+          encoding: 'utf8',
         }).trim(),
         author: execSync('git log -1 --format="%an <%ae>"', {
-    encoding: 'utf8',
+          encoding: 'utf8',
         }).trim(),
         commit_message: execSync('git log -1 --format="%s"', {
-    encoding: 'utf8',
+          encoding: 'utf8',
         }).trim(),
         commit_date: execSync('git log -1 --format="%ai"', {
-    encoding: 'utf8',
+          encoding: 'utf8',
         }).trim(),
         tag: this.getLatestTag(),
         is_dirty: this.isGitDirty(),
@@ -300,7 +299,7 @@ const errorType = this.categorizeError(
       // Add GitHub/GitLab specific information
       if (process.env.GITHUB_ACTIONS) {
         info.github = {
-    workflow: process.env.GITHUB_WORKFLOW,
+          workflow: process.env.GITHUB_WORKFLOW,
           run_id: process.env.GITHUB_RUN_ID,
           run_number: process.env.GITHUB_RUN_NUMBER,
           actor: process.env.GITHUB_ACTOR,
@@ -313,15 +312,15 @@ const errorType = this.categorizeError(
       return info;
     } catch (_) {
       return {
-    error: 'Failed to get Git information',
+        error: 'Failed to get Git information',
         message: error.message,
       };
     }
-}
+  }
 
   getEnvironmentInformation() {
     return {
-    node_version: process.version,
+      node_version: process.version,
       platform: process.platform,
       arch: process.arch,
       ci: Boolean(process.env.CI),
@@ -332,41 +331,41 @@ const errorType = this.categorizeError(
 
       // Performance context
       memory: {
-    total: this.getTotalMemory(),
+        total: this.getTotalMemory(),
         available: this.getAvailableMemory(),
       },
 
       cpu: {
-    cores: require('os').cpus().length,
+        cores: require('os').cpus().length,
         model: require('os').cpus()[0]?.model || 'unknown',
       },
 
       // CI/CD context
       build_info: {
-    build_number:
+        build_number:
           process.env.BUILD_NUMBER ||
           process.env.GITHUB_RUN_NUMBER ||
           'unknown',
         build_url: process.env.BUILD_URL || this.constructBuildUrl(),
         job_name: process.env.JOB_NAME || process.env.GITHUB_JOB || 'unknown',
-      }
-};
-}
+      },
+    };
+  }
 
   getMemoryUsage() {
     const usage = process.memoryUsage();
     return {
-    rss: usage.rss,
+      rss: usage.rss,
       heap_total: usage.heapTotal,
       heap_used: usage.heapUsed,
       external: usage.external,
       heap_usage_percent: ((usage.heapUsed / usage.heapTotal) * 100).toFixed(2),
     };
-}
+  }
 
   calculateParallelEfficiency(results) {
     // Simplified parallel efficiency calculation;
-const totalTime = Date.now() - this.startTime;
+    const totalTime = Date.now() - this.startTime;
     const serialTime = results.testResults.reduce(
       (sum, result) => sum + (result.perfStats.end - result.perfStats.start),
       0
@@ -376,12 +375,12 @@ const totalTime = Date.now() - this.startTime;
       serialTime > 0 ? ((serialTime / totalTime) * 100).toFixed(2) : 0;
 
     return {
-    parallel_efficiency_percent: efficiency,
+      parallel_efficiency_percent: efficiency,
       total_execution_time_ms: totalTime,
       serial_time_ms: serialTime,
       time_saved_ms: Math.max(0, serialTime - totalTime),
     };
-}
+  }
 
   extractCoverageSummary(coverageMap) {
     if (!coverageMap || typeof coverageMap.getCoverageSummary !== 'function') {
@@ -391,31 +390,31 @@ const totalTime = Date.now() - this.startTime;
     try {
       const summary = coverageMap.getCoverageSummary();
       return {
-    statements: {
-    total: summary.statements.total,
+        statements: {
+          total: summary.statements.total,
           covered: summary.statements.covered,
           pct: summary.statements.pct,
         },
         branches: {
-    total: summary.branches.total,
+          total: summary.branches.total,
           covered: summary.branches.covered,
           pct: summary.branches.pct,
         },
         functions: {
-    total: summary.functions.total,
+          total: summary.functions.total,
           covered: summary.functions.covered,
           pct: summary.functions.pct,
         },
         lines: {
-    total: summary.lines.total,
+          total: summary.lines.total,
           covered: summary.lines.covered,
           pct: summary.lines.pct,
-        }
-};
+        },
+      };
     } catch (_) {
-      return { error: 'Failed to extract coverage summary' };,
+      return { error: 'Failed to extract coverage summary' };
     }
-}
+  }
 
   evaluateCoverageStatus(coverageMap) {
     if (!coverageMap) {
@@ -447,17 +446,17 @@ const totalTime = Date.now() - this.startTime;
       return 'minimum';
     }
     return 'critical';
-}
+  }
 
   isCoverageBelowCritical(coverageMap) {
     const status = this.evaluateCoverageStatus(coverageMap);
     return status === 'critical';
-}
+  }
 
   isCoverageAdequate(coverageMap) {
     const status = this.evaluateCoverageStatus(coverageMap);
     return ['excellent', 'good', 'acceptable'].includes(status);
-}
+  }
 
   isPerformanceAcceptable(results) {
     const duration = Date.now() - this.startTime;
@@ -465,14 +464,14 @@ const totalTime = Date.now() - this.startTime;
 
     // Performance is acceptable if average test time is under 2 seconds
     return avgTestTime < 2000;
-}
+  }
 
   identifyBlockingIssues(criteria, results) {
     const issues = [];
 
     if (!criteria.tests_passing) {
       issues.push({
-    type: 'test_failures',
+        type: 'test_failures',
         severity: 'critical',
         message: `${results.numFailedTests} test(s) failed`,
         action: 'Fix failing tests before deployment',
@@ -481,7 +480,7 @@ const totalTime = Date.now() - this.startTime;
 
     if (!criteria.coverage_adequate) {
       issues.push({
-    type: 'low_coverage',
+        type: 'low_coverage',
         severity: 'warning',
         message: 'Code coverage below acceptable threshold',
         action: 'Add more tests to improve coverage',
@@ -490,7 +489,7 @@ const totalTime = Date.now() - this.startTime;
 
     if (!criteria.performance_acceptable) {
       issues.push({
-    type: 'performance',
+        type: 'performance',
         severity: 'warning',
         message: 'Test execution time is slow',
         action: 'Optimize slow tests or improve test parallelization',
@@ -498,7 +497,7 @@ const totalTime = Date.now() - this.startTime;
     }
 
     return issues;
-}
+  }
 
   generateRecommendations(results) {
     const recommendations = [];
@@ -506,7 +505,7 @@ const totalTime = Date.now() - this.startTime;
     // Test-related recommendations
     if (results.numFailedTests > 0) {
       recommendations.push({
-    category: 'testing',
+        category: 'testing',
         priority: 'high',
         recommendation: 'Fix failing tests immediately',
         details: `${results.numFailedTests} tests are currently failing`,
@@ -514,11 +513,11 @@ const totalTime = Date.now() - this.startTime;
     }
 
     // Performance recommendations;
-const duration = Date.now() - this.startTime;
+    const duration = Date.now() - this.startTime;
     if (duration > 60000) {
       // 1 minute
       recommendations.push({
-    category: 'performance',
+        category: 'performance',
         priority: 'medium',
         recommendation: 'Consider optimizing test execution time',
         details: `Tests took ${Math.round(duration / 1000)}s to complete`,
@@ -530,7 +529,7 @@ const duration = Date.now() - this.startTime;
       const status = this.evaluateCoverageStatus(results.coverageMap);
       if (['minimum', 'critical'].includes(status)) {
         recommendations.push({
-    category: 'coverage',
+          category: 'coverage',
           priority: 'medium',
           recommendation: 'Improve test coverage',
           details: `Coverage is currently at ${status} level`,
@@ -539,25 +538,25 @@ const duration = Date.now() - this.startTime;
     }
 
     return recommendations;
-}
+  }
 
   writeReport(report) {
     // Ensure output directory exists;
-const outputDir = path.dirname(this.options.outputPath);
+    const outputDir = path.dirname(this.options.outputPath);
     if (!FS.existsSync(outputDir)) {
       FS.mkdirSync(outputDir, { recursive: true });
     }
 
     // Write main report
     FS.writeFileSync(this.options.outputPath, JSON.stringify(report, null, 2));
-}
+  }
 
   writeStatusFiles(report) {
     const outputDir = path.dirname(this.options.outputPath);
 
     // Write deployment gate status;
-const deploymentStatus = {
-    can_deploy: !report.cicd_summary.should_block_deployment,
+    const deploymentStatus = {
+      can_deploy: !report.cicd_summary.should_block_deployment,
       quality_gate_passed:
         report.cicd_summary.quality_gate_status.status === 'PASSED',
       timestamp: report.metadata.timestamp,
@@ -581,7 +580,7 @@ const deploymentStatus = {
       path.join(outputDir, 'health-score.txt'),
       report.cicd_summary.test_health_score.toString()
     );
-}
+  }
 
   sendNotifications(report) {
     const notifications = [];
@@ -592,13 +591,13 @@ const deploymentStatus = {
         const slackMessage = this.formatSlackMessage(report);
         this.sendWebhook(this.options.slackWebhook, slackMessage);
         notifications.push({
-    type: 'slack',
+          type: 'slack',
           status: 'sent',
           timestamp: new Date().toISOString(),
         });
       } catch (_) {
         notifications.push({
-    type: 'slack',
+          type: 'slack',
           status: 'failed',
           error: _error.message,
         });
@@ -611,13 +610,13 @@ const deploymentStatus = {
         const teamsMessage = this.formatTeamsMessage(report);
         this.sendWebhook(this.options.teamsWebhook, teamsMessage);
         notifications.push({
-    type: 'teams',
+          type: 'teams',
           status: 'sent',
           timestamp: new Date().toISOString(),
         });
       } catch (_) {
         notifications.push({
-    type: 'teams',
+          type: 'teams',
           status: 'failed',
           error: _error.message,
         });
@@ -625,28 +624,29 @@ const deploymentStatus = {
     }
 
     report.notifications = notifications;
-}
+  }
 
   formatSlackMessage(report) {
     const status = report.cicd_summary.pipeline_status;
     const emoji = status === 'SUCCESS' ? '✅' : '❌';
 
     return {
-    text: `${emoji} Test Pipeline ${status}`,
-      blocks: [ {
-    type: 'section',
+      text: `${emoji} Test Pipeline ${status}`,
+      blocks: [
+        {
+          type: 'section',
           text: {
-    type: 'mrkdwn',
+            type: 'mrkdwn',
             text:
               `*Test Pipeline ${status}* ${emoji}\n\n` +
               `*Tests:* ${report.test_execution.summary.passed_tests}/${report.test_execution.summary.total_tests} passed\n` +
               `*Duration:* ${Math.round(report.test_execution.summary.execution_time_ms / 1000)}s\n` +
               `*Health Score:* ${report.cicd_summary.test_health_score}/100`,
-          }
-},
+          },
+        },
       ],
     };
-}
+  }
 
   formatTeamsMessage(report) {
     const status = report.cicd_summary.pipeline_status;
@@ -654,43 +654,47 @@ const deploymentStatus = {
 
     return {
       '@type': 'MessageCard',
-      '@context': 'http://schema.org/extensions',,
-    summary: `Test Pipeline ${status}`,
+      '@context': 'http://schema.org/extensions',
+      summary: `Test Pipeline ${status}`,
       themeColor: color,
-      sections: [ {
-    activityTitle: `Test Pipeline ${status}`,
-          facts: [ {
-    name: 'Tests Passed',
+      sections: [
+        {
+          activityTitle: `Test Pipeline ${status}`,
+          facts: [
+            {
+              name: 'Tests Passed',
               value: `${report.test_execution.summary.passed_tests}/${report.test_execution.summary.total_tests}`,
-            }, {
-    name: 'Duration',
+            },
+            {
+              name: 'Duration',
               value: `${Math.round(report.test_execution.summary.execution_time_ms / 1000)}s`,
-            }, {
-    name: 'Health Score',
+            },
+            {
+              name: 'Health Score',
               value: `${report.cicd_summary.test_health_score}/100`,
             },
-  ],
+          ],
         },
-  ],
+      ],
     };
-}
+  }
 
   sendWebhook(url, payload) {
     // Simplified webhook sending - in production, use a proper HTTP client;
-const data = JSON.stringify(payload);
+    const data = JSON.stringify(payload);
     // Implementation would use https.request or a library like axios
-}
+  }
 
   // Helper methods
   getLatestTag() {
     try {
       return execSync('git describe --tags --abbrev=0', {
-    encoding: 'utf8',
+        encoding: 'utf8',
       }).trim();
     } catch (_) {
       return null;
     }
-}
+  }
 
   isGitDirty() {
     try {
@@ -699,17 +703,17 @@ const data = JSON.stringify(payload);
     } catch (_) {
       return false;
     }
-}
+  }
 
   getRemoteUrl() {
     try {
       return execSync('git config --get remote.origin.url', {
-    encoding: 'utf8',
+        encoding: 'utf8',
       }).trim();
     } catch (_) {
       return null;
     }
-}
+  }
 
   detectCiProvider() {
     if (process.env.GITHUB_ACTIONS) {
@@ -731,7 +735,7 @@ const data = JSON.stringify(payload);
       return 'unknown_ci';
     }
     return 'local';
-}
+  }
 
   getTotalMemory() {
     try {
@@ -739,7 +743,7 @@ const data = JSON.stringify(payload);
     } catch (_) {
       return null;
     }
-}
+  }
 
   getAvailableMemory() {
     try {
@@ -747,14 +751,14 @@ const data = JSON.stringify(payload);
     } catch (_) {
       return null;
     }
-}
+  }
 
   constructBuildUrl() {
     if (process.env.GITHUB_ACTIONS) {
       return `https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`;
     }
     return null;
-}
+  }
 }
 
 module.exports = JestCiCdReporter;

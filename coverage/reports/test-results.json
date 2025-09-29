@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "timestamp": "2025-09-29T05:12:52.764Z",
+    "timestamp": "2025-09-29T16:06:20.036Z",
     "reporter": "jest-json-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System"
@@ -15,14 +15,14 @@
     "numFailedTests": 0,
     "numPendingTests": 0,
     "numTodoTests": 0,
-    "startTime": 1759122768222,
-    "endTime": 1759122772768,
-    "duration": 4546,
+    "startTime": 1759161979697,
+    "endTime": 1759161980036,
+    "duration": 339,
     "success": false
   },
   "testResults": [
     {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js",
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
       "status": "passed",
       "startTime": 0,
       "endTime": 0,
