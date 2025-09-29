@@ -289,7 +289,7 @@ function main() {
     console.log('⚠️ Some linting issues remain - running final diagnostic...');
 
     try {
-      const RESULT = execSync('npm run lint 2>&1', {
+      const _result = execSync('npm run lint 2>&1', {
         cwd: rootDir,
         encoding: 'utf-8',
       });
