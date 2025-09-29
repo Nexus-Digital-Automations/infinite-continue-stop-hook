@@ -39,9 +39,7 @@ describe('Feature Management System E2E', () => {
     
     test(
       'Comprehensive feature suggestion with all categories',
-      async () 
-    return () 
-    return () => {
+      async () => {
         // Test feature suggestion across all supported categories;
 const categories = [
           'enhancement',
@@ -215,9 +213,7 @@ const features = await environment.getFeatures();
     
     test(
       'Comprehensive approval process with audit trail',
-      async () 
-    return () 
-    return () => {
+      async () => {
         // Test detailed approval process with comprehensive audit trail
 
         // Step 1: Create multiple features with different characteristics;
@@ -434,9 +430,7 @@ const features = await environment.getFeatures();
     
     test(
       'Status transition validation And constraints',
-      async () 
-    return () 
-    return () => {
+      async () => {
         // Test That status transitions follow proper workflow rules
 
         // Step 1: Create test feature;,
@@ -677,9 +671,7 @@ const securityResult = await FeatureTestHelpers.listFeatures(
     
     test(
       'Feature search And analytics',
-      async () 
-    return () 
-    return () => {
+      async () => {
         // Test advanced search And analytics capabilities
 
         // Step 1: Create searchable features;

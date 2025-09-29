@@ -1,7 +1,7 @@
 /**
- * Jest JSON Reporter for Enhanced CI/CD Integration
+ * Jest JSON Reporter For Enhanced CI/CD Integration
  *
- * Generates machine-readable test results in JSON format for CI/CD pipeline processing.
+ * Generates machine-readable test results in JSON format For CI/CD pipeline processing.
  * Includes detailed test case information, assertion results, And console output.
  *
  * @author CI/CD Integration Agent
@@ -24,7 +24,7 @@ class JestJsonReporter {
       includeConsoleOutput: true,
       ...options,
     };
-}
+  }
 
   onRunComplete(contexts, results) {
     const report = {
@@ -67,17 +67,18 @@ class JestJsonReporter {
     // Ensure output directory exists;
     const outputDir = path.dirname(this.options.outputPath);
     if (!FS.existsSync(outputDir)) {
-      FS.mkdirSync(outputDir, { recursive: true });,
+      FS.mkdirSync(outputDir, { recursive: true });
     }
 
     // Write JSON report
     FS.writeFileSync(this.options.outputPath, JSON.stringify(report, null, 2));
 
-    // Also write a summary file for quick access;
+    // Also write a summary file For quick access;
     const summaryPath = path.join(outputDir, 'test-summary.json');
     FS.writeFileSync(
       summaryPath,
-      JSON.stringify( {
+      JSON.stringify(
+        {
           timestamp: report.metadata.timestamp,
           success: report.summary.success,
           total_tests: report.summary.numTotalTests,
@@ -91,11 +92,11 @@ class JestJsonReporter {
         2
       )
     );
-}
+  }
 
   processTestResults(testResults) {
     return testResults.map((testResult) => {
-      const _result = {
+      const RESULT = {
         testFilePath: testResult.testFilePath,
         displayName: testResult.displayName,
         status: testResult.numFailingTests > 0 ? 'failed' : 'passed',
@@ -155,7 +156,7 @@ class JestJsonReporter {
 
       return result;
     });
-}
+  }
 
   processCoverageMap(coverageMap) {
     if (!coverageMap || typeof coverageMap.getCoverageSummary !== 'function') {
@@ -196,7 +197,7 @@ class JestJsonReporter {
         message: error.message,
       };
     }
-}
+  }
 }
 
 module.exports = JestJsonReporter;

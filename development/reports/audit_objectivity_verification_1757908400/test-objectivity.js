@@ -62,7 +62,7 @@ async function testObjectivityEnforcement(agentId, category = 'general') {
     loggers.stopHook.log(`   Status: ${status}`);
 
     if (!validation.valid) {
-      loggers.stopHook.log(`   Reason: ${validation.errorResult.reason}`);,
+      loggers.stopHook.log(`   Reason: ${validation.errorResult.reason}`);
     }
     loggers.stopHook.log('');
 });

@@ -609,22 +609,36 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 - **PREVIEW ENVIRONMENTS**: CI/CD pipeline MUST automatically deploy preview environments for PRs
 - **REVIEWABILITY**: All changes structured for optimal code review
 
-### CI/CD & DEVELOPMENT ACCELERATION
+### 🚀 CI/CD PIPELINE - ABSOLUTE TOP PRIORITY
 
-**AUTOMATED PIPELINE REQUIREMENTS:**
+**🔥 OPTIMAL CI/CD IS THE FOUNDATION - IMPLEMENT FIRST, EVERYTHING ELSE DEPENDS ON IT**
 
-- **QUALITY GATES**: Pre-commit hooks, CI pipelines handle linting, testing, security scanning automatically
-- **ZERO MANUAL CHECKS**: CI/CD catches issues consistently without developer intervention
-- **FAIL-FAST FEEDBACK**: Immediate notification on commit/PR for fast developer response
-- **RELIABLE ENFORCEMENT**: Consistent standards across all contributors and branches
-- **EMERGENCY BACKUP**: Manual validation only when CI/CD temporarily offline
+**MANDATORY REQUIREMENT:** Establish a comprehensive, optimized CI/CD pipeline BEFORE any other development work. This is non-negotiable and the highest priority for any project.
 
-**PERFORMANCE OPTIMIZATION:**
+**CORE CI/CD REQUIREMENTS:**
 
-- **INCREMENTAL BUILDS**: Support incremental builds and remote caching (Turborepo, Nx, Bazel)
-- **PARALLELIZATION**: Execute independent jobs in parallel to minimize pipeline duration
-- **HMR FOR FRONTEND**: Hot Module Replacement for sub-second browser updates
-- **COMPONENT-DRIVEN**: Use component explorer tools (Storybook) for isolated UI development
+- **ZERO TOLERANCE QUALITY GATES**: Automated linting, testing, security scanning, build validation
+- **FAIL-FAST FEEDBACK**: Immediate notification on any failures (< 30 seconds)
+- **PARALLEL EXECUTION**: All validation steps run concurrently for maximum speed
+- **COMPREHENSIVE VALIDATION**: ESLint, Prettier, TypeScript, security scans, tests, builds
+- **AUTOMATED DEPLOYMENT**: Staging and production deployment with rollback capability
+
+**ESSENTIAL PIPELINE STAGES:**
+1. **Validate** (2 min): Linting, formatting, type checking
+2. **Test** (5 min): Unit, integration, security tests
+3. **Build** (3 min): Build artifacts and containers
+4. **Deploy** (8 min): Staging deployment and E2E validation
+5. **Production** (5 min): Production deployment with monitoring
+
+**CI/CD SUCCESS CRITERIA:**
+- Pipeline completes in under 15 minutes total
+- Zero manual intervention required
+- Automatic rollback on failure
+- 100% naming convention enforcement
+- Security vulnerabilities block deployment
+- All quality standards enforced automatically
+
+**🚨 IMPLEMENTATION ORDER:** CI/CD pipeline setup is PRIORITY #1. No other development work should begin until the automated pipeline is operational and enforcing all quality standards.
 
 **SECURITY PROTOCOL:**
 
@@ -648,15 +662,457 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 - **FIX**: Code vulnerabilities, exposed secrets, injection risks, insecure patterns
 - **REPORT**: Infrastructure issues, third-party service vulnerabilities
 
-### NAMING CONVENTIONS & CODE ORGANIZATION
+### 🚨 COMPREHENSIVE NAMING CONVENTIONS & CODE ORGANIZATION
 
-**NAMING STANDARDS:**
+**🔥 ABSOLUTE CONSISTENCY MANDATE - ZERO TOLERANCE FOR NAMING VIOLATIONS**
 
-- **CONSISTENCY**: Never change variable/function names unless functionally necessary
-- **SEMANTIC CLARITY**: Names should reveal intent and domain concepts clearly
-- **JS/TS**: `camelCase` variables, `UPPER_SNAKE_CASE` constants, `PascalCase` classes, `kebab-case.js` files
-- **Python**: `snake_case` variables, `UPPER_SNAKE_CASE` constants, `PascalCase` classes, `snake_case.py` files
-- **PRINCIPLES**: Descriptive names, boolean prefixes (`is`, `has`), action verbs, avoid abbreviations
+All code MUST follow these comprehensive naming conventions with automated enforcement via ESLint, Ruff, and CI/CD pipelines. Any naming violations will cause immediate build failures.
+
+#### 🟨 JavaScript/TypeScript Naming Conventions (Industry Standard + TypeScript Strict)
+
+**Core Identifier Naming Rules:**
+
+**1. Variables:**
+- **Rule**: camelCase format required
+- **Pattern**: `^[a-z][a-zA-Z0-9]*$`
+- **Examples**:
+  - ✅ `userName`, `isValidUser`, `getCurrentData`
+  - ❌ `user_name`, `UserName`, `CURRENT_DATA`
+- **ESLint Rule**: `camelcase: ['error', { properties: 'always' }]`
+
+**2. Constants:**
+- **Rule**: UPPER_SNAKE_CASE format required
+- **Pattern**: `^[A-Z][A-Z0-9_]*$`
+- **Examples**:
+  - ✅ `MAX_RETRY_COUNT`, `API_BASE_URL`, `DEFAULT_TIMEOUT`
+  - ❌ `maxRetryCount`, `apiBaseUrl`, `default_timeout`
+- **ESLint Rule**: Via camelcase allow list and id-match pattern
+
+**3. Functions:**
+- **Rule**: camelCase format required
+- **Pattern**: `^[a-z][a-zA-Z0-9]*$`
+- **Examples**:
+  - ✅ `getUserData()`, `validateEmailFormat()`, `processRequestAsync()`
+  - ❌ `GetUserData()`, `validate_email`, `ProcessRequest()`
+- **ESLint Rule**: `func-names: ['error', 'always']`
+
+**4. Classes:**
+- **Rule**: PascalCase format required
+- **Pattern**: `^[A-Z][a-zA-Z0-9]*$`
+- **Examples**:
+  - ✅ `UserService`, `EmailValidator`, `DataProcessor`
+  - ❌ `userService`, `email_validator`, `dataProcessor`
+- **ESLint Rule**: `new-cap: ['error', { newIsCap: true, capIsNew: true }]`
+
+**5. TypeScript-Specific Rules:**
+- **Interfaces**: PascalCase with optional I prefix
+  - ✅ `IUserService`, `ApiResponse`, `DataModel`
+- **Type Aliases**: PascalCase format
+  - ✅ `UserRole`, `HttpStatus`, `ConfigOptions`
+- **Enums**: PascalCase for enum name, UPPER_CASE for members
+  - ✅ `UserRole.ADMIN`, `HttpStatus.SUCCESS`
+
+**Boolean Variable Naming (Intelligent Autofix System):**
+
+**Prefix Categories with Semantic Detection:**
+
+1. **is prefix** - State or property checks
+   - Patterns: valid, active, visible, hidden, enabled, authenticated
+   - ✅ `isValidUser`, `isActiveSession`, `isVisible`
+
+2. **has prefix** - Possession or presence
+   - Patterns: data, permission, access, error, children
+   - ✅ `hasPermission`, `hasData`, `hasErrors`
+
+3. **can prefix** - Ability or permission
+   - Patterns: edit, delete, create, access, view, execute
+   - ✅ `canEdit`, `canDelete`, `canAccess`
+
+4. **should prefix** - Recommendations or requirements
+   - Patterns: include, show, validate, refresh, retry
+   - ✅ `shouldInclude`, `shouldShowDialog`, `shouldValidate`
+
+5. **does prefix** - Action performance or existence
+   - Patterns: exist, support, contain, match, respond
+   - ✅ `doesFileExist`, `doesSupportFeature`, `doesMatch`
+
+6. **will prefix** - Future actions or intentions
+   - Patterns: auto, schedule, trigger, expire, complete
+   - ✅ `willAutoSave`, `willTriggerEvent`, `willExpire`
+
+**Advanced Naming Pattern Detection:**
+- Smart Word Boundary Detection: Handles compound words like `getbadfunctionname` → `getBadFunctionName`
+- Common Programming Words: 150+ word vocabulary for intelligent camelCase conversion
+- Context-Based Prefixes: Semantic analysis determines optimal boolean prefixes
+
+**ESLint Pattern Enforcement:**
+```javascript
+'id-match': [
+  'error',
+  '^(is|has|can|should|will|was|were)[A-Z][a-zA-Z0-9]*$|^[a-z][a-zA-Z0-9]*$|^[A-Z][a-zA-Z0-9]*$|^[A-Z][A-Z0-9_]*$|^__[a-zA-Z0-9_]*__$'
+]
+```
+
+#### 🐍 Python Naming Conventions (PEP 8 Compliant + Strict Tools)
+
+**Core Python Rules:**
+- **Variables/Functions**: `snake_case`
+  - ✅ `user_name`, `get_user_data()`, `validate_email()`
+- **Constants**: `UPPER_SNAKE_CASE`
+  - ✅ `MAX_RETRY_COUNT`, `API_BASE_URL`
+- **Classes**: `PascalCase`
+  - ✅ `UserService`, `EmailValidator`
+- **Private Methods**: `_leading_underscore`
+  - ✅ `_validate_input()`, `_process_data()`
+- **Files/Modules**: `snake_case.py`
+  - ✅ `user_service.py`, `email_validator.py`
+
+**Python Tool Configuration:**
+- **Ruff**: ALL rules enabled with PEP 8 naming enforcement
+- **Black**: 88-character line length, strict formatting
+- **mypy**: Ultra-strict type checking with complete annotation requirements
+- **isort**: Import sorting with Black compatibility
+
+#### 🖥️ Shell Script Naming Convention
+
+**Shell Naming Rules:**
+- **Variables**: `snake_case`
+  - ✅ `user_name`, `config_file`, `retry_count`
+- **Functions**: `snake_case`
+  - ✅ `get_user_data()`, `validate_config()`
+- **Constants**: `UPPER_SNAKE_CASE`
+  - ✅ `MAX_RETRIES`, `DEFAULT_PATH`
+- **Files**: `kebab-case`
+  - ✅ `user-service.sh`, `config-validator.sh`
+
+#### 📁 File and Directory Naming
+
+**File Naming Conventions:**
+- **JavaScript/TypeScript**: `kebab-case.js/.ts`
+  - ✅ `user-service.ts`, `email-validator.js`, `api-client.mjs`
+- **Python**: `snake_case.py`
+  - ✅ `user_service.py`, `email_validator.py`
+- **Shell Scripts**: `kebab-case.sh`
+  - ✅ `deploy-app.sh`, `setup-database.sh`
+- **Configuration Files**: Various formats maintained
+  - ✅ `eslint.config.mjs`, `.gitignore`, `package.json`
+
+**Directory Naming:**
+- **General Rule**: `kebab-case` for consistency
+  - ✅ `user-management/`, `api-services/`, `test-utilities/`
+- **Standard Project Structure**:
+  - `/src` - Source code
+  - `/tests` - Test files
+  - `/docs` - Documentation
+  - `/scripts` - Build and utility scripts
+  - `/config` - Configuration files
+
+#### 🛡️ Safety Filters and Protection
+
+**Automatic Processing Safety Filters:**
+
+The system includes comprehensive safety filters to prevent problematic automatic renames:
+
+**Framework Method Protection:**
+- React lifecycle: `componentDidMount`, `render`, `constructor`
+- Test frameworks: `describe`, `it`, `beforeEach`, `afterEach`
+- Express/HTTP: `get`, `post`, `put`, `delete`, `use`, `listen`
+
+**Pattern-Based Protection:**
+- Regex artifacts: `$1`, `$2` (capture groups)
+- Reserved keywords: `for`, `if`, `while`, `function`, `class`
+- API patterns: `handle*`, `on*`, `middleware*`, `validate*`
+
+**File Context Protection:**
+- Server files: Enhanced protection for HTTP methods in server-related files
+- Test files: Protected test framework functions and assertions
+
+#### 🔧 Automation and Enforcement
+
+**ESLint Integration:**
+- Real-time Detection: Live linting during development
+- Autofix Capability: Many naming violations automatically fixable
+- CI/CD Integration: Automated enforcement in build pipelines
+
+**Intelligent Autofix System:**
+- AST-Based Renaming: Safe identifier renaming across files
+- Cross-File References: Automatic updating of references
+- Rollback Safety: File safety system with validation
+- Manual Review Bridge: Automatic processing of manual review violations
+
+**Multi-Language Support:**
+- JavaScript/TypeScript: ESLint + TypeScript compiler integration
+- Python: Ruff + Black + mypy + isort comprehensive toolchain
+- Shell: ShellCheck integration with custom naming rules
+
+#### ⚙️ MANDATORY CONFIGURATION FILES
+
+**🔥 ABSOLUTE REQUIREMENT: ALL PROJECTS MUST INCLUDE THESE CONFIGURATION FILES**
+
+**`.editorconfig` (project root):**
+```ini
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+max_line_length = 120
+
+[*.{js,ts,jsx,tsx,json,yml,yaml,md}]
+indent_style = space
+indent_size = 2
+
+[*.{py}]
+indent_style = space
+indent_size = 4
+
+[*.{go}]
+indent_style = tab
+
+[Makefile]
+indent_style = tab
+```
+
+**`eslint.config.mjs` (2024 flat config format):**
+```javascript
+import eslint from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import prettier from 'eslint-config-prettier';
+
+export default tseslint.config(
+  eslint.configs.recommended,
+  tseslint.configs.recommendedTypeChecked,
+  tseslint.configs.strictTypeChecked,
+  tseslint.configs.stylistic,
+  prettier,
+  {
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+    rules: {
+      // Comprehensive naming convention enforcement
+      'camelcase': ['error', { properties: 'always' }],
+      'func-names': ['error', 'always'],
+      'new-cap': ['error', { newIsCap: true, capIsNew: true }],
+      'id-match': [
+        'error',
+        '^(is|has|can|should|will|was|were)[A-Z][a-zA-Z0-9]*$|^[a-z][a-zA-Z0-9]*$|^[A-Z][a-zA-Z0-9]*$|^[A-Z][A-Z0-9_]*$|^__[a-zA-Z0-9_]*__$'
+      ],
+      // Multi-agent specific rules
+      'prefer-const': 'error',
+      'no-var': 'error',
+      '@typescript-eslint/no-unused-vars': 'error',
+      '@typescript-eslint/explicit-function-return-type': 'warn',
+      '@typescript-eslint/no-explicit-any': 'warn',
+      // Quality and consistency rules
+      'no-console': 'warn',
+      'no-debugger': 'error',
+      'no-duplicate-imports': 'error',
+      'no-unused-expressions': 'error',
+      'prefer-template': 'error',
+      'consistent-return': 'error',
+      'array-callback-return': 'error',
+      'no-implicit-coercion': 'error',
+      'no-magic-numbers': ['warn', { ignore: [-1, 0, 1, 2] }],
+    }
+  },
+);
+```
+
+**`pyproject.toml` (unified Python configuration):**
+```toml
+[tool.black]
+line-length = 88
+target-version = ['py38', 'py39', 'py310', 'py311']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "W", "I", "N", "UP", "B", "C4", "PIE", "T20", "RSE", "TCH"]
+ignore = ["E501"]  # Line too long (handled by black)
+fix = true
+show-fixes = true
+target-version = "py38"
+
+[tool.ruff.per-file-ignores]
+"tests/*" = ["T20"]  # Allow print statements in tests
+
+[tool.mypy]
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+
+[tool.isort]
+profile = "black"
+line_length = 88
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q --strict-markers --strict-config"
+testpaths = ["tests"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+]
+```
+
+**`package.json` scripts section (mandatory):**
+```json
+{
+  "scripts": {
+    "lint": "eslint . --fix && prettier --write .",
+    "lint:check": "eslint . && prettier --check .",
+    "typecheck": "tsc --noEmit",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watch",
+    "build": "vite build",
+    "dev": "vite dev",
+    "start": "node dist/index.js",
+    "security": "npm audit && semgrep --config=p/security-audit .",
+    "autofix": "npm run lint && npm run typecheck",
+    "validate": "npm run lint:check && npm run typecheck && npm run test && npm run build"
+  }
+}
+```
+
+**GitHub Actions CI/CD Pipeline (`.github/workflows/ci.yml`):**
+```yaml
+name: Comprehensive CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate Code Quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        node-version: [18, 20]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      # Parallel validation jobs
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint check
+        run: npm run lint:check
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Format check
+        run: npx prettier --check .
+
+  security:
+    name: Security Scanning
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Semgrep
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: >-
+            p/security-audit
+            p/javascript
+            p/typescript
+            p/owasp-top-ten
+
+      - name: Dependency Audit
+        run: npm audit --audit-level=moderate
+
+  test:
+    name: Test Suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests with coverage
+        run: npm run test:coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+
+  build:
+    name: Build Application
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [validate, security, test]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: dist/
+```
 
 **CODE ORGANIZATION:**
 

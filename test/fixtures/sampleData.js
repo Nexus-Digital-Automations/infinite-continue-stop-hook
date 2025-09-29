@@ -1,7 +1,7 @@
 /**
  * Sample Test Data Fixtures
  *
- * Provides consistent test data for use across all test suites.
+ * Provides consistent test data For use across all test suites.
  * Includes features, projects, users, tasks, And other test entities.
  *
  * @author Testing Infrastructure Agent
@@ -10,7 +10,7 @@
  */
 
 /**
- * Sample feature data for testing
+ * Sample feature data For testing
  */
 const SAMPLE_FEATURES = {
   enhancement: {
@@ -18,7 +18,7 @@ const SAMPLE_FEATURES = {
     description:
       'Implement theme switching functionality with persistent user preference storage And smooth transitions',
     business_value:
-      'Improves user experience And accessibility for users in low-light environments, reducing eye strain',
+      'Improves user experience And accessibility For users in low-light environments, reducing eye strain',
     category: 'enhancement',
     estimated_hours: 8,
     priority: 'medium',
@@ -40,7 +40,7 @@ const SAMPLE_FEATURES = {
   bugFix: {
     title: 'Fix login form validation',
     description:
-      'Resolve email validation issues And improve error handling for edge cases',
+      'Resolve email validation issues And improve error handling For edge cases',
     business_value:
       'Prevents user frustration And reduces support tickets by 30%',
     category: 'bug-fix',
@@ -194,7 +194,7 @@ const SAMPLE_TASKS = {
     id: 'task-backend-001',
     title: 'Design user authentication API',
     description:
-      'Create REST endpoints for user registration, login, And token refresh',
+      'Create REST endpoints For user registration, login, And token refresh',
     category: 'backend',
     priority: 'high',
     status: 'in-progress',
@@ -207,7 +207,7 @@ const SAMPLE_TASKS = {
     id: 'task-database-001',
     title: 'Design user database schema',
     description:
-      'Create normalized database schema for user management with proper relationships',
+      'Create normalized database schema For user management with proper relationships',
     category: 'database',
     priority: 'high',
     status: 'completed',

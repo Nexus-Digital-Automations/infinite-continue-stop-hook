@@ -22,7 +22,7 @@ global.RAG_TEST_CONFIG = {
     semanticSearch: 500, // 500ms
     batchOperations: 100, // 100ms per item
     databaseQueries: 1000, // 1 second
-},
+  },
 };
 
 // Mock implementations for when RAG system is not yet available
@@ -31,7 +31,7 @@ global.RAG_MOCKS = {
     generateEmbedding: jest.fn().mockResolvedValue([0.1, 0.2, 0.3]),
     generateBatchEmbeddings: jest.fn().mockResolvedValue([[0.1, 0.2, 0.3]]),
     calculateSimilarity: jest.fn().mockReturnValue(0.85),
-},
+  },
 
   vectorDatabase: {
     store: jest.fn().mockResolvedValue({ success: true, id: 'mock-id' }),
@@ -39,7 +39,7 @@ global.RAG_MOCKS = {
       results: [{ id: 'mock-id', score: 0.9, content: 'mock content' }],
     }),
     delete: jest.fn().mockResolvedValue({ success: true }),
-},
+  },
 
   ragSystem: {
     storeLesson: jest.fn().mockResolvedValue({
@@ -50,7 +50,8 @@ global.RAG_MOCKS = {
 
     searchLessons: jest.fn().mockResolvedValue({
       success: true,
-      results: [ {
+      results: [
+        {
           id: 'mock-lesson-1',
           title: 'Mock Lesson',
           content: 'Mock lesson content',
@@ -66,14 +67,15 @@ global.RAG_MOCKS = {
 
     findSimilarErrors: jest.fn().mockResolvedValue({
       success: true,
-      errors: [ {
+      errors: [
+        {
           id: 'mock-error-1',
           message: 'Mock error message',
           similarity_score: 0.85,
         },
       ],
     }),
-},
+  },
 };
 
 // Test utilities
@@ -87,7 +89,7 @@ global.RAG_TEST_UTILS = {
     category: 'test',
     tags: ['test', `lesson-${index}`],
     created_at: new Date().toISOString(),
-}),
+  }),
 
   /**
    * Create test error data
@@ -98,7 +100,7 @@ global.RAG_TEST_UTILS = {
     file_path: `/test/file${index}.js`,
     line_number: index * 10,
     context: { test_context: true, index },
-}),
+  }),
 
   /**
    * Generate random technical content
@@ -117,14 +119,14 @@ global.RAG_TEST_UTILS = {
 
     const template = templates[topic] || templates.general;
     return template.replace('{topic}', topic);
-},
+  },
 
   /**
    * Create mock embedding vector
    */
   createMockEmbedding: (dimension = 384) => {
     return Array.from({ length: dimension }, () => Math.random() * 2 - 1);
-},
+  },
 
   /**
    * Wait for specified time
@@ -139,11 +141,11 @@ global.RAG_TEST_UTILS = {
    */
   measureTime: async (fn) => {
     const start = process.hrtime.bigint();
-    const _result = await fn();
+    const RESULT = await fn();
     const end = process.hrtime.bigint();
     const duration = Number(end - start) / 1000000; // Convert to milliseconds,
     return { result, duration };
-},
+  },
 
   /**
    * Assert performance threshold
@@ -154,7 +156,7 @@ global.RAG_TEST_UTILS = {
         `Performance threshold exceeded for ${operation}: ${duration}ms > ${threshold}ms`
       );
     }
-},
+  },
 
   /**
    * Create test directory structure
@@ -186,18 +188,18 @@ global.RAG_TEST_UTILS = {
     await Promise.all(
       files.map((file) => FS.writeFile(file.path, file.content))
     );
-},
+  },
 
   /**
    * Cleanup test directory
    */
   cleanupTestDirectory: async (dirPath) => {
     try {
-      await FS.rm(dirPath, { recursive: true, force: true });,
+      await FS.rm(dirPath, { recursive: true, force: true });
     } catch (_) {
       loggers.stopHook.warn(`Cleanup warning for ${dirPath}:`, _error.message);
     }
-},
+  },
 
   /**
    * Validate RAG system response structure
@@ -210,7 +212,7 @@ global.RAG_TEST_UTILS = {
     expectedFields.forEach((field) => {
       expect(response).toHaveProperty(field);
     });
-},
+  },
 
   /**
    * Create performance test suite
@@ -225,7 +227,7 @@ global.RAG_TEST_UTILS = {
 
       return result;
     };
-},
+  },
 };
 
 // Global setup
@@ -237,11 +239,11 @@ beforeEach(async () => {
         mockFn.mockClear();
       }
     });
-});
+  });
 
   // Ensure test directories exist
   await FS.mkdir(global.RAG_TEST_CONFIG.testDataPath, { recursive: true });
-  await FS.mkdir(global.RAG_TEST_CONFIG.tempPath, { recursive: true });,
+  await FS.mkdir(global.RAG_TEST_CONFIG.tempPath, { recursive: true });
 });
 
 // Global teardown
@@ -258,9 +260,9 @@ afterEach(async () => {
         })
       )
     );
-} catch (_) {
+  } catch (_) {
     // Ignore cleanup errors
-}
+  }
 });
 
 // Extend Jest matchers for RAG-specific assertions
@@ -283,7 +285,7 @@ expect.extend({
         pass: false,
       };
     }
-},
+  },
 
   toHaveHighSimilarity(received, expected, threshold = 0.7) {
     const pass =
@@ -302,7 +304,7 @@ expect.extend({
         pass: false,
       };
     }
-},
+  },
 
   toMeetPerformanceThreshold(received, threshold) {
     const pass = typeof received === 'number' && received <= threshold;
@@ -320,7 +322,7 @@ expect.extend({
         pass: false,
       };
     }
-},
+  },
 });
 
 loggers.stopHook.log('RAG System test environment initialized');

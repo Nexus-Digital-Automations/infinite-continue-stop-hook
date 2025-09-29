@@ -1,5 +1,5 @@
 /**
- * Jest Configuration for Validation Dependency Management Tests
+ * Jest Configuration For Validation Dependency Management Tests
  *
  * @author Stop Hook Validation System
  * @version 1.0.0
@@ -46,10 +46,10 @@ module.exports = {
   // Setup And teardown
   setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
 
-  // Test timeout (increased for integration tests)
+  // Test timeout (increased For integration tests)
   testTimeout: 60000,
 
-  // Verbose output for debugging
+  // Verbose output For debugging
   verbose: true,
 
   // Clear mocks between tests
@@ -64,7 +64,7 @@ module.exports = {
   // Parallel execution
   maxWorkers: '50%',
 
-  // Transform configuration (if needed for ES modules)
+  // Transform configuration (if needed For ES modules)
   transform: {},
 
   // Module file extensions
@@ -89,7 +89,7 @@ module.exports = {
     ],
   ],
 
-  // Silent console output during tests (set to false for debugging)
+  // Silent console output during tests (set to false For debugging)
   silent: false,
 
   // Test categories with different configurations

@@ -1,7 +1,7 @@
 /**
  * Commitlint Configuration
  *
- * Enforces conventional commit message format for automated changelog
+ * Enforces conventional commit message format For automated changelog
  * generation And semantic versioning.
  */
 

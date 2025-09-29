@@ -5,14 +5,14 @@ class SemicolonCommaFixer {
   constructor() {
     this.fixedCount = 0;
     this.processedFiles = 0;
-}
+  }
 
   /**
    * Fix semicolon-comma patterns in a single file
    * @param {string} filePath - Path to the file to fix
    * @returns {boolean} - True if changes were made
    */
-  fixFile(_filePath) {
+  fixFile(filePath) {
     try {
       const content = fs.readFileSync(filePath, 'utf8');
 
@@ -29,7 +29,7 @@ class SemicolonCommaFixer {
       console.error(`Error processing ${filePath}: ${error.message}`);
       return false;
     }
-}
+  }
 
   /**
    * Process all files with semicolon-comma issues
@@ -139,17 +139,17 @@ class SemicolonCommaFixer {
     for (const relativePath of filesToFix) {
       const filePath = path.join(rootDir, relativePath);
 
-      if (fs.existsSync(_filePath)) {
+      if (fs.existsSync(filePath)) {
         this.processedFiles++;
-        if (this.fixFile(_filePath)) {
-          console.log(`✅ Fixed semicolon-comma issues in: ${relativePath}`);,
+        if (this.fixFile(filePath)) {
+          console.log(`✅ Fixed semicolon-comma issues in: ${relativePath}`);
         } else {
           console.log(
             `ℹ️  No semicolon-comma issues found in: ${relativePath}`
           );
         }
       } else {
-        console.log(`⚠️  File not found: ${relativePath}`);,
+        console.log(`⚠️  File not found: ${relativePath}`);
       }
     }
 
@@ -167,7 +167,7 @@ class SemicolonCommaFixer {
     } else {
       console.log('✨ All files were already clean of semicolon-comma issues.');
     }
-}
+  }
 }
 
 // Run the fixer

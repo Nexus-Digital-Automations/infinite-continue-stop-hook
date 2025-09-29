@@ -27,20 +27,20 @@ describe('RAG System Data Migration And Integrity', () => {
 
     // Create test development/lessons structure
     await setupTestLessonsStructure();
-});
+  });
 
   afterAll(async () => {
     loggers.stopHook.log('Cleaning up data integrity test environment...');
     try {
-      await FS.rm(_testMigrationPath, { recursive: true, force: true });,
+      await FS.rm(_testMigrationPath, { recursive: true, force: true });
     } catch (_) {
       loggers.stopHook.warn('Cleanup warning:', _error.message);
     }
-});
+  });
 
   beforeEach(() => {
     jest.clearAllMocks();
-});
+  });
 
   describe('Existing Lessons Migration', () => {
     test('should migrate all existing lesson files accurately', async () => {
@@ -108,7 +108,8 @@ const _migratedLessons = await ragSystem.getLessonsByMigrationId(
 
     test('should handle different file formats during migration', () => {
       // Create test files in different formats;
-      const _testFileFormats = [ {
+      const _testFileFormats = [
+        {
           filename: 'markdown_lesson.md',
           content: `# API Error Handling
 
@@ -125,7 +126,7 @@ This lesson covers proper API error handling techniques.
     const req = https.get('/api/data', (res) => {
       let data = '';
       res.on('data', chunk => data += chunk);
-      res.on('end', () => resolve({ ok: res.statusCode === 200, json: () => JSON.parse(data) }));,
+      res.on('end', () => resolve({ ok: res.statusCode === 200, json: () => JSON.parse(data) }));
     });
     req.on('error', reject);
 });
@@ -139,7 +140,8 @@ This lesson covers proper API error handling techniques.
 - api
 - error-handling
 - javascript`,
-        }, {
+        },
+        {
           filename: 'text_lesson.txt',
           content: `Database Connection Pooling
 
@@ -148,9 +150,11 @@ Use libraries like pg-pool for PostgreSQL or mysql2 for MySQL.
 
 Category: database-optimization,
     Tags: database, performance, connection-pooling`,
-        }, {
+        },
+        {
           filename: 'json_lesson.json',
-          content: JSON.stringify( {
+          content: JSON.stringify(
+            {
               title: 'React Hook Optimization',
               content:
                 'Use useMemo And useCallback to optimize React hook performance',
@@ -223,16 +227,20 @@ const _textLesson = migratedFormatLessons.lessons.find(l =>
 
     test('should handle migration errors gracefully', () => {
       // Create problematic files for error testing;
-      const _problematicFiles = [ {
+      const _problematicFiles = [
+        {
           filename: 'empty_file.md',
           content: '',
-        }, {
+        },
+        {
           filename: 'invalid_json.json',
           content: '{ "title": "Invalid JSON", invalid syntax }',
-        }, {
+        },
+        {
           filename: 'binary_file.bin',
           content: Buffer.from([0x00, 0x01, 0x02, 0x03]),
-        }, {
+        },
+        {
           filename: 'huge_file.md',
           content: '# Huge File\n' + 'x'.repeat(10 * 1024 * 1024), // 10MB
         },
@@ -289,7 +297,7 @@ const ERRORS = errorMigrationResult.errors;
       loggers.stopHook.log(`Migration completed with ${errorMigrationResult.errors.length} errors handled gracefully`);
       */
     });
-});
+  });
 
   describe('Data Integrity Validation', () => {
     test('should validate data consistency across system components', async () => {
@@ -314,7 +322,7 @@ const _testLessons = [ {
       // Store lessons;
 const _storedLessons = [];
       for (const lesson of testLessons) {
-        const _result = await ragSystem.storeLesson(lesson);
+        const RESULT = await ragSystem.storeLesson(lesson);
         expect(result.success).toBe(true);
         storedLessons.push(result.lesson_id);
       }
@@ -473,7 +481,7 @@ const _postRepairCheck = await ragSystem.detectDataCorruption();
       loggers.stopHook.log('Automatic data repair completed successfully');
       */
     });
-});
+  });
 
   describe('Backup And Recovery', () => {
     test('should create comprehensive system backups', async () => {
@@ -493,7 +501,7 @@ const _backupTestData = Array.from({ length: 100 }, (_, i) => ({
       // Store test data;
 const _storedIds = [];
       for (const lesson of backupTestData) {
-        const _result = await ragSystem.storeLesson(lesson);
+        const RESULT = await ragSystem.storeLesson(lesson);
         storedIds.push(result.lesson_id);
       }
 
@@ -555,7 +563,7 @@ const _originalData = [ {
       // Store original data And create backup;
 const _originalIds = [];
       for (const lesson of originalData) {
-        const _result = await ragSystem.storeLesson(lesson);
+        const RESULT = await ragSystem.storeLesson(lesson);
         originalIds.push(result.lesson_id);
       }
 
@@ -633,7 +641,7 @@ const _initialLessons = [
 
       const _initialIds = [];
       for (const lesson of initialLessons) {
-        const _result = await ragSystem.storeLesson(lesson);
+        const RESULT = await ragSystem.storeLesson(lesson);
         initialIds.push(result.lesson_id);
       }
 
@@ -703,7 +711,7 @@ const _nonExistentLesson = await ragSystem.getLessonById(anotherNewLesson.lesson
       loggers.stopHook.log('Point-in-time recovery completed successfully');
       */
     });
-});
+  });
 
   // Helper function to setup test lessons structure
   async function setupTestLessonsStructure(category = 'general') {
@@ -808,7 +816,7 @@ Category: api-design,
         );
       })
     );
-}
+  }
 
   async function _getAllLessonFiles(_basePath, category = 'general') {
     const files = [];
@@ -842,5 +850,5 @@ Category: api-design,
 
     await scanDirectory(_basePath);
     return files;
-}
+  }
 });

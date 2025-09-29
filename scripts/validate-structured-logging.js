@@ -1,7 +1,7 @@
 /**
  * Structured Logging and Observability Validation Script
  *
- * Validates implementation against 25-point success criteria for:
+ * Validates implementation against 25-point success criteria For:
  * Feature: Add Structured Logging and Observability (feature_1759082400000_struct_logging)
  */
 
@@ -15,7 +15,7 @@ class StructuredLoggingValidator {
     this.passedCriteria = 0;
     this.totalCriteria = 25;
     this.projectRoot = process.cwd();
-}
+  }
 
   /**
    * Run complete validation suite
@@ -42,7 +42,7 @@ class StructuredLoggingValidator {
     this.generateFinalReport();
 
     return this.passedCriteria === this.totalCriteria;
-}
+  }
 
   /**
    * Validate core structured logging implementation (Criteria 1-10)
@@ -149,7 +149,7 @@ class StructuredLoggingValidator {
     // Criterion 7: Specialized component loggers
     this.validateCriterion(
       7,
-      'Specialized loggers for different components (app, taskManager, agent, etc.)',
+      'Specialized loggers For different components (app, taskManager, agent, etc.)',
       () => {
         const loggerPath = path.join(this.projectRoot, 'lib', 'logger.js');
         const content = fs.readFileSync(loggerPath, 'utf8');
@@ -166,7 +166,7 @@ class StructuredLoggingValidator {
     // Criterion 8: Legacy logger backward compatibility
     this.validateCriterion(
       8,
-      'Legacy logger class for backward compatibility with stop hook',
+      'Legacy logger class For backward compatibility with stop hook',
       () => {
         const loggerPath = path.join(this.projectRoot, 'lib', 'logger.js');
         const content = fs.readFileSync(loggerPath, 'utf8');
@@ -208,7 +208,7 @@ class StructuredLoggingValidator {
         );
       }
     );
-}
+  }
 
   /**
    * Validate production readiness (Criteria 11-15)
@@ -314,7 +314,7 @@ class StructuredLoggingValidator {
         );
       }
     );
-}
+  }
 
   /**
    * Validate observability and monitoring features (Criteria 16-20)
@@ -344,7 +344,7 @@ class StructuredLoggingValidator {
     // Criterion 17: Business metrics tracking
     this.validateCriterion(
       17,
-      'Business metrics tracking for task operations',
+      'Business metrics tracking For task operations',
       () => {
         const loggerPath = path.join(this.projectRoot, 'lib', 'logger.js');
         const content = fs.readFileSync(loggerPath, 'utf8');
@@ -394,7 +394,7 @@ class StructuredLoggingValidator {
     // Criterion 20: Health check endpoints
     this.validateCriterion(
       20,
-      'Health check utilities for system monitoring',
+      'Health check utilities For system monitoring',
       () => {
         const loggerPath = path.join(this.projectRoot, 'lib', 'logger.js');
         const content = fs.readFileSync(loggerPath, 'utf8');
@@ -405,7 +405,7 @@ class StructuredLoggingValidator {
         );
       }
     );
-}
+  }
 
   /**
    * Validate security and compliance (Criteria 21-25)
@@ -438,10 +438,10 @@ class StructuredLoggingValidator {
       }
     );
 
-    // Criterion 22: Audit logging for compliance
+    // Criterion 22: Audit logging For compliance
     this.validateCriterion(
       22,
-      'Audit logging for GDPR/SOX/HIPAA compliance',
+      'Audit logging For GDPR/SOX/HIPAA compliance',
       () => {
         const prodLoggerPath = path.join(
           this.projectRoot,
@@ -464,7 +464,7 @@ class StructuredLoggingValidator {
     // Criterion 23: Data retention policies
     this.validateCriterion(
       23,
-      'Data retention policies configured for different log types',
+      'Data retention policies configured For different log types',
       () => {
         const configPath = path.join(
           this.projectRoot,
@@ -509,10 +509,10 @@ class StructuredLoggingValidator {
       }
     );
 
-    // Criterion 25: Performance optimization for production
+    // Criterion 25: Performance optimization For production
     this.validateCriterion(
       25,
-      'Performance optimizations for high-throughput production logging',
+      'Performance optimizations For high-throughput production logging',
       () => {
         const configPath = path.join(
           this.projectRoot,
@@ -532,7 +532,7 @@ class StructuredLoggingValidator {
         );
       }
     );
-}
+  }
 
   /**
    * Validate a single criterion
@@ -569,7 +569,7 @@ class StructuredLoggingValidator {
         error: error.message,
       });
     }
-}
+  }
 
   /**
    * Generate final validation report
@@ -600,7 +600,7 @@ class StructuredLoggingValidator {
             `   ${result.number.toString().padStart(2, '0')}. ${result.description}`
           );
           if (result.error) {
-            console.log(`       Error: ${result.error}`);,
+            console.log(`       Error: ${result.error}`);
           }
         });
     }
@@ -632,7 +632,7 @@ class StructuredLoggingValidator {
       '\n📝 Detailed report saved to: structured-logging-validation-report.json'
     );
     console.log('='.repeat(60));
-}
+  }
 
   /**
    * Generate detailed JSON report
@@ -689,7 +689,7 @@ class StructuredLoggingValidator {
       path.join(this.projectRoot, 'structured-logging-validation-report.json'),
       JSON.stringify(report, null, 2)
     );
-}
+  }
 }
 
 // Run validation if called directly
@@ -704,7 +704,7 @@ if (require.main === module) {
   main().catch((error) => {
     console.error('Validation failed:', error);
     process.exit(1);
-});
+  });
 }
 
 module.exports = {

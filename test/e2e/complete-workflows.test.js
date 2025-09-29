@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-const { loggers } = require('../lib/logger');
 /**
  * Complete Workflows E2E Tests
  *
@@ -26,9 +25,7 @@ describe('Complete System Workflows E2E', () => {
     
   let environment;
 
-  beforeEach(async () 
-    return () 
-    return () => {
+  beforeEach(async () => {
     environment = new E2EEnvironment('complete-workflows');
     await environment.setup();
 });
@@ -44,13 +41,11 @@ describe('Complete System Workflows E2E', () => {
     
     test(
       'Complete feature suggestion to implementation workflow',
-      async () 
-    return () 
-    return () => {
+      async () => {
         // Test the complete feature lifecycle from suggestion to implementation
 
         // Step 1: Suggest a feature;
-const featureData = FeatureTestHelpers.createFeatureData({,
+        const featureData = FeatureTestHelpers.createFeatureData({
     title: 'E2E Test Feature - Complete Workflow',
           description:
             'Test feature for validating complete workflow from suggestion to implementation',
@@ -196,9 +191,7 @@ const feature = await FeatureTestHelpers.validateFeatureStatus(
     
     test(
       'Complete system startup to shutdown workflow',
-      async () 
-    return () 
-    return () => {
+      async () => {
         // Test complete system lifecycle from startup to controlled shutdown
 
         // Step 1: Initialize system state;
@@ -331,9 +324,7 @@ const finalFeatures = await environment.getFeatures();
     
     test(
       'Complete user journey from discovery to completion',
-      async () 
-    return () 
-    return () => {
+      async () => {
         // Test realistic user workflow from feature discovery to implementation tracking
 
         // Step 1: User discovers need for new feature;
