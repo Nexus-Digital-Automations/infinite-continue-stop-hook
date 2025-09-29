@@ -35,13 +35,13 @@ const additionalPatterns = [
   // Function parameter patterns
   {
     search: /function[^(]*\(([^)]*\b_filePath\b[^)]*)\)/g,
-    replace: function (match, params, __filename) {
+    replace: function (match, _params, ___filename) {
       return match.replace(/\b_filePath\b/g, '__filename');
     },
   },
   {
     search: /\(([^)]*\b_filePath\b[^)]*)\) =>/g,
-    replace: function (match, params, __filename) {
+    replace: function (match, _params, ___filename) {
       return match.replace(/\b_filePath\b/g, '__filename');
     },
   },
@@ -84,7 +84,7 @@ function fixFileUnusedVars(filePath) {
           content = newContent;
           modified = true;
           console.log(
-            `  ✓ Applied function pattern in ${path.relative(process.cwd(), filePath)}`,
+            `  ✓ Applied function pattern in ${path.relative(process.cwd(), filePath)}`
           );
         }
       } else {
@@ -94,7 +94,7 @@ function fixFileUnusedVars(filePath) {
             content = newContent;
             modified = true;
             console.log(
-              `  ✓ Applied pattern in ${path.relative(process.cwd(), filePath)}`,
+              `  ✓ Applied pattern in ${path.relative(process.cwd(), filePath)}`
             );
           }
         }
@@ -139,14 +139,14 @@ function main() {
   try {
     execSync('npm run lint', { stdio: 'pipe' });
     console.log('✅ All linting errors resolved!');
-  } catch (_) {
+  } catch (_lintError) {
     console.log(
-      '⚠️  Some linting errors may remain. Running detailed check...',
+      '⚠️  Some linting errors may remain. Running detailed check...'
     );
     try {
       const output = execSync(
         'npm run lint 2>&1 | grep "no-unused-vars" | head -10',
-        { encoding: 'utf8' },
+        { encoding: 'utf8' }
       );
       if (output.trim()) {
         console.log('Remaining no-unused-vars errors:');
@@ -154,7 +154,7 @@ function main() {
       } else {
         console.log('✅ All no-unused-vars errors resolved!');
       }
-    } catch (checkError) {
+    } catch (_checkError) {
       console.log('✅ All no-unused-vars errors resolved!');
     }
   }
