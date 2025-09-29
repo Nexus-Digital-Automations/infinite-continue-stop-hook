@@ -383,11 +383,7 @@ const firstNode = visualization.nodes[0];
     });
 
     test('should handle unsupported visualization formats', () => {
-    
-    
-      expect(() 
-    return () 
-    return () => {
+      expect(() => {
         dependencyManager.generateInteractiveVisualization('unsupported');
       }).toThrow('Unsupported visualization format');
     });

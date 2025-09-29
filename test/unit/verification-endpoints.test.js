@@ -104,12 +104,12 @@ const testTask = {
         verificationGate: {
     status: 'pending',
           requirements: [
-            {,
+            {
     type: 'file',
               description: 'Review existing codebase patterns',
               critical: true,
             },
-            {,
+            {
     type: 'function',
               description: 'Review API patterns and error handling',
               critical: true,
@@ -217,7 +217,7 @@ const testTask = {
         verificationGate: {
     status: 'pending',
           requirements: [
-            {,
+            {
     type: 'file',
               description: 'Review existing codebase patterns',
               critical: true,
@@ -238,7 +238,7 @@ const testTask = {
       const validEvidence = {
     agentId: 'test_agent_001',
         reviewedItems: [
-          {,
+          {
     type: 'file',
             description: 'Reviewed taskmanager-api.js for patterns',
             details: 'Examined existing API structure and conventions',
@@ -287,7 +287,7 @@ const testTask = {
         verificationGate: {
     status: 'passed',
           requirements: [
-            {,
+            {
     type: 'file',
               description: 'Review existing codebase patterns',
               critical: true,
@@ -329,7 +329,7 @@ const testTask = {
         verificationGate: {
     status: 'pending',
           requirements: [
-            {,
+            {
     type: 'file',
               description: 'Review existing codebase patterns',
               critical: true,
@@ -397,7 +397,7 @@ const testTask = {
         verificationGate: {
     status: 'pending',
           requirements: [
-            {,
+            {
     type: 'file',
               description: 'Review existing codebase patterns',
               critical: true,
@@ -507,17 +507,17 @@ const testTask = {
         verificationGate: {
     status: 'pending',
           requirements: [
-            {,
+            {
     type: 'file',
               description: 'Review existing codebase patterns',
               critical: true,
             },
-            {,
+            {
     type: 'function',
               description: 'Review API patterns and error handling',
               critical: true,
             },
-            {,
+            {
     type: 'convention',
               description: 'Review coding conventions',
               critical: false,
@@ -537,19 +537,19 @@ const testTask = {
       const comprehensiveEvidence = {
         agentId: 'thorough_agent',
         reviewedItems: [
-          {,
+          {
     type: 'file',
             description: 'Reviewed taskmanager-api.js structure and patterns',
             details:
               'Examined class structure, method organization, and file patterns',
           },
-          {,
+          {
     type: 'function',
             description: 'Reviewed API endpoint patterns and error handling',
             details:
               'Analyzed error response formats, status codes, and exception handling',
           },
-          {,
+          {
     type: 'convention',
             description: 'Reviewed naming conventions and code style',
             details:
@@ -586,7 +586,7 @@ const testTask = {
         verificationGate: {
     status: 'pending',
           requirements: [
-            {,
+            {
     type: 'file',
               description: 'Review existing patterns',
               critical: true,
@@ -617,7 +617,7 @@ const requirements =
 const evidence = {
         agentId: 'workflow_agent',
         reviewedItems: [
-          {,
+          {
     type: 'file',
             description: 'Reviewed existing patterns thoroughly',
             details: 'Complete analysis of codebase structure and conventions',
