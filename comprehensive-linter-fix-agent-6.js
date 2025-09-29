@@ -31,13 +31,13 @@ class ComprehensiveLinterFixAgent6 {
     // Fix 2: Fix all unused variable declarations with underscore
     content = content.replace(
       /const\s+(RESULT|LINT_OUTPUT|LINT_RESULT|replacements)\s*=/g,
-      'const 1 ='
+      'const _$1 =',
     );
 
     // Fix 3: Fix constructor parameters - add underscore to unused params
     content = content.replace(
       /constructor\s*\(\s*([^)]+)\s*\)/g,
-      (match, _params) => {
+      (match, params) => {
         const fixedParams = params
           .split(',')
           .map((param) => {
@@ -50,13 +50,13 @@ class ComprehensiveLinterFixAgent6 {
           })
           .join(', ');
         return `constructor(${fixedParams})`;
-      }
+      },
     );
 
     // Fix 4: Remove unused parameters from function calls
     content = content.replace(
       /generateReport\s*\([^)]*\)/g,
-      'generateReport()'
+      'generateReport()',
     );
     content = content.replace(
       /fixTestFile\s*\([^,]+,\s*[^,]+,\s*[^,]+,\s*[^)]+\)/g,
@@ -66,19 +66,19 @@ class ComprehensiveLinterFixAgent6 {
           return `fixTestFile(${firstParam[1]})`;
         }
         return match;
-      }
+      },
     );
 
     // Fix 5: Fix function parameter naming - change _params to params when used
     content = content.replace(
       /\(\s*match,\s*_params\s*\)\s*=>\s*{[^}]*params\.trim\(\)/g,
-      (match) => match.replace('_params', 'params')
+      (match) => match.replace('_params', 'params'),
     );
 
     // Fix 6: Fix conditional expressions with comma operators
     content = content.replace(
       /if\s*\(\s*\([^)]*,\s*[^)]*\)\s*\)/g,
-      'if (true)'
+      'if (true)',
     );
 
     // Fix 7: Fix specific _error is not defined issues by ensuring proper catch block structure;
@@ -131,7 +131,7 @@ class ComprehensiveLinterFixAgent6 {
     // Fix 9: Fix specific parameter issues
     content = content.replace(
       /\(agentId,\s*filePath,\s*category\s*=\s*'general',\s*validationResults\s*=\s*{}\)/g,
-      "(_agentId, _filePath, _category = 'general', _validationResults = {})"
+      "(_agentId, _filePath, _category = 'general', _validationResults = {})",
     );
 
     // Fix 10: Fix AGENT_ID patterns
@@ -139,7 +139,7 @@ class ComprehensiveLinterFixAgent6 {
     content = content.replace(/\bAGENT_ID\b/g, 'agentId');
 
     // Check if we made any changes;
-    const originalContent = fs.readFileSync(filePath, 'utf8');
+    const originalContent = fs.readFileSync(_filePath, 'utf8');
     if (content !== originalContent) {
       modified = true;
       fileFixCount =
@@ -153,7 +153,7 @@ class ComprehensiveLinterFixAgent6 {
 
     // Write back if modified
     if (modified) {
-      fs.writeFileSync(filePath, content);
+      fs.writeFileSync(_filePath, content);
       console.log(`  ✅ Applied comprehensive fixes`);
       this.fixesApplied += fileFixCount;
       return true;
@@ -174,12 +174,12 @@ class ComprehensiveLinterFixAgent6 {
     let filesFixed = 0;
 
     for (const filePath of this.targetFiles) {
-      if (fs.existsSync(_filePath)) {
-        if (this.fixFile(_filePath)) {
+      if (fs.existsSync(filePath)) {
+        if (this.fixFile(filePath)) {
           filesFixed++;
         }
       } else {
-        console.log(`⚠️ File not found: ${path.basename(_filePath)}`);
+        console.log(`⚠️ File not found: ${path.basename(filePath)}`);
       }
     }
 
