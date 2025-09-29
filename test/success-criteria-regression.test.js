@@ -1238,7 +1238,7 @@ const ESSENTIAL_FUNCTIONS = [{
       // Baseline performance test;
 const PERFORMANCE_TESTS = [{
     name: 'Template Application Performance',
-          test: async () 
+          test: async () => {
   
             const START_TIME = Date.now();
 
