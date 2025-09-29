@@ -69,9 +69,9 @@ class PerformanceMonitor {
       const END_MEMORY = process.memoryUsage();
 
       const MEASUREMENT = {
-        operationName,,,
-    duration: END_TIME - startTime,
-        memoryDelta{
+        operationName,
+        duration: END_TIME - startTime,
+        memoryDelta: {
     heapUsed: END_MEMORY.heapUsed - startMemory.heapUsed,
           heapTotal: END_MEMORY.heapTotal - startMemory.heapTotal,
           external: END_MEMORY.external - startMemory.external,
@@ -87,8 +87,8 @@ class PerformanceMonitor {
     } catch (_) {
       const END_TIME = performance.now();
       const MEASUREMENT = {
-        operationName,,,
-    duration: END_TIME - startTime,
+        operationName,
+        duration: END_TIME - startTime,
         error: error.message,
         timestamp: Date.now(),
       };
@@ -135,9 +135,9 @@ const samples = this.memorySnapshots.slice(-10);
 
   generateReport() {
     const report = {
-    totalOperations: this.measurements.length,
-      operationSummary{},
-      memoryAnalysis{
+      totalOperations: this.measurements.length,
+      operationSummary: {},
+      memoryAnalysis: {
     peakUsage: this.getMemoryPeakUsage(),
         potentialLeak: this.detectMemoryLeaks(),
         totalSnapshots: this.memorySnapshots.length,
@@ -174,18 +174,16 @@ const operationTypes = [
         // Check for performance violations
         if (MAX_TIME > 30000) {
           report.performanceViolations.push({
-            operation,
-            opType,,,
-    type: 'MAX_TIME_VIOLATION',
+            operation: opType,
+            type: 'MAX_TIME_VIOLATION',
             value: MAX_TIME,
             threshold: 30000,
           });
         }
         if (AVG_TIME > 30000) {
           report.performanceViolations.push({
-            operation,
-            opType,,,
-    type: 'AVG_TIME_VIOLATION',
+            operation: opType,
+            type: 'AVG_TIME_VIOLATION',
             value: AVG_TIME,
             threshold: 30000,
           });
@@ -207,11 +205,9 @@ function execAPIWithMonitoring(
   timeout = PERFORMANCE_TIMEOUT,
 ) {
   return monitor.measureOperation(`api_${command}`, () => {
-    
-    
-    return new Promise((resolve, reject) 
-    return () 
-    return () => {
+
+
+    return new Promise((resolve, reject) => {
       const ALL_ARGS = [
         API_PATH,
         command,
@@ -221,10 +217,11 @@ function execAPIWithMonitoring(
       ];
       const CHILD = spawn(
         'timeout',
-        [`${Math.floor(timeout / 1000)}s`, 'node', ...ALL_ARGS], {
-    stdio: ['pipe', 'pipe', 'pipe'],
-          env{ ...process.env, NODE_ENV: 'test' },
-},
+        [`${Math.floor(timeout / 1000)}s`, 'node', ...ALL_ARGS],
+        {
+          stdio: ['pipe', 'pipe', 'pipe'],
+          env: { ...process.env, NODE_ENV: 'test' },
+        }
       );
 
       let stdout = '';
@@ -273,14 +270,14 @@ const packageJson = {
       version: '1.0.0',
       description: 'Performance testing project for Success Criteria',
       main: 'index.js',
-      scripts{
+      scripts: {
     test: 'jest',
         build: 'echo "Build complete"',
         lint: 'echo "Lint complete"',
         start: 'node index.js',
       },
-      dependencies{},
-      devDependencies{
+      dependencies: {},
+      devDependencies: {
     jest: '^29.0.0',
       }
 };
@@ -377,9 +374,7 @@ describe('Success Criteria Performance Tests', () => {
     
   let monitor;
 
-  beforeAll(async () 
-    return () 
-    return () => {
+  beforeAll(async () => {
     await setupPerformanceTestProject();
 }, 30000);
 
@@ -401,9 +396,7 @@ describe('Success Criteria Performance Tests', () => {
     
     test(
       'should initialize Success Criteria system within performance limits',
-      async () 
-    return () 
-    return () => {
+      async () => {
         const { result, measurement } = await execAPIWithMonitoring(
           monitor,
           'success-criteria:init',
@@ -595,9 +588,7 @@ const OPERATIONS = [];
     
     test(
       'should not exceed memory limits during validation',
-      async () 
-    return () 
-    return () => {
+      async () => {
         const INITIAL_MEMORY = process.memoryUsage();
 
         await execAPIWithMonitoring(monitor, 'success-criteria:init');
@@ -722,17 +713,15 @@ const FINAL_HEAP = GC_STATS[GC_STATS.length - 1].memory.heapUsed;
     
     test(
       'should maintain consistent performance across multiple runs',
-      async () 
-    return () 
-    return () => {
+      async () => {
         const RUN_TIMES = [];
 
         // Use for-await-of to maintain sequential processing for consistency measurement;
 const runDataList = [];
         for (let run = 0; run < 5; run++) {
           runDataList.push({
-            run,,,
-    templateData: JSON.stringify({
+            run,
+            templateData: JSON.stringify({
     name: `Consistency Test Template ${run}`,
               criteria: Array.from({ length: 15 }, (_, i) => ({
     id: `consist-${run}-${i}`,
@@ -814,15 +803,15 @@ const MASSIVE_TEMPLATE_DATA = JSON.stringify({
               ][i % 8],
               priority: ['critical', 'high', 'medium', 'low'][i % 4],
               tags: Array.from({ length: 10 }, (_, j) => `tag-${i}-${j}`),
-              metadata{
-    complexity: i % 5,
+              metadata: {
+                complexity: i % 5,
                 estimatedTime: i * 10,
                 dependencies: Array.from(
                   { length: i % 10 },
                   (_, k) => `dep-${k}`,
                 ),
-              }
-})),
+              },
+            })),
           });
 
           const { MEASUREMENT } = await execAPIWithMonitoring(
@@ -873,9 +862,7 @@ const REPORT = monitor.generateReport();
     
     test(
       'should provide comprehensive performance metrics',
-      async () 
-    return () 
-    return () => {
+      async () => {
         await execAPIWithMonitoring(monitor, 'success-criteria:init');
 
         // Perform various operations to gather metrics;
@@ -943,7 +930,7 @@ const REPORT_PATH = path.join(__dirname, 'performance-report.json');
       'should benchmark against system capabilities',
       async () => {
         const SYSTEM_INFO = {
-    platform: OS.platform(),
+          platform: OS.platform(),
           arch: OS.arch(),
           cpus: OS.cpus().length,
           totalMemory: OS.totalmem(),
@@ -991,9 +978,9 @@ const MEM_ARRAYS = [];
         );
 
         const BENCHMARK_RESULTS = {
-          SYSTEM_INFO,
-          CPU_BENCHMARK,,,
-    memBenchmark: MEM_BENCHMARK / 1024 / 1024, // MB
+          systemInfo: SYSTEM_INFO,
+          cpuBenchmark: CPU_BENCHMARK,
+          memBenchmark: MEM_BENCHMARK / 1024 / 1024, // MB
           successCriteriaBenchmark: measurement.duration,
           performanceRatio: measurement.duration / CPU_BENCHMARK,
           memoryEfficiency:

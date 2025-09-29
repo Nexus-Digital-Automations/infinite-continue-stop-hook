@@ -95,7 +95,7 @@ async function setupTestProject(category = 'general') {
 
     // Create basic TODO.json structure;
 const initialTodoData = {
-    meta{
+      meta: {
     created: new Date().toISOString(),
         updated: new Date().toISOString(),
         version: '2.0.0',
@@ -103,8 +103,8 @@ const initialTodoData = {
       },
       tasks: [],
       features: [],
-      agents{},
-      statistics{
+      agents: {},
+      statistics: {
     total_tasks: 0,
         completed_tasks: 0,
         pending_tasks: 0,
@@ -116,10 +116,10 @@ const initialTodoData = {
 
     // Create package.json for the test project;
 const packageJson = {
-    name: 'success-criteria-test-project',
+      name: 'success-criteria-test-project',
       version: '1.0.0',
       description: 'Test project for Success Criteria integration tests',
-      scripts{
+      scripts: {
     test: 'echo "Test script"',
         lint: 'echo "Lint script"',
         build: 'echo "Build script"',
@@ -152,9 +152,7 @@ describe('Success Criteria Integration Tests', () => {
     
   let agentId;
 
-  beforeAll(async () 
-    return () 
-    return () => {
+  beforeAll(async () => {
     await setupTestProject();
 });
 
@@ -174,9 +172,7 @@ const initResult = await execAPI('init');
     
     let taskId;
 
-    beforeEach(async () 
-    return () 
-    return () => {
+    beforeEach(async () => {
       // Create a test task for success criteria operations;
 const createResult = await execAPI('create', [
         JSON.stringify({
@@ -249,9 +245,7 @@ const _result = await execAPI('status', [agentId]);
   describe('Success Criteria Workflow Integration', () => {
     
     
-    test('should integrate success criteria with task lifecycle', async () 
-    return () 
-    return () => {
+    test('should integrate success criteria with task lifecycle', async () => {
       // Create task with criteria;
 const createResult = await execAPI('create', [
         JSON.stringify({
@@ -277,13 +271,13 @@ const claimResult = await execAPI('claim', [TASK_ID, agentId]);
 const completeResult = await execAPI('complete', [
         TASK_ID,
         JSON.stringify({
-    message: 'Task completed with all success criteria met',
-          validation_results{
+          message: 'Task completed with all success criteria met',
+          validation_results: {
     linter: 'passed',
             build: 'passed',
             runtime: 'passed',
-          }
-}),
+          },
+        }),
       ]);
       expect(completeResult.success).toBe(true);
     });
@@ -338,9 +332,7 @@ const listResult = await execAPI('list', [
   describe('Performance And Reliability', () => {
     
     
-    test('should handle concurrent success criteria operations', async () 
-    return () 
-    return () => {
+    test('should handle concurrent success criteria operations', async () => {
       // Create multiple tasks for concurrent testing;
 const createPromises = Array.from({ length: 5 }, (_, i) =>
         execAPI('create', [
@@ -421,9 +413,7 @@ const START_TIME = Date.now();
   describe('Error Handling And Edge Cases', () => {
     
     
-    test('should handle invalid success criteria gracefully', async () 
-    return () 
-    return () => {
+    test('should handle invalid success criteria gracefully', async () => {
       // Test with invalid criteria format;
 const createResult = await execAPI('create', [
         JSON.stringify({
@@ -470,13 +460,13 @@ const claimResult = await execAPI('claim', [TASK_ID, agentId]);
 const completeResult = await execAPI('complete', [
         TASK_ID,
         JSON.stringify({
-    message: 'Task completed with validation issues',
-          validation_results{
+          message: 'Task completed with validation issues',
+          validation_results: {
     linter: 'failed',
             build: 'passed',
             runtime: 'failed',
-          }
-}),
+          },
+        }),
       ]);
 
       // Should still complete but record validation issues
@@ -508,9 +498,7 @@ const listResult = await execAPI('list', [
   describe('Backward Compatibility', () => {
     
     
-    test('should maintain compatibility with existing task format', async () 
-    return () 
-    return () => {
+    test('should maintain compatibility with existing task format', async () => {
       // Test That tasks without success criteria work normally;
 const createResult = await execAPI('create', [
         JSON.stringify({
@@ -533,17 +521,20 @@ const claimResult = await execAPI('claim', [TASK_ID, agentId]);
 
     test('should handle mixed criteria formats', async () => {
       // Test tasks with different criteria formats;
-const tasks = [{
+const tasks = [
+        {
     title: 'Array criteria task',
           description: 'Task with array criteria',
           category: 'feature',
           success_criteria: ['Criterion 1', 'Criterion 2'],
-        }, {
+        },
+        {
     title: 'String criteria task',
           description: 'Task with string criteria',
           category: 'feature',
           success_criteria: 'Single criterion',
-        }, {
+        },
+        {
     title: 'No criteria task',
           description: 'Task without criteria',
           category: 'feature',
@@ -590,9 +581,7 @@ const listResult = await execAPI('list', [
   describe('Data Integrity And Validation', () => {
     
     
-    test('should maintain data integrity during criteria operations', async () 
-    return () 
-    return () => {
+    test('should maintain data integrity during criteria operations', async () => {
       // Create task And perform multiple operations;
 const createResult = await execAPI('create', [
         JSON.stringify({
