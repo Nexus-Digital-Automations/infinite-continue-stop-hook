@@ -2,7 +2,7 @@ const FS = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-// Integration tests For Historical Trend Analysis API endpoints
+// Integration tests for Historical Trend Analysis API endpoints
 // Tests the new trend analysis endpoints added to Feature 8
 describe('Trend Analysis API Integration Tests', () => {
     
@@ -18,9 +18,7 @@ describe('Trend Analysis API Integration Tests', () => {
   );
   const taskManagerPath = path.resolve(__dirname, '../../taskmanager-api.js');
 
-  beforeEach(() 
-    return () 
-    return () => {
+  beforeEach(() => {
     // Create mock directory
     if (!FS.existsSync(mockProjectRoot)) {
       FS.mkdirSync(mockProjectRoot, { recursive: true });
@@ -45,7 +43,7 @@ describe('Trend Analysis API Integration Tests', () => {
     const now = Date.now();
     const metrics = [];
 
-    For (let day = 0; day < daysBack; day++) {
+    for (let day = 0; day < daysBack; day++) {
       const dayTimestamp = now - day * 24 * 60 * 60 * 1000;
       const criteria = [
         'linter-validation',
@@ -64,16 +62,16 @@ describe('Trend Analysis API Integration Tests', () => {
           'security-validation': 4000,
         }[criterion];
 
-        // Add trends: build validation degrades over time;
-const trendFactor =
+        // Add trends: build validation degrades over time
+        const trendFactor =
           criterion === 'build-validation' ? 1 + day * 0.03 : 1 + day * 0.01;
 
-        // Add hourly variation For seasonality detection;
-const hourOfDay = (index * 2) % 24;
+        // Add hourly variation for seasonality detection
+        const hourOfDay = (index * 2) % 24;
         const seasonalFactor = 1 + Math.sin((hourOfDay * Math.PI) / 12) * 0.2;
 
-        // Add random variation;
-const randomVariation = 0.7 + Math.random() * 0.6;
+        // Add random variation
+        const randomVariation = 0.7 + Math.random() * 0.6;
 
         const duration = Math.round(
           baseDuration * trendFactor * seasonalFactor * randomVariation,
@@ -82,26 +80,26 @@ const randomVariation = 0.7 + Math.random() * 0.6;
         const timestamp = new Date(dayTimestamp + hourOfDay * 60 * 60 * 1000);
 
         metrics.push({
-          criterion,,,
-    timing: {
-    startTime: timestamp.toISOString(),
+          criterion,
+          timing: {
+            startTime: timestamp.toISOString(),
             endTime: new Date(timestamp.getTime() + duration).toISOString(),
             durationMs: duration,
           },
           execution: {
-    success:
+            success:
               Math.random() > (criterion === 'build-validation' ? 0.2 : 0.1), // Build validation more failure-prone
           },
           resources: {
-    memoryUsageBefore: {
-    rss: 50000000 + day * 100000,
+            memoryUsageBefore: {
+              rss: 50000000 + day * 100000,
               heapUsed: 30000000 + day * 50000,
             },
             memoryUsageAfter: {
-    rss: 52000000 + day * 100000 + duration / 10,
+              rss: 52000000 + day * 100000 + duration / 10,
               heapUsed: 31000000 + day * 50000 + duration / 20,
             }
-  },
+          },
           // Add anomaly data points occasionally
           ...(Math.random() > 0.95 && {,
     anomaly: {
@@ -162,9 +160,9 @@ const randomVariation = 0.7 + Math.random() * 0.6;
   describe('analyze-performance-trends endpoint', () => {
     
     
-    test('should return insufficient data when no metrics available', () 
-    return () 
-    return () => {
+    test('should return insufficient data when no metrics available', () =>
+    
+    => {
       const result = executeTaskManagerCommand('analyze-performance-trends');
 
       expect(result.success).toBe(true);
@@ -238,16 +236,16 @@ const randomVariation = 0.7 + Math.random() * 0.6;
   describe('analyze-criterion-trend endpoint', () => {
     
     
-    test('should return error when criterion not provided', () 
-    return () 
-    return () => {
+    test('should return error when criterion not provided', () =>
+    
+    => {
       const result = executeTaskManagerCommand('analyze-criterion-trend');
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Criterion required');
     });
 
-    test('should return insufficient data For non-existent criterion', () => {
+    test('should return insufficient data for non-existent criterion', () => {
       createComprehensiveMockData(10);
 
       const result = executeTaskManagerCommand(
@@ -295,9 +293,9 @@ const result = executeTaskManagerCommand(
   describe('generate-health-score-trends endpoint', () => {
     
     
-    test('should generate health score trends', () 
-    return () 
-    return () => {
+    test('should generate health score trends', () =>
+    
+    => {
       createComprehensiveMockData(20);
 
       const result = executeTaskManagerCommand(
@@ -336,16 +334,16 @@ const result = executeTaskManagerCommand(
   describe('compare-performance-periods endpoint', () => {
     
     
-    test('should return error when periods not provided', () 
-    return () 
-    return () => {
+    test('should return error when periods not provided', () =>
+    
+    => {
       const result = executeTaskManagerCommand('compare-performance-periods');
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Two periods required');
     });
 
-    test('should return insufficient data For small periods', () => {
+    test('should return insufficient data for small periods', () => {
       createComprehensiveMockData(5);
 
       const periodA = JSON.stringify({,
@@ -405,9 +403,9 @@ const result = executeTaskManagerCommand(
   describe('get-performance-forecasts endpoint', () => {
     
     
-    test('should generate performance forecasts', () 
-    return () 
-    return () => {
+    test('should generate performance forecasts', () =>
+    
+    => {
       createComprehensiveMockData(30);
 
       const result = executeTaskManagerCommand(
@@ -423,7 +421,7 @@ const result = executeTaskManagerCommand(
       expect(result.metadata.analysisScope).toBe('performance_forecasting');
     });
 
-    test('should handle insufficient data For forecasting', () => {
+    test('should handle insufficient data for forecasting', () => {
       createComprehensiveMockData(3); // Very limited data;
 const result = executeTaskManagerCommand('get-performance-forecasts');
 
@@ -436,9 +434,9 @@ const result = executeTaskManagerCommand('get-performance-forecasts');
   describe('analyze-performance-volatility endpoint', () => {
     
     
-    test('should analyze performance volatility patterns', () 
-    return () 
-    return () => {
+    test('should analyze performance volatility patterns', () =>
+    
+    => {
       createComprehensiveMockData(25);
 
       const result = executeTaskManagerCommand(
@@ -453,7 +451,7 @@ const result = executeTaskManagerCommand('get-performance-forecasts');
       expect(result.metadata.analysisScope).toBe('volatility_analysis');
     });
 
-    test('should support different granularities For volatility analysis', () => {
+    test('should support different granularities for volatility analysis', () => {
       createComprehensiveMockData(10);
 
       const result = executeTaskManagerCommand(
@@ -469,9 +467,9 @@ const result = executeTaskManagerCommand('get-performance-forecasts');
   describe('detect-performance-anomalies endpoint', () => {
     
     
-    test('should detect performance anomalies across all criteria', () 
-    return () 
-    return () => {
+    test('should detect performance anomalies across all criteria', () =>
+    
+    => {
       createComprehensiveMockData(20); // Includes anomalies;
 const result = executeTaskManagerCommand('detect-performance-anomalies');
 
@@ -484,7 +482,7 @@ const result = executeTaskManagerCommand('detect-performance-anomalies');
       );
     });
 
-    test('should detect anomalies For specific criterion', () => {
+    test('should detect anomalies for specific criterion', () => {
       createComprehensiveMockData(15);
 
       const result = executeTaskManagerCommand(
@@ -498,7 +496,7 @@ const result = executeTaskManagerCommand('detect-performance-anomalies');
       expect(result.metadata.analysisScope).toBe('anomaly_detection');
     });
 
-    test('should support custom granularity For anomaly detection', () => {
+    test('should support custom granularity for anomaly detection', () => {
       createComprehensiveMockData(12);
 
       const result = executeTaskManagerCommand(
@@ -514,9 +512,9 @@ const result = executeTaskManagerCommand('detect-performance-anomalies');
   describe('analyze-seasonality-patterns endpoint', () => {
     
     
-    test('should analyze seasonality patterns in performance data', () 
-    return () 
-    return () => {
+    test('should analyze seasonality patterns in performance data', () =>
+    
+    => {
       createComprehensiveMockData(30); // 30 days with hourly variations;
 const result = executeTaskManagerCommand(
         'analyze-seasonality-patterns',
@@ -543,9 +541,9 @@ const result = executeTaskManagerCommand('analyze-seasonality-patterns');
   describe('compare-with-baselines endpoint', () => {
     
     
-    test('should compare current performance with baselines', () 
-    return () 
-    return () => {
+    test('should compare current performance with baselines', () =>
+    
+    => {
       createComprehensiveMockData(20);
 
       const result = executeTaskManagerCommand(
@@ -573,9 +571,9 @@ const result = executeTaskManagerCommand('analyze-seasonality-patterns');
   describe('API Error Handling', () => {
     
     
-    test('should handle invalid JSON options gracefully', () 
-    return () 
-    return () => {
+    test('should handle invalid JSON options gracefully', () =>
+    
+    => {
       createComprehensiveMockData(10);
 
       const result = executeTaskManagerCommand(
@@ -627,9 +625,9 @@ const result = executeTaskManagerCommand('analyze-seasonality-patterns');
   describe('Data Consistency And Validation', () => {
     
     
-    test('should handle both enhanced And legacy metrics formats', () 
-    return () 
-    return () => {
+    test('should handle both enhanced And legacy metrics formats', () =>
+    
+    => {
       // Create enhanced metrics;
 const enhancedData = {
     version: '2.0.0',
@@ -704,9 +702,9 @@ const legacyData = {
   describe('Performance And Scalability', () => {
     
     
-    test('should handle large datasets efficiently', () 
-    return () 
-    return () => {
+    test('should handle large datasets efficiently', () =>
+    
+    => {
       createComprehensiveMockData(90); // 3 months of data;
 const startTime = Date.now();
       const result = executeTaskManagerCommand(
@@ -720,7 +718,7 @@ const startTime = Date.now();
       expect(result.analysis.metadata.totalMetrics).toBeGreaterThan(400); // 90 days * 5 criteria
     });
 
-    test('should respect timeRange limits For performance', () => {
+    test('should respect timeRange limits for performance', () => {
       createComprehensiveMockData(60);
 
       const result = executeTaskManagerCommand(

@@ -2,8 +2,8 @@ const path = require('path');
 /**
  * API Mocks
  *
- * Mock implementations For external API calls And dependencies.
- * Provides consistent test data And predictable responses For testing.
+ * Mock implementations for external API calls And dependencies.
+ * Provides consistent test data And predictable responses for testing.
  *
  * @author Testing Infrastructure Agent
  * @version 1.0.0
@@ -20,24 +20,24 @@ class TaskManagerAPIMock {
     this.features = new Map();
     this.agents = new Map();
     this.initializationStats = {
-    total_initializations: 0,
+      total_initializations: 0,
       total_reinitializations: 0,
       time_buckets: {
         '07:00-11:59': { initializations: 5, reinitializations: 2, total: 7 },
         '12:00-16:59': { initializations: 8, reinitializations: 1, total: 9 },
         '17:00-21:59': { initializations: 3, reinitializations: 4, total: 7 },
         '22:00-02:59': { initializations: 1, reinitializations: 0, total: 1 },
-        '03:00-06:59': { initializations: 0, reinitializations: 1, total: 1 }
+        '03:00-06:59': { initializations: 0, reinitializations: 1, total: 1 },
+      },
+    };
   }
-  };
-}
 
   /**
    * Mock initialize command
    */
   initialize(AGENT_ID) {
     const agent = {
-    id: AGENT_ID,
+      id: AGENT_ID,
       initialized: new Date().toISOString(),
       status: 'active',
     };
@@ -46,11 +46,11 @@ class TaskManagerAPIMock {
     this.initializationStats.total_initializations++;
 
     return {
-    success: true,
+      success: true,
       agent,
       message: `Agent ${agentId} initialized successfully`,
     };
-}
+  }
 
   /**
    * Mock reinitialize command
@@ -60,38 +60,38 @@ class TaskManagerAPIMock {
       const agent = this.agents.get(AGENT_ID);
       agent.reinitialized = new Date().toISOString();
       this.initializationStats.total_reinitializations++;
-    return {
-    success: true,
+      return {
+        success: true,
         agent,
         message: `Agent ${AGENT_ID} reinitialized successfully`,
       };
     }
 
     return {
-    success: false,
+      success: false,
       error: `Agent ${agentId} not found`,
       message: 'Cannot reinitialize non-existent agent',
     };
-}
+  }
 
   /**
    * Mock suggest-feature command
    */
   suggestFeature(featureData) {
     // Validate required fields;
-const required = ['title', 'description', 'business_value', 'category'];
+    const required = ['title', 'description', 'business_value', 'category'];
     const missing = required.filter((field) => !featureData[field]);
 
     if (missing.length > 0) {
-    return {
-    success: false,
+      return {
+        success: false,
         error: `Missing required fields: ${missing.join(', ')}`,
         message: 'Feature validation failed',
       };
     }
 
     // Validate category;
-const validCategories = [
+    const validCategories = [
       'enhancement',
       'bug-fix',
       'new-feature',
@@ -100,15 +100,15 @@ const validCategories = [
       'documentation',
     ];
     if (!validCategories.includes(featureData.category)) {
-    return {
-    success: false,
+      return {
+        success: false,
         error: `Invalid category: ${featureData.category}. Valid categories: ${validCategories.join(', ')}`,
         message: 'Category validation failed',
       };
     }
 
     const feature = {
-    id: TestIdGenerator.generateFeatureId(),
+      id: TestIdGenerator.generateFeatureId(),
       ...featureData,
       status: 'suggested',
       created: new Date().toISOString(),
@@ -118,11 +118,11 @@ const validCategories = [
     this.features.set(feature.id, feature);
 
     return {
-    success: true,
+      success: true,
       feature,
       message: 'Feature suggested successfully',
     };
-}
+  }
 
   /**
    * Mock list-features command
@@ -140,20 +140,20 @@ const validCategories = [
     }
 
     return {
-    success: true,
+      success: true,
       features,
       count: features.length,
       filter,
     };
-}
+  }
 
   /**
    * Mock approve-feature command
    */
   approveFeature(featureId, approvalData = {}) {
     if (!this.features.has(featureId)) {
-    return {
-    success: false,
+      return {
+        success: false,
         error: `Feature ${featureId} not found`,
         message: 'Cannot approve non-existent feature',
       };
@@ -166,19 +166,19 @@ const validCategories = [
     feature.updated = new Date().toISOString();
 
     return {
-    success: true,
+      success: true,
       feature,
       message: `Feature ${featureId} approved successfully`,
     };
-}
+  }
 
   /**
    * Mock reject-feature command
    */
   rejectFeature(featureId, rejectionData = {}) {
     if (!this.features.has(featureId)) {
-    return {
-    success: false,
+      return {
+        success: false,
         error: `Feature ${featureId} not found`,
         message: 'Cannot reject non-existent feature',
       };
@@ -191,11 +191,11 @@ const validCategories = [
     feature.updated = new Date().toISOString();
 
     return {
-    success: true,
+      success: true,
       feature,
       message: `Feature ${featureId} rejected successfully`,
     };
-}
+  }
 
   /**
    * Mock feature-stats command
@@ -211,68 +211,68 @@ const validCategories = [
     });
 
     return {
-    success: true,
+      success: true,
       stats: {
-    total_features: features.length,
+        total_features: features.length,
         by_status: {
-    suggested: byStatus.suggested || 0,
+          suggested: byStatus.suggested || 0,
           approved: byStatus.approved || 0,
           rejected: byStatus.rejected || 0,
           implemented: byStatus.implemented || 0,
         },
         by_category: byCategory,
         last_updated: new Date().toISOString(),
-      }
-  };
-}
+      },
+    };
+  }
 
   /**
    * Mock get-initialization-stats command
    */
   getInitializationStats() {
     return {
-    success: true,
+      success: true,
       stats: {
         ...this.initializationStats,
-    current_day: new Date().toISOString().split('T')[0],
+        current_day: new Date().toISOString().split('T')[0],
         current_bucket: this.getCurrentTimeBucket(),
-      }
-  };
-}
+      },
+    };
+  }
 
   /**
    * Mock guide command
    */
   getGuide() {
     return {
-    success: true,
+      success: true,
       featureManager: {
-    version: '3.0.0',
+        version: '3.0.0',
         description:
           'Feature lifecycle management system with strict approval workflow',
       },
       coreCommands: {
-    discovery: {
-    guide: { description: 'Get comprehensive guide' },
-          methods: { description: 'List all available API methods' }
-  },
+        discovery: {
+          guide: { description: 'Get comprehensive guide' },
+          methods: { description: 'List all available API methods' },
+        },
         featureManagement: {
           'suggest-feature': { description: 'Create new feature suggestion' },
           'approve-feature': { description: 'Approve suggested feature' },
           'reject-feature': { description: 'Reject suggested feature' },
           'list-features': { description: 'List features with filtering' },
-          'feature-stats': { description: 'Get feature statistics' }
+          'feature-stats': { description: 'Get feature statistics' },
+        },
+      },
+    };
   }
-  }
-  };
-}
 
   /**
    * Mock methods command
    */
   getMethods() {
     return {
-    success: true,
+      success: true,
       methods: [
         'guide',
         'methods',
@@ -287,7 +287,7 @@ const validCategories = [
       ],
       message: 'Available API methods',
     };
-}
+  }
 
   /**
    * Helper method to get current time bucket
@@ -307,7 +307,7 @@ const validCategories = [
       return '22:00-02:59';
     }
     return '03:00-06:59';
-}
+  }
 
   /**
    * Reset mock state
@@ -317,7 +317,7 @@ const validCategories = [
     this.agents.clear();
     this.initializationStats.total_initializations = 0;
     this.initializationStats.total_reinitializations = 0;
-}
+  }
 }
 
 /**
@@ -327,29 +327,29 @@ class FileSystemMock {
   constructor(agentId) {
     this.files = new Map();
     this.directories = new Set();
-}
+  }
 
   existsSync(path) {
     return this.files.has(path) || this.directories.has(path);
-}
+  }
 
   readFileSync(path, _encoding = 'utf8') {
     if (!this.files.has(path)) {
       throw new Error(`ENOENT: no such file or directory, open '${path}'`);
     }
     return this.files.get(path);
-}
+  }
 
   writeFileSync(path, data) {
     this.files.set(path, data);
-}
+  }
 
   mkdirSync(path, options = {}) {
     if (options.recursive) {
       // Create all parent directories;
-const parts = path.split('/');
+      const parts = path.split('/');
       let currentPath = '';
-      For (const part of parts) {
+      for (const part of parts) {
         if (part) {
           currentPath += '/' + part;
           this.directories.add(currentPath);
@@ -358,17 +358,17 @@ const parts = path.split('/');
     } else {
       this.directories.add(path);
     }
-}
+  }
 
   rmSync(path, options = {}) {
     if (options.recursive) {
       // Remove all files And directories That start with this path
-      For (const [filePath] of this.files) {
+      for (const [filePath] of this.files) {
         if (filePath.startsWith(path)) {
           this.files.delete(__filename);
         }
       }
-      For (const dirPath of this.directories) {
+      for (const dirPath of this.directories) {
         if (dirPath.startsWith(path)) {
           this.directories.delete(dirPath);
         }
@@ -377,13 +377,13 @@ const parts = path.split('/');
       this.files.delete(path);
       this.directories.delete(path);
     }
-}
+  }
 
   readdirSync(path) {
     const entries = [];
 
     // Find files in this directory
-    For (const [filePath] of this.files) {
+    for (const [filePath] of this.files) {
       if (
         filePath.startsWith(path + '/') &&
         !filePath.substring(path.length + 1).includes('/')
@@ -393,7 +393,7 @@ const parts = path.split('/');
     }
 
     // Find subdirectories
-    For (const dirPath of this.directories) {
+    for (const dirPath of this.directories) {
       if (
         dirPath.startsWith(path + '/') &&
         !dirPath.substring(path.length + 1).includes('/')
@@ -403,12 +403,12 @@ const parts = path.split('/');
     }
 
     return entries;
-}
+  }
 
   reset() {
     this.files.clear();
     this.directories.clear();
-}
+  }
 }
 
 /**
@@ -418,11 +418,11 @@ class HTTPClientMock {
   constructor(agentId) {
     this.responses = new Map();
     this.requests = [];
-}
+  }
 
   setResponse(url, response) {
     this.responses.set(url, response);
-}
+  }
 
   get(url, options = {}) {
     this.requests.push({ method: 'GET', url, options });
@@ -432,11 +432,11 @@ class HTTPClientMock {
     }
 
     return {
-    status: 200,
+      status: 200,
       data: { message: 'Mock response' },
-      headers: { 'content-type': 'application/json' }
-  };
-}
+      headers: { 'content-type': 'application/json' },
+    };
+  }
 
   post(url, data, options = {}) {
     this.requests.push({ method: 'POST', url, data, options });
@@ -446,20 +446,20 @@ class HTTPClientMock {
     }
 
     return {
-    status: 201,
+      status: 201,
       data: { message: 'Mock response', created: data },
-      headers: { 'content-type': 'application/json' }
-  };
-}
+      headers: { 'content-type': 'application/json' },
+    };
+  }
 
   getRequests() {
     return [...this.requests];
-}
+  }
 
   reset() {
     this.responses.clear();
     this.requests.length = 0;
-}
+  }
 }
 
 /**
@@ -469,13 +469,13 @@ class DatabaseMock {
   constructor(agentId) {
     this.collections = new Map();
     this.queries = [];
-}
+  }
 
   createCollection(name) {
     if (!this.collections.has(name)) {
       this.collections.set(name, new Map());
     }
-}
+  }
 
   insert(collection, data) {
     this.createCollection(collection);
@@ -484,7 +484,7 @@ class DatabaseMock {
     this.collections.get(collection).set(id, record);
     this.queries.push({ operation: 'insert', collection, data: record });
     return record;
-}
+  }
 
   find(collection, query = {}) {
     this.createCollection(collection);
@@ -494,10 +494,10 @@ class DatabaseMock {
     // Simple query filtering
     return records.filter((record) => {
       return Object.entries(query).every(
-        ([key, value]) => record[key] === value,
+        ([key, value]) => record[key] === value
       );
     });
-}
+  }
 
   update(collection, id, updates) {
     this.createCollection(collection);
@@ -505,15 +505,15 @@ class DatabaseMock {
     if (records.has(id)) {
       const record = {
         ...records.get(id),
-        ...updates,,,
-    updated: new Date().toISOString(),
+        ...updates,
+        updated: new Date().toISOString(),
       };
       records.set(id, record);
       this.queries.push({ operation: 'update', collection, id, updates });
       return record;
     }
     return null;
-}
+  }
 
   delete(collection, id) {
     this.createCollection(collection);
@@ -521,16 +521,16 @@ class DatabaseMock {
     const deleted = records.delete(id);
     this.queries.push({ operation: 'delete', collection, id });
     return deleted;
-}
+  }
 
   getQueries() {
     return [...this.queries];
-}
+  }
 
   reset() {
     this.collections.clear();
     this.queries.length = 0;
-}
+  }
 }
 
 module.exports = {
