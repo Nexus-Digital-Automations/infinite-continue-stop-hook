@@ -21,7 +21,7 @@ const FS = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
 
-// Test configuration
+// Test configuration;
 const TEST_PROJECT_DIR = path.join(__dirname, 'test-api-project');
 const TODO_PATH = path.join(TEST_PROJECT_DIR, 'TODO.json');
 const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
@@ -46,9 +46,8 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
 
     const child = spawn(
       'timeout',
-      [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs],
-      {
-        cwd: __dirname,
+      [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs], {
+    cwd: __dirname,
         stdio: ['pipe', 'pipe', 'pipe'],
       }
     );
@@ -66,24 +65,24 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
 
     child.on('close', (code) => {
       try {
-        // Handle cases where validation messages are printed before JSON
-        let jsonString = stdout.trim();
+        // Handle cases where validation messages are printed before JSON;
+let jsonString = stdout.trim();
 
-        // Look for JSON object starting with { after any prefix text
-        const jsonStart = jsonString.indexOf('{');
+        // Look for JSON object starting with{ after any prefix text;
+const jsonStart = jsonString.indexOf('{');
         if (jsonStart > 0) {
           jsonString = jsonString.substring(jsonStart);
         }
 
-        // Try to parse JSON response
-        const result = JSON.parse(jsonString);
+        // Try to parse JSON response;
+const result = JSON.parse(jsonString);
         resolve(result);
-      } catch (_) {
+      } catch (_1) {
         // If JSON parsing fails, check if we can extract JSON from stderr
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch (_) {
+        } catch (_1) {
           // If both fail, include raw output for debugging
           reject(
             new Error(
@@ -97,7 +96,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
     child.on('error', (error) => {
       reject(new Error(`Command execution failed: ${error.message}`));
     });
-  });
+});
 }
 
 /**
@@ -107,7 +106,7 @@ function createTestTodoFile(category = 'general') {
   const todoData = {
     project: 'test-taskmanager-api',
     tasks: [],
-    agents: {},
+    agents{},
     features: [],
     current_mode: 'DEVELOPMENT',
     last_mode: null,
@@ -115,10 +114,10 @@ function createTestTodoFile(category = 'general') {
     review_strikes: 0,
     strikes_completed_last_run: false,
     last_hook_activation: Date.now(),
-    settings: {
-      version: '2.0.0',
+    settings{
+    version: '2.0.0',
       created: new Date().toISOString(),
-    },
+    }
   };
 
   FS.writeFileSync(TODO_PATH, JSON.stringify(todoData, null, 2));
@@ -132,7 +131,7 @@ function setupTestEnvironment(category = 'general') {
   // Create test project directory
   if (!FS.existsSync(TEST_PROJECT_DIR)) {
     FS.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
-  }
+}
 
   // Create clean TODO.json
   createTestTodoFile();
@@ -145,28 +144,32 @@ async function cleanupTestEnvironment(agentId, category = 'general') {
   // Remove test project directory And all contents
   if (FS.existsSync(TEST_PROJECT_DIR)) {
     FS.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
-  }
+}
 }
 
 describe('TaskManager API Comprehensive Test Suite', () => {
+    
   let testAgentId = null;
   let testTaskId = null;
   let testFeatureId = null;
 
-  beforeEach(() => {
+  beforeEach(() 
+    return () => {
     setupTestEnvironment();
-  });
+});
 
   afterEach(() => {
     cleanupTestEnvironment();
-  });
+});
 
   // ========================================
   // DISCOVERY AND DOCUMENTATION TESTS
   // ========================================
 
   describe('API Discovery', () => {
-    test('should return comprehensive guide', async () => {
+    
+    test('should return comprehensive guide', async () 
+    return () => {
       const result = await execAPI('guide');
 
       expect(result.success).toBe(true);
@@ -176,8 +179,8 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       expect(result.workflows).toBeDefined();
       expect(result.examples).toBeDefined();
 
-      // Verify task classification structure
-      const taskTypes = result.taskClassification.types;
+      // Verify task classification structure;
+const taskTypes = result.taskClassification.types;
       expect(taskTypes).toHaveLength(4);
       expect(taskTypes.map((t) => t.value)).toEqual([
         'error',
@@ -209,14 +212,16 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       expect(result.taskManagerMethods.methods).toContain('readTodo');
       expect(result.taskManagerMethods.methods).toContain('writeTodo');
     });
-  });
+});
 
   // ========================================
   // AGENT LIFECYCLE TESTS
   // ========================================
 
   describe('Agent Lifecycle Management', () => {
-    test('should initialize agent with default configuration', async () => {
+    
+    test('should initialize agent with default configuration', async () 
+    return () => {
       const result = await execAPI('init');
 
       expect(result.success).toBe(true);
@@ -230,10 +235,10 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
     test('should initialize agent with custom configuration', async () => {
       const config = {
-        role: 'testing',
+    role: 'testing',
         specialization: ['unit-tests', 'integration-tests'],
-        metadata: { environment: 'ci' },
-      };
+        metadata{ environment: 'ci' }
+  };
 
       const result = await execAPI('init', [JSON.stringify(config)]);
 
@@ -250,12 +255,12 @@ describe('TaskManager API Comprehensive Test Suite', () => {
     });
 
     test('should get agent status after initialization', async () => {
-      // First initialize an agent
-      const initResult = await execAPI('init');
+      // First initialize an agent;
+const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
 
-      // Get agent status
-      const result = await execAPI('status', [testAgentId]);
+      // Get agent status;
+const result = await execAPI('status', [testAgentId]);
 
       expect(result.success).toBe(true);
       expect(result.agent).toBeDefined();
@@ -266,14 +271,14 @@ describe('TaskManager API Comprehensive Test Suite', () => {
     });
 
     test('should reinitialize agent with updated configuration', async () => {
-      // First initialize an agent
-      const initResult = await execAPI('init');
+      // First initialize an agent;
+const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
 
-      // Reinitialize with updated config
-      const updateConfig = {
-        metadata: { updated: true, timestamp: new Date().toISOString() },
-      };
+      // Reinitialize with updated config;
+const updateConfig = {
+    metadata{ updated: true, timestamp: new Date().toISOString() }
+  };
 
       const result = await execAPI('reinitialize', [
         testAgentId,
@@ -294,22 +299,24 @@ describe('TaskManager API Comprehensive Test Suite', () => {
         'No agent ID provided And no agent initialized'
       );
     });
-  });
+});
 
   // ========================================
   // TASK CREATION TESTS
   // ========================================
 
   describe('Task Creation', () => {
-    beforeEach(async () => {
-      // Initialize agent for task operations
-      const initResult = await execAPI('init');
+    
+    beforeEach(async () 
+    return () => {
+      // Initialize agent for task operations;
+const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
     });
 
     test('should create error task with highest priority', async () => {
       const taskData = {
-        title: 'Fix critical ESLint violations',
+    title: 'Fix critical ESLint violations',
         description: 'Resolve linting errors in authentication module',
         task_type: 'error',
         priority: 'critical',
@@ -329,7 +336,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
     test('should create feature task', async () => {
       const taskData = {
-        title: 'Add user authentication system',
+    title: 'Add user authentication system',
         description: 'Implement OAuth 2.0 authentication with JWT tokens',
         task_type: 'feature',
         priority: 'high',
@@ -347,7 +354,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
     test('should create subtask', async () => {
       const taskData = {
-        title: 'Implement login form component',
+    title: 'Implement login form component',
         description: 'Create React component for user login form',
         task_type: 'subtask',
         priority: 'medium',
@@ -365,7 +372,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
     test('should create test task', async () => {
       const taskData = {
-        title: 'Add unit tests for UserService',
+    title: 'Add unit tests for UserService',
         description: 'Comprehensive unit test coverage for user management',
         task_type: 'test',
         priority: 'medium',
@@ -383,7 +390,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
     test('should reject task creation without required task_type', async () => {
       const taskData = {
-        title: 'Task without task_type',
+    title: 'Task without task_type',
         description: 'This should fail validation',
         priority: 'medium',
       };
@@ -396,7 +403,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
     test('should create error task with absolute priority', async () => {
       const taskData = {
-        title: 'Critical system failure',
+    title: 'Critical system failure',
         description:
           'System is completely broken And needs immediate attention',
         task_type: 'error',
@@ -411,21 +418,23 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       expect(result.task.priority).toBe('critical');
       expect(result.message).toContain('absolute priority');
     });
-  });
+});
 
   // ========================================
   // TASK CLAIMING TESTS
   // ========================================
 
   describe('Task Claiming', () => {
-    beforeEach(async () => {
-      // Initialize agent for task operations
-      const initResult = await execAPI('init');
+    
+    beforeEach(async () 
+    return () => {
+      // Initialize agent for task operations;
+const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
 
-      // Create a test task
-      const taskData = {
-        title: 'Test task for claiming',
+      // Create a test task;
+const taskData = {
+    title: 'Test task for claiming',
         description: 'Task to test claiming functionality',
         task_type: 'feature',
         priority: 'medium',
@@ -448,21 +457,21 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       // First claim
       await execAPI('claim', [testTaskId, testAgentId]);
 
-      // Initialize another agent
-      const secondInitResult = await execAPI('init');
+      // Initialize another agent;
+const secondInitResult = await execAPI('init');
       const secondAgentId = secondInitResult.agentId;
 
-      // Try to claim the same task
-      const result = await execAPI('claim', [testTaskId, secondAgentId]);
+      // Try to claim the same task;
+const result = await execAPI('claim', [testTaskId, secondAgentId]);
 
       expect(result.success).toBe(false);
       expect(result.reason).toContain('not available for claiming');
     });
 
     test('should handle claiming with dependency validation', async () => {
-      // Create dependency task
-      const depTaskData = {
-        title: 'Dependency task',
+      // Create dependency task;
+const depTaskData = {
+    title: 'Dependency task',
         description: 'Task That must be completed first',
         task_type: 'feature',
         priority: 'high',
@@ -470,9 +479,9 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       const depResult = await execAPI('create', [JSON.stringify(depTaskData)]);
       const depTaskId = depResult.taskId;
 
-      // Create task with dependency
-      const taskData = {
-        title: 'Task with dependency',
+      // Create task with dependency;
+const taskData = {
+    title: 'Task with dependency',
         description: 'Task That depends on another task',
         task_type: 'feature',
         dependencies: [depTaskId],
@@ -480,8 +489,8 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       const createResult = await execAPI('create', [JSON.stringify(taskData)]);
       const mainTaskId = createResult.taskId;
 
-      // Try to claim task with incomplete dependency
-      const result = await execAPI('claim', [mainTaskId, testAgentId]);
+      // Try to claim task with incomplete dependency;
+const result = await execAPI('claim', [mainTaskId, testAgentId]);
 
       expect(result.success).toBe(false);
       expect(result.blockedByDependencies).toBe(true);
@@ -493,28 +502,30 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       // Claim a task
       await execAPI('claim', [testTaskId, testAgentId]);
 
-      // Get current task
-      const result = await execAPI('current', [testAgentId]);
+      // Get current task;
+const result = await execAPI('current', [testAgentId]);
 
       expect(result.success).toBe(true);
       expect(result.task).toBeDefined();
       expect(result.task.id).toBe(testTaskId);
       expect(result.hasTask).toBe(true);
     });
-  });
+});
 
   // ========================================
   // TASK COMPLETION TESTS
   // ========================================
 
   describe('Task Completion', () => {
-    beforeEach(async () => {
-      // Initialize agent And create/claim a task
-      const initResult = await execAPI('init');
+    
+    beforeEach(async () 
+    return () => {
+      // Initialize agent And create/claim a task;
+const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
 
       const taskData = {
-        title: 'Test completion task',
+    title: 'Test completion task',
         description: 'Task to test completion functionality',
         task_type: 'feature',
         priority: 'medium',
@@ -528,7 +539,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
     test('should complete task successfully', async () => {
       const completionData = {
-        notes: 'Task completed successfully with all requirements met',
+    notes: 'Task completed successfully with all requirements met',
         evidence: 'All tests passing, linting clean',
       };
 
@@ -543,9 +554,9 @@ describe('TaskManager API Comprehensive Test Suite', () => {
     });
 
     test('should include documentation instructions for feature completion', async () => {
-      // Create a feature task specifically
-      const featureTaskData = {
-        title: 'Feature requiring documentation',
+      // Create a feature task specifically;
+const featureTaskData = {
+    title: 'Feature requiring documentation',
         description: 'Feature That should trigger documentation requirements',
         task_type: 'feature',
         priority: 'high',
@@ -574,45 +585,43 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       expect(result.taskId).toBe(testTaskId);
       expect(result.message).toBeDefined();
     });
-  });
+});
 
   // ========================================
   // TASK LISTING AND FILTERING TESTS
   // ========================================
 
   describe('Task Listing And Filtering', () => {
-    beforeEach(async () => {
-      // Initialize agent
-      const initResult = await execAPI('init');
+    
+    beforeEach(async () 
+    return () => {
+      // Initialize agent;
+const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
 
-      // Create multiple tasks with different properties
-      const tasks = [
-        {
-          title: 'Error task',
+      // Create multiple tasks with different properties;
+const tasks = [{
+    title: 'Error task',
           task_type: 'error',
           priority: 'critical',
           category: 'linter-error',
-        },
-        {
-          title: 'Feature task',
+        }, {
+    title: 'Feature task',
           task_type: 'feature',
           priority: 'high',
           category: 'authentication',
-        },
-        {
-          title: 'Test task',
+        }, {
+    title: 'Test task',
           task_type: 'test',
           priority: 'medium',
           category: 'test-coverage',
-        },
-        {
-          title: 'Subtask task',
+        }, {
+    title: 'Subtask task',
           task_type: 'subtask',
           priority: 'low',
           category: 'ui-component',
-        },
-      ];
+        }
+  ];
 
       await Promise.all(
         tasks.map((taskData) => execAPI('create', [JSON.stringify(taskData)]))
@@ -672,23 +681,25 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       expect(result.tasks).toHaveLength(1);
       expect(result.tasks[0].title).toBe('Feature task');
     });
-  });
+});
 
   // ========================================
   // TASK REORDERING TESTS
   // ========================================
 
   describe('Task Reordering', () => {
-    beforeEach(async () => {
-      // Initialize agent And create multiple tasks
-      const initResult = await execAPI('init');
+    
+    beforeEach(async () 
+    return () => {
+      // Initialize agent And create multiple tasks;
+const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
 
       const tasks = [
         { title: 'First task', task_type: 'feature', priority: 'medium' },
         { title: 'Second task', task_type: 'feature', priority: 'low' },
-        { title: 'Third task', task_type: 'feature', priority: 'high' },
-      ];
+        { title: 'Third task', task_type: 'feature', priority: 'high' }
+  ];
 
       const createResults = await Promise.all(
         tasks.map((taskData) => execAPI('create', [JSON.stringify(taskData)]))
@@ -709,8 +720,8 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       expect(result.moved).toBe(true);
       expect(result.taskId).toBe(testTaskId);
 
-      // Verify task is now at top
-      const listResult = await execAPI('list');
+      // Verify task is now at top;
+const listResult = await execAPI('list');
       expect(listResult.tasks[0].id).toBe(testTaskId);
     });
 
@@ -737,27 +748,29 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       expect(result.moved).toBe(true);
       expect(result.taskId).toBe(testTaskId);
 
-      // Verify task is now at bottom
-      const listResult = await execAPI('list');
+      // Verify task is now at bottom;
+const listResult = await execAPI('list');
       const lastTask = listResult.tasks[listResult.tasks.length - 1];
       expect(lastTask.id).toBe(testTaskId);
     });
-  });
+});
 
   // ========================================
   // FEATURE MANAGEMENT TESTS
   // ========================================
 
   describe('Feature Management', () => {
-    beforeEach(async () => {
-      // Initialize agent
-      const initResult = await execAPI('init');
+    
+    beforeEach(async () 
+    return () => {
+      // Initialize agent;
+const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
     });
 
     test('should suggest new feature', async () => {
       const featureData = {
-        title: 'Add dark mode support',
+    title: 'Add dark mode support',
         description: 'Implement dark theme toggle for better user experience',
         rationale: 'Many users prefer dark themes for reduced eye strain',
         category: 'ui',
@@ -779,9 +792,9 @@ describe('TaskManager API Comprehensive Test Suite', () => {
     });
 
     test('should list suggested features', async () => {
-      // First suggest a feature
-      const featureData = {
-        title: 'Test suggested feature',
+      // First suggest a feature;
+const featureData = {
+    title: 'Test suggested feature',
         description: 'Feature for testing listing',
         rationale: 'Testing purposes',
         category: 'test',
@@ -791,8 +804,8 @@ describe('TaskManager API Comprehensive Test Suite', () => {
         testAgentId,
       ]);
 
-      // List suggested features
-      const result = await execAPI('list-suggested-features');
+      // List suggested features;
+const result = await execAPI('list-suggested-features');
 
       expect(result.success).toBe(true);
       expect(result.suggested_features).toHaveLength(1);
@@ -801,9 +814,9 @@ describe('TaskManager API Comprehensive Test Suite', () => {
     });
 
     test('should approve suggested feature', async () => {
-      // First suggest a feature
-      const featureData = {
-        title: 'Feature to approve',
+      // First suggest a feature;
+const featureData = {
+    title: 'Feature to approve',
         description: 'Feature for approval testing',
         rationale: 'Testing feature approval workflow',
         category: 'test',
@@ -814,8 +827,8 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       ]);
       testFeatureId = suggestResult.featureId;
 
-      // Approve the feature
-      const result = await execAPI('approve-feature', [
+      // Approve the feature;
+const result = await execAPI('approve-feature', [
         testFeatureId,
         'test-user',
       ]);
@@ -827,9 +840,9 @@ describe('TaskManager API Comprehensive Test Suite', () => {
     });
 
     test('should reject suggested feature', async () => {
-      // First suggest a feature
-      const featureData = {
-        title: 'Feature to reject',
+      // First suggest a feature;
+const featureData = {
+    title: 'Feature to reject',
         description: 'Feature for rejection testing',
         rationale: 'Testing feature rejection workflow',
         category: 'test',
@@ -840,8 +853,8 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       ]);
       testFeatureId = suggestResult.featureId;
 
-      // Reject the feature
-      const reason = 'Not aligned with project goals';
+      // Reject the feature;
+const reason = 'Not aligned with project goals';
       const result = await execAPI('reject-feature', [
         testFeatureId,
         'test-user',
@@ -855,9 +868,9 @@ describe('TaskManager API Comprehensive Test Suite', () => {
     });
 
     test('should list all features with filters', async () => {
-      // Suggest And approve a feature
-      const featureData = {
-        title: 'Approved feature',
+      // Suggest And approve a feature;
+const featureData = {
+    title: 'Approved feature',
         description: 'Feature for listing test',
         rationale: 'Testing feature listing',
         category: 'enhancement',
@@ -869,15 +882,15 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       ]);
       await execAPI('approve-feature', [suggestResult.featureId, 'test-user']);
 
-      // List all features
-      const result = await execAPI('list-features');
+      // List all features;
+const result = await execAPI('list-features');
 
       expect(result.success).toBe(true);
       expect(result.features.length).toBeGreaterThan(0);
       expect(result.count).toBeGreaterThan(0);
 
-      // Filter by status
-      const approvedResult = await execAPI('list-features', [
+      // Filter by status;
+const approvedResult = await execAPI('list-features', [
         JSON.stringify({ status: 'approved' }),
       ]);
       expect(approvedResult.success).toBe(true);
@@ -887,11 +900,11 @@ describe('TaskManager API Comprehensive Test Suite', () => {
     });
 
     test('should get feature statistics', async () => {
-      // Create some features in different states
-      const features = [
+      // Create some features in different states;
+const features = [
         { title: 'Suggested feature', status: 'suggested' },
-        { title: 'Another suggested feature', status: 'suggested' },
-      ];
+        { title: 'Another suggested feature', status: 'suggested' }
+  ];
 
       await Promise.all(
         features.map((featureData) =>
@@ -907,20 +920,22 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       expect(result.feature_statistics.by_status).toBeDefined();
       expect(result.feature_statistics.awaiting_approval).toBeGreaterThan(0);
     });
-  });
+});
 
   // ========================================
   // TASK DELETION TESTS
   // ========================================
 
   describe('Task Deletion', () => {
-    beforeEach(async () => {
-      // Initialize agent And create test task
-      const initResult = await execAPI('init');
+    
+    beforeEach(async () 
+    return () => {
+      // Initialize agent And create test task;
+const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
 
       const taskData = {
-        title: 'Task to delete',
+    title: 'Task to delete',
         description: 'Task for deletion testing',
         task_type: 'test',
         priority: 'low',
@@ -936,8 +951,8 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       expect(result.taskId).toBe(testTaskId);
       expect(result.deletedTask.id).toBe(testTaskId);
 
-      // Verify task is no longer in the list
-      const listResult = await execAPI('list');
+      // Verify task is no longer in the list;
+const listResult = await execAPI('list');
       const deletedTask = listResult.tasks.find((t) => t.id === testTaskId);
       expect(deletedTask).toBeUndefined();
     });
@@ -949,23 +964,25 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       expect(result.success).toBe(false);
       expect(result.error).toContain('Task not found');
     });
-  });
+});
 
   // ========================================
   // STATISTICS AND MONITORING TESTS
   // ========================================
 
   describe('Statistics And Monitoring', () => {
-    beforeEach(async () => {
-      // Initialize agent And create some tasks
-      const initResult = await execAPI('init');
+    
+    beforeEach(async () 
+    return () => {
+      // Initialize agent And create some tasks;
+const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
 
-      // Create And claim some tasks for statistics
-      const tasks = [
+      // Create And claim some tasks for statistics;
+const tasks = [
         { title: 'Active task 1', task_type: 'feature', priority: 'high' },
-        { title: 'Active task 2', task_type: 'error', priority: 'critical' },
-      ];
+        { title: 'Active task 2', task_type: 'error', priority: 'critical' }
+  ];
 
       const createResults = await Promise.all(
         tasks.map((taskData) => execAPI('create', [JSON.stringify(taskData)]))
@@ -984,23 +1001,25 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       expect(result.success).toBe(true);
       expect(result.statistics).toBeDefined();
 
-      // Verify statistics structure
-      const stats = result.statistics;
+      // Verify statistics structure;
+const stats = result.statistics;
       expect(stats.agents).toBeDefined();
       expect(stats.tasks).toBeDefined();
       expect(stats.performance).toBeDefined();
     });
-  });
+});
 
   // ========================================
   // ERROR HANDLING AND EDGE CASES
   // ========================================
 
   describe('Error Handling And Edge Cases', () => {
-    test('should handle invalid command gracefully', async () => {
+    
+    test('should handle invalid command gracefully', async () 
+    return () => {
       try {
         await execAPI('invalid-command');
-      } catch (_) {
+      } catch (_error) {
         expect(_error.message).toContain('Command failed');
       }
     });
@@ -1016,9 +1035,9 @@ describe('TaskManager API Comprehensive Test Suite', () => {
     });
 
     test('should handle operations without agent initialization', async () => {
-      // Try to claim task without initializing agent
-      const taskData = {
-        title: 'Test task',
+      // Try to claim task without initializing agent;
+const taskData = {
+    title: 'Test task',
         description: 'Task for testing error handling',
         task_type: 'feature',
       };
@@ -1033,8 +1052,8 @@ describe('TaskManager API Comprehensive Test Suite', () => {
     });
 
     test('should handle missing required parameters', async () => {
-      // Try to claim task without task ID
-      const result = await execAPI('claim');
+      // Try to claim task without task ID;
+const result = await execAPI('claim');
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Task ID required');
@@ -1045,26 +1064,28 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       // by using a very short timeout
       try {
         await execAPI('guide', [], 100); // 100ms timeout
-      } catch (_) {
+      } catch (_error) {
         expect(_error.message).toContain('Command failed');
       }
     }, 10000);
-  });
+});
 
   // ========================================
   // INTEGRATION WORKFLOW TESTS
   // ========================================
 
   describe('Complete Workflow Integration', () => {
-    test('should complete full task lifecycle', async () => {
-      // 1. Initialize agent
-      const initResult = await execAPI('init');
+    
+    test('should complete full task lifecycle', async () 
+    return () => {
+      // 1. Initialize agent;
+const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
       expect(initResult.success).toBe(true);
 
-      // 2. Create task
-      const taskData = {
-        title: 'Complete workflow test',
+      // 2. Create task;
+const taskData = {
+    title: 'Complete workflow test',
         description: 'Task to test complete workflow',
         task_type: 'feature',
         priority: 'high',
@@ -1074,24 +1095,24 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       testTaskId = createResult.taskId;
       expect(createResult.success).toBe(true);
 
-      // 3. List tasks And verify creation
-      const listResult = await execAPI('list');
+      // 3. List tasks And verify creation;
+const listResult = await execAPI('list');
       expect(listResult.success).toBe(true);
       expect(listResult.tasks.some((t) => t.id === testTaskId)).toBe(true);
 
-      // 4. Claim task
-      const claimResult = await execAPI('claim', [testTaskId, testAgentId]);
+      // 4. Claim task;
+const claimResult = await execAPI('claim', [testTaskId, testAgentId]);
       expect(claimResult.success).toBe(true);
       expect(claimResult.task.status).toBe('in_progress');
 
-      // 5. Get current task
-      const currentResult = await execAPI('current', [testAgentId]);
+      // 5. Get current task;
+const currentResult = await execAPI('current', [testAgentId]);
       expect(currentResult.success).toBe(true);
       expect(currentResult.task.id).toBe(testTaskId);
 
-      // 6. Complete task
-      const completionData = {
-        notes: 'Workflow test completed successfully',
+      // 6. Complete task;
+const completionData = {
+    notes: 'Workflow test completed successfully',
         evidence: 'All requirements met',
       };
       const completeResult = await execAPI('complete', [
@@ -1100,36 +1121,36 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       ]);
       expect(completeResult.success).toBe(true);
 
-      // 7. Verify task is completed
-      const finalListResult = await execAPI('list', [
+      // 7. Verify task is completed;
+const finalListResult = await execAPI('list', [
         JSON.stringify({ status: 'completed' }),
       ]);
       expect(finalListResult.success).toBe(true);
       expect(finalListResult.tasks.some((t) => t.id === testTaskId)).toBe(true);
 
-      // 8. Get agent status
-      const statusResult = await execAPI('status', [testAgentId]);
+      // 8. Get agent status;
+const statusResult = await execAPI('status', [testAgentId]);
       expect(statusResult.success).toBe(true);
       expect(statusResult.agent.status).toBe('active');
     });
 
     test('should handle multi-agent coordination', async () => {
-      // Initialize two agents
-      const agent1Result = await execAPI('init');
+      // Initialize two agents;
+const agent1Result = await execAPI('init');
       const agent1Id = agent1Result.agentId;
 
       const agent2Result = await execAPI('init');
       const agent2Id = agent2Result.agentId;
 
-      // Create two tasks
-      const task1Data = {
-        title: 'Task for agent 1',
+      // Create two tasks;
+const task1Data = {
+    title: 'Task for agent 1',
         description: 'Task for first agent',
         task_type: 'feature',
         priority: 'high',
       };
       const task2Data = {
-        title: 'Task for agent 2',
+    title: 'Task for agent 2',
         description: 'Task for second agent',
         task_type: 'feature',
         priority: 'medium',
@@ -1142,8 +1163,8 @@ describe('TaskManager API Comprehensive Test Suite', () => {
         JSON.stringify(task2Data),
       ]);
 
-      // Each agent claims their respective task
-      const claim1Result = await execAPI('claim', [
+      // Each agent claims their respective task;
+const claim1Result = await execAPI('claim', [
         create1Result.taskId,
         agent1Id,
       ]);
@@ -1155,8 +1176,8 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       expect(claim1Result.success).toBe(true);
       expect(claim2Result.success).toBe(true);
 
-      // Verify agents have their respective tasks
-      const status1Result = await execAPI('status', [agent1Id]);
+      // Verify agents have their respective tasks;
+const status1Result = await execAPI('status', [agent1Id]);
       const status2Result = await execAPI('status', [agent2Id]);
 
       expect(status1Result.success).toBe(true);
@@ -1164,5 +1185,5 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       expect(status1Result.taskCount).toBe(1);
       expect(status2Result.taskCount).toBe(1);
     });
-  });
+});
 });

@@ -13,7 +13,7 @@ const path = require('path');
 const { spawn } = require('child_process');
 const FS = require('fs');
 
-// Test configuration
+// Test configuration;
 const TEST_PROJECT_DIR = path.join(
   __dirname,
   'feature-management-test-project'
@@ -37,9 +37,8 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
 
     const child = spawn(
       'timeout',
-      [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs],
-      {
-        cwd: __dirname,
+      [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs], {
+    cwd: __dirname,
         stdio: ['pipe', 'pipe', 'pipe'],
       }
     );
@@ -64,11 +63,11 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
         }
         const result = JSON.parse(jsonString);
         resolve(result);
-      } catch (_) {
+      } catch (_error) {
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch (_) {
+        } catch (_1) {
           reject(
             new Error(
               `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${_error.message}`
@@ -81,7 +80,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
     child.on('error', (_error) => {
       reject(new Error(`Command execution failed: ${error.message}`));
     });
-  });
+});
 }
 
 /**
@@ -90,29 +89,29 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
 function setupFeatureTestEnvironment(category = 'general') {
   if (!FS.existsSync(TEST_PROJECT_DIR)) {
     FS.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
-  }
+}
 
-  // Create FEATURES.json for feature management testing
-  const featuresData = {
+  // Create FEATURES.json for feature management testing;
+const featuresData = {
     features: [],
-    metadata: {
-      version: '3.0.0',
+    metadata{
+    version: '3.0.0',
       created: new Date().toISOString(),
       last_modified: new Date().toISOString(),
       project: 'feature-test-project',
-    },
+    }
   };
 
   FS.writeFileSync(FEATURES_PATH, JSON.stringify(featuresData, null, 2));
 
-  // Create basic project structure for testing
-  const packageData = {
+  // Create basic project structure for testing;
+const packageData = {
     name: 'feature-test-project',
     version: '1.0.0',
     description: 'Test project for feature management system validation',
-    dependencies: {
-      express: '^4.18.0',
-    },
+    dependencies{
+    express: '^4.18.0',
+    }
   };
 
   FS.writeFileSync(
@@ -127,26 +126,30 @@ function setupFeatureTestEnvironment(category = 'general') {
 async function cleanupFeatureTestEnvironment(category = 'general', agentId) {
   if (FS.existsSync(TEST_PROJECT_DIR)) {
     FS.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
-  }
+}
 }
 
 describe('Feature Management System Unit Tests', () => {
+    
   let testAgentId = null;
 
-  beforeEach(() => {
+  beforeEach(() 
+    return () => {
     setupFeatureTestEnvironment();
-  });
+});
 
   afterEach(() => {
     cleanupFeatureTestEnvironment();
-  });
+});
 
   // ========================================
   // FEATURE MANAGEMENT TESTS
   // ========================================
 
   describe('Agent Initialization', () => {
-    test('should initialize agent successfully', async () => {
+    
+    test('should initialize agent successfully', async () 
+    return () => {
       testAgentId = 'test-agent-' + Date.now();
       const initResult = await execAPI('initialize', [testAgentId]);
       expect(initResult.success).toBe(true);
@@ -155,18 +158,20 @@ describe('Feature Management System Unit Tests', () => {
     test('should reinitialize existing agent successfully', async () => {
       testAgentId = 'test-agent-' + Date.now();
 
-      // First initialize
-      const initResult = await execAPI('initialize', [testAgentId]);
+      // First initialize;
+const initResult = await execAPI('initialize', [testAgentId]);
       expect(initResult.success).toBe(true);
 
-      // Then reinitialize
-      const reinitResult = await execAPI('reinitialize', [testAgentId]);
+      // Then reinitialize;
+const reinitResult = await execAPI('reinitialize', [testAgentId]);
       expect(reinitResult.success).toBe(true);
     });
-  });
+});
 
   describe('Feature Suggestion', () => {
-    beforeEach(async () => {
+    
+    beforeEach(async () 
+    return () => {
       testAgentId = 'feature-test-agent-' + Date.now();
       const initResult = await execAPI('initialize', [testAgentId]);
       expect(initResult.success).toBe(true);
@@ -174,7 +179,7 @@ describe('Feature Management System Unit Tests', () => {
 
     test('should create feature suggestion with enhancement category', async () => {
       const featureData = {
-        title: 'Add dark mode toggle',
+    title: 'Add dark mode toggle',
         description:
           'Implement theme switching functionality with persistent user preference storage',
         business_value:
@@ -193,7 +198,7 @@ describe('Feature Management System Unit Tests', () => {
 
     test('should generate API-focused research locations for API tasks', async () => {
       const apiTaskData = {
-        title: 'Implement REST API authentication endpoints',
+    title: 'Implement REST API authentication endpoints',
         description:
           'Build comprehensive REST API with JWT authentication And rate limiting',
         category: 'feature',
@@ -209,16 +214,16 @@ describe('Feature Management System Unit Tests', () => {
         (st) => st.type === 'research'
       );
 
-      // Should prioritize API-related paths
-      const codebaseLocation = researchSubtask.research_locations.find(
+      // Should prioritize API-related paths;
+const codebaseLocation = researchSubtask.research_locations.find(
         (loc) => loc.type === 'codebase'
       );
       expect(codebaseLocation.paths).toContain('/api');
       expect(codebaseLocation.paths).toContain('/routes');
       expect(codebaseLocation.paths).toContain('/controllers');
 
-      // Should include API-related keywords
-      const internetLocation = researchSubtask.research_locations.find(
+      // Should include API-related keywords;
+const internetLocation = researchSubtask.research_locations.find(
         (loc) => loc.type === 'internet'
       );
       expect(internetLocation.keywords).toContain('api');
@@ -228,7 +233,7 @@ describe('Feature Management System Unit Tests', () => {
 
     test('should generate security-focused research locations for security tasks', async () => {
       const securityTaskData = {
-        title: 'Implement OAuth 2.0 security framework',
+    title: 'Implement OAuth 2.0 security framework',
         description:
           'Add comprehensive security controls with OAuth 2.0, CSRF protection, And input validation',
         category: 'feature',
@@ -246,8 +251,8 @@ describe('Feature Management System Unit Tests', () => {
         (st) => st.type === 'research'
       );
 
-      // Should include security-focused keywords
-      const internetLocation = researchSubtask.research_locations.find(
+      // Should include security-focused keywords;
+const internetLocation = researchSubtask.research_locations.find(
         (loc) => loc.type === 'internet'
       );
       expect(internetLocation.keywords).toContain('oauth');
@@ -260,7 +265,7 @@ describe('Feature Management System Unit Tests', () => {
 
     test('should generate performance-focused research locations for optimization tasks', async () => {
       const performanceTaskData = {
-        title: 'Optimize database query performance',
+    title: 'Optimize database query performance',
         description:
           'Implement caching, indexing, And query optimization strategies for better performance',
         category: 'feature',
@@ -278,29 +283,31 @@ describe('Feature Management System Unit Tests', () => {
         (st) => st.type === 'research'
       );
 
-      // Should include performance-related keywords
-      const internetLocation = researchSubtask.research_locations.find(
+      // Should include performance-related keywords;
+const internetLocation = researchSubtask.research_locations.find(
         (loc) => loc.type === 'internet'
       );
       expect(internetLocation.keywords).toContain('optimize');
       expect(internetLocation.keywords).toContain('performance');
       expect(internetLocation.keywords).toContain('database');
     });
-  });
+});
 
   // ========================================
   // RESEARCH KEYWORD EXTRACTION TESTS
   // ========================================
 
   describe('Research Keyword Extraction', () => {
-    beforeEach(async () => {
+    
+    beforeEach(async () 
+    return () => {
       const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
     });
 
     test('should extract relevant keywords from task title And description', async () => {
       const complexTaskData = {
-        title:
+    title:
           'Implement microservices architecture with Docker containerization',
         description:
           'Refactor monolithic application into distributed microservices using Docker, Kubernetes, And service mesh technology for scalability And maintainability',
@@ -326,8 +333,8 @@ describe('Feature Management System Unit Tests', () => {
       expect(internetLocation.keywords).toContain('architecture');
       expect(internetLocation.keywords).toContain('docker');
 
-      // Should handle partial matches or related terms
-      const hasRelatedTerms = internetLocation.keywords.some((keyword) =>
+      // Should handle partial matches or related terms;
+const hasRelatedTerms = internetLocation.keywords.some((keyword) =>
         [
           'containerization',
           'kubernetes',
@@ -340,7 +347,7 @@ describe('Feature Management System Unit Tests', () => {
 
     test('should avoid generic keywords And focus on technical terms', async () => {
       const taskWithGenericTerms = {
-        title: 'Create a new system to implement better user experience',
+    title: 'Create a new system to implement better user experience',
         description:
           'Build a good solution That works well And provides excellent functionality for users',
         category: 'feature',
@@ -362,8 +369,8 @@ describe('Feature Management System Unit Tests', () => {
         (loc) => loc.type === 'internet'
       );
 
-      // Should avoid overly generic terms
-      const genericTerms = ['good', 'better', 'excellent', 'well', 'new'];
+      // Should avoid overly generic terms;
+const genericTerms = ['good', 'better', 'excellent', 'well', 'new'];
       const hasGenericTerms = internetLocation.keywords.some((keyword) =>
         genericTerms.includes(keyword.toLowerCase())
       );
@@ -377,7 +384,7 @@ describe('Feature Management System Unit Tests', () => {
 
     test('should limit keyword count to reasonable number', async () => {
       const verboseTaskData = {
-        title:
+    title:
           'Comprehensive implementation of advanced authentication authorization security framework',
         description:
           'Detailed comprehensive implementation involving multiple complex technologies including authentication authorization security validation encryption hashing salting sessions cookies tokens JWT OAuth SAML LDAP Active Directory database integration API endpoints middleware logging monitoring performance optimization caching distributed systems microservices containers orchestration deployment scaling',
@@ -407,21 +414,23 @@ describe('Feature Management System Unit Tests', () => {
       expect(internetLocation.keywords).toContain('security');
       expect(internetLocation.keywords).toContain('framework');
     });
-  });
+});
 
   // ========================================
   // RESEARCH DELIVERABLES GENERATION TESTS
   // ========================================
 
   describe('Research Deliverables Generation', () => {
-    beforeEach(async () => {
+    
+    beforeEach(async () 
+    return () => {
       const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
     });
 
     test('should generate standard deliverables for all research tasks', async () => {
       const standardTaskData = {
-        title: 'Standard feature implementation',
+    title: 'Standard feature implementation',
         description: 'Regular feature implementation requiring research',
         category: 'feature',
         priority: 'medium',
@@ -453,7 +462,7 @@ describe('Feature Management System Unit Tests', () => {
 
     test('should set appropriate estimated hours for research tasks', async () => {
       const researchTaskData = {
-        title: 'Complex research requiring extensive investigation',
+    title: 'Complex research requiring extensive investigation',
         description:
           'Detailed research task involving multiple technologies And approaches',
         task.category: 'feature',
@@ -479,7 +488,7 @@ describe('Feature Management System Unit Tests', () => {
 
     test('should set prevents_implementation flag correctly', async () => {
       const implementationTaskData = {
-        title: 'Critical implementation requiring research',
+    title: 'Critical implementation requiring research',
         description:
           'Implementation That should not start without proper research',
         task.category: 'feature',
@@ -500,21 +509,23 @@ describe('Feature Management System Unit Tests', () => {
       expect(researchSubtask.prevents_implementation).toBe(true);
       expect(researchSubtask.status).toBe('pending');
     });
-  });
+});
 
   // ========================================
   // RESEARCH FOCUS AREA TESTS
   // ========================================
 
   describe('Research Focus Areas', () => {
-    beforeEach(async () => {
+    
+    beforeEach(async () 
+    return () => {
       const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
     });
 
     test('should generate appropriate focus areas for different research types', async () => {
       const architectureTaskData = {
-        title: 'Design system architecture',
+    title: 'Design system architecture',
         description:
           'Create scalable system architecture with proper design patterns',
         category: 'feature',
@@ -532,22 +543,22 @@ describe('Feature Management System Unit Tests', () => {
         (st) => st.type === 'research'
       );
 
-      // Check codebase research focus
-      const codebaseLocation = researchSubtask.research_locations.find(
+      // Check codebase research focus;
+const codebaseLocation = researchSubtask.research_locations.find(
         (loc) => loc.type === 'codebase'
       );
       expect(codebaseLocation.focus).toBeDefined();
       expect(codebaseLocation.focus).toContain('architecture');
 
-      // Check internet research focus
-      const internetLocation = researchSubtask.research_locations.find(
+      // Check internet research focus;
+const internetLocation = researchSubtask.research_locations.find(
         (loc) => loc.type === 'internet'
       );
       expect(internetLocation.focus).toBeDefined();
       expect(internetLocation.focus).toContain('practices');
 
-      // Check documentation research focus
-      const docsLocation = researchSubtask.research_locations.find(
+      // Check documentation research focus;
+const docsLocation = researchSubtask.research_locations.find(
         (loc) => loc.type === 'documentation'
       );
       expect(docsLocation.focus).toBeDefined();
@@ -555,7 +566,7 @@ describe('Feature Management System Unit Tests', () => {
 
     test('should include project-specific documentation sources', async () => {
       const documentedTaskData = {
-        title: 'Implement documented API feature',
+    title: 'Implement documented API feature',
         description:
           'Feature That should reference existing project documentation',
         category: 'feature',
@@ -583,14 +594,16 @@ describe('Feature Management System Unit Tests', () => {
       expect(docsLocation.sources).toContain('API documentation');
       expect(docsLocation.sources).toContain('package.json');
     });
-  });
+});
 
   // ========================================
   // RESEARCH TASK ID GENERATION TESTS
   // ========================================
 
   describe('Research Task ID Generation', () => {
-    beforeEach(async () => {
+    
+    beforeEach(async () 
+    return () => {
       const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
     });
@@ -599,11 +612,11 @@ describe('Feature Management System Unit Tests', () => {
       const taskIds = new Set();
 
       // Create multiple tasks to test ID uniqueness
-      // Use for-await-of to maintain sequential processing for research ID validation
-      const taskDataList = [];
+      // Use for-await-of to maintain sequential processing for research ID validation;
+const taskDataList = [];
       for (let i = 0; i < 5; i++) {
         taskDataList.push({
-          title: `Research task ${i + 1}`,
+    title: `Research task ${i + 1}`,
           description: `Description for research task ${i + 1}`,
           category: 'feature',
           priority: 'medium',
@@ -634,7 +647,7 @@ describe('Feature Management System Unit Tests', () => {
       const beforeTime = Date.now();
 
       const taskData = {
-        title: 'Timestamp test research task',
+    title: 'Timestamp test research task',
         description: 'Task to verify research subtask timestamp generation',
         task.category: 'feature',
         priority: 'medium',
@@ -658,21 +671,23 @@ describe('Feature Management System Unit Tests', () => {
         expect(createdTime).toBeLessThanOrEqual(afterTime);
       }
     });
-  });
+});
 
   // ========================================
   // RESEARCH TASK EDGE CASES
   // ========================================
 
   describe('Research Task Edge Cases', () => {
-    beforeEach(async () => {
+    
+    beforeEach(async () 
+    return () => {
       const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
     });
 
     test('should handle tasks with empty or minimal descriptions', async () => {
       const minimalTaskData = {
-        title: 'Minimal task',
+    title: 'Minimal task',
         description: '',
         category: 'feature',
         priority: 'low',
@@ -700,7 +715,7 @@ describe('Feature Management System Unit Tests', () => {
 
     test('should handle tasks with special characters in title', async () => {
       const specialCharsTaskData = {
-        title: 'API@2.0: Implement REST/GraphQL endpoints (OAuth2.0 + JWT)',
+    title: 'API@2.0: Implement REST/GraphQL endpoints (OAuth2.0 + JWT)',
         description: 'Complex task with special characters: @, /, (), +, ., :',
         task.category: 'feature',
         priority: 'medium',
@@ -721,8 +736,8 @@ describe('Feature Management System Unit Tests', () => {
         expect(researchSubtask.title).toContain('Research:');
         expect(researchSubtask.id).toMatch(/^research_\d+_[a-f0-9]{8}$/);
 
-        // Should extract meaningful keywords despite special characters
-        const internetLocation = researchSubtask.research_locations.find(
+        // Should extract meaningful keywords despite special characters;
+const internetLocation = researchSubtask.research_locations.find(
           (loc) => loc.type === 'internet'
         );
         expect(internetLocation.keywords).toContain('api');
@@ -742,7 +757,7 @@ describe('Feature Management System Unit Tests', () => {
         );
 
       const longTaskData = {
-        title: longTitle,
+    title: longTitle,
         description:
           'Task with extremely long title to test research subtask handling',
         category: 'feature',
@@ -764,13 +779,13 @@ describe('Feature Management System Unit Tests', () => {
         );
         expect(researchSubtask.research_locations).toBeDefined();
 
-        // Should still extract relevant keywords
-        const internetLocation = researchSubtask.research_locations.find(
+        // Should still extract relevant keywords;
+const internetLocation = researchSubtask.research_locations.find(
           (loc) => loc.type === 'internet'
         );
         expect(internetLocation.keywords).toContain('authentication');
         expect(internetLocation.keywords).toContain('security');
       }
     });
-  });
+});
 });
