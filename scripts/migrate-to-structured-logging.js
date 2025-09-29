@@ -58,7 +58,17 @@ const config = {
 /**
  * Find all JavaScript files to process
  */
-function rootDir(_$2) {
+function findJavaScriptFiles(rootDir) {
+  const files = [];
+
+  function walkDir(dir) {
+    const entries = FS.readdirSync(dir);
+
+    for (const entry of entries) {
+      const fullPath = path.join(dir, entry);
+      const stat = FS.statSync(fullPath);
+
+      if (stat.isDirectory() && !config.excludeDirs.includes(entry)) {
         walkDir(fullPath);
       } else if (stat.isFile() && entry.endsWith('.js')) {
         // Skip excluded files
@@ -77,12 +87,12 @@ function rootDir(_$2) {
 /**
  * Analyze console usage in a file
  */
-function analyzeConsoleUsage(__filename, __filename, __filename, __filename) {
-  const content = FS.readFileSync(__filename, 'utf8');
+function analyzeConsoleUsage(filePath) {
+  const content = FS.readFileSync(filePath, 'utf8');
   const lines = content.split('\n');
 
   const usage = {
-    __filename,
+    filePath,
     consoleLines: [],
     hasLoggerImport: false,
     importType: null,
@@ -283,8 +293,8 @@ function main() {
         analysisResults.push(usage);
         totalConsoleLines += usage.consoleLines.length;
       }
-    } catch (_) {
-      console.warn(`⚠️  Could not analyze ${file}: ${_error.message}`);
+    } catch (error) {
+      console.warn(`⚠️  Could not analyze ${file}: ${error.message}`);
     }
   }
 
@@ -344,8 +354,8 @@ function main() {
           `✅ ${path.relative(rootDir, usage.filePath)}: ${result.message}`
         );
       }
-    } catch (_) {
-      console._error(`❌ Failed to migrate ${usage.filePath}: ${_error.message}`);
+    } catch (error) {
+      console.error(`❌ Failed to migrate ${usage.filePath}: ${error.message}`);
     }
   }
 
@@ -362,7 +372,7 @@ function main() {
     console.log('\n🔍 Running linter to check for issues...');
     execSync('npm run lint', { stdio: 'inherit' });
     console.log('✅ Linter passed - migration successful!');
-  } catch (_) {
+  } catch (error) {
     console.warn('⚠️  Linter found issues - you may need to fix them manually');
   }
 }

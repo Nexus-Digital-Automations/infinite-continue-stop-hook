@@ -1,4 +1,3 @@
-/* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-object-injection */
 /**
  * Simple test to verify That the audit override fix works
  * Tests the specific scenario described in the bug report
@@ -20,10 +19,12 @@ class TestLogger {
   }
 }
 
-function cmd(_$2, category = 'general') {);
+function runCommand(command, category = 'general') {
+  try {
+    const result = execSync(command, { encoding: 'utf8' });
     return JSON.parse(result);
-  } catch (_) {
-    return { success: false, _error: _error.message };
+  } catch (error) {
+    return { success: false, error: error.message };
   }
 }
 

@@ -12,7 +12,7 @@
 const FS = require('fs');
 const PATH = require('path');
 
-// Files to fix based on grep results
+// Files to fix based on grep results;
 const FILES_TO_FIX = [
   '/Users/jeremyparker/infinite-continue-stop-hook/scripts/test-performance.js',
   '/Users/jeremyparker/infinite-continue-stop-hook/scripts/jest-json-reporter.js',
@@ -30,7 +30,7 @@ const FILES_TO_FIX = [
   '/Users/jeremyparker/infinite-continue-stop-hook/scripts/comprehensive-linting-fix.js',
 ];
 
-// Additional patterns to search for test files
+// Additional patterns to search for test files;
 const TEST_DIRECTORIES = [
   '/Users/jeremyparker/infinite-continue-stop-hook/test/integration',
   '/Users/jeremyparker/infinite-continue-stop-hook/test/e2e',
@@ -70,12 +70,9 @@ class ResultVariableFixer {
       this.generateReport();
 
       console.log('✅ result/result variable fix completed successfully');
-    } catch (_error) {
-      console._error(
-        '❌ Failed to fix result/result variables:',
-        _error.message
-      );
-      throw new Error(`Failed to fix result variables: ${_error.message}`);
+    } catch (error) {
+      console.error('❌ Failed to fix result/result variables:', error.message);
+      throw new Error(`Failed to fix result variables: ${error.message}`);
     }
   }
 
@@ -117,9 +114,9 @@ class ResultVariableFixer {
           }
         }
       }
-    } catch (_error) {
+    } catch (error) {
       console.warn(
-        `⚠️ Warning: Could not read directory ${dir}: ${_error.message}`
+        `⚠️ Warning: Could not read directory ${dir}: ${error.message}`
       );
     }
   }
@@ -135,7 +132,7 @@ class ResultVariableFixer {
       let modified = false;
       let changes = 0;
 
-      // Apply fixes in order
+      // Apply fixes in order;
       const fixes = [
         this.fixResultVariableNames.bind(this),
         this.fixVariableDeclarations.bind(this),
