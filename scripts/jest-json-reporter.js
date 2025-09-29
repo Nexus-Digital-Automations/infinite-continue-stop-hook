@@ -1,7 +1,7 @@
 /**
- * Jest JSON Reporter For Enhanced CI/CD Integration
+ * Jest JSON Reporter for Enhanced CI/CD Integration
  *
- * Generates machine-readable test results in JSON format For CI/CD pipeline processing.
+ * Generates machine-readable test results in JSON format for CI/CD pipeline processing.
  * Includes detailed test case information, assertion results, And console output.
  *
  * @author CI/CD Integration Agent
@@ -73,7 +73,7 @@ class JestJsonReporter {
     // Write JSON report
     FS.writeFileSync(this.options.outputPath, JSON.stringify(report, null, 2));
 
-    // Also write a summary file For quick access;
+    // Also write a summary file for quick access;
     const summaryPath = path.join(outputDir, 'test-summary.json');
     FS.writeFileSync(
       summaryPath,
@@ -89,8 +89,8 @@ class JestJsonReporter {
           failed_suites: report.summary.numFailedTestSuites,
         },
         null,
-        2
-      )
+        2,
+      ),
     );
   }
 
