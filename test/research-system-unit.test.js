@@ -469,7 +469,7 @@ const genericTerms = ['good', 'better', 'excellent', 'well', 'new'];
     title: 'Complex research requiring extensive investigation',
         description:
           'Detailed research task involving multiple technologies And approaches',
-        task.category: 'feature',
+        category: 'feature',
         priority: 'high',
       };
 
@@ -495,7 +495,7 @@ const genericTerms = ['good', 'better', 'excellent', 'well', 'new'];
     title: 'Critical implementation requiring research',
         description:
           'Implementation That should not start without proper research',
-        task.category: 'feature',
+        category: 'feature',
         priority: 'critical',
       };
 
@@ -657,7 +657,7 @@ const taskDataList = [];
       const taskData = {
     title: 'Timestamp test research task',
         description: 'Task to verify research subtask timestamp generation',
-        task.category: 'feature',
+        category: 'feature',
         priority: 'medium',
       };
 
@@ -727,7 +727,7 @@ const taskDataList = [];
       const specialCharsTaskData = {
     title: 'API@2.0: Implement REST/GraphQL endpoints (OAuth2.0 + JWT)',
         description: 'Complex task with special characters: @, /, (), +, ., :',
-        task.category: 'feature',
+        category: 'feature',
         priority: 'medium',
       };
 

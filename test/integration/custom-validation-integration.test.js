@@ -672,9 +672,7 @@ const config = {
   describe('Integration with Existing Validation System', () => {
     
     
-    test('should maintain compatibility with existing validation commands', () 
-    return () 
-    return () => {
+    test('should maintain compatibility with existing validation commands', () => {
       // Test That existing validation commands still work;
       const _result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" get-validation-dependencies`,
