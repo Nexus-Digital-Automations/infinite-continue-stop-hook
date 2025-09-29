@@ -35,8 +35,7 @@ describe('Agent Lifecycle Integration Tests', () => {
     
   let testDir;
 
-  beforeAll(async () 
-    return () => {
+  beforeAll(async () => {
     await setupGlobalCleanup();
 });
 

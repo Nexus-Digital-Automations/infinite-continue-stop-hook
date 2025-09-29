@@ -80,7 +80,7 @@ class TestDataGenerator {
         'function debounce(_func, wait, category = \'general\') {\n  let timeout;\n  return function executedFunction(...args) {\n    const later = () => {\n      clearTimeout(timeout);\n      _func(...args);\n    };\n    clearTimeout(timeout);\n    timeout = setTimeout(later, wait);\n  };\n}',
       ],
       react: [
-        'function Component({ data }, category = 'general') {\n  const [loading, setLoading] = useState(false);\n  const [error, setError] = useState(null);\n  \n  useEffect(() => {\n    // Effect logic here\n  }, [data]);\n  \n  return <div>{loading ? "Loading..." : data}</div>;\n}',
+        'function Component({ data }, category = \'general\') {\n  const [loading, setLoading] = useState(false);\n  const [error, setError] = useState(null);\n  \n  useEffect(() => {\n    // Effect logic here\n  }, [data]);\n  \n  return <div>{loading ? "Loading..." : data}</div>;\n}',
         'const OptimizedComponent = React.memo(({ items }) => {\n  return (\n    <ul>\n      {items.map(item => <li key={item.id}>{item.name}</li>)}\n    </ul>\n  );\n});',
       ],
     };

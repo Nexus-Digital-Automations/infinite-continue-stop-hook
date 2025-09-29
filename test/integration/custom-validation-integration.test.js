@@ -23,12 +23,10 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
   let testProjectRoot;
   let originalCwd;
 
-  beforeAll(async () 
-    return () 
-    return () => {
+  beforeAll(async () => {
     originalCwd = process.cwd();
     testProjectRoot = path.join(__dirname, '../test-data', 'integration-test');
-    await FS.mkdir(testProjectRoot, { recursive: true });,
+    await FS.mkdir(testProjectRoot, { recursive: true });
 });
 
   afterAll(async () => {

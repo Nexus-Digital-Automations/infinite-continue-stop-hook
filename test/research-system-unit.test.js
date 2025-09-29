@@ -78,7 +78,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
     });
 
     child.on('error', (_error) => {
-      reject(new Error(`Command execution failed: ${error.message}`));,
+      reject(new Error(`Command execution failed: ${_error.message}`));
     });
 });
 }
@@ -149,9 +149,7 @@ describe('Feature Management System Unit Tests', () => {
   describe('Agent Initialization', () => {
     
     
-    test('should initialize agent successfully', async () 
-    return () 
-    return () => {
+    test('should initialize agent successfully', async () => {
       testAgentId = 'test-agent-' + Date.now();
       const initResult = await execAPI('initialize', [testAgentId]);
       expect(initResult.success).toBe(true);
@@ -160,12 +158,12 @@ describe('Feature Management System Unit Tests', () => {
     test('should reinitialize existing agent successfully', async () => {
       testAgentId = 'test-agent-' + Date.now();
 
-      // First initialize;
-const initResult = await execAPI('initialize', [testAgentId]);
+      // First initialize
+      const initResult = await execAPI('initialize', [testAgentId]);
       expect(initResult.success).toBe(true);
 
-      // Then reinitialize;
-const reinitResult = await execAPI('reinitialize', [testAgentId]);
+      // Then reinitialize
+      const reinitResult = await execAPI('reinitialize', [testAgentId]);
       expect(reinitResult.success).toBe(true);
     });
 });
@@ -173,9 +171,7 @@ const reinitResult = await execAPI('reinitialize', [testAgentId]);
   describe('Feature Suggestion', () => {
     
     
-    beforeEach(async () 
-    return () 
-    return () => {
+    beforeEach(async () => {
       testAgentId = 'feature-test-agent-' + Date.now();
       const initResult = await execAPI('initialize', [testAgentId]);
       expect(initResult.success).toBe(true);

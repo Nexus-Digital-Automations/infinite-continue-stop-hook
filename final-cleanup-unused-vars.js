@@ -1,4 +1,3 @@
-
 /* eslint-disable no-console, security/detect-non-literal-fs-filename */
 
 /**
@@ -19,7 +18,10 @@ console.log('🔧 Final cleanup for remaining unused variables...\n');
 // Targeted patterns for remaining violations
 const targetedReplacements = [
   // Fix catch (_) where _ is unused - change to catch (_error) if error is actually used later
-  { search: /catch \(_\) \{[\s\S]*?error\./gm, replace: (match) => match.replace('catch (_)', 'catch (_error)') },
+  {
+    search: /catch \(_\) \{[\s\S]*?error\./gm,
+    replace: (match) => match.replace('catch (_)', 'catch (_error)'),
+  },
 
   // Change standalone catch (_) to catch (_error) when used
   { search: /catch \(_\)/g, replace: 'catch (_error)' },
@@ -31,9 +33,15 @@ const targetedReplacements = [
   { search: /(\s+)let match = /g, replace: '$1let _match = ' },
 
   // Fix function parameters
-  { search: /function[^(]*\(([^)]*?)match([^)]*?)\)/g, replace: 'function($1_match$2)' },
+  {
+    search: /function[^(]*\(([^)]*?)match([^)]*?)\)/g,
+    replace: 'function($1_match$2)',
+  },
   { search: /\(([^)]*?)match([^)]*?)\) =>/g, replace: '($1_match$2) =>' },
-  { search: /function[^(]*\(([^)]*?)filePath([^)]*?)\)/g, replace: 'function($1_filePath$2)' },
+  {
+    search: /function[^(]*\(([^)]*?)filePath([^)]*?)\)/g,
+    replace: 'function($1_filePath$2)',
+  },
   { search: /\(([^)]*?)filePath([^)]*?)\) =>/g, replace: '($1_filePath$2) =>' },
 
   // Fix variable references to match the new prefixed names
@@ -41,13 +49,16 @@ const targetedReplacements = [
   { search: /\bmatch\b(?![.\w])/g, replace: '_match' },
 
   // Remove completely unused _ variables in catch blocks that don't use error
-  { search: /catch \(_\) \{[\s\S]*?\}(?![\s\S]*error\.)/gm, replace: (match) => {
-    // Only replace if no error. properties are used in the block
-    if (!match.includes('error.')) {
-      return match.replace('catch (_)', 'catch (_)');
-    }
-    return match;
-  } },
+  {
+    search: /catch \(_\) \{[\s\S]*?\}(?![\s\S]*error\.)/gm,
+    replace: (match) => {
+      // Only replace if no error. properties are used in the block
+      if (!match.includes('error.')) {
+        return match.replace('catch (_)', 'catch (_)');
+      }
+      return match;
+    },
+  },
 ];
 
 function getAllJSFiles(dir) {
@@ -127,14 +138,20 @@ function main() {
   // Check final results
   console.log('\n🔍 Checking final unused variables count...');
   try {
-    const finalCount = execSync('npm run lint 2>&1 | grep "no-unused-vars" | wc -l', { encoding: 'utf8' }).trim();
+    const finalCount = execSync(
+      'npm run lint 2>&1 | grep "no-unused-vars" | wc -l',
+      { encoding: 'utf8' }
+    ).trim();
     console.log(`Final no-unused-vars violations: ${finalCount}`);
 
     if (parseInt(finalCount) === 0) {
       console.log('🎉 ALL UNUSED VARIABLE VIOLATIONS RESOLVED!');
     } else {
       console.log('📋 Showing remaining violations:');
-      const remaining = execSync('npm run lint 2>&1 | grep "no-unused-vars" | head -10', { encoding: 'utf8' });
+      const remaining = execSync(
+        'npm run lint 2>&1 | grep "no-unused-vars" | head -10',
+        { encoding: 'utf8' }
+      );
       console.log(remaining);
     }
   } catch (error) {

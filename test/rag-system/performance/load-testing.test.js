@@ -57,8 +57,7 @@ describe('RAG System Performance And Load Testing', () => {
   let _performanceMonitor;
   let _loadGenerator;
 
-  beforeAll(async () 
-    return () => {
+  beforeAll(async () => {
     loggers.stopHook.log('Setting up performance test environment...');
     jest.setTimeout(300000); // 5 minutes for performance tests
 
