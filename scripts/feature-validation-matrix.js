@@ -146,9 +146,9 @@ class FeatureValidationMatrix {
       if (!startTest.success) {
         result.errors.push(`API startup failed: ${startTest.error}`);
       }
-    } catch {
+    } catch (_error) {
       result.status = 'failed';
-      result.errors.push(`API validation error: ${error.message}`);
+      result.errors.push(`API validation error: ${_error.message}`);
     }
 
     return result;
@@ -174,7 +174,7 @@ class FeatureValidationMatrix {
         try {
           require(dep);
           result.details[`${dep}_available`] = true;
-        } catch {
+        } catch (_error) {
           result.details[`${dep}_available`] = false;
           result.errors.push(`RAG dependency missing: ${dep}`);
         }
@@ -206,9 +206,9 @@ class FeatureValidationMatrix {
       }
 
       result.status = result.errors.length === 0 ? 'passed' : 'failed';
-    } catch {
+    } catch (_error) {
       result.status = 'failed';
-      result.errors.push(`RAG validation error: ${error.message}`);
+      result.errors.push(`RAG validation error: ${_error.message}`);
     }
 
     return result;
@@ -272,9 +272,9 @@ class FeatureValidationMatrix {
       }
 
       result.status = result.errors.length === 0 ? 'passed' : 'failed';
-    } catch {
+    } catch (_error) {
       result.status = 'failed';
-      result.errors.push(`File operations validation error: ${error.message}`);
+      result.errors.push(`File operations validation error: ${_error.message}`);
     }
 
     return result;
@@ -340,9 +340,9 @@ class FeatureValidationMatrix {
       }
 
       result.status = result.errors.length === 0 ? 'passed' : 'failed';
-    } catch {
+    } catch (_error) {
       result.status = 'failed';
-      result.errors.push(`Agent management validation error: ${error.message}`);
+      result.errors.push(`Agent management validation error: ${_error.message}`);
     }
 
     return result;
@@ -404,10 +404,10 @@ class FeatureValidationMatrix {
       };
 
       result.status = result.errors.length === 0 ? 'passed' : 'failed';
-    } catch {
+    } catch (_error) {
       result.status = 'failed';
       result.errors.push(
-        `Performance monitoring validation error: ${error.message}`,
+        `Performance monitoring validation error: ${_error.message}`,
       );
     }
 
@@ -439,10 +439,10 @@ class FeatureValidationMatrix {
           const module = dep.test();
           result.details[`${dep.name}_loaded`] = true;
           result.details[`${dep.name}_version`] = module.version || 'unknown';
-        } catch {
+        } catch (_error) {
           result.details[`${dep.name}_loaded`] = false;
           result.errors.push(
-            `Native dependency failed: ${dep.name} - ${error.message}`,
+            `Native dependency failed: ${dep.name} - ${_error.message}`,
           );
         }
       }
@@ -459,16 +459,16 @@ class FeatureValidationMatrix {
             `Native module rebuild failed: ${rebuildTest.error}`,
           );
         }
-      } catch {
+      } catch (_error) {
         result.details.rebuild_capability = false;
-        result.errors.push(`Rebuild test error: ${error.message}`);
+        result.errors.push(`Rebuild test error: ${_error.message}`);
       }
 
       result.status = result.errors.length === 0 ? 'passed' : 'failed';
-    } catch {
+    } catch (_error) {
       result.status = 'failed';
       result.errors.push(
-        `Native dependencies validation error: ${error.message}`,
+        `Native dependencies validation error: ${_error.message}`,
       );
     }
 
@@ -495,12 +495,12 @@ class FeatureValidationMatrix {
           duration: Date.now() - start,
           error: null,
         });
-      } catch {
+      } catch (_error) {
         resolve({
           success: false,
-          output: error.stdout || '',
+          output: _error.stdout || '',
           duration: Date.now() - start,
-          error: error.message,
+          error: _error.message,
         });
       }
     });
@@ -529,12 +529,12 @@ class FeatureValidationMatrix {
             errors: result.errors,
           });
         }
-      } catch {
+      } catch (_error) {
         loggers.stopHook.log(`❌ ${feature.name}: validation failed`);
         this.validationResults.feature_tests[feature.name] = {
           name: feature.name,
           status: 'failed',
-          errors: [`Validation error: ${error.message}`],
+          errors: [`Validation error: ${_error.message}`],
         };
 
         if (feature.critical) {
@@ -761,9 +761,9 @@ ${
 
       loggers.stopHook.log('\n✅ Feature validation completed successfully!');
       return this.validationResults;
-    } catch {
+    } catch (_error) {
       loggers.stopHook.error('❌ Feature validation failed:', _error.message);
-      throw error;
+      throw _error;
     }
   }
 }

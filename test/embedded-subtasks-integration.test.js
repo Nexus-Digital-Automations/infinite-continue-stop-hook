@@ -78,16 +78,16 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         // Try to parse JSON response
         const result = JSON.parse(jsonString);
         resolve(result);
-      } catch {
+      } catch (_error) {
         // If JSON parsing fails, check if we can extract JSON from stderr
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch {
+        } catch (_error) {
           // If both fail, include raw output for debugging
           reject(
             new Error(
-              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${error.message}`
+              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${_error.message}`
             )
           );
         }

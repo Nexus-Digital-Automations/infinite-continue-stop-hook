@@ -37,7 +37,7 @@ class FinalResultFixer {
       console.log('✅ Final result/result variable fix completed successfully');
     } catch (_error) {
       console.error('❌ Failed to complete final fix:', _error.message);
-      throw new Error(`Final fix failed: ${error.message}`);
+      throw new Error(`Final fix failed: ${_error.message}`);
     }
   }
 
@@ -45,14 +45,14 @@ class FinalResultFixer {
     const filePath =
       '/Users/jeremyparker/infinite-continue-stop-hook/scripts/test-performance.js';
 
-    if (!FS.existsSync(_filePath)) {
+    if (!FS.existsSync(FILE_PATH)) {
       console.warn('⚠️ test-performance.js not found');
       return;
     }
 
     console.log('🔧 Fixing test-performance.js...');
 
-    let content = FS.readFileSync(_filePath, 'utf8');
+    let content = FS.readFileSync(FILE_PATH, 'utf8');
     let changes = 0;
 
     // Fix name to name consistently
@@ -83,8 +83,8 @@ class FinalResultFixer {
     }
 
     if (changes > 0) {
-      FS.writeFileSync(_filePath, content);
-      this.fixedFiles.push({ path: filePath, changes });
+      FS.writeFileSync(FILE_PATH, content);
+      this.fixedFiles.push({ path: FILE_PATH, changes });
       this.totalChanges += changes;
       console.log(
         `✅ Fixed ${changes} name/name issues in test-performance.js`
@@ -101,16 +101,16 @@ class FinalResultFixer {
     ];
 
     for (const filePath of testFiles) {
-      if (FS.existsSync(_filePath)) {
-        this.fixTestFile(_filePath);
+      if (FS.existsSync(FILE_PATH)) {
+        this.fixTestFile(FILE_PATH);
       }
     }
   }
 
-  fixTestFile(_filePath) {
-    console.log(`🔧 Fixing ${PATH.relative(process.cwd(), _filePath)}...`);
+  fixTestFile(FILE_PATH) {
+    console.log(`🔧 Fixing ${PATH.relative(process.cwd(), FILE_PATH)}...`);
 
-    let content = FS.readFileSync(_filePath, 'utf8');
+    let content = FS.readFileSync(FILE_PATH, 'utf8');
     let changes = 0;
 
     // Fix specific patterns in test files
@@ -194,15 +194,15 @@ class FinalResultFixer {
     }
 
     if (changes > 0) {
-      FS.writeFileSync(_filePath, content);
-      this.fixedFiles.push({ path: filePath, changes });
+      FS.writeFileSync(FILE_PATH, content);
+      this.fixedFiles.push({ path: FILE_PATH, changes });
       this.totalChanges += changes;
       console.log(
-        `✅ Fixed ${changes} issues in ${PATH.relative(process.cwd(), _filePath)}`
+        `✅ Fixed ${changes} issues in ${PATH.relative(process.cwd(), FILE_PATH)}`
       );
     } else {
       console.log(
-        `✅ No issues found in ${PATH.relative(process.cwd(), _filePath)}`
+        `✅ No issues found in ${PATH.relative(process.cwd(), FILE_PATH)}`
       );
     }
   }

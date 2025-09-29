@@ -522,7 +522,7 @@ function main() {
 if (require.main === module) {
   main().catch((error) => {
     console.error('❌ Optimization failed:', error.message);
-    process.exit(1);
+    throw new Error(`Optimization failed: ${error.message}`);
   });
 }
 

@@ -94,7 +94,7 @@ class ParallelTestOptimizer {
       });
     } catch (_error) {
       this.logger.warn('Could not read package.json', {
-        error: error.message,
+        _error: _error.message,
         OPERATION 'discover-test-suites',
       });
     }
@@ -769,7 +769,7 @@ ${analysis.github_actions_matrix.strategy.matrix.include
       return analysis;
     } catch (_error) {
       loggers.stopHook.error('❌ Optimization analysis failed:', _error.message);
-      throw error;
+      throw _error;
     }
   }
 }

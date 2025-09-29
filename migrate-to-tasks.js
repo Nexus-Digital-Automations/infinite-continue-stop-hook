@@ -60,9 +60,9 @@ class TaskMigrator {
         newFile: this.tasksPath,
         stats: await this.getMigrationStats(tasksData),
       };
-    } catch {
+    } catch (_error) {
       loggers.stopHook.error('❌ Migration failed:', _error.message);
-      throw error;
+      throw _error;
     }
   }
 
@@ -73,7 +73,7 @@ class TaskMigrator {
     try {
       await FS.access(this.featuresPath);
       loggers.stopHook.log('✓ Source FEATURES.json found');
-    } catch {
+    } catch (_error) {
       throw new Error(`FEATURES.json not found at ${this.featuresPath}`);
     }
   }
@@ -85,7 +85,7 @@ class TaskMigrator {
     try {
       await FS.copyFile(this.featuresPath, this.backupPath);
       loggers.stopHook.log(`✓ Backup created: ${this.backupPath}`);
-    } catch {
+    } catch (_error) {
       throw new Error(`Failed to create backup: ${error.message}`);
     }
   }
@@ -99,7 +99,7 @@ class TaskMigrator {
       const parsedData = JSON.parse(data);
       loggers.stopHook.log('✓ Features data loaded And parsed');
       return parsedData;
-    } catch {
+    } catch (_error) {
       throw new Error(`Failed to load features data: ${error.message}`);
     }
   }
@@ -293,7 +293,7 @@ class TaskMigrator {
           business_value:
             task.metadata?.business_value ||
             'Implementation of approved feature',
-          category: task.metadata?.feature_category || 'enhancement',
+          task.category: task.metadata?.feature_category || 'enhancement',
           status: this.mapTaskStatus(task.status),
           priority: task.priority || 'normal',
           auto_generated: task.metadata?.auto_generated || false,
@@ -359,7 +359,7 @@ class TaskMigrator {
           title: `Implement comprehensive tests for ${task.title}`,
           description: `Create unit tests, integration tests, And E2E tests to achieve >80% coverage for ${task.title}. Must validate all functionality, edge cases, And error conditions.`,
           business_value: `Ensures reliability And quality of ${task.title} feature`,
-          category: task.category,
+          task.category: task.task.category,
           status: 'suggested',
           priority: 'high',
           auto_generated: true,
@@ -399,7 +399,7 @@ class TaskMigrator {
           title: `Security And quality audit for ${task.title}`,
           description: `Run semgrep security scan, dependency vulnerability check, code quality analysis, And compliance validation for ${task.title}. Zero tolerance for security vulnerabilities.`,
           business_value: `Ensures security And quality compliance of ${task.title} feature`,
-          category: 'security',
+          task.category: 'security',
           status: 'suggested',
           priority: 'high',
           auto_generated: true,
@@ -516,7 +516,7 @@ class TaskMigrator {
     try {
       await FS.writeFile(this.tasksPath, JSON.stringify(tasksData, null, 2));
       loggers.stopHook.log(`✓ TASKS.json written to ${this.tasksPath}`);
-    } catch {
+    } catch (_error) {
       throw new Error(`Failed to write TASKS.json: ${error.message}`);
     }
   }

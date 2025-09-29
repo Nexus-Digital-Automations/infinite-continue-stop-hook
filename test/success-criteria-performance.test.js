@@ -84,16 +84,16 @@ class PerformanceMonitor {
 
       this.measurements.push(MEASUREMENT);
       return { result, MEASUREMENT };
-    } catch {
+    } catch (_error) {
       const END_TIME = performance.now();
       const MEASUREMENT = {
         operationName,
         duration: END_TIME - startTime,
-        error: error.message,
+        error: _error.message,
         timestamp: Date.now(),
       };
       this.measurements.push(MEASUREMENT);
-      throw error;
+      throw _error;
     }
   }
 
@@ -240,7 +240,7 @@ function execAPIWithMonitoring(
           try {
             const result = stdout.trim() ? JSON.parse(stdout) : {};
             resolve(result);
-          } catch {
+          } catch (_error) {
             resolve({ rawOutput: stdout, stderr });
           }
         } else {
@@ -344,9 +344,9 @@ describe('Performance Test Suite', () => {
     await FS.writeFile(path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
 
     loggers.stopHook.log('Performance test project setup completed');
-  } catch {
+  } catch (_error) {
     loggers.stopHook.error('Failed to setup performance test project:', error);
-    throw error;
+    throw _error;
   }
 }
 
@@ -354,7 +354,7 @@ async function cleanupPerformanceTestProject() {
   try {
     await FS.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     loggers.stopHook.log('Performance test project cleanup completed');
-  } catch {
+  } catch (_error) {
     loggers.stopHook.error(
       'Failed to cleanup performance test project:',
       error,
@@ -828,7 +828,7 @@ describe('Success Criteria Performance Tests', () => {
           expect(REPORT.totalOperations).toBeGreaterThan(0);
           expect(REPORT.operationSummary).toBeDefined();
           expect(REPORT.memoryAnalysis).toBeDefined();
-        } catch {
+        } catch (_error) {
           const REPORT = monitor.generateReport();
           loggers.app.info(
             'Performance stress test failed with report:',

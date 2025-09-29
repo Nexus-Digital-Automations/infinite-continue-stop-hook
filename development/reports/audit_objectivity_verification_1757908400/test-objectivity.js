@@ -15,7 +15,7 @@ async function testObjectivityEnforcement() {
   loggers.stopHook.log('📋 Task Details:');
   loggers.stopHook.log(`   Task ID: ${task.id}`);
   loggers.stopHook.log(`   Title: ${task.title}`);
-  loggers.stopHook.log(`   Category: ${task.category}`);
+  loggers.stopHook.log(`   Category: ${task.task.category}`);
   loggers.stopHook.log(`   Original Implementer: ${task.original_implementer}`);
   loggers.stopHook.log(`   Current Status: ${task.status}`);
   loggers.stopHook.log('');

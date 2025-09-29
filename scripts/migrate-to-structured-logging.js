@@ -76,12 +76,12 @@ function rootDir(_$2) {
 /**
  * Analyze console usage in a file
  */
-function analyzeConsoleUsage(_filePath) {
-  const content = FS.readFileSync(_filePath, 'utf8');
+function analyzeConsoleUsage(FILE_PATH) {
+  const content = FS.readFileSync(FILE_PATH, 'utf8');
   const lines = content.split('\n');
 
   const usage = {
-    _filePath,
+    FILE_PATH,
     consoleLines: [],
     hasLoggerImport: false,
     importType: null,
@@ -283,7 +283,7 @@ function main() {
         totalConsoleLines += usage.consoleLines.length;
       }
     } catch (_error) {
-      console.warn(`⚠️  Could not analyze ${file}: ${error.message}`);
+      console.warn(`⚠️  Could not analyze ${file}: ${_error.message}`);
     }
   }
 
@@ -344,7 +344,7 @@ function main() {
         );
       }
     } catch (_error) {
-      console.error(`❌ Failed to migrate ${usage.filePath}: ${error.message}`);
+      console._error(`❌ Failed to migrate ${usage.filePath}: ${_error.message}`);
     }
   }
 

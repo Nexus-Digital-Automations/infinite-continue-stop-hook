@@ -219,12 +219,12 @@ class TestPerformanceMonitor {
       if (hasErrors) {
         throw new Error('Test performance monitoring completed with errors');
       }
-    } catch {
+    } catch (_error) {
       PerformanceLogger.error(
-        `Test performance monitoring failed: ${error.message}`,
+        `Test performance monitoring failed: ${_error.message}`,
       );
-      PerformanceLogger.debug(error.stack);
-      throw error;
+      PerformanceLogger.debug(_error.stack);
+      throw _error;
     }
   }
 
@@ -314,15 +314,15 @@ class TestPerformanceMonitor {
       this.checkSuitePerformance(suiteResult);
 
       PerformanceLogger.success(`${testSuite.name} completed in ${duration}ms`);
-    } catch {
+    } catch (_error) {
       const duration = Date.now() - suiteStartTime;
       PerformanceLogger.error(
-        `${testSuite.name} failed after ${duration}ms: ${error.message}`,
+        `${testSuite.name} failed after ${duration}ms: ${_error.message}`,
       );
 
       this.errors.push({
         suite: testSuite.name,
-        error: error.message,
+        error: _error.message,
         duration,
         timestamp: new Date().toISOString(),
       });
@@ -543,7 +543,7 @@ class TestPerformanceMonitor {
     if (FS.existsSync(CONFIG.paths.trends)) {
       try {
         trends = JSON.parse(FS.readFileSync(CONFIG.paths.trends, 'utf8'));
-      } catch {
+      } catch (_error) {
         PerformanceLogger.warning(
           'Could not load existing trends, starting fresh',
         );
@@ -712,7 +712,7 @@ class TestPerformanceMonitor {
           encoding: 'utf8',
         }).trim(),
       };
-    } catch {
+    } catch (_error) {
       return { commit: 'unknown', branch: 'unknown', author: 'unknown' };
     }
   }

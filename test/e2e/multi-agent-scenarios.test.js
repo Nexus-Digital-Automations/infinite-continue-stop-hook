@@ -515,7 +515,7 @@ describe('Multi-Agent Scenarios E2E', () => {
               successfulOperations++;
             } catch (_error) {
               console.warn(
-                `Operation ${index} failed validation: ${error.message}`,
+                `Operation ${index} failed validation: ${_error.message}`,
               );
             }
           }

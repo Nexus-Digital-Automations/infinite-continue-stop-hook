@@ -248,7 +248,7 @@ ${progressReport.validationDetails
       return flagData.stop_allowed === true;
     } catch (_error) {
       // Invalid flag file, remove it
-      loggers.app.error(
+      loggers.app._error(
         `⚠️ Invalid validation progress file detected - cleaning up. Error: ${_error.message}`
       );
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
@@ -658,8 +658,8 @@ async function autoSortTasksByPriority(_taskManager) {
         tasksMoved++;
       }
 
-      // STEP 2: Ensure all tasks have required category field for validation
-      if (!task.category) {
+      // STEP 2: Ensure all tasks have required task.category field for validation
+      if (!task.task.category) {
         const taskPrefix = getCurrentPrefix(task.id || '');
         switch (taskPrefix) {
           case 'error':
@@ -744,7 +744,7 @@ async function autoSortTasksByPriority(_taskManager) {
       totalTasks: tasksOrFeatures.length,
     };
   } catch (_error) {
-    // Log error through logger for proper tracking - use loggers.app for error handling
+    // Log _error through logger for proper tracking - use loggers.app for _error handling
     loggers.app.error('autoSortTasksByPriority error:', _error);
     return { error: _error.message, tasksMoved: 0, tasksUpdated: 0 };
   }
@@ -1681,7 +1681,7 @@ This system operates in infinite continue mode. To authorize a stop, use:
       `Error handled - continuing infinite mode: ${_error.message}`
     );
 
-    loggers.app.error(`
+    loggers.app._error(`
 ⚠️ STOP HOOK ERROR - CONTINUING ANYWAY
 
 Error encountered: ${_error.message}
@@ -1697,6 +1697,6 @@ Even with errors, the system continues to prevent accidental termination.
 ⚡ CONTINUING OPERATION...
 `);
     // eslint-disable-next-line n/no-process-exit
-    process.exit(2); // Even on error, continue infinite mode
+    process.exit(2); // Even on _error, continue infinite mode
   }
 });

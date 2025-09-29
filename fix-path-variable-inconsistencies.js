@@ -35,7 +35,7 @@ function getAllJavaScriptFiles() {
  */
 function fixPathVariableInconsistencies(filePath) {
   try {
-    const content = fs.readFileSync(_filePath, 'utf-8');
+    const content = fs.readFileSync(FILE_PATH, 'utf-8');
     let fixed = content;
     let changes = 0;
 
@@ -117,30 +117,30 @@ function fixPathVariableInconsistencies(filePath) {
     }
     fixed = lines.join('\n');
 
-    // Pattern 4: Fix variable declaration mismatches (_filePath vs filePath)
+    // Pattern 4: Fix variable declaration mismatches (FILE_PATH vs filePath)
     const beforeFilePathFix = fixed;
-    // When function parameter is _filePath but code uses filePath
+    // When function parameter is filePath but code uses filePath
     fixed = fixed.replace(
-      /function\s+\w+\s*\(\s*_filePath\s*\)[^{]*\{[^}]*\bfilePath\b/g,
+      /function\s+\w+\s*\(\s*filePath\s*\)[^{]*\{[^}]*\bfilePath\b/g,
       (match) => {
-        return match.replace(/\bfilePath\b/g, '_filePath');
+        return match.replace(/\bfilePath\b/g, 'filePath');
       },
     );
 
-    // Fix fs.readFileSync(_filePath, ...) when parameter is _filePath
+    // Fix fs.readFileSync(FILE_PATH, ...) when parameter is FILE_PATH
     fixed = fixed.replace(
-      /fs\.readFileSync\(\s*filePath\s*,/g,
-      'fs.readFileSync(_filePath,',
+      /fs\.readFileSync\(\s*FILE_PATH\s*,/g,
+      'fs.readFileSync(FILE_PATH,',
     );
     fixed = fixed.replace(
-      /fs\.writeFileSync\(\s*filePath\s*,/g,
-      'fs.writeFileSync(_filePath,',
+      /fs\.writeFileSync\(\s*FILE_PATH\s*,/g,
+      'fs.writeFileSync(FILE_PATH,',
     );
 
     if (beforeFilePathFix !== fixed) {
       changes++;
       console.log(
-        `  ✓ Fixed filePath vs _filePath inconsistencies in ${PATH.basename(filePath)}`,
+        `  ✓ Fixed filePath vs filePath inconsistencies in ${PATH.basename(filePath)}`,
       );
     }
 
@@ -159,7 +159,7 @@ function fixPathVariableInconsistencies(filePath) {
     }
 
     if (changes > 0) {
-      fs.writeFileSync(_filePath, fixed);
+      fs.writeFileSync(FILE_PATH, fixed);
       console.log(
         `✅ Fixed ${changes} PATH variable inconsistencies in: ${PATH.relative(rootDir, filePath)}`,
       );

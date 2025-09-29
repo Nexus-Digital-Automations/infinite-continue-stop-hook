@@ -16,9 +16,9 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       this.PROJECT_ROOT = mockProjectRoot;
     }
 
-    _fileExists(_filePath) {
+    _fileExists(FILE_PATH) {
       try {
-        return FS.existsSync(_filePath);
+        return FS.existsSync(FILE_PATH);
       } catch (_error) {
         return false;
       }
@@ -87,7 +87,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       } catch (_error) {
         return {
           success: false,
-          error: error.message,
+          _error: _error.message,
           metrics: [],
           statistics: null,
         };
@@ -136,7 +136,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       } catch (_error) {
         return {
           success: false,
-          error: error.message,
+          _error: _error.message,
           bottlenecks: [],
         };
       }
@@ -183,7 +183,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       } catch (_error) {
         return {
           success: false,
-          error: error.message,
+          _error: _error.message,
           benchmarks: null,
         };
       }

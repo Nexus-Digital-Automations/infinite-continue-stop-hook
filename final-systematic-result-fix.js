@@ -39,7 +39,7 @@ class FinalSystematicResultFix {
       this.reportResults();
     } catch (_error) {
       console.error('❌ Error during systematic fixes:', _error.message);
-      process.exit(1);
+      throw new Error(`Systematic fixes failed: ${_error.message}`);
     }
   }
 
@@ -88,7 +88,7 @@ class FinalSystematicResultFix {
     // Skip if file doesn't exist or is not readable
     try {
       fs.accessSync(filePath, fs.constants.R_OK | fs.constants.W_OK);
-    } catch {
+    } catch (_error) {
       return false;
     }
 
@@ -137,7 +137,7 @@ class FinalSystematicResultFix {
     }
 
     // Apply context-specific fixes
-    fixed = this.applyContextSpecificFixes(fixed, filePath);
+    fixed = this.applyContextSpecificFixes(fixed, FILE_PATH);
 
     // Final validation and cleanup
     fixed = this.validateAndCleanup(fixed);
@@ -412,7 +412,7 @@ if (require.main === module) {
   const fixer = new FinalSystematicResultFix();
   fixer.applySystematicFixes().catch((error) => {
     console.error('❌ Failed to apply systematic fixes:', error);
-    process.exit(1);
+    throw new Error(`Script execution failed: ${error.message}`);
   });
 }
 

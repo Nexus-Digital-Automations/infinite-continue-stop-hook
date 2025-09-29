@@ -1,14 +1,15 @@
 /* eslint-disable no-console, security/detect-non-literal-fs-filename */
 const fs = require('fs');
+const { loggers } = require('../lib/logger');
 const PATH = require('path');
 
 /**
  * Fix catch blocks that use 'error' variable but don't declare it in E2E tests
  */
 
-function fixCatchBlocks(_filePath) {
+function fixCatchBlocks(FILE_PATH) {
   try {
-    const content = fs.readFileSync(_filePath, 'utf8');
+    const content = fs.readFileSync(FILE_PATH, 'utf8');
     const lines = content.split('\n');
     let modified = false;
 
@@ -55,14 +56,14 @@ function fixCatchBlocks(_filePath) {
     }
 
     if (modified) {
-      fs.writeFileSync(_filePath, lines.join('\n'));
-      console.log(`Fixed catch blocks in: ${filePath}`);
+      fs.writeFileSync(FILE_PATH, lines.join('\n'));
+      console.log(`Fixed catch blocks in: ${FILE_PATH}`);
       return true;
     }
 
     return false;
   } catch (_error) {
-    console.error(`Error fixing ${filePath}:`, _error.message);
+    console.error(`Error fixing ${FILE_PATH}:`, _error.message);
     return false;
   }
 }

@@ -575,7 +575,7 @@ describe('Agent Management', () => {
           expect(result.error).toContain('Failed to authorize stop');
         } catch (_error) {
           // Expected in this test scenario
-          expect(error.message).toContain('File system unavailable');
+          expect(_error.message).toContain('File system unavailable');
         }
       });
     });

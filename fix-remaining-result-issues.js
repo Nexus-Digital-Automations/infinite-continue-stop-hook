@@ -106,7 +106,7 @@ class RemainingResultFixer {
       );
     } catch (_error) {
       console.error('❌ Failed to fix remaining issues:', _error.message);
-      process.exit(1);
+      throw new Error(`Failed to fix remaining issues: ${_error.message}`);
     }
   }
 
@@ -153,12 +153,12 @@ class RemainingResultFixer {
     }
   }
 
-  fixTestFile(_filePath) {
+  fixTestFile(FILE_PATH) {
     console.log(
-      `🔧 Processing test file: ${PATH.relative(process.cwd(), _filePath)}`
+      `🔧 Processing test file: ${PATH.relative(process.cwd(), FILE_PATH)}`
     );
 
-    let content = FS.readFileSync(filePath, 'utf8');
+    let content = FS.readFileSync(FILE_PATH, 'utf8');
     let modified = false;
     let totalChanges = 0;
 
@@ -259,11 +259,11 @@ class RemainingResultFixer {
         changes: totalChanges,
       });
       console.log(
-        `✅ Fixed ${totalChanges} issues in ${PATH.relative(process.cwd(), _filePath)}`
+        `✅ Fixed ${totalChanges} issues in ${PATH.relative(process.cwd(), filePath)}`
       );
     } else {
       console.log(
-        `✅ No issues found in ${PATH.relative(process.cwd(), _filePath)}`
+        `✅ No issues found in ${PATH.relative(process.cwd(), filePath)}`
       );
     }
   }

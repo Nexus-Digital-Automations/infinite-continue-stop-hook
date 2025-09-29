@@ -16,7 +16,7 @@
  * @author Audit System Agent #4
  */
 
-const FS = require('fs').promises;
+const _FS = require('fs').promises;
 const path = require('path');
 const { execSync } = require('child_process');
 
@@ -31,14 +31,14 @@ class SecurityUtils {
    * @returns {string} Safe resolved path
    * @throws {Error} If path is invalid or outside base directory
    */
-  static validatePath(basePath, _filePath) {
-    if (!_filePath || typeof _filePath !== 'string') {
+  static validatePath(basePath, FILE_PATH) {
+    if (!filePath || typeof filePath !== 'string') {
       throw new Error('Invalid file path provided');
     }
 
     // Resolve paths to prevent directory traversal
     const resolvedBase = path.resolve(basePath);
-    const resolvedPath = path.resolve(basePath, path.basename(_filePath));
+    const resolvedPath = path.resolve(basePath, path.basename(FILE_PATH));
 
     // Ensure the resolved path is within the base directory
     if (
@@ -46,7 +46,7 @@ class SecurityUtils {
       resolvedPath !== resolvedBase
     ) {
       throw new Error(
-        `Path ${_filePath} is outside allowed directory ${basePath}`,
+        `Path ${FILE_PATH} is outside allowed directory ${basePath}`,
       );
     }
 
@@ -63,7 +63,7 @@ class SecurityUtils {
   static safeReadFile(basePath, filePath, encoding = 'utf-8') {
     const safePath = this.validatePath(basePath, filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
-    return FS.readFile(safePath, encoding);
+    return _FS.readFile(safePath, encoding);
   }
 
   /**
@@ -76,9 +76,9 @@ class SecurityUtils {
   static async safeWriteFile(basePath, filePath, content) {
     const safePath = this.validatePath(basePath, filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
-    await FS.mkdir(path.dirname(safePath), { recursive: true });
+    await _FS.mkdir(path.dirname(safePath), { recursive: true });
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
-    return FS.writeFile(safePath, content, 'utf-8');
+    return _FS.writeFile(safePath, content, 'utf-8');
   }
 
   /**
@@ -91,9 +91,9 @@ class SecurityUtils {
   static async safeAppendFile(basePath, filePath, content) {
     const safePath = this.validatePath(basePath, filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
-    await FS.mkdir(path.dirname(safePath), { recursive: true });
+    await _FS.mkdir(path.dirname(safePath), { recursive: true });
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
-    return FS.appendFile(safePath, content);
+    return _FS.appendFile(safePath, content);
   }
 }
 
@@ -418,7 +418,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
         this.projectRoot,
         'package.json',
       );
-      await FS.access(packageJsonPath);
+      await _FS.access(packageJsonPath);
       hasPackageJson = true;
     } catch (_error) {
       // Package.json not found or access denied
@@ -529,8 +529,8 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
    * @param {string} agentId - Agent ID to analyze
    * @returns {string|null} Detected role or null
    */
-  detectAgentRole(_AGENT_ID) {
-    const lowerAgentId = _AGENT_ID.toLowerCase();
+  detectAgentRole(agentId) {
+    const lowerAgentId = agentId.toLowerCase();
 
     for (const [role, patterns] of Object.entries(this.agentRolePatterns)) {
       if (patterns.some((pattern) => lowerAgentId.includes(pattern))) {
@@ -580,7 +580,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
       return false;
     }
 
-    return this.config.mandatoryAuditCategories.includes(taskDetails.category);
+    return this.config.mandatoryAuditCategories.includes(taskDetails.task.category);
   }
 
   /**

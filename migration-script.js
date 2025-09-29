@@ -62,9 +62,9 @@ class FeaturesMigration {
 
       loggers.stopHook.log('✅ Migration completed successfully!');
       return true;
-    } catch {
+    } catch (_error) {
       loggers.stopHook.error('❌ Migration failed:', _error.message);
-      this.migrationReport.errors.push(error.message);
+      this.migrationReport.errors.push(_error.message);
       return false;
     }
   }
@@ -195,9 +195,9 @@ class FeaturesMigration {
           const transformedFeature = this.transformTask(task);
           transformedData.features.push(transformedFeature);
           this.migrationReport.migratedFeatures++;
-        } catch {
+        } catch (_error) {
           this.migrationReport.errors.push(
-            `Failed to transform task ${task.id || index}: ${error.message}`
+            `Failed to transform task ${task.id || index}: ${_error.message}`
           );
           loggers.app.warn(
             `⚠️  Warning: Failed to transform task ${task.id || index}`
@@ -212,9 +212,9 @@ class FeaturesMigration {
         try {
           const transformedFeature = this.transformTask(task, true);
           transformedData.completed_features.push(transformedFeature);
-        } catch {
+        } catch (_error) {
           this.migrationReport.errors.push(
-            `Failed to transform completed task ${task.id || index}: ${error.message}`
+            `Failed to transform completed task ${task.id || index}: ${_error.message}`
           );
         }
       });
@@ -271,7 +271,7 @@ class FeaturesMigration {
           : null,
 
       // Preserved original fields
-      original_category: task.category || 'feature',
+      original_category: task.task.category || 'feature',
       original_priority: task.priority || 'medium',
       original_status: task.status || 'pending',
 
@@ -399,7 +399,7 @@ class FeaturesMigration {
 
       loggers.stopHook.log('✅ Migration validation passed');
       return true;
-    } catch {
+    } catch (_error) {
       loggers.stopHook.error('❌ Migration validation failed:', _error.message);
       return false;
     }

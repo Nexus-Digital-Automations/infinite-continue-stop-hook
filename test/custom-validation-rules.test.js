@@ -51,7 +51,7 @@ describe('CustomValidationRulesManager', () => {
     // Cleanup test directory
     try {
       await FS.rm(testProjectRoot, { recursive: true, force: true });
-    } catch {
+    } catch (_error) {
       loggers.stopHook.warn(
         'Failed to cleanup test directory:',
         _error.message
@@ -71,7 +71,7 @@ describe('CustomValidationRulesManager', () => {
         })
       );
       await Promise.all(deletions);
-    } catch {
+    } catch (_error) {
       // Ignore cleanup errors
     }
   });

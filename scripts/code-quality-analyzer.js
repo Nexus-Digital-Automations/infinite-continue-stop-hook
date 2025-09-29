@@ -257,11 +257,11 @@ class CodeQualityAnalyzer {
         recommendations: this.recommendations,
         detailed_metrics: this.metrics,
       };
-    } catch {
+    } catch (_error) {
       this.logger.error('Code quality analysis failed', {
-        error: error.message,
+        error: _error.message,
       });
-      throw error;
+      throw _error;
     }
   }
 
@@ -281,9 +281,9 @@ class CodeQualityAnalyzer {
           absolute: true,
         });
         allFiles.push(...files);
-      } catch {
+      } catch (_error) {
         this.logger.warning(`Failed to glob pattern ${pattern}`, {
-          error: error.message,
+          error: _error.message,
         });
       }
     }
@@ -307,7 +307,7 @@ class CodeQualityAnalyzer {
 
     for (const filePath of this.sourceFiles) {
       try {
-        const fileComplexity = this.analyzeFileComplexity(_filePath);
+        const fileComplexity = this.analyzeFileComplexity(FILE_PATH);
 
         // Aggregate cyclomatic complexity
         complexityData.cyclomatic.files[filePath] = fileComplexity.cyclomatic;
@@ -347,9 +347,9 @@ class CodeQualityAnalyzer {
             message: `High cyclomatic complexity: ${fileComplexity.cyclomatic}`,
           });
         }
-      } catch {
+      } catch (_error) {
         this.logger.debug(`Failed to analyze complexity for ${filePath}`, {
-          error: error.message,
+          error: _error.message,
         });
       }
     }
@@ -370,9 +370,9 @@ class CodeQualityAnalyzer {
   /**
    * Analyze complexity for a single file
    */
-  analyzeFileComplexity(_filePath) {
+  analyzeFileComplexity(FILE_PATH) {
     try {
-      const content = FS.readFileSync(_filePath, 'utf8');
+      const content = FS.readFileSync(FILE_PATH, 'utf8');
 
       // Simple complexity analysis (can be enhanced with AST parsing)
       const lines = content.split('\n');
@@ -410,7 +410,7 @@ class CodeQualityAnalyzer {
         complex_functions: complexFunctions,
         line_count: lines.length,
       };
-    } catch {
+    } catch (_error) {
       return {
         cyclomatic: 0,
         cognitive: 0,
@@ -446,7 +446,7 @@ class CodeQualityAnalyzer {
 
     for (const filePath of this.sourceFiles) {
       try {
-        const content = FS.readFileSync(_filePath, 'utf8');
+        const content = FS.readFileSync(FILE_PATH, 'utf8');
         const lineCount = content.split('\n').length;
 
         sizeData.total_lines += lineCount;
@@ -470,9 +470,9 @@ class CodeQualityAnalyzer {
             message: `Large file: ${lineCount} lines`,
           });
         }
-      } catch {
+      } catch (_error) {
         this.logger.debug(`Failed to analyze size for ${filePath}`, {
-          error: error.message,
+          error: _error.message,
         });
       }
     }
@@ -508,7 +508,7 @@ class CodeQualityAnalyzer {
 
     for (const filePath of this.sourceFiles) {
       try {
-        const content = FS.readFileSync(_filePath, 'utf8');
+        const content = FS.readFileSync(FILE_PATH, 'utf8');
         const lines = content.split('\n');
 
         // Track line-level duplication
@@ -541,9 +541,9 @@ class CodeQualityAnalyzer {
             blockHashes.get(hash).push({ file: filePath, startLine: i + 1 });
           }
         }
-      } catch {
+      } catch (_error) {
         this.logger.debug(`Failed to analyze duplication for ${filePath}`, {
-          error: error.message,
+          error: _error.message,
         });
       }
     }
@@ -658,7 +658,7 @@ class CodeQualityAnalyzer {
 
     for (const filePath of this.sourceFiles) {
       try {
-        const content = FS.readFileSync(_filePath, 'utf8');
+        const content = FS.readFileSync(FILE_PATH, 'utf8');
         const lines = content.split('\n');
 
         for (let i = 0; i < lines.length; i++) {
@@ -684,9 +684,9 @@ class CodeQualityAnalyzer {
             }
           }
         }
-      } catch {
+      } catch (_error) {
         this.logger.debug(`Failed to analyze security for ${filePath}`, {
-          error: error.message,
+          error: _error.message,
         });
       }
     }
@@ -792,7 +792,7 @@ class CodeQualityAnalyzer {
     // Detect various code smells
     for (const filePath of this.sourceFiles) {
       try {
-        const content = FS.readFileSync(_filePath, 'utf8');
+        const content = FS.readFileSync(FILE_PATH, 'utf8');
         const lines = content.split('\n');
 
         // Detect long methods/functions
@@ -839,9 +839,9 @@ class CodeQualityAnalyzer {
         if (lines.length > this.config.size.lines_per_file.critical) {
           smellsData.god_objects++;
         }
-      } catch {
+      } catch (_error) {
         this.logger.debug(`Failed to detect smells for ${filePath}`, {
-          error: error.message,
+          error: _error.message,
         });
       }
     }
@@ -889,7 +889,7 @@ class CodeQualityAnalyzer {
 
     for (const filePath of this.sourceFiles) {
       try {
-        const content = FS.readFileSync(_filePath, 'utf8');
+        const content = FS.readFileSync(FILE_PATH, 'utf8');
         const lines = content.split('\n');
 
         const fileImports = [];
@@ -919,9 +919,9 @@ class CodeQualityAnalyzer {
 
         imports.set(filePath, fileImports);
         exports.set(filePath, fileExports);
-      } catch {
+      } catch (_error) {
         this.logger.debug(`Failed to analyze architecture for ${filePath}`, {
-          error: error.message,
+          error: _error.message,
         });
       }
     }
@@ -1241,9 +1241,9 @@ Examples:
     try {
       const customConfig = JSON.parse(FS.readFileSync(configPath, 'utf8'));
       options.config = customConfig;
-    } catch {
-      loggers.stopHook.error(`❌ Failed to load config: ${error.message}`);
-      throw error;
+    } catch (_error) {
+      loggers.stopHook.error(`❌ Failed to load config: ${_error.message}`);
+      throw _error;
     }
   }
 
@@ -1263,9 +1263,9 @@ Examples:
     if (result.overall_score < 70) {
       throw new Error('Code quality score below threshold');
     }
-  } catch {
+  } catch (_error) {
     loggers.stopHook.error('❌ Code quality analysis failed:', _error.message);
-    throw error;
+    throw _error;
   }
 }
 

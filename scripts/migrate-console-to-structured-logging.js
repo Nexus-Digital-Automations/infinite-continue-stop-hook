@@ -43,17 +43,17 @@ class ConsoleToStructuredMigrator {
     };
   }
 
-  shouldSkipFile(_filePath) {
+  shouldSkipFile(FILE_PATH) {
     return this.skipPatterns.some((pattern) => {
       const regex = new RegExp(
         pattern.replace(/\*\*/g, '.*').replace(/\*/g, '[^/]*')
       );
-      return regex.test(_filePath);
+      return regex.test(FILE_PATH);
     });
   }
 
-  shouldProcessFile(_filePath) {
-    if (this.shouldSkipFile(_filePath)) {
+  shouldProcessFile(FILE_PATH) {
+    if (this.shouldSkipFile(FILE_PATH)) {
       return false;
     }
 
@@ -61,11 +61,11 @@ class ConsoleToStructuredMigrator {
       const regex = new RegExp(
         pattern.replace(/\*\*/g, '.*').replace(/\*/g, '[^/]*')
       );
-      return regex.test(_filePath);
+      return regex.test(FILE_PATH);
     });
   }
 
-  migrateFileContent(content, _filePath) {
+  migrateFileContent(content, FILE_PATH) {
     let modified = false;
     let newContent = content;
 
@@ -81,7 +81,7 @@ class ConsoleToStructuredMigrator {
         content.match(/^const .* = require\(.*\);?$/gm) || [];
       if (requireStatements.length > 0) {
         const lastRequire = requireStatements[requireStatements.length - 1];
-        const loggerImport = this.getLoggerImportForFile(_filePath);
+        const loggerImport = this.getLoggerImportForFile(FILE_PATH);
         newContent = newContent.replace(
           lastRequire,
           lastRequire + '\n' + loggerImport
@@ -108,37 +108,37 @@ class ConsoleToStructuredMigrator {
     return { content: newContent, modified };
   }
 
-  getLoggerImportForFile(_filePath) {
+  getLoggerImportForFile(FILE_PATH) {
     const relativePath = path.relative(
-      path.dirname(_filePath),
+      path.dirname(FILE_PATH),
       path.join(__dirname, '../lib/logger')
     );
     const normalizedPath = relativePath.replace(/\\/g, '/');
     return `const { loggers } = require('${normalizedPath}');`;
   }
 
-  processFile(_filePath) {
+  processFile(FILE_PATH) {
     try {
-      const content = FS.readFileSync(_filePath, 'utf8');
+      const content = FS.readFileSync(FILE_PATH, 'utf8');
       const { content: newContent, modified } = this.migrateFileContent(
         content,
-        filePath
+        FILE_PATH
       );
 
       if (modified) {
-        FS.writeFileSync(_filePath, newContent, 'utf8');
+        FS.writeFileSync(FILE_PATH, newContent, 'utf8');
         loggers.app.info('Migrated console calls to structured logging', {
-          filePath: path.relative(process.cwd(), _filePath),
+          FILE_PATH: path.relative(process.cwd(), FILE_PATH),
           replacedCalls: this.replacedCalls,
         });
         this.processedFiles++;
       }
     } catch (_error) {
       loggers.app.error('Failed to process file', {
-        filePath,
-        error: error.message,
+        FILE_PATH,
+        _error: _error.message,
       });
-      this.skippedFiles.push({ filePath, reason: error.message });
+      this.skippedFiles.push({ FILE_PATH, reason: _error.message });
     }
   }
 
@@ -206,8 +206,8 @@ if (require.main === module) {
       );
     }
   } catch (_error) {
-    loggers.app.error('Migration failed', { error: error.message });
-    throw new Error(`Migration failed: ${error.message}`);
+    loggers.app.error('Migration failed', { error: _error.message });
+    throw new Error(`Migration failed: ${_error.message}`);
   }
 }
 

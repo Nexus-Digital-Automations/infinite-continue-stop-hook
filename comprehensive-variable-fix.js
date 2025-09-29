@@ -43,7 +43,7 @@ const catchBlockFixes = [
     },
   },
 
-  // Add error parameter to catch blocks that reference error
+  // Add _error parameter to catch blocks that reference error
   {
     pattern: /catch\s*\(\s*\)\s*\{([^{}]*\berror\b[^{}]*)\}/g,
     replacement: (match, _blockContent) => {
@@ -52,8 +52,8 @@ const catchBlockFixes = [
   },
 ];
 
-function fixFile(_filePath) {
-  const normalizedPath = PATH.resolve(_filePath);
+function fixFile(FILE_PATH) {
+  const normalizedPath = PATH.resolve(FILE_PATH);
 
   if (!normalizedPath.endsWith('.js')) {
     return false;
@@ -125,13 +125,13 @@ function fixFile(_filePath) {
 
     if (modified) {
       FS.writeFileSync(normalizedPath, content, 'utf8');
-      loggers.app.info(`Fixed: ${PATH.relative(rootDir, _filePath)}`);
+      loggers.app.info(`Fixed: ${PATH.relative(rootDir, FILE_PATH)}`);
       return true;
     }
 
     return false;
   } catch (_fixError) {
-    loggers.app.error(`Error fixing ${filePath}:`, {
+    loggers.app.error(`Error fixing ${FILE_PATH}:`, {
       error: _fixError.message,
     });
     return false;

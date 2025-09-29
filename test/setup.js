@@ -52,7 +52,7 @@ global.testUtils = {
         // eslint-disable-next-line no-await-in-loop -- Retry mechanism requires sequential attempts
         await fn();
         return;
-      } catch {
+      } catch (_error) {
         // eslint-disable-next-line no-await-in-loop -- Retry mechanism requires sequential delays
         await new Promise((resolve) => {
           setTimeout(resolve, interval);

@@ -84,12 +84,12 @@ async function execAPI(command, args = []) {
 
   try {
     return JSON.parse(result.stdout);
-  } catch {
+  } catch (_error) {
     loggers.app.error(
       'Failed to parse API response:',
       result.stdout,
       'Error:',
-      error.message
+      _error.message
     );
     // Some commands return plain text, not JSON
     return { success: true, output: result.stdout, raw: true };
@@ -259,9 +259,9 @@ describe('Application Tests', () => {
       path.join(E2E_PROJECT_DIR, 'development', 'success-criteria-config.json'),
       JSON.stringify(successCriteriaConfig, null, 2)
     );
-  } catch {
+  } catch (_error) {
     loggers.stopHook.error('Failed to setup E2E project:', error);
-    throw error;
+    throw _error;
   }
 }
 
@@ -271,7 +271,7 @@ describe('Application Tests', () => {
 async function cleanupE2EProject() {
   try {
     await FS.rm(E2E_PROJECT_DIR, { recursive: true, force: true });
-  } catch {
+  } catch (_error) {
     // Ignore cleanup errors
   }
 }
@@ -300,8 +300,8 @@ describe('Success Criteria End-to-End Tests', () => {
       } else {
         expect(initResult.success).toBe(true);
       }
-    } catch {
-      loggers.stopHook.warn(`Agent initialization warning: ${error.message}`);
+    } catch (_error) {
+      loggers.stopHook.warn(`Agent initialization warning: ${_error.message}`);
       // Continue with test - some initialization issues may be recoverable
     }
   }, 60000);
@@ -339,8 +339,8 @@ describe('Success Criteria End-to-End Tests', () => {
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch {
-        loggers.stopHook.warn(`Feature approval warning: ${error.message}`);
+      } catch (_error) {
+        loggers.stopHook.warn(`Feature approval warning: ${_error.message}`);
       }
 
       // 3. Execute validation steps (simulated implementation)
@@ -381,8 +381,8 @@ describe('Success Criteria End-to-End Tests', () => {
             }
           }
         }
-      } catch {
-        loggers.stopHook.warn(`Feature listing warning: ${error.message}`);
+      } catch (_error) {
+        loggers.stopHook.warn(`Feature listing warning: ${_error.message}`);
       }
 
       // Validation results should show successful workflow
@@ -420,8 +420,8 @@ describe('Success Criteria End-to-End Tests', () => {
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch {
-        loggers.stopHook.warn(`Feature approval warning: ${error.message}`);
+      } catch (_error) {
+        loggers.stopHook.warn(`Feature approval warning: ${_error.message}`);
       }
 
       // Simulate validation failures during implementation
@@ -452,8 +452,10 @@ describe('Success Criteria End-to-End Tests', () => {
             }
           }
         }
-      } catch {
-        loggers.stopHook.warn(`Feature verification warning: ${error.message}`);
+      } catch (_error) {
+        loggers.stopHook.warn(
+          `Feature verification warning: ${_error.message}`
+        );
       }
 
       // Expected validation failures should be detected
@@ -495,9 +497,9 @@ describe('Success Criteria End-to-End Tests', () => {
             }
           }
         }
-      } catch {
+      } catch (_error) {
         loggers.stopHook.warn(
-          `Feature metadata verification warning: ${error.message}`
+          `Feature metadata verification warning: ${_error.message}`
         );
       }
 
@@ -509,9 +511,9 @@ describe('Success Criteria End-to-End Tests', () => {
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch {
+      } catch (_error) {
         loggers.stopHook.warn(
-          `Enterprise feature approval warning: ${error.message}`
+          `Enterprise feature approval warning: ${_error.message}`
         );
       }
 
@@ -545,9 +547,9 @@ describe('Success Criteria End-to-End Tests', () => {
             }
           }
         }
-      } catch {
+      } catch (_error) {
         loggers.app.warn(
-          `Enhanced validation verification warning: ${error.message}`
+          `Enhanced validation verification warning: ${_error.message}`
         );
       }
     }, 30000);
@@ -580,8 +582,8 @@ describe('Success Criteria End-to-End Tests', () => {
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch {
-        loggers.stopHook.warn(`Feature approval warning: ${error.message}`);
+      } catch (_error) {
+        loggers.stopHook.warn(`Feature approval warning: ${_error.message}`);
       }
 
       // 3. Implement feature (simulate code changes)
@@ -624,9 +626,9 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch {
+      } catch (_error) {
         loggers.app.warn(
-          `Feature workflow completion verification warning: ${error.message}`
+          `Feature workflow completion verification warning: ${_error.message}`
         );
       }
 
@@ -659,8 +661,8 @@ module.exports = { authenticate };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch {
-        loggers.stopHook.warn(`Bug fix approval warning: ${error.message}`);
+      } catch (_error) {
+        loggers.stopHook.warn(`Bug fix approval warning: ${_error.message}`);
       }
 
       // Implement bug fix
@@ -705,9 +707,9 @@ module.exports = { authenticateWithTimeout };
             }
           }
         }
-      } catch {
+      } catch (_error) {
         loggers.stopHook.warn(
-          `Bug fix workflow verification warning: ${error.message}`
+          `Bug fix workflow verification warning: ${_error.message}`
         );
       }
 
@@ -742,9 +744,9 @@ module.exports = { authenticateWithTimeout };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch {
+      } catch (_error) {
         loggers.stopHook.warn(
-          `Refactoring feature approval warning: ${error.message}`
+          `Refactoring feature approval warning: ${_error.message}`
         );
       }
 
@@ -819,9 +821,9 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch {
+      } catch (_error) {
         loggers.app.warn(
-          `Refactoring workflow verification warning: ${error.message}`
+          `Refactoring workflow verification warning: ${_error.message}`
         );
       }
 
@@ -878,9 +880,9 @@ module.exports = { authenticate };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch {
+      } catch (_error) {
         loggers.stopHook.warn(
-          `Multi-agent feature approval warning: ${error.message}`
+          `Multi-agent feature approval warning: ${_error.message}`
         );
       }
 
@@ -913,9 +915,9 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch {
+      } catch (_error) {
         loggers.app.warn(
-          `Multi-agent coordination verification warning: ${error.message}`
+          `Multi-agent coordination verification warning: ${_error.message}`
         );
       }
 
@@ -951,9 +953,9 @@ module.exports = { authenticate };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch {
+      } catch (_error) {
         loggers.stopHook.warn(
-          `Performance feature approval warning: ${error.message}`
+          `Performance feature approval warning: ${_error.message}`
         );
       }
 
@@ -989,9 +991,9 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch {
+      } catch (_error) {
         loggers.app.warn(
-          `Performance feature verification warning: ${error.message}`
+          `Performance feature verification warning: ${_error.message}`
         );
       }
 
@@ -1028,9 +1030,9 @@ module.exports = { authenticate };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch {
+      } catch (_error) {
         loggers.stopHook.warn(
-          `Regression detection approval warning: ${error.message}`
+          `Regression detection approval warning: ${_error.message}`
         );
       }
 
@@ -1062,9 +1064,9 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch {
+      } catch (_error) {
         loggers.app.warn(
-          `Regression detection verification warning: ${error.message}`
+          `Regression detection verification warning: ${_error.message}`
         );
       }
 
@@ -1108,9 +1110,9 @@ module.exports = { authenticate };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch {
+      } catch (_error) {
         loggers.stopHook.warn(
-          `Evidence collection approval warning: ${error.message}`
+          `Evidence collection approval warning: ${_error.message}`
         );
       }
 
@@ -1160,9 +1162,9 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch {
+      } catch (_error) {
         loggers.app.warn(
-          `Evidence collection verification warning: ${error.message}`
+          `Evidence collection verification warning: ${_error.message}`
         );
       }
 

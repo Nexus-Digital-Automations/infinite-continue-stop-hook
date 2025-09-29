@@ -35,13 +35,13 @@ const additionalPatterns = [
   {
     search: /function[^(]*\(([^)]*\bfilePath\b[^)]*)\)/g,
     replace: function (match, params) {
-      return match.replace(/\bfilePath\b/g, '_filePath');
+      return match.replace(/\bfilePath\b/g, 'FILE_PATH');
     },
   },
   {
     search: /\(([^)]*\bfilePath\b[^)]*)\) =>/g,
     replace: function (match, params) {
-      return match.replace(/\bfilePath\b/g, '_filePath');
+      return match.replace(/\bfilePath\b/g, 'FILE_PATH');
     },
   },
 
@@ -73,7 +73,7 @@ function getAllJSFiles(dir) {
 
 function fixFileUnusedVars(filePath) {
   try {
-    let content = fs.readFileSync(_filePath, 'utf8');
+    let content = fs.readFileSync(FILE_PATH, 'utf8');
     let modified = false;
 
     for (const pattern of additionalPatterns) {
@@ -101,13 +101,13 @@ function fixFileUnusedVars(filePath) {
     }
 
     if (modified) {
-      fs.writeFileSync(_filePath, content, 'utf8');
+      fs.writeFileSync(FILE_PATH, content, 'utf8');
       return true;
     }
 
     return false;
   } catch (_error) {
-    console.error(`  ✗ Error processing ${filePath}:`, _error.message);
+    console.error(`  ✗ Error processing ${FILE_PATH}:`, _error.message);
     return false;
   }
 }

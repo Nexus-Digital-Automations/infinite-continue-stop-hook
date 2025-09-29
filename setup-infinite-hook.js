@@ -133,7 +133,7 @@ async function getProjectInfo(targetPath) {
       if (packageJson.Name) {
         detectedName = packageJson.Name;
       }
-    } catch {
+    } catch (_error) {
       // Ignore And use directory Name
     }
   }
@@ -262,7 +262,7 @@ function needsTodoUpdate(todoPath) {
       `✓ ${path.basename(path.dirname(todoPath))} - FEATURES.json already up to date`
     );
     return false;
-  } catch {
+  } catch (_error) {
     loggers.app.info(
       `⚠️  ${path.basename(path.dirname(todoPath))} - FEATURES.json corrupted, will recreate`
     );
@@ -462,9 +462,9 @@ async function processProject(targetPath) {
     }
 
     return { success: true, project: projectName };
-  } catch {
+  } catch (_error) {
     loggers.stopHook.error(`❌ ${projectName} - Error:`, _error.message);
-    return { success: false, project: projectName, error: error.message };
+    return { success: false, project: projectName, error: _error.message };
   }
 }
 
@@ -530,8 +530,8 @@ function migrateToFeatureBasedSystem(targetPath) {
         `   🗑️  Removed features.json (dual system eliminated)`
       );
     }
-  } catch {
-    loggers.stopHook.log(`   ❌ Feature migration failed: ${error.message}`);
+  } catch (_error) {
+    loggers.stopHook.log(`   ❌ Feature migration failed: ${_error.message}`);
     // Don't fail the entire setup for migration issues
   }
 }
@@ -900,9 +900,9 @@ async function main() {
     loggers.app.info(
       'node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/stop-hook.js"'
     );
-  } catch {
+  } catch (_error) {
     loggers.stopHook.error('\n❌ Batch setup error:', _error.message);
-    throw error;
+    throw _error;
   } finally {
     rl.close();
   }

@@ -64,14 +64,14 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         }
         const result = JSON.parse(jsonString);
         resolve(result);
-      } catch {
+      } catch (_error) {
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch {
+        } catch (_error) {
           reject(
             new Error(
-              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${error.message}`
+              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${_error.message}`
             )
           );
         }
@@ -456,7 +456,7 @@ describe('Feature Management System Unit Tests', () => {
         title: 'Complex research requiring extensive investigation',
         description:
           'Detailed research task involving multiple technologies And approaches',
-        category: 'feature',
+        task.category: 'feature',
         priority: 'high',
       };
 
@@ -482,7 +482,7 @@ describe('Feature Management System Unit Tests', () => {
         title: 'Critical implementation requiring research',
         description:
           'Implementation That should not start without proper research',
-        category: 'feature',
+        task.category: 'feature',
         priority: 'critical',
       };
 
@@ -636,7 +636,7 @@ describe('Feature Management System Unit Tests', () => {
       const taskData = {
         title: 'Timestamp test research task',
         description: 'Task to verify research subtask timestamp generation',
-        category: 'feature',
+        task.category: 'feature',
         priority: 'medium',
       };
 
@@ -702,7 +702,7 @@ describe('Feature Management System Unit Tests', () => {
       const specialCharsTaskData = {
         title: 'API@2.0: Implement REST/GraphQL endpoints (OAuth2.0 + JWT)',
         description: 'Complex task with special characters: @, /, (), +, ., :',
-        category: 'feature',
+        task.category: 'feature',
         priority: 'medium',
       };
 

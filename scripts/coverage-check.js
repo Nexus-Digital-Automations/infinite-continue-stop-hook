@@ -132,12 +132,12 @@ class CoverageThresholdChecker {
       if (shouldFail) {
         throw new Error('Coverage validation failed');
       }
-    } catch {
-      CoverageLogger.error(`Coverage validation failed: ${error.message}`);
+    } catch (_error) {
+      CoverageLogger.error(`Coverage validation failed: ${_error.message}`);
       if (process.env.DEBUG) {
-        loggers.stopHook.error(error.stack);
+        loggers.stopHook.error(_error.stack);
       }
-      throw error;
+      throw _error;
     }
   }
 
@@ -154,7 +154,7 @@ class CoverageThresholdChecker {
       CoverageLogger.info('Coverage data not found, attempting to generate...');
       try {
         execSync('npm run coverage:ci', { stdio: 'inherit', timeout: 120000 });
-      } catch {
+      } catch (_error) {
         throw new Error(
           'Failed to generate coverage data. Run tests with coverage first.'
         );
@@ -179,9 +179,9 @@ class CoverageThresholdChecker {
       );
 
       return coverageData;
-    } catch {
-      if (error.message.includes('Invalid coverage')) {
-        throw error;
+    } catch (_error) {
+      if (_error.message.includes('Invalid coverage')) {
+        throw _error;
       }
       throw new Error(`Failed to parse coverage data: ${error.message}`);
     }
@@ -455,7 +455,7 @@ class CoverageThresholdChecker {
           encoding: 'utf8',
         }).trim(),
       };
-    } catch {
+    } catch (_error) {
       return { commit: 'unknown', branch: 'unknown' };
     }
   }
@@ -514,18 +514,18 @@ Examples:
     try {
       const customThresholds = JSON.parse(thresholdArg.split('=')[1]);
       config.thresholds = { ...config.thresholds, ...customThresholds };
-    } catch {
+    } catch (_error) {
       loggers.stopHook.error('❌ Invalid thresholds JSON:', _error.message);
-      throw error;
+      throw _error;
     }
   }
 
   const checker = new CoverageThresholdChecker(config);
   try {
     checker.run();
-  } catch {
+  } catch (_error) {
     loggers.stopHook.error('❌ Fatal error:', _error.message);
-    throw error;
+    throw _error;
   }
 }
 

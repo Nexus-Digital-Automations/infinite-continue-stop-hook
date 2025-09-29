@@ -138,7 +138,7 @@ class E2EEnvironment {
         // eslint-disable-next-line no-await-in-loop -- Sequential cleanup required for proper teardown order
         await task();
       } catch (_error) {
-        loggers.stopHook.warn(`Cleanup task failed: ${error.message}`);
+        loggers.stopHook.warn(`Cleanup task failed: ${_error.message}`);
       }
     }
   }
@@ -159,8 +159,8 @@ class E2EEnvironment {
         await FS.unlink(dirPath);
       }
     } catch (_error) {
-      if (error.code !== 'ENOENT') {
-        throw error;
+      if (_error.code !== 'ENOENT') {
+        throw _error;
       }
     }
   }
@@ -191,7 +191,7 @@ class E2EEnvironment {
       }
     } catch (_error) {
       throw new Error(
-        `Failed to get features from TaskManager API: ${error.message}`,
+        `Failed to get features from TaskManager API: ${_error.message}`,
       );
     }
   }
@@ -404,7 +404,7 @@ class FeatureTestHelpers {
       title: data.title,
       description: data.description,
       business_value: data.business_value,
-      category: data.category,
+      task.category: data.task.category,
     });
 
     const result = await CommandExecutor.executeAPI(
@@ -742,7 +742,7 @@ class E2EAssertions {
       throw new Error('No feature ID found in response');
     } catch (_error) {
       throw new Error(
-        `Failed to extract feature ID: ${error.message}\nResponse: ${commandResult.stdout}`,
+        `Failed to extract feature ID: ${_error.message}\nResponse: ${commandResult.stdout}`,
       );
     }
   }

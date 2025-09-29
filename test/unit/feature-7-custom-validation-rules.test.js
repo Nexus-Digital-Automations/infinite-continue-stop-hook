@@ -237,7 +237,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
         } catch (_error) {
           return {
             success: false,
-            error: `Custom validation '${rule.name}' failed: ${error.message}`,
+            error: `Custom validation '${rule.name}' failed: ${_error.message}`,
           };
         }
       };
@@ -287,7 +287,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
         } catch (_error) {
           return {
             success: false,
-            error: `Custom validation '${rule.name}' failed: ${error.message}`,
+            error: `Custom validation '${rule.name}' failed: ${_error.message}`,
           };
         }
       };
@@ -337,7 +337,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
         } catch (_error) {
           return {
             success: false,
-            error: `Custom validation '${rule.name}' failed: ${error.message}`,
+            error: `Custom validation '${rule.name}' failed: ${_error.message}`,
           };
         }
       };
@@ -370,7 +370,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
         } catch (_error) {
           return {
             success: false,
-            error: `Custom validation '${rule.name}' failed: ${error.message}`,
+            error: `Custom validation '${rule.name}' failed: ${_error.message}`,
           };
         }
       };
@@ -424,7 +424,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
         } catch (_error) {
           return {
             success: false,
-            error: `Custom validation '${rule.name}' failed: ${error.message}`,
+            error: `Custom validation '${rule.name}' failed: ${_error.message}`,
           };
         }
       };
@@ -570,7 +570,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
         } catch (_error) {
           return {
             success: false,
-            error: `Custom validation '${rule.name}' failed: ${error.message}`,
+            error: `Custom validation '${rule.name}' failed: ${_error.message}`,
           };
         }
       };

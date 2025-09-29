@@ -10,7 +10,7 @@ const { loggers } = require('./lib/logger');
 
 function filePath(_$2) {
 
-    let content = FS.readFileSync(filePath, 'utf8');
+    let content = FS.readFileSync(FILE_PATH, 'utf8');
     let modified = false;
 
     // Common unused variable patterns to fix
@@ -69,14 +69,14 @@ function filePath(_$2) {
     if (modified) {
       FS.writeFileSync(filePath, content, 'utf8');
       loggers.app.info(
-        `✅ Fixed unused variables in ${PATH.relative('.', _filePath)}`
+        `✅ Fixed unused variables in ${PATH.relative('.', filePath)}`
       );
       return true;
     }
 
     return false;
   } catch (_error) {
-    loggers.app.error(`❌ Error fixing ${filePath}:`, { error: error.message });
+    loggers.app._error(`❌ Error fixing ${filePath}:`, { _error: _error.message });
     return false;
   }
 }

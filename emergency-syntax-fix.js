@@ -23,7 +23,7 @@ class EmergencySyntaxFixer {
 
       // Apply emergency fixes
       for (const filePath of jsFiles) {
-        this.processFile(_filePath);
+        this.processFile(FILE_PATH);
       }
 
       console.log(`✅ Fixed ${this.fixedFiles.length} files`);
@@ -65,9 +65,9 @@ class EmergencySyntaxFixer {
     return files;
   }
 
-  processFile(_filePath) {
+  processFile(FILE_PATH) {
     try {
-      const content = FS.readFileSync(_filePath, 'utf8');
+      const content = FS.readFileSync(FILE_PATH, 'utf8');
       let fixedContent = content;
       let hasChanges = false;
 
@@ -141,11 +141,11 @@ class EmergencySyntaxFixer {
 
       // Write file if changes were made
       if (hasChanges) {
-        FS.writeFileSync(_filePath, fixedContent, 'utf8');
-        this.fixedFiles.push(_filePath);
+        FS.writeFileSync(FILE_PATH, fixedContent, 'utf8');
+        this.fixedFiles.push(FILE_PATH);
       }
     } catch (_error) {
-      this.errors.push(`${filePath}: ${_error.message}`);
+      this.errors.push(`${FILE_PATH}: ${_error.message}`);
     }
   }
 }

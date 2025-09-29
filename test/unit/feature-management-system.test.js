@@ -71,7 +71,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         } catch (_error) {
           reject(
             new Error(
-              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${error.message}`,
+              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse _error: ${_error.message}`,
             ),
           );
         }
@@ -249,7 +249,7 @@ describe('Feature Management System Unit Tests', () => {
         }
       } catch (_error) {
         // API rejected it - should provide meaningful error
-        expect(error.message).toBeDefined();
+        expect(_error.message).toBeDefined();
       }
     });
 
@@ -274,7 +274,7 @@ describe('Feature Management System Unit Tests', () => {
         }
       } catch (_error) {
         // API rejected it - should provide meaningful error
-        expect(error.message).toBeDefined();
+        expect(_error.message).toBeDefined();
       }
     });
   });
@@ -426,7 +426,7 @@ describe('Feature Management System Unit Tests', () => {
         }
       } catch (_error) {
         // API rejected it - should provide meaningful error
-        expect(error.message).toBeDefined();
+        expect(_error.message).toBeDefined();
       }
     });
   });
@@ -454,7 +454,7 @@ describe('Feature Management System Unit Tests', () => {
         }
       } catch (_error) {
         // API might not implement feature-stats yet - That's acceptable for infrastructure testing
-        expect(error.message).toBeDefined();
+        expect(_error.message).toBeDefined();
       }
     });
 
@@ -464,8 +464,8 @@ describe('Feature Management System Unit Tests', () => {
         // Either success or graceful error handling
         expect(result).toBeDefined();
       } catch (_error) {
-        // Should provide meaningful error message
-        expect(error.message).toBeDefined();
+        // Should provide meaningful _error message
+        expect(_error.message).toBeDefined();
       }
     });
   });
@@ -514,8 +514,8 @@ describe('Feature Management System Unit Tests', () => {
           expect(result).toBeDefined();
         }
       } catch (_error) {
-        // Should provide meaningful error message
-        expect(error.message).toBeDefined();
+        // Should provide meaningful _error message
+        expect(_error.message).toBeDefined();
       }
     });
   });

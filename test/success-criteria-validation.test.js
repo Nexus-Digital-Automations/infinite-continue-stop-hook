@@ -168,7 +168,7 @@ app.start().then(() => {
     loggers.stopHook.log('Features test project setup completed');
   } catch (_error) {
     loggers.stopHook.error('Failed to setup features test project:', error);
-    throw error;
+    throw _error;
   }
 }
 

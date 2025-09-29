@@ -132,7 +132,7 @@ describe('RAG System API Endpoints', () => {
           const DURATION = Date.now() - start;
           expect(duration).toBeLessThan(10000);
         } catch (_error) {
-        expect(error.code).toBe('ECONNABORTED');
+        expect(_error.code).toBe('ECONNABORTED');
         }
         */
       });

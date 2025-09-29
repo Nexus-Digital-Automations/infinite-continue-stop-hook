@@ -66,7 +66,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         try {
           const result = JSON.parse(stdout);
           resolve(result);
-        } catch {
+        } catch (_error) {
           reject(
             new Error(`JSON parse error: ${error.message}\nOutput: ${stdout}`)
           );
@@ -130,9 +130,9 @@ async function setupTestProject() {
       path.join(TEST_PROJECT_DIR, 'package.json'),
       JSON.stringify(packageJson, null, 2)
     );
-  } catch {
+  } catch (_error) {
     loggers.stopHook.error('Failed to setup test project:', error);
-    throw error;
+    throw _error;
   }
 }
 
@@ -142,7 +142,7 @@ async function setupTestProject() {
 async function cleanupTestProject() {
   try {
     await FS.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
-  } catch {
+  } catch (_error) {
     // Ignore cleanup errors
   }
 }
@@ -303,7 +303,7 @@ describe('Success Criteria Integration Tests', () => {
         JSON.stringify({
           title: 'Template validation task',
           description: 'Test task for template validation workflow',
-          category: 'feature',
+          task.category: 'feature',
         }),
       ]);
       expect(createResult.success).toBe(true);
@@ -423,7 +423,7 @@ describe('Success Criteria Integration Tests', () => {
       try {
         const result = await execAPI('complete', ['non_existent_task_id']);
         expect(result.success).toBe(false);
-      } catch {
+      } catch (_error) {
         // Expected to fail
         expect(error).toBeDefined();
       }
@@ -626,7 +626,7 @@ describe('Success Criteria Integration Tests', () => {
         JSON.stringify({
           title: 'Concurrent modification test task',
           description: 'Test task for concurrent modification safety',
-          category: 'feature',
+          task.category: 'feature',
         }),
       ]);
       expect(createResult.success).toBe(true);

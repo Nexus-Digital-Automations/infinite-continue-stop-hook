@@ -307,21 +307,21 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
         // Initialize all agents
         ...agentIds.map((_AGENT_ID) => ({
           command: 'initialize',
-          args: [agentId],
+          args: [_AGENT_ID],
           options: { projectRoot: testDir },
         })),
 
         // Reinitialize some agents
         ...agentIds.slice(0, 5).map((_AGENT_ID) => ({
           command: 'reinitialize',
-          args: [agentId],
+          args: [_AGENT_ID],
           options: { projectRoot: testDir },
         })),
 
         // More initializations (duplicates)
         ...agentIds.slice(5, 10).map((_AGENT_ID) => ({
           command: 'initialize',
-          args: [agentId],
+          args: [_AGENT_ID],
           options: { projectRoot: testDir },
         })),
 
@@ -350,8 +350,8 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
 
       // All agents should be present
       agentIds.forEach((_AGENT_ID) => {
-        expect(featuresData.agents[agentId]).toBeDefined();
-        expect(featuresData.agents[agentId].status).toBe('active');
+        expect(featuresData.agents[_AGENT_ID]).toBeDefined();
+        expect(featuresData.agents[_AGENT_ID].status).toBe('active');
       });
 
       // 5. Verify statistics consistency
@@ -867,7 +867,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
       // 1. Create data, then simulate errors And cleanup
       const feature = generateTestFeature({
         title: 'Cleanup Test Feature',
-        category: 'enhancement',
+        task.category: 'enhancement',
       });
 
       const initialResult = await execAPI(

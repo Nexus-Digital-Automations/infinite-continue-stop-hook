@@ -40,7 +40,7 @@ class TasksApiAdapter {
             title: task.title,
             description: task.description,
             business_value: task.business_value,
-            category: task.category,
+            task.category: task.task.category,
             status: task.status,
             created_at: task.created_at,
             updated_at: task.updated_at,

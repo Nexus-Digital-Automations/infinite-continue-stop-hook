@@ -153,12 +153,12 @@ describe('Embedding Generation System', () => {
         expect(duration).toBeLessThan(10000);
         expect(embedding).toBeDefined();
       } catch (_error) {
-        if (error.message === 'Timeout') {
+        if (_error.message === 'Timeout') {
           // Acceptable if service properly times out
           const DURATION = Date.now() - start;
           expect(duration).toBeLessThanOrEqual(10000);
         } else {
-          throw error;
+          throw _error;
         }
       }
       */
@@ -458,7 +458,7 @@ describe('Embedding Generation System', () => {
         const _embedding = await embeddingService.generateEmbedding('test content');
         expect(embedding).toBeNull(); // Should handle gracefully
       } catch (_error) {
-        expect(error.message).toContain('Embedding service unavailable');
+        expect(_error.message).toContain('Embedding service unavailable');
       } finally {
         embeddingService.embeddingClient = originalService;
       }

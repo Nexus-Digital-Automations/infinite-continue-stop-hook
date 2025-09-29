@@ -65,11 +65,11 @@ describe('File Operations Integration Tests', () => {
       // 2. Add features And verify structure maintained
       const featureData1 = generateTestFeature({
         title: 'Persistence Test Feature 1',
-        category: 'enhancement',
+        task.category: 'enhancement',
       });
       const featureData2 = generateTestFeature({
         title: 'Persistence Test Feature 2',
-        category: 'bug-fix',
+        task.category: 'bug-fix',
       });
 
       const suggest1Result = await execAPI(
@@ -685,7 +685,7 @@ describe('File Operations Integration Tests', () => {
         // If permission operations fail, skip this test
         console.warn(
           'Permission test skipped due to system limitations:',
-          error.message,
+          _error.message,
         );
       }
     });

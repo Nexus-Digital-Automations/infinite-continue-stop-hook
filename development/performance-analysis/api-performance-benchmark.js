@@ -757,7 +757,7 @@ async function main() {
     loggers.stopHook.log(`\n📄 Full report: ${outputFile}`);
   } catch (_error) {
     loggers.stopHook.error('❌ Benchmark failed:', _error);
-    throw error;
+    throw _error;
   }
 }
 

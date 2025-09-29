@@ -23,16 +23,16 @@ class MockFileSystem {
   }
 
   // Mock FS.access
-  async access(_filePath) {
+  async access(FILE_PATH) {
     await new Promise((resolve) => {
       setTimeout(resolve, 0);
     });
-    if (this.accessErrors.has(_filePath)) {
-      const error = new Error(this.accessErrors.get(_filePath));
+    if (this.accessErrors.has(FILE_PATH)) {
+      const error = new Error(this.accessErrors.get(FILE_PATH));
       error.code = 'ENOENT';
       throw error;
     }
-    if (!this.files.has(_filePath)) {
+    if (!this.files.has(FILE_PATH)) {
       const error = new Error('File not found');
       error.code = 'ENOENT';
       throw error;
@@ -74,8 +74,8 @@ class MockFileSystem {
     this.files.set(filePath, content);
   }
 
-  deleteFile(_filePath) {
-    this.files.delete(_filePath);
+  deleteFile(FILE_PATH) {
+    this.files.delete(FILE_PATH);
   }
 
   setAccessError(filePath, error) {
@@ -101,12 +101,12 @@ class MockFileSystem {
     this.clearErrors();
   }
 
-  hasFile(_filePath) {
-    return this.files.has(_filePath);
+  hasFile(FILE_PATH) {
+    return this.files.has(FILE_PATH);
   }
 
-  getFile(_filePath) {
-    return this.files.get(_filePath);
+  getFile(FILE_PATH) {
+    return this.files.get(FILE_PATH);
   }
 }
 

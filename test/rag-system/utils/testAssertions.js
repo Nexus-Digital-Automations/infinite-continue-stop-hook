@@ -571,9 +571,9 @@ class TestAssertions {
         );
       } catch (_error) {
         // This is expected - function should handle invalid input gracefully
-        expect(error).toBeInstanceOf(Error);
-        expect(error.message).toBeDefined();
-        expect(typeof error.message).toBe('string');
+        expect(_error).toBeInstanceOf(Error);
+        expect(_error.message).toBeDefined();
+        expect(typeof _error.message).toBe('string');
       }
     }
   }

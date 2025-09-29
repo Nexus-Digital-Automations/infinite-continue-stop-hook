@@ -100,7 +100,7 @@ class FileLock {
         return async () => {
           try {
             await FS.unlink(lockPath);
-          } catch {
+          } catch (_error) {
             // Lock file already removed or doesn't exist
           }
         };
@@ -119,16 +119,16 @@ class FileLock {
                 setTimeout(resolve, this.retryDelay);
               });
               continue;
-            } catch {
+            } catch (_error) {
               // Process doesn't exist, remove stale lock
               try {
                 await FS.unlink(lockPath);
-              } catch {
+              } catch (_error) {
                 // Someone else removed it
               }
               continue;
             }
-          } catch {
+          } catch (_error) {
             // Can't read lock file, wait And retry
             await new Promise((resolve) => {
               setTimeout(resolve, this.retryDelay);
@@ -325,7 +325,7 @@ class AutonomousTaskManagerAPI {
   async _ensureFeaturesFile() {
     try {
       await FS.access(this.tasksPath);
-    } catch {
+    } catch (_error) {
       // File doesn't exist, create it
       const initialStructure = {
         project: path.basename(PROJECT_ROOT),
@@ -358,7 +358,7 @@ class AutonomousTaskManagerAPI {
   async _ensureTasksFile() {
     try {
       await FS.access(this.tasksPath);
-    } catch {
+    } catch (_error) {
       // File doesn't exist, create it with new TASKS.json schema
       const initialStructure = {
         project: path.basename(PROJECT_ROOT),
@@ -1627,7 +1627,7 @@ class AutonomousTaskManagerAPI {
       // Store performance metrics even for failures
       try {
         await this._storeValidationPerformanceMetrics(performanceMetrics);
-      } catch {
+      } catch (_error) {
         // Don't fail the response due to metrics storage issues
       }
 
@@ -2124,7 +2124,7 @@ class AutonomousTaskManagerAPI {
             testsFound = true;
             testFiles.push(...matches);
           }
-        } catch {
+        } catch (_error) {
           // Continue with next pattern
         }
       }
@@ -2147,7 +2147,7 @@ class AutonomousTaskManagerAPI {
                 testFiles.push(...grepResult.trim().split('\n'));
               }
             }
-          } catch {
+          } catch (_error) {
             // Continue checking
           }
         }
@@ -2224,7 +2224,7 @@ class AutonomousTaskManagerAPI {
             coverageResult = result;
             break;
           }
-        } catch {
+        } catch (_error) {
           // Try next command
         }
       }
@@ -2492,7 +2492,7 @@ class AutonomousTaskManagerAPI {
           const data = await FS.readFile(metricsFile, 'utf8');
           existingMetrics = JSON.parse(data);
         }
-      } catch {
+      } catch (_error) {
         // Start fresh if file is corrupted
         existingMetrics = { metrics: [] };
       }
@@ -4062,7 +4062,7 @@ class AutonomousTaskManagerAPI {
           const backupPath = path.join(snapshotDir, file);
           await FS.mkdir(path.dirname(backupPath), { recursive: true });
           await FS.copyFile(filePath, backupPath);
-        } catch {
+        } catch (_error) {
           // File doesn't exist, skip backup
         }
       });
@@ -4173,7 +4173,7 @@ class AutonomousTaskManagerAPI {
         try {
           await FS.access(backupPath);
           await FS.copyFile(backupPath, targetPath);
-        } catch {
+        } catch (_error) {
           // Backup file doesn't exist, skip restore
         }
       });
@@ -4218,7 +4218,7 @@ class AutonomousTaskManagerAPI {
 
       try {
         await FS.access(snapshotsDir);
-      } catch {
+      } catch (_error) {
         return {
           success: true,
           snapshots: [],
@@ -4250,7 +4250,7 @@ class AutonomousTaskManagerAPI {
               age: this._calculateSnapshotAge(metadata.timestamp),
             });
           }
-        } catch {
+        } catch (_error) {
           // Skip invalid snapshots
           loggers.taskManager.warn(`Skipping invalid snapshot: ${entry}`);
         }
@@ -4308,7 +4308,7 @@ class AutonomousTaskManagerAPI {
           total: historyData.events?.length || 0,
           showing: events.length,
         };
-      } catch {
+      } catch (_error) {
         return {
           success: true,
           history: [],
@@ -4333,7 +4333,7 @@ class AutonomousTaskManagerAPI {
 
       try {
         await FS.access(snapshotsDir);
-      } catch {
+      } catch (_error) {
         return {
           success: true,
           cleaned: 0,
@@ -4364,7 +4364,7 @@ class AutonomousTaskManagerAPI {
               directory: snapshotDir,
             });
           }
-        } catch {
+        } catch (_error) {
           // Invalid snapshot, mark for cleanup
           snapshots.push({
             id: entry,
@@ -4505,7 +4505,7 @@ class AutonomousTaskManagerAPI {
       try {
         const existing = await FS.readFile(historyFile, 'utf8');
         history = JSON.parse(existing);
-      } catch {
+      } catch (_error) {
         // History file doesn't exist yet
       }
 
@@ -4543,7 +4543,7 @@ class AutonomousTaskManagerAPI {
       try {
         const existing = await FS.readFile(historyFile, 'utf8');
         history = JSON.parse(existing);
-      } catch {
+      } catch (_error) {
         // History file doesn't exist yet
       }
 
@@ -4622,7 +4622,7 @@ class AutonomousTaskManagerAPI {
           .toString()
           .trim();
         cacheInputs.push(`git:${gitHash}`);
-      } catch {
+      } catch (_error) {
         // No git or error, use timestamp as fallback
         cacheInputs.push(`timestamp:${Date.now()}`);
       }
@@ -4632,7 +4632,7 @@ class AutonomousTaskManagerAPI {
       try {
         const packageStats = await FS.stat(packageJsonPath);
         cacheInputs.push(`package:${packageStats.mtime.getTime()}`);
-      } catch {
+      } catch (_error) {
         // No package.json
         cacheInputs.push('package:none');
       }
@@ -4644,7 +4644,7 @@ class AutonomousTaskManagerAPI {
           const fullPath = path.join(PROJECT_ROOT, filePath);
           const stats = await FS.stat(fullPath);
           cacheInputs.push(`file:${filePath}:${stats.mtime.getTime()}`);
-        } catch {
+        } catch (_error) {
           // File doesn't exist, include in cache key
           cacheInputs.push(`file:${filePath}:missing`);
         }
@@ -4659,7 +4659,7 @@ class AutonomousTaskManagerAPI {
         .slice(0, 16);
 
       return cacheKey;
-    } catch {
+    } catch (_error) {
       // Fallback to simple cache key
       return `${criterion}_${Date.now()}`;
     }
@@ -4813,7 +4813,7 @@ class AutonomousTaskManagerAPI {
       // Ensure cache directory exists
       try {
         await FS.mkdir(cacheDir, { recursive: true });
-      } catch {
+      } catch (_error) {
         // Directory might already exist
       }
 
@@ -4868,7 +4868,7 @@ class AutonomousTaskManagerAPI {
             await FS.unlink(filePath);
             cleanedCount++;
           }
-        } catch {
+        } catch (_error) {
           // File might have been deleted already
         }
       }
@@ -5092,7 +5092,7 @@ class AutonomousTaskManagerAPI {
             if (!stat.isDirectory()) {
               return false;
             }
-          } catch {
+          } catch (_error) {
             return false;
           }
         }
@@ -5160,7 +5160,7 @@ class AutonomousTaskManagerAPI {
           if (!rule.conditions.gitBranch.includes(currentBranch)) {
             return false;
           }
-        } catch {
+        } catch (_error) {
           return false;
         }
       }
@@ -5466,7 +5466,7 @@ class AutonomousTaskManagerAPI {
                   };
                 }
               }
-            } catch {
+            } catch (_error) {
               // Command failed or not available, continue
             }
           }
@@ -5528,7 +5528,7 @@ class AutonomousTaskManagerAPI {
                 hasTypeCheckableFiles = true;
                 break;
               }
-            } catch {
+            } catch (_error) {
               // Continue checking other patterns
             }
           }
@@ -5574,7 +5574,7 @@ class AutonomousTaskManagerAPI {
                 };
               }
             }
-          } catch {
+          } catch (_error) {
             // Continue with normal build validation if package.json check fails
           }
 
@@ -5619,7 +5619,7 @@ class AutonomousTaskManagerAPI {
                 };
               }
             }
-          } catch {
+          } catch (_error) {
             // Continue with normal start validation if self-validation check fails
           }
 
@@ -5652,7 +5652,7 @@ class AutonomousTaskManagerAPI {
                 };
               }
             }
-          } catch {
+          } catch (_error) {
             // Continue with normal test validation if self-validation check fails
           }
 
@@ -5786,7 +5786,7 @@ class AutonomousTaskManagerAPI {
               success: true,
               details: `passed with command: ${cmd}`,
             };
-          } catch {
+          } catch (_error) {
             errors.push(`${cmd}: ${commandError.message}`);
 
             // Special fallback for common build system issues
@@ -5856,7 +5856,7 @@ class AutonomousTaskManagerAPI {
               // Kill entire process group to handle spawned processes
               process.kill(-child.pid, 'SIGKILL');
             }
-          } catch {
+          } catch (_error) {
             // Fallback: direct kill
             child.kill('SIGKILL');
           }
@@ -5901,7 +5901,7 @@ class AutonomousTaskManagerAPI {
 
             try {
               child.kill('SIGTERM');
-            } catch {
+            } catch (_error) {
               // Already killed
             }
 
@@ -5933,7 +5933,7 @@ class AutonomousTaskManagerAPI {
             details:
               'Start command executed successfully (killed after timeout)',
           });
-        } catch {
+        } catch (_error) {
           resolve({
             success: false,
             error: `Failed to kill start process: ${killError.message}`,
@@ -5943,7 +5943,7 @@ class AutonomousTaskManagerAPI {
 
       child.on('error', (_error) => {
         clearTimeout(timer);
-        resolve({ success: false, error: error.message });
+        resolve({ success: false, error: _error.message });
       });
 
       child.on('exit', (code) => {
@@ -6023,7 +6023,7 @@ class AutonomousTaskManagerAPI {
           success: true,
           details: `passed with fallback strategy: ${fallbackCmd}`,
         };
-      } catch {
+      } catch (_error) {
         // Continue to next fallback
         continue;
       }
@@ -6140,7 +6140,7 @@ class AutonomousTaskManagerAPI {
       try {
         const result = await strategy();
         return { ...result, attempted: true };
-      } catch {
+      } catch (_error) {
         return {
           success: false,
           error: `Graceful fallback failed: ${strategyError.message}`,
@@ -6160,7 +6160,7 @@ class AutonomousTaskManagerAPI {
     try {
       await FS.access(filePath);
       return true;
-    } catch {
+    } catch (_error) {
       return false;
     }
   }
@@ -6223,13 +6223,13 @@ class AutonomousTaskManagerAPI {
           if (scripts.test && Object.keys(scripts).length <= 3) {
             return 'library';
           }
-        } catch {
+        } catch (_error) {
           // Ignore JSON parsing errors
         }
       }
 
       return 'generic';
-    } catch {
+    } catch (_error) {
       return 'unknown';
     }
   }
@@ -6250,7 +6250,7 @@ class AutonomousTaskManagerAPI {
       // Ensure failures directory exists
       try {
         await FS.mkdir(failuresDir, { recursive: true });
-      } catch {
+      } catch (_error) {
         // Directory might already exist
       }
 
@@ -6645,7 +6645,7 @@ class AutonomousTaskManagerAPI {
       // Ensure emergency directory exists
       try {
         await FS.mkdir(emergencyDir, { recursive: true });
-      } catch {
+      } catch (_error) {
         // Directory might already exist
       }
 
@@ -6975,7 +6975,7 @@ class AutonomousTaskManagerAPI {
       // Ensure audit directory exists
       try {
         await FS.mkdir(auditDir, { recursive: true });
-      } catch {
+      } catch (_error) {
         // Directory might already exist
       }
 
@@ -8316,7 +8316,7 @@ class AutonomousTaskManagerAPI {
       try {
         // eslint-disable-next-line n/no-missing-require
         webSocket = require('ws');
-      } catch {
+      } catch (_error) {
         throw new Error(
           'webSocket package (ws) not installed. Run: npm install ws'
         );
@@ -11067,7 +11067,7 @@ async function main() {
                     expiresAt: record.expiresAt,
                     timestamp: record.timestamp,
                   });
-                } catch {
+                } catch (_error) {
                   // Skip invalid files
                 }
               }

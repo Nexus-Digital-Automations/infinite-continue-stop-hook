@@ -91,13 +91,13 @@ function filePath(_$2) {`);
 
     if (modified) {
       FS.writeFileSync(normalizedPath, content, 'utf8');
-      loggers.app.info(`✅ Fixed: ${PATH.relative(rootDir, _filePath)}`);
+      loggers.app.info(`✅ Fixed: ${PATH.relative(rootDir, FILE_PATH)}`);
       return true;
     }
 
     return false;
   } catch (fixError) {
-    loggers.app.error(`❌ Error fixing ${filePath}:`, {
+    loggers.app.error(`❌ Error fixing ${FILE_PATH}:`, {
       error: fixError.message,
     });
     return false;

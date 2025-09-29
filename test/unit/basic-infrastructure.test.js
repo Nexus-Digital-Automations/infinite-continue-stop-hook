@@ -111,7 +111,7 @@ describe('Basic Testing Infrastructure', () => {
       expect(task.description).toBeDefined();
       expect(task.status).toBe('pending');
       expect(task.priority).toBe('medium');
-      expect(task.category).toBe('test');
+      expect(task.task.category).toBe('test');
     });
   });
 

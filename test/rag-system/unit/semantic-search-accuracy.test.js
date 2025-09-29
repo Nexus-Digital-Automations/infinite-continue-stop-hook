@@ -240,7 +240,7 @@ describe('Semantic Search Accuracy Validation', () => {
                 return await response.json();
               } catch (_error) {
         loggers.stopHook.error('Failed to fetch user:', error);
-                throw error;
+                throw _error;
               }
             }
           `,

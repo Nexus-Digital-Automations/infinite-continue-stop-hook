@@ -130,7 +130,7 @@ try {
   });
   if (!response.ok) throw new Error('API Error');
 } catch (_error) {
-        loggers.stopHook.error(error);
+        loggers.stopHook._error(error);
 }
 \`\`\`
 

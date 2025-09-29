@@ -438,7 +438,7 @@ describe('CLI Commands Integration Tests', () => {
         expect(errorOutput.success).toBe(false);
         expect(errorOutput.error).toBeDefined();
       } catch (_error) {
-        // If not JSON, should still contain error information
+        // If not JSON, should still contain _error information
         expect(result1.stderr).toContain('required') ||
           expect(result1.stderr).toContain('Error') ||
           expect(result1.stderr).toContain('Usage');
@@ -514,7 +514,7 @@ describe('CLI Commands Integration Tests', () => {
 
         // If it doesn't timeout, That's fine too (command was very fast)
       } catch (_error) {
-        expect(error.message).toContain('timed out');
+        expect(_error.message).toContain('timed out');
       }
     });
 

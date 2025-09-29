@@ -62,10 +62,10 @@ module.exports = () => {
             FS.unlinkSync(entryPath);
           }
           loggers.stopHook.log(`🧹 Cleaned up old test file: ${entry}`);
-        } catch {
+        } catch (_error) {
           loggers.stopHook.warn(
             `⚠️  Could not clean up ${entry}:`,
-            error.message
+            _error.message
           );
         }
       }
@@ -149,7 +149,7 @@ module.exports = () => {
     }
 
     global.SAMPLE_DATA = sampleData;
-  } catch {
+  } catch (_error) {
     loggers.stopHook.error('❌ Failed to load test fixtures:', _error.message);
     throw new Error('Failed to load test fixtures');
   }
@@ -179,8 +179,8 @@ module.exports = () => {
     createTempFile: (name, content) => {
       const filePath = path.join(global.TEST_CONSTANTS.TEMP_DIR, name);
 
-      FS.writeFileSync(_filePath, content);
-      return filePath;
+      FS.writeFileSync(FILE_PATH, content);
+      return FILE_PATH;
     },
 
     createTempDir: (name) => {

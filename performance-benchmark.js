@@ -166,7 +166,7 @@ class TaskManagerPerformanceBenchmark {
       const taskData = {
         title: 'Performance Test Task',
         description: 'Task for performance testing embedded subtasks',
-        category: 'feature',
+        task.category: 'feature',
       };
 
       const createResult = await this.executeTimedCommand('create', [

@@ -141,20 +141,20 @@ describe('Feature Lifecycle Integration Tests', () => {
         {
           description: 'Missing title',
           business_value: 'Test',
-          category: 'enhancement',
+          task.category: 'enhancement',
         },
         {
           title: 'Missing description',
           business_value: 'Test',
-          category: 'enhancement',
+          task.category: 'enhancement',
         },
         {
           title: 'Missing business value',
           description: 'Test',
-          category: 'enhancement',
+          task.category: 'enhancement',
         },
         {
-          title: 'Missing category',
+          title: 'Missing task.category',
           description: 'Test',
           business_value: 'Test',
         },
@@ -462,7 +462,7 @@ describe('Feature Lifecycle Integration Tests', () => {
       // 1. Create And approve a feature
       const featureData = generateTestFeature({
         title: 'Transition Test Feature',
-        category: 'enhancement',
+        task.category: 'enhancement',
       });
 
       const suggestResult = await execAPI(

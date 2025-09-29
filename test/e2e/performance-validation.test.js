@@ -67,7 +67,7 @@ describe('Performance Validation E2E', () => {
           );
         } catch (_error) {
           loggers.stopHook.warn(
-            `Performance validation warning: ${error.message}`,
+            `Performance validation warning: ${_error.message}`,
           );
           console.warn(
             `Actual metrics: avg=${performanceMetrics.avg}ms, max=${performanceMetrics.max}ms`,
@@ -122,11 +122,11 @@ describe('Performance Validation E2E', () => {
             const response = JSON.parse(result.result.stdout);
             return response.feature.id;
           } catch (_error) {
-            console.error(
+            console._error(
               'Failed to parse feature suggestion response:',
               result.result.stdout,
             );
-            throw error;
+            throw _error;
           }
         });
 
@@ -162,7 +162,7 @@ describe('Performance Validation E2E', () => {
           );
         } catch (_error) {
           loggers.stopHook.warn(
-            `Approval performance warning: ${error.message}`,
+            `Approval performance warning: ${_error.message}`,
           );
         }
 
@@ -202,11 +202,11 @@ describe('Performance Validation E2E', () => {
             const response = JSON.parse(result.result.stdout);
             return response.feature.id;
           } catch (_error) {
-            console.error(
+            console._error(
               'Failed to parse bulk feature suggestion response:',
               result.result.stdout,
             );
-            throw error;
+            throw _error;
           }
         });
 
@@ -383,7 +383,7 @@ describe('Performance Validation E2E', () => {
           PerformanceTestHelpers.validatePerformance(apiMetrics, apiThresholds);
         } catch (_error) {
           loggers.stopHook.warn(
-            `TaskManager API performance warning: ${error.message}`,
+            `TaskManager API performance warning: ${_error.message}`,
           );
         }
 
@@ -414,7 +414,7 @@ describe('Performance Validation E2E', () => {
             }
             return { success: false, time: Date.now() };
           } catch (_error) {
-            return { success: false, time: Date.now(), error: error.message };
+            return { success: false, time: Date.now(), _error: _error.message };
           }
         };
 
@@ -436,7 +436,7 @@ describe('Performance Validation E2E', () => {
           );
         } catch (_error) {
           loggers.stopHook.warn(
-            `Authorization performance warning: ${error.message}`,
+            `Authorization performance warning: ${_error.message}`,
           );
         }
 
@@ -545,7 +545,7 @@ describe('Performance Validation E2E', () => {
         } catch (_error) {
           // If API response fails due to large payload, it's acceptable for memory stress test
           console.warn(
-            `API response failed under memory stress (expected): ${error.message}`,
+            `API response failed under memory stress (expected): ${_error.message}`,
           );
           // Test passes if we can create intensive operations without system crash
           expect(true).toBe(true);

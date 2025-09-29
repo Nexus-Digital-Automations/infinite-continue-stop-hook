@@ -57,14 +57,14 @@ class LoggingContextEnhancer {
     };
   }
 
-  enhanceFile(_filePath) {
+  enhanceFile(FILE_PATH) {
     try {
-      const content = FS.readFileSync(_filePath, 'utf8');
+      const content = FS.readFileSync(FILE_PATH, 'utf8');
       let newContent = content;
       let enhanced = false;
 
       // Determine context based on file type
-      const contextInfo = this.getFileContext(_filePath);
+      const contextInfo = this.getFileContext(FILE_PATH);
 
       // Enhance simple logger calls (no context)
       newContent = newContent.replace(
@@ -89,7 +89,7 @@ class LoggingContextEnhancer {
             this.enhancedCalls++;
             enhanced = true;
             return `loggers.${loggerType}.${level}('${message}', ${JSON.stringify(enhancedContext)});`;
-          } catch {
+          } catch (_error) {
             // If we can't parse the context, leave it as is
             return match;
           }
@@ -97,23 +97,23 @@ class LoggingContextEnhancer {
       );
 
       if (enhanced) {
-        FS.writeFileSync(_filePath, newContent, 'utf8');
+        FS.writeFileSync(FILE_PATH, newContent, 'utf8');
         loggers.app.info('Enhanced logging context in file', {
-          filePath: path.relative(process.cwd(), _filePath),
+          FILE_PATH: path.relative(process.cwd(), FILE_PATH),
           enhancedCalls: this.enhancedCalls,
         });
         this.processedFiles++;
       }
-    } catch {
+    } catch (_error) {
       loggers.app.error('Failed to enhance file', {
-        filePath,
-        error: error.message,
+        FILE_PATH,
+        error: _error.message,
       });
     }
   }
 
-  getFileContext(_filePath) {
-    const fileName = path.basename(_filePath);
+  getFileContext(FILE_PATH) {
+    const fileName = path.basename(FILE_PATH);
 
     // Determine context based on file purpose
     if (fileName.includes('agent')) {

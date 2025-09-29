@@ -711,7 +711,7 @@ describe('API Workflow Integration Tests', () => {
         // Should not reach here
         expect(true).toBe(false);
       } catch (_error) {
-        expect(error.message).toContain('Command failed');
+        expect(_error.message).toContain('Command failed');
       }
     });
 

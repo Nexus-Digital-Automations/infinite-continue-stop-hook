@@ -21,9 +21,9 @@ function getAllJsFiles() {
 }
 
 // Fix common variable naming issues
-function fixFile(_filePath) {
+function fixFile(FILE_PATH) {
   try {
-    let content = fs.readFileSync(_filePath, 'utf8');
+    let content = fs.readFileSync(FILE_PATH, 'utf8');
     let modified = false;
 
     // Fix result unused variables - add underscore prefix
@@ -66,14 +66,14 @@ function fixFile(_filePath) {
     });
 
     if (modified) {
-      fs.writeFileSync(_filePath, content, 'utf8');
-      console.log(`Fixed: ${filePath}`);
+      fs.writeFileSync(FILE_PATH, content, 'utf8');
+      console.log(`Fixed: ${FILE_PATH}`);
       return true;
     }
 
     return false;
   } catch (_error) {
-    console.error(`Error fixing ${filePath}:`, _error.message);
+    console.error(`Error fixing ${FILE_PATH}:`, _error.message);
     return false;
   }
 }

@@ -12,7 +12,7 @@ class ValidationTestLogger {
   }
 }
 
-const _UNUSED = ['error', 'feature', 'subtask', 'test'];
+const __UNUSED = ['error', 'feature', 'subtask', 'test'];
 const VALID_CATEGORIES = ['error', 'feature', 'subtask', 'test', 'audit'];
 const VALID_COMMANDS = [
   'guide',
@@ -61,17 +61,17 @@ class TaskManagerValidator {
     // Validate category value
     if (taskData.category && !VALID_CATEGORIES.includes(taskData.category)) {
       this.errors.push(
-        `Invalid category '${taskData.category}'. Valid categories: ${VALID_CATEGORIES.join(', ')}`,
+        `Invalid task.category '${taskData.task.category}'. Valid categories: ${VALID_CATEGORIES.join(', ')}`,
       );
     }
 
     // Check for old task_type field
     if (taskData.task_type) {
       this.errors.push(
-        'Field task_type is no longer valid. Use category instead',
+        'Field task_type is no longer valid. Use task.category instead',
       );
       this.warnings.push(
-        'Legacy task_type field detected - update to use category field',
+        'Legacy task_type field detected - update to use task.category field',
       );
     }
 
@@ -194,7 +194,7 @@ class TaskManagerValidator {
           const validation = this.validateTaskCreation(parsed);
           this.errors.push(...validation.errors);
           this.warnings.push(...validation.warnings);
-        } catch (_) {
+        } catch {
           this.errors.push('Invalid JSON format in create command');
         }
       }

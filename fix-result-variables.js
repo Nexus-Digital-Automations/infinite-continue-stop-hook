@@ -64,7 +64,7 @@ class ResultVariableFixer {
 
       // Process each file
       for (const filePath of allFiles) {
-        this.processFile(_filePath);
+        this.processFile(FILE_PATH);
       }
 
       this.generateReport();
@@ -75,7 +75,7 @@ class ResultVariableFixer {
         '❌ Failed to fix result/result variables:',
         _error.message
       );
-      process.exit(1);
+      throw new Error(`Failed to fix result variables: ${_error.message}`);
     }
   }
 
@@ -127,9 +127,9 @@ class ResultVariableFixer {
   /**
    * Process individual file to fix result issues
    */
-  processFile(_filePath) {
+  processFile(FILE_PATH) {
     try {
-      console.log(`🔧 Processing: ${PATH.relative(process.cwd(), _filePath)}`);
+      console.log(`🔧 Processing: ${PATH.relative(process.cwd(), FILE_PATH)}`);
 
       let content = FS.readFileSync(filePath, 'utf8');
       let modified = false;
@@ -144,7 +144,7 @@ class ResultVariableFixer {
       ];
 
       for (const fix of fixes) {
-        const result = fix(content, _filePath);
+        const result = fix(content, FILE_PATH);
         if (result.modified) {
           content = result.content;
           modified = true;
@@ -159,7 +159,7 @@ class ResultVariableFixer {
           changes,
         });
         console.log(
-          `✅ Fixed ${changes} issues in ${PATH.relative(process.cwd(), _filePath)}`
+          `✅ Fixed ${changes} issues in ${PATH.relative(process.cwd(), filePath)}`
         );
       }
 
@@ -176,7 +176,7 @@ class ResultVariableFixer {
   /**
    * Fix result variable names to lowercase result
    */
-  fixResultVariableNames(content, _filePath) {
+  fixResultVariableNames(content, filePath) {
     let modified = false;
     let changes = 0;
 
@@ -235,7 +235,7 @@ class ResultVariableFixer {
   /**
    * Fix variable declaration issues
    */
-  fixVariableDeclarations(content, _filePath) {
+  fixVariableDeclarations(content, FILE_PATH) {
     let modified = false;
     let changes = 0;
 
@@ -307,7 +307,7 @@ class ResultVariableFixer {
   /**
    * Fix scope issues
    */
-  fixScopeIssues(content, _filePath) {
+  fixScopeIssues(content, FILE_PATH) {
     let modified = false;
     let changes = 0;
 
@@ -359,12 +359,12 @@ class ResultVariableFixer {
   /**
    * Fix specific patterns identified in the codebase
    */
-  fixSpecificPatterns(content, _filePath) {
+  fixSpecificPatterns(content, FILE_PATH) {
     let modified = false;
     let changes = 0;
 
     // File-specific fixes
-    const fileName = PATH.basename(_filePath);
+    const fileName = PATH.basename(FILE_PATH);
 
     if (fileName === 'jest-json-reporter.js') {
       // Fix the specific issue where result should be result in return statement

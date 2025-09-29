@@ -349,7 +349,7 @@ class MockManager {
       // Fetch not available, skip restoration
       loggers.stopHook.log(
         'Fetch not available for restoration:',
-        error.message,
+        _error.message,
       );
     }
 

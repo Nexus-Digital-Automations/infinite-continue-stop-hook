@@ -157,7 +157,7 @@ describe('Agent Lifecycle Integration Tests', () => {
 
       const concurrentCommands = agentIds.map((_AGENT_ID) => ({
         command: 'initialize',
-        args: [agentId],
+        args: [_AGENT_ID],
         options: { projectRoot: testDir },
       }));
 
@@ -354,7 +354,7 @@ describe('Agent Lifecycle Integration Tests', () => {
       // 2. Reinitialize all agents concurrently
       const reinitCommands = agentIds.map((_AGENT_ID) => ({
         command: 'reinitialize',
-        args: [agentId],
+        args: [_AGENT_ID],
         options: { projectRoot: testDir },
       }));
 
@@ -816,8 +816,8 @@ describe('Agent Lifecycle Integration Tests', () => {
       // 3. Verify all agents are tracked
       const featuresData = await readFeaturesFile(testDir);
       agentTeam.forEach((_AGENT_ID) => {
-        expect(featuresData.agents[agentId]).toBeDefined();
-        expect(featuresData.agents[agentId].status).toBe('active');
+        expect(featuresData.agents[_AGENT_ID]).toBeDefined();
+        expect(featuresData.agents[_AGENT_ID].status).toBe('active');
       });
 
       // 4. Lead agent authorizes stop after team completion

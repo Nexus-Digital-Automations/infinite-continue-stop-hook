@@ -30,8 +30,8 @@ const targetedFixes = [
   { pattern: /parseError/g, replacement: 'error' },
 ];
 
-function fixFile(_filePath) {
-  const normalizedPath = PATH.resolve(_filePath);
+function fixFile(FILE_PATH) {
+  const normalizedPath = PATH.resolve(FILE_PATH);
 
   if (!normalizedPath.endsWith('.js')) {
     return false;
@@ -71,13 +71,13 @@ function fixFile(_filePath) {
 
     if (modified) {
       FS.writeFileSync(normalizedPath, content, 'utf8');
-      loggers.app.info(`Fixed: ${PATH.relative(rootDir, _filePath)}`);
+      loggers.app.info(`Fixed: ${PATH.relative(rootDir, FILE_PATH)}`);
       return true;
     }
 
     return false;
   } catch (fixError) {
-    loggers.app.error(`Error fixing ${_filePath}:`, {
+    loggers.app.error(`Error fixing ${FILE_PATH}:`, {
       error: fixError.message,
     });
     return false;
@@ -118,8 +118,8 @@ const errorFiles = getErrorFiles();
 loggers.app.info(`📊 Processing ${errorFiles.length} files with errors...`);
 
 let fixedCount = 0;
-errorFiles.forEach((_filePath) => {
-  if (applyTargetedFixes(_filePath)) {
+errorFiles.forEach((FILE_PATH) => {
+  if (applyTargetedFixes(FILE_PATH)) {
     fixedCount++;
   }
 });

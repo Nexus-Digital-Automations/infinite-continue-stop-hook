@@ -222,7 +222,7 @@ describe('Regression Test Suite', () => {
     loggers.stopHook.log('Regression test project setup completed');
   } catch (_error) {
     loggers.stopHook.error('Failed to setup regression test project:', error);
-    throw error;
+    throw _error;
   }
 }
 
@@ -379,7 +379,7 @@ describe('Success Criteria Regression Tests', () => {
           // Log version compatibility issues but don't fail test
           loggers.app.info(
             `API version ${version} compatibility note:`,
-            error.message
+            _error.message
           );
         }
       }
@@ -683,7 +683,7 @@ describe('Success Criteria Regression Tests', () => {
         } catch (_error) {
           loggers.app.info(
             `Schema ${schema.version} evolution note:`,
-            error.message
+            _error.message
           );
         }
       }
@@ -862,7 +862,7 @@ describe('Success Criteria Regression Tests', () => {
           // Some deprecated endpoints might be completely removed
           loggers.app.info(
             `Deprecated endpoint ${endpoint} is no longer available:`,
-            error.message
+            _error.message
           );
         }
       }
@@ -979,7 +979,7 @@ describe('Success Criteria Regression Tests', () => {
         } catch (_error) {
           loggers.app.info(
             `Template version ${template.version} compatibility issue:`,
-            error.message
+            _error.message
           );
         }
       }
@@ -1220,11 +1220,11 @@ describe('Success Criteria Regression Tests', () => {
             `Essential function '${func.name}' is preserved`
           );
         } catch (_error) {
-          loggers.app.error(
+          loggers.app._error(
             `Essential function '${func.name}' failed:`,
-            error.message
+            _error.message
           );
-          throw error; // Essential functions must pass
+          throw _error; // Essential functions must pass
         }
       }
 

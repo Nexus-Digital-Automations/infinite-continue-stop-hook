@@ -310,10 +310,10 @@ class JestCiCdReporter {
       }
 
       return info;
-    } catch {
+    } catch (_error) {
       return {
         error: 'Failed to get Git information',
-        message: error.message,
+        message: _error.message,
       };
     }
   }
@@ -411,7 +411,7 @@ class JestCiCdReporter {
           pct: summary.lines.pct,
         },
       };
-    } catch {
+    } catch (_error) {
       return { error: 'Failed to extract coverage summary' };
     }
   }
@@ -595,11 +595,11 @@ class JestCiCdReporter {
           status: 'sent',
           timestamp: new Date().toISOString(),
         });
-      } catch {
+      } catch (_error) {
         notifications.push({
           type: 'slack',
           status: 'failed',
-          error: error.message,
+          error: _error.message,
         });
       }
     }
@@ -614,11 +614,11 @@ class JestCiCdReporter {
           status: 'sent',
           timestamp: new Date().toISOString(),
         });
-      } catch {
+      } catch (_error) {
         notifications.push({
           type: 'teams',
           status: 'failed',
-          error: error.message,
+          error: _error.message,
         });
       }
     }
@@ -691,7 +691,7 @@ class JestCiCdReporter {
       return execSync('git describe --tags --abbrev=0', {
         encoding: 'utf8',
       }).trim();
-    } catch {
+    } catch (_error) {
       return null;
     }
   }
@@ -700,7 +700,7 @@ class JestCiCdReporter {
     try {
       const status = execSync('git status --porcelain', { encoding: 'utf8' });
       return status.trim().length > 0;
-    } catch {
+    } catch (_error) {
       return false;
     }
   }
@@ -710,7 +710,7 @@ class JestCiCdReporter {
       return execSync('git config --get remote.origin.url', {
         encoding: 'utf8',
       }).trim();
-    } catch {
+    } catch (_error) {
       return null;
     }
   }
@@ -740,7 +740,7 @@ class JestCiCdReporter {
   getTotalMemory() {
     try {
       return require('os').totalmem();
-    } catch {
+    } catch (_error) {
       return null;
     }
   }
@@ -748,7 +748,7 @@ class JestCiCdReporter {
   getAvailableMemory() {
     try {
       return require('os').freemem();
-    } catch {
+    } catch (_error) {
       return null;
     }
   }

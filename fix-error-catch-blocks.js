@@ -8,9 +8,9 @@ const FS = require('fs');
 const PATH = require('path');
 const { loggers } = require('./lib/logger');
 
-function fixErrorCatchBlocks(_filePath) {
+function fixErrorCatchBlocks(FILE_PATH) {
   try {
-    let content = FS.readFileSync(_filePath, 'utf8');
+    let content = FS.readFileSync(FILE_PATH, 'utf8');
     let modified = false;
 
     // Find all catch blocks without parameters that reference 'error' (not 'error')
@@ -40,14 +40,14 @@ function fixErrorCatchBlocks(_filePath) {
     if (modified) {
       FS.writeFileSync(filePath, content, 'utf8');
       loggers.app.info(
-        `✅ Fixed error catch blocks in ${PATH.relative('.', _filePath)}`
+        `✅ Fixed error catch blocks in ${PATH.relative('.', filePath)}`
       );
       return true;
     }
 
     return false;
   } catch (_error) {
-    loggers.app.error(`❌ Error fixing ${_filePath}:`, {
+    loggers.app._error(`❌ Error fixing ${filePath}:`, {
       error: _error.message,
     });
     return false;

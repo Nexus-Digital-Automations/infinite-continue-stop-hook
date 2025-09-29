@@ -28,13 +28,13 @@ function getAllJsFiles() {
 }
 
 // Comprehensive catch block fixing function
-function fixAllCatchBlocks(_filePath) {
+function fixAllCatchBlocks(FILE_PATH) {
   try {
-    if (!fs.existsSync(_filePath)) {
+    if (!fs.existsSync(FILE_PATH)) {
       return false;
     }
 
-    let content = fs.readFileSync(_filePath, 'utf8');
+    let content = fs.readFileSync(FILE_PATH, 'utf8');
     let modified = false;
     const originalContent = content;
 
@@ -70,7 +70,7 @@ function fixAllCatchBlocks(_filePath) {
           replacement: 'catch (_error) {',
         });
       } else if (
-        blockContent.includes('error.') ||
+        blockContent.includes('_error.') ||
         blockContent.includes('error ')
       ) {
         fixes1.push({
@@ -89,7 +89,7 @@ function fixAllCatchBlocks(_filePath) {
     });
 
     // Fix Pattern 2: catch (_error) {} but error is used inside - change parameter to error
-    const pattern2 = /catch\s*\(\s*error\s*\)\s*\{/g;
+    const pattern2 = /catch\s*\(\s*_error\s*\)\s*\{/g;
     let match2;
     const fixes2 = [];
 
@@ -177,7 +177,7 @@ function fixAllCatchBlocks(_filePath) {
     });
 
     // Fix Pattern 4: catch (_error) {} where error is unused - change to error
-    const pattern4 = /catch\s*\(\s*error\s*\)\s*\{/g;
+    const pattern4 = /catch\s*\(\s*_error\s*\)\s*\{/g;
     let match4;
     const fixes4 = [];
 
@@ -225,16 +225,16 @@ function fixAllCatchBlocks(_filePath) {
     });
 
     if (modified && content !== originalContent) {
-      fs.writeFileSync(_filePath, content, 'utf8');
+      fs.writeFileSync(FILE_PATH, content, 'utf8');
       console.log(
-        `Fixed catch blocks in: ${PATH.relative(rootDir, _filePath)}`
+        `Fixed catch blocks in: ${PATH.relative(rootDir, FILE_PATH)}`
       );
       return true;
     }
 
     return false;
   } catch (_error) {
-    console.error(`Error fixing catch blocks in ${_filePath}:`, _error.message);
+    console.error(`Error fixing catch blocks in ${FILE_PATH}:`, _error.message);
     return false;
   }
 }

@@ -69,7 +69,7 @@ const patterns = [
   { search: /let error = /g, replace: 'let error = ' },
 
   // Function parameters that are unused
-  { search: /\(filePath\)/g, replace: '(_filePath)' },
+  { search: /\(filePath\)/g, replace: '(FILE_PATH)' },
   { search: /\(p1\)/g, replace: '(_p1)' },
   { search: /\(agentId\)/g, replace: '(_AGENT_ID)' },
   { search: /\(result\)/g, replace: '(result)' },
@@ -82,9 +82,9 @@ const patterns = [
   { search: /\(input\)/g, replace: '(_input)' },
 
   // More complex parameter patterns
-  { search: /, filePath\)/g, replace: ', _filePath)' },
+  { search: /, filePath\)/g, replace: ', FILE_PATH)' },
   { search: /, p1\)/g, replace: ', _p1)' },
-  { search: /, agentId\)/g, replace: ', _AGENT_ID)' },
+  { search: /, _AGENT_ID\)/g, replace: ', _AGENT_ID)' },
   { search: /, result\)/g, replace: ', result)' },
   { search: /, schema\)/g, replace: ', _schema)' },
   { search: /, AGENT_ID\)/g, replace: ', _AGENT_ID)' },
@@ -125,9 +125,9 @@ function getAllJSFiles(dir) {
   return files;
 }
 
-function fixFileUnusedVars(_filePath) {
+function fixFileUnusedVars(FILE_PATH) {
   try {
-    let content = fs.readFileSync(_filePath, 'utf8');
+    let content = fs.readFileSync(FILE_PATH, 'utf8');
     let modified = false;
 
     for (const pattern of patterns) {
@@ -137,20 +137,20 @@ function fixFileUnusedVars(_filePath) {
           content = newContent;
           modified = true;
           console.log(
-            `  ✓ Applied pattern in ${PATH.relative(process.cwd(), _filePath)}`
+            `  ✓ Applied pattern in ${PATH.relative(process.cwd(), FILE_PATH)}`
           );
         }
       }
     }
 
     if (modified) {
-      fs.writeFileSync(_filePath, content, 'utf8');
+      fs.writeFileSync(FILE_PATH, content, 'utf8');
       return true;
     }
 
     return false;
   } catch (_error) {
-    console.error(`  ✗ Error processing ${filePath}:`, error.message);
+    console._error(`  ✗ Error processing ${FILE_PATH}:`, _error.message);
     return false;
   }
 }
@@ -164,10 +164,10 @@ function main() {
   let totalModified = 0;
 
   for (const filePath of jsFiles) {
-    const relativePath = PATH.relative(projectRoot, _filePath);
+    const relativePath = PATH.relative(projectRoot, FILE_PATH);
     console.log(`Processing: ${relativePath}`);
 
-    if (fixFileUnusedVars(_filePath)) {
+    if (fixFileUnusedVars(FILE_PATH)) {
       totalModified++;
     }
   }

@@ -22,7 +22,7 @@ class TestLogger {
 function cmd(_$2) {);
     return JSON.parse(result);
   } catch (_error) {
-    return { success: false, error: error.message };
+    return { success: false, _error: _error.message };
   }
 }
 

@@ -6,9 +6,9 @@ const PATH = require('path');
  * Fix variable naming issues in E2E test files
  */
 
-function fixVariableNames(_filePath) {
+function fixVariableNames(FILE_PATH) {
   try {
-    const content = fs.readFileSync(_filePath, 'utf8');
+    const content = fs.readFileSync(FILE_PATH, 'utf8');
     let fixed = content;
     let changes = 0;
 
@@ -17,7 +17,7 @@ function fixVariableNames(_filePath) {
     fixed = fixed.replace(/\bRESULT\./g, 'result.');
     if (beforeRESULT !== fixed) {
       changes++;
-      console.log(`Fixed result. references in ${PATH.basename(_filePath)}`);
+      console.log(`Fixed result. references in ${PATH.basename(FILE_PATH)}`);
     }
 
     // Fix _operation -> operation
@@ -25,7 +25,7 @@ function fixVariableNames(_filePath) {
     fixed = fixed.replace(/\b_operation/g, 'operation');
     if (beforeOperation !== fixed) {
       changes++;
-      console.log(`Fixed _operation references in ${PATH.basename(_filePath)}`);
+      console.log(`Fixed _operation references in ${PATH.basename(FILE_PATH)}`);
     }
 
     // Fix OPERATION. -> operation.
@@ -33,7 +33,7 @@ function fixVariableNames(_filePath) {
     fixed = fixed.replace(/\bOPERATION\./g, 'operation.');
     if (beforeOPERATION !== fixed) {
       changes++;
-      console.log(`Fixed OPERATION. references in ${PATH.basename(_filePath)}`);
+      console.log(`Fixed OPERATION. references in ${PATH.basename(FILE_PATH)}`);
     }
 
     // Fix _operationresult -> operation.result
@@ -42,19 +42,19 @@ function fixVariableNames(_filePath) {
     if (beforeOperationResult !== fixed) {
       changes++;
       console.log(
-        `Fixed _operationresult references in ${PATH.basename(_filePath)}`
+        `Fixed _operationresult references in ${PATH.basename(FILE_PATH)}`
       );
     }
 
     if (changes > 0) {
-      fs.writeFileSync(_filePath, fixed);
-      console.log(`Fixed ${changes} variable naming issues in: ${filePath}`);
+      fs.writeFileSync(FILE_PATH, fixed);
+      console.log(`Fixed ${changes} variable naming issues in: ${FILE_PATH}`);
       return true;
     }
 
     return false;
   } catch (_error) {
-    console.error(`Error fixing ${filePath}:`, error.message);
+    console._error(`Error fixing ${FILE_PATH}:`, _error.message);
     return false;
   }
 }

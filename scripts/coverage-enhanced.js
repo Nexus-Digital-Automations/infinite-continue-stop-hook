@@ -264,12 +264,12 @@ class EnhancedCoverageSystem {
       if (hasFailures) {
         throw new Error('Coverage validation failed with blocking failures');
       }
-    } catch {
+    } catch (_error) {
       this.logger.error('Coverage pipeline failed', {
-        error: error.message,
-        stack: error.stack,
+        error: _error.message,
+        stack: _error.stack,
       });
-      throw error;
+      throw _error;
     }
   }
 
@@ -403,7 +403,7 @@ class EnhancedCoverageSystem {
         'Coverage analysis completed',
         this.results.performance
       );
-    } catch {
+    } catch (_error) {
       // Check if coverage data was generated despite test failures
       if (
         FS.existsSync(
@@ -448,7 +448,7 @@ class EnhancedCoverageSystem {
 
       this.logger.success('Coverage data loaded successfully');
       this.logger.debug('Coverage summary', this.results.coverage.summary);
-    } catch {
+    } catch (_error) {
       throw new Error(`Failed to load coverage data: ${error.message}`);
     }
   }
@@ -469,7 +469,7 @@ class EnhancedCoverageSystem {
     if (FS.existsSync(trendsPath)) {
       try {
         trends = JSON.parse(FS.readFileSync(trendsPath, 'utf8'));
-      } catch {
+      } catch (_error) {
         this.logger.warning('Could not load existing trends');
       }
     }
@@ -1138,8 +1138,8 @@ Last updated: ${new Date().toISOString()}
       }
 
       this.logger.success('Integrations updated');
-    } catch {
-      this.logger.warning(`Integration update failed: ${error.message}`);
+    } catch (_error) {
+      this.logger.warning(`Integration update failed: ${_error.message}`);
     }
   }
 
@@ -1457,9 +1457,9 @@ Last updated: ${new Date().toISOString()}
           encoding: 'utf8',
         }).trim(),
       };
-    } catch {
+    } catch (_error) {
       this.logger.debug('Could not get Git information', {
-        error: error.message,
+        error: _error.message,
       });
       return {
         commit: 'unknown',
@@ -1530,9 +1530,9 @@ Examples:
     try {
       const customConfig = JSON.parse(FS.readFileSync(configPath, 'utf8'));
       Object.assign(options, customConfig);
-    } catch {
-      loggers.stopHook.error(`❌ Failed to load config: ${error.message}`);
-      throw error;
+    } catch (_error) {
+      loggers.stopHook.error(`❌ Failed to load config: ${_error.message}`);
+      throw _error;
     }
   }
 
@@ -1569,12 +1569,12 @@ Examples:
   const system = new EnhancedCoverageSystem(options);
   try {
     system.run();
-  } catch {
+  } catch (_error) {
     loggers.stopHook.error(
       '❌ Enhanced coverage system failed:',
-      error.message
+      _error.message
     );
-    throw error;
+    throw _error;
   }
 }
 

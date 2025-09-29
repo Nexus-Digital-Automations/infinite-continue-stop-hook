@@ -29,16 +29,16 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
 
       return JSON.parse(output.trim());
     } catch (_error) {
-      if (error.stdout) {
+      if (_error.stdout) {
         try {
-          return JSON.parse(error.stdout.trim());
+          return JSON.parse(_error.stdout.trim());
         } catch (_parseError) {
           throw new Error(
-            `Command failed: ${error.message}, Output: ${error.stdout || error.stderr}`,
+            `Command failed: ${_error.message}, Output: ${_error.stdout || _error.stderr}`,
           );
         }
       }
-      throw error;
+      throw _error;
     }
   };
 

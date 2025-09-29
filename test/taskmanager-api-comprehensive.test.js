@@ -78,7 +78,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         // Try to parse JSON response
         const result = JSON.parse(jsonString);
         resolve(result);
-      } catch {
+      } catch (_error) {
         // If JSON parsing fails, check if we can extract JSON from stderr
         try {
           const stderrJson = JSON.parse(stderr.trim());
@@ -87,7 +87,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
           // If both fail, include raw output for debugging
           reject(
             new Error(
-              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${error.message}`
+              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse _error: ${_error.message}`
             )
           );
         }
@@ -351,7 +351,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
         description: 'Create React component for user login form',
         task_type: 'subtask',
         priority: 'medium',
-        category: 'ui-component',
+        task.category: 'ui-component',
       };
 
       const result = await execAPI('create', [JSON.stringify(taskData)]);
@@ -369,7 +369,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
         description: 'Comprehensive unit test coverage for user management',
         task_type: 'test',
         priority: 'medium',
-        category: 'test-coverage',
+        task.category: 'test-coverage',
       };
 
       const result = await execAPI('create', [JSON.stringify(taskData)]);
@@ -1001,7 +1001,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       try {
         await execAPI('invalid-command');
       } catch (_error) {
-        expect(error.message).toContain('Command failed');
+        expect(_error.message).toContain('Command failed');
       }
     });
 
@@ -1046,7 +1046,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       try {
         await execAPI('guide', [], 100); // 100ms timeout
       } catch (_error) {
-        expect(error.message).toContain('Command failed');
+        expect(_error.message).toContain('Command failed');
       }
     }, 10000);
   });

@@ -109,14 +109,14 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       return JSON.parse(result.trim());
     } catch (_error) {
-      if (error.stdout) {
+      if (_error.stdout) {
         try {
-          return JSON.parse(error.stdout.trim());
+          return JSON.parse(_error.stdout.trim());
         } catch (_error) {
-          return { success: false, error: error.message, stdout: error.stdout };
+          return { success: false, _error: _error.message, stdout: _error.stdout };
         }
       }
-      return { success: false, error: error.message };
+      return { success: false, error: _error.message };
     }
   }
 

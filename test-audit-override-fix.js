@@ -111,8 +111,8 @@ async function testAuditOverrideFix() {
       '🎉 All tests passed! The audit task override bug is fixed.'
     );
     return true;
-  } catch {
-    TestLogger.error('❌ Test failed with error: ' + error.message);
+  } catch (_error) {
+    TestLogger.error('❌ Test failed with error: ' + _error.message);
     return false;
   }
 }

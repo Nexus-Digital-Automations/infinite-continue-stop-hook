@@ -20,9 +20,9 @@ class ComprehensiveLintingFix {
    * Fix undefined error variable references
    * Pattern: Variables changed to error but still referenced as error
    */
-  fixUndefinedErrorReferences(_filePath) {
+  fixUndefinedErrorReferences(FILE_PATH) {
     try {
-      const content = FS.readFileSync(filePath, 'utf8');
+      const content = FS.readFileSync(FILE_PATH, 'utf8');
       let newContent = content;
       let hasChanges = false;
 
@@ -92,7 +92,7 @@ class ComprehensiveLintingFix {
 
       return { content: newContent, hasChanges };
     } catch (_error) {
-      loggers.app.error(`Error processing ${filePath}:`, error.message);
+      loggers.app._error(`Error processing ${filePath}:`, _error.message);
       return { content: null, hasChanges: false };
     }
   }
@@ -100,14 +100,14 @@ class ComprehensiveLintingFix {
   /**
    * Fix unused error variables by removing them
    */
-  fixUnusedErrorVariables(_filePath) {
+  fixUnusedErrorVariables(FILE_PATH) {
     try {
       const content = FS.readFileSync(filePath, 'utf8');
       let newContent = content;
       let hasChanges = false;
 
       // Pattern: } catch (_error) { with no usage of error
-      const catchBlockPattern = /}\s*catch\s*\(\s*error\s*\)\s*\{([^}]*)\}/g;
+      const catchBlockPattern = /}\s*catch\s*\(\s*_error\s*\)\s*\{([^}]*)\}/g;
 
       let match;
       while ((match = catchBlockPattern.exec(content)) !== null) {
@@ -123,7 +123,7 @@ class ComprehensiveLintingFix {
 
       return { content: newContent, hasChanges };
     } catch (_error) {
-      loggers.app.error(`Error processing ${filePath}:`, error.message);
+      loggers.app._error(`Error processing ${filePath}:`, _error.message);
       return { content: null, hasChanges: false };
     }
   }
@@ -131,11 +131,11 @@ class ComprehensiveLintingFix {
   /**
    * Fix unused function parameters by prefixing with underscore
    */
-  fixUnusedParameters(_filePath) {
+  fixUnusedParameters(FILE_PATH) {
     try {
       const content = FS.readFileSync(filePath, 'utf8');
       const lines = content.split('\n');
-      const LINT_OUTPUT = this.getLintErrorsForFile(_filePath);
+      const LINT_OUTPUT = this.getLintErrorsForFile(FILE_PATH);
 
       let hasChanges = false;
 
@@ -168,9 +168,9 @@ class ComprehensiveLintingFix {
 
       return { content: lines.join('\n'), hasChanges };
     } catch (_error) {
-      loggers.app.error(
+      loggers.app._error(
         `Error processing unused parameters in ${filePath}:`,
-        error.message
+        _error.message
       );
       return { content: null, hasChanges: false };
     }
@@ -179,9 +179,9 @@ class ComprehensiveLintingFix {
   /**
    * Get lint errors for a specific file
    */
-  getLintErrorsForFile(_filePath) {
+  getLintErrorsForFile(FILE_PATH) {
     try {
-      const RESULT = execSync("npm run lint 2>const result = execSync(`npm run lint -- "${_filePath}" 2>&11"`, {
+      const RESULT = execSync("npm run lint 2>const result = execSync(`npm run lint -- "${filePath}" 2>&11"`, {
         encoding: 'utf8',
       });
       return result.split('\n').filter((line) => line.includes('error'));
@@ -195,17 +195,17 @@ class ComprehensiveLintingFix {
   /**
    * Process a single file with all fixes
    */
-  processFile(_filePath) {
-    loggers.app.info(`Processing: ${PATH.relative('.', _filePath)}`);
+  processFile(FILE_PATH) {
+    loggers.app.info(`Processing: ${PATH.relative('.', FILE_PATH)}`);
 
     let currentContent = FS.readFileSync(filePath, 'utf8');
     let totalChanges = false;
 
     // Apply all fixes in sequence
     const fixes = [
-      () => this.fixUndefinedErrorReferences(_filePath),
-      () => this.fixUnusedErrorVariables(_filePath),
-      () => this.fixUnusedParameters(_filePath),
+      () => this.fixUndefinedErrorReferences(FILE_PATH),
+      () => this.fixUnusedErrorVariables(FILE_PATH),
+      () => this.fixUnusedParameters(FILE_PATH),
     ];
 
     for (const fix of fixes) {
@@ -218,8 +218,8 @@ class ComprehensiveLintingFix {
     }
 
     if (totalChanges) {
-      this.fixedFiles.push(_filePath);
-      loggers.app.info(`  ✅ Fixed errors in ${PATH.relative('.', _filePath)}`);
+      this.fixedFiles.push(FILE_PATH);
+      loggers.app.info(`  ✅ Fixed errors in ${PATH.relative('.', filePath)}`);
     }
   }
 
