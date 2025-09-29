@@ -138,7 +138,7 @@ console.log(`\n📈 Applied ${totalFixes} simple fixes\n`);
 // Check current status
 console.log('🔍 Checking current undefined variable status...');
 try {
-  const _OUTPUT = execSync('npm run lint 2>&1', { encoding: 'utf-8' });
+  const OUTPUT = execSync('npm run lint 2>&1', { encoding: 'utf-8' });
   console.log('🎉 No linting errors found!');
 } catch (lintError) {
   const output = lintError.stdout || lintError.message;

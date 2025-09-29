@@ -29,8 +29,8 @@ function comprehensiveAuditFix() {
       '$1\n  let testAgentId = null;\n  let auditAgentId = null;'
     );
 
-    // Fix ALL instances of result.taskId to _result.taskId
-    content = content.replace(/result\.taskId/g, '_result.taskId');
+    // Fix ALL instances of result.taskId to RESULT.taskId
+    content = content.replace(/result\.taskId/g, 'RESULT.taskId');
 
     // Remove ALL unused result assignments
     content = content.replace(/\s*const result = [^;]+;\s*/g, '\n');
@@ -38,13 +38,13 @@ function comprehensiveAuditFix() {
     // Fix specific patterns where result is still missing
     content = content.replace(
       /const TASK = listResult\.tasks\.find\(\(t\) => t\.id === result\.taskId\);/g,
-      'const TASK = listResult.tasks.find((t) => t.id === _result.taskId);'
+      'const TASK = listResult.tasks.find((t) => t.id === RESULT.taskId);'
     );
 
     // Fix any remaining undefined result references in test expectations
     content = content.replace(
       /expect\(result\.success\)\.toBe\(true\);/g,
-      'expect(_result.success).toBe(true);'
+      'expect(RESULT.success).toBe(true);'
     );
 
     FS.writeFileSync(filePath, content);

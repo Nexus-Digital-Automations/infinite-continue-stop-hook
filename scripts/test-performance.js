@@ -77,7 +77,7 @@ class PerformanceLogger {
 /**
  * System resource monitor
  */
-class ResourceMonitor {
+class RESOURCE_MONITOR {
   constructor() {
     this.startTime = Date.now();
     this.startMemory = process.memoryUsage();
@@ -166,7 +166,7 @@ class ResourceMonitor {
         heapTotal: sum.heapTotal + measurement.memory.heapTotal,
         external: sum.external + measurement.memory.external,
       }),
-      { rss: 0, heapUsed: 0, heapTotal: 0, external: 0 },
+      { rss: 0, heapUsed: 0, heapTotal: 0, external: 0 }
     );
 
     const count = this.measurements.length;
@@ -187,7 +187,7 @@ class TestPerformanceMonitor {
     this.startTime = Date.now();
     this.testResults = [];
     this.suiteResults = [];
-    this.resourceMonitor = new ResourceMonitor();
+    this.resourceMonitor = new RESOURCE_MONITOR();
     this.warnings = [];
     this.errors = [];
   }
@@ -212,7 +212,7 @@ class TestPerformanceMonitor {
 
       const duration = Date.now() - this.startTime;
       PerformanceLogger.success(
-        `Test performance monitoring completed in ${duration}ms`,
+        `Test performance monitoring completed in ${duration}ms`
       );
 
       // Exit with appropriate code
@@ -222,7 +222,7 @@ class TestPerformanceMonitor {
       }
     } catch (_) {
       PerformanceLogger._error(
-        `Test performance monitoring failed: ${_error.message}`,
+        `Test performance monitoring failed: ${_error.message}`
       );
       PerformanceLogger.debug(_error.stack);
       throw _error;
@@ -249,7 +249,7 @@ class TestPerformanceMonitor {
    */
   async runTestSuites() {
     PerformanceLogger.info(
-      'Running test suites with performance monitoring...',
+      'Running test suites with performance monitoring...'
     );
 
     const testCommands = [
@@ -318,7 +318,7 @@ class TestPerformanceMonitor {
     } catch (_) {
       const duration = Date.now() - suiteStartTime;
       PerformanceLogger._error(
-        `${testSuite.name} failed after ${duration}ms: ${_error.message}`,
+        `${testSuite.name} failed after ${duration}ms: ${_error.message}`
       );
 
       this.errors.push({
@@ -413,7 +413,7 @@ class TestPerformanceMonitor {
     // Calculate total test time
     const totalTestTime = this.suiteResults.reduce(
       (sum, result) => sum + result.duration,
-      0,
+      0
     );
 
     // Identify slowest tests
@@ -471,7 +471,7 @@ class TestPerformanceMonitor {
   analyzeParallelizationOpportunities() {
     const serialTime = this.suiteResults.reduce(
       (sum, result) => sum + result.duration,
-      0,
+      0
     );
     const longestSuite = Math.max(...this.suiteResults.map((r) => r.duration));
 
@@ -525,7 +525,7 @@ class TestPerformanceMonitor {
     for (const suiteResult of this.suiteResults) {
       const suiteFile = path.join(
         CONFIG.paths.results,
-        `${suiteResult.name.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.json`,
+        `${suiteResult.name.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.json`
       );
       FS.writeFileSync(suiteFile, JSON.stringify(suiteResult, null, 2));
     }
@@ -546,7 +546,7 @@ class TestPerformanceMonitor {
         trends = JSON.parse(FS.readFileSync(CONFIG.paths.trends, 'utf8'));
       } catch (_) {
         PerformanceLogger.warning(
-          'Could not load existing trends, starting fresh',
+          'Could not load existing trends, starting fresh'
         );
       }
     }
@@ -589,40 +589,40 @@ class TestPerformanceMonitor {
 
     loggers.stopHook.log('\n⚡ Test Performance Summary:');
     loggers.stopHook.log(
-      '┌─────────────────────────┬──────────────────┬──────────┐',
+      '┌─────────────────────────┬──────────────────┬──────────┐'
     );
     loggers.stopHook.log(
-      '│ Metric                  │ Value            │ Status   │',
+      '│ Metric                  │ Value            │ Status   │'
     );
     loggers.stopHook.log(
-      '├─────────────────────────┼──────────────────┼──────────┤',
+      '├─────────────────────────┼──────────────────┼──────────┤'
     );
 
     // Overall metrics
     loggers.stopHook.log(
-      `│ Total Execution Time    │ ${this.formatDuration(totalDuration).padEnd(14)} │ ${this.getTimeStatus(totalDuration).padEnd(8)} │`,
+      `│ Total Execution Time    │ ${this.formatDuration(totalDuration).padEnd(14)} │ ${this.getTimeStatus(totalDuration).padEnd(8)} │`
     );
     loggers.stopHook.log(
-      `│ Test Suites Run         │ ${this.suiteResults.length.toString().padEnd(14)} │ ${'ℹ️ Info'.padEnd(8)} │`,
+      `│ Test Suites Run         │ ${this.suiteResults.length.toString().padEnd(14)} │ ${'ℹ️ Info'.padEnd(8)} │`
     );
     loggers.stopHook.log(
-      `│ Successful Suites       │ ${successfulSuites.toString().padEnd(14)} │ ${successfulSuites === this.suiteResults.length ? '✅ Good' : '⚠️ Check'} │`,
+      `│ Successful Suites       │ ${successfulSuites.toString().padEnd(14)} │ ${successfulSuites === this.suiteResults.length ? '✅ Good' : '⚠️ Check'} │`
     );
     loggers.stopHook.log(
-      `│ Failed Suites           │ ${failedSuites.toString().padEnd(14)} │ ${failedSuites === 0 ? '✅ Good' : '❌ Bad'} │`,
+      `│ Failed Suites           │ ${failedSuites.toString().padEnd(14)} │ ${failedSuites === 0 ? '✅ Good' : '❌ Bad'} │`
     );
 
     if (this.analysis) {
       loggers.stopHook.log(
-        `│ Peak Memory Usage       │ ${this.analysis.memoryAnalysis.peak_memory.padEnd(14)} │ ${'📊 Info'.padEnd(8)} │`,
+        `│ Peak Memory Usage       │ ${this.analysis.memoryAnalysis.peak_memory.padEnd(14)} │ ${'📊 Info'.padEnd(8)} │`
       );
       loggers.stopHook.log(
-        `│ Potential Speedup       │ ${this.analysis.parallelizationAnalysis.potential_speedup.padEnd(14)} │ ${'🚀 Info'.padEnd(8)} │`,
+        `│ Potential Speedup       │ ${this.analysis.parallelizationAnalysis.potential_speedup.padEnd(14)} │ ${'🚀 Info'.padEnd(8)} │`
       );
     }
 
     loggers.stopHook.log(
-      '└─────────────────────────┴──────────────────┴──────────┘',
+      '└─────────────────────────┴──────────────────┴──────────┘'
     );
 
     // Slowest tests
@@ -630,7 +630,7 @@ class TestPerformanceMonitor {
       loggers.stopHook.log('\n🐌 Slowest Test Suites:');
       this.analysis.slowestTests.forEach((test, index) => {
         loggers.stopHook.log(
-          `${index + 1}. ${test.name}: ${this.formatDuration(test.duration)}`,
+          `${index + 1}. ${test.name}: ${this.formatDuration(test.duration)}`
         );
       });
     }
@@ -638,7 +638,7 @@ class TestPerformanceMonitor {
     // Warnings And errors
     if (this.warnings.length > 0) {
       loggers.stopHook.log(
-        `\n⚠️  Performance Warnings: ${this.warnings.length}`,
+        `\n⚠️  Performance Warnings: ${this.warnings.length}`
       );
     }
 
@@ -652,12 +652,12 @@ class TestPerformanceMonitor {
     // Recommendations
     if (this.analysis?.parallelizationAnalysis?.recommendation) {
       loggers.stopHook.log(
-        `\n💡 Recommendation: ${this.analysis.parallelizationAnalysis.recommendation}`,
+        `\n💡 Recommendation: ${this.analysis.parallelizationAnalysis.recommendation}`
       );
     }
 
     loggers.stopHook.log(
-      `\n📁 Detailed reports available in: ${CONFIG.paths.reports}`,
+      `\n📁 Detailed reports available in: ${CONFIG.paths.reports}`
     );
   }
 

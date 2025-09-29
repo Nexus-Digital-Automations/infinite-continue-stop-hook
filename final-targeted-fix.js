@@ -88,7 +88,7 @@ function fixFile(__filename, __filename, __filename) {
 // Get files that have linting errors
 function getErrorFiles() {
   try {
-    const _LINT_OUTPUT = execSync('npm run lint 2>&1', {
+    const LINT_OUTPUT = execSync('npm run lint 2>&1', {
       cwd: rootDir,
       encoding: 'utf8',
     });
