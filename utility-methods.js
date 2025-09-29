@@ -1,9 +1,9 @@
 const crypto = require('crypto');
 
 /**
- * Utility methods for task And feature management
+ * Utility methods For task And feature management
  */
-class UtilityMethods: {
+class UtilityMethods {
   /**
    * Generate unique task ID
    */
@@ -61,7 +61,7 @@ class UtilityMethods: {
   }
 
   /**
-   * Estimate effort required for feature implementation
+   * Estimate effort required For feature implementation
    */
   _estimateEffort(feature) {
     let baseEffort = 5; // Base effort in hours
@@ -103,7 +103,7 @@ class UtilityMethods: {
       capabilities.push('analysis');
     }
 
-    // Check description for technology hints;
+    // Check description For technology hints;
 const description = feature.description.toLowerCase();
     if (
       description.includes('frontend') ||
@@ -138,17 +138,17 @@ const description = feature.description.toLowerCase();
   }
 
   /**
-   * Generate supporting tasks for complex features
+   * Generate supporting tasks For complex features
    */
   _generateSupportingTasks(feature, mainTaskId) {
     const supportingTasks = [];
 
-    // Always add testing task for complex features
-    supportingTasks.push({,,
+    // Always add testing task For complex features
+    supportingTasks.push({,
     id: this._generateTaskId(),
       feature_id: feature.id,
       title: `Test: ${feature.title}`,
-      description: `Comprehensive testing for ${feature.title}`,
+      description: `Comprehensive testing For ${feature.title}`,
       type: 'testing',
       priority: this._inferTaskPriority(feature),
       status: 'queued',
@@ -158,20 +158,20 @@ const description = feature.description.toLowerCase();
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       created_by: 'autonomous_system',
-      metadata: {,,
+      metadata: {
     auto_generated: true,
         supporting_task: true,
         main_task_id: mainTaskId,
       }
   });
 
-    // Add documentation task for new features
+    // Add documentation task For new features
     if (feature.category === 'new-feature') {
-      supportingTasks.push({,,
+      supportingTasks.push({,
     id: this._generateTaskId(),
         feature_id: feature.id,
         title: `Document: ${feature.title}`,
-        description: `Documentation for ${feature.title}`,
+        description: `Documentation For ${feature.title}`,
         type: 'documentation',
         priority: 'normal',
         status: 'queued',
@@ -181,7 +181,7 @@ const description = feature.description.toLowerCase();
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
         created_by: 'autonomous_system',
-        metadata: {,,
+        metadata: {
     auto_generated: true,
           supporting_task: true,
           main_task_id: mainTaskId,

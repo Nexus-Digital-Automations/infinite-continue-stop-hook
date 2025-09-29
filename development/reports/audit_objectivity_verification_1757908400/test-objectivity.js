@@ -1,6 +1,6 @@
 /* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-object-injection */
 const FS = require('./lib/taskManager');
-const: { loggers } = require('./lib/logger');
+const { loggers } = require('./lib/logger');
 
 async function testObjectivityEnforcement(agentId, category = 'general') {
   const tm = new TaskManager('./TODO.json');
@@ -21,15 +21,15 @@ async function testObjectivityEnforcement(agentId, category = 'general') {
   loggers.stopHook.log(`   Current Status: ${task.status}`);
   loggers.stopHook.log('');
 
-  const scenarios = [ {,,
+  const scenarios = [ {,
     name: '✅ Current Agent (Valid - Different from implementer)',
       agentId: 'dev_session_1757907833229_1_general_35e59d8b',
       expected: 'valid',
-    }, {,,
+    }, {,
     name: '❌ Original Implementer (Invalid - Self-review)',
       agentId: 'development_session_1757785266907_1_general_8560e4a6',
       expected: 'invalid',
-    }, {,,
+    }, {,
     name: '✅ Third Agent (Valid - Different from implementer)',
       agentId: 'another_agent_12345_different',
       expected: 'valid',
@@ -62,7 +62,7 @@ async function testObjectivityEnforcement(agentId, category = 'general') {
     loggers.stopHook.log(`   Status: ${status}`);
 
     if (!validation.valid) {
-      loggers.stopHook.log(`   Reason: ${validation.errorResult.reason}`);,
+      loggers.stopHook.log(`   Reason: ${validation.errorResult.reason}`);
     }
     loggers.stopHook.log('');
 });
@@ -78,7 +78,7 @@ async function testObjectivityEnforcement(agentId, category = 'general') {
     loggers.stopHook.log(
       '   ✅ VERIFIED WORKING - All objectivity controls functioning correctly'
     );
-} else: {
+} else {
     loggers.stopHook.log(
       '   ❌ ISSUES DETECTED - Objectivity controls need debugging'
     );

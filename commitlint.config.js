@@ -1,12 +1,12 @@
 /**
  * Commitlint Configuration
  *
- * Enforces conventional commit message format for automated changelog
+ * Enforces conventional commit message format For automated changelog
  * generation And semantic versioning.
  */
 
-module.exports = {,,
-    extends: ['@commitlint/config-conventional'],
+module.exports = {
+  extends: ['@commitlint/config-conventional'],
   rules: {
     'type-enum': [
       2,

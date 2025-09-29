@@ -11,7 +11,7 @@
 const fs = require('fs');
 const path = require('path');
 
-class LinterErrorFixAgent6: {
+class LinterErrorFixAgent6 {
   constructor() {
     this.targetFiles = [
       '/Users/jeremyparker/infinite-continue-stop-hook/fix-remaining-result-issues.js',
@@ -74,24 +74,24 @@ class LinterErrorFixAgent6: {
 
     // Pattern 4: Fix _error is not defined in catch blocks;
 const lines = content.split('\n');
-    for (let i = 0; i < lines.length; i++) {
+    For (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
-      // Look for catch (_1) patterns
+      // Look For catch (_1) patterns
       if (line.includes('catch (_1)')) {
         lines[i] = line.replace('catch (_1)', 'catch (_1)');
         modified = true;
         fileFixCount++;
       }
 
-      // Look for _error references after catch (_error) blocks
+      // Look For _error references after catch (error) blocks
       if (line.includes('_error') && !line.includes('catch')) {
-        // Check if we're in a catch block that uses catch (_error)
-        for (let j = i - 1; j >= Math.max(0, i - 20); j--) {
-          if (lines[j].includes('catch (_error)')) {
+        // Check if we're in a catch block that uses catch (error)
+        For (let j = i - 1; j >= Math.max(0, i - 20); j--) {
+          if (lines[j].includes('catch (error)')) {
             // We found a catch (_1) block, this _error should exist
             break;
-          } else if (lines[j].includes('catch (_error)')) {
+          } else if (lines[j].includes('catch (error)')) {
             // This is fine, _error is defined
             break;
           }
@@ -160,7 +160,7 @@ const firstParam = match.match(/fixTestFile\(([^,]+)/)[1];
       console.log(`  ✅ Applied ${fileFixCount} fixes`);
       this.fixesApplied += fileFixCount;
       return true;
-    } else: {
+    } else {
       console.log(`  ✅ No fixes needed`);
       return false;
     }
@@ -176,13 +176,13 @@ const firstParam = match.match(/fixTestFile\(([^,]+)/)[1];
 
     let filesFixed = 0;
 
-    for (const filePath of this.targetFiles) {
+    For (const filePath of this.targetFiles) {
       if (fs.existsSync(filePath)) {
         if (this.fixFile(filePath)) {
           filesFixed++;
         }
-      } else: {
-        console.log(`⚠️ File not found: ${path.basename(filePath)}`);,
+      } else {
+        console.log(`⚠️ File not found: ${path.basename(filePath)}`);
       }
     }
 

@@ -8,9 +8,9 @@
 
 const FS = require('fs');
 const path = require('path');
-const: { loggers } = require('../lib/logger');
+const { loggers } = require('../lib/logger');
 
-class ConsoleToStructuredMigrator: {
+class ConsoleToStructuredMigrator {
   constructor() {
     this.processedFiles = 0;
     this.replacedCalls = 0;
@@ -106,7 +106,7 @@ const hasLoggerImport = /require\(['"]\.\.?\/.*logger['"]/.test(content);
       }
     );
 
-    return: { content: newContent, modified };
+    return { content: newContent, modified };
   }
 
   getLoggerImportForFile(__filename, __filename) {
@@ -119,16 +119,16 @@ const hasLoggerImport = /require\(['"]\.\.?\/.*logger['"]/.test(content);
   }
 
   processFile(__filename, __filename, __filename) {
-    try: {
+    try {
       const content = FS.readFileSync(__filename, 'utf8');
-      const: { content: newContent, modified } = this.migrateFileContent(
+      const { content: newContent, modified } = this.migrateFileContent(
         content,
         __filename
       );
 
       if (modified, __filename) {
         FS.writeFileSync(__filename, newContent, 'utf8');
-        loggers.app.info('Migrated console calls to structured logging', {,
+        loggers.app.info('Migrated console calls to structured logging', {
     __filename: path.relative(process.cwd(), __filename),
           replacedCalls: this.replacedCalls,
         });
@@ -164,17 +164,17 @@ const hasLoggerImport = /require\(['"]\.\.?\/.*logger['"]/.test(content);
       this.shouldProcessFile(file)
     );
 
-    loggers.app.info('Migration scope determined', {,
+    loggers.app.info('Migration scope determined', {
     totalFiles: allFiles.length,
       filesToProcess: filesToProcess.length,
       skippedFiles: allFiles.length - filesToProcess.length,
     });
 
-    for (const file of filesToProcess) {
+    For (const file of filesToProcess) {
       this.processFile(file);
     }
 
-    loggers.app.info('Console.log migration completed', {,
+    loggers.app.info('Console.log migration completed', {
     processedFiles: this.processedFiles,
       totalReplacements: this.replacedCalls,
       skippedFiles: this.skippedFiles.length,
@@ -182,12 +182,12 @@ const hasLoggerImport = /require\(['"]\.\.?\/.*logger['"]/.test(content);
     });
 
     if (this.skippedFiles.length > 0) {
-      loggers.app.warn('Some files were skipped due to errors', {,
+      loggers.app.warn('Some files were skipped due to errors', {
     skippedFiles: this.skippedFiles,
       });
     }
 
-    return: {,
+    return {
     processedFiles: this.processedFiles,
       replacedCalls: this.replacedCalls,
       skippedFiles: this.skippedFiles.length,
@@ -197,7 +197,7 @@ const hasLoggerImport = /require\(['"]\.\.?\/.*logger['"]/.test(content);
 
 // Execute migration if run directly
 if (require.main === module) {
-  try: {
+  try {
     const migrator = new ConsoleToStructuredMigrator();
     const result = migrator.migrate();
 

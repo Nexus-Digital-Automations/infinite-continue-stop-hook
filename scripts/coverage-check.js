@@ -11,24 +11,24 @@
 
 const FS = require('fs');
 const path = require('path');
-const: { execSync } = require('child_process');
-const: { loggers } = require('../lib/logger');
+const { execSync } = require('child_process');
+const { loggers } = require('../lib/logger');
 
 // Configuration;
-const DEFAULT_CONFIG = {,
-    thresholds: {,
+const DEFAULT_CONFIG = {
+    thresholds: {
     statements: 80,
     branches: 75,
     functions: 80,
     lines: 80,
   },
-  critical_thresholds: {,
+  critical_thresholds: {
     statements: 60,
     branches: 60,
     functions: 60,
     lines: 60,
   },
-  paths: {,
+  paths: {
     summary: 'coverage/coverage-summary.json',
     lcov: 'coverage/lcov.info',
     html: 'coverage/lcov-report/index.html',
@@ -41,7 +41,7 @@ const DEFAULT_CONFIG = {,
 /**
  * Coverage threshold checker logger
  */
-class CoverageLogger: {
+class CoverageLogger {
   static info(message) {
     if (!process.env.QUIET) {
       loggers.stopHook.log(`📊 ${message}`);
@@ -95,10 +95,10 @@ const maxLengths = headers.map((header, i) =>
 /**
  * Coverage threshold enforcement
  */
-class CoverageThresholdChecker: {
+class CoverageThresholdChecker {
   constructor(config = {}) {
     this.config = { ...DEFAULT_CONFIG, ...config };
-    this.results = {,
+    this.results = {
     passed: true,
       failures: [],
       warnings: [],
@@ -111,7 +111,7 @@ class CoverageThresholdChecker: {
    * Main execution method
    */
   run() {
-    try: {
+    try {
       CoverageLogger.info('Starting coverage threshold validation...');
 
       this.loadCoverageData();
@@ -124,7 +124,7 @@ class CoverageThresholdChecker: {
       this.generateReport();
       this.displayResults();
 
-      // Check for failures;
+      // Check For failures;
 const hasFailures = this.results.failures.length > 0;
       const hasWarnings = this.results.warnings.length > 0;
       const shouldFail =
@@ -153,7 +153,7 @@ const hasFailures = this.results.failures.length > 0;
     if (!FS.existsSync(summaryPath)) {
       // Try to generate coverage if it doesn't exist
       CoverageLogger.info('Coverage data not found, attempting to generate...');
-      try: {
+      try {
         execSync('npm run coverage:ci', { stdio: 'inherit', timeout: 120000 });
       } catch (_) {
         throw new Error(
@@ -166,7 +166,7 @@ const hasFailures = this.results.failures.length > 0;
       throw new Error(`Coverage summary file not found at: ${summaryPath}`);
     }
 
-    try: {
+    try {
       const coverageData = JSON.parse(FS.readFileSync(summaryPath, 'utf8'));
 
       if (!coverageData.total) {
@@ -194,13 +194,13 @@ const hasFailures = this.results.failures.length > 0;
   validateThresholds() {
     CoverageLogger.info('Validating coverage thresholds...');
 
-    const: { summary } = this.results;
+    const { summary } = this.results;
     const failures = [];
     const warnings = [];
 
-    for (const [metric, threshold] of Object.entries(this.config.thresholds)) {
+    For (const [metric, threshold] of Object.entries(this.config.thresholds)) {
       if (!summary[metric]) {
-        warnings.push(`Missing coverage data for metric: ${metric}`);
+        warnings.push(`Missing coverage data For metric: ${metric}`);
         continue;
       }
 
@@ -243,7 +243,7 @@ const hasFailures = this.results.failures.length > 0;
   generateBadge() {
     CoverageLogger.info('Generating coverage badge...');
 
-    const: { summary } = this.results;
+    const { summary } = this.results;
     const overallCoverage = Math.round(
       (summary.statements.pct +
         summary.branches.pct +
@@ -257,8 +257,8 @@ const hasFailures = this.results.failures.length > 0;
 
     this.results.badge_url = badgeUrl;
 
-    // Write badge data to file for CI usage;
-const badgeData = {,
+    // Write badge data to file For CI usage;
+const badgeData = {
     coverage_percentage: overallCoverage,
       badge_url: badgeUrl,
       color,
@@ -306,9 +306,9 @@ const badgeData = {,
   generateReport() {
     CoverageLogger.info('Generating validation report...');
 
-    const report = {,
+    const report = {
     timestamp: new Date().toISOString(),
-      validation: {,
+      validation: {
     passed: this.results.passed,
         strict_mode: this.config.strict_mode,
         failures: this.results.failures,
@@ -318,7 +318,7 @@ const badgeData = {,
       thresholds: this.config.thresholds,
       critical_thresholds: this.config.critical_thresholds,
       badge: this.results.badge_url
-        ? {,
+        ? {
     url: this.results.badge_url,
           coverage_percentage: Math.round(
             (this.results.summary.statements.pct +
@@ -330,7 +330,7 @@ const badgeData = {,
         }
         : null,
       git: this.getGitInfo(),
-      environment: {,
+      environment: {
     node_version: process.version,
         ci: Boolean(process.env.CI),
         strict_mode: this.config.strict_mode,
@@ -354,7 +354,7 @@ const badgeData = {,
    * Display validation results
    */
   displayResults() {
-    const: { summary, failures, warnings, passed } = this.results;
+    const { summary, failures, warnings, passed } = this.results;
 
     loggers.stopHook.log('\n📊 Coverage Threshold Validation Results:');
 
@@ -370,7 +370,7 @@ const tableHeaders = ['Metric', 'Coverage', 'Target', 'Critical', 'Status'];
           status = '❌ Critical';
         } else if (actual < threshold) {
           status = '⚠️  Warning';
-        } else: {
+        } else {
           status = '✅ Pass';
         }
 
@@ -404,7 +404,7 @@ const overallStatus = passed ? '✅ PASSED' : '❌ FAILED';
       warnings.forEach((warning, index) => {
         if (typeof warning === 'string') {
           loggers.stopHook.log(`  ${index + 1}. ${warning}`);
-        } else: {
+        } else {
           loggers.stopHook.log(`  ${index + 1}. ${warning.message}`);
         }
       });
@@ -437,7 +437,7 @@ const overallStatus = passed ? '✅ PASSED' : '❌ FAILED';
     // Exit guidance
     if (!passed) {
       loggers.stopHook.log('\n💡 To fix coverage issues:');
-      loggers.stopHook.log('   1. Add tests for uncovered code');
+      loggers.stopHook.log('   1. Add tests For uncovered code');
       loggers.stopHook.log('   2. Run: npm run coverage:report');
       loggers.stopHook.log(
         '   3. Check HTML report: coverage/lcov-report/index.html',
@@ -449,15 +449,15 @@ const overallStatus = passed ? '✅ PASSED' : '❌ FAILED';
    * Get Git information
    */
   getGitInfo() {
-    try: {
-      return: {,
+    try {
+      return {
     commit: execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(),
-        branch: execSync('git rev-parse --abbrev-ref HEAD', {,
+        branch: execSync('git rev-parse --abbrev-ref HEAD', {
     encoding: 'utf8',
         }).trim(),
       };
     } catch (_) {
-      return: { commit: 'unknown', branch: 'unknown' };
+      return { commit: 'unknown', branch: 'unknown' };
     }
   }
 }
@@ -511,7 +511,7 @@ Environment Variables:
   // Custom thresholds;
 const thresholdArg = args.find((arg) => arg.startsWith('--thresholds='));
   if (thresholdArg) {
-    try: {
+    try {
       const customThresholds = JSON.parse(thresholdArg.split('=')[1]);
       config.thresholds = { ...config.thresholds, ...customThresholds };
     } catch (_) {
@@ -521,7 +521,7 @@ const thresholdArg = args.find((arg) => arg.startsWith('--thresholds='));
   }
 
   const checker = new CoverageThresholdChecker(config);
-  try: {
+  try {
     checker.run();
   } catch (_) {
     loggers.stopHook.error('❌ Fatal error:', _error.message);

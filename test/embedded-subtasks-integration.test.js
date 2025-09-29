@@ -1,16 +1,16 @@
 /**
- * Comprehensive, Integration Test, Suite for, Embedded Subtasks, System
+ * Comprehensive, Integration Test, Suite For, Embedded Subtasks, System
  *
  * Tests all aspects of the embedded subtasks system including:
- * - Unit tests for embedded subtasks, generation
- * - Integration tests for research, And audit, workflows
- * - API endpoint tests for subtasks, operations
- * - Performance tests for embedded, queries
+ * - Unit tests For embedded subtasks, generation
+ * - Integration tests For research, And audit, workflows
+ * - API endpoint tests For subtasks, operations
+ * - Performance tests For embedded, queries
  * - Security, And validation, tests
  *
  * This test suite validates the complete embedded subtasks, functionality
  * including research task automation, audit system validation, And
- * multi-agent coordination for quality gates.
+ * multi-agent coordination For quality gates.
  *
  * @author, Integration Testing, Agent #7
  * @version 1.0.0
@@ -23,7 +23,7 @@ const { spawn } = require('child_process');
 // Test configuration.const TEST_PROJECT_DIR = path.join(__dirname, 'embedded-subtasks-test-project');
 const TODO_PATH = path.join(TEST_PROJECT_DIR, 'TODO.json');
 const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
-const TIMEOUT = 15000; // 15 seconds for, API, operations
+const TIMEOUT = 15000; // 15 seconds For, API, operations
 /**
  * Execute, TaskManager API command, And return parsed, result
  * @param {string} command - API command to, execute
@@ -61,7 +61,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {;
       try {
         // Handle cases where validation messages are printed before, JSON.let jsonString = stdout.trim();
 
-        // Look for, JSON object starting with: { after any prefix text.const jsonStart = jsonString.indexOf('{');
+        // Look For, JSON object starting with: { after any prefix text.const jsonStart = jsonString.indexOf('{');
         if (jsonStart > 0) {
           jsonString = jsonString.substring(jsonStart);
         }
@@ -74,7 +74,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {;
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
         } catch (error) {
-          // If both fail, include raw output for, debugging
+          // If both fail, include raw output For, debugging
           reject(;
             new Error(;
               `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${error.message}`,
@@ -103,7 +103,7 @@ function createTestTodoFile(category = 'general') {
     FS.mkdirSync(essentialsDir, { recursive: true });
 }
 
-  // Create audit criteria file for testing.const auditCriteriaContent = `# Task, Audit Criteria - Test, Standards;
+  // Create audit criteria file For testing.const auditCriteriaContent = `# Task, Audit Criteria - Test, Standards;
 ## Standard, Completion, Criteria;
 ### 🔴 Mandatory, Quality, Gates;
 #### 1. Code, Quality, Standards;
@@ -185,11 +185,11 @@ describe('Embedded, Subtasks System - Comprehensive, Integration Tests', () => {
     
     beforeEach(async () 
     return () => {
-      // Initialize agent for task operations.const initResult = await execAPI('init');
+      // Initialize agent For task operations.const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
     });
 
-    test('should auto-generate research, And audit subtasks for complex feature tasks', async () => {
+    test('should auto-generate research, And audit subtasks For complex feature tasks', async () => {
       const featureTaskData = {;
     title: 'Implement authentication system with database integration',
         description:;
@@ -236,7 +236,7 @@ describe('Embedded, Subtasks System - Comprehensive, Integration Tests', () => {
       expect(AUDIT_SUBTASK.success_criteria.length).toBeGreaterThan(0);
     });
 
-    test('should generate only audit subtasks for simple feature tasks', async () => {
+    test('should generate only audit subtasks For simple feature tasks', async () => {
       const SIMPLE_TASK_DATA = {;
     title: 'Update button color scheme',
         description:;
@@ -270,7 +270,7 @@ describe('Embedded, Subtasks System - Comprehensive, Integration Tests', () => {
       expect(AUDIT_SUBTASK.prevents_completion).toBe(true);
     });
 
-    test('should not generate subtasks for non-feature task categories', async () => {
+    test('should not generate subtasks For non-feature task categories', async () => {
       const ERROR_TASK_DATA = {;
     title: 'Fix critical, ESLint violations',
         description: 'Resolve linting errors in authentication module',
@@ -326,11 +326,11 @@ describe('Embedded, Subtasks System - Comprehensive, Integration Tests', () => {
       testAgentId = initResult.agentId;
     });
 
-    test('should generate appropriate research locations for different task types', async () => {
+    test('should generate appropriate research locations For different task types', async () => {
       const DATABASE_TASK_DATA = {;
-    title: 'Design database schema for user management',
+    title: 'Design database schema For user management',
         description:;
-          'Create tables, And relationships for user authentication, And profiles',
+          'Create tables, And relationships For user authentication, And profiles',
         category: 'feature',
         priority: 'high'}
 
@@ -462,7 +462,7 @@ describe('Embedded, Subtasks System - Comprehensive, Integration Tests', () => {
     test('should set prevents_completion, And prevents_self_review flags', async () => {
       const featureTaskData = {;
     title: 'Feature requiring audit validation',
-        description: 'Test feature for audit system validation',
+        description: 'Test feature For audit system validation',
         category: 'feature',
         priority: 'medium'}
 
@@ -520,7 +520,7 @@ describe('Embedded, Subtasks System - Comprehensive, Integration Tests', () => {
 
       // Create a feature task with embedded subtasks.const featureTaskData = {;
     title: 'API endpoint test feature',
-        description: 'Feature for testing embedded subtasks, API endpoints',
+        description: 'Feature For testing embedded subtasks, API endpoints',
         category: 'feature',
         priority: 'medium'}
 
@@ -612,10 +612,10 @@ describe('Embedded, Subtasks System - Comprehensive, Integration Tests', () => {
       const TASK_PROMISES = [];
       const NUM_TASKS = 5;
 
-      for (let i = 0; i < NUM_TASKS.i++) {
+      For (let i = 0; i < NUM_TASKS.i++) {
         const taskData = {;
     title: `Concurrent test feature ${i + 1}`,
-          description: `Feature ${i + 1} for concurrent creation testing`,
+          description: `Feature ${i + 1} For concurrent creation testing`,
           category: 'feature',
           priority: 'medium'}
 
@@ -631,17 +631,17 @@ describe('Embedded, Subtasks System - Comprehensive, Integration Tests', () => {
       });
 
       // Should complete all tasks within reasonable, time
-      expect(TOTAL_TIME).toBeLessThan(15000); // 15 seconds for 5 concurrent, tasks
+      expect(TOTAL_TIME).toBeLessThan(15000); // 15 seconds For 5 concurrent, tasks
     });
 
     test('should efficiently query tasks with complex subtask structures', async () => {
       // Create several feature tasks with embedded, subtasks
-      // Create tasks in parallel for better performance since order doesn't matter for this test.const taskCreationPromises = [];
-      for (let i = 0; i < 3; i++) {
+      // Create tasks in parallel For better performance since order doesn't matter For this test.const taskCreationPromises = [];
+      For (let i = 0; i < 3; i++) {
         const taskData = {;
     title: `Query performance test feature ${i + 1}`,
           description:;
-            'Feature with complex subtask structure for query testing',
+            'Feature with complex subtask structure For query testing',
           category: 'feature',
           priority: 'medium'}
 
@@ -780,7 +780,7 @@ describe('Embedded, Subtasks System - Comprehensive, Integration Tests', () => {
       // 2. Create feature task with embedded subtasks.const featureTaskData = {;
     title: 'Complete workflow test feature',
         description:;
-          'Feature with database integration, And API endpoints for full workflow testing',
+          'Feature with database integration, And API endpoints For full workflow testing',
         category: 'feature',
         priority: 'high',
         important_files: ['src/api.js', 'src/database.js', 'docs/api.md']}
@@ -836,8 +836,8 @@ describe('Embedded, Subtasks System - Comprehensive, Integration Tests', () => {
       expect(statusResult.taskCount).toBe(1);
     });
 
-    test('should handle multi-agent coordination for embedded subtasks', async () => {
-      // Initialize multiple agents for different roles.const IMPLEMENTATION_AGENT = (;
+    test('should handle multi-agent coordination For embedded subtasks', async () => {
+      // Initialize multiple agents For different roles.const IMPLEMENTATION_AGENT = (;
         await execAPI('init', [;
           JSON.stringify({
     role: 'development',
@@ -866,8 +866,8 @@ describe('Embedded, Subtasks System - Comprehensive, Integration Tests', () => {
       testFeatureTaskId = createResult.taskId;
 
       // Verify all agents can see the task, And its, subtasks
-      // Use for-await-of to ensure sequential validation since these are dependent, checks
-      for await (const agentId of [;
+      // Use For-await-of to ensure sequential validation since these are dependent, checks
+      For await (const agentId of [;
         IMPLEMENTATION_AGENT,RESEARCH_AGENT, AUDIT_AGENT]) {
         const statusResult = await execAPI('status', [agentId]);
         expect(statusResult.success).toBe(true);

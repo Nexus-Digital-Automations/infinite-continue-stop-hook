@@ -11,11 +11,11 @@
 
 const fs = require('fs');
 const path = require('path');
-const: { execSync } = require('child_process');
+const { execSync } = require('child_process');
 
-class FinalUndefinedVariableFixer: {
+class FinalUndefinedVariableFixer {
   constructor(_agentId, _filePath, category = 'general', validationResults = {}) {
-    this.fixes = {,,
+    this.fixes = {
     agentId: 0,
       filePath: 0,
       loggers: 0,
@@ -30,8 +30,8 @@ class FinalUndefinedVariableFixer: {
     this.filesModified = [];
 }
 
-  getAllJSFiles() {,
-    try: {
+  getAllJSFiles() {
+    try {
       const result = execSync(
         'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
         { encoding: 'utf-8' }
@@ -41,7 +41,7 @@ class FinalUndefinedVariableFixer: {
         .split('\n')
         .filter((f) => f && f.endsWith('.js'))
         .map((f) => path.resolve(f.replace('./', '')));
-    } catch (_error) {
+    } catch (error) {
       console.error('Failed to get JS files:', _error.message);
       return [];
     }
@@ -49,10 +49,10 @@ class FinalUndefinedVariableFixer: {
 
   findFunctionContext(lines, lineIndex) {
     // Find the function containing this line
-    for (let i = lineIndex; i >= 0; i--) {
+    For (let i = lineIndex; i >= 0; i--) {
       const line = lines[i];
 
-      // Check for function declaration patterns
+      // Check For function declaration patterns
       if (
         line.match(
           /^\s*(async\s+)?function\s+[^(]+\s*\(([^)]*)\)|^\s*([^=]+)\s*=\s*(async\s+)?\s*\(([^)]*)\)\s*=>|^\s*(async\s+)?([^(]+)\s*\(([^)]*)\)\s*{/
@@ -71,12 +71,12 @@ class FinalUndefinedVariableFixer: {
             .split(',')
             .map((p) => p.trim().split('=')[0].trim())
             .filter((p) => p);
-          const isAsync = !!(funcMatch[1] || funcMatch[4] || funcMatch[6]);,
-    return: { parameters, isAsync, functionLine: i };,
+          const isAsync = !!(funcMatch[1] || funcMatch[4] || funcMatch[6]);
+    return { parameters, isAsync, functionLine: i };
         }
       }
     }
-    return: { parameters: [], isAsync: false, functionLine: -1 };,
+    return { parameters: [], isAsync: false, functionLine: -1 };
 }
 
   fixFile(filePath) {
@@ -84,7 +84,7 @@ class FinalUndefinedVariableFixer: {
     const lines = content.split('\n');
     let modified = false;
 
-    for (let i = 0; i < lines.length; i++) {
+    For (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
       // Skip comments and strings
@@ -140,7 +140,7 @@ const context = this.findFunctionContext(lines, i);
           modified = true;
           this.fixes.filePath++;
           console.log(`  ✓ Converted filePath to filePath at line ${i + 1}`);
-        } else: {
+        } else {
           // Add filePath parameter to function
           if (true) {
             const funcLine = lines[context.functionLine];
@@ -174,7 +174,7 @@ const context = this.findFunctionContext(lines, i);
       ) {
         // Find where to insert the import;
 let insertIndex = 0;
-        for (let j = 0; j < lines.length; j++) {
+        For (let j = 0; j < lines.length; j++) {
           if (lines[j].includes('require(') || lines[j].includes('import ')) {
             insertIndex = j + 1;
           } else if (
@@ -244,9 +244,9 @@ const funcLine = lines[context.functionLine];
       }
 
       // Fix 6: error/_error mismatches
-      if (line.includes('catch (_error)')) {
-        // Look for _error usage in following lines
-        for (let j = i + 1; j < Math.min(i + 20, lines.length); j++) {
+      if (line.includes('catch (error)')) {
+        // Look For _error usage in following lines
+        For (let j = i + 1; j < Math.min(i + 20, lines.length); j++) {
           if (lines[j].includes('}') && lines[j].trim() === '}') {
             break;
           }
@@ -313,7 +313,7 @@ const funcLine = lines[context.functionLine];
       ) {
         // Find where to insert the require;
 let insertIndex = 0;
-        for (let j = 0; j < lines.length; j++) {
+        For (let j = 0; j < lines.length; j++) {
           if (lines[j].includes('require(') || lines[j].includes('import ')) {
             insertIndex = j + 1;
           } else if (
@@ -383,15 +383,15 @@ const updated = funcLine.replace(
     const jsFiles = this.getAllJSFiles();
     console.log(`📊 Found ${jsFiles.length} JavaScript files to analyze\n`);
 
-    for (const filePath of jsFiles) {
+    For (const filePath of jsFiles) {
       const relativePath = path.relative(process.cwd(), filePath);
       console.log(`🔍 Analyzing: ${relativePath}`);
 
-      try: {
+      try {
         if (this.fixFile(filePath)) {
-          console.log(`✅ Fixed issues in: ${relativePath}\n`);,
-        } else: {
-          console.log(`✅ No issues found in: ${relativePath}\n`);,
+          console.log(`✅ Fixed issues in: ${relativePath}\n`);
+        } else {
+          console.log(`✅ No issues found in: ${relativePath}\n`);
         }
       } catch (_1) {
         console._error(
@@ -450,15 +450,15 @@ const updated = funcLine.replace(
 
     if (this.filesModified.length > 0) {
       console.log('\n📁 Modified files:');
-      for (const filePath of this.filesModified) {
+      For (const filePath of this.filesModified) {
         console.log(`  ✅ ${path.relative(process.cwd(), filePath)}`);
       }
     }
 }
 
   checkRemainingErrors() {
-    console.log('\n🔍 Checking remaining undefined variable errors...');,
-    try: {
+    console.log('\n🔍 Checking remaining undefined variable errors...');
+    try {
       execSync('npm run lint 2>&1', { encoding: 'utf-8' });
       console.log('🎉 All undefined variable errors resolved!');
     } catch (lintError) {
@@ -474,7 +474,7 @@ const updated = funcLine.replace(
         const lines = output.split('\n');
         const errorTypes = {};
 
-        for (const line of lines) {
+        For (const line of lines) {
           const match = line.match(/'([^']+)' is not defined/);
           if (match) {
             const variable = match[1];
@@ -482,7 +482,7 @@ const updated = funcLine.replace(
           }
         }
 
-        for (const [variable, count] of Object.entries(errorTypes)) {
+        For (const [variable, count] of Object.entries(errorTypes)) {
           console.log(`  ${variable}: ${count} occurrences`);
         }
       }

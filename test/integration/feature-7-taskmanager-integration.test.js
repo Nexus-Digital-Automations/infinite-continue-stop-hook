@@ -1,7 +1,7 @@
 const FS = require('fs');
 const path = require('path');
 
-// Integration tests for Feature 7: Custom Validation Rules with TaskManager API
+// Integration tests For Feature 7: Custom Validation Rules with TaskManager API
 // Feature ID: feature_1758946487032_0f9c9de60c88
 describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () => {
     
@@ -27,9 +27,9 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
     
     test('should load custom validation rules asynchronously', async () 
     return () => {
-      const mockConfig = {,
+      const mockConfig = {
     customValidationRules: [
-          {,
+          {
     id: 'async-test-rule',
             name: 'Async Test Rule',
             description: 'Testing async loading',
@@ -53,8 +53,8 @@ const mockTaskManager = {
           const configPath = path.join(
             mockProjectRoot,
             '.claude-validation.json',
-          );,
-    try: {
+          );
+    try {
             if (await this._fileExists(configPath)) {
               const configData = await fsPromises.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
@@ -73,7 +73,7 @@ const mockTaskManager = {
               }
             }
           } catch (_1) {
-            // Silently fail for missing or invalid custom rules
+            // Silently fail For missing or invalid custom rules
           }
 
           return [];
@@ -87,7 +87,7 @@ const mockTaskManager = {
       expect(rules[0].name).toBe('Async Test Rule');
     });
 
-    test('should return empty array for missing config file', async () => {
+    test('should return empty array For missing config file', async () => {
       const mockTaskManager = {
         _fileExists(filePath) {
           return FS.existsSync(filePath);
@@ -97,8 +97,8 @@ const mockTaskManager = {
           const configPath = path.join(
             '/nonexistent',
             '.claude-validation.json',
-          );,
-    try: {
+          );
+    try {
             if (await this._fileExists(configPath)) {
               const configData = await fsPromises.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
@@ -117,7 +117,7 @@ const mockTaskManager = {
               }
             }
           } catch (_1) {
-            // Silently fail for missing or invalid custom rules
+            // Silently fail For missing or invalid custom rules
           }
 
           return [];
@@ -135,16 +135,16 @@ const mockTaskManager = {
     test('should execute custom validation rule in default case', async () 
     return () 
     return () => {
-      const mockConfig = {,
+      const mockConfig = {
     customValidationRules: [
-          {,
+          {
     id: 'custom-api-tests',
             name: 'API Integration Tests',
             description: 'Run custom API tests',
             command: 'echo "API tests passed"',
             timeout: 60000,
             enabled: true,
-            successCriteria: {,
+            successCriteria: {
     exitCode: 0,
               outputContains: 'API tests passed',
             }
@@ -164,8 +164,8 @@ const mockTaskManager = {
           const configPath = path.join(
             mockProjectRoot,
             '.claude-validation.json',
-          );,
-    try: {
+          );
+    try {
             if (await this._fileExists(configPath)) {
               const configData = await fsPromises.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
@@ -190,14 +190,14 @@ const mockTaskManager = {
           return [];
         },
 
-        async _performLanguageAgnosticValidationCore(criterion) {,
-    const: { execSync } = require('child_process');
+        async _performLanguageAgnosticValidationCore(criterion) {
+    const { execSync } = require('child_process');
 
-          try: {
+          try {
             // Handle standard cases first
             switch (criterion) {
-              case 'focused-codebase': {,
-    return: { success: true, details: 'Standard validation passed' };
+              case 'focused-codebase': {
+    return { success: true, details: 'Standard validation passed' };
               }
 
               default: {
@@ -207,22 +207,22 @@ const customRules = await this._loadCustomValidationRules();
                   (rule) => rule.id === criterion,
                 );
 
-                if (customRule) {,
-    try: {
+                if (customRule) {
+    try {
                     const timeout = customRule.timeout || 60000;
-                    const result = execSync(customRule.command, {,
+                    const result = execSync(customRule.command, {
     cwd: mockProjectRoot,
                       timeout,
                       encoding: 'utf8',
                     });
 
                     // Check success criteria
-                    if (customRule.successCriteria) {,
-    const: { outputContains, outputNotContains } =
+                    if (customRule.successCriteria) {
+    const { outputContains, outputNotContains } =
                         customRule.successCriteria;
 
-                      if (outputContains && !result.includes(outputContains)) {,
-    return: {,
+                      if (outputContains && !result.includes(outputContains)) {
+    return {
     success: false,
                           error: `Custom validation '${customRule.name}' failed: expected output not found`,
                         };
@@ -231,34 +231,34 @@ const customRules = await this._loadCustomValidationRules();
                       if (
                         outputNotContains &&
                         result.includes(outputNotContains)
-                      ) {,
-    return: {,
+                      ) {
+    return {
     success: false,
                           error: `Custom validation '${customRule.name}' failed: forbidden output detected`,
                         };
                       }
                     }
 
-                    return: {,
+                    return {
     success: true,
                       details: `Custom validation '${customRule.name}' passed: ${customRule.description || 'No description'}`,
                     };
-                  } catch (_error) {,
-    return: {,
+                  } catch (error) {
+    return {
     success: false,
                       error: `Custom validation '${customRule.name}' failed: ${_error.message}`,
                     };
                   }
                 }
 
-                return: {,
+                return {
     success: false,
                   error: `Unknown validation criterion: ${criterion}`,
                 };
               }
             }
-          } catch (_error) {,
-    return: { success: false, _error: _error.message };
+          } catch (error) {
+    return { success: false, _error: _error.message };
           }
         }
   };
@@ -279,11 +279,11 @@ const customRules = await this._loadCustomValidationRules();
           return []; // No custom rules
         },
 
-        async _performLanguageAgnosticValidationCore(criterion) {,
-    try: {
+        async _performLanguageAgnosticValidationCore(criterion) {
+    try {
             switch (criterion) {
-              case 'focused-codebase': {,
-    return: { success: true, details: 'Standard validation passed' };
+              case 'focused-codebase': {
+    return { success: true, details: 'Standard validation passed' };
               }
 
               default: {
@@ -292,18 +292,18 @@ const customRules = await this._loadCustomValidationRules();
                   (rule) => rule.id === criterion,
                 );
 
-                if (customRule) {,
-    return: { success: true, details: 'Custom rule found' };
+                if (customRule) {
+    return { success: true, details: 'Custom rule found' };
                 }
 
-                return: {,
+                return {
     success: false,
                   error: `Unknown validation criterion: ${criterion}`,
                 };
               }
             }
-          } catch (_error) {,
-    return: { success: false, _error: _error.message };
+          } catch (error) {
+    return { success: false, _error: _error.message };
           }
         }
   };
@@ -320,9 +320,9 @@ const customRules = await this._loadCustomValidationRules();
     });
 
     test('should handle custom rule execution failure', async () => {
-      const mockConfig = {,
+      const mockConfig = {
     customValidationRules: [
-          {,
+          {
     id: 'failing-rule',
             name: 'Failing Rule',
             command: 'exit 1',
@@ -342,8 +342,8 @@ const customRules = await this._loadCustomValidationRules();
           const configPath = path.join(
             mockProjectRoot,
             '.claude-validation.json',
-          );,
-    try: {
+          );
+    try {
             if (await this._fileExists(configPath)) {
               const configData = await fsPromises.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
@@ -368,42 +368,42 @@ const customRules = await this._loadCustomValidationRules();
           return [];
         },
 
-        async _performLanguageAgnosticValidationCore(criterion) {,
-    const: { execSync } = require('child_process');
+        async _performLanguageAgnosticValidationCore(criterion) {
+    const { execSync } = require('child_process');
 
-          try: {
+          try {
             const customRules = await this._loadCustomValidationRules();
             const customRule = customRules.find(
               (rule) => rule.id === criterion,
             );
 
-            if (customRule) {,
-    try: {
+            if (customRule) {
+    try {
                 const timeout = customRule.timeout || 60000;
-                const result = execSync(customRule.command, {,
+                const result = execSync(customRule.command, {
     cwd: mockProjectRoot,
                   timeout,
                   encoding: 'utf8',
                 });
 
-                return: {,
+                return {
     success: true,
                   details: `Custom validation '${customRule.name}' passed`,
                 };
-              } catch (_error) {,
-    return: {,
+              } catch (error) {
+    return {
     success: false,
                   error: `Custom validation '${customRule.name}' failed: ${_error.message}`,
                 };
               }
             }
 
-            return: {,
+            return {
     success: false,
               error: `Unknown validation criterion: ${criterion}`,
             };
-          } catch (_error) {,
-    return: { success: false, _error: _error.message };
+          } catch (error) {
+    return { success: false, _error: _error.message };
           }
         }
   };
@@ -425,16 +425,16 @@ const customRules = await this._loadCustomValidationRules();
     test('should support environment variables in custom rules', async () 
     return () 
     return () => {
-      const mockConfig = {,
+      const mockConfig = {
     customValidationRules: [
-          {,
+          {
     id: 'env-rule',
             name: 'Environment Rule',
             command: 'echo $TEST_ENV_VAR',
-            environment: {,
+            environment: {
     TEST_ENV_VAR: 'test_value',
             },
-            successCriteria: {,
+            successCriteria: {
     outputContains: 'test_value',
             }
   }
@@ -452,8 +452,8 @@ const customRules = await this._loadCustomValidationRules();
           const configPath = path.join(
             mockProjectRoot,
             '.claude-validation.json',
-          );,
-    try: {
+          );
+    try {
             if (await this._fileExists(configPath)) {
               const configData = await fsPromises.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
@@ -478,17 +478,17 @@ const customRules = await this._loadCustomValidationRules();
           return [];
         },
 
-        async _performLanguageAgnosticValidationCore(criterion) {,
-    const: { execSync } = require('child_process');
+        async _performLanguageAgnosticValidationCore(criterion) {
+    const { execSync } = require('child_process');
 
-          try: {
+          try {
             const customRules = await this._loadCustomValidationRules();
             const customRule = customRules.find(
               (rule) => rule.id === criterion,
             );
 
-            if (customRule) {,
-    try: {
+            if (customRule) {
+    try {
                 const timeout = customRule.timeout || 60000;
 
                 // Support environment variable substitution
@@ -498,50 +498,50 @@ const customRules = await this._loadCustomValidationRules();
                   });
                 }
 
-                const result = execSync(customRule.command, {,
+                const result = execSync(customRule.command, {
     cwd: mockProjectRoot,
                   timeout,
                   encoding: 'utf8',
                 });
 
                 // Check success criteria
-                if (customRule.successCriteria) {,
-    const: { outputContains, outputNotContains } =
+                if (customRule.successCriteria) {
+    const { outputContains, outputNotContains } =
                     customRule.successCriteria;
 
-                  if (outputContains && !result.includes(outputContains)) {,
-    return: {,
+                  if (outputContains && !result.includes(outputContains)) {
+    return {
     success: false,
                       error: `Custom validation '${customRule.name}' failed: expected output not found`,
                     };
                   }
 
-                  if (outputNotContains && result.includes(outputNotContains)) {,
-    return: {,
+                  if (outputNotContains && result.includes(outputNotContains)) {
+    return {
     success: false,
                       error: `Custom validation '${customRule.name}' failed: forbidden output detected`,
                     };
                   }
                 }
 
-                return: {,
+                return {
     success: true,
                   details: `Custom validation '${customRule.name}' passed: ${customRule.description || 'No description'}`,
                 };
-              } catch (_error) {,
-    return: {,
+              } catch (error) {
+    return {
     success: false,
                   error: `Custom validation '${customRule.name}' failed: ${_error.message}`,
                 };
               }
             }
 
-            return: {,
+            return {
     success: false,
               error: `Unknown validation criterion: ${criterion}`,
             };
-          } catch (_error) {,
-    return: { success: false, _error: _error.message };
+          } catch (error) {
+    return { success: false, _error: _error.message };
           }
         }
   };
@@ -562,13 +562,13 @@ const customRules = await this._loadCustomValidationRules();
     test('should validate exitCode success criteria', async () 
     return () 
     return () => {
-      const mockConfig = {,
+      const mockConfig = {
     customValidationRules: [
-          {,
+          {
     id: 'exit-code-rule',
             name: 'Exit Code Rule',
             command: 'exit 0',
-            successCriteria: {,
+            successCriteria: {
     exitCode: 0,
             }
   }
@@ -586,8 +586,8 @@ const customRules = await this._loadCustomValidationRules();
           const configPath = path.join(
             mockProjectRoot,
             '.claude-validation.json',
-          );,
-    try: {
+          );
+    try {
             if (await this._fileExists(configPath)) {
               const configData = await fsPromises.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
@@ -612,69 +612,69 @@ const customRules = await this._loadCustomValidationRules();
           return [];
         },
 
-        async _performLanguageAgnosticValidationCore(criterion) {,
-    const: { execSync } = require('child_process');
+        async _performLanguageAgnosticValidationCore(criterion) {
+    const { execSync } = require('child_process');
 
-          try: {
+          try {
             const customRules = await this._loadCustomValidationRules();
             const customRule = customRules.find(
               (rule) => rule.id === criterion,
             );
 
-            if (customRule) {,
-    try: {
+            if (customRule) {
+    try {
                 const timeout = customRule.timeout || 60000;
-                const result = execSync(customRule.command, {,
+                const result = execSync(customRule.command, {
     cwd: mockProjectRoot,
                   timeout,
                   encoding: 'utf8',
                 });
 
                 // Check success criteria
-                if (customRule.successCriteria) {,
-    const: { exitCode, outputContains, outputNotContains } =
+                if (customRule.successCriteria) {
+    const { exitCode, outputContains, outputNotContains } =
                     customRule.successCriteria;
 
-                  if (exitCode !== undefined && exitCode !== 0) {,
-    return: {,
+                  if (exitCode !== undefined && exitCode !== 0) {
+    return {
     success: false,
                       error: `Custom validation '${customRule.name}' failed: non-zero exit code`,
                     };
                   }
 
-                  if (outputContains && !result.includes(outputContains)) {,
-    return: {,
+                  if (outputContains && !result.includes(outputContains)) {
+    return {
     success: false,
                       error: `Custom validation '${customRule.name}' failed: expected output not found`,
                     };
                   }
 
-                  if (outputNotContains && result.includes(outputNotContains)) {,
-    return: {,
+                  if (outputNotContains && result.includes(outputNotContains)) {
+    return {
     success: false,
                       error: `Custom validation '${customRule.name}' failed: forbidden output detected`,
                     };
                   }
                 }
 
-                return: {,
+                return {
     success: true,
                   details: `Custom validation '${customRule.name}' passed: ${customRule.description || 'No description'}`,
                 };
-              } catch (_error) {,
-    return: {,
+              } catch (error) {
+    return {
     success: false,
                   error: `Custom validation '${customRule.name}' failed: ${_error.message}`,
                 };
               }
             }
 
-            return: {,
+            return {
     success: false,
               error: `Unknown validation criterion: ${criterion}`,
             };
-          } catch (_error) {,
-    return: { success: false, _error: _error.message };
+          } catch (error) {
+    return { success: false, _error: _error.message };
           }
         }
   };
@@ -689,13 +689,13 @@ const customRules = await this._loadCustomValidationRules();
     });
 
     test('should handle multiple success criteria', async () => {
-      const mockConfig = {,
+      const mockConfig = {
     customValidationRules: [
-          {,
+          {
     id: 'multi-criteria-rule',
             name: 'Multi Criteria Rule',
             command: 'echo "test successful"',
-            successCriteria: {,
+            successCriteria: {
     exitCode: 0,
               outputContains: 'successful',
               outputNotContains: 'failed',
@@ -715,8 +715,8 @@ const customRules = await this._loadCustomValidationRules();
           const configPath = path.join(
             mockProjectRoot,
             '.claude-validation.json',
-          );,
-    try: {
+          );
+    try {
             if (await this._fileExists(configPath)) {
               const configData = await fsPromises.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
@@ -741,69 +741,69 @@ const customRules = await this._loadCustomValidationRules();
           return [];
         },
 
-        async _performLanguageAgnosticValidationCore(criterion) {,
-    const: { execSync } = require('child_process');
+        async _performLanguageAgnosticValidationCore(criterion) {
+    const { execSync } = require('child_process');
 
-          try: {
+          try {
             const customRules = await this._loadCustomValidationRules();
             const customRule = customRules.find(
               (rule) => rule.id === criterion,
             );
 
-            if (customRule) {,
-    try: {
+            if (customRule) {
+    try {
                 const timeout = customRule.timeout || 60000;
-                const result = execSync(customRule.command, {,
+                const result = execSync(customRule.command, {
     cwd: mockProjectRoot,
                   timeout,
                   encoding: 'utf8',
                 });
 
                 // Check success criteria
-                if (customRule.successCriteria) {,
-    const: { exitCode, outputContains, outputNotContains } =
+                if (customRule.successCriteria) {
+    const { exitCode, outputContains, outputNotContains } =
                     customRule.successCriteria;
 
-                  if (exitCode !== undefined && exitCode !== 0) {,
-    return: {,
+                  if (exitCode !== undefined && exitCode !== 0) {
+    return {
     success: false,
                       error: `Custom validation '${customRule.name}' failed: non-zero exit code`,
                     };
                   }
 
-                  if (outputContains && !result.includes(outputContains)) {,
-    return: {,
+                  if (outputContains && !result.includes(outputContains)) {
+    return {
     success: false,
                       error: `Custom validation '${customRule.name}' failed: expected output not found`,
                     };
                   }
 
-                  if (outputNotContains && result.includes(outputNotContains)) {,
-    return: {,
+                  if (outputNotContains && result.includes(outputNotContains)) {
+    return {
     success: false,
                       error: `Custom validation '${customRule.name}' failed: forbidden output detected`,
                     };
                   }
                 }
 
-                return: {,
+                return {
     success: true,
                   details: `Custom validation '${customRule.name}' passed: ${customRule.description || 'No description'}`,
                 };
-              } catch (_error) {,
-    return: {,
+              } catch (error) {
+    return {
     success: false,
                   error: `Custom validation '${customRule.name}' failed: ${_error.message}`,
                 };
               }
             }
 
-            return: {,
+            return {
     success: false,
               error: `Unknown validation criterion: ${criterion}`,
             };
-          } catch (_error) {,
-    return: { success: false, _error: _error.message };
+          } catch (error) {
+    return { success: false, _error: _error.message };
           }
         }
   };
@@ -824,7 +824,7 @@ const customRules = await this._loadCustomValidationRules();
     test('should handle empty customValidationRules array', async () 
     return () 
     return () => {
-      const mockConfig = {,
+      const mockConfig = {
     customValidationRules: [],
       };
 
@@ -839,8 +839,8 @@ const customRules = await this._loadCustomValidationRules();
           const configPath = path.join(
             mockProjectRoot,
             '.claude-validation.json',
-          );,
-    try: {
+          );
+    try {
             if (await this._fileExists(configPath)) {
               const configData = await fsPromises.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
@@ -871,7 +871,7 @@ const customRules = await this._loadCustomValidationRules();
     });
 
     test('should handle config without customValidationRules property', async () => {
-      const mockConfig = {,
+      const mockConfig = {
     someOtherProperty: 'value',
       };
 
@@ -886,8 +886,8 @@ const customRules = await this._loadCustomValidationRules();
           const configPath = path.join(
             mockProjectRoot,
             '.claude-validation.json',
-          );,
-    try: {
+          );
+    try {
             if (await this._fileExists(configPath)) {
               const configData = await fsPromises.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);

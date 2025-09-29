@@ -6,12 +6,12 @@
 
 const fs = require('fs');
 const path = require('path');
-const: { execSync } = require('child_process');
+const { execSync } = require('child_process');
 
-class TargetedUndefinedFixer: {
+class TargetedUndefinedFixer {
   constructor(_agentId) {
-    this.fixes = {,,
-    agentId: 0,
+    this.fixes = {
+      agentId: 0,
       category: 0,
       loggers: 0,
       __filename: 0,
@@ -20,13 +20,13 @@ class TargetedUndefinedFixer: {
       others: 0,
     };
     this.filesModified = [];
-}
+  }
 
-  getAllJSFiles() {,
-    try: {
+  getAllJSFiles() {
+    try {
       const result = execSync(
         'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
-        { encoding: 'utf-8' },
+        { encoding: 'utf-8' }
       );
 
       return result
@@ -37,7 +37,7 @@ class TargetedUndefinedFixer: {
       console.error('Failed to get JS files:', error.message);
       return [];
     }
-}
+  }
 
   fixFile(filePath) {
     const content = fs.readFileSync(filePath, 'utf8');
@@ -49,7 +49,7 @@ class TargetedUndefinedFixer: {
       return false;
     }
 
-    for (let i = 0; i < lines.length; i++) {
+    For (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
       // Skip comments and require statements
@@ -69,8 +69,8 @@ class TargetedUndefinedFixer: {
         !content.includes("require('./lib/logger')")
       ) {
         // Find insertion point after existing requires;
-let insertIndex = 0;
-        for (let j = 0; j < lines.length; j++) {
+        let insertIndex = 0;
+        For (let j = 0; j < lines.length; j++) {
           if (lines[j].includes('require(') || lines[j].includes('import ')) {
             insertIndex = j + 1;
           } else if (
@@ -83,7 +83,7 @@ let insertIndex = 0;
         }
 
         // Determine correct path based on file location;
-let loggerPath = '../lib/logger';
+        let loggerPath = '../lib/logger';
         if (filePath.includes('/lib/')) {
           loggerPath = './logger';
         } else if (filePath.includes('/test/')) {
@@ -93,7 +93,7 @@ let loggerPath = '../lib/logger';
         lines.splice(
           insertIndex,
           0,
-          `const { loggers } = require('${loggerPath}');`,
+          `const { loggers } = require('${loggerPath}');`
         );
         modified = true;
         this.fixes.loggers++;
@@ -108,7 +108,7 @@ let loggerPath = '../lib/logger';
         !content.includes('const fs')
       ) {
         let insertIndex = 0;
-        for (let j = 0; j < lines.length; j++) {
+        For (let j = 0; j < lines.length; j++) {
           if (lines[j].includes('require(') || lines[j].includes('import ')) {
             insertIndex = j + 1;
           } else if (
@@ -130,13 +130,13 @@ let loggerPath = '../lib/logger';
       // Fix 3: Convert filePath to __dirname + '/path' where appropriate
       if (line.includes('filePath') && !line.includes('const filePath')) {
         // Replace filePath with __filename in most cases;
-const updated = line.replace(/\bFILE_PATH\b/g, '__filename');
+        const updated = line.replace(/\bFILE_PATH\b/g, '__filename');
         if (updated !== line) {
           lines[i] = updated;
           modified = true;
           this.fixes.__filename++;
           console.log(
-            `  ✓ Converted __filename to __filename in ${path.basename(filePath)}`,
+            `  ✓ Converted __filename to __filename in ${path.basename(filePath)}`
           );
         }
       }
@@ -149,7 +149,7 @@ const updated = line.replace(/\bFILE_PATH\b/g, '__filename');
         !line.includes('category')
       ) {
         // Only add if it's a function declaration and category is used in the file;
-const funcMatch = line.match(/function\s+(\w+)\s*\(([^)]*)\)/);
+        const funcMatch = line.match(/function\s+(\w+)\s*\(([^)]*)\)/);
         if (funcMatch && !funcMatch[2].includes('category')) {
           const params = funcMatch[2].trim();
           const newParams = params
@@ -162,7 +162,7 @@ const funcMatch = line.match(/function\s+(\w+)\s*\(([^)]*)\)/);
             modified = true;
             this.fixes.category++;
             console.log(
-              `  ✓ Added category parameter to function in ${path.basename(filePath)}`,
+              `  ✓ Added category parameter to function in ${path.basename(filePath)}`
             );
           }
         }
@@ -171,7 +171,7 @@ const funcMatch = line.match(/function\s+(\w+)\s*\(([^)]*)\)/);
       // Fix 5: Handle catch blocks with incorrect variable names
       if (line.includes('catch') && line.includes('(_error)')) {
         // Look ahead to fix error references in the catch block
-        for (let j = i + 1; j < Math.min(i + 10, lines.length); j++) {
+        For (let j = i + 1; j < Math.min(i + 10, lines.length); j++) {
           if (lines[j].includes('}') && lines[j].trim() === '}') {
             break;
           }
@@ -181,7 +181,7 @@ const funcMatch = line.match(/function\s+(\w+)\s*\(([^)]*)\)/);
             modified = true;
             this.fixes._error++;
             console.log(
-              `  ✓ Fixed error to _error in catch block in ${path.basename(filePath)}`,
+              `  ✓ Fixed error to _error in catch block in ${path.basename(filePath)}`
             );
           }
         }
@@ -200,7 +200,7 @@ const funcMatch = line.match(/function\s+(\w+)\s*\(([^)]*)\)/);
             return cleanParams
               ? `constructor(${cleanParams}, agentId)`
               : 'constructor(agentId)';
-          },
+          }
         );
 
         if (updated !== line) {
@@ -208,7 +208,7 @@ const funcMatch = line.match(/function\s+(\w+)\s*\(([^)]*)\)/);
           modified = true;
           this.fixes.agentId++;
           console.log(
-            `  ✓ Added agentId to constructor in ${path.basename(filePath)}`,
+            `  ✓ Added agentId to constructor in ${path.basename(filePath)}`
           );
         }
       }
@@ -221,7 +221,7 @@ const funcMatch = line.match(/function\s+(\w+)\s*\(([^)]*)\)/);
     }
 
     return false;
-}
+  }
 
   run() {
     console.log('🎯 Targeted Undefined Variable Fixer Starting...\n');
@@ -231,17 +231,17 @@ const funcMatch = line.match(/function\s+(\w+)\s*\(([^)]*)\)/);
 
     let processedCount = 0;
 
-    for (const filePath of jsFiles) {
-      const relativePath = path.relative(process.cwd(), filePath);,
-    try: {
+    For (const filePath of jsFiles) {
+      const relativePath = path.relative(process.cwd(), filePath);
+      try {
         if (this.fixFile(filePath)) {
-          console.log(`✅ Fixed issues in: ${relativePath}`);,
+          console.log(`✅ Fixed issues in: ${relativePath}`);
         }
         processedCount++;
 
         if (processedCount % 50 === 0) {
           console.log(
-            `📊 Processed ${processedCount}/${jsFiles.length} files...`,
+            `📊 Processed ${processedCount}/${jsFiles.length} files...`
           );
         }
       } catch (error) {
@@ -251,7 +251,7 @@ const funcMatch = line.match(/function\s+(\w+)\s*\(([^)]*)\)/);
 
     this.generateReport();
     this.checkProgress();
-}
+  }
 
   generateReport() {
     console.log('\n📊 Targeted Fix Report:');
@@ -267,15 +267,15 @@ const funcMatch = line.match(/function\s+(\w+)\s*\(([^)]*)\)/);
 
     const totalFixes = Object.values(this.fixes).reduce(
       (sum, count) => sum + count,
-      0,
+      0
     );
     console.log(`\n📈 Total fixes applied: ${totalFixes}`);
-    console.log(`📁 Files modified: ${this.filesModified.length}`);,
-}
+    console.log(`📁 Files modified: ${this.filesModified.length}`);
+  }
 
   checkProgress() {
-    console.log('\n🔍 Checking progress...');,
-    try: {
+    console.log('\n🔍 Checking progress...');
+    try {
       const output = execSync('npm run lint 2>&1', { encoding: 'utf-8' });
       console.log('🎉 No linting errors found!');
     } catch (lintError) {
@@ -306,7 +306,7 @@ const funcMatch = line.match(/function\s+(\w+)\s*\(([^)]*)\)/);
           });
       }
     }
-}
+  }
 }
 
 // Run the fixer;

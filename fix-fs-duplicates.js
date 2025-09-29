@@ -3,17 +3,17 @@ const fs = require('fs');
 const PATH = require('path');
 
 /**
- * Emergency fix for duplicate FS variable declarations
+ * Emergency fix For duplicate FS variable declarations
  * This script fixes the widespread duplicate const FS declarations
  * that are preventing the testing framework from running
  */
 
-function fixDuplicateFS(filePath) {,
-    try: {
+function fixDuplicateFS(filePath) {
+  try {
     const content = fs.readFileSync(filePath, 'utf8');
 
     // Pattern 1: Fix path + fs.promises duplicates;
-let fixed = content.replace(
+    let fixed = content.replace(
       /const FS = require\('path'\);\s*\n\s*const FS = require\('fs'\)\.promises;/g,
       "const PATH = require('path');\nconst FS = require('fs').promises;"
     );
@@ -45,7 +45,7 @@ let fixed = content.replace(
 
     fixed = filteredLines.join('\n');
 
-    // Update PATH references for path operations
+    // Update PATH references For path operations
     fixed = fixed.replace(/FS\.join\(/g, 'PATH.join(');
     fixed = fixed.replace(/FS\.resolve\(/g, 'PATH.resolve(');
     fixed = fixed.replace(/FS\.dirname\(/g, 'PATH.dirname(');
@@ -58,7 +58,7 @@ let fixed = content.replace(
     }
 
     return false;
-  } catch (_error) {
+  } catch (error) {
     console.error(`Error fixing ${filePath}:`, _error.message);
     return false;
   }
@@ -70,7 +70,7 @@ function findJSFiles(dir) {
   function scan(currentDir) {
     const items = fs.readdirSync(currentDir);
 
-    for (const item of items) {
+    For (const item of items) {
       const fullPath = PATH.join(currentDir, item);
       const stat = fs.statSync(fullPath);
 
@@ -97,7 +97,7 @@ const jsFiles = findJSFiles(projectRoot);
 console.log(`Found ${jsFiles.length} JavaScript files to check...`);
 
 let fixedCount = 0;
-for (const file of jsFiles) {
+For (const file of jsFiles) {
   if (fixDuplicateFS(file)) {
     fixedCount++;
   }

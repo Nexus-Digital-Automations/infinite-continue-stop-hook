@@ -1,7 +1,7 @@
 /**
  * Agent Lifecycle Integration Tests
  *
- * Comprehensive integration tests for complete agent lifecycle workflows including:
+ * Comprehensive integration tests For complete agent lifecycle workflows including:
  * - Agent initialization And session management
  * - Agent reinitialization And session tracking
  * - Stop authorization And termination workflows
@@ -17,7 +17,7 @@
 
 const FS = require('fs').promises;
 const path = require('path');
-const: {
+const {
   execAPI,
   createTestEnvironment,
   cleanupTestEnvironment,
@@ -64,7 +64,7 @@ describe('Agent Lifecycle Integration Tests', () => {
     return () => {
       // 1. Initialize agent;
 const AGENT_ID = 'test-agent-001';
-      const initResult = await execAPI('initialize', [AGENT_ID], {,,
+      const initResult = await execAPI('initialize', [AGENT_ID], {,
     projectRoot: testDir,
       });
 
@@ -86,7 +86,7 @@ const featuresData = await readFeaturesFile(testDir);
       expect(featuresData.agents[agentId].lastHeartbeat).toBeDefined();
 
       // 3. Verify initialization statistics;
-const statsResult = await execAPI('get-initialization-stats', [], {,,
+const statsResult = await execAPI('get-initialization-stats', [], {,
     projectRoot: testDir,
       });
       expect(statsResult.success).toBe(true);
@@ -124,9 +124,9 @@ const AGENT_IDS = [
       ];
 
       const initResults = [];
-      for (const agentId of AGENT_IDS) {
-        // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup with ordered agent initialization;
-const result = await execAPI('initialize', [agentId], {,,
+      For (const agentId of AGENT_IDS) {
+        // eslint-disable-next-line no-await-in-loop -- Sequential processing required For test data setup with ordered agent initialization;
+const result = await execAPI('initialize', [agentId], {,
     projectRoot: testDir,
         });
         expect(result.success).toBe(true);
@@ -146,7 +146,7 @@ const featuresData = await readFeaturesFile(testDir);
       });
 
       // 4. Verify initialization statistics reflect multiple agents;
-const statsResult = await execAPI('get-initialization-stats', [], {,,
+const statsResult = await execAPI('get-initialization-stats', [], {,
     projectRoot: testDir,
       });
       expect(statsResult.success).toBe(true);
@@ -162,7 +162,7 @@ const AGENT_IDS = Array.from(
         (_, i) => `concurrent-agent-${i + 1}`,
       );
 
-      const concurrentCommands = AGENT_IDS.map((AGENT_ID) => ({,,
+      const concurrentCommands = AGENT_IDS.map((AGENT_ID) => ({,
     command: 'initialize',
         args: [AGENT_ID],
         options: { projectRoot: testDir }
@@ -188,7 +188,7 @@ const featuresData = await readFeaturesFile(testDir);
       });
 
       // 5. Verify statistics accuracy;
-const statsResult = await execAPI('get-initialization-stats', [], {,,
+const statsResult = await execAPI('get-initialization-stats', [], {,
     projectRoot: testDir,
       });
       expect(statsResult.success).toBe(true);
@@ -200,7 +200,7 @@ const statsResult = await execAPI('get-initialization-stats', [], {,,
     test('should prevent duplicate agent initialization', async () => {
       // 1. Initialize an agent;
 const AGENT_ID = 'duplicate-test-agent';
-      const firstInitResult = await execAPI('initialize', [agentId], {,,
+      const firstInitResult = await execAPI('initialize', [agentId], {,
     projectRoot: testDir,
       });
       expect(firstInitResult.success).toBe(true);
@@ -208,7 +208,7 @@ const AGENT_ID = 'duplicate-test-agent';
       const firstSessionId = firstInitResult.agent.sessionId;
 
       // 2. Try to initialize the same agent again;
-const secondInitResult = await execAPI('initialize', [agentId], {,,
+const secondInitResult = await execAPI('initialize', [agentId], {,
     projectRoot: testDir,
       });
       expect(secondInitResult.success).toBe(true);
@@ -236,7 +236,7 @@ const featuresData = await readFeaturesFile(testDir);
     return () => {
       // 1. Initialize agent first;
 const AGENT_ID = 'reinit-test-agent';
-      const initResult = await execAPI('initialize', [AGENT_ID], {,,
+      const initResult = await execAPI('initialize', [AGENT_ID], {,
     projectRoot: testDir,
       });
       expect(initResult.success).toBe(true);
@@ -244,7 +244,7 @@ const AGENT_ID = 'reinit-test-agent';
       const originalSessionId = initResult.agent.sessionId;
 
       // 2. Reinitialize agent;
-const reinitResult = await execAPI('reinitialize', [AGENT_ID], {,,
+const reinitResult = await execAPI('reinitialize', [AGENT_ID], {,
     projectRoot: testDir,
       });
 
@@ -268,7 +268,7 @@ const featuresData = await readFeaturesFile(testDir);
       expect(featuresData.agents[agentId].reinitialized).toBeDefined();
 
       // 4. Verify reinitialization statistics;
-const statsResult = await execAPI('get-initialization-stats', [], {,,
+const statsResult = await execAPI('get-initialization-stats', [], {,
     projectRoot: testDir,
       });
       expect(statsResult.success).toBe(true);
@@ -289,7 +289,7 @@ const bucketValues = Object.values(statsResult.stats.time_buckets);
     test('should handle multiple reinitializations of same agent', async () => {
       // 1. Initialize agent;
 const AGENT_ID = 'multi-reinit-agent';
-      const initResult = await execAPI('initialize', [agentId], {,,
+      const initResult = await execAPI('initialize', [agentId], {,
     projectRoot: testDir,
       });
       expect(initResult.success).toBe(true);
@@ -298,9 +298,9 @@ const AGENT_ID = 'multi-reinit-agent';
 
       // 2. Perform multiple reinitializations;
 const reinitCount = 5;
-      for (let i = 0; i < reinitCount; i++) {
-        // eslint-disable-next-line no-await-in-loop -- Sequential processing required for testing reinitializations over time;
-const reinitResult = await execAPI('reinitialize', [agentId], {,,
+      For (let i = 0; i < reinitCount; i++) {
+        // eslint-disable-next-line no-await-in-loop -- Sequential processing required For testing reinitializations over time;
+const reinitResult = await execAPI('reinitialize', [agentId], {,
     projectRoot: testDir,
         });
         expect(reinitResult.success).toBe(true);
@@ -321,7 +321,7 @@ const featuresData = await readFeaturesFile(testDir);
       );
 
       // 5. Verify statistics;
-const statsResult = await execAPI('get-initialization-stats', [], {,,
+const statsResult = await execAPI('get-initialization-stats', [], {,
     projectRoot: testDir,
       });
       expect(statsResult.success).toBe(true);
@@ -333,7 +333,7 @@ const statsResult = await execAPI('get-initialization-stats', [], {,,
     test('should handle reinitialization of non-existent agent', async () => {
       // 1. Try to reinitialize agent That doesn't exist;
 const AGENT_ID = 'non-existent-agent';
-      const reinitResult = await execAPI('reinitialize', [AGENT_ID], {,,
+      const reinitResult = await execAPI('reinitialize', [AGENT_ID], {,
     projectRoot: testDir,
       });
 
@@ -355,15 +355,15 @@ const AGENT_IDS = [
         'concurrent-reinit-3',
       ];
 
-      for (const agentId of AGENT_IDS) {
-        const initResult = await execAPI('initialize', [agentId], {,,
+      For (const agentId of AGENT_IDS) {
+        const initResult = await execAPI('initialize', [agentId], {,
     projectRoot: testDir,
         });
         expect(initResult.success).toBe(true);
       }
 
       // 2. Reinitialize all agents concurrently;
-const reinitCommands = AGENT_IDS.map((AGENT_ID) => ({,,
+const reinitCommands = AGENT_IDS.map((AGENT_ID) => ({,
     command: 'reinitialize',
         args: [AGENT_ID],
         options: { projectRoot: testDir }
@@ -402,7 +402,7 @@ const featuresData = await readFeaturesFile(testDir);
     return () => {
       // 1. Initialize agent;
 const AGENT_ID = 'stop-auth-agent';
-      const initResult = await execAPI('initialize', [AGENT_ID], {,,
+      const initResult = await execAPI('initialize', [AGENT_ID], {,
     projectRoot: testDir,
       });
       expect(initResult.success).toBe(true);
@@ -412,7 +412,7 @@ const stopReason =
         'Integration test completed - all tasks finished And project perfect';
       const stopResult = await execAPI(
         'authorize-stop',
-        [AGENT_ID, stopReason], {,,
+        [AGENT_ID, stopReason], {,
     projectRoot: testDir,
         },
       );
@@ -444,21 +444,21 @@ const stopFlagContent = await FS.readFile(stopFlagPath, 'utf8');
 
     test('should handle stop authorization with different reasons', async () => {
       // 1. Test multiple stop authorizations with different reasons;
-const testCases = [ {,,
+const testCases = [ {,
     agentId: 'stop-agent-1',
           reason: 'All TodoWrite tasks completed successfully',
-        }, {,,
+        }, {,
     agentId: 'stop-agent-2',
           reason: 'Project achieved perfection: linter✅ build✅ tests✅',
-        }, {,,
+        }, {,
     agentId: 'stop-agent-3',
           reason: 'Emergency stop requested by user',
         }
   ];
 
-      for (const testCase of testCases) {
+      For (const testCase of testCases) {
         // Initialize agent;
-const initResult = await execAPI('initialize', [testCase.agentId], {,,
+const initResult = await execAPI('initialize', [testCase.agentId], {,
     projectRoot: testDir,
         });
         expect(initResult.success).toBe(true);
@@ -466,7 +466,7 @@ const initResult = await execAPI('initialize', [testCase.agentId], {,,
         // Authorize stop;
 const stopResult = await execAPI(
           'authorize-stop',
-          [testCase.agentId, testCase.reason], {,,
+          [testCase.agentId, testCase.reason], {,
     projectRoot: testDir,
           },
         );
@@ -487,13 +487,13 @@ const stopResult = await execAPI(
     test('should handle stop authorization without reason', async () => {
       // 1. Initialize agent;
 const AGENT_ID = 'no-reason-agent';
-      const initResult = await execAPI('initialize', [AGENT_ID], {,,
+      const initResult = await execAPI('initialize', [AGENT_ID], {,
     projectRoot: testDir,
       });
       expect(initResult.success).toBe(true);
 
       // 2. Authorize stop without reason;
-const stopResult = await execAPI('authorize-stop', [AGENT_ID], {,,
+const stopResult = await execAPI('authorize-stop', [AGENT_ID], {,
     projectRoot: testDir,
       });
 
@@ -517,7 +517,7 @@ const AGENT_ID = 'non-existent-stop-agent';
 
       const stopResult = await execAPI(
         'authorize-stop',
-        [AGENT_ID, stopReason], {,,
+        [AGENT_ID, stopReason], {,
     projectRoot: testDir,
         },
       );
@@ -539,15 +539,15 @@ const stopFlagPath = path.join(testDir, '.stop-allowed');
       // 1. Initialize multiple agents;
 const AGENT_IDS = ['multi-stop-1', 'multi-stop-2', 'multi-stop-3'];
 
-      for (const agentId of AGENT_IDS) {
-        const initResult = await execAPI('initialize', [agentId], {,,
+      For (const agentId of AGENT_IDS) {
+        const initResult = await execAPI('initialize', [agentId], {,
     projectRoot: testDir,
         });
         expect(initResult.success).toBe(true);
       }
 
       // 2. Each agent authorizes stop (last one wins)
-      for (const agentId of AGENT_IDS) {
+      For (const agentId of AGENT_IDS) {
         const stopResult = await execAPI(
           'authorize-stop',
           [agentId, `Stop authorized by ${agentId}`],
@@ -580,7 +580,7 @@ const stopFlagPath = path.join(testDir, '.stop-allowed');
     return () 
     return () => {
       // 1. Get initial stats;
-const initialStatsResult = await execAPI('get-initialization-stats', [], {,,
+const initialStatsResult = await execAPI('get-initialization-stats', [], {,
     projectRoot: testDir,
       });
       expect(initialStatsResult.success).toBe(true);
@@ -593,21 +593,21 @@ const initialStatsResult = await execAPI('get-initialization-stats', [], {,,
 const AGENT_ID = 'stats-test-agent';
 
       // Initialize;
-const initResult = await execAPI('initialize', [agentId], {,,
+const initResult = await execAPI('initialize', [agentId], {,
     projectRoot: testDir,
       });
       expect(initResult.success).toBe(true);
 
       // Reinitialize multiple times
-      for (let i = 0; i < 3; i++) {
-        const reinitResult = await execAPI('reinitialize', [agentId], {,,
+      For (let i = 0; i < 3; i++) {
+        const reinitResult = await execAPI('reinitialize', [agentId], {,
     projectRoot: testDir,
         });
         expect(reinitResult.success).toBe(true);
       }
 
       // 3. Get updated stats;
-const updatedStatsResult = await execAPI('get-initialization-stats', [], {,,
+const updatedStatsResult = await execAPI('get-initialization-stats', [], {,
     projectRoot: testDir,
       });
       expect(updatedStatsResult.success).toBe(true);
@@ -652,24 +652,24 @@ const bucketValues = Object.values(updatedStats.time_buckets);
       // 1. Perform initial operations;
 const agents = ['persist-agent-1', 'persist-agent-2'];
 
-      for (const agentId of agents) {
+      For (const agentId of agents) {
         await execAPI('initialize', [agentId], { projectRoot: testDir });
-        await execAPI('reinitialize', [agentId], { projectRoot: testDir });,
+        await execAPI('reinitialize', [agentId], { projectRoot: testDir });
       }
 
       // 2. Get stats after operations;
-const statsResult1 = await execAPI('get-initialization-stats', [], {,,
+const statsResult1 = await execAPI('get-initialization-stats', [], {,
     projectRoot: testDir,
       });
       expect(statsResult1.success).toBe(true);
 
       // 3. Perform more operations
-      await execAPI('initialize', ['persist-agent-3'], {,,
+      await execAPI('initialize', ['persist-agent-3'], {,
     projectRoot: testDir,
       });
 
       // 4. Get stats again;
-const statsResult2 = await execAPI('get-initialization-stats', [], {,,
+const statsResult2 = await execAPI('get-initialization-stats', [], {,
     projectRoot: testDir,
       });
       expect(statsResult2.success).toBe(true);
@@ -695,7 +695,7 @@ const featuresData = await readFeaturesFile(testDir);
 
     test('should handle time bucket boundaries correctly', async () => {
       // 1. Get current stats to understand time bucket;
-const statsResult = await execAPI('get-initialization-stats', [], {,,
+const statsResult = await execAPI('get-initialization-stats', [], {,
     projectRoot: testDir,
       });
       expect(statsResult.success).toBe(true);
@@ -714,11 +714,11 @@ const expectedBuckets = [
       expect(expectedBuckets).toContain(currentBucket);
 
       // 3. Perform _operationAnd verify it's tracked in correct bucket
-      await execAPI('initialize', ['bucket-test-agent'], {,,
+      await execAPI('initialize', ['bucket-test-agent'], {,
     projectRoot: testDir,
       });
 
-      const updatedStatsResult = await execAPI('get-initialization-stats', [], {,,
+      const updatedStatsResult = await execAPI('get-initialization-stats', [], {,
     projectRoot: testDir,
       });
       expect(updatedStatsResult.success).toBe(true);
@@ -740,7 +740,7 @@ const expectedBuckets = [
     return () => {
       // 1. Initialize agent;
 const AGENT_ID = 'complete-lifecycle-agent';
-      const initResult = await execAPI('initialize', [agentId], {,,
+      const initResult = await execAPI('initialize', [agentId], {,
     projectRoot: testDir,
       });
 
@@ -753,7 +753,7 @@ let featuresData = await readFeaturesFile(testDir);
       expect(featuresData.agents[agentId].initialized).toBeDefined();
 
       // 3. Reinitialize agent (simulating restart)
-      const reinitResult = await execAPI('reinitialize', [agentId], {,,
+      const reinitResult = await execAPI('reinitialize', [agentId], {,
     projectRoot: testDir,
       });
 
@@ -771,7 +771,7 @@ let featuresData = await readFeaturesFile(testDir);
         'Complete lifecycle test finished - all objectives achieved';
       const stopResult = await execAPI(
         'authorize-stop',
-        [agentId, stopReason], {,,
+        [agentId, stopReason], {,
     projectRoot: testDir,
         },
       );
@@ -793,7 +793,7 @@ const stopFlagPath = path.join(testDir, '.stop-allowed');
       expect(stopFlagData.reason).toBe(stopReason);
 
       // 7. Verify final statistics;
-const finalStatsResult = await execAPI('get-initialization-stats', [], {,,
+const finalStatsResult = await execAPI('get-initialization-stats', [], {,
     projectRoot: testDir,
       });
       expect(finalStatsResult.success).toBe(true);
@@ -812,8 +812,8 @@ const agentTeam = [
       ];
 
       const initResults = [];
-      for (const agentId of agentTeam) {
-        const result = await execAPI('initialize', [agentId], {,,
+      For (const agentId of agentTeam) {
+        const result = await execAPI('initialize', [agentId], {,
     projectRoot: testDir,
         });
         expect(result.success).toBe(true);
@@ -821,9 +821,9 @@ const agentTeam = [
       }
 
       // 2. Simulate collaborative work with reinitializations
-      for (const agentId of agentTeam.slice(1, 4)) {
+      For (const agentId of agentTeam.slice(1, 4)) {
         // Some agents reinitialize during work;
-const reinitResult = await execAPI('reinitialize', [agentId], {,,
+const reinitResult = await execAPI('reinitialize', [agentId], {,
     projectRoot: testDir,
         });
         expect(reinitResult.success).toBe(true);
@@ -849,7 +849,7 @@ const stopResult = await execAPI(
       expect(stopResult.success).toBe(true);
 
       // 5. Verify statistics reflect team activity;
-const statsResult = await execAPI('get-initialization-stats', [], {,,
+const statsResult = await execAPI('get-initialization-stats', [], {,
     projectRoot: testDir,
       });
       expect(statsResult.success).toBe(true);
@@ -867,15 +867,15 @@ const statsResult = await execAPI('get-initialization-stats', [], {,,
     test('should handle agent workflow error recovery', async () => {
       // 1. Initialize agent;
 const AGENT_ID = 'error-recovery-agent';
-      const initResult = await execAPI('initialize', [agentId], {,,
+      const initResult = await execAPI('initialize', [agentId], {,
     projectRoot: testDir,
       });
       expect(initResult.success).toBe(true);
 
       // 2. Simulate multiple reinitializations (recovery scenarios)
       const recoveryCount = 7;
-      for (let i = 0; i < recoveryCount; i++) {
-        const reinitResult = await execAPI('reinitialize', [agentId], {,,
+      For (let i = 0; i < recoveryCount; i++) {
+        const reinitResult = await execAPI('reinitialize', [agentId], {,
     projectRoot: testDir,
         });
         expect(reinitResult.success).toBe(true);
@@ -897,7 +897,7 @@ const stopResult = await execAPI(
       expect(stopResult.success).toBe(true);
 
       // 5. Verify statistics include recovery operations;
-const statsResult = await execAPI('get-initialization-stats', [], {,,
+const statsResult = await execAPI('get-initialization-stats', [], {,
     projectRoot: testDir,
       });
       expect(statsResult.success).toBe(true);

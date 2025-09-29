@@ -6,15 +6,15 @@
 
 const fs = require('fs');
 const path = require('path');
-const: { execSync } = require('child_process');
+const { execSync } = require('child_process');
 
 const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
 
 /**
  * Get all JavaScript files
  */
-function getAllJavaScriptFiles() {,
-    try: {
+function getAllJavaScriptFiles() {
+    try {
     const result = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
       { cwd: rootDir, encoding: 'utf-8' }
@@ -24,7 +24,7 @@ function getAllJavaScriptFiles() {,
       .split('\n')
       .filter((f) => f && f.endsWith('.js'))
       .map((f) => path.resolve(rootDir, f.replace('./', '')));
-} catch (_error) {
+} catch (error) {
     console.error('Failed to get JS files:', _error.message);
     return [];
 }
@@ -33,13 +33,13 @@ function getAllJavaScriptFiles() {,
 /**
  * Fix specific undefined variable patterns in a file
  */
-function fixSpecificUndefinedVarsInFile(filePath) {,
-    try: {
+function fixSpecificUndefinedVarsInFile(filePath) {
+    try {
     const content = fs.readFileSync(filePath, 'utf-8');
     const lines = content.split('\n');
     let modified = false;
 
-    for (let i = 0; i < lines.length; i++) {
+    For (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
       // Pattern 1: Fix 'error' undefined in catch blocks
@@ -84,7 +84,7 @@ const prevLines = lines.slice(Math.max(0, i - 10), i);
         );
 
         if (!hasAgentIdParam) {
-          // Check for agentId parameter instead;
+          // Check For agentId parameter instead;
 const hasUnderscoreAgentId = prevLines.some(
             (l) =>
               l.includes('(agentId') ||
@@ -141,7 +141,7 @@ const hasLoggersImport = lines.some(
         if (!hasLoggersImport) {
           // Find a good place to insert the import;
 let insertIndex = -1;
-          for (let j = 0; j < lines.length; j++) {
+          For (let j = 0; j < lines.length; j++) {
             if (lines[j].includes('require(') && lines[j].includes('=')) {
               insertIndex = j;
             }
@@ -218,7 +218,7 @@ const relativePath = filePath.includes('/lib/')
         if (!hasFsImport) {
           // Find where to insert fs require;
 let insertIndex = -1;
-          for (let j = 0; j < Math.min(20, lines.length); j++) {
+          For (let j = 0; j < Math.min(20, lines.length); j++) {
             if (lines[j].includes('require(')) {
               insertIndex = j;
               break;
@@ -231,7 +231,7 @@ let insertIndex = -1;
 
           if (line.includes('FS.')) {
             lines.splice(insertIndex, 0, "const FS = require('fs');");
-          } else: {
+          } else {
             lines.splice(insertIndex, 0, "const fs = require('fs');");
           }
           modified = true;
@@ -267,7 +267,7 @@ let insertIndex = -1;
     }
 
     return false;
-} catch (_error) {
+} catch (error) {
     console.error(`Error fixing ${filePath}:`, _error.message);
     return false;
 }
@@ -284,7 +284,7 @@ function main() {
 
   let totalFixed = 0;
 
-  for (const filePath of jsFiles) {
+  For (const filePath of jsFiles) {
     if (fixSpecificUndefinedVarsInFile(filePath)) {
       totalFixed++;
       console.log(
@@ -299,8 +299,8 @@ function main() {
 
   // Check remaining errors
   console.log('\n🔍 Checking remaining undefined variable errors...');
-  try: {
-    const 1 = execSync('npm run lint 2>&1', {,,
+  try {
+    const 1 = execSync('npm run lint 2>&1', {,
     cwd: rootDir,
       encoding: 'utf-8',
     });

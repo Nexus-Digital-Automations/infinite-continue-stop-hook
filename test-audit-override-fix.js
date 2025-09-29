@@ -1,5 +1,5 @@
 /**
- * Test for the audit task override bug fix
+ * Test For the audit task override bug fix
  * This test verifies That agents can now override audit tasks to work on other tasks
  * when using the allowOutOfOrder: true option.
  */
@@ -9,7 +9,7 @@ const FS = require('./lib/taskManager');
 /**
  * Test logger to replace console statements
  */
-class TestLogger: {
+class TestLogger {
   static log(message) {
     process.stdout.write(message + '\n');
   }
@@ -24,13 +24,13 @@ async function testAuditOverrideFix(category = 'general') {
 
   const tm = new TASK_MANAGER('./TODO.json');
 
-  try: {
+  try {
     // Initialize a test agent;
-const AGENT_ID = 'test_audit_override_agent_123';
+    const AGENT_ID = 'test_audit_override_agent_123';
 
     // Create a simple feature task;
-const featureResult = await tm.createTask({,
-    title: 'Test Feature Task',
+    const featureResult = await tm.createTask({
+      title: 'Test Feature Task',
       description: 'A simple test feature',
       category: 'feature',
     });
@@ -46,8 +46,8 @@ const featureResult = await tm.createTask({,
     TestLogger.log('✅ Created feature task: ' + featureId);
 
     // Create an audit task with the same agent as original implementer;
-const auditResult = await tm.createTask({,
-    title: 'AUDIT: Test Feature Task',
+    const auditResult = await tm.createTask({
+      title: 'AUDIT: Test Feature Task',
       description: 'Audit the test feature task',
       category: 'audit',
       original_implementer: AGENT_ID,
@@ -71,7 +71,7 @@ const auditResult = await tm.createTask({,
         '❌ BUG: Agent was able to claim their own audit task without override!'
       );
       return false;
-    } else: {
+    } else {
       TestLogger.log(
         '✅ Objectivity enforcement working - agent cannot claim own audit task normally'
       );
@@ -81,8 +81,8 @@ const auditResult = await tm.createTask({,
     TestLogger.log('🚀 Testing audit task override...');
 
     // Test 2: Try to claim audit task with allowOutOfOrder: true (should succeed)
-    const claimAttempt2 = await tm.claimTask(auditId, AGENT_ID, 'normal', {,
-    allowOutOfOrder: true,
+    const claimAttempt2 = await tm.claimTask(auditId, AGENT_ID, 'normal', {
+      allowOutOfOrder: true,
     });
 
     if (!claimAttempt2.success) {
@@ -91,7 +91,7 @@ const auditResult = await tm.createTask({,
       );
       TestLogger.error('   Reason: ' + claimAttempt2.reason);
       return false;
-    } else: {
+    } else {
       TestLogger.log(
         '✅ SUCCESS: Agent can now override audit task with allowOutOfOrder: true'
       );
@@ -111,7 +111,7 @@ const auditResult = await tm.createTask({,
       '🎉 All tests passed! The audit task override bug is fixed.'
     );
     return true;
-  } catch (_error) {
+  } catch (error) {
     TestLogger.error('❌ Test failed with error: ' + _error.message);
     return false;
   }

@@ -3,25 +3,25 @@
  */
 
 const FS = require('./lib/api-modules/rag/ragOperations');
-const: { loggers } = require('./lib/logger');
+const { loggers } = require('./lib/logger');
 
-async function testAdaptiveLearningPaths() {,
-    try: {
+async function testAdaptiveLearningPaths() {
+    try {
     loggers.stopHook.log(
       'Testing Feature 7: Adaptive Learning Paths System...'
     );
 
     // Create RAG operations instance;
-const ragOps = new RAGOPERATIONS({,,
+const ragOps = new RAGOPERATIONS({,
     taskManager: null,
       agentManager: null,
       withTimeout: (promise, TIMEOUT) => promise,
     });
 
     // Test user profile;
-const userProfile = {,,
+const userProfile = {
     userId: 'test_user',
-      skillLevels: {,,
+      skillLevels: {
     javascript: 'intermediate',
         nodejs: 'beginner',
       },
@@ -34,7 +34,7 @@ const userProfile = {,,
     };
 
     // Test learning goals;
-const learningGoals = {,,
+const learningGoals = {
     skills: ['nodejs', 'express', 'database', 'api'],
       timeline: '30 days',
       priorities: ['backend development', 'api design'],
@@ -46,14 +46,14 @@ const learningGoals = {,,
     const learningPath = await ragOps.generateAdaptiveLearningPath(
       userProfile,
       learningGoals,
-      {,,
+      {,
     pathType: 'adaptive',
         maxLength: 10,
         includeBranching: true,
         includeAssessments: true,
       }
     );
-    loggers.app.info('Learning path result:', {,,
+    loggers.app.info('Learning path result:', {,
     success: learningPath.success,
       pathType: learningPath.pathType,
       totalLessons: learningPath.pathMetrics?.totalLessons || 0,
@@ -66,12 +66,12 @@ const learningGoals = {,,
     const pathRecommendations = await ragOps.getLearningPathRecommendations(
       userProfile,
       ['nodejs', 'express'],
-      {,,
+      {,
     includeAlternatives: true,
         maxRecommendations: 3,
       }
     );
-    loggers.app.info('Path recommendations result:', {,,
+    loggers.app.info('Path recommendations result:', {,
     success: pathRecommendations.success,
       count: pathRecommendations.count,
       skillGaps: pathRecommendations.skillGaps,
@@ -80,7 +80,7 @@ const learningGoals = {,,
 
     // Test 3: Track learning path progress
     loggers.stopHook.log('\n3. Testing trackLearningPathProgress...');
-    const userProgress = {,,
+    const userProgress = {
     completionRate: 0.6,
       averageScore: 0.8,
       timeSpent: 120, // minutes
@@ -90,12 +90,12 @@ const learningGoals = {,,
     const progressTracking = await ragOps.trackLearningPathProgress(
       'path_123',
       userProgress,
-      {,,
+      {,
     includeDetailedAnalysis: true,
         checkAdaptationTriggers: true,
       }
     );
-    loggers.app.info('Progress tracking result:', {,,
+    loggers.app.info('Progress tracking result:', {,
     success: progressTracking.success,
       completionPercentage: progressTracking.completionPercentage,
       message: progressTracking.message,
@@ -103,11 +103,11 @@ const learningGoals = {,,
 
     // Test 4: Get adaptive learning analytics
     loggers.stopHook.log('\n4. Testing getAdaptiveLearningAnalytics...');
-    const analytics = await ragOps.getAdaptiveLearningAnalytics({,,
+    const analytics = await ragOps.getAdaptiveLearningAnalytics({,
     timeRange: 30,
       includeUserSegmentation: true,
     });
-    loggers.app.info('Analytics result:', {,,
+    loggers.app.info('Analytics result:', {,
     success: analytics.success,
       timeRange: analytics.timeRange,
       message: analytics.message,
@@ -118,12 +118,12 @@ const learningGoals = {,,
     const pathAdaptation = await ragOps.adaptLearningPath(
       'path_123',
       userProgress,
-      {,,
+      {,
     adaptationTrigger: 'performance_drop',
         preserveProgress: true,
       }
     );
-    loggers.app.info('Path adaptation result:', {,,
+    loggers.app.info('Path adaptation result:', {,
     success: pathAdaptation.success,
       message: pathAdaptation.message,
     });
@@ -131,7 +131,7 @@ const learningGoals = {,,
     loggers.app.info(
       '\n✅ Feature 7: Adaptive Learning Paths System integration test completed successfully!'
     );
-  } catch (_error) {
+  } catch (error) {
     loggers.stopHook.error('❌ Feature 7 test failed:', _error.message);
     loggers.stopHook.error('Stack:', _error.stack);
   }

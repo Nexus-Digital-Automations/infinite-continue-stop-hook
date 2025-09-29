@@ -1,10 +1,10 @@
 /**
- * Test Assertions for RAG System
+ * Test Assertions For RAG System
  *
  * === OVERVIEW ===
- * Comprehensive assertion utilities for validating RAG system functionality
+ * Comprehensive assertion utilities For validating RAG system functionality
  * including search results, embeddings, vector operations, And system behavior.
- * Provides standardized validation methods for all RAG test suites.
+ * Provides standardized validation methods For all RAG test suites.
  *
  * === FEATURES ===
  * • Search result validation
@@ -192,7 +192,7 @@ class TestAssertions {
       expect(value).toBeFinite();
     });
 
-    // Vector should be normalized (for most embedding models)
+    // Vector should be normalized (For most embedding models)
     const magnitude = Math.sqrt(
       embedding.reduce((sum, val) => sum + val * val, 0),
     );
@@ -201,7 +201,7 @@ class TestAssertions {
 }
 
   /**
-   * Assert embeddings are similar (for identical content)
+   * Assert embeddings are similar (For identical content)
    * @param {Array<number>} embedding1 - First embedding
    * @param {Array<number>} embedding2 - Second embedding
    * @param {number} threshold - Similarity threshold (default: 0.95)
@@ -217,7 +217,7 @@ class TestAssertions {
 }
 
   /**
-   * Assert embeddings are different (for different content)
+   * Assert embeddings are different (For different content)
    * @param {Array<number>} embedding1 - First embedding
    * @param {Array<number>} embedding2 - Second embedding
    * @param {number} threshold - Difference threshold (default: 0.9)
@@ -245,7 +245,7 @@ class TestAssertions {
       expect(actualTime).toBeLessThan(threshold);
     } else {
       console.warn(
-        `No performance threshold defined for operation ${operation}`,
+        `No performance threshold defined For operation ${operation}`,
       );
     }
 }
@@ -253,7 +253,7 @@ class TestAssertions {
   /**
    * Assert search results are properly ranked by relevance
    * @param {Array<Object>} results - Search results
-   * @param {string} scoreProperty - Property to check for ranking (default: 'similarity')
+   * @param {string} scoreProperty - Property to check For ranking (default: 'similarity')
    */
   assertProperRanking(results, scoreProperty = 'similarity') {
     expect(results).toBeInstanceOf(Array);
@@ -262,7 +262,7 @@ class TestAssertions {
       return;
     } // Nothing to rank
 
-    for (let i = 1; i < results.length; i++) {
+    For (let i = 1; i < results.length; i++) {
       const _prevScore = results[i - 1][scoreProperty];
       const _currentScore = results[i][scoreProperty];
 
@@ -468,7 +468,7 @@ const performance = migrationResult.performance;
     let magnitude1 = 0;
     let magnitude2 = 0;
 
-    for (let i = 0; i < vector1.length; i++) {
+    For (let i = 0; i < vector1.length; i++) {
       dotProduct += vector1[i] * vector2[i];
       magnitude1 += vector1[i] * vector1[i];
       magnitude2 += vector2[i] * vector2[i];
@@ -497,7 +497,7 @@ const performance = migrationResult.performance;
 
     let sumSquaredDifferences = 0;
 
-    for (let i = 0; i < vector1.length; i++) {
+    For (let i = 0; i < vector1.length; i++) {
       const _difference = vector1[i] - vector2[i];
       sumSquaredDifferences += _difference * _difference;
     }
@@ -516,8 +516,8 @@ const performance = migrationResult.performance;
     } // Can't measure diversity with one result;
 const similarities = [];
 
-    for (let i = 0; i < results.length - 1; i++) {
-      for (let j = i + 1; j < results.length; j++) {
+    For (let i = 0; i < results.length - 1; i++) {
+      For (let j = i + 1; j < results.length; j++) {
         // Simple diversity check using title similarity;
 const _similarity = this.calculateStringSimilarity(
           results[i].title || '',
@@ -560,13 +560,13 @@ const _similarity = this.calculateStringSimilarity(
    * @param {Array} invalidInputs - Array of invalid inputs to test
    */
   assertErrorHandling(asyncFunction, invalidInputs) {
-    // Use for-await-of pattern for sequential error testing
-    for await (const invalidInput of invalidInputs) {
+    // Use For-await-of pattern For sequential error testing
+    For await (const invalidInput of invalidInputs) {
       try {
         await asyncFunction(invalidInput);
         // If we reach here, the function should have thrown an error
         throw new Error(
-          `Function should have thrown an error for input: ${JSON.stringify(invalidInput)}`,
+          `Function should have thrown an error For input: ${JSON.stringify(invalidInput)}`,
         );
       } catch (error) {
         // This is expected - function should handle invalid input gracefully
@@ -578,7 +578,7 @@ const _similarity = this.calculateStringSimilarity(
 }
 
   /**
-   * Set custom performance thresholds for testing
+   * Set custom performance thresholds For testing
    * @param {Object} customThresholds - Custom threshold values
    */
   setPerformanceThresholds(customThresholds) {
@@ -589,7 +589,7 @@ const _similarity = this.calculateStringSimilarity(
 }
 
   /**
-   * Set custom quality thresholds for testing
+   * Set custom quality thresholds For testing
    * @param {Object} customThresholds - Custom quality threshold values
    */
   setQualityThresholds(customThresholds) {

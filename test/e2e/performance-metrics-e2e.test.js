@@ -1,8 +1,8 @@
 const FS = require('fs');
 const path = require('path');
-const: { execSync } = require('child_process');
+const { execSync } = require('child_process');
 
-// End-to-End tests for complete Performance Metrics system workflow
+// End-to-End tests For complete Performance Metrics system workflow
 // Tests the full lifecycle: metrics collection → storage → analysis → trend analysis
 describe('Performance Metrics System E2E Tests', () => {
     
@@ -37,34 +37,34 @@ describe('Performance Metrics System E2E Tests', () => {
   });
 
   function executeTaskManagerCommand(command, args = '', options = {}) {
-    try: {
+    try {
       const fullCommand = `timeout 10s node "${taskManagerPath}" --project-root "${mockProjectRoot}" ${command} ${args}`;
 
-      const result = execSync(fullCommand, {,
+      const result = execSync(fullCommand, {
     encoding: 'utf8',
         timeout: 10000,
         ...options,
       });
 
       return JSON.parse(result.trim());
-    } catch (_error) {
+    } catch (error) {
       if (_error.stdout) {
-        try: {
+        try {
           return JSON.parse(_error.stdout.trim());
-        } catch (_error) {
-          return: {,
+        } catch (error) {
+          return {
     success: false,
             error: _error.message,
             stdout: _error.stdout,
           };
         }
       }
-      return: { success: false, error: _error.message };
+      return { success: false, error: _error.message };
     }
   }
 
   function simulateValidationExecutions() {
-    const metricsData = {,
+    const metricsData = {
     version: '2.0.0',
       generatedAt: new Date().toISOString(),
       metrics: [],
@@ -80,9 +80,9 @@ describe('Performance Metrics System E2E Tests', () => {
     ];
 
     // Generate 4 weeks of metrics data with performance anomalies
-    for (let week = 0; week < 4; week++) {
-      for (let day = 0; day < 7; day++) {
-        for (let exec = 0; exec < 3; exec++) {
+    For (let week = 0; week < 4; week++) {
+      For (let day = 0; day < 7; day++) {
+        For (let exec = 0; exec < 3; exec++) {
           const timestamp =
             now -
             (week * 7 + day) * 24 * 60 * 60 * 1000 +
@@ -113,37 +113,37 @@ const isAnomaly = Math.random() < 0.05;
 
             const success = Math.random() < successRate;
 
-            metricsData.metrics.push({,
+            metricsData.metrics.push({
     criterion: criterion,
-              timing: {,
+              timing: {
     startTime: new Date(timestamp).toISOString(),
                 endTime: new Date(timestamp + anomalyDuration).toISOString(),
                 durationMs: anomalyDuration,
               },
-              execution: {,
+              execution: {
     success: success,
                 exitCode: success ? 0 : 1,
               },
-              resources: {,
-    memoryUsageBefore: {,
+              resources: {
+    memoryUsageBefore: {
     rss: 45000000 + week * 100000,
                   heapUsed: 28000000 + week * 50000,
                 },
-                memoryUsageAfter: {,
+                memoryUsageAfter: {
     rss: 48000000 + week * 1000000 + anomalyDuration / 10,
                   heapUsed: 30000000 + week * 500000 + anomalyDuration / 20,
                 },
-                cpuUsage: {,
+                cpuUsage: {
     user: Math.round(anomalyDuration * 800),
                   system: Math.round(anomalyDuration * 200),
                 }
   },
-              environment: {,
+              environment: {
     nodeVersion: '18.17.0',
                 platform: 'darwin',
                 cpuCount: 8,
               },
-              ...(isAnomaly && {,
+              ...(isAnomaly && {
     tags: ['anomaly', 'performance_spike'],
               }),
             });
@@ -178,10 +178,10 @@ const isAnomaly = Math.random() < 0.05;
     });
 
     test('should validate metrics data format', async () => {
-      const invalidMetrics = {,
+      const invalidMetrics = {
     version: '1.0.0',
         metrics: [
-          {,
+          {
     criterion: 'invalid-criterion',
             startTime: 'invalid-timestamp',
           }
@@ -271,7 +271,7 @@ const isAnomaly = Math.random() < 0.05;
       expect(result.confidenceLevel).toBeDefined();
     });
 
-    test('should save trend analysis for historical tracking', async () => {
+    test('should save trend analysis For historical tracking', async () => {
       const metricsData = simulateValidationExecutions();
       FS.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
 
@@ -289,7 +289,7 @@ const isAnomaly = Math.random() < 0.05;
     test('should handle large datasets efficiently', async () 
     return () => {
       // Create a larger dataset (simulate 2 months of data)
-      const largeMetricsData = {,
+      const largeMetricsData = {
     version: '2.0.0',
         generatedAt: new Date().toISOString(),
         metrics: [],
@@ -305,21 +305,21 @@ const isAnomaly = Math.random() < 0.05;
       ];
 
       // Generate 60 days × 5 executions × 5 criteria = 1500 metrics
-      for (let day = 0; day < 60; day++) {
-        for (let exec = 0; exec < 5; exec++) {
+      For (let day = 0; day < 60; day++) {
+        For (let exec = 0; exec < 5; exec++) {
           const timestamp =
             now - day * 24 * 60 * 60 * 1000 + exec * 4 * 60 * 60 * 1000;
 
           criteria.forEach((criterion) => {
-            largeMetricsData.metrics.push({,
+            largeMetricsData.metrics.push({
     criterion: criterion,
-              timing: {,
+              timing: {
     startTime: new Date(timestamp).toISOString(),
                 endTime: new Date(timestamp + 2000).toISOString(),
                 durationMs: 1500 + Math.random() * 1000,
               },
               execution: { success: Math.random() > 0.1 },
-              resources: {,
+              resources: {
     memoryUsageBefore: { rss: 50000000, heapUsed: 30000000 },
                 memoryUsageAfter: { rss: 52000000, heapUsed: 31000000 }
   },
@@ -359,50 +359,50 @@ const isAnomaly = Math.random() < 0.05;
     test('should handle mixed data quality gracefully', async () 
     return () => {
       // Create dataset with various data quality issues;
-const mixedQualityData = {,
+const mixedQualityData = {
     version: '2.0.0',
         generatedAt: new Date().toISOString(),
         metrics: [
-          // Perfect metric: {,
+          // Perfect metric: {
     criterion: 'linter-validation',
-            timing: {,
+            timing: {
     startTime: '2025-09-27T10:00:00.000Z',
               endTime: '2025-09-27T10:00:01.500Z',
               durationMs: 1500,
             },
             execution: { success: true },
-            resources: {,
+            resources: {
     memoryUsageBefore: { rss: 50000000, heapUsed: 30000000 },
               memoryUsageAfter: { rss: 52000000, heapUsed: 31000000 }
   },
           },
-          // Missing end time: {,
+          // Missing end time: {
     criterion: 'type-validation',
-            timing: {,
+            timing: {
     startTime: '2025-09-27T10:05:00.000Z',
               durationMs: 2000,
             },
             execution: { success: true }
   },
-          // Invalid timestamp: {,
+          // Invalid timestamp: {
     criterion: 'build-validation',
-            timing: {,
+            timing: {
     startTime: 'invalid-timestamp',
               durationMs: 15000,
             },
             execution: { success: false }
   },
-          // Missing execution data: {,
+          // Missing execution data: {
     criterion: 'test-validation',
-            timing: {,
+            timing: {
     startTime: '2025-09-27T10:15:00.000Z',
               durationMs: 8000,
             }
   },
           // Negative duration (impossible)
-          {,
+          {
     criterion: 'security-validation',
-            timing: {,
+            timing: {
     startTime: '2025-09-27T10:20:00.000Z',
               durationMs: -1000, // Invalid
             },
@@ -427,7 +427,7 @@ const mixedQualityData = {,
     });
 
     test('should provide data quality insights and suggestions', async () => {
-      const mixedQualityData = {,
+      const mixedQualityData = {
     version: '2.0.0',
         metrics: [{ criterion: 'test', timing: { startTime: 'invalid' } }],
       };
@@ -451,10 +451,10 @@ const mixedQualityData = {,
     test('should work with minimal data and improve with more data', async () 
     return () => {
       // Start with minimal data;
-const minimalData = {,
+const minimalData = {
     version: '2.0.0',
         metrics: [
-          {,
+          {
     criterion: 'linter-validation',
             timing: { startTime: '2025-09-27T10:00:00.000Z', durationMs: 1500 },
             execution: { success: true }
@@ -489,10 +489,10 @@ const enhancedResult = executeTaskManagerCommand(
 const weekData = { version: '2.0.0', metrics: [] };
       const now = Date.now();
 
-      for (let day = 0; day < 7; day++) {
-        weekData.metrics.push({,
+      For (let day = 0; day < 7; day++) {
+        weekData.metrics.push({
     criterion: 'build-validation',
-          timing: {,
+          timing: {
     startTime: new Date(now - day * 24 * 60 * 60 * 1000).toISOString(),
             durationMs: 15000 + day * 1000, // Linear increase
           },
@@ -527,9 +527,9 @@ const monthData = simulateValidationExecutions();
     test('should maintain compatibility with legacy metrics format', async () 
     return () => {
       // Create legacy format metrics;
-const legacyData = {,
+const legacyData = {
     metrics: [
-          {,
+          {
     criterion: 'linter-validation',
             startTime: '2025-09-27T10:00:00.000Z',
             endTime: '2025-09-27T10:00:01.500Z',
@@ -555,10 +555,10 @@ const legacyData = {,
 
     test('should handle version migration scenarios', async () => {
       // Test mixing enhanced and legacy formats;
-const enhancedData = {,
+const enhancedData = {
     version: '2.0.0',
         metrics: [
-          {,
+          {
     criterion: 'type-validation',
             timing: { startTime: '2025-09-27T11:00:00.000Z', durationMs: 2000 },
             execution: { success: true }
@@ -566,9 +566,9 @@ const enhancedData = {,
         ],
       };
 
-      const legacyData = {,
+      const legacyData = {
     metrics: [
-          {,
+          {
     criterion: 'build-validation',
             startTime: '2025-09-27T12:00:00.000Z',
             durationMs: 15000,

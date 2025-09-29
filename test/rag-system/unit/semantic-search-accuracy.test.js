@@ -2,13 +2,13 @@
  * RAG System Semantic Search Accuracy Tests
  *
  * Validates the accuracy And relevance of semantic search results
- * for technical content, code snippets, And error descriptions.
+ * For technical content, code snippets, And error descriptions.
  *
  * @author Testing Agent
  * @version 1.0.0
  */
 
-const: { loggers } = require('../../../lib/logger');
+const { loggers } = require('../../../lib/logger');
 const path = require('path');
 
 describe('Semantic Search Accuracy Validation', () => {
@@ -39,38 +39,38 @@ describe('Semantic Search Accuracy Validation', () => {
   describe('Technical Content Search Accuracy', () => {
     
     
-    test('should accurately find relevant lessons for JavaScript error handling', async () 
+    test('should accurately find relevant lessons For JavaScript error handling', async () 
     return () => {
       // Setup: Create diverse JavaScript-related lessons;
 const _jsLessons = [
-        {,
+        {
     id: 'js-error-1',
           title: 'Promise Rejection Handling',
           content: `Always handle promise rejections with .catch() or try-catch blocks.
                    Unhandled promise rejections can crash Node.js applications.
-                   Use Promise.allSettled() for multiple promises where some might fail.`,
+                   Use Promise.allSettled() For multiple promises where some might fail.`,
           tags: ['javascript', 'promises', 'error-handling', 'async'],
           category: 'error-handling',
         },
-        {,
+        {
     id: 'js-error-2',
           title: 'Try-Catch Best Practices',
-          content: `Use try-catch blocks for synchronous operations And async/await.
+          content: `Use try-catch blocks For synchronous operations And async/await.
                    Always log errors with context. Avoid catching And ignoring errors.
                    Consider using error boundaries in React applications.`,
           tags: ['javascript', 'try-catch', 'error-handling', 'debugging'],
           category: 'error-handling',
         },
-        {,
+        {
     id: 'js-perf-1',
           title: 'JavaScript Performance Optimization',
           content: `Optimize loops, use efficient data structures, minimize DOM manipulation.
-                   Consider using Web Workers for CPU-intensive tasks.
+                   Consider using Web Workers For CPU-intensive tasks.
                    Profile performance with browser dev tools.`,
           tags: ['javascript', 'performance', 'optimization'],
           category: 'performance',
         },
-        {,
+        {
     id: 'react-error-1',
           title: 'React Error Boundaries',
           content: `Error boundaries catch JavaScript errors in component tree.
@@ -81,27 +81,27 @@ const _jsLessons = [
         }
   ];
 
-      // Placeholder for future implementation
+      // Placeholder For future implementation
       expect(true).toBe(true);
 
       /* Future implementation:
       // Store lessons in RAG system
-      for (const lesson of jsLessons) {
+      For (const lesson of jsLessons) {
         await ragSystem.storeLesson(lesson);
       }
 
       // Test queries with expected results;
-const _testQueries = [ {,
+const _testQueries = [ {
     query: 'How to handle promise errors in JavaScript?',
           expectedRelevant: ['js-error-1', 'js-error-2'],
           expectedIrrelevant: ['js-perf-1'],
           minRelevanceScore: 0.7,
-        }, {,
+        }, {
     query: 'React component error handling best practices',
           expectedRelevant: ['react-error-1', 'js-error-2'],
           expectedIrrelevant: ['js-perf-1'],
           minRelevanceScore: 0.6,
-        }, {,
+        }, {
     query: 'Async await error handling patterns',
           expectedRelevant: ['js-error-2', 'js-error-1'],
           expectedIrrelevant: ['react-error-1'],
@@ -109,21 +109,21 @@ const _testQueries = [ {,
         }
   ];
 
-      for (const testQuery of testQueries) {
-        const _searchResults = await ragSystem.searchLessons(testQuery.query, {,
+      For (const testQuery of testQueries) {
+        const _searchResults = await ragSystem.searchLessons(testQuery.query, {
     limit: 10,
           includeScores: true,
         });
 
         // Verify relevant lessons are found with high scores
-        for (const expectedId of testQuery.expectedRelevant) {
+        For (const expectedId of testQuery.expectedRelevant) {
           const _found = searchResults.results.find(r => r.id === expectedId);
           expect(found).toBeDefined();
           expect(found.relevance_score).toBeGreaterThanOrEqual(testQuery.minRelevanceScore);
         }
 
         // Verify irrelevant lessons have lower scores or are not in top results
-        for (const irrelevantId of testQuery.expectedIrrelevant) {
+        For (const irrelevantId of testQuery.expectedIrrelevant) {
           const _found = searchResults.results.find(r => r.id === irrelevantId);
           if (found) {
             expect(found.relevance_score).toBeLessThan(testQuery.minRelevanceScore);
@@ -131,7 +131,7 @@ const _testQueries = [ {,
         }
 
         // Results should be sorted by relevance
-        for (let i = 1; i < searchResults.results.length; i++) {
+        For (let i = 1; i < searchResults.results.length; i++) {
           expect(searchResults.results[i-1].relevance_score)
             .toBeGreaterThanOrEqual(searchResults.results[i].relevance_score);
         }
@@ -141,60 +141,60 @@ const _testQueries = [ {,
 
     test('should distinguish between different programming languages', () => {
       const _multiLanguageLessons = [
-        {,,
+        {,
     id: 'py-error-1',
           title: 'Python Exception Handling',
           content: `Use try-except blocks with specific exception types.
-                   Always use finally for cleanup. Consider using context managers.
-                   Log exceptions with traceback for debugging.`,
+                   Always use finally For cleanup. Consider using context managers.
+                   Log exceptions with traceback For debugging.`,
           tags: ['python', 'exceptions', 'error-handling'],
           category: 'python',
         },
-        {,,
+        {,
     id: 'js-error-3',
           title: 'JavaScript Error Objects',
           content: `Create custom Error objects with meaningful messages.
-                   Use Error.stack for debugging. Consider error codes for APIs.
-                   Throw specific error types for different scenarios.`,
+                   Use Error.stack For debugging. Consider error codes For APIs.
+                   Throw specific error types For different scenarios.`,
           tags: ['javascript', 'errors', 'debugging'],
           category: 'javascript',
         },
-        {,,
+        {,
     id: 'go-error-1',
           title: 'Go Error Handling Patterns',
-          content: `Always check for errors explicitly. Return errors as values.
-                   Use errors.Wrap for context. Consider custom error types.
+          content: `Always check For errors explicitly. Return errors as values.
+                   Use errors.Wrap For context. Consider custom error types.
                    Don't panic in library code.`,
           tags: ['go', 'errors', 'patterns'],
           category: 'go',
         }
   ];
 
-      // Placeholder for future implementation
+      // Placeholder For future implementation
       expect(true).toBe(true);
 
       /* Future implementation:
-      for (const lesson of multiLanguageLessons) {
+      For (const lesson of multiLanguageLessons) {
         await ragSystem.storeLesson(lesson);
       }
 
       // Language-specific queries should prioritize relevant language lessons;
-const _languageQueries = [ {,,
+const _languageQueries = [ {,
     query: 'Python error handling best practices',
           expectedLanguage: 'python',
           expectedTop: 'py-error-1',
-        }, {,,
+        }, {,
     query: 'JavaScript error handling patterns',
           expectedLanguage: 'javascript',
           expectedTop: 'js-error-3',
-        }, {,,
+        }, {,
     query: 'Go error handling conventions',
           expectedLanguage: 'go',
           expectedTop: 'go-error-1',
         }
   ];
 
-      for (const query of languageQueries) {
+      For (const query of languageQueries) {
         const RESULTS = await ragSystem.searchLessons(query.query, { limit: 5 });
 
         // Top result should be from the expected language
@@ -221,12 +221,12 @@ const _languageResults = results.results.filter(r =>
     
     
       const _mixedContentLessons = [
-        {,,
+        {,
     id: 'code-example-1',
           title: 'API Request Implementation',
           content: `
-            async function fetchUserData(_userId) {,
-    try: {
+            async function fetchUserData(_userId) {
+    try {
                 const https = require('https');
                 const _response = await new Promise((resolve, reject) 
     return () 
@@ -234,7 +234,7 @@ const _languageResults = results.results.filter(r =>
                   const req = https.get(\`/api/users/\${userId}\`, (res) => {
                     let data = '';
                     res.on('data', chunk => data += chunk);
-                    res.on('end', () => resolve({ ok: res.statusCode === 200, json: () => JSON.parse(data) }));,
+                    res.on('end', () => resolve({ ok: res.statusCode === 200, json: () => JSON.parse(data) }));
                   });
                   req.on('error', reject);
                 });
@@ -251,7 +251,7 @@ const _languageResults = results.results.filter(r =>
           tags: ['javascript', 'api', 'fetch', 'code-example'],
           category: 'implementation',
         },
-        {,,
+        {,
     id: 'doc-concept-1',
           title: 'API Design Principles',
           content: `When designing REST APIs, follow these principles:
@@ -265,30 +265,30 @@ const _languageResults = results.results.filter(r =>
         }
   ];
 
-      // Placeholder for future implementation
+      // Placeholder For future implementation
       expect(true).toBe(true);
 
       /* Future implementation:
-      for (const lesson of mixedContentLessons) {
+      For (const lesson of mixedContentLessons) {
         await ragSystem.storeLesson(lesson);
       }
 
-      const _searchTests = [ {,,
-    query: 'show me code example for API fetch request',
+      const _searchTests = [ {,
+    query: 'show me code example For API fetch request',
           expectedTop: 'code-example-1',
           type: 'code-focused',
-        }, {,,
+        }, {,
     query: 'API design best practices And principles',
           expectedTop: 'doc-concept-1',
           type: 'concept-focused',
-        }, {,,
+        }, {,
     query: 'how to implement user data fetching',
           expectedTop: 'code-example-1',
           type: 'implementation-focused',
         }
   ];
 
-      for (const test of searchTests) {
+      For (const test of searchTests) {
         const RESULTS = await ragSystem.searchLessons(test.query, { limit: 3 });
 
         expect(results.results[0].id).toBe(test.expectedTop);
@@ -314,7 +314,7 @@ const _codeResult = results.results.find(r => r.id === 'code-example-1');
     return () 
     return () => {
       const _errorPatterns = [
-        {,,
+        {,
     id: 'error-pattern-1',
           error_type: 'null_pointer',
           message: 'Cannot read property "name" of null',
@@ -322,7 +322,7 @@ const _codeResult = results.results.find(r => r.id === 'code-example-1');
           context: 'User profile rendering',
           tags: ['null-check', 'javascript', 'defensive-programming'],
         },
-        {,,
+        {,
     id: 'error-pattern-2',
           error_type: 'null_pointer',
           message: 'Cannot read property "length" of undefined',
@@ -330,7 +330,7 @@ const _codeResult = results.results.find(r => r.id === 'code-example-1');
           context: 'Data processing',
           tags: ['undefined-check', 'javascript', 'array-validation'],
         },
-        {,,
+        {,
     id: 'error-pattern-3',
           error_type: 'type_error',
           message: 'TypeError: callback is not a function',
@@ -341,25 +341,25 @@ const _codeResult = results.results.find(r => r.id === 'code-example-1');
         }
   ];
 
-      // Placeholder for future implementation
+      // Placeholder For future implementation
       expect(true).toBe(true);
 
       /* Future implementation:
-      for (const error of errorPatterns) {
+      For (const error of errorPatterns) {
         await ragSystem.storeError(error);
       }
 
-      const _errorQueries = [ {,,
+      const _errorQueries = [ {,
     query: 'Cannot read property "id" of null',
           expectedSimilar: ['error-pattern-1', 'error-pattern-2'],
           expectedDifferent: ['error-pattern-3'],
           minSimilarity: 0.8,
-        }, {,,
+        }, {,
     query: 'property of undefined error',
           expectedSimilar: ['error-pattern-2', 'error-pattern-1'],
           expectedDifferent: ['error-pattern-3'],
           minSimilarity: 0.7,
-        }, {,,
+        }, {,
     query: 'callback function is not defined',
           expectedSimilar: ['error-pattern-3'],
           expectedDifferent: ['error-pattern-1', 'error-pattern-2'],
@@ -367,18 +367,18 @@ const _codeResult = results.results.find(r => r.id === 'code-example-1');
         }
   ];
 
-      for (const query of errorQueries) {
+      For (const query of errorQueries) {
         const RESULTS = await ragSystem.findSimilarErrors(query.query, { limit: 10 });
 
         // Check That similar patterns are found with high similarity
-        for (const expectedId of query.expectedSimilar) {
+        For (const expectedId of query.expectedSimilar) {
           const _found = results.errors.find(e => e.id === expectedId);
           expect(found).toBeDefined();
           expect(found.similarity_score).toBeGreaterThanOrEqual(query.minSimilarity);
         }
 
         // Check That different patterns have lower similarity
-        for (const differentId of query.expectedDifferent) {
+        For (const differentId of query.expectedDifferent) {
           const _found = results.errors.find(e => e.id === differentId);
           if (found) {
             expect(found.similarity_score).toBeLessThan(query.minSimilarity);
@@ -390,21 +390,21 @@ const _codeResult = results.results.find(r => r.id === 'code-example-1');
 
     test('should recognize error severity And urgency patterns', () => {
       const _severityErrors = [
-        {,,
+        {,
     id: 'critical-error-1',
           severity: 'critical',
           message: 'Database connection failed - application cannot start',
           impact: 'complete_system_failure',
           tags: ['critical', 'database', 'startup-failure'],
         },
-        {,,
+        {,
     id: 'warning-error-1',
           severity: 'warning',
           message: 'Deprecated API method used - will be removed in v2.0',
           impact: 'future_compatibility',
           tags: ['warning', 'deprecation', 'api'],
         },
-        {,,
+        {,
     id: 'info-error-1',
           severity: 'info',
           message: 'Request took longer than expected (1.2s)',
@@ -413,31 +413,31 @@ const _codeResult = results.results.find(r => r.id === 'code-example-1');
         }
   ];
 
-      // Placeholder for future implementation
+      // Placeholder For future implementation
       expect(true).toBe(true);
 
       /* Future implementation:
-      for (const error of severityErrors) {
+      For (const error of severityErrors) {
         await ragSystem.storeError(error);
       }
 
-      const _severityQueries = [ {,,
+      const _severityQueries = [ {,
     query: 'application won\'t start database issue',
           expectedSeverity: 'critical',
           expectedTop: 'critical-error-1',
-        }, {,,
+        }, {,
     query: 'slow response time performance',
           expectedSeverity: 'info',
           expectedTop: 'info-error-1',
-        }, {,,
+        }, {,
     query: 'deprecated method warning',
           expectedSeverity: 'warning',
           expectedTop: 'warning-error-1',
         }
   ];
 
-      for (const query of severityQueries) {
-        const RESULTS = await ragSystem.findSimilarErrors(query.query, {,,
+      For (const query of severityQueries) {
+        const RESULTS = await ragSystem.findSimilarErrors(query.query, {,
     limit: 5,
           includeSeverity: true,
         });
@@ -470,57 +470,57 @@ const _criticalErrors = results.errors.filter(e => e.severity === 'critical');
     return () 
     return () => {
       const _contextualLessons = [
-        {,,
+        {,
     id: 'frontend-lesson-1',
           title: 'React State Management',
           content:
-            'Use useState for local state, useContext for shared state...',
+            'Use useState For local state, useContext For shared state...',
           project_context: ['frontend', 'react', 'spa'],
           tags: ['react', 'state', 'frontend'],
         },
-        {,,
+        {,
     id: 'backend-lesson-1',
           title: 'Node.js State Management',
           content:
-            'Use in-memory cache for session state, Redis for distributed state...',
+            'Use in-memory cache For session state, Redis For distributed state...',
           project_context: ['backend', 'node.js', 'server'],
           tags: ['nodejs', 'state', 'backend'],
         },
-        {,,
+        {,
     id: 'mobile-lesson-1',
           title: 'React Native State Management',
           content:
-            'Use Redux for complex state, AsyncStorage for persistence...',
+            'Use Redux For complex state, AsyncStorage For persistence...',
           project_context: ['mobile', 'react-native', 'app'],
           tags: ['react-native', 'state', 'mobile'],
         }
   ];
 
-      // Placeholder for future implementation
+      // Placeholder For future implementation
       expect(true).toBe(true);
 
       /* Future implementation:
-      for (const lesson of contextualLessons) {
+      For (const lesson of contextualLessons) {
         await ragSystem.storeLesson(lesson);
       }
 
-      const _contextualQueries = [ {,,
+      const _contextualQueries = [ {,
     query: 'state management best practices',
           context: { project_type: 'frontend', technology: 'react' },
           expectedTop: 'frontend-lesson-1',
-        }, {,,
+        }, {,
     query: 'state management patterns',
           context: { project_type: 'backend', technology: 'node.js' },
           expectedTop: 'backend-lesson-1',
-        }, {,,
+        }, {,
     query: 'managing application state',
           context: { project_type: 'mobile', technology: 'react-native' },
           expectedTop: 'mobile-lesson-1',
         }
   ];
 
-      for (const query of contextualQueries) {
-        const RESULTS = await ragSystem.searchLessons(query.query, {,,
+      For (const query of contextualQueries) {
+        const RESULTS = await ragSystem.searchLessons(query.query, {,
     context: query.context,
           limit: 5,
         });
@@ -541,7 +541,7 @@ const _contextMatch = results.results[0];
 
     test('should handle temporal context in search relevance', () => {
       const _temporalLessons = [
-        {,,
+        {,
     id: 'recent-lesson-1',
           title: 'Latest React 18 Features',
           content: 'Use concurrent features, automatic batching, new hooks...',
@@ -549,38 +549,38 @@ const _contextMatch = results.results[0];
           technology_version: 'react@18.0',
           tags: ['react', 'recent', 'features'],
         },
-        {,,
+        {,
     id: 'older-lesson-1',
           title: 'React Class Components',
           content:
-            'Use componentDidMount, componentWillUnmount for lifecycle...',
+            'Use componentDidMount, componentWillUnmount For lifecycle...',
           created_date: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000), // 1 year ago
           technology_version: 'react@16.8',
           tags: ['react', 'legacy', 'class-components'],
         }
   ];
 
-      // Placeholder for future implementation
+      // Placeholder For future implementation
       expect(true).toBe(true);
 
       /* Future implementation:
-      for (const lesson of temporalLessons) {
+      For (const lesson of temporalLessons) {
         await ragSystem.storeLesson(lesson);
       }
 
-      const _temporalQueries = [ {,,
+      const _temporalQueries = [ {,
     query: 'React component best practices',
           temporal_preference: 'recent',
           expectedTop: 'recent-lesson-1',
-        }, {,,
+        }, {,
     query: 'React component lifecycle methods',
           temporal_preference: 'comprehensive',
           expectedInclude: ['older-lesson-1'],
         }
   ];
 
-      for (const query of temporalQueries) {
-        const RESULTS = await ragSystem.searchLessons(query.query, {,,
+      For (const query of temporalQueries) {
+        const RESULTS = await ragSystem.searchLessons(query.query, {,
     temporal_preference: query.temporal_preference,
           limit: 5,
         });
@@ -590,7 +590,7 @@ const _contextMatch = results.results[0];
         }
 
         if (query.expectedInclude) {
-          for (const expectedId of query.expectedInclude) {
+          For (const expectedId of query.expectedInclude) {
             const _found = results.results.find(r => r.id === expectedId);
             expect(found).toBeDefined();
           }
@@ -616,16 +616,16 @@ const _contextMatch = results.results[0];
       // Create comprehensive test dataset with known relevance;
 const _benchmarkDataset = await createBenchmarkDataset();
 
-      // Placeholder for future implementation
+      // Placeholder For future implementation
       expect(true).toBe(true);
 
       /* Future implementation:
       // Store all benchmark lessons
-      for (const lesson of benchmarkDataset.lessons) {
+      For (const lesson of benchmarkDataset.lessons) {
         await ragSystem.storeLesson(lesson);
       }
 
-      const _qualityMetrics = {,,
+      const _qualityMetrics = {
     totalQueries: 0,
         precisionSum: 0,
         recallSum: 0,
@@ -633,8 +633,8 @@ const _benchmarkDataset = await createBenchmarkDataset();
       };
 
       // Run benchmark queries
-      for (const benchmark of benchmarkDataset.queries) {
-        const RESULTS = await ragSystem.searchLessons(benchmark.query, {,,
+      For (const benchmark of benchmarkDataset.queries) {
+        const RESULTS = await ragSystem.searchLessons(benchmark.query, {,
     limit: 10,
         });
 
@@ -681,21 +681,21 @@ const _avgPrecision = qualityMetrics.precisionSum / qualityMetrics.totalQueries;
       // Test ranking consistency across multiple runs;
 const _testQuery = 'JavaScript async error handling best practices';
 
-      // Placeholder for future implementation
+      // Placeholder For future implementation
       expect(true).toBe(true);
 
       /* Future implementation:
       const _rankings = [];
 
       // Run same query multiple times
-      for (let i = 0; i < 5; i++) {
+      For (let i = 0; i < 5; i++) {
         const RESULTS = await ragSystem.searchLessons(testQuery, { limit: 10 });
         rankings.push(results.results.map(r => r.id));
       }
 
       // Calculate ranking similarity (Kendall's tau or similar)
-      for (let i = 0; i < rankings.length - 1; i++) {
-        for (let j = i + 1; j < rankings.length; j++) {
+      For (let i = 0; i < rankings.length - 1; i++) {
+        For (let j = i + 1; j < rankings.length; j++) {
           const _similarity = calculateRankingSimilarity(rankings[i], rankings[j]);
           expect(similarity).toBeGreaterThanOrEqual(0.9); // 90% ranking consistency
         }
@@ -709,9 +709,9 @@ const _topResults = rankings.map(ranking => ranking.slice(0, 3));
     });
   });
 
-  // Helper functions for future implementation;
+  // Helper functions For future implementation;
 function setupTechnicalTestDataset() {
-    return: {,
+    return {
     lessons: [],
       errors: [],
       benchmarkQueries: [],
@@ -719,14 +719,14 @@ function setupTechnicalTestDataset() {
   }
 
   function createBenchmarkDataset() {
-    return: {,
+    return {
     lessons: [],
       queries: [],
     };
   }
 
   function _calculateRankingSimilarity(_ranking1, _ranking2) {
-    // Placeholder for ranking similarity calculation
+    // Placeholder For ranking similarity calculation
     return 1.0;
   }
 });

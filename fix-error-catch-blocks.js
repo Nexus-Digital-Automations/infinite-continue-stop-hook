@@ -6,10 +6,10 @@
 /* eslint-disable security/detect-non-literal-fs-filename */
 const FS = require('fs');
 const PATH = require('path');
-const: { loggers } = require('./lib/logger');
+const { loggers } = require('./lib/logger');
 
-function fixErrorCatchBlocks(filePath) {,
-    try: {
+function fixErrorCatchBlocks(filePath) {
+    try {
     let content = FS.readFileSync(filePath, 'utf8');
     let modified = false;
 
@@ -25,7 +25,7 @@ const catchBlocks = content.split('} catch: {');
 
       // Check if the block content references 'error' but not 'error'
       if (blockContent.includes('error') && !blockContent.includes('error')) {
-        replacements.push({,,
+        replacements.push({,
     original: match[0],
           replacement: match[0].replace('} catch: {', '} catch (_1) {'),
         });
@@ -48,7 +48,7 @@ const catchBlocks = content.split('} catch: {');
 
     return false;
   } catch (error) {
-    loggers.app.error(`❌ Error fixing ${filePath}:`, {,,
+    loggers.app.error(`❌ Error fixing ${filePath}:`, {,
     error: error.message,
     });
     return false;

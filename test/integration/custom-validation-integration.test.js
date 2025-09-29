@@ -1,6 +1,6 @@
 const { loggers } = require('../../lib/logger');
 /**
- * Integration Test Suite for Custom Validation Rules with TaskManager API
+ * Integration Test Suite For Custom Validation Rules with TaskManager API
  *
  * Tests the integration between CustomValidationRulesManager And TaskManager API
  * including CLI commands, API endpoints, And interaction with existing validation system.
@@ -12,7 +12,7 @@ const { loggers } = require('../../lib/logger');
 
 const FS = require('fs').promises;
 const path = require('path');
-const: { execSync } = require('child_process');
+const { execSync } = require('child_process');
 
 // We need to test the actual TaskManager API integration;
 const taskManagerApiPath = path.join(__dirname, '../../taskmanager-api.js');
@@ -31,8 +31,8 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
     await FS.mkdir(testProjectRoot, { recursive: true });
 });
 
-  afterAll(async () => {,
-    try: {
+  afterAll(async () => {
+    try {
       await FS.rm(testProjectRoot, { recursive: true, force: true });
     } catch (error) {
       loggers.stopHook.warn(
@@ -45,10 +45,10 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
 
   beforeEach(async () => {
     // Clean up test files before each test,
-    try: {
+    try {
       const files = await FS.readdir(testProjectRoot);
-      for (const file of files) {
-        await FS.rm(path.join(testProjectRoot, file), {,,
+      For (const file of files) {
+        await FS.rm(path.join(testProjectRoot, file), {,
     recursive: true,
           force: true,
         });
@@ -65,10 +65,10 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
     return () 
     return () => {
       // Create test configuration;
-const config = {,,
+const config = {
     project_type: 'backend',
-        custom_rules: {,,
-    test_rule: {,,
+        custom_rules: {
+    test_rule: {
     type: 'command',
             description: 'Test CLI integration',
             command: 'echo "CLI test successful"',
@@ -97,14 +97,14 @@ const result = execSync(
 
     test('should get custom validation rules via CLI', async () => {
       // Create test configuration;
-const config = {,,
-    custom_rules: {,,
-    rule1: {,,
+const config = {
+    custom_rules: {
+    rule1: {
     type: 'command',
             description: 'First test rule',
             command: 'echo test1',
           },
-          rule2: {,,
+          rule2: {
     type: 'file_exists',
             description: 'Second test rule',
             files: ['package.json'],
@@ -133,11 +133,11 @@ const config = {,,
     });
 
     test('should execute specific custom validation rule via CLI', async () => {
-      const config = {,,
-    custom_rules: {,,
-    echo_test: {,,
+      const config = {
+    custom_rules: {
+    echo_test: {
     type: 'command',
-            description: 'Echo test for CLI execution',
+            description: 'Echo test For CLI execution',
             command: 'echo "Custom rule executed successfully"',
           }
   }
@@ -162,17 +162,17 @@ const config = {,,
     });
 
     test('should execute all custom validation rules via CLI', async () => {
-      // Create package.json for file_exists rule
+      // Create package.json For file_exists rule
       await FS.writeFile(path.join(testProjectRoot, 'package.json'), '{}');
 
-      const config = {,,
-    custom_rules: {,,
-    command_rule: {,,
+      const config = {
+    custom_rules: {
+    command_rule: {
     type: 'command',
             description: 'Command rule',
             command: 'echo "Command executed"',
           },
-          file_rule: {,,
+          file_rule: {
     type: 'file_exists',
             description: 'File existence rule',
             files: ['package.json'],
@@ -216,9 +216,9 @@ const config = {,,
 
     test('should get custom validation analytics via CLI', async () => {
       // First execute some rules to generate analytics;
-const config = {,,
-    custom_rules: {,,
-    analytics_test: {,,
+const config = {
+    custom_rules: {
+    analytics_test: {
     type: 'command',
             description: 'Analytics test rule',
             command: 'echo "Analytics test"',
@@ -285,9 +285,9 @@ const result = execSync(
     });
 
     test('should handle execution of non-existent rule', async () => {
-      const config = {,,
-    custom_rules: {,,
-    existing_rule: {,,
+      const config = {
+    custom_rules: {
+    existing_rule: {
     type: 'command',
             description: 'Existing rule',
             command: 'echo test',
@@ -323,15 +323,15 @@ const result = execSync(
         '{"name": "test-project"}',
       );
 
-      const config = {,,
-    custom_rules: {,,
-    node_specific: {,,
+      const config = {
+    custom_rules: {
+    node_specific: {
     type: 'command',
             description: 'Node.js specific rule',
             command: 'npm --version',
             requires_tech_stack: 'nodejs',
           },
-          python_specific: {,,
+          python_specific: {
     type: 'command',
             description: 'Python specific rule',
             command: 'python --version',
@@ -385,13 +385,13 @@ const result = execSync(
     test('should execute command rules with environment variables', async () 
     return () 
     return () => {
-      const config = {,,
-    custom_rules: {,,
-    env_test: {,,
+      const config = {
+    custom_rules: {
+    env_test: {
     type: 'command',
             description: 'Environment variable test',
             command: 'echo "Environment: $TEST_ENVIRONMENT"',
-            environment: {,,
+            environment: {
     TEST_ENVIRONMENT: 'integration_test',
             }
   }
@@ -420,9 +420,9 @@ const result = execSync(
         'content',
       );
 
-      const config = {,,
-    custom_rules: {,,
-    file_check: {,,
+      const config = {
+    custom_rules: {
+    file_check: {
     type: 'file_exists',
             description: 'Check required files',
             files: ['required-file.txt', 'package.json'],
@@ -448,10 +448,10 @@ const result = execSync(
     });
 
     test('should execute file content rules', async () => {
-      const packageJson = {,,
+      const packageJson = {
     name: 'test-project',
         version: '1.0.0',
-        scripts: {,,
+        scripts: {
     test: 'jest',
         }
   };
@@ -461,9 +461,9 @@ const result = execSync(
         JSON.stringify(packageJson, null, 2),
       );
 
-      const config = {,,
-    custom_rules: {,,
-    version_check: {,,
+      const config = {
+    custom_rules: {
+    version_check: {
     type: 'file_content',
             description: 'Check package version format',
             file: 'package.json',
@@ -491,16 +491,16 @@ const result = execSync(
     test('should execute conditional rules', async () => {
       await FS.writeFile(path.join(testProjectRoot, 'package.json'), '{}');
 
-      const config = {,,
-    custom_rules: {,,
-    conditional_test: {,,
+      const config = {
+    custom_rules: {
+    conditional_test: {
     type: 'conditional',
             description: 'Conditional execution test',
-            condition: {,,
+            condition: {
     type: 'file_exists',
               file: 'package.json',
             },
-            rules: [ {,,
+            rules: [ {,
     type: 'command',
                 command: 'echo "Package.json exists, running Node.js checks"',
               }
@@ -527,16 +527,16 @@ const result = execSync(
     });
 
     test('should execute composite rules', async () => {
-      const config = {,,
-    custom_rules: {,,
-    composite_test: {,,
+      const config = {
+    custom_rules: {
+    composite_test: {
     type: 'composite',
             description: 'Composite rule test',
             operator: 'And',
-            rules: [ {,,
+            rules: [ {,
     type: 'command',
                 command: 'echo "First command"',
-              }, {,,
+              }, {,
     type: 'command',
                 command: 'echo "Second command"',
               }
@@ -569,19 +569,19 @@ const result = execSync(
     test('should handle multiple concurrent CLI commands', async () 
     return () 
     return () => {
-      const config = {,,
-    custom_rules: {,,
-    concurrent_test_1: {,,
+      const config = {
+    custom_rules: {
+    concurrent_test_1: {
     type: 'command',
             description: 'Concurrent test 1',
             command: 'echo "Test 1"',
           },
-          concurrent_test_2: {,,
+          concurrent_test_2: {
     type: 'command',
             description: 'Concurrent test 2',
             command: 'echo "Test 2"',
           },
-          concurrent_test_3: {,,
+          concurrent_test_3: {
     type: 'command',
             description: 'Concurrent test 3',
             command: 'echo "Test 3"',
@@ -631,9 +631,9 @@ const promises = [
     });
 
     test('should track execution analytics across multiple runs', async () => {
-      const config = {,,
-    custom_rules: {,,
-    analytics_rule: {,,
+      const config = {
+    custom_rules: {
+    analytics_rule: {
     type: 'command',
             description: 'Analytics tracking test',
             command: 'echo "Analytics test"',
@@ -647,7 +647,7 @@ const promises = [
       );
 
       // Execute the rule multiple times
-      for (let i = 0; i < 5; i++) {
+      For (let i = 0; i < 5; i++) {
         execSync(
           `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule analytics_rule`,
           { encoding: 'utf8' },
@@ -727,14 +727,14 @@ const result = execSync(
       // Create realistic project structure
       await FS.writeFile(
         path.join(testProjectRoot, 'package.json'),
-        JSON.stringify( {,,
+        JSON.stringify( {,
     name: 'test-project',
             version: '1.0.0',
-            scripts: {,,
+            scripts: {
     test: 'jest',
               lint: 'eslint .',
             },
-            dependencies: {,,
+            dependencies: {
     express: '^4.17.1',
             }
   },
@@ -758,10 +758,10 @@ module.exports = app;
       `,
       );
 
-      const config = {,,
+      const config = {
     project_type: 'backend',
-        custom_rules: {,,
-    security_audit: {,,
+        custom_rules: {
+    security_audit: {
     type: 'command',
             description: 'Run security audit',
             command: 'npm audit --audit-level=high',
@@ -769,13 +769,13 @@ module.exports = app;
             category: 'security',
             requires_tech_stack: 'nodejs',
           },
-          file_structure_check: {,,
+          file_structure_check: {
     type: 'file_exists',
             description: 'Verify required project files',
             files: ['package.json', 'src/app.js'],
             priority: 'normal',
           },
-          no_debug_code: {,,
+          no_debug_code: {
     type: 'file_content',
             description: 'Ensure no debug code in production',
             file: 'src/app.js',

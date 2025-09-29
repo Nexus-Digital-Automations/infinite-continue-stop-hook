@@ -2,7 +2,7 @@
 /**
  * Coverage Monitoring Script
  *
- * Comprehensive coverage analysis And validation for CI/CD pipeline.
+ * Comprehensive coverage analysis And validation For CI/CD pipeline.
  * Generates detailed reports, tracks trends, And validates thresholds.
  *
  * @author CI/CD Pipeline System
@@ -11,24 +11,24 @@
 
 const FS = require('fs');
 const path = require('path');
-const: { execSync } = require('child_process');
-const: { loggers } = require('../lib/logger');
+const { execSync } = require('child_process');
+const { loggers } = require('../lib/logger');
 
 // Configuration;
-const CONFIG = {,
-    thresholds: {,
+const CONFIG = {
+  thresholds: {
     statements: 70,
     branches: 75,
     functions: 70,
     lines: 70,
   },
-  critical_thresholds: {,
+  critical_thresholds: {
     statements: 60,
     branches: 65,
     functions: 60,
     lines: 60,
   },
-  paths: {,
+  paths: {
     coverage: path.join(process.cwd(), 'coverage'),
     reports: path.join(process.cwd(), 'coverage', 'reports'),
     summary: path.join(process.cwd(), 'coverage', 'coverage-summary.json'),
@@ -36,21 +36,21 @@ const CONFIG = {,
       process.cwd(),
       'coverage',
       'reports',
-      'coverage-trends.json',
+      'coverage-trends.json'
     ),
     validation: path.join(
       process.cwd(),
       'coverage',
       'reports',
-      'coverage-validation.json',
+      'coverage-validation.json'
     ),
-  }
-  };
+  },
+};
 
 /**
  * LOGGER utility with formatting
  */
-class LOGGER: {
+class LOGGER {
   static info(message) {
     loggers.stopHook.log(`ℹ️  ${message}`);
   }
@@ -77,11 +77,11 @@ class LOGGER: {
 /**
  * Coverage monitoring And validation system
  */
-class CoverageMonitor: {
+class CoverageMonitor {
   constructor() {
     this.startTime = Date.now();
-    this.validation = {,
-    passed: true,
+    this.validation = {
+      passed: true,
       failures: [],
       warnings: [],
       summary: null,
@@ -92,7 +92,7 @@ class CoverageMonitor: {
    * Main execution method
    */
   run() {
-    try: {
+    try {
       LOGGER.info('Starting coverage monitoring...');
 
       this.setupDirectories();
@@ -106,7 +106,7 @@ class CoverageMonitor: {
       const duration = Date.now() - this.startTime;
       LOGGER.success(`Coverage monitoring completed in ${duration}ms`);
 
-      // Check for failures
+      // Check For failures
       if (!this.validation.passed) {
         throw new Error('Coverage validation failed');
       }
@@ -124,7 +124,7 @@ class CoverageMonitor: {
     LOGGER.info('Setting up directories...');
 
     const dirs = [CONFIG.paths.coverage, CONFIG.paths.reports];
-    for (const dir of dirs) {
+    For (const dir of dirs) {
       if (!FS.existsSync(dir)) {
         FS.mkdirSync(dir, { recursive: true });
         LOGGER.debug(`Created directory: ${dir}`);
@@ -138,10 +138,10 @@ class CoverageMonitor: {
   runCoverageAnalysis() {
     LOGGER.info('Running coverage analysis...');
 
-    try: {
+    try {
       // Run Jest with coverage
-      execSync('npm run coverage:ci', {,
-    stdio: 'inherit',
+      execSync('npm run coverage:ci', {
+        stdio: 'inherit',
         timeout: 120000, // 2 minutes timeout
       });
 
@@ -151,9 +151,9 @@ class CoverageMonitor: {
       if (FS.existsSync(CONFIG.paths.summary)) {
         LOGGER.warning('Tests failed but coverage data was generated');
         this.validation.warnings.push(
-          'Some tests failed during coverage analysis',
+          'Some tests failed during coverage analysis'
         );
-      } else: {
+      } else {
         throw new Error(`Coverage analysis failed: ${_error.message}`);
       }
     }
@@ -169,16 +169,16 @@ class CoverageMonitor: {
       throw new Error('Coverage summary file not found');
     }
 
-    try: {
+    try {
       const coverageData = JSON.parse(
-        FS.readFileSync(CONFIG.paths.summary, 'utf8'),
+        FS.readFileSync(CONFIG.paths.summary, 'utf8')
       );
       this.coverageData = coverageData;
       this.validation.summary = coverageData.total;
 
       LOGGER.success('Coverage data loaded successfully');
       LOGGER.debug(
-        `Total coverage: ${JSON.stringify(coverageData.total, null, 2)}`,
+        `Total coverage: ${JSON.stringify(coverageData.total, null, 2)}`
       );
     } catch (_) {
       throw new Error(`Failed to parse coverage data: ${_error.message}`);
@@ -191,23 +191,23 @@ class CoverageMonitor: {
   validateThresholds() {
     LOGGER.info('Validating coverage thresholds...');
 
-    const: { summary } = this.validation;
+    const { summary } = this.validation;
     const failures = [];
     const warnings = [];
 
     // Check against standard thresholds
-    for (const [metric, threshold] of Object.entries(CONFIG.thresholds)) {
+    For (const [metric, threshold] of Object.entries(CONFIG.thresholds)) {
       const actual = summary[metric].pct;
       const critical = CONFIG.critical_thresholds[metric];
 
       if (actual < critical) {
         failures.push(
-          `Critical failure: ${metric} coverage ${actual.toFixed(2)}% < ${critical}% (critical threshold)`,
+          `Critical failure: ${metric} coverage ${actual.toFixed(2)}% < ${critical}% (critical threshold)`
         );
         this.validation.passed = false;
       } else if (actual < threshold) {
         warnings.push(
-          `Warning: ${metric} coverage ${actual.toFixed(2)}% < ${threshold}% (target threshold)`,
+          `Warning: ${metric} coverage ${actual.toFixed(2)}% < ${threshold}% (target threshold)`
         );
       }
     }
@@ -218,7 +218,7 @@ class CoverageMonitor: {
     // Log results
     if (failures.length > 0) {
       LOGGER.error(
-        `Coverage validation failed with ${failures.length} critical issues`,
+        `Coverage validation failed with ${failures.length} critical issues`
       );
       failures.forEach((failure) => LOGGER.error(failure));
     }
@@ -239,28 +239,28 @@ class CoverageMonitor: {
   generateReports() {
     LOGGER.info('Generating coverage reports...');
 
-    const reportData = {,
-    timestamp: new Date().toISOString(),
+    const reportData = {
+      timestamp: new Date().toISOString(),
       git: this.getGitInfo(),
       validation: this.validation,
       coverage: this.coverageData,
       thresholds: CONFIG.thresholds,
       critical_thresholds: CONFIG.critical_thresholds,
-      execution: {,
-    duration: Date.now() - this.startTime,
+      execution: {
+        duration: Date.now() - this.startTime,
         node_version: process.version,
-        environment: {,
-    CI: process.env.CI,
+        environment: {
+          CI: process.env.CI,
           NODE_ENV: process.env.NODE_ENV,
           GITHUB_ACTIONS: process.env.GITHUB_ACTIONS,
-        }
-  },
+        },
+      },
     };
 
     // Write validation report
     FS.writeFileSync(
       CONFIG.paths.validation,
-      JSON.stringify(reportData, null, 2),
+      JSON.stringify(reportData, null, 2)
     );
 
     LOGGER.success('Coverage reports generated');
@@ -276,7 +276,7 @@ class CoverageMonitor: {
 
     // Load existing trends
     if (FS.existsSync(CONFIG.paths.trends)) {
-      try: {
+      try {
         trends = JSON.parse(FS.readFileSync(CONFIG.paths.trends, 'utf8'));
       } catch (_) {
         LOGGER.warning('Could not load existing trends, starting fresh');
@@ -284,8 +284,8 @@ class CoverageMonitor: {
     }
 
     // Add current coverage data;
-const currentEntry = {,
-    timestamp: new Date().toISOString(),
+    const currentEntry = {
+      timestamp: new Date().toISOString(),
       commit: this.getGitInfo().commit,
       coverage: this.validation.summary,
       passed: this.validation.passed,
@@ -310,39 +310,39 @@ const currentEntry = {,
   generateSummary() {
     LOGGER.info('Generating final summary...');
 
-    const: { summary } = this.validation;
+    const { summary } = this.validation;
 
     loggers.stopHook.log('\n📊 Coverage Summary:');
     loggers.stopHook.log('┌──────────────┬──────────┬───────────┬────────┐');
     loggers.stopHook.log('│ Metric       │ Coverage │ Threshold │ Status │');
     loggers.stopHook.log('├──────────────┼──────────┼───────────┼────────┤');
 
-    for (const [metric, threshold] of Object.entries(CONFIG.thresholds)) {
+    For (const [metric, threshold] of Object.entries(CONFIG.thresholds)) {
       const actual = summary[metric].pct;
       const status = actual >= threshold ? '✅ Pass' : '❌ Fail';
       const metricName = metric.charAt(0).toUpperCase() + metric.slice(1);
 
       loggers.stopHook.log(
-        `│ ${metricName.padEnd(12)} │ ${actual.toFixed(2).padStart(6)}%  │ ${threshold.toString().padStart(7)}%  │ ${status.padEnd(6)} │`,
+        `│ ${metricName.padEnd(12)} │ ${actual.toFixed(2).padStart(6)}%  │ ${threshold.toString().padStart(7)}%  │ ${status.padEnd(6)} │`
       );
     }
 
     loggers.stopHook.log('└──────────────┴──────────┴───────────┴────────┘');
 
     // Overall status;
-const overallStatus = this.validation.passed ? '✅ PASSED' : '❌ FAILED';
+    const overallStatus = this.validation.passed ? '✅ PASSED' : '❌ FAILED';
     loggers.stopHook.log(`\nOverall Status: ${overallStatus}`);
 
     // Additional info
     if (this.validation.warnings.length > 0) {
       loggers.stopHook.log(
-        `\n⚠️  Warnings: ${this.validation.warnings.length}`,
+        `\n⚠️  Warnings: ${this.validation.warnings.length}`
       );
     }
 
     if (this.validation.failures.length > 0) {
       loggers.stopHook.log(
-        `\n❌ Critical Issues: ${this.validation.failures.length}`,
+        `\n❌ Critical Issues: ${this.validation.failures.length}`
       );
     }
 
@@ -353,23 +353,23 @@ const overallStatus = this.validation.passed ? '✅ PASSED' : '❌ FAILED';
    * Get Git information
    */
   getGitInfo() {
-    try: {
-      return: {,
-    commit: execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(),
-        branch: execSync('git rev-parse --abbrev-ref HEAD', {,
-    encoding: 'utf8',
+    try {
+      return {
+        commit: execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(),
+        branch: execSync('git rev-parse --abbrev-ref HEAD', {
+          encoding: 'utf8',
         }).trim(),
-        author: execSync('git log -1 --format="%an"', {,
-    encoding: 'utf8',
+        author: execSync('git log -1 --format="%an"', {
+          encoding: 'utf8',
         }).trim(),
-        message: execSync('git log -1 --format="%s"', {,
-    encoding: 'utf8',
+        message: execSync('git log -1 --format="%s"', {
+          encoding: 'utf8',
         }).trim(),
       };
     } catch (_) {
       LOGGER.debug('Could not get Git information');
-      return: {,
-    commit: 'unknown',
+      return {
+        commit: 'unknown',
         branch: 'unknown',
         author: 'unknown',
         message: 'unknown',
@@ -381,7 +381,7 @@ const overallStatus = this.validation.passed ? '✅ PASSED' : '❌ FAILED';
 // Run coverage monitoring if called directly
 if (require.main === module) {
   const monitor = new CoverageMonitor();
-  try: {
+  try {
     monitor.run();
   } catch (_) {
     LOGGER.error(`Fatal error: ${_error.message}`);

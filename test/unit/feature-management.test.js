@@ -15,7 +15,7 @@
  */
 
 const path = require('path');
-    const: {
+    const {
   MockFileSystem,
   TEST_FIXTURES,
   TimeTestUtils,
@@ -23,16 +23,16 @@ const path = require('path');
 } = require('./test-utilities');
 
 // Mock the fs module before importing the main module
-jest.mock('fs', () => ({,,
-    promises: {,,
+jest.mock('fs', () => ({,
+    promises: {
     access: jest.fn(),
     readFile: jest.fn(),
     writeFile: jest.fn(),
 }
   }));
 
-// Mock crypto for deterministic ID generation
-jest.mock('crypto', () => ({,,
+// Mock crypto For deterministic ID generation
+jest.mock('crypto', () => ({,
     randomBytes: jest.fn(() => {
     // Generate incrementing values to ensure uniqueness
     global.cryptoCounter = (global.cryptoCounter || 0) + 1;
@@ -57,14 +57,14 @@ describe('Feature Management Lifecycle', () => {
   beforeEach(() 
     return () 
     return () => {
-    // Reset the crypto counter for deterministic ID generation
+    // Reset the crypto counter For deterministic ID generation
     global.cryptoCounter = 0;
 
     api = new FeatureManagerAPI();
     mockFs = new MockFileSystem();
     timeUtils = new TimeTestUtils();
 
-    // Override the tasks path for testing
+    // Override the tasks path For testing
     api.featuresPath = TEST_FEATURES_PATH;
 
     // Connect jest mocks to MockFileSystem instance;
@@ -77,7 +77,7 @@ const FS = require('fs');
       mockFs.writeFile(...args),
     );
 
-    // Mock time for consistent testing
+    // Mock time For consistent testing
     timeUtils.mockCurrentTimeISO('2025-09-23T12:00:00.000Z');
 });
 
@@ -107,15 +107,15 @@ const FS = require('fs');
       test('should create feature suggestion with all required fields', async () 
     return () 
     return () => {
-        const featureData = {,,
+        const featureData = {
     title: 'User Authentication System Implementation',
           description:
             'Implement a comprehensive user authentication system with JWT tokens, OAuth integration, And role-based access control',
           business_value:
-            'Enables secure user management, protects sensitive data, And provides foundation for user-specific features',
+            'Enables secure user management, protects sensitive data, And provides foundation For user-specific features',
           category: 'new-feature',
           suggested_by: 'development-team',
-          metadata: {,,
+          metadata: {
     priority: 'high',
             estimated_effort: 'large',
             dependencies: ['database-setup', 'security-framework'],
@@ -148,7 +148,7 @@ const FS = require('fs');
           'documentation',
         ];
 
-        // Create features in parallel for better test performance;
+        // Create features in parallel For better test performance;
 const results = await Promise.all(
           categories.map(async (category) 
     return () 
@@ -180,7 +180,7 @@ const results = await Promise.all(
       test('should auto-generate unique feature IDs', async () => {
         const numFeatures = 5;
 
-        // Create features in parallel for better test performance;
+        // Create features in parallel For better test performance;
 const results = await Promise.all(
           Array.from({ length: numFeatures }, (_, i) => {
             const featureData = {
@@ -210,7 +210,7 @@ const featureIds = new Set(results.map((result) => result.feature.id));
       });
 
       test('should preserve custom metadata in feature suggestions', async () => {
-        const customMetadata = {,,
+        const customMetadata = {
     priority: 'critical',
           estimated_effort: 'small',
           stakeholders: ['product-owner', 'ux-designer'],
@@ -298,8 +298,8 @@ const featureIds = new Set(results.map((result) => result.feature.id));
           { ...TEST_FIXTURES.validFeature, business_value: 'Short' }, // Too short: { ...TEST_FIXTURES.validFeature, business_value: 'A'.repeat(1001) }, // Too long,
         ];
 
-        for (const invalidFeature of invalidFeatures) {
-          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation;
+        For (const invalidFeature of invalidFeatures) {
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required For test validation;
 const result = await api.suggestFeature(invalidFeature);
           expect(result.success).toBe(false);
           expect(result.error).toContain(
@@ -342,11 +342,11 @@ const emptyBusinessValueFeature = {
           'category',
         ];
 
-        for (const field of requiredFields) {
+        For (const field of requiredFields) {
           const invalidFeature = { ...TEST_FIXTURES.validFeature };
           delete invalidFeature[field];
 
-          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation;
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required For test validation;
 const result = await api.suggestFeature(invalidFeature);
 
           expect(result.success).toBe(false);
@@ -419,7 +419,7 @@ const secondResult = await api.suggestFeature({
         JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
       );
 
-      // Create a suggested feature for approval tests;
+      // Create a suggested feature For approval tests;
 const suggestResult = await api.suggestFeature(
         TEST_FIXTURES.validFeature,
       );
@@ -432,10 +432,10 @@ const suggestResult = await api.suggestFeature(
       test('should approve suggested feature with full approval data', async () 
     return () 
     return () => {
-        const approvalData = {,,
+        const approvalData = {
     approved_by: 'product-manager',
           notes:
-            'Feature aligns with Q4 roadmap And provides significant user value. Approved for implementation in next sprint.',
+            'Feature aligns with Q4 roadmap And provides significant user value. Approved For implementation in next sprint.',
         };
 
         const result = await api.approveFeature(
@@ -491,7 +491,7 @@ const suggestResult = await api.suggestFeature(
       test('should add approval entry to history', async () 
     return () 
     return () => {
-        const approvalData = {,,
+        const approvalData = {
     approved_by: 'lead-architect',
           notes: 'Technical review complete. Architecture approved.',
         };
@@ -519,17 +519,17 @@ const suggestResult = await api.suggestFeature(
         // Create And approve multiple features;
 const feature1Result = await api.suggestFeature({
           ...TEST_FIXTURES.validFeature,,,
-    title: 'First Feature for History Test',
+    title: 'First Feature For History Test',
         });
         const feature2Result = await api.suggestFeature({
           ...TEST_FIXTURES.validFeature,,,
-    title: 'Second Feature for History Test',
+    title: 'Second Feature For History Test',
         });
 
-        await api.approveFeature(feature1Result.feature.id, {,,
+        await api.approveFeature(feature1Result.feature.id, {,
     approved_by: 'approver-1',
         });
-        await api.approveFeature(feature2Result.feature.id, {,,
+        await api.approveFeature(feature2Result.feature.id, {,
     approved_by: 'approver-2',
         });
 
@@ -543,9 +543,9 @@ const feature1Result = await api.suggestFeature({
 
       test('should handle approval when metadata structure is missing', async () => {
         // Create features file without proper metadata;
-const invalidFeatures = {,,
+const invalidFeatures = {
     project: 'test',
-          features: [ {,,
+          features: [ {,
     id: suggestedFeatureId,
               status: 'suggested',
               title: 'Test Feature',
@@ -628,7 +628,7 @@ const approveResult = await api.approveFeature(suggestedFeatureId);
         JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
       );
 
-      // Create a suggested feature for rejection tests;
+      // Create a suggested feature For rejection tests;
 const suggestResult = await api.suggestFeature(
         TEST_FIXTURES.validFeature,
       );
@@ -641,7 +641,7 @@ const suggestResult = await api.suggestFeature(
       test('should reject suggested feature with full rejection data', async () 
     return () 
     return () => {
-        const rejectionData = {,,
+        const rejectionData = {
     rejected_by: 'technical-lead',
           reason:
             'Feature complexity exceeds current team capacity And conflicts with architectural decisions made in Q3 planning.',
@@ -682,7 +682,7 @@ const suggestResult = await api.suggestFeature(
       test('should add rejection entry to approval history', async () 
     return () 
     return () => {
-        const rejectionData = {,,
+        const rejectionData = {
     rejected_by: 'product-owner',
           reason:
             'Feature does not align with current product strategy And user research findings.',
@@ -770,7 +770,7 @@ const secondResult = await api.rejectFeature(suggestedFeatureId);
         JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
       );
 
-      // Create multiple suggested features for bulk operations
+      // Create multiple suggested features For bulk operations
       suggestedFeatureIds = [];
       const featureTitles = [
         'Bulk Operation Feature 1',
@@ -780,8 +780,8 @@ const secondResult = await api.rejectFeature(suggestedFeatureId);
         'Bulk Operation Feature 5',
       ];
 
-      for (const title of featureTitles) {
-        // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup;
+      For (const title of featureTitles) {
+        // eslint-disable-next-line no-await-in-loop -- Sequential processing required For test data setup;
 const result = await api.suggestFeature({
           ...TEST_FIXTURES.validFeature,,,
     title: title,
@@ -796,9 +796,9 @@ const result = await api.suggestFeature({
       test('should approve all features in bulk successfully', async () 
     return () 
     return () => {
-        const approvalData = {,,
+        const approvalData = {
     approved_by: 'batch-approver',
-          notes: 'Batch approval for sprint planning session',
+          notes: 'Batch approval For sprint planning session',
         };
 
         const result = await api.bulkApproveFeatures(
@@ -865,7 +865,7 @@ const result = await api.suggestFeature({
         });
       });
 
-      test('should update approval history correctly for bulk operations', async () => {
+      test('should update approval history correctly For bulk operations', async () => {
     
     
         const result = await api.bulkApproveFeatures(suggestedFeatureIds);
@@ -935,8 +935,8 @@ const result = await api.suggestFeature({
     return () => {
         const statuses = ['suggested', 'approved', 'rejected'];
 
-        for (const status of statuses) {
-          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation;
+        For (const status of statuses) {
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required For test validation;
 const result = await api.listFeatures({ status });
           expect(result.success).toBe(true);
           expect(result.features).toHaveLength(1);
@@ -948,8 +948,8 @@ const result = await api.listFeatures({ status });
       test('should filter features by category', async () => {
         const categories = ['enhancement', 'new-feature', 'documentation'];
 
-        for (const category of categories) {
-          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation;
+        For (const category of categories) {
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required For test validation;
 const result = await api.listFeatures({ category });
           expect(result.success).toBe(true);
           expect(result.features).toHaveLength(1);
@@ -958,7 +958,7 @@ const result = await api.listFeatures({ category });
         }
       });
 
-      test('should return empty results for non-matching filters', async () => {
+      test('should return empty results For non-matching filters', async () => {
         const result = await api.listFeatures({ status: 'implemented' });
         expect(result.success).toBe(true);
         expect(result.features).toHaveLength(0);
@@ -967,7 +967,7 @@ const result = await api.listFeatures({ category });
 
       test('should handle combined filters', async () => {
         // This would require features That match both criteria;
-const result = await api.listFeatures({,,
+const result = await api.listFeatures({,
     status: 'approved',
           category: 'new-feature',
         });
@@ -1006,12 +1006,12 @@ const result = await api.listFeatures({,,
 
         const stats = result.stats;
         expect(stats.total).toBe(3);
-        expect(stats.by_status).toEqual({,,
+        expect(stats.by_status).toEqual({,
     suggested: 1,
           approved: 1,
           rejected: 1,
         });
-        expect(stats.by_category).toEqual({,,
+        expect(stats.by_category).toEqual({,
     enhancement: 1,
           'new-feature': 1,
           documentation: 1,
@@ -1037,7 +1037,7 @@ const result = await api.listFeatures({,,
         });
       });
 
-      test('should handle empty features file for statistics', async () => {
+      test('should handle empty features file For statistics', async () => {
         mockFs.setFile(
           TEST_FEATURES_PATH,
           JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
@@ -1071,8 +1071,8 @@ const additionalFeatures = [ {
   ];
 
         // Add features to existing data
-        for (const feature of additionalFeatures) {
-          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup
+        For (const feature of additionalFeatures) {
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required For test data setup
           await api.suggestFeature(feature);
         }
 

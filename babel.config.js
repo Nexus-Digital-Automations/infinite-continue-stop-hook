@@ -1,35 +1,35 @@
 /**
- * Babel Configuration for Jest Testing
+ * Babel Configuration For Jest Testing
  *
  * Configures Babel to transform ES modules and modern JavaScript features
- * for compatibility with Jest testing environment.
+ * For compatibility with Jest testing environment.
  */
 
-module.exports = {,,
-    presets: [
+module.exports = {
+  presets: [
     [
       '@babel/preset-env',
-      {,,
-    targets: {,,
-    node: '18',
+      {
+        targets: {
+          node: '18',
         },
         modules: 'commonjs',
-      }
+      },
+    ],
   ],
-  ],
-  env: {,,
-    test: {,,
-    presets: [
+  env: {
+    test: {
+      presets: [
         [
           '@babel/preset-env',
-          {,,
-    targets: {,,
-    node: 'current',
+          {
+            targets: {
+              node: 'current',
             },
             modules: 'commonjs',
-          }
-  ],
+          },
+        ],
       ],
-    }
-  }
-  };
+    },
+  },
+};

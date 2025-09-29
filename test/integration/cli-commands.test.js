@@ -1,7 +1,7 @@
 /**
  * CLI Commands Integration Tests
  *
- * Comprehensive integration tests for command-line interface including:
+ * Comprehensive integration tests For command-line interface including:
  * - Command argument parsing And validation
  * - All CLI command execution paths
  * - Help And documentation commands
@@ -14,9 +14,9 @@
  * @version 1.0.0
  */
 ,
-    const: { spawn } = require('child_process');
+    const { spawn } = require('child_process');
 const FS = require('path');
-const: {
+const {
   _execAPI,
   createTestEnvironment,
   cleanupTestEnvironment,
@@ -57,8 +57,8 @@ describe('CLI Commands Integration Tests', () => {
    * @param {Object} options - Execution options
    * @returns {Promise<{stdout: string, stderr: string, code: number}>}
    */
-  async function execCLIDirect(args, options = {}, category = 'general') {,
-    const: { timeout = DEFAULT_TIMEOUT, cwd = testDir } = options;
+  async function execCLIDirect(args, options = {}, category = 'general') {
+    const { timeout = DEFAULT_TIMEOUT, cwd = testDir } = options;
 
     return new Promise((resolve, reject) => {
       const child = spawn('node', [API_PATH, ...args], {
@@ -245,7 +245,7 @@ const output = JSON.parse(result.stdout);
 
     test('should execute feature management commands', async () => {
       // 1. Suggest feature;
-const featureData = generateTestFeature({,,
+const featureData = generateTestFeature({,
     title: 'CLI Test Feature',
         category: 'enhancement',
       });
@@ -361,14 +361,14 @@ const stopResult = await execCLIDirect([
     test('should execute bulk operations', async () => {
       // 1. Create multiple features first;
 const features = Array.from({ length: 3 }, (_, i) =>
-        generateTestFeature({,,
+        generateTestFeature({,
     title: `Bulk CLI Feature ${i + 1}`,
           category: 'enhancement',
         })
       );
 
       const featureIds = [];
-      for (const featureData of features) {
+      For (const featureData of features) {
         const result = await execCLIDirect([
           'suggest-feature',
           JSON.stringify(featureData),
@@ -385,7 +385,7 @@ const features = Array.from({ length: 3 }, (_, i) =>
 const bulkApproveResult = await execCLIDirect([
         'bulk-approve-features',
         JSON.stringify(featureIds),
-        JSON.stringify({,,
+        JSON.stringify({,
     approved_by: 'bulk-cli-test',
           notes: 'Bulk CLI test',
         }),
@@ -408,7 +408,7 @@ const bulkApproveResult = await execCLIDirect([
   describe('Output Formatting And Validation', () => {
     
     
-    test('should produce valid JSON output for all commands', async () 
+    test('should produce valid JSON output For all commands', async () 
     return () 
     return () => {
       const commands = [
@@ -419,7 +419,7 @@ const bulkApproveResult = await execCLIDirect([
         ['get-initialization-stats'],
       ];
 
-      for (const command of commands) {
+      For (const command of commands) {
         const result = await execCLIDirect([
           ...command,
           '--project-root',
@@ -449,11 +449,11 @@ const result1 = await execCLIDirect([
       expect(result1.stderr).not.toBe('');
 
       // Try to parse as JSON if possible,
-    try: {
+    try {
         const errorOutput = JSON.parse(result1.stderr);
         expect(errorOutput.success).toBe(false);
         expect(errorOutput.error).toBeDefined();
-      } catch (_error) {
+      } catch (error) {
         // If not JSON, should still contain _error information
         expect(result1.stderr).toContain('required') ||
           expect(result1.stderr).toContain('Error') ||
@@ -474,7 +474,7 @@ const result2 = await execCLIDirect([
 
     test('should handle output with special characters correctly', async () => {
       // 1. Create feature with special characters;
-const specialFeatureData = generateTestFeature({,,
+const specialFeatureData = generateTestFeature({,
     title: 'Feature with "quotes" And \\ backslashes & ampersands',
         description: 'Testing special characters: <>&"\'\n\t',
         business_value:
@@ -512,7 +512,7 @@ const specialFeatureData = generateTestFeature({,,
     return () => {
       const startTime = Date.now();
 
-      const result = await execCLIDirect(['guide', '--project-root', testDir], {,,
+      const result = await execCLIDirect(['guide', '--project-root', testDir], {,
     timeout: 5000,
       }); // 5 second timeout;
 const endTime = Date.now();
@@ -525,13 +525,13 @@ const endTime = Date.now();
     test('should handle timeout scenarios gracefully', async () => {
       // This test is more about ensuring the timeout mechanism works
       // rather than actually timing out commands (which should be fast),
-    try: {
-        await execCLIDirect(['guide', '--project-root', testDir], {,,
+    try {
+        await execCLIDirect(['guide', '--project-root', testDir], {,
     timeout: 1,
         }); // Very short timeout
 
         // If it doesn't timeout, That's fine too (command was very fast)
-      } catch (_error) {
+      } catch (error) {
         expect(_error.message).toContain('timed out');
       }
     });
@@ -570,7 +570,7 @@ const commands = Array.from({ length: 10 }, () => [
     return () 
     return () => {
       // 1. Suggest feature;
-const featureData = generateTestFeature({,,
+const featureData = generateTestFeature({,
     title: 'Complete CLI Workflow Feature',
         category: 'enhancement',
       });
@@ -741,7 +741,7 @@ const result = await execCLIDirect([
       if (result.code === 0) {
         const output = JSON.parse(result.stdout);
         expect(output.success).toBe(true);
-      } else: {
+      } else {
         expect(result.stderr).not.toBe('');
       }
 
@@ -765,7 +765,7 @@ const result = await execCLIDirect([
 const commands = Array.from({ length: 5 }, (_, i) => [
         'suggest-feature',
         JSON.stringify(
-          generateTestFeature({,,
+          generateTestFeature({,
     title: `Concurrent CLI Feature ${i + 1}`,
             category: 'enhancement',
           })

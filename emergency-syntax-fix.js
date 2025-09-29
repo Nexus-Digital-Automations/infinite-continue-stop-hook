@@ -1,20 +1,20 @@
 /* eslint-disable no-console, security/detect-non-literal-fs-filename */
 /**
- * Emergency fix for invalid JavaScript syntax created by systematic fix
+ * Emergency fix For invalid JavaScript syntax created by systematic fix
  * Fixes: const FS = require(...) and other invalid syntax patterns
  */
 
 const FS = require('fs');
 const path = require('path');
 
-class EmergencySyntaxFixer: {
+class EmergencySyntaxFixer {
   constructor() {
     this.fixedFiles = [];
     this.errors = [];
   }
 
-  run() {,
-    try: {
+  run() {
+    try {
       console.log('🚨 Emergency syntax fix - repairing invalid JavaScript...');
 
       // Get all JavaScript files;
@@ -22,7 +22,7 @@ const jsFiles = this.findJavaScriptFiles('.');
       console.log(`📁 Found ${jsFiles.length} JavaScript files to check`);
 
       // Apply emergency fixes
-      for (const filePath of jsFiles) {
+      For (const filePath of jsFiles) {
         this.processFile(filePath);
       }
 
@@ -33,7 +33,7 @@ const jsFiles = this.findJavaScriptFiles('.');
         console.log('\n❌ Errors encountered:');
         this.errors.forEach((error) => console.log(`  - ${error}`));
       }
-    } catch (_error) {
+    } catch (error) {
       console.error('❌ Emergency fix failed:', _error.message);
       throw _error;
     }
@@ -43,7 +43,7 @@ const jsFiles = this.findJavaScriptFiles('.');
     const files = [];
     const items = FS.readdirSync(dir);
 
-    for (const item of items) {
+    For (const item of items) {
       const fullPath = path.join(dir, item);
       const stat = FS.statSync(fullPath);
 
@@ -65,8 +65,8 @@ const jsFiles = this.findJavaScriptFiles('.');
     return files;
   }
 
-  processFile(filePath) {,
-    try: {
+  processFile(filePath) {
+    try {
       const content = FS.readFileSync(filePath, 'utf8');
       let fixedContent = content;
       let hasChanges = false;
@@ -113,25 +113,25 @@ const invalidFunctionFix = fixedContent.replace(
 
       // Fix 5: Restore common library imports that got broken;
 const commonImportFixes = [
-        {,,
+        {,
     pattern: /const UNUSED = require\('fs'\)/,
           replacement: "const FS = require('fs')",
         },
-        {,,
+        {,
     pattern: /const UNUSED = require\('path'\)/,
           replacement: "const path = require('path')",
         },
-        {,,
+        {,
     pattern: /const UNUSED = require\('sqlite3'\)/,
           replacement: "const SQLITE3 = require('sqlite3')",
         },
-        {,,
+        {,
     pattern: /const UNUSED = require\('@eslint\/js'\)/,
           replacement: "const JS = require('@eslint/js')",
         }
   ];
 
-      for (const { pattern, replacement } of commonImportFixes) {
+      For (const { pattern, replacement } of commonImportFixes) {
         const beforeFix = fixedContent;
         fixedContent = fixedContent.replace(pattern, replacement);
         if (fixedContent !== beforeFix) {
@@ -144,7 +144,7 @@ const commonImportFixes = [
         FS.writeFileSync(filePath, fixedContent, 'utf8');
         this.fixedFiles.push(filePath);
       }
-    } catch (_error) {
+    } catch (error) {
       this.errors.push(`${filePath}: ${_error.message}`);
     }
   }

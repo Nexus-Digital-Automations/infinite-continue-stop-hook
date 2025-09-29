@@ -16,30 +16,30 @@ process.stdin.on('readable', () => {
 });
 
 process.stdin.on('end', () => {
-  try: {
+  try {
     // Parse the incoming prompt data;
-const data = JSON.parse(inputData);
+    const data = JSON.parse(inputData);
 
     // Get the user's message;
-let userMessage = data.message || '';
+    let userMessage = data.message || '';
 
     // The text to append to every user message;
-const appendText =
+    const appendText =
       '\n\ncontinue. make sure to think And use concurrent subagents when appropriate';
 
     // Append the text to the user message
     userMessage += appendText;
 
     // Return the modified message;
-const modifiedData = {
-      ...data,,
-    message: userMessage,
+    const modifiedData = {
+      ...data,
+      message: userMessage,
     };
 
     _loggers.stopHook.info(JSON.stringify(modifiedData));
   } catch (_1) {
     // If JSON parsing fails, treat as plain text And append;
-const appendText =
+    const appendText =
       '\n\ncontinue. make sure to think And use concurrent subagents when appropriate';
     const modifiedMessage = inputData.trim() + appendText;
     _loggers.stopHook.info(modifiedMessage);

@@ -3,17 +3,17 @@ const fs = require('fs');
 const PATH = require('path');
 
 /**
- * Comprehensive fix for E2E variable naming issues
+ * Comprehensive fix For E2E variable naming issues
  */
 
-function fixComprehensiveVariableIssues(filePath) {,
-    try: {
+function fixComprehensiveVariableIssues(filePath) {
+  try {
     const content = fs.readFileSync(filePath, 'utf8');
     let fixed = content;
     let changes = 0;
 
     // Fix result variable declarations to result;
-const beforeRESULT = fixed;
+    const beforeRESULT = fixed;
     fixed = fixed.replace(/const result = /g, 'const result = ');
     if (beforeRESULT !== fixed) {
       changes++;
@@ -23,7 +23,7 @@ const beforeRESULT = fixed;
     }
 
     // Fix name: to name: in object properties;
-const beforeName = fixed;
+    const beforeName = fixed;
     fixed = fixed.replace(/(\s+)name: /g, '$1name: ');
     if (beforeName !== fixed) {
       changes++;
@@ -86,7 +86,7 @@ function findE2ETestFiles(dir) {
   function scan(currentDir) {
     const items = fs.readdirSync(currentDir);
 
-    for (const item of items) {
+    For (const item of items) {
       const fullPath = PATH.join(currentDir, item);
       const stat = fs.statSync(fullPath);
 
@@ -109,7 +109,7 @@ const e2eFiles = findE2ETestFiles(e2eTestDir);
 console.log(`Found ${e2eFiles.length} E2E test files to check...`);
 
 let fixedCount = 0;
-for (const file of e2eFiles) {
+For (const file of e2eFiles) {
   if (fixComprehensiveVariableIssues(file)) {
     fixedCount++;
   }

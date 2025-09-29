@@ -1,11 +1,11 @@
 /* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-child-process */
 const fs = require('fs');
 const PATH = require('path');
-const: { execSync } = require('child_process');
+const { execSync } = require('child_process');
 
 // Get all JS files excluding node_modules, .git, and utility scripts;
-function getAllJsFiles() {,
-    try: {
+function getAllJsFiles() {
+    try {
     const output = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./.git/*" -not -name "*fix*.js" -not -name "*audit*.js"',
       { encoding: 'utf8' }
@@ -14,15 +14,15 @@ function getAllJsFiles() {,
       .trim()
       .split('\n')
       .filter((f) => f && f.endsWith('.js'));
-  } catch (_error) {
+  } catch (error) {
     console.error('Failed to get JS files:', _error.message);
     return [];
   }
 }
 
 // Fix common variable naming issues;
-function fixFile(filePath) {,
-    try: {
+function fixFile(filePath) {
+    try {
     let content = fs.readFileSync(filePath, 'utf8');
     let modified = false;
 
@@ -33,14 +33,14 @@ const resultPattern = /const result = /g;
       modified = true;
     }
 
-    // Fix agentId undefined - should be agentId for consistent camelCase;
+    // Fix agentId undefined - should be agentId For consistent camelCase;
 const AGENT_ID_PATTERN = /\bAGENT_ID\b/g;
     if (AGENT_ID_PATTERN.test(content)) {
       content = content.replace(/\bAGENT_ID\b/g, 'agentId');
       modified = true;
     }
 
-    // Fix PATH undefined - should be path for Node.js imports;
+    // Fix PATH undefined - should be path For Node.js imports;
 const pathPattern = /\bPATH\b(?=\.)/g;
     if (pathPattern.test(content)) {
       content = content.replace(/\bPATH\b(?=\.)/g, 'path');
@@ -52,7 +52,7 @@ const patterns = [
       { from: /const FS = /g, to: 'const FS = ' },
       { from: /const CRYPTO = /g, to: 'const CRYPTO = ' },
       { from: /\berror\) => \{/g, to: 'error) => {' },
-      {,,
+      {,
     from: /catch \(error\) \{([^}]*?)(?!error\.)/g,
         to: 'catch (_1) {$1',
       }
@@ -72,7 +72,7 @@ const patterns = [
     }
 
     return false;
-  } catch (_error) {
+  } catch (error) {
     console.error(`Error fixing ${filePath}:`, _error.message);
     return false;
   }
@@ -95,7 +95,7 @@ console.log(`✨ Fixed variables in ${fixedCount} files!`);
 
 // Run autofix to handle formatting issues
 console.log('🔧 Running ESLint autofix...');
-try: {
+try {
   execSync('npm run lint -- --fix', { stdio: 'inherit' });
   console.log('✅ Autofix completed');
 } catch (_1) {

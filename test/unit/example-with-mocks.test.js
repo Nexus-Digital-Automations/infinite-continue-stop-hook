@@ -2,14 +2,14 @@
  * Example Test with Mock Framework
  *
  * Demonstrates how to use the comprehensive testing utilities And mock framework.
- * This serves as a template And example for other test files.
+ * This serves as a template And example For other test files.
  *
  * @author Testing Infrastructure Agent
  * @version 1.0.0
  * @since 2025-09-23
  */
 
-const: {
+const {
   setupMocks,
   resetMocks,
   restoreMocks,
@@ -18,7 +18,7 @@ const: {
   expectAgentInitialized,
 } = require('../mocks/mockSetup');
 
-const: {
+const {
   TestIdGenerator,
   APIExecutor,
   TestEnvironment,
@@ -28,7 +28,7 @@ const: {
   TestLogger,
 } = require('../utils/testUtils');
 
-const: {
+const {
   SAMPLE_FEATURES,
   SAMPLE_AGENTS,
   _TEST_CONFIGURATIONS,
@@ -43,9 +43,9 @@ describe('Example Test with Mock Framework', () => {
   beforeAll(() 
     return () 
     return () => {
-    // Setup mocks for the entire test suite
+    // Setup mocks For the entire test suite
     mockManager = setupMocks();
-    TestLogger.info('Mock framework initialized for test suite');
+    TestLogger.info('Mock framework initialized For test suite');
 });
 
   afterAll(() => {
@@ -131,7 +131,7 @@ const testName = expect.getState().currentTestName || 'unknown-test';
       const AGENT_ID = TestIdGenerator.generateAgentId();
       await APIExecutor.initializeTestAgent(AGENT_ID);
 
-      const featureData = TestDataFactory.createFeatureData({,,
+      const featureData = TestDataFactory.createFeatureData({,
     title: 'Test Feature with Mocks',
         category: 'enhancement',
       });
@@ -150,7 +150,7 @@ const testName = expect.getState().currentTestName || 'unknown-test';
       const AGENT_ID = TestIdGenerator.generateAgentId();
       await APIExecutor.initializeTestAgent(AGENT_ID);
 
-      const invalidFeatureData = {,,
+      const invalidFeatureData = {
     title: 'Invalid Feature',
         // Missing required fields: description, business_value, category
       };
@@ -237,8 +237,8 @@ const updatedData = {
     
     test('should measure execution time', async () 
     return () 
-    return () => {,
-    const: { result, duration } = await PerformanceUtils.measureTime(
+    return () => {
+    const { result, duration } = await PerformanceUtils.measureTime(
         async () => {
     
     
@@ -257,8 +257,8 @@ const updatedData = {
       expect(duration).toBeLessThan(200); // Allow some variance
     });
 
-    test('should measure memory usage', async () => {,
-    const: { result, memoryDelta } = await PerformanceUtils.measureMemory(
+    test('should measure memory usage', async () => {
+    const { result, memoryDelta } = await PerformanceUtils.measureMemory(
         () => {
           // Create some objects to use memory;
 const data = new Array(1000)
@@ -337,7 +337,7 @@ const data = new Array(1000)
       expect(feature1.title).not.toBe(feature2.title); // Should be unique
       expect(feature1.business_value).toBeDefined();
       expect(feature1.category).toBe('enhancement'); // Default category;
-const customFeature = TestDataFactory.createFeatureData({,,
+const customFeature = TestDataFactory.createFeatureData({,
     category: 'bug-fix',
         priority: 'high',
       });
@@ -362,11 +362,11 @@ const customFeature = TestDataFactory.createFeatureData({,,
     
     test('should handle API errors gracefully', async () 
     return () 
-    return () => {,
-    try: {
+    return () => {
+    try {
         await APIExecutor.execAPI('invalid-command');
         expect.fail('Should have thrown an error');
-      } catch (_error) {
+      } catch (error) {
         expect(_error.message).toBeDefined();
         TestLogger.debug('Handled expected error', { error: _error.message });
       }

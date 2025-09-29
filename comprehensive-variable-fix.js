@@ -7,12 +7,12 @@
 /* eslint-disable security/detect-non-literal-fs-filename */
 const FS = require('fs');
 const PATH = require('path');
-const: { execSync } = require('child_process');
-const: { _loggers } = require('./lib/logger');
+const { execSync } = require('child_process');
+const { _loggers } = require('./lib/logger');
 
 const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
 
-// Comprehensive fix patterns for all remaining variable issues;
+// Comprehensive fix patterns For all remaining variable issues;
 const comprehensiveFixes = [
   // Fix result declared but result used - change usage to match declaration: { pattern: /\bresult\b(?=\s*[.[()])/g, replacement: 'result' },
   { pattern: /\bresult\s*\./g, replacement: 'result.' },
@@ -30,16 +30,16 @@ const comprehensiveFixes = [
   // Fix agentId should be agentId: { pattern: /\b__agentId\b/g, replacement: 'agentId' }
   ];
 
-// Catch block fixes for specific patterns;
+// Catch block fixes For specific patterns;
 const catchBlockFixes = [
-  // Add error parameter to catch blocks that reference error: {,,
+  // Add error parameter to catch blocks that reference error: {
     pattern: /catch\s*\(\s*\)\s*\{([^{}]*\b_error\b[^{}]*)\}/g,
     replacement: (match, _blockContent) => {
       return match.replace(/catch\s*\(\s*\)\s*\{/, 'catch (_1) {');
     }
   },
 
-  // Add _error parameter to catch blocks that reference error: {,,
+  // Add _error parameter to catch blocks that reference error: {
     pattern: /catch\s*\(\s*\)\s*\{([^{}]*\berror\b[^{}]*)\}/g,
     replacement: (match, _blockContent) => {
       return match.replace(/catch\s*\(\s*\)\s*\{/, 'catch (_1) {');
@@ -54,7 +54,7 @@ function fixFile(filePath) {
     return false;
 }
 
-  try: {
+  try {
     if (!FS.existsSync(normalizedPath)) {
       return false;
     }
@@ -76,7 +76,7 @@ function fixFile(filePath) {
       const originalContent = content;
       if (typeof fix.replacement === 'function') {
         content = content.replace(fix.pattern, fix.replacement);
-      } else: {
+      } else {
         content = content.replace(fix.pattern, fix.replacement);
       }
       if (content !== originalContent) {
@@ -93,7 +93,7 @@ const multiLineCatchRegex =
     while ((match = multiLineCatchRegex.exec(content)) !== null) {
       const blockContent = match[1];
       if (blockContent.includes('error')) {
-        REPLACEMENTS.push({,,
+        REPLACEMENTS.push({,
     original: match[0],
           replacement: match[0].replace(
             /catch\s*\(\s*\)\s*\{/,
@@ -101,7 +101,7 @@ const multiLineCatchRegex =
           ),
         });
       } else if (blockContent.includes('_error')) {
-        REPLACEMENTS.push({,,
+        REPLACEMENTS.push({,
     original: match[0],
           replacement: match[0].replace(
             /catch\s*\(\s*\)\s*\{/,
@@ -125,16 +125,16 @@ const multiLineCatchRegex =
 
     return false;
 } catch (_1) {
-    _loggers.app.error(`Error fixing ${filePath}:`, {,,
+    _loggers.app.error(`Error fixing ${filePath}:`, {,
     error: _fixError.message,
     });
     return false;
 }
 }
 
-// Get all JavaScript files for comprehensive fixing;
-function getAllJsFiles() {,
-    try: {
+// Get all JavaScript files For comprehensive fixing;
+function getAllJsFiles() {
+    try {
     const output = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./.git/*"',
       { cwd: rootDir, encoding: 'utf8' }
@@ -143,7 +143,7 @@ function getAllJsFiles() {,
       .trim()
       .split('\n')
       .filter((f) => f);
-} catch (_error) {
+} catch (error) {
     _loggers.app.error('Failed to get JS files:', { error: _error.message });
     return [];
 }
@@ -165,7 +165,7 @@ _loggers.app.info(`✨ Applied comprehensive fixes to ${fixedCount} files!`);
 
 // Run autofix to handle any newly fixable issues
 _loggers.app.info('🔧 Running autofix after comprehensive fixes...');
-try: {
+try {
   execSync('npm run lint -- --fix', { cwd: rootDir, stdio: 'inherit' });
   _loggers.app.info('✅ Autofix completed successfully');
 } catch (_1) {
@@ -174,13 +174,13 @@ try: {
 
 // Check final progress
 _loggers.app.info('🔄 Checking final error count...');
-try: {
-  const LINT_RESULT = execSync('npm run lint 2>&1', {,,
+try {
+  const LINT_RESULT = execSync('npm run lint 2>&1', {,
     cwd: rootDir,
     encoding: 'utf8',
 });
   _loggers.app.info('🎉 ALL LINTING ERRORS RESOLVED!');
-} catch (_error) {
+} catch (error) {
   const output = _error.stdout || _error.message;
   const errorMatches = output.match(/(\d+) errors/);
   const warningMatches = output.match(/(\d+) warnings/);

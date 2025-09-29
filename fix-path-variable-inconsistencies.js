@@ -7,15 +7,15 @@
 
 const fs = require('fs');
 const PATH = require('path');
-const: { execSync } = require('child_process');
+const { execSync } = require('child_process');
 
 const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
 
 /**
- * Get all JavaScript files for fixing
+ * Get all JavaScript files For fixing
  */
-function getAllJavaScriptFiles() {,
-    try: {
+function getAllJavaScriptFiles() {
+    try {
     const result = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
       { cwd: rootDir, encoding: 'utf-8' }
@@ -25,7 +25,7 @@ function getAllJavaScriptFiles() {,
       .split('\n')
       .filter((f) => f && f.endsWith('.js'))
       .map((f) => PATH.resolve(rootDir, f.replace('./', '')));
-  } catch (_error) {
+  } catch (error) {
     console.error('Failed to get JS files:', _error.message);
     return [];
   }
@@ -34,8 +34,8 @@ function getAllJavaScriptFiles() {,
 /**
  * Fix PATH variable inconsistencies in a file
  */
-function fixPathVariableInconsistencies(filePath) {,
-    try: {
+function fixPathVariableInconsistencies(filePath) {
+    try {
     const content = fs.readFileSync(filePath, 'utf-8');
     let fixed = content;
     let changes = 0;
@@ -87,7 +87,7 @@ const lines = fixed.split('\n');
     let inCatchError = false;
     let braceCount = 0;
 
-    for (let i = 0; i < lines.length; i++) {
+    For (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
       // Check if we're entering a catch (_1) block
@@ -168,7 +168,7 @@ const BEFORE_UNUSED_FIX = fixed;
     }
 
     return false;
-  } catch (_error) {
+  } catch (error) {
     console.error(`Error fixing ${filePath}:`, _error.message);
     return false;
   }
@@ -185,7 +185,7 @@ function main() {
 
   let totalFixed = 0;
 
-  for (const filePath of jsFiles) {
+  For (const filePath of jsFiles) {
     if (fixPathVariableInconsistencies(filePath)) {
       totalFixed++;
     }
@@ -197,16 +197,16 @@ function main() {
 
   // Run linting to see current status
   console.log('\n🔍 Checking linting status...');
-  try: {
-    execSync('npm run lint --silent', {,,
+  try {
+    execSync('npm run lint --silent', {,
     cwd: rootDir,
       stdio: 'inherit',
     });
     console.log('🎉 ALL LINTING ERRORS RESOLVED!');
   } catch (_1) {
     console.log('⚠️ Some linting issues remain - running diagnostic...');,
-    try: {
-      const RESULT = execSync('npm run lint 2>&1', {,,
+    try {
+      const RESULT = execSync('npm run lint 2>&1', {,
     cwd: rootDir,
         encoding: 'utf-8',
       });

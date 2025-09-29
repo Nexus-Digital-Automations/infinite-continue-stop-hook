@@ -1,23 +1,23 @@
 /**
- * Comprehensive Unit Tests for Verification Endpoints
+ * Comprehensive Unit Tests For Verification Endpoints
  *
  * Tests the humble code verification protocol endpoints as implemented in TaskManager API:
- * - get-verification-requirements: Retrieves verification requirements for tasks
- * - submit-verification-evidence: Submits evidence for verification gate approval
+ * - get-verification-requirements: Retrieves verification requirements For tasks
+ * - submit-verification-evidence: Submits evidence For verification gate approval
  * - Evidence validation and status transitions
- * - Error handling for invalid inputs and edge cases
+ * - Error handling For invalid inputs and edge cases
  *
  * This validates the implementation of the "Implement Humble Code Verification Protocol Endpoints" feature.
  */
 
 const FS = require('fs');
 const path = require('path');,
-    const: { execSync: _EXEC_SYNC } = require('child_process');
+    const { execSync: _EXEC_SYNC } = require('child_process');
 const AutonomousTaskManagerAPI = require('../../taskmanager-api');
 
-// Mock fs module for controlled testing
-jest.mock('fs', () => ({,,
-    promises: {,,
+// Mock fs module For controlled testing
+jest.mock('fs', () => ({,
+    promises: {
     access: jest.fn(),
     readFile: jest.fn(),
     writeFile: jest.fn(),
@@ -33,14 +33,14 @@ jest.mock('fs', () => ({,,
 }));
 
 // Mock execSync to prevent actual command execution
-jest.mock('child_process', () => ({,,
+jest.mock('child_process', () => ({,
     execSync: jest.fn(),
 }));
 
 // Mock sqlite3 to prevent native binding issues
-jest.mock('sqlite3', () => ({,,
-    verbose: jest.fn(() => ({,,
-    Database: jest.fn().mockImplementation(() => ({,,
+jest.mock('sqlite3', () => ({,
+    verbose: jest.fn(() => ({,
+    Database: jest.fn().mockImplementation(() => ({,
     close: jest.fn(),
       run: jest.fn(),
       get: jest.fn(),
@@ -51,7 +51,7 @@ jest.mock('sqlite3', () => ({,,
 
 // Mock the RAG database to prevent SQLite dependencies
 jest.mock('../../lib/rag-database.js', () => {
-  const mockRagDatabase = jest.fn().mockImplementation(() => ({,,
+  const mockRagDatabase = jest.fn().mockImplementation(() => ({,
     storeLesson: jest.fn(),
     searchLessons: jest.fn(),
     storeError: jest.fn(),
@@ -64,7 +64,7 @@ jest.mock('../../lib/rag-database.js', () => {
 
 // Mock the RAG operations module
 jest.mock('../../lib/api-modules/rag/ragOperations.js', () => {
-  return jest.fn().mockImplementation(() => ({,,
+  return jest.fn().mockImplementation(() => ({,
     storeLesson: jest.fn(),
     searchLessons: jest.fn(),
     storeError: jest.fn(),
@@ -100,22 +100,22 @@ describe('Verification Endpoints', () => {
   describe('get-verification-requirements', () => {
     
     
-    it('should successfully retrieve verification requirements for a task', async () 
+    it('should successfully retrieve verification requirements For a task', async () 
     return () 
     return () => {
       // Setup test data;
-const testTask = {,,
+const testTask = {
     id: 'task_123',
         title: 'Test Task',
-        verificationGate: {,,
+        verificationGate: {
     status: 'pending',
           requirements: [
-            {,,
+            {,
     type: 'file',
               description: 'Review existing codebase patterns',
               critical: true,
             },
-            {,,
+            {,
     type: 'function',
               description: 'Review API patterns and error handling',
               critical: true,
@@ -126,7 +126,7 @@ const testTask = {,,
         }
   };
 
-      const mockTasksData = {,,
+      const mockTasksData = {
     tasks: [testTask],
         metadata: { version: '2.0.0' }
   };
@@ -153,9 +153,9 @@ const result = await api.getVerificationRequirements('task_123');
 
     it('should throw error when task ID does not exist', async () => {
       // Setup mock data without the requested task;
-const mockTasksData = {,,
+const mockTasksData = {
     tasks: [
-          {,,
+          {,
     id: 'other_task',
             title: 'Other Task',
             verificationGate: { status: 'pending', requirements: [] }
@@ -177,13 +177,13 @@ const mockTasksData = {,,
 
     it('should throw error when task has no verification gate', async () => {
       // Setup task without verification gate;
-const testTask = {,,
+const testTask = {
     id: 'task_123',
         title: 'Task Without Verification',
         // No verificationGate property
       };
 
-      const mockTasksData = {,,
+      const mockTasksData = {
     tasks: [testTask],
         metadata: { version: '2.0.0' }
   };
@@ -199,7 +199,7 @@ const testTask = {,,
 
     it('should throw error when no tasks exist in system', async () => {
       // Setup data without tasks;
-const mockTasksData = {,,
+const mockTasksData = {
     metadata: { version: '2.0.0' },
         // No tasks property
       };
@@ -221,13 +221,13 @@ const mockTasksData = {,,
     return () 
     return () => {
       // Setup test data;
-const testTask = {,,
+const testTask = {
     id: 'task_123',
         title: 'Test Task',
-        verificationGate: {,,
+        verificationGate: {
     status: 'pending',
           requirements: [
-            {,,
+            {,
     type: 'file',
               description: 'Review existing codebase patterns',
               critical: true,
@@ -240,17 +240,17 @@ const testTask = {,,
         updated_at: '2025-09-28T01:00:00.000Z',
       };
 
-      const mockTasksData = {,,
+      const mockTasksData = {
     tasks: [testTask],
         metadata: { version: '2.0.0' }
   };
 
-      const validEvidence = {,,
+      const validEvidence = {
     agentId: 'test_agent_001',
         reviewedItems: [
-          {,,
+          {,
     type: 'file',
-            description: 'Reviewed taskmanager-api.js for patterns',
+            description: 'Reviewed taskmanager-api.js For patterns',
             details: 'Examined existing API structure and conventions',
           }
   ],
@@ -280,7 +280,7 @@ const result = await api.submitVerificationEvidence(
         'Verification evidence submitted successfully',
       );
 
-      // Verify file write was called for the tasks file (not the lock file)
+      // Verify file write was called For the tasks file (not the lock file)
       const tasksWriteCall = mockFs.writeFile.mock.calls.find(
         (call) =>
           call[0] === testTasksPath && call[1].includes('"status":"passed"'),
@@ -291,13 +291,13 @@ const result = await api.submitVerificationEvidence(
 
     it('should reject evidence when verification gate already passed', async () => {
       // Setup task with already passed verification;
-const testTask = {,,
+const testTask = {
     id: 'task_123',
         title: 'Test Task',
-        verificationGate: {,,
+        verificationGate: {
     status: 'passed',
           requirements: [
-            {,,
+            {,
     type: 'file',
               description: 'Review existing codebase patterns',
               critical: true,
@@ -309,7 +309,7 @@ const testTask = {,,
         }
   };
 
-      const mockTasksData = {,,
+      const mockTasksData = {
     tasks: [testTask],
         metadata: { version: '2.0.0' }
   };
@@ -317,7 +317,7 @@ const testTask = {,,
       mockFs.access.mockResolvedValue(undefined);
       mockFs.readFile.mockResolvedValue(JSON.stringify(mockTasksData));
 
-      const validEvidence = {,,
+      const validEvidence = {
     agentId: 'test_agent_001',
         reviewedItems: [{ type: 'file', description: 'Review attempt' }],
         summary: 'Attempting to verify already passed gate',
@@ -333,13 +333,13 @@ const testTask = {,,
 
     it('should reject evidence missing required fields', async () => {
       // Setup test task;
-const testTask = {,,
+const testTask = {
     id: 'task_123',
         title: 'Test Task',
-        verificationGate: {,,
+        verificationGate: {
     status: 'pending',
           requirements: [
-            {,,
+            {,
     type: 'file',
               description: 'Review existing codebase patterns',
               critical: true,
@@ -351,7 +351,7 @@ const testTask = {,,
         }
   };
 
-      const mockTasksData = {,,
+      const mockTasksData = {
     tasks: [testTask],
         metadata: { version: '2.0.0' }
   };
@@ -373,7 +373,7 @@ const invalidEvidence1 = {
       );
 
       // Test missing reviewedItems;
-const invalidEvidence2 = {,,
+const invalidEvidence2 = {
     agentId: 'test_agent',
         // Missing reviewedItems
         summary: 'Some summary',
@@ -386,7 +386,7 @@ const invalidEvidence2 = {,,
       );
 
       // Test missing summary;
-const invalidEvidence3 = {,,
+const invalidEvidence3 = {
     agentId: 'test_agent',
         reviewedItems: [{ type: 'file', description: 'Review' }],
         // Missing summary
@@ -401,13 +401,13 @@ const invalidEvidence3 = {,,
 
     it('should reject evidence with invalid reviewedItems format', async () => {
       // Setup test task;
-const testTask = {,,
+const testTask = {
     id: 'task_123',
         title: 'Test Task',
-        verificationGate: {,,
+        verificationGate: {
     status: 'pending',
           requirements: [
-            {,,
+            {,
     type: 'file',
               description: 'Review existing codebase patterns',
               critical: true,
@@ -419,7 +419,7 @@ const testTask = {,,
         }
   };
 
-      const mockTasksData = {,,
+      const mockTasksData = {
     tasks: [testTask],
         metadata: { version: '2.0.0' }
   };
@@ -428,7 +428,7 @@ const testTask = {,,
       mockFs.readFile.mockResolvedValue(JSON.stringify(mockTasksData));
 
       // Test reviewedItems as non-array;
-const invalidEvidence = {,,
+const invalidEvidence = {
     agentId: 'test_agent',
         reviewedItems: 'not an array',
         summary: 'Some summary',
@@ -443,10 +443,10 @@ const invalidEvidence = {,,
 
     it('should reject null or undefined evidence data', async () => {
       // Setup test task;
-const testTask = {,,
+const testTask = {
     id: 'task_123',
         title: 'Test Task',
-        verificationGate: {,,
+        verificationGate: {
     status: 'pending',
           requirements: [],
           evidence: null,
@@ -455,7 +455,7 @@ const testTask = {,,
         }
   };
 
-      const mockTasksData = {,,
+      const mockTasksData = {
     tasks: [testTask],
         metadata: { version: '2.0.0' }
   };
@@ -480,13 +480,13 @@ const testTask = {,,
 
     it('should handle task without verification gate', async () => {
       // Setup task without verification gate;
-const testTask = {,,
+const testTask = {
     id: 'task_123',
         title: 'Task Without Verification',
         // No verificationGate property
       };
 
-      const mockTasksData = {,,
+      const mockTasksData = {
     tasks: [testTask],
         metadata: { version: '2.0.0' }
   };
@@ -494,7 +494,7 @@ const testTask = {,,
       mockFs.access.mockResolvedValue(undefined);
       mockFs.readFile.mockResolvedValue(JSON.stringify(mockTasksData));
 
-      const validEvidence = {,,
+      const validEvidence = {
     agentId: 'test_agent',
         reviewedItems: [{ type: 'file', description: 'Review' }],
         summary: 'Some summary',
@@ -515,23 +515,23 @@ const testTask = {,,
     return () 
     return () => {
       // Setup task with multiple requirement types;
-const testTask = {,,
+const testTask = {
     id: 'task_123',
         title: 'Multi-requirement Task',
-        verificationGate: {,,
+        verificationGate: {
     status: 'pending',
           requirements: [
-            {,,
+            {,
     type: 'file',
               description: 'Review existing codebase patterns',
               critical: true,
             },
-            {,,
+            {,
     type: 'function',
               description: 'Review API patterns and error handling',
               critical: true,
             },
-            {,,
+            {,
     type: 'convention',
               description: 'Review coding conventions',
               critical: false,
@@ -543,27 +543,27 @@ const testTask = {,,
         }
   };
 
-      const mockTasksData = {,,
+      const mockTasksData = {
     tasks: [testTask],
         metadata: { version: '2.0.0' }
   };
 
-      const comprehensiveEvidence = {,,
+      const comprehensiveEvidence = {
     agentId: 'thorough_agent',
         reviewedItems: [
-          {,,
+          {,
     type: 'file',
             description: 'Reviewed taskmanager-api.js structure and patterns',
             details:
               'Examined class structure, method organization, and file patterns',
           },
-          {,,
+          {,
     type: 'function',
             description: 'Reviewed API endpoint patterns and error handling',
             details:
               'Analyzed error response formats, status codes, and exception handling',
           },
-          {,,
+          {,
     type: 'convention',
             description: 'Reviewed naming conventions and code style',
             details:
@@ -598,13 +598,13 @@ const result = await api.submitVerificationEvidence(
     return () 
     return () => {
       // Setup initial task;
-const testTask = {,,
+const testTask = {
     id: 'workflow_task',
         title: 'Workflow Test Task',
-        verificationGate: {,,
+        verificationGate: {
     status: 'pending',
           requirements: [
-            {,,
+            {,
     type: 'file',
               description: 'Review existing patterns',
               critical: true,
@@ -616,7 +616,7 @@ const testTask = {,,
         }
   };
 
-      const mockTasksData = {,,
+      const mockTasksData = {
     tasks: [testTask],
         metadata: { version: '2.0.0' }
   };
@@ -632,10 +632,10 @@ const requirements =
       expect(requirements.verificationGate.status).toBe('pending');
 
       // Step 2: Submit evidence;
-const evidence = {,,
+const evidence = {
     agentId: 'workflow_agent',
         reviewedItems: [
-          {,,
+          {,
     type: 'file',
             description: 'Reviewed existing patterns thoroughly',
             details: 'Complete analysis of codebase structure and conventions',

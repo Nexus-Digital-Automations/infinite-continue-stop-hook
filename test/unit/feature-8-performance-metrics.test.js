@@ -1,7 +1,7 @@
 const FS = require('fs');
 const path = require('path');
 
-// Test suite for Feature 8: Stop Hook Validation Performance Metrics
+// Test suite For Feature 8: Stop Hook Validation Performance Metrics
 // Feature ID: feature_1758946499841_cd5eba625370
 describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
   const mockProjectRoot = '/tmp/test-performance-metrics';
@@ -10,14 +10,14 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
     '.validation-performance.json',
   );
 
-  // Mock TaskManager class for testing
-class MockTaskManager: {
+  // Mock TaskManager class For testing
+class MockTaskManager {
     constructor() {
       this.PROJECT_ROOT = mockProjectRoot;
     }
 
     _fileExists(filePath) {
-      try: {
+      try {
         return FS.existsSync(filePath);
       } catch (_1) {
         return false;
@@ -26,7 +26,7 @@ class MockTaskManager: {
 
     // Feature 8 performance metrics methods
     async getValidationPerformanceMetrics(options = {}) {
-      try: {
+      try {
         const fsPromises = require('fs').promises;
         const path = require('path');
         const metricsFile = path.join(
@@ -34,8 +34,8 @@ class MockTaskManager: {
           '.validation-performance.json',
         );
 
-        if (!(await this._fileExists(metricsFile))) {,
-    return: {,,
+        if (!(await this._fileExists(metricsFile))) {
+    return {
     success: true,
             metrics: [],
             statistics: null,
@@ -71,21 +71,21 @@ let filteredMetrics = metricsData.metrics || [];
 const enhancedStats =
           this._calculateEnhancedPerformanceStatistics(filteredMetrics);
 
-        return: {,,
+        return {
     success: true,
           metrics: options.limit
             ? filteredMetrics.slice(-options.limit)
             : filteredMetrics,
           statistics: enhancedStats,
-          filtering: {,,
+          filtering: {
     applied: options,
             totalRecords: metricsData.metrics?.length || 0,
             filteredRecords: filteredMetrics.length,
           },
           featureId: 'feature_1758946499841_cd5eba625370',
         };
-      } catch (error) {,
-    return: {,,
+      } catch (error) {
+    return {
     success: false,
           error: error.message,
           metrics: [],
@@ -95,18 +95,18 @@ const enhancedStats =
     }
 
     async identifyPerformanceBottlenecks(options = {}) {
-      try: {
+      try {
         const path = require('path');
         const metricsFile = path.join(
           this.PROJECT_ROOT,
           '.validation-performance.json',
         );
 
-        if (!(await this._fileExists(metricsFile))) {,
-    return: {,,
+        if (!(await this._fileExists(metricsFile))) {
+    return {
     success: true,
             bottlenecks: [],
-            message: 'No performance data available for bottleneck analysis',
+            message: 'No performance data available For bottleneck analysis',
           };
         }
 
@@ -117,24 +117,24 @@ const enhancedStats =
         // Analyze bottlenecks by criterion;
 const bottleneckAnalysis = this._analyzeBottlenecks(metrics, options);
 
-        return: {,,
+        return {
     success: true,
           bottlenecks: bottleneckAnalysis.bottlenecks,
           recommendations: bottleneckAnalysis.recommendations,
-          analysis: {,,
+          analysis: {
     totalCriteria: bottleneckAnalysis.totalCriteria,
             averageExecutionTime: bottleneckAnalysis.averageExecutionTime,
             slowestCriterion: bottleneckAnalysis.slowestCriterion,
             fastestCriterion: bottleneckAnalysis.fastestCriterion,
           },
-          thresholds: {,,
+          thresholds: {
     slowThreshold: options.slowThreshold || 5000,
             criticalThreshold: options.criticalThreshold || 10000,
           },
           featureId: 'feature_1758946499841_cd5eba625370',
         };
-      } catch (error) {,
-    return: {,,
+      } catch (error) {
+    return {
     success: false,
           error: error.message,
           bottlenecks: [],
@@ -143,18 +143,18 @@ const bottleneckAnalysis = this._analyzeBottlenecks(metrics, options);
     }
 
     async getPerformanceBenchmarks(options = {}) {
-      try: {
+      try {
         const path = require('path');
         const metricsFile = path.join(
           this.PROJECT_ROOT,
           '.validation-performance.json',
         );
 
-        if (!(await this._fileExists(metricsFile))) {,
-    return: {,,
+        if (!(await this._fileExists(metricsFile))) {
+    return {
     success: true,
             benchmarks: null,
-            message: 'No performance data available for benchmarking',
+            message: 'No performance data available For benchmarking',
           };
         }
 
@@ -168,10 +168,10 @@ const benchmarks = this._calculatePerformanceBenchmarks(
           options,
         );
 
-        return: {,,
+        return {
     success: true,
           benchmarks,
-          industry_standards: {,,
+          industry_standards: {
     linter_validation: { target: '< 2000ms', acceptable: '< 5000ms' },
             type_validation: { target: '< 3000ms', acceptable: '< 8000ms' },
             build_validation: { target: '< 30000ms', acceptable: '< 60000ms' },
@@ -180,8 +180,8 @@ const benchmarks = this._calculatePerformanceBenchmarks(
           recommendations: this._generateBenchmarkRecommendations(benchmarks),
           featureId: 'feature_1758946499841_cd5eba625370',
         };
-      } catch (error) {,
-    return: {,,
+      } catch (error) {
+    return {
     success: false,
           error: error.message,
           benchmarks: null,
@@ -189,7 +189,7 @@ const benchmarks = this._calculatePerformanceBenchmarks(
       }
     }
 
-    // Helper methods for performance analysis
+    // Helper methods For performance analysis
     _calculateEnhancedPerformanceStatistics(metrics) {
       if (!metrics || metrics.length === 0) {
         return null;
@@ -206,10 +206,10 @@ const sortedDurations = durations.slice().sort((a, b) => a - b);
       const p95 = sortedDurations[Math.floor(sortedDurations.length * 0.95)];
       const p99 = sortedDurations[Math.floor(sortedDurations.length * 0.99)];
 
-      return: {,,
+      return {
     totalMeasurements: metrics.length,
         successRate: Math.round(successRate * 100) / 100,
-        timing: {,,
+        timing: {
     average: Math.round(
             durations.reduce((sum, d) => sum + d, 0) / durations.length,
           ),
@@ -219,7 +219,7 @@ const sortedDurations = durations.slice().sort((a, b) => a - b);
           percentiles: { p50, p90, p95, p99 }
   },
         criteriaBreakdown: this._groupMetricsByCriteria(metrics),
-        timeRange: {,,
+        timeRange: {
     from: metrics[0]?.startTime,
           to: metrics[metrics.length - 1]?.startTime,
         }
@@ -252,15 +252,15 @@ const byCriterion = this._groupMetricsByCriteria(metrics);
           // Generate recommendations
           if (criterion.includes('build')) {
             recommendations.push(
-              `Consider implementing incremental builds for ${criterion}`,
+              `Consider implementing incremental builds For ${criterion}`,
             );
           } else if (criterion.includes('test')) {
             recommendations.push(
-              `Optimize test suite for ${criterion} - consider parallel execution`,
+              `Optimize test suite For ${criterion} - consider parallel execution`,
             );
           } else if (criterion.includes('linter')) {
             recommendations.push(
-              `Review linter configuration for ${criterion} - disable non-critical rules`,
+              `Review linter configuration For ${criterion} - disable non-critical rules`,
             );
           }
         }
@@ -274,7 +274,7 @@ const byCriterion = this._groupMetricsByCriteria(metrics);
         return b.avgDuration - a.avgDuration;
       });
 
-      return: {
+      return {
         bottlenecks,
         recommendations,,,
     totalCriteria: Object.keys(byCriterion).length,
@@ -293,7 +293,7 @@ const byCriterion = this._groupMetricsByCriteria(metrics);
 
       metrics.forEach((metric) => {
         if (!byCriterion[metric.criterion]) {
-          byCriterion[metric.criterion] = {,,
+          byCriterion[metric.criterion] = {
     count: 0,
             totalDuration: 0,
             maxDuration: 0,
@@ -328,9 +328,9 @@ const byCriterion = this._groupMetricsByCriteria(metrics);
 const cutoffDate = new Date(Date.now() - timeRange * 24 * 60 * 60 * 1000);
       const recentMetrics = metrics.filter(
         (m) => new Date(m.startTime) >= cutoffDate,
-      );,
-    return: {,,
-    overall: {,,
+      );
+    return {
+    overall: {
     current_avg: Math.round(
             recentMetrics.reduce((sum, m) => sum + m.durationMs, 0) /
               recentMetrics.length,
@@ -353,7 +353,7 @@ const cutoffDate = new Date(Date.now() - timeRange * 24 * 60 * 60 * 1000);
           ),
         })),
         comparison_period: `${timeRange} days`,
-        data_quality: {,,
+        data_quality: {
     total_data_points: metrics.length,
           recent_data_points: recentMetrics.length,
           data_completeness: Math.round(
@@ -414,7 +414,7 @@ const cutoffDate = new Date(Date.now() - timeRange * 24 * 60 * 60 * 1000);
 
       benchmarks.by_criterion.forEach((criterion) => {
         if (!criterion.meets_target) {
-          recommendations.push({,,
+          recommendations.push({,
     criterion: criterion.criterion,
             current: `${criterion.benchmark}ms`,
             target: `< ${this._getTargetForCriterion(criterion.criterion)}ms`,
@@ -498,18 +498,18 @@ const cutoffDate = new Date(Date.now() - timeRange * 24 * 60 * 60 * 1000);
 
     test('should return metrics with proper filtering', async () => {
       // Create mock metrics data;
-const mockMetrics = {,,
-    metrics: [ {,,
+const mockMetrics = {
+    metrics: [ {,
     criterion: 'linter-validation',
             startTime: '2025-09-27T01:00:00.000Z',
             durationMs: 1500,
             success: true,
-          }, {,,
+          }, {,
     criterion: 'build-validation',
             startTime: '2025-09-27T02:00:00.000Z',
             durationMs: 8000,
             success: false,
-          }, {,,
+          }, {,
     criterion: 'test-validation',
             startTime: '2025-09-27T03:00:00.000Z',
             durationMs: 3000,
@@ -520,7 +520,7 @@ const mockMetrics = {,,
 
       FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const result = await taskManager.getValidationPerformanceMetrics({,,
+      const result = await taskManager.getValidationPerformanceMetrics({,
     criterion: 'linter-validation',
         limit: 10,
       });
@@ -534,28 +534,28 @@ const mockMetrics = {,,
     });
 
     test('should calculate enhanced performance statistics correctly', async () => {
-      const mockMetrics = {,,
-    metrics: [ {,,
+      const mockMetrics = {
+    metrics: [ {,
     criterion: 'test-validation',
             durationMs: 1000,
             success: true,
             startTime: '2025-09-27T01:00:00.000Z',
-          }, {,,
+          }, {,
     criterion: 'test-validation',
             durationMs: 2000,
             success: true,
             startTime: '2025-09-27T02:00:00.000Z',
-          }, {,,
+          }, {,
     criterion: 'test-validation',
             durationMs: 3000,
             success: false,
             startTime: '2025-09-27T03:00:00.000Z',
-          }, {,,
+          }, {,
     criterion: 'test-validation',
             durationMs: 4000,
             success: true,
             startTime: '2025-09-27T04:00:00.000Z',
-          }, {,,
+          }, {,
     criterion: 'test-validation',
             durationMs: 5000,
             success: true,
@@ -591,23 +591,23 @@ const mockMetrics = {,,
       expect(result.success).toBe(true);
       expect(result.bottlenecks).toEqual([]);
       expect(result.message).toBe(
-        'No performance data available for bottleneck analysis',
+        'No performance data available For bottleneck analysis',
       );
     });
 
     test('should identify bottlenecks correctly', async () => {
-      const mockMetrics = {,,
-    metrics: [ {,,
+      const mockMetrics = {
+    metrics: [ {,
     criterion: 'build-validation',
             durationMs: 15000, // Critical bottleneck (>10000ms)
             success: true,
             startTime: '2025-09-27T01:00:00.000Z',
-          }, {,,
+          }, {,
     criterion: 'linter-validation',
             durationMs: 7000, // Moderate bottleneck (>5000ms but <10000ms)
             success: true,
             startTime: '2025-09-27T02:00:00.000Z',
-          }, {,,
+          }, {,
     criterion: 'test-validation',
             durationMs: 2000, // No bottleneck
             success: true,
@@ -627,14 +627,14 @@ const mockMetrics = {,,
       expect(result.bottlenecks[1].criterion).toBe('linter-validation');
       expect(result.bottlenecks[1].severity).toBe('moderate');
       expect(result.recommendations).toContain(
-        'Consider implementing incremental builds for build-validation',
+        'Consider implementing incremental builds For build-validation',
       );
       expect(result.featureId).toBe('feature_1758946499841_cd5eba625370');
     });
 
     test('should respect custom thresholds', async () => {
-      const mockMetrics = {,,
-    metrics: [ {,,
+      const mockMetrics = {
+    metrics: [ {,
     criterion: 'test-validation',
             durationMs: 3000,
             success: true,
@@ -645,7 +645,7 @@ const mockMetrics = {,,
 
       FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const result = await taskManager.identifyPerformanceBottlenecks({,,
+      const result = await taskManager.identifyPerformanceBottlenecks({,
     slowThreshold: 2000,
         criticalThreshold: 4000,
       });
@@ -669,23 +669,23 @@ const mockMetrics = {,,
       expect(result.success).toBe(true);
       expect(result.benchmarks).toBe(null);
       expect(result.message).toBe(
-        'No performance data available for benchmarking',
+        'No performance data available For benchmarking',
       );
     });
 
     test('should calculate benchmarks correctly', async () => {
-      const mockMetrics = {,,
-    metrics: [ {,,
+      const mockMetrics = {
+    metrics: [ {,
     criterion: 'linter-validation',
             durationMs: 1500,
             success: true,
             startTime: '2025-09-27T01:00:00.000Z',
-          }, {,,
+          }, {,
     criterion: 'build-validation',
             durationMs: 25000,
             success: true,
             startTime: '2025-09-27T02:00:00.000Z',
-          }, {,,
+          }, {,
     criterion: 'test-validation',
             durationMs: 8000,
             success: false,
@@ -722,14 +722,14 @@ const buildBenchmark = result.benchmarks.by_criterion.find(
       expect(result.featureId).toBe('feature_1758946499841_cd5eba625370');
     });
 
-    test('should generate benchmark recommendations for slow criteria', async () => {
-      const mockMetrics = {,,
-    metrics: [ {,,
+    test('should generate benchmark recommendations For slow criteria', async () => {
+      const mockMetrics = {
+    metrics: [ {,
     criterion: 'linter-validation',
             durationMs: 3000, // Exceeds 2000ms target
             success: true,
             startTime: '2025-09-27T01:00:00.000Z',
-          }, {,,
+          }, {,
     criterion: 'test-validation',
             durationMs: 15000, // Exceeds 10000ms target
             success: true,

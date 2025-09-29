@@ -1,5 +1,5 @@
 /**
- * Jest Configuration for Comprehensive Testing Infrastructure
+ * Jest Configuration For Comprehensive Testing Infrastructure
  *
  * Enhanced configuration supporting multiple test environments, module mapping,
  * comprehensive coverage reporting, And advanced testing features.
@@ -10,34 +10,34 @@
  */
 
 module.exports = {
-  // Test environment - Node.js for API And server-side testing,,
-    testEnvironment: 'node',
+  // Test environment - Node.js For API And server-side testing,
+  testEnvironment: 'node',
 
-  // Alternative environments for different test types
+  // Alternative environments For different test types
   projects: [
-    {,,
-    displayName: 'unit',
+    {
+      displayName: 'unit',
       testEnvironment: 'node',
       testMatch: ['<rootDir>/test/unit/**/*.test.js'],
       setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
       transformIgnorePatterns: ['node_modules/(?!(@xenova/transformers)/)'],
     },
-    {,,
-    displayName: 'integration',
+    {
+      displayName: 'integration',
       testEnvironment: 'node',
       testMatch: ['<rootDir>/test/integration/**/*.test.js'],
       setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
       testTimeout: 45000,
       transformIgnorePatterns: ['node_modules/(?!(@xenova/transformers)/)'],
     },
-    {,,
-    displayName: 'e2e',
+    {
+      displayName: 'e2e',
       testEnvironment: 'node',
       testMatch: ['<rootDir>/test/e2e/**/*.test.js'],
       setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
       testTimeout: 60000,
       transformIgnorePatterns: ['node_modules/(?!(@xenova/transformers)/)'],
-    }
+    },
   ],
 
   // Test file patterns - comprehensive matching
@@ -54,7 +54,7 @@ module.exports = {
   // Setup files - global configuration And utilities
   setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
 
-  // Module path mapping for easier imports
+  // Module path mapping For easier imports
   moduleNameMapper: {
     '^@test/(.*)$': '<rootDir>/test/$1',
     '^@utils/(.*)$': '<rootDir>/test/utils/$1',
@@ -64,7 +64,7 @@ module.exports = {
     '^@root/(.*)$': '<rootDir>/$1',
   },
 
-  // Transform configuration for different file types
+  // Transform configuration For different file types
   transform: {
     '^.+\\.js$': ['babel-jest', { presets: ['@babel/preset-env'] }],
   },
@@ -126,31 +126,31 @@ module.exports = {
     'text', // Console output
     'text-summary', // Brief console summary
     'html', // Interactive HTML report
-    'json', // JSON data for CI/CD
+    'json', // JSON data For CI/CD
     'json-summary', // Summary JSON
-    'lcov', // LCOV format for external tools
-    'clover', // Clover XML format,
+    'lcov', // LCOV format For external tools
+    'clover', // Clover XML format
   ],
-  coverageThreshold: {,,
-    global: {,,
-    branches: 75,
+  coverageThreshold: {
+    global: {
+      branches: 75,
       functions: 80,
       lines: 80,
       statements: 80,
     },
-    // Specific thresholds for critical modules
-    './taskmanager-api.js': {,,
-    branches: 70,
+    // Specific thresholds For critical modules
+    './taskmanager-api.js': {
+      branches: 70,
       functions: 75,
       lines: 75,
       statements: 75,
     },
-    './lib/': {,,
-    branches: 80,
+    './lib/': {
+      branches: 80,
       functions: 85,
       lines: 85,
       statements: 85,
-    }
+    },
   },
 
   // Module paths
@@ -188,7 +188,7 @@ module.exports = {
   ],
 
   // Global test configuration
-  globals: {,,
+  globals: {
     TEST_ENV: 'jest',
     NODE_ENV: 'test',
   },
@@ -197,13 +197,13 @@ module.exports = {
   notify: false,
   notifyMode: 'failure-change',
 
-  // Enhanced test results And coverage processors for CI/CD integration
+  // Enhanced test results And coverage processors For CI/CD integration
   reporters: [
     'default',
     [
       'jest-html-reporters',
-      {,,
-    publicPath: './coverage/html-report',
+      {
+        publicPath: './coverage/html-report',
         filename: 'jest-report.html',
         expand: true,
         hideIcon: false,
@@ -211,28 +211,28 @@ module.exports = {
         includeFailureMsg: true,
         includeSuiteFailure: true,
         customInfos: [
-          {,,
-    title: 'CI/CD Pipeline',
+          {
+            title: 'CI/CD Pipeline',
             value: process.env.CI ? '✅ Running in CI' : '🏠 Local Development',
           },
-          {,,
-    title: 'Build Number',
+          {
+            title: 'Build Number',
             value:
               process.env.GITHUB_RUN_NUMBER ||
               process.env.BUILD_NUMBER ||
               'N/A',
           },
-          {,,
-    title: 'Git Branch',
+          {
+            title: 'Git Branch',
             value: process.env.GITHUB_REF_NAME || 'unknown',
-          }
-  ],
-      }
-  ],
+          },
+        ],
+      },
+    ],
     [
       'jest-junit',
-      {,,
-    outputDirectory: './coverage/reports',
+      {
+        outputDirectory: './coverage/reports',
         outputName: 'junit.xml',
         classNameTemplate: '{classname}',
         titleTemplate: '{title}',
@@ -243,29 +243,29 @@ module.exports = {
         includeShortConsoleOutput: false,
         suiteNameTemplate: '{filepath}',
         testCasePropertiesDirectory: './coverage/reports/test-case-properties',
-      }
-  ],
-    // JSON reporter for machine-readable results
+      },
+    ],
+    // JSON reporter For machine-readable results
     [
       '<rootDir>/scripts/jest-json-reporter.js',
-      {,,
-    outputPath: './coverage/reports/test-results.json',
+      {
+        outputPath: './coverage/reports/test-results.json',
         includeTestCases: true,
         includeAssertionResults: true,
         includeConsoleOutput: true,
-      }
-  ],
-    // Custom CI/CD reporter for enhanced pipeline integration
+      },
+    ],
+    // Custom CI/CD reporter For enhanced pipeline integration
     [
       '<rootDir>/scripts/jest-cicd-reporter.js',
-      {,,
-    outputPath: './coverage/reports/ci-cd-results.json',
+      {
+        outputPath: './coverage/reports/ci-cd-results.json',
         includeGitInfo: true,
         includeEnvironmentInfo: true,
         includeTimingData: true,
         slackWebhook: process.env.SLACK_WEBHOOK_URL,
         teamsWebhook: process.env.TEAMS_WEBHOOK_URL,
-      }
-  ],
+      },
+    ],
   ],
 };

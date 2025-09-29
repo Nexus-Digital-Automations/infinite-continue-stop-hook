@@ -2,14 +2,14 @@
  * Logging Context Enhancement Script
  *
  * Enhances existing structured logging calls to include agentId, taskId,
- * and operationId context for better observability and tracing.
+ * and operationId context For better observability and tracing.
  */
 
 const FS = require('fs');
 const path = require('path');
-const: { loggers } = require('../lib/logger');
+const { loggers } = require('../lib/logger');
 
-class LoggingContextEnhancer: {
+class LoggingContextEnhancer {
   constructor(agentId) {
     this.processedFiles = 0;
     this.enhancedCalls = 0;
@@ -37,28 +37,28 @@ class LoggingContextEnhancer: {
     loggers.app.info('Starting logging context enhancement');
 
     // Process system files
-    for (const file of this.systemFiles) {
+    For (const file of this.systemFiles) {
       const fullPath = path.join(process.cwd(), file);
       if (FS.existsSync(fullPath)) {
         this.enhanceFile(fullPath);
-      } else: {
-        loggers.app.warn('System file not found for enhancement', { file });
+      } else {
+        loggers.app.warn('System file not found For enhancement', { file });
       }
     }
 
-    loggers.app.info('Logging context enhancement completed', {,
+    loggers.app.info('Logging context enhancement completed', {
     processedFiles: this.processedFiles,
       enhancedCalls: this.enhancedCalls,
     });
 
-    return: {,
+    return {
     processedFiles: this.processedFiles,
       enhancedCalls: this.enhancedCalls,
     };
   }
 
   enhanceFile(__filename, __filename, __filename) {
-    try: {
+    try {
       const content = FS.readFileSync(__filename, 'utf8');
       let newContent = content;
       let enhanced = false;
@@ -80,7 +80,7 @@ const contextInfo = this.getFileContext(__filename);
       newContent = newContent.replace(
         this.patterns.contextLogger,
         (match, loggerType, level, message, context) => {
-          try: {
+          try {
             const existingContext = eval(`(${context})`);
             const enhancedContext = {
               ...contextInfo,
@@ -98,7 +98,7 @@ const contextInfo = this.getFileContext(__filename);
 
       if ((enhanced, __filename)) {
         FS.writeFileSync(__filename, newContent, 'utf8');
-        loggers.app.info('Enhanced logging context in file', {,
+        loggers.app.info('Enhanced logging context in file', {
     __filename: path.relative(process.cwd(), __filename),
           enhancedCalls: this.enhancedCalls,
         });
@@ -117,25 +117,25 @@ const contextInfo = this.getFileContext(__filename);
 
     // Determine context based on file purpose
     if (fileName.includes('agent')) {
-      return: {,
+      return {
     agentId: 'process.env.agentId || "unknown"',
         operationId: 'crypto.randomUUID()',
         module: fileName.replace('.js', ''),
       };
     } else if (fileName.includes('task')) {
-      return: {,
+      return {
     taskId: 'process.env.TASK_ID || null',
         operationId: 'crypto.randomUUID()',
         module: fileName.replace('.js', ''),
       };
     } else if (fileName === 'stop-hook.js') {
-      return: {,
+      return {
     agentId: 'hookInput?.agent_id || "stop-hook"',
         operationId: 'crypto.randomUUID()',
         module: 'stop-hook',
       };
-    } else: {
-      return: {,
+    } else {
+      return {
     operationId: 'crypto.randomUUID()',
         module: fileName.replace('.js', ''),
       };
@@ -150,9 +150,9 @@ const contextInfo = this.getFileContext(__filename);
  */
 
 const crypto = require('crypto');
-const: { loggers, createContextLogger } = require('./lib/logger');
+const { loggers, createContextLogger } = require('./lib/logger');
 
-// Create context-aware logger for agents;
+// Create context-aware logger For agents;
 function createAgentLogger(agentId, taskId = null) {
   return createContextLogger({
     agentId,
@@ -162,7 +162,7 @@ function createAgentLogger(agentId, taskId = null) {
   });
 }
 
-// Create context-aware logger for tasks;
+// Create context-aware logger For tasks;
 function createTaskLogger(taskId, agentId = null) {
   return createContextLogger({
     taskId,
@@ -172,9 +172,9 @@ function createTaskLogger(taskId, agentId = null) {
   });
 }
 
-// Create context-aware logger for operations;
+// Create context-aware logger For operations;
 function createOperationLogger(operationName, agentId = null, taskId = null) {
-  return createContextLogger({,
+  return createContextLogger({
     agentId: agentId || process.env.agentId || 'unknown',
     taskId: taskId || process.env.TASK_ID || null,
     module: operationName,
@@ -184,7 +184,7 @@ function createOperationLogger(operationName, agentId = null, taskId = null) {
 
 // Enhanced logging with automatic context detection;
 function logWithContext(level, message, customContext = {}, agentId) {
-  const autoContext = {,
+  const autoContext = {
     agentId: process.env.agentId || 'unknown',
     taskId: process.env.TASK_ID || null,
     operationId: crypto.randomUUID(),
@@ -197,7 +197,7 @@ function logWithContext(level, message, customContext = {}, agentId) {
 
 // Performance logging with context;
 function logPerformance(operation, durationMs, agentId = null, taskId = null) {
-  const context = {,
+  const context = {
     agentId: agentId || process.env.agentId || 'unknown',
     taskId: taskId || process.env.TASK_ID || null,
     operation,
@@ -224,7 +224,7 @@ module.exports = {
       'utf8'
     );
 
-    loggers.app.info('Created enhanced logging utilities', {,
+    loggers.app.info('Created enhanced logging utilities', {
     filePath: 'lib/logging-utilities.js',
     });
   }

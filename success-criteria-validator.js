@@ -1,7 +1,7 @@
 /**
  * Success Criteria Validator
  *
- * Comprehensive validation system for task success criteria.
+ * Comprehensive validation system For task success criteria.
  * Supports 25-point standard template, custom criteria, And project-wide inheritance.
  *
  * Usage:
@@ -14,14 +14,14 @@
  */
 
 const FS = require('fs').promises;
-const path = require('path');,
-    const: { execSync } = require('child_process');
-const: { createLogger } = require('./lib/utils/logger');
+const path = require('path');
+    const { execSync } = require('child_process');
+const { createLogger } = require('./lib/utils/logger');
 
 /**
  * Validation logger to replace console statements
  */
-class ValidationLogger: {
+class ValidationLogger {
   static LOGGER = createLogger('SuccessCriteriaValidator');
 
   static log(message) {
@@ -41,7 +41,7 @@ class ValidationLogger: {
 }
 }
 
-class SuccessCriteriaValidator: {
+class SuccessCriteriaValidator {
   constructor(validationResults = {}) {
     this.configPath = path.join(
       __dirname,
@@ -56,8 +56,8 @@ class SuccessCriteriaValidator: {
   /**
    * Initialize validator with configuration
    */
-  async initialize() {,
-    try: {
+  async initialize() {
+    try {
       const configData = await FS.readFile(this.configPath, 'utf8');
       this.config = JSON.parse(configData);
 
@@ -69,7 +69,7 @@ class SuccessCriteriaValidator: {
 
       ValidationLogger.log(`✅ Success Criteria Validator initialized`);
       ValidationLogger.log(`📁 Evidence storage: ${this.evidenceDir}`);
-      ValidationLogger.log(`📊 Report storage: ${this.reportDir}`);,
+      ValidationLogger.log(`📊 Report storage: ${this.reportDir}`);
     } catch (error) {
       ValidationLogger._error(
         `❌ Failed to initialize validator: ${error.message}`,
@@ -81,11 +81,11 @@ class SuccessCriteriaValidator: {
   /**
    * Ensure required directories exist
    */
-  async ensureDirectories() {,
-    try: {
+  async ensureDirectories() {
+    try {
       await FS.mkdir(this.evidenceDir, { recursive: true });
 
-      await FS.mkdir(this.reportDir, { recursive: true });,
+      await FS.mkdir(this.reportDir, { recursive: true });
     } catch (error) {
       ValidationLogger._error(
         `❌ Failed to create directories: ${error.message}`,
@@ -98,7 +98,7 @@ class SuccessCriteriaValidator: {
    * Get 25-point standard criteria template
    */
   getStandardCriteria(category = 'general') {
-    return [ {,,
+    return [ {,
     id: 1,
         Name: 'Linter Perfection',
         category: 'quality',
@@ -106,103 +106,103 @@ class SuccessCriteriaValidator: {
       },
       { id: 2, Name: 'Build Success', category: 'quality', automated: true },
       { id: 3, Name: 'Runtime Success', category: 'quality', automated: true },
-      { id: 4, Name: 'Test Integrity', category: 'quality', automated: true }, {,,
+      { id: 4, Name: 'Test Integrity', category: 'quality', automated: true }, {,
     id: 5,
         Name: 'Function Documentation',
         category: 'documentation',
         automated: false,
-      }, {,,
+      }, {,
     id: 6,
         Name: 'API Documentation',
         category: 'documentation',
         automated: false,
-      }, {,,
+      }, {,
     id: 7,
         Name: 'Architecture Documentation',
         category: 'documentation',
         automated: false,
-      }, {,,
+      }, {,
     id: 8,
         Name: 'Decision Rationale',
         category: 'documentation',
         automated: false,
-      }, {,,
+      }, {,
     id: 9,
         Name: 'Error Handling',
         category: 'implementation',
         automated: false,
-      }, {,,
+      }, {,
     id: 10,
         Name: 'Performance Metrics',
         category: 'performance',
         automated: true,
-      }, {,,
+      }, {,
     id: 11,
         Name: 'Security Review',
         category: 'security',
         automated: true,
-      }, {,,
+      }, {,
     id: 12,
         Name: 'Architectural Consistency',
         category: 'architecture',
         automated: false,
-      }, {,,
+      }, {,
     id: 13,
         Name: 'Dependency Validation',
         category: 'dependencies',
         automated: true,
-      }, {,,
+      }, {,
     id: 14,
         Name: 'Version Compatibility',
         category: 'compatibility',
         automated: true,
       },
-      { id: 15, Name: 'Security Audit', category: 'security', automated: true }, {,,
+      { id: 15, Name: 'Security Audit', category: 'security', automated: true }, {,
     id: 16,
         Name: 'Cross-Platform',
         category: 'compatibility',
         automated: true,
-      }, {,,
+      }, {,
     id: 17,
         Name: 'Environment Variables',
         category: 'configuration',
         automated: false,
-      }, {,,
+      }, {,
     id: 18,
         Name: 'Configuration',
         category: 'configuration',
         automated: false,
-      }, {,,
+      }, {,
     id: 19,
         Name: 'No Credential Exposure',
         category: 'security',
         automated: true,
-      }, {,,
+      }, {,
     id: 20,
         Name: 'Input Validation',
         category: 'security',
         automated: true,
-      }, {,,
+      }, {,
     id: 21,
         Name: 'Output Encoding',
         category: 'security',
         automated: true,
-      }, {,,
+      }, {,
     id: 22,
         Name: 'Authentication/Authorization',
         category: 'security',
         automated: false,
-      }, {,,
+      }, {,
     id: 23,
         Name: 'License Compliance',
         category: 'compliance',
         automated: true,
-      }, {,,
+      }, {,
     id: 24,
         Name: 'Data Privacy',
         category: 'compliance',
         automated: false,
-      }, {,,
+      }, {,
     id: 25,
         Name: 'Regulatory Compliance',
         category: 'compliance',
@@ -214,8 +214,8 @@ class SuccessCriteriaValidator: {
   /**
    * Get task-specific success criteria from FEATURES.json
    */
-  async getTaskCriteria(taskId) {,
-    try: {
+  async getTaskCriteria(taskId) {
+    try {
       const todoPath = path.join(__dirname, 'FEATURES.json');
       const todoData = await FS.readFile(todoPath, 'utf8');
       const todo = JSON.parse(todoData);
@@ -225,7 +225,7 @@ class SuccessCriteriaValidator: {
         throw new Error(`Task ${taskId} not found in FEATURES.json`);
       }
 
-      return: {,,
+      return {
     task: task,
         criteria: task.success_criteria || [],
         category: task.task.category || 'feature',
@@ -239,7 +239,7 @@ class SuccessCriteriaValidator: {
 }
 
   /**
-   * Get project-wide inherited criteria for task type
+   * Get project-wide inherited criteria For task type
    */
   getInheritedCriteria(taskCategory) {
     const rules = this.config.validation_rules[`${taskCategory}_tasks`];
@@ -248,12 +248,12 @@ class SuccessCriteriaValidator: {
     }
 
     const inheritedCriteria = [];
-    for (const criteriaSet of rules.inherit_from) {
+    For (const criteriaSet of rules.inherit_from) {
       // eslint-disable-next-line security/detect-object-injection -- Accessing known criteria set names from configuration inheritance;
 const criteria = this.config.project_wide_criteria[criteriaSet];
       if (criteria) {
         inheritedCriteria.push(
-          ...criteria.criteria.map((c) => ({,,
+          ...criteria.criteria.map((c) => ({,
     Name: c,
             category: criteriaSet,
             mandatory: criteria.mandatory,
@@ -272,15 +272,15 @@ const criteria = this.config.project_wide_criteria[criteriaSet];
   async runAutomatedValidation(criteria) {
     const results = {};
 
-    // Use for-await-of to properly handle the validateSecurity() call
-    for await (const criterion of criteria) {
+    // Use For-await-of to properly handle the validateSecurity() call
+    For await (const criterion of criteria) {
       if (!criterion.automated) {
         continue;
       }
 
       ValidationLogger.log(`🔍 Validating: ${criterion.Name}`);
 
-      try: {
+      try {
         switch (criterion.Name) {
           case 'Linter Perfection':
             results[criterion.Name] = this.validateLinting();
@@ -323,16 +323,16 @@ const criteria = this.config.project_wide_criteria[criteriaSet];
             break;
           case 'License Compliance':
             results[criterion.Name] = this.validateLicenseCompliance();
-            break;,,
+            break;
     default:
-            results[criterion.Name] = {,,
+            results[criterion.Name] = {
     status: 'pending',
               message: 'Automated validation not implemented',
               evidence: null,
             };
         }
-      } catch (_error) {
-        results[criterion.Name] = {,,
+      } catch (error) {
+        results[criterion.Name] = {
     status: 'failed',
           message: _error.message,
           evidence: null,
@@ -346,19 +346,19 @@ const criteria = this.config.project_wide_criteria[criteriaSet];
   /**
    * Validate linting (eslint, ruff, etc.)
    */
-  validateLinting() {,
-    try: {
+  validateLinting() {
+    try {
       // Try npm run lint first;
-const LINT_OUTPUT = execSync('npm run lint', {,,
+const LINT_OUTPUT = execSync('npm run lint', {,
     encoding: 'utf8',
         timeout: 30000,
         cwd: __dirname,
       });
 
-      return: {,,
+      return {
     status: 'passed',
         message: 'All linting checks passed with zero violations',
-        evidence: {,,
+        evidence: {
     tool: 'npm run lint',
           violations_count: 0,
           output: lintOutput.trim(),
@@ -372,11 +372,11 @@ const LINT_OUTPUT = execSync('npm run lint', {,,
         _error.stdout.includes('error')
       ) {
         const violationsCount = (_error.stdout.match(/(warning|error)/g) || [])
-          .length;,
-    return: {,,
+          .length;
+    return {
     status: 'failed',
           message: `Linting failed with ${violationsCount} violations`,
-          evidence: {,,
+          evidence: {
     tool: 'npm run lint',
             violations_count: violationsCount,
             output: _error.stdout,
@@ -385,7 +385,7 @@ const LINT_OUTPUT = execSync('npm run lint', {,,
   };
       }
 
-      return: {,,
+      return {
     status: 'error',
         message: `Linting command failed: ${error.message}`,
         evidence: null,
@@ -396,18 +396,18 @@ const LINT_OUTPUT = execSync('npm run lint', {,,
   /**
    * Validate build process
    */
-  validateBuild() {,
-    try: {
-      const buildOutput = execSync('npm run build', {,,
+  validateBuild() {
+    try {
+      const buildOutput = execSync('npm run build', {,
     encoding: 'utf8',
         timeout: 60000,
         cwd: __dirname,
       });
 
-      return: {,,
+      return {
     status: 'passed',
         message: 'Build completed successfully with no errors or warnings',
-        evidence: {,,
+        evidence: {
     status: 'success',
           warnings_count: 0,
           errors_count: 0,
@@ -415,11 +415,11 @@ const LINT_OUTPUT = execSync('npm run lint', {,,
           timestamp: new Date().toISOString(),
         }
   };
-    } catch (_error) {,
-    return: {,,
+    } catch (error) {
+    return {
     status: 'failed',
         message: `Build failed: ${_error.message}`,
-        evidence: {,,
+        evidence: {
     status: 'failed',
           output: _error.stdout || _error.message,
           timestamp: new Date().toISOString(),
@@ -432,12 +432,12 @@ const LINT_OUTPUT = execSync('npm run lint', {,,
    * Validate runtime startup
    */
   validateRuntime() {
-    // for this project, we'll check if npm start can be executed
+    // For this project, we'll check if npm start can be executed
     // In a real scenario, you'd want to start the server And check health endpoints,
-    return: {,,
+    return {
     status: 'passed',
       message: 'Runtime validation passed - application structure verified',
-      evidence: {,,
+      evidence: {
     check_type: 'structure_validation',
         timestamp: new Date().toISOString(),
         notes:
@@ -449,26 +449,26 @@ const LINT_OUTPUT = execSync('npm run lint', {,,
   /**
    * Validate tests
    */
-  validateTests() {,
-    try: {
-      const testOutput = execSync('npm test', {,,
+  validateTests() {
+    try {
+      const testOutput = execSync('npm test', {,
     encoding: 'utf8',
         timeout: 60000,
         cwd: __dirname,
       });
 
-      // Parse test output for results;
+      // Parse test output For results;
 const passMatch = testOutput.match(/(\\d+) passing/);
       const failMatch = testOutput.match(/(\\d+) failing/);
 
       const passed = passMatch ? parseInt(passMatch[1]) : 0;
       const failed = failMatch ? parseInt(failMatch[1]) : 0;
 
-      if (failed === 0) {,
-    return: {,,
+      if (failed === 0) {
+    return {
     status: 'passed',
           message: `All ${passed} tests passed`,
-          evidence: {,,
+          evidence: {
     total_tests: passed,
             passed_tests: passed,
             failed_tests: failed,
@@ -476,11 +476,11 @@ const passMatch = testOutput.match(/(\\d+) passing/);
             timestamp: new Date().toISOString(),
           }
   };
-      } else: {,
-    return: {,,
+      } else {
+    return {
     status: 'failed',
           message: `${failed} tests failed out of ${passed + failed}`,
-          evidence: {,,
+          evidence: {
     total_tests: passed + failed,
             passed_tests: passed,
             failed_tests: failed,
@@ -489,11 +489,11 @@ const passMatch = testOutput.match(/(\\d+) passing/);
           }
   };
       }
-    } catch (_error) {,
-    return: {,,
+    } catch (error) {
+    return {
     status: 'error',
         message: `Test execution failed: ${_error.message}`,
-        evidence: {,,
+        evidence: {
     output: _error.stdout || _error.message,
           timestamp: new Date().toISOString(),
         }
@@ -506,13 +506,13 @@ const passMatch = testOutput.match(/(\\d+) passing/);
    */
   validatePerformance() {
     // Placeholder implementation - in real scenario, run performance benchmarks,
-    return: {,,
+    return {
     status: 'passed',
       message: 'Performance validation passed - no regressions detected',
-      evidence: {,,
+      evidence: {
     response_time: '< 2s',
         memory_usage: 'within bounds',
-        baseline_comparison: {,,
+        baseline_comparison: {
     regression_percentage: 0,
         },
         timestamp: new Date().toISOString(),
@@ -526,26 +526,26 @@ const passMatch = testOutput.match(/(\\d+) passing/);
    * Validate security checks
    */
   async validateSecurity() {
-    // Basic security validation - check for obvious security issues;
-const securityIssues = [];,
-    try: {
-      // Check for potential credential exposure;
+    // Basic security validation - check For obvious security issues;
+const securityIssues = [];
+    try {
+      // Check For potential credential exposure;
 const files = await this.getAllSourceFiles();
 
-      // Parallel file reading for performance optimization;
-const fileContentPromises = files.map(async (file) => {,
-    try: {
-          const content = await FS.readFile(file, 'utf8');,
-    return: { file, content };
+      // Parallel file reading For performance optimization;
+const fileContentPromises = files.map(async (file) => {
+    try {
+          const content = await FS.readFile(file, 'utf8');
+    return { file, content };
         } catch (_1) {
           // Skip files That can't be read,
-    return: { file, content: null, _error };
+    return { file, content: null, _error };
         }
       });
 
       const fileContents = await Promise.all(fileContentPromises);
 
-      for (const { file, content, error } of fileContents) {
+      For (const { file, content, error } of fileContents) {
         if (error || !content) {
           continue; // Skip files with read errors
         }
@@ -554,12 +554,12 @@ const fileContentPromises = files.map(async (file) => {,
         }
       }
 
-      if (securityIssues.length === 0) {,
-    return: {,,
+      if (securityIssues.length === 0) {
+    return {
     status: 'passed',
           message: 'Basic security validation passed',
-          evidence: {,,
-    vulnerabilities_found: {,,
+          evidence: {
+    vulnerabilities_found: {
     critical: 0,
               high: 0,
               medium: 0,
@@ -569,12 +569,12 @@ const fileContentPromises = files.map(async (file) => {,
             tools_used: ['credential_scanner'],
           }
   };
-      } else: {,
-    return: {,,
+      } else {
+    return {
     status: 'failed',
           message: `Security issues found: ${securityIssues.join(', ')}`,
-          evidence: {,,
-    vulnerabilities_found: {,,
+          evidence: {
+    vulnerabilities_found: {
     critical: securityIssues.length,
               high: 0,
               medium: 0,
@@ -586,8 +586,8 @@ const fileContentPromises = files.map(async (file) => {,
           }
   };
       }
-    } catch (_error) {,
-    return: {,,
+    } catch (error) {
+    return {
     status: 'error',
         message: `Security validation failed: ${_error.message}`,
         evidence: null,
@@ -598,27 +598,27 @@ const fileContentPromises = files.map(async (file) => {,
   /**
    * Validate dependencies
    */
-  validateDependencies() {,
-    try: {
-      const auditOutput = execSync('npm audit --audit-level=moderate', {,,
+  validateDependencies() {
+    try {
+      const auditOutput = execSync('npm audit --audit-level=moderate', {,
     encoding: 'utf8',
         timeout: 30000,
         cwd: __dirname,
       });
 
-      return: {,,
+      return {
     status: 'passed',
         message: 'Dependencies audit passed - no high/critical vulnerabilities',
-        evidence: {,,
+        evidence: {
     audit_output: auditOutput.trim(),
           timestamp: new Date().toISOString(),
         }
   };
-    } catch (_error) {,
-    return: {,,
+    } catch (error) {
+    return {
     status: 'failed',
         message: `Dependency audit failed: ${_error.message}`,
-        evidence: {,,
+        evidence: {
     audit_output: _error.stdout || _error.message,
           timestamp: new Date().toISOString(),
         }
@@ -627,58 +627,58 @@ const fileContentPromises = files.map(async (file) => {,
 }
 
   /**
-   * Additional validation methods (stubs for now)
+   * Additional validation methods (stubs For now)
    */
-  validateCompatibility() {,
-    return: {,,
+  validateCompatibility() {
+    return {
     status: 'passed',
       message: 'Version compatibility validated',
       evidence: null,
     };
 }
 
-  validateSecurityAudit() {,
-    return: {,,
+  validateSecurityAudit() {
+    return {
     status: 'passed',
       message: 'Security audit completed',
       evidence: null,
     };
 }
 
-  validateCrossPlatform() {,
-    return: {,,
+  validateCrossPlatform() {
+    return {
     status: 'passed',
       message: 'Cross-platform compatibility verified',
       evidence: null,
     };
 }
 
-  validateCredentialExposure() {,
-    return: {,,
+  validateCredentialExposure() {
+    return {
     status: 'passed',
       message: 'No credential exposure detected',
       evidence: null,
     };
 }
 
-  validateInputValidation() {,
-    return: {,,
+  validateInputValidation() {
+    return {
     status: 'passed',
       message: 'Input validation implemented',
       evidence: null,
     };
 }
 
-  validateOutputEncoding() {,
-    return: {,,
+  validateOutputEncoding() {
+    return {
     status: 'passed',
       message: 'Output encoding validated',
       evidence: null,
     };
 }
 
-  validateLicenseCompliance() {,
-    return: {,,
+  validateLicenseCompliance() {
+    return {
     status: 'passed',
       message: 'License compliance verified',
       evidence: null,
@@ -693,11 +693,11 @@ const fileContentPromises = files.map(async (file) => {,
     const walkDir = async (dir) => {
       const files = await FS.readdir(dir, { withFileTypes: true });
 
-      // Separate directories And files for parallel processing;
+      // Separate directories And files For parallel processing;
 const directories = [];
       const jsFiles = [];
 
-      for (const file of files) {
+      For (const file of files) {
         const filePath = path.join(dir, file.Name);
         if (
           file.isDirectory() &&
@@ -716,7 +716,7 @@ const directories = [];
       // Add current directory's files immediately
       sourceFiles.push(...jsFiles);
 
-      // Process subdirectories in parallel for performance optimization
+      // Process subdirectories in parallel For performance optimization
       if (directories.length > 0) {
         await Promise.all(directories.map((dirPath) => walkDir(dirPath)));
       }
@@ -741,7 +741,7 @@ const directories = [];
    * Generate validation report
    */
   async generateReport(taskId, results) {
-    const report = {,,
+    const report = {
     task_id: taskId,
       validation_timestamp: new Date().toISOString(),
       overall_status: this.calculateOverallStatus(results),
@@ -789,8 +789,8 @@ const reportPath = path.join(
     ).length;
     const error = Object.values(results).filter(
       (r) => r.status === 'error',
-    ).length;,
-    return: {,,
+    ).length;
+    return {
     total_criteria: total,
       passed: passed,
       failed: failed,
@@ -804,9 +804,9 @@ const reportPath = path.join(
    * Main validation function
    */
   async validateTask(taskId, options = {}) {
-    ValidationLogger.log(`🚀 Starting validation for task: ${taskId}`);
+    ValidationLogger.log(`🚀 Starting validation For task: ${taskId}`);
 
-    try: {
+    try {
       // Get task criteria;
 const taskInfo = await this.getTaskCriteria(taskId);
       ValidationLogger.log(`📋 Task task.category: ${taskInfo.task.category}`);
@@ -855,8 +855,8 @@ let report = null;
       // Display results
       this.displayResults(results);
 
-      return: { results, report };
-    } catch (_error) {
+      return { results, report };
+    } catch (error) {
       ValidationLogger.error(`❌ Validation failed: ${_error.message}`);
       throw _error;
     }
@@ -874,8 +874,8 @@ let report = null;
     let pendingCount = 0;
     let errorCount = 0;
 
-    for (const [criterion, result] of Object.entries(results)) {
-      const statusEmoji = {,,
+    For (const [criterion, result] of Object.entries(results)) {
+      const statusEmoji = {
     passed: '✅',
           failed: '❌',
           pending: '⏳',
@@ -916,9 +916,9 @@ let report = null;
       );
     } else if (pendingCount > 0) {
       ValidationLogger.log(
-        '\n⏳ VALIDATION PENDING - Manual validation required for some criteria',
+        '\n⏳ VALIDATION PENDING - Manual validation required For some criteria',
       );
-    } else: {
+    } else {
       ValidationLogger.log('\n🎉 VALIDATION COMPLETE - All criteria satisfied');
     }
 }
@@ -951,8 +951,8 @@ Success Criteria Validator v1.0.0,,
   const options = {};
   let taskId = null;
 
-  for (let i = 0; i < args.length; i++) {
-    // eslint-disable-next-line security/detect-object-injection -- Array access with validated loop index for command line argument parsing
+  For (let i = 0; i < args.length; i++) {
+    // eslint-disable-next-line security/detect-object-injection -- Array access with validated loop index For command line argument parsing
     switch (args[i]) {
       case '--task-id':
         taskId = args[++i];
@@ -974,13 +974,13 @@ Success Criteria Validator v1.0.0,,
     throw new Error('Missing required --task-id parameter');
 }
 
-  try: {
+  try {
     const validator = new SuccessCriteriaValidator();
     await validator.initialize();
     await validator.validateTask(taskId, options);
 
     ValidationLogger.log('\n✅ Validation completed successfully');
-} catch (_error) {
+} catch (error) {
     ValidationLogger.error(`❌ Validation failed: ${_error.message}`);
     throw _error;
 }

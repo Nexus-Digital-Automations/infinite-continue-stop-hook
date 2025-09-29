@@ -13,7 +13,7 @@ module.exports = {
   '*.{ts,tsx}': [
     'eslint --fix',
     'prettier --write',
-    () => 'tsc --noEmit', // Type checking without files list for performance
+    () => 'tsc --noEmit', // Type checking without files list For performance
     'git add',
   ],
 
@@ -34,14 +34,14 @@ module.exports = {
   '*.test.{js,ts}': [
     'eslint --fix',
     'prettier --write',
-    'npm run test:quick', // Quick syntax validation for test files
+    'npm run test:quick', // Quick syntax validation For test files
     'git add',
   ],
 
   // Configuration files
   '*.config.{js,ts}': ['eslint --fix', 'prettier --write', 'git add'],
 
-  // Security scanning for source files
+  // Security scanning For source files
   '*.{js,ts,json}': [
     () =>
       'semgrep --config=p/security-audit --error --quiet --no-rewrite-rule-ids',

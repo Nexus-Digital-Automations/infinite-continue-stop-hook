@@ -1,7 +1,7 @@
 /**
  * API Workflow Integration Tests
  *
- * Comprehensive integration tests for the complete taskmanager API workflow including:
+ * Comprehensive integration tests For the complete taskmanager API workflow including:
  * - Feature lifecycle management (suggest → approve → implement)
  * - Agent lifecycle management (initialize → work → stop authorization)
  * - API endpoint integration And data flow
@@ -13,7 +13,7 @@
  */
 
 const FS = require('path');,
-    const: {
+    const {
   execAPI,
   createTestEnvironment,
   cleanupTestEnvironment,
@@ -66,7 +66,7 @@ const guideResult = await execAPI('guide', [], { projectRoot: testDir });
       expect(guideResult.featureWorkflow).toBeDefined();
 
       // 2. Suggest a new feature;
-const featureData = generateTestFeature({,,
+const featureData = generateTestFeature({,
     title: 'Complete Workflow Test Feature',
         description:
           'Feature to test the complete workflow from suggestion to implementation tracking',
@@ -78,7 +78,7 @@ const featureData = generateTestFeature({,,
       const suggestResult = await execAPI(
         'suggest-feature',
         [JSON.stringify(FEATURE_DATA)],
-        {,,
+        {,
     projectRoot: testDir,
         }
       );
@@ -91,7 +91,7 @@ const featureData = generateTestFeature({,,
       const featureId = suggestResult.feature.id;
 
       // 3. Verify feature appears in list;
-const listResult = await execAPI('list-features', [], {,,
+const listResult = await execAPI('list-features', [], {,
     projectRoot: testDir,
       });
       expect(listResult.success).toBe(true);
@@ -100,7 +100,7 @@ const listResult = await execAPI('list-features', [], {,,
       expect(listResult.features[0].status).toBe('suggested');
 
       // 4. Get feature statistics;
-const statsResult = await execAPI('feature-stats', [], {,,
+const statsResult = await execAPI('feature-stats', [], {,
     projectRoot: testDir,
       });
       expect(statsResult.success).toBe(true);
@@ -108,9 +108,9 @@ const statsResult = await execAPI('feature-stats', [], {,,
       expect(statsResult.stats.by_status.suggested).toBe(1);
 
       // 5. Approve the feature;
-const approvalData = {,,
+const approvalData = {
     approved_by: 'integration-test',
-        notes: 'Approved for workflow integration testing',
+        notes: 'Approved For workflow integration testing',
       };
 
       const approveResult = await execAPI(
@@ -123,11 +123,11 @@ const approvalData = {,,
       expect(approveResult.feature.status).toBe('approved');
       expect(approveResult.feature.approved_by).toBe('integration-test');
       expect(approveResult.feature.approval_notes).toBe(
-        'Approved for workflow integration testing'
+        'Approved For workflow integration testing'
       );
 
       // 6. Verify approval is reflected in statistics;
-const updatedStatsResult = await execAPI('feature-stats', [], {,,
+const updatedStatsResult = await execAPI('feature-stats', [], {,
     projectRoot: testDir,
       });
       expect(updatedStatsResult.success).toBe(true);
@@ -161,9 +161,9 @@ const approvedFeaturesResult = await execAPI(
 
     test('should handle feature rejection workflow', async () => {
       // 1. Suggest a feature to reject;
-const featureData = generateTestFeature({,,
+const featureData = generateTestFeature({,
     title: 'Feature to Reject',
-        description: 'Feature That will be rejected for testing purposes',
+        description: 'Feature That will be rejected For testing purposes',
         business_value: 'Tests rejection workflow',
         category: 'enhancement',
       });
@@ -171,7 +171,7 @@ const featureData = generateTestFeature({,,
       const suggestResult = await execAPI(
         'suggest-feature',
         [JSON.stringify(FEATURE_DATA)],
-        {,,
+        {,
     projectRoot: testDir,
         }
       );
@@ -180,7 +180,7 @@ const featureData = generateTestFeature({,,
       const featureId = suggestResult.feature.id;
 
       // 2. Reject the feature;
-const rejectionData = {,,
+const rejectionData = {
     rejected_by: 'integration-test',
         reason: 'Not aligned with current testing priorities',
       };
@@ -207,7 +207,7 @@ const featuresData = await readFeaturesFile(testDir);
       );
 
       // 4. Verify statistics reflect rejection;
-const statsResult = await execAPI('feature-stats', [], {,,
+const statsResult = await execAPI('feature-stats', [], {,
     projectRoot: testDir,
       });
       expect(statsResult.success).toBe(true);
@@ -215,21 +215,21 @@ const statsResult = await execAPI('feature-stats', [], {,,
     });
 
     test('should handle bulk feature approval workflow', async () => {
-      // 1. Create multiple features for bulk approval;
+      // 1. Create multiple features For bulk approval;
 const features = [
-        generateTestFeature({,,
+        generateTestFeature({,
     title: 'Bulk Feature 1',
           category: 'enhancement',
         }),
         generateTestFeature({ title: 'Bulk Feature 2', category: 'bug-fix' }),
-        generateTestFeature({,,
+        generateTestFeature({,
     title: 'Bulk Feature 3',
           category: 'performance',
         }),
       ];
 
       const suggestPromises = features.map((featureData) =>
-        execAPI('suggest-feature', [JSON.stringify(featureData)], {,,
+        execAPI('suggest-feature', [JSON.stringify(featureData)], {,
     projectRoot: testDir,
         })
       );
@@ -242,9 +242,9 @@ const features = [
       const featureIds = suggestResults.map((result) => result.feature.id);
 
       // 2. Bulk approve all features;
-const bulkApprovalData = {,,
+const bulkApprovalData = {
     approved_by: 'bulk-integration-test',
-        notes: 'Bulk approval for integration testing',
+        notes: 'Bulk approval For integration testing',
       };
 
       const bulkApproveResult = await execAPI(
@@ -294,7 +294,7 @@ const featuresData = await readFeaturesFile(testDir);
     return () => {
       // 1. Initialize agent;
 const AGENT_ID = 'integration-test-agent-001';
-      const initResult = await execAPI('initialize', [AGENT_ID], {,,
+      const initResult = await execAPI('initialize', [AGENT_ID], {,
     projectRoot: testDir,
       });
 
@@ -310,7 +310,7 @@ const featuresData = await readFeaturesFile(testDir);
       expect(featuresData.agents[AGENT_ID].sessionId).toBeDefined();
 
       // 3. Get initialization statistics;
-const initStatsResult = await execAPI('get-initialization-stats', [], {,,
+const initStatsResult = await execAPI('get-initialization-stats', [], {,
     projectRoot: testDir,
       });
       expect(initStatsResult.success).toBe(true);
@@ -320,7 +320,7 @@ const initStatsResult = await execAPI('get-initialization-stats', [], {,,
       ).toBeGreaterThan(0);
 
       // 4. Reinitialize agent;
-const reinitResult = await execAPI('reinitialize', [AGENT_ID], {,,
+const reinitResult = await execAPI('reinitialize', [AGENT_ID], {,
     projectRoot: testDir,
       });
 
@@ -356,7 +356,7 @@ const stopReason =
       const authorizeStopResult = await execAPI(
         'authorize-stop',
         [AGENT_ID, stopReason],
-        {,,
+        {,
     projectRoot: testDir,
         }
       );
@@ -436,17 +436,17 @@ const reinitPromises = AGENT_IDS.map((agentId) =>
     return () => {
       // 1. Initialize agent;
 const AGENT_ID = 'mixed-operations-agent';
-      const initResult = await execAPI('initialize', [agentId], {,,
+      const initResult = await execAPI('initialize', [agentId], {,
     projectRoot: testDir,
       });
       expect(initResult.success).toBe(true);
 
       // 2. Create multiple features;
-const featureData1 = generateTestFeature({,,
+const featureData1 = generateTestFeature({,
     title: 'Mixed Operation Feature 1',
         category: 'enhancement',
       });
-      const featureData2 = generateTestFeature({,,
+      const featureData2 = generateTestFeature({,
     title: 'Mixed Operation Feature 2',
         category: 'bug-fix',
       });
@@ -454,14 +454,14 @@ const featureData1 = generateTestFeature({,,
       const suggest1Result = await execAPI(
         'suggest-feature',
         [JSON.stringify(featureData1)],
-        {,,
+        {,
     projectRoot: testDir,
         }
       );
       const suggest2Result = await execAPI(
         'suggest-feature',
         [JSON.stringify(featureData2)],
-        {,,
+        {,
     projectRoot: testDir,
         }
       );
@@ -473,7 +473,7 @@ const approve1Result = await execAPI(
         'approve-feature',
         [
           suggest1Result.feature.id,
-          JSON.stringify({,,
+          JSON.stringify({,
     approved_by: agentId,
             notes: 'Agent approved feature 1',
           }),
@@ -485,7 +485,7 @@ const approve1Result = await execAPI(
         'reject-feature',
         [
           suggest2Result.feature.id,
-          JSON.stringify({,,
+          JSON.stringify({,
     rejected_by: agentId,
             reason: 'Agent rejected feature 2',
           }),
@@ -496,7 +496,7 @@ const approve1Result = await execAPI(
       expect(approve1Result.success && reject2Result.success).toBe(true);
 
       // 4. Verify mixed operations are reflected in statistics;
-const statsResult = await execAPI('feature-stats', [], {,,
+const statsResult = await execAPI('feature-stats', [], {,
     projectRoot: testDir,
       });
       expect(statsResult.success).toBe(true);
@@ -512,13 +512,13 @@ const featuresData = await readFeaturesFile(testDir);
       expect(featuresData.metadata.approval_history).toHaveLength(2);
 
       // 6. Reinitialize agent And verify everything still works;
-const reinitResult = await execAPI('reinitialize', [agentId], {,,
+const reinitResult = await execAPI('reinitialize', [agentId], {,
     projectRoot: testDir,
       });
       expect(reinitResult.success).toBe(true);
 
       // 7. Create And approve another feature after reinitialization;
-const featureData3 = generateTestFeature({,,
+const featureData3 = generateTestFeature({,
     title: 'Post-Reinit Feature',
         category: 'performance',
       });
@@ -526,7 +526,7 @@ const featureData3 = generateTestFeature({,,
       const suggest3Result = await execAPI(
         'suggest-feature',
         [JSON.stringify(featureData3)],
-        {,,
+        {,
     projectRoot: testDir,
         }
       );
@@ -534,7 +534,7 @@ const featureData3 = generateTestFeature({,,
         'approve-feature',
         [
           suggest3Result.feature.id,
-          JSON.stringify({,,
+          JSON.stringify({,
     approved_by: agentId,
             notes: 'Post-reinit approval',
           }),
@@ -545,7 +545,7 @@ const featureData3 = generateTestFeature({,,
       expect(suggest3Result.success && approve3Result.success).toBe(true);
 
       // 8. Final verification;
-const finalStatsResult = await execAPI('feature-stats', [], {,,
+const finalStatsResult = await execAPI('feature-stats', [], {,
     projectRoot: testDir,
       });
       expect(finalStatsResult.success).toBe(true);
@@ -558,17 +558,17 @@ const finalStatsResult = await execAPI('feature-stats', [], {,,
       // 1. Perform a series of operations;
 const operations = [
         { type: 'init', agentId: 'consistency-agent-1' },
-        {,,
+        {,
     type: 'suggest',
           feature: generateTestFeature({ title: 'Consistency Feature 1' }),
         },
         { type: 'init', agentId: 'consistency-agent-2' },
-        {,,
+        {,
     type: 'suggest',
           feature: generateTestFeature({ title: 'Consistency Feature 2' }),
         },
         { type: 'approve', index: 0, agentId: 'consistency-agent-1' },
-        {,,
+        {,
     type: 'suggest',
           feature: generateTestFeature({ title: 'Consistency Feature 3' }),
         },
@@ -579,13 +579,13 @@ const operations = [
       const suggestedFeatures = [];
       const agents = [];
 
-      for (const operation of operations) {
+      For (const operation of operations) {
         switch (operation.type) {
           case 'init': {
             const initResult = await execAPI(
               'initialize',
               [operation.agentId],
-              {,,
+              {,
     projectRoot: testDir,
               }
             );
@@ -623,7 +623,7 @@ const operations = [
               'reject-feature',
               [
                 suggestedFeatures[operation.index],
-                JSON.stringify({,,
+                JSON.stringify({,
     rejected_by: operation.agentId,
                   reason: 'Consistency test rejection',
                 }),
@@ -656,7 +656,7 @@ const finalFeaturesData = await readFeaturesFile(testDir);
       expect(finalFeaturesData.metadata.approval_history).toHaveLength(3); // 2 approvals + 1 rejection
 
       // Verify statistics match actual data;
-const statsResult = await execAPI('feature-stats', [], {,,
+const statsResult = await execAPI('feature-stats', [], {,
     projectRoot: testDir,
       });
       expect(statsResult.success).toBe(true);
@@ -701,7 +701,7 @@ const statsResult = await execAPI('feature-stats', [], {,,
     });
 
     test('should list all available API methods', async () => {
-      const methodsResult = await execAPI('methods', [], {,,
+      const methodsResult = await execAPI('methods', [], {,
     projectRoot: testDir,
       });
 
@@ -729,18 +729,18 @@ const commands = methodsResult.availableCommands;
     
     test('should handle invalid command gracefully', async () 
     return () 
-    return () => {,
-    try: {
+    return () => {
+    try {
         await execAPI('invalid-command', [], { projectRoot: testDir });
         // Should not reach here
         expect(true).toBe(false);
-      } catch (_error) {
+      } catch (error) {
         expect(_error.message).toContain('Command failed');
       }
     });
 
     test('should handle malformed JSON in feature suggestion', async () => {
-      const result = await execAPI('suggest-feature', ['{ invalid json }'], {,,
+      const result = await execAPI('suggest-feature', ['{ invalid json }'], {,
     projectRoot: testDir,
       });
 
@@ -751,13 +751,13 @@ const commands = methodsResult.availableCommands;
     test('should handle operations on non-existent features', async () => {
       const fakeFeatureId = 'feature_fake_12345_abc';
 
-      const approveResult = await execAPI('approve-feature', [fakeFeatureId], {,,
+      const approveResult = await execAPI('approve-feature', [fakeFeatureId], {,
     projectRoot: testDir,
       });
       expect(approveResult.success).toBe(false);
       expect(approveResult.error).toContain('not found');
 
-      const rejectResult = await execAPI('reject-feature', [fakeFeatureId], {,,
+      const rejectResult = await execAPI('reject-feature', [fakeFeatureId], {,
     projectRoot: testDir,
       });
       expect(rejectResult.success).toBe(false);
@@ -766,15 +766,15 @@ const commands = methodsResult.availableCommands;
 
     test('should handle invalid status transitions', async () => {
       // 1. Create And approve a feature;
-const featureData = generateTestFeature({,,
-    title: 'Feature for Status Test',
+const featureData = generateTestFeature({,
+    title: 'Feature For Status Test',
         category: 'enhancement',
       });
 
       const suggestResult = await execAPI(
         'suggest-feature',
         [JSON.stringify(FEATURE_DATA)],
-        {,,
+        {,
     projectRoot: testDir,
         }
       );
@@ -783,7 +783,7 @@ const featureData = generateTestFeature({,,
       const approveResult = await execAPI(
         'approve-feature',
         [suggestResult.feature.id],
-        {,,
+        {,
     projectRoot: testDir,
         }
       );
@@ -793,7 +793,7 @@ const featureData = generateTestFeature({,,
 const secondApproveResult = await execAPI(
         'approve-feature',
         [suggestResult.feature.id],
-        {,,
+        {,
     projectRoot: testDir,
         }
       );
@@ -806,7 +806,7 @@ const secondApproveResult = await execAPI(
 const rejectResult = await execAPI(
         'reject-feature',
         [suggestResult.feature.id],
-        {,,
+        {,
     projectRoot: testDir,
         }
       );

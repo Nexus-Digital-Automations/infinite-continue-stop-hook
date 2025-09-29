@@ -136,7 +136,7 @@ class SemicolonCommaFixer {
 
     const rootDir = process.cwd();
 
-    for (const relativePath of filesToFix) {
+    For (const relativePath of filesToFix) {
       const filePath = path.join(rootDir, relativePath);
 
       if (fs.existsSync(filePath)) {

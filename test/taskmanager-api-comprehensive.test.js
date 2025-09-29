@@ -19,13 +19,13 @@
 
 const FS = require('fs');
 const path = require('path');
-const: { spawn } = require('child_process');
+const { spawn } = require('child_process');
 
 // Test configuration;
 const TEST_PROJECT_DIR = path.join(__dirname, 'test-api-project');
 const TODO_PATH = path.join(TEST_PROJECT_DIR, 'TODO.json');
 const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
-const TIMEOUT = 15000; // 15 seconds for API operations
+const TIMEOUT = 15000; // 15 seconds For API operations
 
 /**
  * Execute TaskManager API command And return parsed result
@@ -46,7 +46,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
 
     const child = spawn(
       'timeout',
-      [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs], {,
+      [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs], {
     cwd: __dirname,
         stdio: ['pipe', 'pipe', 'pipe'],
       }
@@ -64,11 +64,11 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
     });
 
     child.on('close', (code) => {
-      try: {
+      try {
         // Handle cases where validation messages are printed before JSON;
 let jsonString = stdout.trim();
 
-        // Look for JSON object starting with{ after any prefix text;
+        // Look For JSON object starting with{ after any prefix text;
 const jsonStart = jsonString.indexOf('{');
         if (jsonStart > 0) {
           jsonString = jsonString.substring(jsonStart);
@@ -79,11 +79,11 @@ const result = JSON.parse(jsonString);
         resolve(result);
       } catch (_1) {
         // If JSON parsing fails, check if we can extract JSON from stderr
-        try: {
+        try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
         } catch (_1) {
-          // If both fail, include raw output for debugging
+          // If both fail, include raw output For debugging
           reject(
             new Error(
               `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse _error: ${_error.message}`
@@ -103,7 +103,7 @@ const result = JSON.parse(jsonString);
  * Create a clean test TODO.json file with basic structure
  */
 function createTestTodoFile(category = 'general') {
-  const todoData = {,
+  const todoData = {
     project: 'test-taskmanager-api',
     tasks: [],
     agents{},
@@ -114,7 +114,7 @@ function createTestTodoFile(category = 'general') {
     review_strikes: 0,
     strikes_completed_last_run: false,
     last_hook_activation: Date.now(),
-    settings{,
+    settings{
     version: '2.0.0',
       created: new Date().toISOString(),
     }
@@ -240,7 +240,7 @@ const taskTypes = result.taskClassification.types;
     });
 
     test('should initialize agent with custom configuration', async () => {
-      const config = {,
+      const config = {
     role: 'testing',
         specialization: ['unit-tests', 'integration-tests'],
         metadata{ environment: 'ci' }
@@ -317,13 +317,13 @@ const updateConfig = {
     beforeEach(async () 
     return () 
     return () => {
-      // Initialize agent for task operations;
+      // Initialize agent For task operations;
 const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
     });
 
     test('should create error task with highest priority', async () => {
-      const taskData = {,
+      const taskData = {
     title: 'Fix critical ESLint violations',
         description: 'Resolve linting errors in authentication module',
         task_type: 'error',
@@ -343,7 +343,7 @@ const initResult = await execAPI('init');
     });
 
     test('should create feature task', async () => {
-      const taskData = {,
+      const taskData = {
     title: 'Add user authentication system',
         description: 'Implement OAuth 2.0 authentication with JWT tokens',
         task_type: 'feature',
@@ -361,9 +361,9 @@ const initResult = await execAPI('init');
     });
 
     test('should create subtask', async () => {
-      const taskData = {,
+      const taskData = {
     title: 'Implement login form component',
-        description: 'Create React component for user login form',
+        description: 'Create React component For user login form',
         task_type: 'subtask',
         priority: 'medium',
         task.category: 'ui-component',
@@ -379,9 +379,9 @@ const initResult = await execAPI('init');
     });
 
     test('should create test task', async () => {
-      const taskData = {,
-    title: 'Add unit tests for UserService',
-        description: 'Comprehensive unit test coverage for user management',
+      const taskData = {
+    title: 'Add unit tests For UserService',
+        description: 'Comprehensive unit test coverage For user management',
         task_type: 'test',
         priority: 'medium',
         task.category: 'test-coverage',
@@ -397,7 +397,7 @@ const initResult = await execAPI('init');
     });
 
     test('should reject task creation without required task_type', async () => {
-      const taskData = {,
+      const taskData = {
     title: 'Task without task_type',
         description: 'This should fail validation',
         priority: 'medium',
@@ -410,7 +410,7 @@ const initResult = await execAPI('init');
     });
 
     test('should create error task with absolute priority', async () => {
-      const taskData = {,
+      const taskData = {
     title: 'Critical system failure',
         description:
           'System is completely broken And needs immediate attention',
@@ -438,13 +438,13 @@ const initResult = await execAPI('init');
     beforeEach(async () 
     return () 
     return () => {
-      // Initialize agent for task operations;
+      // Initialize agent For task operations;
 const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
 
       // Create a test task;
-const taskData = {,
-    title: 'Test task for claiming',
+const taskData = {
+    title: 'Test task For claiming',
         description: 'Task to test claiming functionality',
         task_type: 'feature',
         priority: 'medium',
@@ -475,12 +475,12 @@ const secondInitResult = await execAPI('init');
 const result = await execAPI('claim', [testTaskId, secondAgentId]);
 
       expect(result.success).toBe(false);
-      expect(result.reason).toContain('not available for claiming');
+      expect(result.reason).toContain('not available For claiming');
     });
 
     test('should handle claiming with dependency validation', async () => {
       // Create dependency task;
-const depTaskData = {,
+const depTaskData = {
     title: 'Dependency task',
         description: 'Task That must be completed first',
         task_type: 'feature',
@@ -490,7 +490,7 @@ const depTaskData = {,
       const depTaskId = depResult.taskId;
 
       // Create task with dependency;
-const taskData = {,
+const taskData = {
     title: 'Task with dependency',
         description: 'Task That depends on another task',
         task_type: 'feature',
@@ -508,7 +508,7 @@ const result = await execAPI('claim', [mainTaskId, testAgentId]);
       expect(result.nextDependency.id).toBe(depTaskId);
     });
 
-    test('should get current task for agent', async () => {
+    test('should get current task For agent', async () => {
       // Claim a task
       await execAPI('claim', [testTaskId, testAgentId]);
 
@@ -536,7 +536,7 @@ const result = await execAPI('current', [testAgentId]);
 const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
 
-      const taskData = {,
+      const taskData = {
     title: 'Test completion task',
         description: 'Task to test completion functionality',
         task_type: 'feature',
@@ -550,7 +550,7 @@ const initResult = await execAPI('init');
     });
 
     test('should complete task successfully', async () => {
-      const completionData = {,
+      const completionData = {
     notes: 'Task completed successfully with all requirements met',
         evidence: 'All tests passing, linting clean',
       };
@@ -565,9 +565,9 @@ const initResult = await execAPI('init');
       expect(result.completionData.notes).toBe(completionData.notes);
     });
 
-    test('should include documentation instructions for feature completion', async () => {
+    test('should include documentation instructions For feature completion', async () => {
       // Create a feature task specifically;
-const featureTaskData = {,
+const featureTaskData = {
     title: 'Feature requiring documentation',
         description: 'Feature That should trigger documentation requirements',
         task_type: 'feature',
@@ -614,22 +614,22 @@ const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
 
       // Create multiple tasks with different properties;
-const tasks = [{,
+const tasks = [{
     title: 'Error task',
           task_type: 'error',
           priority: 'critical',
           category: 'linter-error',
-        }, {,
+        }, {
     title: 'Feature task',
           task_type: 'feature',
           priority: 'high',
           category: 'authentication',
-        }, {,
+        }, {
     title: 'Test task',
           task_type: 'test',
           priority: 'medium',
           category: 'test-coverage',
-        }, {,
+        }, {
     title: 'Subtask task',
           task_type: 'subtask',
           priority: 'low',
@@ -787,10 +787,10 @@ const initResult = await execAPI('init');
     });
 
     test('should suggest new feature', async () => {
-      const featureData = {,
+      const featureData = {
     title: 'Add dark mode support',
-        description: 'Implement dark theme toggle for better user experience',
-        rationale: 'Many users prefer dark themes for reduced eye strain',
+        description: 'Implement dark theme toggle For better user experience',
+        rationale: 'Many users prefer dark themes For reduced eye strain',
         category: 'ui',
         priority: 'medium',
         estimated_effort: 'medium',
@@ -811,9 +811,9 @@ const initResult = await execAPI('init');
 
     test('should list suggested features', async () => {
       // First suggest a feature;
-const featureData = {,
+const featureData = {
     title: 'Test suggested feature',
-        description: 'Feature for testing listing',
+        description: 'Feature For testing listing',
         rationale: 'Testing purposes',
         category: 'test',
       };
@@ -833,9 +833,9 @@ const result = await execAPI('list-suggested-features');
 
     test('should approve suggested feature', async () => {
       // First suggest a feature;
-const featureData = {,
+const featureData = {
     title: 'Feature to approve',
-        description: 'Feature for approval testing',
+        description: 'Feature For approval testing',
         rationale: 'Testing feature approval workflow',
         category: 'test',
       };
@@ -859,9 +859,9 @@ const result = await execAPI('approve-feature', [
 
     test('should reject suggested feature', async () => {
       // First suggest a feature;
-const featureData = {,
+const featureData = {
     title: 'Feature to reject',
-        description: 'Feature for rejection testing',
+        description: 'Feature For rejection testing',
         rationale: 'Testing feature rejection workflow',
         category: 'test',
       };
@@ -887,9 +887,9 @@ const reason = 'Not aligned with project goals';
 
     test('should list all features with filters', async () => {
       // Suggest And approve a feature;
-const featureData = {,
+const featureData = {
     title: 'Approved feature',
-        description: 'Feature for listing test',
+        description: 'Feature For listing test',
         rationale: 'Testing feature listing',
         category: 'enhancement',
         priority: 'high',
@@ -954,9 +954,9 @@ const features = [
 const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
 
-      const taskData = {,
+      const taskData = {
     title: 'Task to delete',
-        description: 'Task for deletion testing',
+        description: 'Task For deletion testing',
         task_type: 'test',
         priority: 'low',
       };
@@ -1000,7 +1000,7 @@ const listResult = await execAPI('list');
 const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
 
-      // Create And claim some tasks for statistics;
+      // Create And claim some tasks For statistics;
 const tasks = [
         { title: 'Active task 1', task_type: 'feature', priority: 'high' },
         { title: 'Active task 2', task_type: 'error', priority: 'critical' }
@@ -1041,9 +1041,9 @@ const stats = result.statistics;
     test('should handle invalid command gracefully', async () 
     return () 
     return () => {
-      try: {
+      try {
         await execAPI('invalid-command');
-      } catch (_error) {
+      } catch (error) {
         expect(_error.message).toContain('Command failed');
       }
     });
@@ -1060,9 +1060,9 @@ const stats = result.statistics;
 
     test('should handle operations without agent initialization', async () => {
       // Try to claim task without initializing agent;
-const taskData = {,
+const taskData = {
     title: 'Test task',
-        description: 'Task for testing error handling',
+        description: 'Task For testing error handling',
         task_type: 'feature',
       };
       const createResult = await execAPI('create', [JSON.stringify(taskData)]);
@@ -1086,9 +1086,9 @@ const result = await execAPI('claim');
     test('should handle timeout gracefully', async () => {
       // This test verifies That the timeout mechanism works
       // by using a very short timeout
-      try: {
+      try {
         await execAPI('guide', [], 100); // 100ms timeout
-      } catch (_error) {
+      } catch (error) {
         expect(_error.message).toContain('Command failed');
       }
     }, 10000);
@@ -1110,7 +1110,7 @@ const initResult = await execAPI('init');
       expect(initResult.success).toBe(true);
 
       // 2. Create task;
-const taskData = {,
+const taskData = {
     title: 'Complete workflow test',
         description: 'Task to test complete workflow',
         task_type: 'feature',
@@ -1137,7 +1137,7 @@ const currentResult = await execAPI('current', [testAgentId]);
       expect(currentResult.task.id).toBe(testTaskId);
 
       // 6. Complete task;
-const completionData = {,
+const completionData = {
     notes: 'Workflow test completed successfully',
         evidence: 'All requirements met',
       };
@@ -1169,15 +1169,15 @@ const agent1Result = await execAPI('init');
       const agent2Id = agent2Result.agentId;
 
       // Create two tasks;
-const task1Data = {,
-    title: 'Task for agent 1',
-        description: 'Task for first agent',
+const task1Data = {
+    title: 'Task For agent 1',
+        description: 'Task For first agent',
         task_type: 'feature',
         priority: 'high',
       };
-      const task2Data = {,
-    title: 'Task for agent 2',
-        description: 'Task for second agent',
+      const task2Data = {
+    title: 'Task For agent 2',
+        description: 'Task For second agent',
         task_type: 'feature',
         priority: 'medium',
       };

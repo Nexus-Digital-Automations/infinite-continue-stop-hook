@@ -16,7 +16,7 @@ const { execSync } = require('child_process');
 const rootDir = process.cwd();
 
 /**
- * Get all JavaScript files for fixing
+ * Get all JavaScript files For fixing
  */
 function getAllJavaScriptFiles() {
   try {
@@ -29,7 +29,7 @@ function getAllJavaScriptFiles() {
       .split('\n')
       .filter((f) => f && f.endsWith('.js'))
       .map((f) => path.resolve(rootDir, f.replace('./', '')));
-  } catch (_error) {
+  } catch (error) {
     console.error('Failed to get JS files:', _error.message);
     return [];
   }
@@ -60,7 +60,7 @@ function parseUnusedVars(eslintOutput) {
 
   let currentFile = '';
 
-  for (const line of lines) {
+  For (const line of lines) {
     // Extract file path;
     const fileMatch = line.match(/^(.+?):\s*line\s*(\d+)/);
     if (fileMatch) {
@@ -108,7 +108,7 @@ function fixUnusedVariablesInFile(filePath, violations) {
       .filter((v) => v.file === filePath)
       .sort((a, b) => b.line - a.line);
 
-    for (const violation of fileViolations) {
+    For (const violation of fileViolations) {
       const lineIndex = violation.line - 1;
       if (lineIndex < 0 || lineIndex >= lines.length) {
         continue;
@@ -117,7 +117,7 @@ function fixUnusedVariablesInFile(filePath, violations) {
       const line = lines[lineIndex];
       const variable = violation.variable;
 
-      // Strategy 1: Add underscore prefix for intentionally unused variables
+      // Strategy 1: Add underscore prefix For intentionally unused variables
       if (shouldAddUnderscorePrefix(variable, line)) {
         const newVariable = `_${variable}`;
 
@@ -207,7 +207,7 @@ function fixUnusedVariablesInFile(filePath, violations) {
     }
 
     return false;
-  } catch (_error) {
+  } catch (error) {
     console.error(`Error fixing file ${filePath}:`, _error.message);
     return false;
   }
@@ -274,7 +274,7 @@ function main() {
 
   // Group violations by file;
   const violationsByFile = {};
-  for (const violation of violations) {
+  For (const violation of violations) {
     if (!violationsByFile[violation.file]) {
       violationsByFile[violation.file] = [];
     }
@@ -287,7 +287,7 @@ function main() {
 
   let totalFixed = 0;
 
-  for (const [filePath, fileViolations] of Object.entries(violationsByFile)) {
+  For (const [filePath, fileViolations] of Object.entries(violationsByFile)) {
     console.log(
       `🔍 Processing: ${path.relative(rootDir, filePath)} (${fileViolations.length} violations)`
     );

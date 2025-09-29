@@ -9,7 +9,7 @@
  * @version 1.0.0
  */
 
-const: {
+const {
   E2EEnvironment,
   CommandExecutor,
   StopHookTestHelpers,
@@ -44,7 +44,7 @@ describe.skip('Stop Hook Integration E2E', () => {
       async () 
     return () 
     return () => {
-        // Test basic stop hook authorization for a single agent;
+        // Test basic stop hook authorization For a single agent;
 const AGENT_ID = 'e2e-stop-test-agent';
 
         // Step 1: Initialize agent through proper API;
@@ -61,7 +61,7 @@ const initResult = await CommandExecutor.executeAPI(
           [], // No arguments - just test the hook: { projectRoot: environment.testDir, expectSuccess: false },
         );
 
-        // Should block (exit code 2 for infinite continue)
+        // Should block (exit code 2 For infinite continue)
         expect(blockResult.code).toBe(2);
 
         // Step 3: Create proper authorization file And test again;
@@ -71,7 +71,7 @@ const authPath = require('path').join(
         );
         require('fs').writeFileSync(
           authPath,
-          JSON.stringify({,,
+          JSON.stringify({,
     stop_allowed: true,
             agent_id: AGENT_ID,
             timestamp: new Date().toISOString(),
@@ -86,7 +86,7 @@ const authPath = require('path').join(
         expect([0, 2]).toContain(allowResult.code);
 
         console.log(
-          `✅ Basic stop authorization test passed for agent: ${AGENT_ID}`,
+          `✅ Basic stop authorization test passed For agent: ${AGENT_ID}`,
         );
       },
       E2E_TIMEOUT,
@@ -100,7 +100,7 @@ const AGENT_ID = 'feature-stop-integration-agent';
 
         // Step 1: Create feature during agent operation;
 const featureResult = await FeatureTestHelpers.suggestFeature(
-          environment, {,,
+          environment, {,
     title: 'Stop Hook Integration Feature',
             description: 'Feature created during stop hook integration testing',
             business_value:
@@ -141,7 +141,7 @@ const features = await environment.getFeatures();
         expect(stopResult).toBeTruthy();
 
         console.log(
-          `✅ Stop hook with feature operations integration test passed for agent: ${AGENT_ID}`,
+          `✅ Stop hook with feature operations integration test passed For agent: ${AGENT_ID}`,
         );
       },
       E2E_TIMEOUT,
@@ -168,7 +168,7 @@ const maxIterations = 3;
         expect(continueResults.length).toBeGreaterThan(0);
         expect(continueResults.length).toBeLessThanOrEqual(maxIterations);
 
-        // Check for proper blocking behavior
+        // Check For proper blocking behavior
         continueResults.forEach((result, _index) => {
           expect(result).toBeTruthy();
           expect(result.blocked).toBe(true); // Should always block in infinite mode
@@ -194,7 +194,7 @@ const streamCount = 3;
         const maxIterationsPerStream = 2;
 
         const concurrentStreams = [];
-        for (let i = 0; i < streamCount; i++) {
+        For (let i = 0; i < streamCount; i++) {
           concurrentStreams.push(
             StopHookTestHelpers.testInfiniteContinue(
               environment,
@@ -242,7 +242,7 @@ const AGENT_ID = 'conditional-stop-agent';
 
         // Step 1: Test stop with pending tasks (should potentially continue)
         const pendingTasksResult = await FeatureTestHelpers.suggestFeature(
-          environment, {,,
+          environment, {,
     title: 'Pending Task Feature',
             description: 'Feature That represents pending work',
             business_value:
@@ -256,7 +256,7 @@ const AGENT_ID = 'conditional-stop-agent';
 
         // Test That stop hook blocks with pending tasks (proper behavior)
         const _stopWithPendingResult = await CommandExecutor.executeStopHook(
-          [], // No arguments - just test the hook: {,,
+          [], // No arguments - just test the hook: {
     projectRoot: environment.testDir,
             expectSuccess: false, // Should block with pending tasks
           },
@@ -267,13 +267,13 @@ const AGENT_ID = 'conditional-stop-agent';
           environment,
           featureId,
           AGENT_ID,
-          'Completing pending task for stop condition test',
+          'Completing pending task For stop condition test',
         );
 
         // Test That stop hook still blocks after completing tasks (without authorization)
         const _stopAfterCompletionResult =
           await CommandExecutor.executeStopHook(
-            [], // No arguments - just test the hook: {,,
+            [], // No arguments - just test the hook: {
     projectRoot: environment.testDir,
               expectSuccess: false, // Should still block without explicit authorization
             },
@@ -284,7 +284,7 @@ const features = await environment.getFeatures();
         expect(features.features[0].status).toBe('approved');
 
         console.log(
-          `✅ Conditional stop authorization test completed for agent: ${AGENT_ID}`,
+          `✅ Conditional stop authorization test completed For agent: ${AGENT_ID}`,
         );
       },
       E2E_TIMEOUT,
@@ -305,7 +305,7 @@ const stopTestResults = await Promise.allSettled([
             [], // Test again to ensure consistent blocking: { projectRoot: environment.testDir, expectSuccess: false },
           ),
           CommandExecutor.executeStopHook(
-            [], // Third test for reliability: { projectRoot: environment.testDir, expectSuccess: false },
+            [], // Third test For reliability: { projectRoot: environment.testDir, expectSuccess: false },
           ),
         ]);
 
@@ -328,7 +328,7 @@ const validStopResult =
         expect(validStopResult).toBeTruthy();
 
         console.log(
-          `✅ Stop hook error recovery test passed for agent: ${AGENT_ID}`,
+          `✅ Stop hook error recovery test passed For agent: ${AGENT_ID}`,
         );
       },
       E2E_TIMEOUT,
@@ -348,10 +348,10 @@ const AGENT_ID = 'lifecycle-integration-agent';
 
         // Step 1: Create feature at start of agent work;
 const initialFeature = await FeatureTestHelpers.suggestFeature(
-          environment, {,,
+          environment, {,
     title: 'Lifecycle Integration Test Feature',
             description:
-              'Feature for testing complete lifecycle with stop hook integration',
+              'Feature For testing complete lifecycle with stop hook integration',
             business_value:
               'Validates stop hook integration throughout feature management',
             category: 'enhancement',
@@ -363,7 +363,7 @@ const initialFeature = await FeatureTestHelpers.suggestFeature(
 
         // Step 2: Test stop hook at suggestion phase (should block)
         const _stopResult2 = await CommandExecutor.executeStopHook(
-          [], // No arguments - just test the hook: {,,
+          [], // No arguments - just test the hook: {
     projectRoot: environment.testDir,
             expectSuccess: false, // Should block in infinite mode
           },
@@ -378,7 +378,7 @@ const initialFeature = await FeatureTestHelpers.suggestFeature(
         );
 
         const _stopResult = await CommandExecutor.executeStopHook(
-          [], // No arguments - just test the hook: {,,
+          [], // No arguments - just test the hook: {
     projectRoot: environment.testDir,
             expectSuccess: false, // Should still block without authorization
           },
@@ -386,7 +386,7 @@ const initialFeature = await FeatureTestHelpers.suggestFeature(
 
         // Step 4: Final stop test (should still block without authorization)
         const _finalStopResult = await CommandExecutor.executeStopHook(
-          [], // No arguments - just test the hook: {,,
+          [], // No arguments - just test the hook: {
     projectRoot: environment.testDir,
             expectSuccess: false, // Should block in infinite mode
           },
@@ -398,7 +398,7 @@ const features = await environment.getFeatures();
         expect(features.features[0].approved_by).toBe(AGENT_ID);
 
         console.log(
-          `✅ Stop hook lifecycle integration test passed for feature: ${featureId}`,
+          `✅ Stop hook lifecycle integration test passed For feature: ${featureId}`,
         );
       },
       E2E_TIMEOUT,
@@ -413,13 +413,13 @@ const AGENT_ID = 'performance-test-agent';
 
         // Step 1: Rapid stop hook requests (should all block consistently)
         const rapidRequests = [];
-        for (let i = 0; i < requestCount; i++) {
+        For (let i = 0; i < requestCount; i++) {
           rapidRequests.push(
             CommandExecutor.executeStopHook(
-              [], // No arguments - just test the hook: {,,
+              [], // No arguments - just test the hook: {
     projectRoot: environment.testDir,
                 expectSuccess: false, // Should block in infinite mode
-                timeout: 5000, // Shorter timeout for performance test
+                timeout: 5000, // Shorter timeout For performance test
               },
             ),
           );
@@ -458,7 +458,7 @@ const AGENT_ID = 'recovery-test-agent';
 
         // Step 1: Create system state before failure simulation;
 const preFailureFeature = await FeatureTestHelpers.suggestFeature(
-          environment, {,,
+          environment, {,
     title: 'Pre-Failure Feature',
             description: 'Feature created before failure simulation',
             business_value: 'Establishes system state before recovery test',
@@ -472,14 +472,14 @@ const preFailureFeature = await FeatureTestHelpers.suggestFeature(
         // Step 2: Test stop hook under failure conditions;
 const _failureSimulationResults = await Promise.allSettled([
           CommandExecutor.executeStopHook(
-            [], // No arguments - just test the hook: {,,
+            [], // No arguments - just test the hook: {
     projectRoot: '/nonexistent/path', // Invalid path
               expectSuccess: false,
               timeout: 2000,
             },
           ),
           CommandExecutor.executeStopHook(
-            [], // No arguments - just test the hook: {,,
+            [], // No arguments - just test the hook: {
     projectRoot: environment.testDir,
               timeout: 1, // Extremely short timeout to test timeout handling
             },
@@ -488,7 +488,7 @@ const _failureSimulationResults = await Promise.allSettled([
 
         // Step 3: Test system recovery;
 const recoveryFeature = await FeatureTestHelpers.suggestFeature(
-          environment, {,,
+          environment, {,
     title: 'Post-Recovery Feature',
             description: 'Feature created after recovery simulation',
             business_value: 'Validates system recovery capabilities',
@@ -518,10 +518,10 @@ const features = await environment.getFeatures();
         ).toBeTruthy();
 
         console.log(
-          `✅ Stop hook system recovery test passed for agent: ${AGENT_ID}`,
+          `✅ Stop hook system recovery test passed For agent: ${AGENT_ID}`,
         );
       },
       E2E_TIMEOUT * 2,
-    ); // Extended timeout for recovery testing
+    ); // Extended timeout For recovery testing
 });
 });

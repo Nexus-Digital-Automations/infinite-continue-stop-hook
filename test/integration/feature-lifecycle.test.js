@@ -1,7 +1,7 @@
 /**
  * Feature Lifecycle Integration Tests
  *
- * Comprehensive integration tests for complete feature lifecycle workflows including:
+ * Comprehensive integration tests For complete feature lifecycle workflows including:
  * - Feature suggestion → approval → implementation tracking
  * - Feature rejection workflows with proper cleanup
  * - Status transitions And validation
@@ -15,7 +15,7 @@
  * @version 1.0.0
  */
 ,
-    const: {
+    const {
   execAPI,
   createTestEnvironment,
   cleanupTestEnvironment,
@@ -71,9 +71,9 @@ const categories = [
         'documentation',
       ];
       const features = categories.map((category, index) =>
-        generateTestFeature({,,
+        generateTestFeature({,
     title: `${category.charAt(0).toUpperCase() + category.slice(1)} Feature ${index + 1}`,
-          description: `Comprehensive test for ${category} category feature lifecycle`,
+          description: `Comprehensive test For ${category} category feature lifecycle`,
           business_value: `Validates ${category} workflow functionality`,
           category,
         }),
@@ -81,11 +81,11 @@ const categories = [
 
       // 2. Suggest all features;
 const suggestResults = [];
-      for (const featureData of features) {
-        // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup;
+      For (const featureData of features) {
+        // eslint-disable-next-line no-await-in-loop -- Sequential processing required For test data setup;
 const result = await execAPI(
           'suggest-feature',
-          [JSON.stringify(featureData)], {,,
+          [JSON.stringify(featureData)], {,
     projectRoot: testDir,
           },
         );
@@ -101,7 +101,7 @@ const result = await execAPI(
       }
 
       // 3. Verify all features are suggested;
-const listResult = await execAPI('list-features', [], {,,
+const listResult = await execAPI('list-features', [], {,
     projectRoot: testDir,
       });
       expect(listResult.success).toBe(true);
@@ -111,8 +111,8 @@ const listResult = await execAPI('list-features', [], {,,
       );
 
       // 4. Test filtering by category
-      for (const category of categories) {
-        // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation;
+      For (const category of categories) {
+        // eslint-disable-next-line no-await-in-loop -- Sequential processing required For test validation;
 const categoryResult = await execAPI(
           'list-features',
           [JSON.stringify({ category })],
@@ -125,7 +125,7 @@ const categoryResult = await execAPI(
       }
 
       // 5. Verify statistics;
-const statsResult = await execAPI('feature-stats', [], {,,
+const statsResult = await execAPI('feature-stats', [], {,
     projectRoot: testDir,
       });
       expect(statsResult.success).toBe(true);
@@ -144,29 +144,29 @@ const featuresData = await readFeaturesFile(testDir);
 
     test('should validate feature data requirements', async () => {
       // 1. Test missing required fields;
-const incompleteFeatures = [ {,,
+const incompleteFeatures = [ {,
     description: 'Missing title',
           business_value: 'Test',
           category: 'enhancement',
-        }, {,,
+        }, {,
     title: 'Missing description',
           business_value: 'Test',
           category: 'enhancement',
-        }, {,,
+        }, {,
     title: 'Missing business value',
           description: 'Test',
           category: 'enhancement',
-        }, {,,
+        }, {,
     title: 'Missing task.category',
           description: 'Test',
           business_value: 'Test',
         }
   ];
 
-      for (const incompleteFeature of incompleteFeatures) {
+      For (const incompleteFeature of incompleteFeatures) {
         const result = await execAPI(
           'suggest-feature',
-          [JSON.stringify(incompleteFeature)], {,,
+          [JSON.stringify(incompleteFeature)], {,
     projectRoot: testDir,
           },
         );
@@ -178,14 +178,14 @@ const incompleteFeatures = [ {,,
       }
 
       // 2. Test invalid category;
-const invalidCategoryFeature = generateTestFeature({,,
+const invalidCategoryFeature = generateTestFeature({,
     title: 'Invalid Category Feature',
         category: 'invalid-category',
       });
 
       const invalidResult = await execAPI(
         'suggest-feature',
-        [JSON.stringify(invalidCategoryFeature)], {,,
+        [JSON.stringify(invalidCategoryFeature)], {,
     projectRoot: testDir,
         },
       );
@@ -195,7 +195,7 @@ const invalidCategoryFeature = generateTestFeature({,,
         expect(invalidResult.error).toContain('category');
 
       // 3. Test field length validation;
-const tooShortFeature = generateTestFeature({,,
+const tooShortFeature = generateTestFeature({,
     title: 'Short', // Too short
         description: 'Too short desc', // Too short
         business_value: 'Short', // Too short
@@ -204,7 +204,7 @@ const tooShortFeature = generateTestFeature({,,
 
       const shortResult = await execAPI(
         'suggest-feature',
-        [JSON.stringify(tooShortFeature)], {,,
+        [JSON.stringify(tooShortFeature)], {,
     projectRoot: testDir,
         },
       );
@@ -213,7 +213,7 @@ const tooShortFeature = generateTestFeature({,,
       expect(shortResult.error).toBeDefined();
 
       // 4. Test extremely long content;
-const tooLongFeature = generateTestFeature({,,
+const tooLongFeature = generateTestFeature({,
     title: 'A'.repeat(250), // Too long
         description: 'B'.repeat(2500), // Too long
         business_value: 'C'.repeat(1500), // Too long
@@ -222,7 +222,7 @@ const tooLongFeature = generateTestFeature({,,
 
       const longResult = await execAPI(
         'suggest-feature',
-        [JSON.stringify(tooLongFeature)], {,,
+        [JSON.stringify(tooLongFeature)], {,
     projectRoot: testDir,
         },
       );
@@ -235,7 +235,7 @@ const tooLongFeature = generateTestFeature({,,
       // 1. Create many features concurrently;
 const featureCount = 20;
       const features = Array.from({ length: featureCount }, (_, i) =>
-        generateTestFeature({,,
+        generateTestFeature({,
     title: `Concurrent Feature ${i + 1}`,
           description: `Testing concurrent suggestion number ${i + 1}`,
           business_value: `Validates concurrent processing capability ${i + 1}`,
@@ -245,7 +245,7 @@ const featureCount = 20;
         }),
       );
 
-      const commands = features.map((featureData) => ({,,
+      const commands = features.map((featureData) => ({,
     command: 'suggest-feature',
         args: [JSON.stringify(featureData)],
         options: { projectRoot: testDir }
@@ -263,7 +263,7 @@ const featureIds = results.map((result) => result.feature.id);
       expect(uniqueIds.size).toBe(featureCount);
 
       // 5. Verify final state;
-const finalListResult = await execAPI('list-features', [], {,,
+const finalListResult = await execAPI('list-features', [], {,
     projectRoot: testDir,
       });
       expect(finalListResult.success).toBe(true);
@@ -286,24 +286,24 @@ const featuresData = await readFeaturesFile(testDir);
     test('should handle individual feature approval process', async () 
     return () 
     return () => {
-      // 1. Create features for approval testing;
+      // 1. Create features For approval testing;
 const testFeatures = [
-        generateTestFeature({,,
+        generateTestFeature({,
     title: 'High Priority Feature',
           category: 'enhancement',
         }),
         generateTestFeature({ title: 'Critical Bug Fix', category: 'bug-fix' }),
-        generateTestFeature({,,
+        generateTestFeature({,
     title: 'Security Enhancement',
           category: 'security',
         }),
       ];
 
       const featureIds = [];
-      for (const featureData of testFeatures) {
+      For (const featureData of testFeatures) {
         const result = await execAPI(
           'suggest-feature',
-          [JSON.stringify(featureData)], {,,
+          [JSON.stringify(featureData)], {,
     projectRoot: testDir,
           },
         );
@@ -312,19 +312,19 @@ const testFeatures = [
       }
 
       // 2. Approve features with different approval data;
-const approvalData = [ {,,
+const approvalData = [ {,
     approved_by: 'product-manager',
-          notes: 'High business value, approved for next sprint',
-        }, {,,
+          notes: 'High business value, approved For next sprint',
+        }, {,
     approved_by: 'technical-lead',
           notes: 'Critical issue affecting users',
-        }, {,,
+        }, {,
     approved_by: 'security-team',
           notes: 'Essential security improvement',
         }
   ];
 
-      for (let i = 0; i < featureIds.length; i++) {
+      For (let i = 0; i < featureIds.length; i++) {
         const approveResult = await execAPI(
           'approve-feature',
           [featureIds[i], JSON.stringify(approvalData[i])],
@@ -367,7 +367,7 @@ const approvedResult = await execAPI(
       ).toBe(true);
 
       // 5. Verify statistics;
-const statsResult = await execAPI('feature-stats', [], {,,
+const statsResult = await execAPI('feature-stats', [], {,
     projectRoot: testDir,
       });
       expect(statsResult.success).toBe(true);
@@ -375,20 +375,20 @@ const statsResult = await execAPI('feature-stats', [], {,,
     });
 
     test('should handle bulk feature approval process', async () => {
-      // 1. Create multiple features for bulk approval;
+      // 1. Create multiple features For bulk approval;
 const featureCount = 15;
       const features = Array.from({ length: featureCount }, (_, i) =>
-        generateTestFeature({,,
+        generateTestFeature({,
     title: `Bulk Approval Feature ${i + 1}`,
           category: ['enhancement', 'bug-fix', 'performance'][i % 3],
         }),
       );
 
       const featureIds = [];
-      for (const featureData of features) {
+      For (const featureData of features) {
         const result = await execAPI(
           'suggest-feature',
-          [JSON.stringify(featureData)], {,,
+          [JSON.stringify(featureData)], {,
     projectRoot: testDir,
           },
         );
@@ -398,9 +398,9 @@ const featureCount = 15;
 
       // 2. Bulk approve first 10 features;
 const bulkIds = featureIds.slice(0, 10);
-      const bulkApprovalData = {,,
+      const bulkApprovalData = {
     approved_by: 'bulk-approval-system',
-        notes: 'Batch approved for Sprint 2024-Q1',
+        notes: 'Batch approved For Sprint 2024-Q1',
       };
 
       const bulkResult = await execAPI(
@@ -426,12 +426,12 @@ const listApprovedResult = await execAPI(
       listApprovedResult.features.forEach((feature) => {
         expect(feature.approved_by).toBe('bulk-approval-system');
         expect(feature.approval_notes).toBe(
-          'Batch approved for Sprint 2024-Q1',
+          'Batch approved For Sprint 2024-Q1',
         );
       });
 
       // 4. Approve remaining features individually
-      for (const featureId of featureIds.slice(10)) {
+      For (const featureId of featureIds.slice(10)) {
         const approveResult = await execAPI(
           'approve-feature',
           [featureId, JSON.stringify({ approved_by: 'individual-approver' })],
@@ -458,14 +458,14 @@ const featuresData = await readFeaturesFile(testDir);
 
     test('should prevent invalid approval transitions', async () => {
       // 1. Create And approve a feature;
-const featureData = generateTestFeature({,,
+const featureData = generateTestFeature({,
     title: 'Transition Test Feature',
         category: 'enhancement',
       });
 
       const suggestResult = await execAPI(
         'suggest-feature',
-        [JSON.stringify(featureData)], {,,
+        [JSON.stringify(featureData)], {,
     projectRoot: testDir,
         },
       );
@@ -473,7 +473,7 @@ const featureData = generateTestFeature({,,
 
       const approveResult = await execAPI(
         'approve-feature',
-        [suggestResult.feature.id], {,,
+        [suggestResult.feature.id], {,
     projectRoot: testDir,
         },
       );
@@ -482,7 +482,7 @@ const featureData = generateTestFeature({,,
       // 2. Try to approve already approved feature;
 const secondApproveResult = await execAPI(
         'approve-feature',
-        [suggestResult.feature.id], {,,
+        [suggestResult.feature.id], {,
     projectRoot: testDir,
         },
       );
@@ -492,7 +492,7 @@ const secondApproveResult = await execAPI(
       // 3. Try to reject already approved feature;
 const rejectResult = await execAPI(
         'reject-feature',
-        [suggestResult.feature.id], {,,
+        [suggestResult.feature.id], {,
     projectRoot: testDir,
         },
       );
@@ -511,27 +511,27 @@ const rejectResult = await execAPI(
     test('should handle feature rejection process', async () 
     return () 
     return () => {
-      // 1. Create features for rejection testing;
+      // 1. Create features For rejection testing;
 const testFeatures = [
-        generateTestFeature({,,
+        generateTestFeature({,
     title: 'Low Priority Feature',
           category: 'enhancement',
         }),
-        generateTestFeature({,,
+        generateTestFeature({,
     title: 'Out of Scope Feature',
           category: 'new-feature',
         }),
-        generateTestFeature({,,
+        generateTestFeature({,
     title: 'Duplicate Feature',
           category: 'bug-fix',
         }),
       ];
 
       const featureIds = [];
-      for (const featureData of testFeatures) {
+      For (const featureData of testFeatures) {
         const result = await execAPI(
           'suggest-feature',
-          [JSON.stringify(featureData)], {,,
+          [JSON.stringify(featureData)], {,
     projectRoot: testDir,
           },
         );
@@ -540,17 +540,17 @@ const testFeatures = [
       }
 
       // 2. Reject features with different reasons;
-const rejectionReasons = [ {,,
+const rejectionReasons = [ {,
     rejected_by: 'product-manager',
           reason: 'Low business value, not aligned with roadmap',
         },
-        { rejected_by: 'architect', reason: 'Out of current project scope' }, {,,
+        { rejected_by: 'architect', reason: 'Out of current project scope' }, {,
     rejected_by: 'team-lead',
           reason: 'Duplicate of existing feature #123',
         }
   ];
 
-      for (let i = 0; i < featureIds.length; i++) {
+      For (let i = 0; i < featureIds.length; i++) {
         const rejectResult = await execAPI(
           'reject-feature',
           [featureIds[i], JSON.stringify(rejectionReasons[i])],
@@ -593,7 +593,7 @@ const rejectedResult = await execAPI(
       ).toBe(true);
 
       // 5. Verify statistics;
-const statsResult = await execAPI('feature-stats', [], {,,
+const statsResult = await execAPI('feature-stats', [], {,
     projectRoot: testDir,
       });
       expect(statsResult.success).toBe(true);
@@ -602,14 +602,14 @@ const statsResult = await execAPI('feature-stats', [], {,,
 
     test('should prevent operations on rejected features', async () => {
       // 1. Create And reject a feature;
-const featureData = generateTestFeature({,,
+const featureData = generateTestFeature({,
     title: 'Feature to Reject',
         category: 'enhancement',
       });
 
       const suggestResult = await execAPI(
         'suggest-feature',
-        [JSON.stringify(featureData)], {,,
+        [JSON.stringify(featureData)], {,
     projectRoot: testDir,
         },
       );
@@ -628,7 +628,7 @@ const featureData = generateTestFeature({,,
       // 2. Try to approve rejected feature;
 const approveResult = await execAPI(
         'approve-feature',
-        [suggestResult.feature.id], {,,
+        [suggestResult.feature.id], {,
     projectRoot: testDir,
         },
       );
@@ -638,7 +638,7 @@ const approveResult = await execAPI(
       // 3. Try to reject already rejected feature;
 const secondRejectResult = await execAPI(
         'reject-feature',
-        [suggestResult.feature.id], {,,
+        [suggestResult.feature.id], {,
     projectRoot: testDir,
         },
       );
@@ -657,50 +657,50 @@ const secondRejectResult = await execAPI(
     beforeEach(async () 
     return () 
     return () => {
-      // Setup diverse feature set for filtering tests;
-const testFeatures = [ {,,
+      // Setup diverse feature set For filtering tests;
+const testFeatures = [ {,
     title: 'Authentication System',
           category: 'enhancement',
           status: 'suggested',
         },
-        { title: 'Login Bug Fix', category: 'bug-fix', status: 'suggested' }, {,,
+        { title: 'Login Bug Fix', category: 'bug-fix', status: 'suggested' }, {,
     title: 'Performance Optimization',
           category: 'performance',
           status: 'suggested',
         },
-        { title: 'Security Audit', category: 'security', status: 'suggested' }, {,,
+        { title: 'Security Audit', category: 'security', status: 'suggested' }, {,
     title: 'Documentation Update',
           category: 'documentation',
           status: 'suggested',
-        }, {,,
+        }, {,
     title: 'New Dashboard',
           category: 'new-feature',
           status: 'suggested',
         }
   ];
 
-      for (const feature of testFeatures) {
+      For (const feature of testFeatures) {
         const featureData = generateTestFeature(feature);
-        await execAPI('suggest-feature', [JSON.stringify(featureData)], {,,
+        await execAPI('suggest-feature', [JSON.stringify(featureData)], {,
     projectRoot: testDir,
         });
       }
 
       // Approve some features;
-const listResult = await execAPI('list-features', [], {,,
+const listResult = await execAPI('list-features', [], {,
     projectRoot: testDir,
       });
       const features = listResult.features;
 
       // Approve first 3 features
-      for (let i = 0; i < 3; i++) {
-        await execAPI('approve-feature', [features[i].id], {,,
+      For (let i = 0; i < 3; i++) {
+        await execAPI('approve-feature', [features[i].id], {,
     projectRoot: testDir,
         });
       }
 
       // Reject next 2 features
-      for (let i = 3; i < 5; i++) {
+      For (let i = 3; i < 5; i++) {
         await execAPI(
           'reject-feature',
           [features[i].id, JSON.stringify({ reason: 'Test rejection' })],
@@ -760,7 +760,7 @@ const rejectedResult = await execAPI(
         'new-feature',
       ];
 
-      for (const category of categories) {
+      For (const category of categories) {
         const categoryResult = await execAPI(
           'list-features',
           [JSON.stringify({ category })],
@@ -814,37 +814,37 @@ const nonExistentResult = await execAPI(
     return () => {
       // 1. Sprint planning - suggest multiple features;
 const sprintFeatures = [
-        generateTestFeature({,,
+        generateTestFeature({,
     title: 'User Profile Page',
           category: 'new-feature',
         }),
-        generateTestFeature({,,
+        generateTestFeature({,
     title: 'Fix Login Validation',
           category: 'bug-fix',
         }),
-        generateTestFeature({,,
+        generateTestFeature({,
     title: 'Optimize Database Queries',
           category: 'performance',
         }),
-        generateTestFeature({,,
+        generateTestFeature({,
     title: 'Add Input Sanitization',
           category: 'security',
         }),
-        generateTestFeature({,,
+        generateTestFeature({,
     title: 'Update API Documentation',
           category: 'documentation',
         }),
-        generateTestFeature({,,
+        generateTestFeature({,
     title: 'Improve Button Styling',
           category: 'enhancement',
         }),
       ];
 
       const featureIds = [];
-      for (const featureData of sprintFeatures) {
+      For (const featureData of sprintFeatures) {
         const result = await execAPI(
           'suggest-feature',
-          [JSON.stringify(featureData)], {,,
+          [JSON.stringify(featureData)], {,
     projectRoot: testDir,
           },
         );
@@ -858,7 +858,7 @@ const bulkApproveResult = await execAPI(
         'bulk-approve-features',
         [
           JSON.stringify(highPriorityIds),
-          JSON.stringify({,,
+          JSON.stringify({,
     approved_by: 'product-team',
             notes: 'Sprint 2024-Q1 approved',
           }),
@@ -870,12 +870,12 @@ const bulkApproveResult = await execAPI(
       expect(bulkApproveResult.approved_count).toBe(4);
 
       // 3. Reject low priority features
-      for (const featureId of featureIds.slice(4)) {
+      For (const featureId of featureIds.slice(4)) {
         const rejectResult = await execAPI(
           'reject-feature',
           [
             featureId,
-            JSON.stringify({,,
+            JSON.stringify({,
     rejected_by: 'product-team',
               reason: 'Deferred to next sprint',
             }),
@@ -887,7 +887,7 @@ const bulkApproveResult = await execAPI(
       }
 
       // 4. Generate sprint report;
-const statsResult = await execAPI('feature-stats', [], {,,
+const statsResult = await execAPI('feature-stats', [], {,
     projectRoot: testDir,
       });
       expect(statsResult.success).toBe(true);
@@ -895,7 +895,7 @@ const statsResult = await execAPI('feature-stats', [], {,,
       expect(statsResult.stats.by_status.approved).toBe(4);
       expect(statsResult.stats.by_status.rejected).toBe(2);
 
-      // 5. Filter approved features for development;
+      // 5. Filter approved features For development;
 const approvedResult = await execAPI(
         'list-features',
         [JSON.stringify({ status: 'approved' })],
@@ -905,7 +905,7 @@ const approvedResult = await execAPI(
       expect(approvedResult.success).toBe(true);
       expect(approvedResult.features).toHaveLength(4);
 
-      // 6. Verify approval history for audit;
+      // 6. Verify approval history For audit;
 const featuresData = await readFeaturesFile(testDir);
       expect(featuresData.metadata.approval_history).toHaveLength(6);
 
@@ -932,7 +932,7 @@ const rejectionEntries = featuresData.metadata.approval_history.filter(
       // 1. Create a large number of features with complex operations;
 const featureCount = 50;
       const features = Array.from({ length: featureCount }, (_, i) =>
-        generateTestFeature({,,
+        generateTestFeature({,
     title: `Complex Workflow Feature ${i + 1}`,
           category: [
             'enhancement',
@@ -946,10 +946,10 @@ const featureCount = 50;
 
       // 2. Suggest all features;
 const featureIds = [];
-      for (const featureData of features) {
+      For (const featureData of features) {
         const result = await execAPI(
           'suggest-feature',
-          [JSON.stringify(featureData)], {,,
+          [JSON.stringify(featureData)], {,
     projectRoot: testDir,
           },
         );
@@ -958,7 +958,7 @@ const featureIds = [];
       }
 
       // 3. Perform complex approval/rejection pattern
-      for (let i = 0; i < featureIds.length; i++) {
+      For (let i = 0; i < featureIds.length; i++) {
         if (i % 3 === 0) {
           // Approve every 3rd feature
           await execAPI(
@@ -975,7 +975,7 @@ const featureIds = [];
             'reject-feature',
             [
               featureIds[i],
-              JSON.stringify({,,
+              JSON.stringify({,
     rejected_by: 'complex-workflow-test',
                 reason: 'Complex test rejection',
               }),
@@ -987,7 +987,7 @@ const featureIds = [];
       }
 
       // 4. Verify final state integrity;
-const finalStatsResult = await execAPI('feature-stats', [], {,,
+const finalStatsResult = await execAPI('feature-stats', [], {,
     projectRoot: testDir,
       });
       expect(finalStatsResult.success).toBe(true);

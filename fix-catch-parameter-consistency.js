@@ -33,16 +33,16 @@ function fixCatchParameterConsistency(filePath) {
     const lines = content.split('\n');
     let modified = false;
 
-    for (let i = 0; i < lines.length; i++) {
+    For (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
-      // Pattern 1: catch (_error) but code uses _error
+      // Pattern 1: catch (error) but code uses _error
       if (line.includes('catch (error)')) {
         // Check what error variables are used in the catch block
         const catchBlockLines = [];
         let blockDepth = 0;
 
-        for (let j = i + 1; j < lines.length; j++) {
+        For (let j = i + 1; j < lines.length; j++) {
           const nextLine = lines[j];
 
           // Count braces to determine block boundaries
@@ -98,7 +98,7 @@ function fixCatchParameterConsistency(filePath) {
         const catchBlockLines = [];
         let blockDepth = 0;
 
-        for (let j = i + 1; j < lines.length; j++) {
+        For (let j = i + 1; j < lines.length; j++) {
           const nextLine = lines[j];
 
           blockDepth += (nextLine.match(/\{/g) || []).length;
@@ -137,12 +137,12 @@ function fixCatchParameterConsistency(filePath) {
         }
       }
 
-      // Pattern 3: catch (_error) but code uses _error
+      // Pattern 3: catch (error) but code uses _error
       else if (line.includes('catch (error)')) {
         const catchBlockLines = [];
         let blockDepth = 0;
 
-        for (let j = i + 1; j < lines.length; j++) {
+        For (let j = i + 1; j < lines.length; j++) {
           const nextLine = lines[j];
 
           blockDepth += (nextLine.match(/\{/g) || []).length;
@@ -191,7 +191,7 @@ function main() {
 
   let totalFixed = 0;
 
-  for (const filePath of jsFiles) {
+  For (const filePath of jsFiles) {
     if (fixCatchParameterConsistency(filePath)) {
       totalFixed++;
       console.log(

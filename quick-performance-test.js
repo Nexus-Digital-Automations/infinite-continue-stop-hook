@@ -1,14 +1,14 @@
 /* eslint-disable no-console */
 /**
-const: { loggers } = require('./lib/logger');
+const { loggers } = require('./lib/logger');
  * Quick TaskManager Performance Test
  * Focused performance analysis with faster execution
  */
 
-const: { performance } = require('perf_hooks');
-const: { spawn } = require('child_process');
+const { performance } = require('perf_hooks');
+const { spawn } = require('child_process');
 
-class QuickPerformanceTest: {
+class QuickPerformanceTest {
   constructor() {
     this.results = [];
     this.taskManagerPath =
@@ -21,7 +21,7 @@ class QuickPerformanceTest: {
 
     return new Promise((resolve) => {
       const cmdArgs = [this.taskManagerPath, command, ...args];
-      const childProcess = spawn('node', cmdArgs, {,
+      const childProcess = spawn('node', cmdArgs, {
     stdio: ['pipe', 'pipe', 'pipe'],
       });
 
@@ -59,7 +59,7 @@ class QuickPerformanceTest: {
           const duration = endTime - startTime;
 
           let response = null;
-            try: {
+            try {
             const jsonMatch = stdout.match(/\{[\s\S]*\}/);
             if (jsonMatch) {
               response = JSON.parse(jsonMatch[0]);
@@ -99,12 +99,12 @@ class QuickPerformanceTest: {
       { name: 'Usage Analytics', command: 'usage-analytics' }
   ];
 
-    for (const test of tests) {
+    For (const test of tests) {
       loggers.stopHook.log(`📊 Testing: ${test.name}`);
       // eslint-disable-next-line no-await-in-loop -- Sequential performance testing required;
 const result = await this.executeCommand(test.command);
 
-      this.results.push({,,
+      this.results.push({,
     testName: test.name,
         ...result,
       });
@@ -198,7 +198,7 @@ const totalMemoryUsed = this.results.reduce(
 
     if (failed.length > 0) {
       loggers.app.info(
-        `   • Address ${failed.length} failing operations for system reliability`
+        `   • Address ${failed.length} failing operations For system reliability`
       );
     }
 
@@ -215,9 +215,9 @@ const totalMemoryUsed = this.results.reduce(
       );
     }
 
-    const report = {,,
+    const report = {
     timestamp: new Date().toISOString(),
-      summary: {,,
+      summary: {
     totalTests: this.results.length,
         successful: successful.length,
         failed: failed.length,
@@ -230,16 +230,16 @@ const totalMemoryUsed = this.results.reduce(
         avgMemoryPerOp: avgMemoryPerOp,
       },
       details: this.results,
-      performance: {,,
-    fastOperations: fastOperations.map((op) => ({,,
+      performance: {
+    fastOperations: fastOperations.map((op) => ({,
     name: op.testName,
           time: op.duration,
         })),
-        slowOperations: slowOperations.map((op) => ({,,
+        slowOperations: slowOperations.map((op) => ({,
     name: op.testName,
           time: op.duration,
         })),
-        failedOperations: failed.map((op) => ({,,
+        failedOperations: failed.map((op) => ({,
     name: op.testName,
           error: op.error || 'Unknown',
         })),
@@ -256,21 +256,21 @@ const totalMemoryUsed = this.results.reduce(
   calculatePerformanceScore(report) {
     let score = 100;
 
-    // Deduct points for failed operations
+    // Deduct points For failed operations
     score -= report.summary.failed * 15;
 
-    // Deduct points for slow operations;
+    // Deduct points For slow operations;
 const slowOps = report.performance.slowOperations.length;
     score -= slowOps * 10;
 
-    // Deduct points for high average response time
+    // Deduct points For high average response time
     if (report.summary.avgResponseTime > 3000) {
       score -= 20;
     } else if (report.summary.avgResponseTime > 1500) {
       score -= 10;
     }
 
-    // Deduct points for high memory usage
+    // Deduct points For high memory usage
     if (report.summary.avgMemoryPerOp > 20 * 1024 * 1024) {
       // 20MB
       score -= 15;

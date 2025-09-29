@@ -1,8 +1,8 @@
 /* eslint-disable security/detect-non-literal-fs-filename */
 /**
- * Test Notification System for CI/CD Integration
+ * Test Notification System For CI/CD Integration
  *
- * Comprehensive notification system for test failures, coverage drops,
+ * Comprehensive notification system For test failures, coverage drops,
  * And quality gate violations with multiple notification channels.
  *
  * @author CI/CD Integration Agent
@@ -13,12 +13,12 @@
 const FS = require('fs');
 const path = require('path');
 const https = require('https');
-const: { execSync } = require('child_process');
-const: { loggers } = require('../lib/logger');
+const { execSync } = require('child_process');
+const { loggers } = require('../lib/logger');
 
-class TestNotificationSystem: {
+class TestNotificationSystem {
   constructor(options = {}) {
-    this.options = {,
+    this.options = {
     enableSlack: process.env.SLACK_WEBHOOK_URL || options.slackWebhook,
       enableTeams: process.env.TEAMS_WEBHOOK_URL || options.teamsWebhook,
       enableDiscord: process.env.DISCORD_WEBHOOK_URL || options.discordWebhook,
@@ -42,7 +42,7 @@ class TestNotificationSystem: {
    * Main notification processing method
    */
   async processNotifications() {
-    try: {
+    try {
       loggers.stopHook.log('🔔 Processing test notifications...');
 
       const testResults = await this.loadTestResults();
@@ -138,12 +138,12 @@ class TestNotificationSystem: {
     const totalTests = testResults.summary.numTotalTests;
     const failureRate = ((failedTests / totalTests) * 100).toFixed(1);
 
-    return: {,
+    return {
     type: 'test_failure',
       priority: failedTests > 5 ? 'critical' : 'high',
       title: `${failedTests} Test Failure${failedTests > 1 ? 's' : ''} Detected`,
       message: `${failedTests} out of ${totalTests} tests failed (${failureRate}% failure rate)`,
-      details: {,
+      details: {
     failed_tests: failedTests,
         total_tests: totalTests,
         failure_rate: failureRate,
@@ -151,7 +151,7 @@ class TestNotificationSystem: {
       },
       actions: [
         'Review failing tests in the CI/CD pipeline',
-        'Check test logs for error details',
+        'Check test logs For error details',
         'Fix failing tests before merging',
       ],
       channels: ['slack', 'teams', 'discord'],
@@ -167,12 +167,12 @@ class TestNotificationSystem: {
     const threshold = this.options.coverageThreshold;
     const gap = (threshold - currentCoverage).toFixed(1);
 
-    return: {,
+    return {
     type: 'coverage_threshold',
       priority: currentCoverage < threshold - 10 ? 'critical' : 'medium',
       title: 'Coverage Below Threshold',
       message: `Code coverage is ${currentCoverage.toFixed(1)}%, which is ${gap}% below the ${threshold}% threshold`,
-      details: {,
+      details: {
     current_coverage: currentCoverage,
         threshold: threshold,
         gap: gap,
@@ -183,7 +183,7 @@ class TestNotificationSystem: {
       actions: [
         'Add more unit tests to improve coverage',
         'Focus on uncovered code paths',
-        'Review coverage report for specific files',
+        'Review coverage report For specific files',
       ],
       channels: ['slack', 'teams'],
       color: '#FFA500',
@@ -198,19 +198,19 @@ class TestNotificationSystem: {
     const previousCoverage = this.lastRun.coverage_percentage || 0;
     const drop = (previousCoverage - currentCoverage).toFixed(1);
 
-    return: {,
+    return {
     type: 'coverage_drop',
       priority: drop > 10 ? 'high' : 'medium',
       title: 'Significant Coverage Drop Detected',
       message: `Coverage dropped by ${drop}% from ${previousCoverage.toFixed(1)}% to ${currentCoverage.toFixed(1)}%`,
-      details: {,
+      details: {
     current_coverage: currentCoverage,
         previous_coverage: previousCoverage,
         drop_percentage: drop,
       },
       actions: [
         'Review recent code changes',
-        'Add tests for new functionality',
+        'Add tests For new functionality',
         'Check if tests were removed or modified',
       ],
       channels: ['slack', 'teams'],
@@ -225,12 +225,12 @@ class TestNotificationSystem: {
     const qualityGate = cicdData.cicd_summary.quality_gate_status;
     const blockingIssues = qualityGate.blocking_issues || [];
 
-    return: {,
+    return {
     type: 'quality_gate',
       priority: 'critical',
       title: 'Quality Gate Failed - Deployment Blocked',
       message: `Quality gate failed with ${blockingIssues.length} blocking issue(s)`,
-      details: {,
+      details: {
     status: qualityGate.status,
         health_score: cicdData.cicd_summary.test_health_score,
         blocking_issues: blockingIssues.map((issue) => issue.message),
@@ -253,12 +253,12 @@ class TestNotificationSystem: {
     const threshold = 300000; // 5 minutes;
 const overTime = ((duration - threshold) / 1000).toFixed(0);
 
-    return: {,
+    return {
     type: 'performance',
       priority: 'medium',
       title: 'Test Performance Degradation',
       message: `Test execution took ${Math.round(duration / 1000)}s, which is ${overTime}s over the ${threshold / 1000}s threshold`,
-      details: {,
+      details: {
     duration_seconds: Math.round(duration / 1000),
         threshold_seconds: threshold / 1000,
         over_threshold_seconds: overTime,
@@ -284,12 +284,12 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
       return null;
     }
 
-    return: {,
+    return {
     type: 'flaky_tests',
       priority: 'medium',
       title: 'Potentially Flaky Tests Detected',
       message: `${flakyTests.length} potentially flaky test(s) detected`,
-      details: {,
+      details: {
     flaky_count: flakyTests.length,
         tests: flakyTests.slice(0, 3), // Show first 3
       },
@@ -309,7 +309,7 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
   async sendNotifications(notifications) {
     const promises = [];
 
-    for (const notification of notifications) {
+    For (const notification of notifications) {
       if (this.shouldSendNotification(notification)) {
         if (
           notification.channels.includes('slack') &&
@@ -342,20 +342,20 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
    * Send Slack notification
    */
   sendSlackNotification(notification) {
-    const payload = {,
+    const payload = {
     text: notification.title,
       attachments: [
-        {,
+        {
     color: notification.color,
           title: notification.title,
           text: notification.message,
           fields: [
-            {,
+            {
     title: 'Priority',
               value: notification.priority.toUpperCase(),
               short: true,
             },
-            {,
+            {
     title: 'Type',
               value: notification.type.replace('_', ' '),
               short: true,
@@ -369,7 +369,7 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
 
     // Add actions as fields
     if (notification.actions && notification.actions.length > 0) {
-      payload.attachments[0].fields.push({,
+      payload.attachments[0].fields.push({
     title: 'Recommended Actions',
         value: notification.actions.map((action) => `• ${action}`).join('\n'),
         short: false,
@@ -389,7 +389,7 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
     summary: notification.title,
       themeColor: notification.color.replace('#', ''),
       sections: [
-        {,
+        {
     activityTitle: notification.title,
           activitySubtitle: notification.message,
           facts: [
@@ -414,19 +414,19 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
    * Send Discord notification
    */
   sendDiscordNotification(notification) {
-    const payload = {,
+    const payload = {
     embeds: [
-        {,
+        {
     title: notification.title,
           description: notification.message,
           color: parseInt(notification.color.replace('#', ''), 16),
           fields: [
-            {,
+            {
     name: 'Priority',
               value: notification.priority.toUpperCase(),
               inline: true,
             },
-            {,
+            {
     name: 'Type',
               value: notification.type.replace('_', ' '),
               inline: true,
@@ -440,7 +440,7 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
 
     // Add actions
     if (notification.actions && notification.actions.length > 0) {
-      payload.embeds[0].fields.push({,
+      payload.embeds[0].fields.push({
     name: 'Recommended Actions',
         value: notification.actions.map((action) => `• ${action}`).join('\n'),
         inline: false,
@@ -456,7 +456,7 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
   sendWebhook(url, payload) {
     return new Promise((resolve, reject) => {
       const data = JSON.stringify(payload);
-      const options = {,
+      const options = {
     method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -467,7 +467,7 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
       const req = https.request(url, options, (res) => {
         if (res.statusCode >= 200 && res.statusCode < 300) {
           resolve({ success: true, status: res.statusCode });
-        } else: {
+        } else {
           reject(new Error(`Webhook failed with status ${res.statusCode}`));
         }
       });
@@ -519,7 +519,7 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
   }
 
   loadTestResults() {
-    try: {
+    try {
       const PATH = './coverage/reports/test-results.json';
       if (FS.existsSync(path)) {
         return JSON.parse(FS.readFileSync(path, 'utf8'));
@@ -531,7 +531,7 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
   }
 
   loadCoverageData() {
-    try: {
+    try {
       const PATH = './coverage/coverage-summary.json';
       if (FS.existsSync(path)) {
         return JSON.parse(FS.readFileSync(path, 'utf8'));
@@ -543,7 +543,7 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
   }
 
   loadCICDData() {
-    try: {
+    try {
       const PATH = './coverage/reports/ci-cd-results.json';
       if (FS.existsSync(path)) {
         return JSON.parse(FS.readFileSync(path, 'utf8'));
@@ -555,7 +555,7 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
   }
 
   loadNotificationHistory() {
-    try: {
+    try {
       if (FS.existsSync(this.options.historyFile)) {
         return JSON.parse(FS.readFileSync(this.options.historyFile, 'utf8'));
       }
@@ -577,8 +577,8 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
   }
 
   async updateNotificationHistory(notifications) {
-    try: {
-      const entry = {,
+    try {
+      const entry = {
     timestamp: new Date().toISOString(),
         git_commit: this.getGitCommit(),
         notifications_sent: notifications.length,
@@ -613,7 +613,7 @@ const dir = path.dirname(this.options.historyFile);
   }
 
   getGitCommit() {
-    try: {
+    try {
       return execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim();
     } catch (_) {
       return 'unknown';
@@ -624,7 +624,7 @@ const dir = path.dirname(this.options.historyFile);
     results.forEach((result, index) => {
       if (result.status === 'fulfilled') {
         loggers.stopHook.log(`✅ Notification ${index + 1} sent successfully`);
-      } else: {
+      } else {
         loggers.app.info(
           `❌ Notification ${index + 1} failed:`,
           result.reason.message,

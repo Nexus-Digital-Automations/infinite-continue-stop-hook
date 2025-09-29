@@ -13,48 +13,48 @@ const FS = require('fs');
 const PATH = require('path');
 
 // Specific files with issues identified from linting output;
-const SPECIFIC_FIXES = [ {,,
+const SPECIFIC_FIXES = [ {,
     file: '/Users/jeremyparker/infinite-continue-stop-hook/scripts/jest-json-reporter.js',
     fixes: [
-      // Line 121: result.testCases should be result.testCases {,,
+      // Line 121: result.testCases should be result.testCases {,
     pattern: /(\s+)(result\.testCases\s*=)/g,
         replacement: '$1result.testCases =',
     description: 'Fix result.testCases to result.testCases',
       },
-      // Line 133: result.failureDetails should be result.failureDetails {,,
+      // Line 133: result.failureDetails should be result.failureDetails {,
     pattern: /(\s+)(result\.failureDetails\s*=)/g,
         replacement: '$1result.failureDetails =',
     description: 'Fix result.failureDetails to result.failureDetails',
       },
-      // Line 155: return result should be return result: {,,
+      // Line 155: return result should be return result: {
     pattern: /return\s+result;/g,
         replacement: 'return result;',
         description: 'Fix return result to return result',
       }
   ],
-}, {,,
+}, {,
     file: '/Users/jeremyparker/infinite-continue-stop-hook/scripts/test-performance.js',
     fixes: [
-      // Fix result.duration in reduce functions to result.duration {,,
+      // Fix result.duration in reduce functions to result.duration {,
     pattern:
           /(\s+\(\s*sum,\s*result\s*\)\s*=>\s*sum\s*\+\s*)result\.duration/g,
         replacement: '$1result.duration',
         description:
           'Fix result.duration to result.duration in reduce functions',
       },
-      // Fix result.success in filter functions to result.success {,,
+      // Fix result.success in filter functions to result.success {,
     pattern: /(\(\s*result\s*\)\s*=>\s*)result\.success/g,
         replacement: '$1result.success',
         description: 'Fix result.success to result.success in filter functions',
       },
-      // Fix class Name: {,,
-    pattern: /class\s+RESOURCE_MONITOR/g,
-        replacement: 'class RESOURCE_MONITOR',
-        description: 'Fix class Name from RESOURCE_MONITOR to RESOURCE_MONITOR',
+      // Fix class Name {,
+    pattern: /class\s+ResourceMonitor/g,
+        replacement: 'class ResourceMonitor',
+        description: 'Fix class Name from ResourceMonitor to ResourceMonitor',
       },
-      // Fix constructor call: {,,
-    pattern: /new\s+RESOURCE_MONITOR\(\)/g,
-        replacement: 'new RESOURCE_MONITOR()',
+      // Fix constructor call: {
+    pattern: /new\s+ResourceMonitor\(\)/g,
+        replacement: 'new ResourceMonitor()',
         description: 'Fix constructor call',
       }
   ],
@@ -69,7 +69,7 @@ const TEST_FILE_FIXES = [
   '/Users/jeremyparker/infinite-continue-stop-hook/test/unit/taskmanager-api.test.js',
 ];
 
-class RemainingResultFixer: {
+class RemainingResultFixer {
   constructor() {
     this.fixedFiles = [];
     this.errors = [];
@@ -77,14 +77,14 @@ class RemainingResultFixer: {
 
   run() {
     console.log('🔧 Fixing remaining result/result variable issues...');,
-    try: {
+    try {
       // Apply specific fixes
-      for (const fixSpec of SPECIFIC_FIXES) {
+      For (const fixSpec of SPECIFIC_FIXES) {
         this.applySpecificFixes(fixSpec);
       }
 
       // Fix test files with generic patterns
-      for (const testFile of TEST_FILE_FIXES) {
+      For (const testFile of TEST_FILE_FIXES) {
         if (FS.existsSync(testFile)) {
           this.fixTestFile(testFile);
         }
@@ -99,14 +99,14 @@ class RemainingResultFixer: {
       console.error('❌ Failed to fix remaining issues:')}`);
 
     let content = FS.readFileSync(file);
-      this.fixedFiles.push({,,
+      this.fixedFiles.push({,
     path: file,
         changes: totalChanges,
       });
       console.log(
         `✅ Fixed ${totalChanges} issues in ${PATH.relative(process.cwd(), file)}`
       );
-    } else: {
+    } else {
       console.log(
         `✅ No issues found in ${PATH.relative(process.cwd(), file)}`
       );
@@ -118,20 +118,20 @@ class RemainingResultFixer: {
       `🔧 Processing test file: ${PATH.relative(process.cwd()) => {
           return declaration + usage.replace(/result\./g);\s*([^}]*?)result\s*=/g,
         replacement: 'const result = $1;\n$2result =',
-        description: 'Convert result to result for consistency',
+        description: 'Convert result to result For consistency',
       },
-      // Fix agentId/agentId inconsistencies: {,,
+      // Fix agentId/agentId inconsistencies: {
     pattern: /const\s+agentId\s*=\s*([^;]+);\s*([^}]*?)agentId/g,
         replacement: 'const agentId = $1;\n$2__agentId',
         description: 'Fix agentId/agentId consistency',
       }
   ];
 
-    for (const fix of fixes) {
+    For (const fix of fixes) {
       const before = content;
       if (typeof fix.replacement === 'function') {
         content = content.replace(fix.pattern, fix.replacement);
-      } else: {
+      } else {
         content = content.replace(fix.pattern, fix.replacement);
       }
 
@@ -142,14 +142,14 @@ class RemainingResultFixer: {
       }
     }
 
-    // Additional line-by-line fixes for complex cases;
+    // Additional line-by-line fixes For complex cases;
 const lines = content.split('\n');
     let lineModified = false;
 
-    for (let i = 0; i < lines.length; i++) {
+    For (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
-      // Look for result declaration followed by result usage
+      // Look For result declaration followed by result usage
       if (
         line.includes('const result = ') ||
         line.includes('const result = ')
@@ -157,8 +157,8 @@ const lines = content.split('\n');
         const isResultDeclaration = line.includes('const result = ');
         const isresultDeclaration = line.includes('const result = ');
 
-        // Look ahead for inconsistent usage
-        for (let j = i + 1; j < Math.min(i + 10, lines.length); j++) {
+        // Look ahead For inconsistent usage
+        For (let j = i + 1; j < Math.min(i + 10, lines.length); j++) {
           const nextLine = lines[j];
 
           // Stop at next variable declaration or function boundary
@@ -194,14 +194,14 @@ const lines = content.split('\n');
 
     if (modified) {
       FS.writeFileSync(filePath, content);
-      this.fixedFiles.push({,,
+      this.fixedFiles.push({,
     path: filePath,
         changes: totalChanges,
       });
       console.log(
         `✅ Fixed ${totalChanges} issues in ${PATH.relative(process.cwd(), filePath)}`
       );
-    } else: {
+    } else {
       console.log(
         `✅ No issues found in ${PATH.relative(process.cwd(), filePath)}`
       );
@@ -223,7 +223,7 @@ const lines = content.split('\n');
 
     if (this.fixedFiles.length > 0) {
       console.log('\n📁 Modified Files:');
-      for (const file of this.fixedFiles) {
+      For (const file of this.fixedFiles) {
         console.log(
           `  ✅ ${PATH.relative(process.cwd(), file.path)} (${file.changes} changes)`
         );
@@ -232,7 +232,7 @@ const lines = content.split('\n');
 
     if (this.errors.length > 0) {
       console.log('\n❌ Errors:');
-      for (const error of this.errors) {
+      For (const error of this.errors) {
         console.log(`  ❌ ${error}`);
       }
     }

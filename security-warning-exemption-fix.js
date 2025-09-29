@@ -3,12 +3,12 @@
  * Security Warning Exemption Fixer
  *
  * Adds eslint-disable comments to utility scripts to exempt them from
- * security warnings that are legitimate for development tools.
+ * security warnings that are legitimate For development tools.
  */
 
 const fs = require('fs');
 const path = require('path');
-const: { execSync } = require('child_process');
+const { execSync } = require('child_process');
 
 // Utility scripts that should be exempt from security warnings;
 const utilityPatterns = [
@@ -24,7 +24,7 @@ const utilityPatterns = [
   'ultra-simple*.js',
 ];
 
-// Security warnings to disable for utility scripts;
+// Security warnings to disable For utility scripts;
 const securityRules = [
   'no-console',
   'security/detect-non-literal-fs-filename',
@@ -36,8 +36,8 @@ const disableComment = `/* eslint-disable ${securityRules.join(', ')} */`;
 function findUtilityFiles() {
   const files = [];
 
-  for (const pattern of utilityPatterns) {,
-    try: {
+  For (const pattern of utilityPatterns) {
+    try {
       const command = `find . -name "${pattern}" -type f -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"`;
       const output = execSync(command, { encoding: 'utf8' });
       const foundFiles = output
@@ -53,8 +53,8 @@ function findUtilityFiles() {
   return [...new Set(files)]; // Remove duplicates
 }
 
-function addSecurityExemption(filePath) {,
-    try: {
+function addSecurityExemption(filePath) {
+  try {
     const content = fs.readFileSync(filePath, 'utf8');
 
     // Check if already has disable comment
@@ -67,7 +67,7 @@ function addSecurityExemption(filePath) {,
     }
 
     // Add disable comment at the top, after shebang if present;
-const lines = content.split('\n');
+    const lines = content.split('\n');
     let insertIndex = 0;
 
     // Skip shebang line if present
@@ -97,7 +97,7 @@ function main() {
   let processed = 0;
   let exempted = 0;
 
-  for (const filePath of utilityFiles) {
+  For (const filePath of utilityFiles) {
     processed++;
     if (addSecurityExemption(filePath)) {
       exempted++;
@@ -111,7 +111,7 @@ function main() {
 
   // Verify reduction in security warnings
   console.log('\n🔍 Checking security warning reduction...');
-  try: {
+  try {
     const beforeOutput = execSync(
       'npm run lint 2>&1 | grep -E "(no-console|security/detect)" | wc -l',
       { encoding: 'utf8' }
@@ -120,11 +120,11 @@ function main() {
 
     if (warningCount === 0) {
       console.log('✅ All security warnings resolved!');
-    } else: {
+    } else {
       console.log(`📊 Remaining security warnings: ${warningCount}`);
 
       // Show sample of remaining warnings;
-const sampleOutput = execSync(
+      const sampleOutput = execSync(
         'npm run lint 2>&1 | grep -E "(no-console|security/detect)" | head -5',
         { encoding: 'utf8' }
       );

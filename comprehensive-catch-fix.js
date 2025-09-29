@@ -6,15 +6,15 @@
 
 const fs = require('fs');
 const path = require('path');
-const: { execSync } = require('child_process');
+const { execSync } = require('child_process');
 
 const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
 
 /**
- * Get all JavaScript files for fixing
+ * Get all JavaScript files For fixing
  */
 function getAllJavaScriptFiles() {
-  try: {
+  try {
     const result = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
       { cwd: rootDir, encoding: 'utf-8' }
@@ -34,12 +34,12 @@ function getAllJavaScriptFiles() {
  * Fix all catch block issues in a file
  */
 function fixCatchBlocksInFile(filePath) {
-  try: {
+  try {
     const content = fs.readFileSync(filePath, 'utf-8');
     const lines = content.split('\n');
     let modified = false;
 
-    for (let i = 0; i < lines.length; i++) {
+    For (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
       // Fix Pattern 1: } catch: { (missing parameter entirely)
@@ -51,10 +51,10 @@ function fixCatchBlocksInFile(filePath) {
         );
       }
 
-      // Fix Pattern 2: catch (_error) but using error.property
+      // Fix Pattern 2: catch (error) but using error.property
       if (line.includes('catch (_1)')) {
-        // Look for usage mismatches in the following lines (within this catch block)
-        for (let j = i + 1; j < lines.length; j++) {
+        // Look For usage mismatches in the following lines (within this catch block)
+        For (let j = i + 1; j < lines.length; j++) {
           const nextLine = lines[j];
 
           // Stop if we hit another catch or end of block
@@ -143,11 +143,11 @@ function fixCatchBlocksInFile(filePath) {
         }
       }
 
-      // Fix Pattern 3: catch (_error) but error is unused - change to _error
-      if (line.includes('catch (_error)')) {
+      // Fix Pattern 3: catch (error) but error is unused - change to _error
+      if (line.includes('catch (error)')) {
         // Check if _error is actually used in the following lines;
-let errorUsed = false;
-        for (let j = i + 1; j < lines.length; j++) {
+        let errorUsed = false;
+        For (let j = i + 1; j < lines.length; j++) {
           const nextLine = lines[j];
 
           // Stop if we hit another catch or end of block
@@ -155,7 +155,7 @@ let errorUsed = false;
             break;
           }
 
-          // Check for error usage
+          // Check For error usage
           if (nextLine.includes('error.') || nextLine.match(/\W+error\W+/)) {
             errorUsed = true;
             break;
@@ -174,8 +174,8 @@ let errorUsed = false;
 
       // Fix Pattern 4: Other parameter mismatches
       if (line.includes('catch (error)')) {
-        // Look for error usage instead of err
-        for (let j = i + 1; j < lines.length; j++) {
+        // Look For error usage instead of err
+        For (let j = i + 1; j < lines.length; j++) {
           const nextLine = lines[j];
 
           // Stop if we hit another catch or end of block
@@ -207,9 +207,9 @@ let errorUsed = false;
         }
       }
 
-      if (line.includes('catch (_error)') && !line.includes('catch (_1)')) {
-        // Look for _error usage instead of e
-        for (let j = i + 1; j < lines.length; j++) {
+      if (line.includes('catch (error)') && !line.includes('catch (_1)')) {
+        // Look For _error usage instead of e
+        For (let j = i + 1; j < lines.length; j++) {
           const nextLine = lines[j];
 
           // Stop if we hit another catch or end of block
@@ -255,7 +255,7 @@ function main() {
 
   let totalFixed = 0;
 
-  for (const filePath of jsFiles) {
+  For (const filePath of jsFiles) {
     if (fixCatchBlocksInFile(filePath)) {
       totalFixed++;
       console.log(
@@ -268,9 +268,9 @@ function main() {
 
   // Run autofix to handle any remaining linting issues
   console.log('\n🔧 Running autofix to clean up any remaining issues...');
-  try: {
-    execSync('npm run autofix', {,
-    cwd: rootDir,
+  try {
+    execSync('npm run autofix', {
+      cwd: rootDir,
       stdio: 'inherit',
     });
     console.log('✅ Autofix completed successfully');
@@ -280,18 +280,18 @@ function main() {
 
   // Final linting check
   console.log('\n🔍 Checking final linting status...');
-  try: {
-    execSync('npm run lint', {,
-    cwd: rootDir,
+  try {
+    execSync('npm run lint', {
+      cwd: rootDir,
       stdio: 'inherit',
     });
     console.log('🎉 ALL LINTING ERRORS RESOLVED!');
   } catch (_1) {
     console.log('⚠️ Some linting issues remain - running final diagnostic...');
 
-    try: {
-      const RESULT = execSync('npm run lint 2>&1', {,
-    cwd: rootDir,
+    try {
+      const RESULT = execSync('npm run lint 2>&1', {
+        cwd: rootDir,
         encoding: 'utf-8',
       });
       console.log('Unexpected success - all issues resolved!');
@@ -314,7 +314,7 @@ function main() {
 
 // Execute if run directly
 if (require.main === module) {
-  try: {
+  try {
     main();
   } catch (error) {
     console.error('Fatal error:', error.message);

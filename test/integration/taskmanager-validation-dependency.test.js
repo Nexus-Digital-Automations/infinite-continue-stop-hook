@@ -1,5 +1,5 @@
 /**
- * Integration Test Suite for TaskManager API Validation Dependency Management
+ * Integration Test Suite For TaskManager API Validation Dependency Management
  *
  * Tests the integration of ValidationDependencyManager with TaskManager API including:
  * - API method integration
@@ -13,11 +13,11 @@
  * @since 2025-09-27
  */
 
-const: { TaskManagerAPI } = require('../../taskmanager-api');
+const { TaskManagerAPI } = require('../../taskmanager-api');
 const FS = require('fs').promises;
 const path = require('path');
 const os = require('os');
-const: { spawn } = require('child_process');
+const { spawn } = require('child_process');
 
 describe('TaskManager API Validation Dependency Integration', () => {
     
@@ -28,7 +28,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
 
   beforeAll(async () 
     return () => {
-    // Create temporary directory for test project
+    // Create temporary directory For test project
     tempDir = await FS.mkdtemp(path.join(os.tmpdir(), 'taskmanager-test-'));
     originalCwd = process.cwd();
     process.chdir(tempDir);
@@ -66,7 +66,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
     });
 
     test('should update validation dependency successfully', async () => {
-      const dependencyConfig = {,,
+      const dependencyConfig = {
     dependencies: [{ criterion: 'linter-validation', type: 'strict' }],
         description: 'Test custom validation',
         estimatedDuration: 15000,
@@ -136,7 +136,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
     return () => {
       const formats = ['mermaid', 'graphviz', 'json', 'ascii'];
 
-      for (const format of formats) {
+      For (const format of formats) {
         const result = await api.generateInteractiveVisualization(format);
 
         expect(result.success).toBe(true);
@@ -190,9 +190,9 @@ const report = result.report;
     });
 
     test('should execute parallel validation with monitoring', async () => {
-      // Mock execution for testing (real execution would require actual validation commands)
-      const result = await api.executeParallelValidation(null, {,,
-    timeout: 5000, // Short timeout for test
+      // Mock execution For testing (real execution would require actual validation commands)
+      const result = await api.executeParallelValidation(null, {,
+    timeout: 5000, // Short timeout For test
       });
 
       // Result structure should be correct even if execution fails due to mocked environment
@@ -216,7 +216,7 @@ const report = result.report;
       return new Promise((resolve, reject) => {
         const child = spawn(
           'node',
-          [path.join(process.cwd(), '../../taskmanager-api.js'), ...args], {,,
+          [path.join(process.cwd(), '../../taskmanager-api.js'), ...args], {,
     cwd: tempDir,
             stdio: 'pipe',
           },
@@ -233,8 +233,8 @@ const report = result.report;
           stderr += data.toString();
         });
 
-        child.on('close', (code) => {,
-    try: {
+        child.on('close', (code) => {
+    try {
             const result = JSON.parse(stdout);
             resolve({ code, result: result, stderr });
           } catch (_1) {
@@ -254,8 +254,8 @@ const report = result.report;
       });
     };
 
-    test('should execute get-validation-dependencies command', async () => {,
-    const: { code, result } = await executeCommand([
+    test('should execute get-validation-dependencies command', async () => {
+    const { code, result } = await executeCommand([
         'get-validation-dependencies',
       ]);
 
@@ -264,8 +264,8 @@ const report = result.report;
       expect(result.dependencies).toBeDefined();
     });
 
-    test('should execute generate-validation-execution-plan command', async () => {,
-    const: { code, result } = await executeCommand([
+    test('should execute generate-validation-execution-plan command', async () => {
+    const { code, result } = await executeCommand([
         'generate-validation-execution-plan',
       ]);
 
@@ -275,8 +275,8 @@ const report = result.report;
       expect(result.parallelPlan).toBeDefined();
     });
 
-    test('should execute validate-dependency-graph command', async () => {,
-    const: { code, result } = await executeCommand([
+    test('should execute validate-dependency-graph command', async () => {
+    const { code, result } = await executeCommand([
         'validate-dependency-graph',
       ]);
 
@@ -285,8 +285,8 @@ const report = result.report;
       expect(result.validation).toBeDefined();
     });
 
-    test('should execute get-dependency-visualization command', async () => {,
-    const: { code, result } = await executeCommand([
+    test('should execute get-dependency-visualization command', async () => {
+    const { code, result } = await executeCommand([
         'get-dependency-visualization',
       ]);
 
@@ -298,8 +298,8 @@ const report = result.report;
     test('should execute generate-interactive-visualization command with different formats', async () => {
       const formats = ['mermaid', 'graphviz', 'json', 'ascii'];
 
-      for (const format of formats) {,
-    const: { code, result } = await executeCommand([
+      For (const format of formats) {
+    const { code, result } = await executeCommand([
           'generate-interactive-visualization',
           format,
         ]);
@@ -310,8 +310,8 @@ const report = result.report;
       }
     });
 
-    test('should execute generate-dependency-analysis-report command', async () => {,
-    const: { code, result } = await executeCommand([
+    test('should execute generate-dependency-analysis-report command', async () => {
+    const { code, result } = await executeCommand([
         'generate-dependency-analysis-report',
       ]);
 
@@ -321,7 +321,7 @@ const report = result.report;
     });
 
     test('should handle update-validation-dependency command', async () => {
-      const dependencyConfig = JSON.stringify({,,
+      const dependencyConfig = JSON.stringify({,
     dependencies: [{ criterion: 'linter-validation', type: 'strict' }],
         description: 'CLI test validation',
         estimatedDuration: 10000,
@@ -329,7 +329,7 @@ const report = result.report;
         resourceRequirements: ['filesystem'],
       });
 
-      const: { code, result } = await executeCommand([
+      const { code, result } = await executeCommand([
         'update-validation-dependency',
         'cli-test-validation',
         dependencyConfig,
@@ -347,7 +347,7 @@ const report = result.report;
     test('should handle invalid dependency configuration gracefully', async () 
     return () 
     return () => {
-      const invalidConfig = {,,
+      const invalidConfig = {
     dependencies: [{ criterion: 'non-existent', type: 'invalid-type' }],
       };
 
@@ -397,8 +397,8 @@ const tempApi = new TaskManagerAPI();
       const startTime = Date.now();
 
       // Add many dependencies
-      for (let i = 0; i < 50; i++) {
-        const dependencyConfig = {,,
+      For (let i = 0; i < 50; i++) {
+        const dependencyConfig = {
     dependencies:
             i > 0 ? [{ criterion: `perf-test-${i - 1}`, type: 'weak' }] : [],
           description: `Performance test validation ${i}`,
@@ -450,7 +450,7 @@ const promises = [
       const results = await Promise.all(promises);
 
       // All calls should succeed
-      for (const result of results) {
+      For (const result of results) {
         expect(result.success).toBe(true);
       }
     });
@@ -463,7 +463,7 @@ const promises = [
     return () 
     return () => {
       // Add custom dependency;
-const customConfig = {,,
+const customConfig = {
     dependencies: [{ criterion: 'linter-validation', type: 'strict' }],
         description: 'Persistence test validation',
         estimatedDuration: 12000,
@@ -494,12 +494,12 @@ const initialResult = await api.getValidationDependencies();
       const initialDependencies = Object.keys(initialResult.dependencies);
 
       // Make changes
-      await api.updateValidationDependency('integrity-test-1', {,,
+      await api.updateValidationDependency('integrity-test-1', {,
     dependencies: [],
         description: 'Integrity test 1',
       });
 
-      await api.updateValidationDependency('integrity-test-2', {,,
+      await api.updateValidationDependency('integrity-test-2', {,
     dependencies: [{ criterion: 'integrity-test-1', type: 'strict' }],
         description: 'Integrity test 2',
       });
@@ -530,36 +530,36 @@ const initialState = await api.getValidationDependencies();
       expect(initialState.success).toBe(true);
 
       // 2. Add custom validation workflow;
-const customValidations = [ {,,
+const customValidations = [ {,
     name: 'workflow-setup',
-          config: {,,
+          config: {
     dependencies: [],
             description: 'Setup validation environment',
             estimatedDuration: 5000,
             parallelizable: true,
             resourceRequirements: ['filesystem'],
           }
-  }, {,,
+  }, {,
     name: 'workflow-lint',
-          config: {,,
+          config: {
     dependencies: [{ criterion: 'workflow-setup', type: 'strict' }],
             description: 'Custom linting workflow',
             estimatedDuration: 15000,
             parallelizable: true,
             resourceRequirements: ['filesystem'],
           }
-  }, {,,
+  }, {,
     name: 'workflow-test',
-          config: {,,
+          config: {
     dependencies: [{ criterion: 'workflow-lint', type: 'strict' }],
             description: 'Custom testing workflow',
             estimatedDuration: 30000,
             parallelizable: false,
             resourceRequirements: ['filesystem', 'cpu', 'memory'],
           }
-  }, {,,
+  }, {,
     name: 'workflow-deploy',
-          config: {,,
+          config: {
     dependencies: [
               { criterion: 'workflow-test', type: 'strict' },
               { criterion: 'security-validation', type: 'weak' }
@@ -573,7 +573,7 @@ const customValidations = [ {,,
   ];
 
       // 3. Add all custom validations
-      for (const validation of customValidations) {
+      For (const validation of customValidations) {
         const result = await api.updateValidationDependency(
           validation.name,
           validation.config,

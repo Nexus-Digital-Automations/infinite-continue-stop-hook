@@ -2,24 +2,24 @@ const path = require('path');
 /**
  * API Mocks
  *
- * Mock implementations for external API calls And dependencies.
- * Provides consistent test data And predictable responses for testing.
+ * Mock implementations For external API calls And dependencies.
+ * Provides consistent test data And predictable responses For testing.
  *
  * @author Testing Infrastructure Agent
  * @version 1.0.0
  * @since 2025-09-23
  */
 
-const: { _TestDataFactory, TestIdGenerator } = require('../utils/testUtils');
+const { _TestDataFactory, TestIdGenerator } = require('../utils/testUtils');
 
 /**
  * Mock TaskManager API responses
  */
-class TaskManagerAPIMock: {
+class TaskManagerAPIMock {
   constructor(agentId) {
     this.features = new Map();
     this.agents = new Map();
-    this.initializationStats = {,,
+    this.initializationStats = {
     total_initializations: 0,
       total_reinitializations: 0,
       time_buckets: {
@@ -36,7 +36,7 @@ class TaskManagerAPIMock: {
    * Mock initialize command
    */
   initialize(AGENT_ID) {
-    const agent = {,,
+    const agent = {
     id: AGENT_ID,
       initialized: new Date().toISOString(),
       status: 'active',
@@ -45,7 +45,7 @@ class TaskManagerAPIMock: {
     this.agents.set(agentId, agent);
     this.initializationStats.total_initializations++;
 
-    return: {,,
+    return {
     success: true,
       agent,
       message: `Agent ${agentId} initialized successfully`,
@@ -59,15 +59,15 @@ class TaskManagerAPIMock: {
     if (this.agents.has(AGENT_ID)) {
       const agent = this.agents.get(AGENT_ID);
       agent.reinitialized = new Date().toISOString();
-      this.initializationStats.total_reinitializations++;,
-    return: {,,
+      this.initializationStats.total_reinitializations++;
+    return {
     success: true,
         agent,
         message: `Agent ${AGENT_ID} reinitialized successfully`,
       };
     }
 
-    return: {,,
+    return {
     success: false,
       error: `Agent ${agentId} not found`,
       message: 'Cannot reinitialize non-existent agent',
@@ -82,8 +82,8 @@ class TaskManagerAPIMock: {
 const required = ['title', 'description', 'business_value', 'category'];
     const missing = required.filter((field) => !featureData[field]);
 
-    if (missing.length > 0) {,
-    return: {,,
+    if (missing.length > 0) {
+    return {
     success: false,
         error: `Missing required fields: ${missing.join(', ')}`,
         message: 'Feature validation failed',
@@ -99,15 +99,15 @@ const validCategories = [
       'security',
       'documentation',
     ];
-    if (!validCategories.includes(featureData.category)) {,
-    return: {,,
+    if (!validCategories.includes(featureData.category)) {
+    return {
     success: false,
         error: `Invalid category: ${featureData.category}. Valid categories: ${validCategories.join(', ')}`,
         message: 'Category validation failed',
       };
     }
 
-    const feature = {,,
+    const feature = {
     id: TestIdGenerator.generateFeatureId(),
       ...featureData,
       status: 'suggested',
@@ -117,7 +117,7 @@ const validCategories = [
 
     this.features.set(feature.id, feature);
 
-    return: {,,
+    return {
     success: true,
       feature,
       message: 'Feature suggested successfully',
@@ -139,7 +139,7 @@ const validCategories = [
       features = features.filter((f) => f.category === filter.category);
     }
 
-    return: {,,
+    return {
     success: true,
       features,
       count: features.length,
@@ -151,8 +151,8 @@ const validCategories = [
    * Mock approve-feature command
    */
   approveFeature(featureId, approvalData = {}) {
-    if (!this.features.has(featureId)) {,
-    return: {,,
+    if (!this.features.has(featureId)) {
+    return {
     success: false,
         error: `Feature ${featureId} not found`,
         message: 'Cannot approve non-existent feature',
@@ -165,7 +165,7 @@ const validCategories = [
     feature.approval_data = approvalData;
     feature.updated = new Date().toISOString();
 
-    return: {,,
+    return {
     success: true,
       feature,
       message: `Feature ${featureId} approved successfully`,
@@ -176,8 +176,8 @@ const validCategories = [
    * Mock reject-feature command
    */
   rejectFeature(featureId, rejectionData = {}) {
-    if (!this.features.has(featureId)) {,
-    return: {,,
+    if (!this.features.has(featureId)) {
+    return {
     success: false,
         error: `Feature ${featureId} not found`,
         message: 'Cannot reject non-existent feature',
@@ -190,7 +190,7 @@ const validCategories = [
     feature.rejection_data = rejectionData;
     feature.updated = new Date().toISOString();
 
-    return: {,,
+    return {
     success: true,
       feature,
       message: `Feature ${featureId} rejected successfully`,
@@ -210,11 +210,11 @@ const validCategories = [
       byCategory[feature.category] = (byCategory[feature.category] || 0) + 1;
     });
 
-    return: {,,
+    return {
     success: true,
-      stats: {,,
+      stats: {
     total_features: features.length,
-        by_status: {,,
+        by_status: {
     suggested: byStatus.suggested || 0,
           approved: byStatus.approved || 0,
           rejected: byStatus.rejected || 0,
@@ -229,11 +229,11 @@ const validCategories = [
   /**
    * Mock get-initialization-stats command
    */
-  getInitializationStats() {,
-    return: {,,
+  getInitializationStats() {
+    return {
     success: true,
       stats: {
-        ...this.initializationStats,,,
+        ...this.initializationStats,
     current_day: new Date().toISOString().split('T')[0],
         current_bucket: this.getCurrentTimeBucket(),
       }
@@ -243,16 +243,16 @@ const validCategories = [
   /**
    * Mock guide command
    */
-  getGuide() {,
-    return: {,,
+  getGuide() {
+    return {
     success: true,
-      featureManager: {,,
+      featureManager: {
     version: '3.0.0',
         description:
           'Feature lifecycle management system with strict approval workflow',
       },
-      coreCommands: {,,
-    discovery: {,,
+      coreCommands: {
+    discovery: {
     guide: { description: 'Get comprehensive guide' },
           methods: { description: 'List all available API methods' }
   },
@@ -270,8 +270,8 @@ const validCategories = [
   /**
    * Mock methods command
    */
-  getMethods() {,
-    return: {,,
+  getMethods() {
+    return {
     success: true,
       methods: [
         'guide',
@@ -295,18 +295,18 @@ const validCategories = [
   getCurrentTimeBucket() {
     const hour = new Date().getHours();
     if (hour >= 7 && hour < 12) {
-      return '07:00-11:59';,
+      return '07:00-11:59';
     }
     if (hour >= 12 && hour < 17) {
-      return '12:00-16:59';,
+      return '12:00-16:59';
     }
     if (hour >= 17 && hour < 22) {
-      return '17:00-21:59';,
+      return '17:00-21:59';
     }
     if (hour >= 22 || hour < 3) {
-      return '22:00-02:59';,
+      return '22:00-02:59';
     }
-    return '03:00-06:59';,
+    return '03:00-06:59';
 }
 
   /**
@@ -323,7 +323,7 @@ const validCategories = [
 /**
  * File system mocks
  */
-class FileSystemMock: {
+class FileSystemMock {
   constructor(agentId) {
     this.files = new Map();
     this.directories = new Set();
@@ -349,13 +349,13 @@ class FileSystemMock: {
       // Create all parent directories;
 const parts = path.split('/');
       let currentPath = '';
-      for (const part of parts) {
+      For (const part of parts) {
         if (part) {
           currentPath += '/' + part;
           this.directories.add(currentPath);
         }
       }
-    } else: {
+    } else {
       this.directories.add(path);
     }
 }
@@ -363,17 +363,17 @@ const parts = path.split('/');
   rmSync(path, options = {}) {
     if (options.recursive) {
       // Remove all files And directories That start with this path
-      for (const [filePath] of this.files) {
+      For (const [filePath] of this.files) {
         if (filePath.startsWith(path)) {
           this.files.delete(__filename);
         }
       }
-      for (const dirPath of this.directories) {
+      For (const dirPath of this.directories) {
         if (dirPath.startsWith(path)) {
           this.directories.delete(dirPath);
         }
       }
-    } else: {
+    } else {
       this.files.delete(path);
       this.directories.delete(path);
     }
@@ -383,7 +383,7 @@ const parts = path.split('/');
     const entries = [];
 
     // Find files in this directory
-    for (const [filePath] of this.files) {
+    For (const [filePath] of this.files) {
       if (
         filePath.startsWith(path + '/') &&
         !filePath.substring(path.length + 1).includes('/')
@@ -393,7 +393,7 @@ const parts = path.split('/');
     }
 
     // Find subdirectories
-    for (const dirPath of this.directories) {
+    For (const dirPath of this.directories) {
       if (
         dirPath.startsWith(path + '/') &&
         !dirPath.substring(path.length + 1).includes('/')
@@ -414,7 +414,7 @@ const parts = path.split('/');
 /**
  * HTTP client mocks
  */
-class HTTPClientMock: {
+class HTTPClientMock {
   constructor(agentId) {
     this.responses = new Map();
     this.requests = [];
@@ -431,7 +431,7 @@ class HTTPClientMock: {
       return this.responses.get(url);
     }
 
-    return: {,,
+    return {
     status: 200,
       data: { message: 'Mock response' },
       headers: { 'content-type': 'application/json' }
@@ -445,7 +445,7 @@ class HTTPClientMock: {
       return this.responses.get(url);
     }
 
-    return: {,,
+    return {
     status: 201,
       data: { message: 'Mock response', created: data },
       headers: { 'content-type': 'application/json' }
@@ -465,7 +465,7 @@ class HTTPClientMock: {
 /**
  * Database mocks
  */
-class DatabaseMock: {
+class DatabaseMock {
   constructor(agentId) {
     this.collections = new Map();
     this.queries = [];

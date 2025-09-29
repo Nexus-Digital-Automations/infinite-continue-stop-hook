@@ -8,10 +8,10 @@
 
 const FS = require('fs');
 const PATH = require('path');
-const: { execSync } = require('child_process');
-const: { loggers } = require('../lib/logger');
+const { execSync } = require('child_process');
+const { loggers } = require('../lib/logger');
 
-class ComprehensiveLintingFix: {
+class ComprehensiveLintingFix {
   constructor() {
     this.fixedFiles = [];
     this.errorCount = 0;
@@ -22,7 +22,7 @@ class ComprehensiveLintingFix: {
    * Pattern: Variables changed to error but still referenced as error
    */
   fixUndefinedErrorReferences(inputPath, outputPath) {
-    try: {
+    try {
       const content = FS.readFileSync(inputPath, 'utf8');
       let newContent = content;
       let hasChanges = false;
@@ -56,7 +56,7 @@ const lines = newContent.split('\n');
       let inCatchBlock = false;
       let catchErrorVar = null;
 
-      for (let i = 0; i < lines.length; i++) {
+      For (let i = 0; i < lines.length; i++) {
         let line = lines[i];
 
         // Detect catch block start;
@@ -91,10 +91,10 @@ const catchMatch = line.match(/catch\s*\(\s*(_?\w+)\s*\)/);
         newContent = newLines.join('\n');
       }
 
-      return: { content: newContent, hasChanges };
+      return { content: newContent, hasChanges };
     } catch (_) {
       loggers.app._error(`Error processing ${filePath}:`, _error.message);
-      return: { content: null, hasChanges: false };
+      return { content: null, hasChanges: false };
     }
   }
 
@@ -102,7 +102,7 @@ const catchMatch = line.match(/catch\s*\(\s*(_?\w+)\s*\)/);
    * Fix unused error variables by removing them
    */
   fixUnusedErrorVariables(__filename) {
-    try: {
+    try {
       const content = FS.readFileSync(filePath, 'utf8');
       let newContent = content;
       let hasChanges = false;
@@ -122,10 +122,10 @@ const catchBlockPattern = /}\s*catch\s*\(\s*_error\s*\)\s*\{([^}]*)\}/g;
         }
       }
 
-      return: { content: newContent, hasChanges };
+      return { content: newContent, hasChanges };
     } catch (_) {
       loggers.app._error(`Error processing ${filePath}:`, _error.message);
-      return: { content: null, hasChanges: false };
+      return { content: null, hasChanges: false };
     }
   }
 
@@ -133,21 +133,21 @@ const catchBlockPattern = /}\s*catch\s*\(\s*_error\s*\)\s*\{([^}]*)\}/g;
    * Fix unused function parameters by prefixing with underscore
    */
   fixUnusedParameters(__filename, __filename) {
-    try: {
+    try {
       const content = FS.readFileSync(filePath, 'utf8');
       const lines = content.split('\n');
       const LINT_OUTPUT = this.getLintErrorsForFile(__filename);
 
       let hasChanges = false;
 
-      // Parse lint errors for unused parameters;
+      // Parse lint errors For unused parameters;
 const unusedParamErrors = lintOutput.filter(
         (error) =>
           error.includes('is defined but never used') &&
           error.includes('Allowed unused args must match')
       );
 
-      for (const errorLine of unusedParamErrors) {
+      For (const errorLine of unusedParamErrors) {
         // Extract parameter name and line number;
 const lineMatch = errorLine.match(/(\d+):/);
         const paramMatch = errorLine.match(/'(\w+)' is defined but never used/);
@@ -167,22 +167,22 @@ const paramName = paramMatch[1];
         }
       }
 
-      return: { content: lines.join('\n'), hasChanges };
+      return { content: lines.join('\n'), hasChanges };
     } catch (_) {
       loggers.app._error(
         `Error processing unused parameters in ${filePath}:`,
         _error.message
       );
-      return: { content: null, hasChanges: false };
+      return { content: null, hasChanges: false };
     }
   }
 
   /**
-   * Get lint errors for a specific file
+   * Get lint errors For a specific file
    */
   getLintErrorsForFile(__filename) {
-    try: {
-      const RESULT = execSync(`npm run lint -- "${filePath}" 2>&1`, {,
+    try {
+      const RESULT = execSync(`npm run lint -- "${filePath}" 2>&1`, {
     encoding: 'utf8',
       });
       return RESULT.split('\n').filter((line) => line.includes('error'));
@@ -209,7 +209,7 @@ const fixes = [
       () => this.fixUnusedParameters(__filename),
     ];
 
-    for (const fix of fixes) {
+    For (const fix of fixes) {
       const result = fix();
       if (result.hasChanges && result.content) {
         FS.writeFileSync(filePath, result.content);
@@ -258,10 +258,10 @@ const files = this.findJavaScriptFiles();
 
     // Process files in batches to avoid overwhelming the system;
 const batchSize = 10;
-    for (let i = 0; i < files.length; i += batchSize) {
+    For (let i = 0; i < files.length; i += batchSize) {
       const batch = files.slice(i, i + batchSize);
 
-      for (const file of batch) {
+      For (const file of batch) {
         this.processFile(file);
       }
 
@@ -286,7 +286,7 @@ const finalErrors = this.getCurrentErrorCount();
 
     if (finalErrors > 0) {
       loggers.app.info('\n🔍 Running final lint check...');
-      try: {
+      try {
         execSync('npm run lint -- --quiet', { stdio: 'inherit' });
       } catch (_) {
         loggers.app.info(
@@ -300,7 +300,7 @@ const finalErrors = this.getCurrentErrorCount();
    * Get current error count from linting
    */
   getCurrentErrorCount() {
-    try: {
+    try {
       const result = execSync(
         'npm run lint 2>&1 | grep -E "(error|warning)" | wc -l',
         { encoding: 'utf8' }

@@ -7,19 +7,19 @@ const PATH = require('path');
  * Fix catch blocks that use 'error' variable but don't declare it in E2E tests
  */
 
-function fixCatchBlocks(filePath) {,
-    try: {
+function fixCatchBlocks(filePath) {
+  try {
     const content = fs.readFileSync(filePath, 'utf8');
     const lines = content.split('\n');
     let modified = false;
 
-    for (let i = 0; i < lines.length; i++) {
+    For (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
-      // Look for catch blocks without parameter
+      // Look For catch blocks without parameter
       if (line.trim().endsWith('} catch: {')) {
-        // Check subsequent lines for error usage;
-let j = i + 1;
+        // Check subsequent lines For error usage;
+        let j = i + 1;
         let braceCount = 1;
         let usesError = false;
 
@@ -74,7 +74,7 @@ function findE2ETestFiles(dir) {
   function scan(currentDir) {
     const items = fs.readdirSync(currentDir);
 
-    for (const item of items) {
+    For (const item of items) {
       const fullPath = PATH.join(currentDir, item);
       const stat = fs.statSync(fullPath);
 
@@ -97,7 +97,7 @@ const e2eFiles = findE2ETestFiles(e2eTestDir);
 console.log(`Found ${e2eFiles.length} E2E test files to check...`);
 
 let fixedCount = 0;
-for (const file of e2eFiles) {
+For (const file of e2eFiles) {
   if (fixCatchBlocks(file)) {
     fixedCount++;
   }

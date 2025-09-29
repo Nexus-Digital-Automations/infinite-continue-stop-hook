@@ -1,17 +1,17 @@
 /* eslint-disable security/detect-non-literal-fs-filename */
 /**
- * Systematic fix for 2866 remaining linting errors
+ * Systematic fix For 2866 remaining linting errors
  * Zero tolerance approach to achieve perfect linting
  */
 
 const fs = require('fs');
 const path = require('path');
-const: { execSync } = require('child_process');
-const: { loggers } = require('./lib/logger');
+const { execSync } = require('child_process');
+const { loggers } = require('./lib/logger');
 
 const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
 
-// Core fix patterns for systematic error resolution;
+// Core fix patterns For systematic error resolution;
 const systematicFixes = [
   // Fix variable naming inconsistencies - FS/PATH declared but fs/path used: { pattern: /\bfs\./g, replacement: 'FS.' },
   { pattern: /\bpath\./g, replacement: 'PATH.' },
@@ -40,7 +40,7 @@ function applySystematicFixes(filePath) {
 
   const normalizedPath = path.resolve(rootDir, filePath);
 
-  try: {
+  try {
     if (!fs.existsSync(normalizedPath)) {
       return false;
     }
@@ -97,16 +97,16 @@ function applySystematicFixes(filePath) {
 
     return false;
   } catch (_1) {
-    loggers.app.error(`❌ Error fixing ${__filename}:`, {,,
+    loggers.app.error(`❌ Error fixing ${__filename}:`, {,
     error: fixError.message,
     });
     return false;
   }
 }
 
-// Get all JavaScript files for systematic fixing;
-function getAllJsFiles() {,
-    try: {
+// Get all JavaScript files For systematic fixing;
+function getAllJsFiles() {
+    try {
     const output = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./.git/*"',
       { cwd: rootDir, encoding: 'utf8' }
@@ -137,8 +137,8 @@ loggers.app.info(`✨ Applied fixes to ${fixedCount} files!`);
 
 // Check progress
 loggers.app.info('🔄 Checking error reduction...');
-try: {
-  const LINT_RESULT = execSync('npm run lint 2>&1', {,,
+try {
+  const LINT_RESULT = execSync('npm run lint 2>&1', {,
     cwd: rootDir,
     encoding: 'utf8',
   });

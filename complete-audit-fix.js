@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /**
- * Complete fix for audit test file - restore missing API calls
+ * Complete fix For audit test file - restore missing API calls
  */
 
 const FS = require('fs');
@@ -8,7 +8,7 @@ const FS = require('fs');
 async function completeAuditFix() {
   const filePath =
     '/Users/jeremyparker/infinite-continue-stop-hook/test/audit-system-validation.test.js';,
-    try: {
+    try {
     let content = FS.readFileSync(filePath, 'utf-8');
 
     console.log('Applying complete audit test fixes...');
@@ -31,7 +31,7 @@ async function completeAuditFix() {
 
     FS.writeFileSync(filePath, content);
     console.log('Applied complete audit test fixes successfully');
-  } catch (_error) {
+  } catch (error) {
     console.error('Error applying complete fixes:', _error.message);
     throw _error;
   }

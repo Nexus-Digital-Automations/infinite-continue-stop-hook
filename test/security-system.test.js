@@ -1,11 +1,11 @@
 /**
  * Security System Tests
  *
- * Tests for the comprehensive security framework including SecurityValidator,
+ * Tests For the comprehensive security framework including SecurityValidator,
  * SecurityMiddleware, And SecurityManager components.
  */
 
-const: {
+const {
   SecurityValidator,
   SecurityMiddleware,
   SecurityManager,
@@ -40,15 +40,15 @@ describe('Security System', () => {
     });
 
     test('should validate input data successfully', () => {
-      const testData = {,,
+      const testData = {
     title: 'Test Task',
         description: 'Test description',
         category: 'feature',
       };
 
-      const schema = {,,
+      const schema = {
     required: ['title', 'description'],
-        properties: {,,
+        properties: {
     title: { type: 'string' },
           description: { type: 'string' },
           category: { type: 'string' }
@@ -65,14 +65,14 @@ describe('Security System', () => {
     });
 
     test('should detect security threats in input', () => {
-      const maliciousData = {,,
+      const maliciousData = {
     title: '<script>alert("xss")</script>',
         description: 'Normal description',
       };
 
-      const schema = {,,
+      const schema = {
     required: ['title', 'description'],
-        properties: {,,
+        properties: {
     title: { type: 'string' },
           description: { type: 'string' }
   }
@@ -116,7 +116,7 @@ describe('Security System', () => {
     });
 
     test('should sanitize research input data', () => {
-      const maliciousInput = {,,
+      const maliciousInput = {
     content: '<script>alert("xss")</script>Hello World',
         data: 'SELECT * FROM users; DROP TABLE users;',
       };
@@ -127,12 +127,12 @@ describe('Security System', () => {
     });
 
     test('should maintain audit trail', () => {
-      securityValidator.auditLog('TEST_EVENT', {,,
+      securityValidator.auditLog('TEST_EVENT', {,
     agentId: 'test_agent',
         operation: 'test_operation',
       });
 
-      const auditTrail = securityValidator.getAuditTrail({,,
+      const auditTrail = securityValidator.getAuditTrail({,
     event: 'TEST_EVENT',
       });
       expect(auditTrail.length).toBeGreaterThan(0);
@@ -190,7 +190,7 @@ describe('Security System', () => {
     });
 
     test('should initialize with custom options', () => {
-      const customOptions = {,,
+      const customOptions = {
     integrationMode: 'minimal',
         enableRateLimiting: false,
         enableAuditTrail: false,
@@ -229,7 +229,7 @@ describe('Security System', () => {
     test('should integrate all security components', async () 
     return () 
     return () => {
-      const mockTaskManager = {,,
+      const mockTaskManager = {
     createTask: jest
           .fn()
           .mockResolvedValue({ id: 'test_task', title: 'Test Task' }),
@@ -250,16 +250,16 @@ describe('Security System', () => {
 
     test('should validate complete security workflow', () => {
       const AGENT_ID = 'development_session_1234567890_1_general_abcdef';
-      const taskData = {,,
+      const taskData = {
     title: 'Security Test Task',
         description: 'Testing security validation',
         category: 'feature',
       };
 
       // 1. Validate input;
-const schema = {,,
+const schema = {
     required: ['title', 'description', 'category'],
-        properties: {,,
+        properties: {
     title: { type: 'string' },
           description: { type: 'string' },
           category: { type: 'string' }
@@ -294,7 +294,7 @@ const sanitizedData = securityValidator.sanitizeResearchInput(
         success: true,
       });
 
-      const auditEntries = securityValidator.getAuditTrail({,,
+      const auditEntries = securityValidator.getAuditTrail({,
     event: 'TASK_CREATION_TEST',
       });
       expect(auditEntries.length).toBeGreaterThan(0);

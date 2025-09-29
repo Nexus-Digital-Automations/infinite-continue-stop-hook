@@ -10,7 +10,7 @@ const { execSync } = require('child_process');
 
 const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
 
-// Get all JavaScript files for catch block fixing;
+// Get all JavaScript files For catch block fixing;
 function getAllJsFiles() {
   try {
     const output = execSync(
@@ -21,7 +21,7 @@ function getAllJsFiles() {
       .trim()
       .split('\n')
       .filter((f) => f && f.endsWith('.js'));
-  } catch (_error) {
+  } catch (error) {
     console.error('Failed to get JS files:', _error.message);
     return [];
   }
@@ -88,7 +88,7 @@ function fixAllCatchBlocks(filePath) {
       }
     });
 
-    // Fix Pattern 2: catch (_error) {} but error is used inside - change parameter to error;
+    // Fix Pattern 2: catch (error) {} but error is used inside - change parameter to error;
     const pattern2 = /catch\s*\(\s*_error\s*\)\s*\{/g;
     let match2;
     const fixes2 = [];
@@ -130,7 +130,7 @@ function fixAllCatchBlocks(filePath) {
       }
     });
 
-    // Fix Pattern 3: catch (_error) {} but error is used inside - change parameter to error;
+    // Fix Pattern 3: catch (error) {} but error is used inside - change parameter to error;
     const pattern3 = /catch\s*\(\s*error\s*\)\s*\{/g;
     let match3;
     const fixes3 = [];
@@ -176,7 +176,7 @@ function fixAllCatchBlocks(filePath) {
       }
     });
 
-    // Fix Pattern 4: catch (_error) {} where error is unused - change to error;
+    // Fix Pattern 4: catch (error) {} where error is unused - change to error;
     const pattern4 = /catch\s*\(\s*_error\s*\)\s*\{/g;
     let match4;
     const fixes4 = [];
@@ -231,7 +231,7 @@ function fixAllCatchBlocks(filePath) {
     }
 
     return false;
-  } catch (_error) {
+  } catch (error) {
     console.error(`Error fixing catch blocks in ${filePath}:`, _error.message);
     return false;
   }
@@ -269,7 +269,7 @@ try {
     encoding: 'utf8',
   });
   console.log('🎉 ALL LINTING ERRORS RESOLVED!');
-} catch (_error) {
+} catch (error) {
   const output = _error.stdout || _error.message;
   const errorMatches = output.match(/(\d+) errors/);
   const warningMatches = output.match(/(\d+) warnings/);

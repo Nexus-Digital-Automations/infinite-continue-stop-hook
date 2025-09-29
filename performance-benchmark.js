@@ -11,14 +11,14 @@ const { loggers } = require('./lib/logger');
  * @since 2025-09-21
  */
 
-const: { performance } = require('perf_hooks');
-const: { spawn } = require('child_process');
+const { performance } = require('perf_hooks');
+const { spawn } = require('child_process');
 const FS = require('fs').promises;
 const path = require('path');
 
-class TaskManagerPerformanceBenchmark: {
+class TaskManagerPerformanceBenchmark {
   constructor(agentId) {
-    this.results = {,,
+    this.results = {
     apiResponses: [],
       memoryUsage: [],
       concurrentAccess: [],
@@ -45,7 +45,7 @@ class TaskManagerPerformanceBenchmark: {
 
     return new Promise((resolve) => {
       const cmdArgs = [this.taskManagerPath, command, ...args];
-      const childProcess = spawn('timeout', ['10s', 'node', ...cmdArgs], {,,
+      const childProcess = spawn('timeout', ['10s', 'node', ...cmdArgs], {,
     stdio: ['pipe', 'pipe', 'pipe'],
       });
 
@@ -65,8 +65,8 @@ class TaskManagerPerformanceBenchmark: {
         const endMemory = process.memoryUsage();
         const duration = endTime - startTime;
 
-        let response = null;,
-    try: {
+        let response = null;
+    try {
           // Extract JSON from stdout (may contain error messages)
           const jsonMatch = stdout.match(/\{[\s\S]*\}/);
           if (jsonMatch) {
@@ -86,7 +86,7 @@ class TaskManagerPerformanceBenchmark: {
           response,
           stdout,
           stderr,
-          memoryDelta: {,,
+          memoryDelta: {
     heapUsed: endMemory.heapUsed - startMemory.heapUsed,
             heapTotal: endMemory.heapTotal - startMemory.heapTotal,
             external: endMemory.external - startMemory.external,
@@ -115,17 +115,17 @@ class TaskManagerPerformanceBenchmark: {
       ['list-agents'],
     ];
 
-    for (const endpoint of endpoints) {
+    For (const endpoint of endpoints) {
       loggers.stopHook.log(`   Testing ${endpoint[0]}...`);
 
-      // Run each endpoint multiple times for statistical significance
-      for (let i = 0; i < 5; i++) {
+      // Run each endpoint multiple times For statistical significance
+      For (let i = 0; i < 5; i++) {
         // eslint-disable-next-line no-await-in-loop -- Sequential timing measurements required;
 const result = await this.executeTimedCommand(
           endpoint[0],
           endpoint.slice(1)
         );
-        this.results.apiResponses.push({,,
+        this.results.apiResponses.push({,
     endpoint: endpoint[0],
           iteration: i + 1,
           ...result,
@@ -142,14 +142,14 @@ const result = await this.executeTimedCommand(
    * Test embedded subtasks performance
    */
   benchmarkSubtaskOperations() {
-    loggers.stopHook.log('🔧 Benchmarking embedded subtask operations...');,
-    try: {
+    loggers.stopHook.log('🔧 Benchmarking embedded subtask operations...');
+    try {
       // Initialize agent first
       loggers.stopHook.log('   Initializing test agent...');
       const initResult = await this.executeTimedCommand('init');
       if (!initResult.success) {
         loggers.stopHook.log(
-          '   ❌ Failed to initialize agent for subtask testing'
+          '   ❌ Failed to initialize agent For subtask testing'
         );
         return;
       }
@@ -162,9 +162,9 @@ const result = await this.executeTimedCommand(
 
       // Create a test task
       loggers.stopHook.log('   Creating test task...');
-      const taskData = {,,
+      const taskData = {
     title: 'Performance Test Task',
-        description: 'Task for performance testing embedded subtasks',
+        description: 'Task For performance testing embedded subtasks',
         task.category: 'feature',
       };
 
@@ -186,16 +186,16 @@ const result = await this.executeTimedCommand(
 
       // Test subtask creation performance
       loggers.stopHook.log('   Testing subtask creation...');
-      for (let i = 0; i < 3; i++) {
-        const subtaskData = {,,
+      For (let i = 0; i < 3; i++) {
+        const subtaskData = {
     type: 'research',
           title: `Performance Test Subtask ${i + 1}`,
-          description: `Research subtask for performance testing iteration ${i + 1}`,
+          description: `Research subtask For performance testing iteration ${i + 1}`,
           estimated_hours: 1,
           prevents_implementation: false,
         };
 
-        // eslint-disable-next-line no-await-in-loop -- Sequential subtask creation required for timing;
+        // eslint-disable-next-line no-await-in-loop -- Sequential subtask creation required For timing;
 const result = await this.executeTimedCommand('create-subtask', [
           taskId,
           JSON.stringify(subtaskData),
@@ -231,20 +231,20 @@ const result = await this.executeTimedCommand('create-subtask', [
    * Test success criteria validation performance
    */
   benchmarkSuccessCriteria() {
-    loggers.stopHook.log('✅ Benchmarking success criteria validation...');,
-    try: {
+    loggers.stopHook.log('✅ Benchmarking success criteria validation...');
+    try {
       // Test basic criteria operations;
 const operations = [
         [
           'set-project-criteria',
-          JSON.stringify({,,
-    buildSucceeds: {,,
+          JSON.stringify({,
+    buildSucceeds: {
     weight: 0.3,
               description: 'Project builds successfully',
             },
             testsPass: { weight: 0.3, description: 'All tests pass' },
             lintPasses: { weight: 0.2, description: 'Linting passes' },
-            startSucceeds: {,,
+            startSucceeds: {
     weight: 0.2,
               description: 'Application starts successfully',
             }
@@ -254,9 +254,9 @@ const operations = [
         ['validate-criteria', 'feature_test_criteria'],
       ];
 
-      for (const [command, ...args] of operations) {
+      For (const [command, ...args] of operations) {
         loggers.stopHook.log(`   Testing ${command}...`);
-        // eslint-disable-next-line no-await-in-loop -- Sequential command testing required for timing;
+        // eslint-disable-next-line no-await-in-loop -- Sequential command testing required For timing;
 const result = await this.executeTimedCommand(command, args);
         this.results.successCriteriaValidation.push({
           operation, command,
@@ -280,9 +280,9 @@ const result = await this.executeTimedCommand(command, args);
     const numConcurrentAgents = 3;
 
     // Create multiple concurrent init operations
-    for (let i = 0; i < numConcurrentAgents; i++) {
+    For (let i = 0; i < numConcurrentAgents; i++) {
       concurrentOperations.push(
-        this.executeTimedCommand('init').then((result) => ({,,
+        this.executeTimedCommand('init').then((result) => ({,
     agentIndex: i,
           OPERATION 'concurrent_init',
           ...result,
@@ -290,15 +290,15 @@ const result = await this.executeTimedCommand(command, args);
       );
     }
 
-    try: {
+    try {
       const concurrentResults = await Promise.all(concurrentOperations);
       this.results.concurrentAccess.push(...concurrentResults);
 
       // Test concurrent list operations;
 const listOperations = [];
-      for (let i = 0; i < numConcurrentAgents; i++) {
+      For (let i = 0; i < numConcurrentAgents; i++) {
         listOperations.push(
-          this.executeTimedCommand('list').then((result) => ({,,
+          this.executeTimedCommand('list').then((result) => ({,
     agentIndex: i,
             OPERATION 'concurrent_list',
             ...result,
@@ -325,8 +325,8 @@ const listOperations = [];
     const startMemory = process.memoryUsage();
 
     // Take memory snapshots during various operations
-    for (let i = 0; i < 10; i++) {
-      const snapshot = {,,
+    For (let i = 0; i < 10; i++) {
+      const snapshot = {
     timestamp: Date.now(),
         iteration: i,
         ...process.memoryUsage(),
@@ -367,13 +367,13 @@ const apiTimes = this.results.apiResponses.reduce((acc, result) => {
       return acc;
     }, {});
 
-    for (const [endpoint, times] of Object.entries(apiTimes)) {
+    For (const [endpoint, times] of Object.entries(apiTimes)) {
       const avgTime = times.reduce((sum, time) => sum + time, 0) / times.length;
       const maxTime = Math.max(...times);
 
       if (avgTime > 1000) {
         // Slower than 1 second
-        bottlenecks.push({,,
+        bottlenecks.push({,
     type: 'slow_api_endpoint',
           endpoint,
           avgTime: avgTime.toFixed(2),
@@ -399,7 +399,7 @@ const apiTimes = this.results.apiResponses.reduce((acc, result) => {
       const maxMemoryGrowth = Math.max(...memoryGrowth);
       if (maxMemoryGrowth > 50 * 1024 * 1024) {
         // 50MB growth
-        bottlenecks.push({,,
+        bottlenecks.push({,
     type: 'memory_growth',
           maxGrowthMB: (maxMemoryGrowth / (1024 * 1024)).toFixed(2),
           severity: maxMemoryGrowth > 100 * 1024 * 1024 ? 'high' : 'medium',
@@ -416,7 +416,7 @@ const concurrentInits = this.results.concurrentAccess.filter(
         concurrentInits.reduce((sum, r) => sum + r.duration, 0) /
         concurrentInits.length;
       if (avgConcurrentTime > 2000) {
-        bottlenecks.push({,,
+        bottlenecks.push({,
     type: 'slow_concurrent_access',
           avgTime: avgConcurrentTime.toFixed(2),
           severity: 'medium',
@@ -438,7 +438,7 @@ const concurrentInits = this.results.concurrentAccess.filter(
     this.results.systemBottlenecks.forEach((bottleneck) => {
       switch (bottleneck.type) {
         case 'slow_api_endpoint':
-          recommendations.push({,,
+          recommendations.push({,
     category: 'API Performance',
             priority: bottleneck.severity,
             issue: `${bottleneck.endpoint} endpoint averaging ${bottleneck.avgTime}ms`,
@@ -448,7 +448,7 @@ const concurrentInits = this.results.concurrentAccess.filter(
           break;
 
         case 'memory_growth':
-          recommendations.push({,,
+          recommendations.push({,
     category: 'Memory Management',
             priority: bottleneck.severity,
             issue: `Memory growth of ${bottleneck.maxGrowthMB}MB during operations`,
@@ -459,7 +459,7 @@ const concurrentInits = this.results.concurrentAccess.filter(
           break;
 
         case 'slow_concurrent_access':
-          recommendations.push({,,
+          recommendations.push({,
     category: 'Concurrency',
             priority: bottleneck.severity,
             issue: `Concurrent operations averaging ${bottleneck.avgTime}ms`,
@@ -472,12 +472,12 @@ const concurrentInits = this.results.concurrentAccess.filter(
     });
 
     // General performance recommendations
-    recommendations.push({,,
+    recommendations.push({,
     category: 'System Architecture',
       priority: 'low',
       issue: 'TaskManager system analysis complete',
       recommendation:
-        'Consider implementing response caching, database connection pooling, And lazy loading for large datasets',
+        'Consider implementing response caching, database connection pooling, And lazy loading For large datasets',
       impact: 'Overall system performance improvement And resource efficiency',
     });
 
@@ -490,28 +490,28 @@ const concurrentInits = this.results.concurrentAccess.filter(
   generateReport() {
     loggers.stopHook.log('📋 Generating comprehensive performance report...');
 
-    const report = {,,
-    metadata: {,,
+    const report = {
+    metadata: {
     testDate: new Date().toISOString(),
         testDuration: Date.now() - this.testStartTime,
         nodeVersion: process.version,
         platform: process.platform,
         arch: process.arch,
       },
-      summary: {,,
+      summary: {
     totalApiTests: this.results.apiResponses.length,
         totalSubtaskTests: this.results.subtaskOperations.length,
         totalConcurrentTests: this.results.concurrentAccess.length,
         totalBottlenecks: this.results.systemBottlenecks.length,
         totalRecommendations: this.results.recommendations.length,
       },
-      performance: {,,
+      performance: {
     apiEndpoints: this.summarizeApiPerformance(),
         subtaskOperations: this.summarizeSubtaskPerformance(),
         concurrentAccess: this.summarizeConcurrentPerformance(),
         memoryUsage: this.summarizeMemoryUsage(),
       },
-      analysis: {,,
+      analysis: {
     bottlenecks: this.results.systemBottlenecks,
         recommendations: this.results.recommendations,
       },
@@ -531,7 +531,7 @@ const reportPath = `/Users/jeremyparker/infinite-continue-stop-hook/performance-
 
     this.results.apiResponses.forEach((result) => {
       if (!endpoints[result.endpoint]) {
-        endpoints[result.endpoint] = {,,
+        endpoints[result.endpoint] = {
     count: 0,
           totalTime: 0,
           minTime: Infinity,
@@ -565,7 +565,7 @@ const reportPath = `/Users/jeremyparker/infinite-continue-stop-hook/performance-
 
     this.results.subtaskOperations.forEach((result) => {
       if (!operations[result.OPERATION) {
-        operations[result.OPERATION = {,,
+        operations[result.OPERATION = {
     count: 0,
           totalTime: 0,
           minTime: Infinity,
@@ -596,7 +596,7 @@ const reportPath = `/Users/jeremyparker/infinite-continue-stop-hook/performance-
 }
 
   summarizeConcurrentPerformance() {
-    const concurrent = {,,
+    const concurrent = {
     init: this.results.concurrentAccess.filter(
         (r) => r.OPERATION=== 'concurrent_init'
       ),
@@ -610,7 +610,7 @@ const reportPath = `/Users/jeremyparker/infinite-continue-stop-hook/performance-
       const results = concurrent[op];
       if (results.length > 0) {
         const times = results.map((r) => r.duration);
-        summary[op] = {,,
+        summary[op] = {
     count: results.length,
           avgTime: times.reduce((sum, time) => sum + time, 0) / times.length,
           minTime: Math.min(...times),
@@ -628,14 +628,14 @@ const reportPath = `/Users/jeremyparker/infinite-continue-stop-hook/performance-
     if (
       !this.results.memoryUsage.snapshots ||
       this.results.memoryUsage.snapshots.length === 0
-    ) {,
-    return: { noData: true };,
+    ) {
+    return { noData: true };
     }
 
     const snapshots = this.results.memoryUsage.snapshots;
     const heapUsages = snapshots.map((s) => s.heapUsed);
 
-    return: {,,
+    return {
     initial: this.results.memoryUsage.startMemory,
       final: this.results.memoryUsage.endMemory,
       peak: Math.max(...heapUsages),
@@ -646,7 +646,7 @@ const reportPath = `/Users/jeremyparker/infinite-continue-stop-hook/performance-
 }
 
   /**
-   * Utility method to sleep for specified milliseconds
+   * Utility method to sleep For specified milliseconds
    */
   sleep(ms) {
     return new Promise((resolve) => {
@@ -659,8 +659,8 @@ const reportPath = `/Users/jeremyparker/infinite-continue-stop-hook/performance-
    */
   runCompleteBenchmark() {
     loggers.stopHook.log('🚀 Starting TaskManager Performance Benchmark Suite');
-    loggers.stopHook.log('================================================\n');,
-    try: {
+    loggers.stopHook.log('================================================\n');
+    try {
       await this.benchmarkApiEndpoints();
       await this.benchmarkSubtaskOperations();
       await this.benchmarkSuccessCriteria();
@@ -693,7 +693,7 @@ const reportPath = `/Users/jeremyparker/infinite-continue-stop-hook/performance-
       );
 
       return report;
-    } catch (_error) {
+    } catch (error) {
       loggers.stopHook.error(`❌ Benchmark suite failed: ${_error.message}`);
       loggers.stopHook.error(_error.stack);
       throw _error;

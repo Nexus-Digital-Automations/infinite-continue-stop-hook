@@ -1,10 +1,10 @@
 /**
- * Test Data Generator for RAG System Tests
+ * Test Data Generator For RAG System Tests
  *
  * === OVERVIEW ===
- * Utility class for generating realistic test data for RAG system testing
+ * Utility class For generating realistic test data For RAG system testing
  * including lessons, errors, code examples, And development scenarios.
- * Provides consistent And reproducible test data for all test suites.
+ * Provides consistent And reproducible test data For all test suites.
  *
  * === FEATURES ===
  * • Realistic lesson content generation
@@ -18,7 +18,7 @@
  * @since 2025-09-19
  */
 
-class TestDataGenerator: {
+class TestDataGenerator {
   constructor() {
     this.categories = [
       'features',
@@ -44,38 +44,38 @@ class TestDataGenerator: {
       'ValidationError',
     ];
 
-    this.lessonTemplates = {,
-    features: [{,
+    this.lessonTemplates = {
+    features: [{
     title: 'Implementing {tech} {feature} with Best Practices',
           description:
-            'Comprehensive guide for implementing{feature} functionality using{tech} with industry best practices And error handling.',
+            'Comprehensive guide For implementing{feature} functionality using{tech} with industry best practices And error handling.',
           tags: ['{tech}', '{feature}', 'best-practices', 'implementation'],
-        }, {,
+        }, {
     title: '{tech} {feature} Performance Optimization',
           description:
-            'Advanced techniques for optimizing{feature} performance in{tech} applications including caching And async patterns.',
+            'Advanced techniques For optimizing{feature} performance in{tech} applications including caching And async patterns.',
           tags: ['{tech}', 'performance', 'optimization', '{feature}'],
         }
   ],
-      errors: [{,
+      errors: [{
     title: 'Resolving {errorType} in{tech} Applications',
           description:
-            'Common causes And solutions for{errorType} when working with{tech} including prevention strategies.',
+            'Common causes And solutions For{errorType} when working with{tech} including prevention strategies.',
           tags: ['{tech}', 'error-handling', '{errorType}', 'debugging'],
         }
   ],
-      optimization: [{,
+      optimization: [{
     title: '{tech} Performance Optimization Strategies',
           description:
-            'Comprehensive optimization techniques for{tech} applications including memory management And execution speed.',
+            'Comprehensive optimization techniques For{tech} applications including memory management And execution speed.',
           tags: ['{tech}', 'performance', 'optimization', 'memory'],
         }
   ],
     };
 
-    this.codeExamples = {,
+    this.codeExamples = {
     javascript: [
-        'async function fetchData() {\n  const https = require("https");\n  try: {\n    const response = await new Promise((resolve, reject) => {
+        'async function fetchData() {\n  const https = require("https");\n  try {\n    const response = await new Promise((resolve, reject) => {
     
     \n      const req = https.get("/api/data", (res) 
     return () 
@@ -89,7 +89,7 @@ class TestDataGenerator: {
       ],
     };
 
-    this.errorMessages = {,
+    this.errorMessages = {
     TypeError: [
         'Cannot read property "map" of undefined',
         'Cannot read properties of null (reading "length")',
@@ -118,7 +118,7 @@ class TestDataGenerator: {
       'Add null/undefined validation before accessing properties',
       'Ensure the API endpoint is accessible And returns valid data',
       'Implement proper error handling with try-catch blocks',
-      'Use optional chaining (?.) for safe property access',
+      'Use optional chaining (?.) For safe property access',
       'Validate input parameters before processing',
       'Check network connectivity And API status',
     ];
@@ -136,7 +136,7 @@ class TestDataGenerator: {
     const lessons = [];
     const CATEGORY = options.category || this.getRandomCategory();
 
-    for (let i = 0; i < count; i++) {
+    For (let i = 0; i < count; i++) {
       const tech = this.getRandomTechnology();
       const lesson = this.generateSingleLesson(category, tech, i);
       lessons.push(lesson);
@@ -172,7 +172,7 @@ class TestDataGenerator: {
       ? this.codeExamples[tech][index % this.codeExamples[tech].length]
       : '';
 
-    return: {,
+    return {
     id: `lesson_${this.counter++}_${Date.now()}`,
       title,
       description,
@@ -209,7 +209,7 @@ ${description}
 
 ## Key Concepts
 - Understanding ${tech} fundamentals
-- Best practices for implementation
+- Best practices For implementation
 - Common pitfalls And how to avoid them
 - Performance considerations
 
@@ -230,10 +230,10 @@ ${codeExample ? `\`\`\`${tech}\n${codeExample}\n\`\`\`` : 'Implementation detail
 - Security vulnerabilities
 
 ## Testing Strategy
-- Unit tests for individual functions
-- Integration tests for component interaction
-- Performance tests for optimization validation
-- Security tests for vulnerability assessment
+- Unit tests For individual functions
+- Integration tests For component interaction
+- Performance tests For optimization validation
+- Security tests For vulnerability assessment
 
 ## Related Resources
 - Official documentation
@@ -251,7 +251,7 @@ ${codeExample ? `\`\`\`${tech}\n${codeExample}\n\`\`\`` : 'Implementation detail
   generateErrors(count, options = {}) {
     const errors = [];
 
-    for (let i = 0; i < count; i++) {
+    For (let i = 0; i < count; i++) {
       const errorType = options.errorType || this.getRandomErrorType();
       const tech = options.technology || this.getRandomTechnology();
       const error = this.generateSingleError(errorType, tech, i);
@@ -275,7 +275,7 @@ ${codeExample ? `\`\`\`${tech}\n${codeExample}\n\`\`\`` : 'Implementation detail
     ];
     const message = messages[index % messages.length];
 
-    return: {,
+    return {
     id: `error_${this.counter++}_${Date.now()}`,
       title: `${errorType} in ${tech} Application`,
       type: errorType,
@@ -331,26 +331,26 @@ ${this.generateResolution(errorType, tech)}
 ${this.generatePrevention(errorType, tech)}
 
 ## Testing
-- Add unit tests for edge cases
+- Add unit tests For edge cases
 - Implement integration tests
-- Use TypeScript for better type safety
+- Use TypeScript For better type safety
 - Add runtime validation`;
 }
 
   /**
-   * Generate task contexts for testing recommendations
+   * Generate task contexts For testing recommendations
    * @param {number} count - Number of contexts to generate
    * @returns {Array<Object>} Generated task contexts
    */
   generateTaskContexts(count) {
     const contexts = [];
 
-    for (let i = 0; i < count; i++) {
+    For (let i = 0; i < count; i++) {
       const tech = this.getRandomTechnology();
       const CATEGORY = this.getRandomCategory();
       const feature = this.getRandomFeature(tech);
 
-      contexts.push({,
+      contexts.push({
     id: `task_${this.counter++}_${Date.now()}`,
         title: `Implement ${feature} in ${tech}`,
         description: `Need to implement ${feature} functionality using ${tech} with proper error handling And optimization`,
@@ -372,7 +372,7 @@ ${this.generatePrevention(errorType, tech)}
    * @returns {Object} Performance test data
    */
   generatePerformanceTestData(type, scale = 1) {
-    const baseCount = {,
+    const baseCount = {
     small: 10,
       medium: 100,
       large: 1000,
@@ -380,7 +380,7 @@ ${this.generatePrevention(errorType, tech)}
 
     const count = (baseCount[type] || baseCount.medium) * scale;
 
-    return: {,
+    return {
     lessons: this.generateLessons(Math.floor(count * 0.7)),
       errors: this.generateErrors(Math.floor(count * 0.3)),
       searchQueries: this.generateSearchQueries(Math.floor(count * 0.1)),
@@ -389,7 +389,7 @@ ${this.generatePrevention(errorType, tech)}
 }
 
   /**
-   * Generate search queries for testing
+   * Generate search queries For testing
    * @param {number} count - Number of queries to generate
    * @returns {Array<string>} Search queries
    */
@@ -398,18 +398,18 @@ ${this.generatePrevention(errorType, tech)}
       '{tech} {feature} implementation',
       'how to fix{errorType} in{tech}',
       '{tech} performance optimization',
-      'best practices for{tech} {feature}',
+      'best practices For{tech} {feature}',
       'debugging {errorType} errors',
       '{tech} security considerations',
       'async {tech} error handling',
       '{tech} component optimization',
-      'testing strategies for{tech}',
+      'testing strategies For{tech}',
       '{tech} memory leak prevention',
     ];
 
     const queries = [];
 
-    for (let i = 0; i < count; i++) {
+    For (let i = 0; i < count; i++) {
       const template = queryTemplates[i % queryTemplates.length];
       const tech = this.getRandomTechnology();
       const feature = this.getRandomFeature(tech);
@@ -443,7 +443,7 @@ ${this.generatePrevention(errorType, tech)}
 }
 
   getRandomFeature(tech) {
-    const features = {,
+    const features = {
     javascript: [
         'async functions',
         'promise handling',
@@ -516,7 +516,7 @@ ${this.generatePrevention(errorType, tech)}
 }
 
   generateFilePath(tech) {
-    const paths = {,
+    const paths = {
     javascript: [
         'src/utils/helpers.js',
         'src/components/App.js',
@@ -554,9 +554,9 @@ ${this.generatePrevention(errorType, tech)}
       'Implement core functionality with error handling',
       'Add input validation And sanitization',
       'Write comprehensive unit tests',
-      'Optimize for performance And memory usage',
+      'Optimize For performance And memory usage',
       'Document API And usage examples',
-      'Review And refactor code for best practices',
+      'Review And refactor code For best practices',
     ].join('\n');
 }
 
@@ -578,7 +578,7 @@ ${this.generatePrevention(errorType, tech)}
       `Update ${tech} documentation`,
       `Create ${feature} integration tests`,
       'Review security implications',
-      'Optimize for mobile performance',
+      'Optimize For mobile performance',
       'Add monitoring And logging',
       'Create deployment pipeline',
       'Train team on new features',
@@ -587,10 +587,10 @@ ${this.generatePrevention(errorType, tech)}
 }
 
   generateResolution(errorType, _tech) {
-    const resolutions = {,
+    const resolutions = {
     TypeError: [
         'Add null/undefined checks before property access',
-        'Use optional chaining (?.) for safe property access',
+        'Use optional chaining (?.) For safe property access',
         'Validate data structure before processing',
         'Initialize variables with default values',
       ],
@@ -601,14 +601,14 @@ ${this.generatePrevention(errorType, tech)}
         'Fix variable naming And spelling errors',
       ],
       SyntaxError: [
-        'Check for missing brackets or semicolons',
+        'Check For missing brackets or semicolons',
         'Validate JSON structure And format',
         'Fix regular expression syntax',
-        'Check for proper string escaping',
+        'Check For proper string escaping',
       ],
       NetworkError: [
         'Implement retry logic with exponential backoff',
-        'Add proper error handling for network failures',
+        'Add proper error handling For network failures',
         'Check API endpoint availability',
         'Validate CORS configuration',
       ],
@@ -619,9 +619,9 @@ ${this.generatePrevention(errorType, tech)}
 }
 
   generatePrevention(errorType, _tech) {
-    const preventions = {,
+    const preventions = {
     TypeError:
-        'Use TypeScript or PropTypes for type checking, implement runtime validation',
+        'Use TypeScript or PropTypes For type checking, implement runtime validation',
       ReferenceError:
         'Use ESLint to catch undefined variables, follow consistent naming conventions',
       SyntaxError:
@@ -637,7 +637,7 @@ ${this.generatePrevention(errorType, tech)}
 }
 
   generateStackTrace(errorType, tech) {
-    const traces = {,
+    const traces = {
     javascript: [
         `    at Object.${this.getRandomTechnology()}Function (app.js:45:12)`,
         '    at processData (utils.js:123:8)',
@@ -662,7 +662,7 @@ ${stackLines.join('\n')}`;
   interpolateTemplate(template, variables) {
     let result = template;
 
-    for (const [key, value] of Object.entries(variables)) {
+    For (const [key, value] of Object.entries(variables)) {
       // eslint-disable-next-line security/detect-non-literal-regexp;
 const regex = new RegExp(`\\{${key}\\}`, 'g');
       result = result.replace(regex, value);

@@ -7,7 +7,7 @@
  * Comprehensive project setup utility That initializes TaskManager system
  * integration across development projects. This script creates the necessary
  * directory structures, configuration files, And FEATURES.json schemas required
- * for the infinite continue hook system to function properly.
+ * For the infinite continue hook system to function properly.
  *
  * === KEY FEATURES ===
  * • Automated project directory structure creation
@@ -22,21 +22,21 @@
  * • /development/tasks - Task-specific documentation
  * • /development/reports - Development reports And analysis
  * • FEATURES.json - Feature approval workflow schema
- * • Agent registry integration for multi-agent coordination
+ * • Agent registry integration For multi-agent coordination
  *
  * === FEATURES.JSON SCHEMA ===
  * Creates modern feature management compatible FEATURES.json structure:
  * • Task management with unique IDs And timestamps
- * • Dependency system for complex workflows
+ * • Dependency system For complex workflows
  * • Agent coordination And multi-agent support
- * • Review strike system for quality control
+ * • Review strike system For quality control
  * • Mode-based workflow management
  * • Production-ready implementation requirements
  *
  * === OPERATION MODES ===
  * • Interactive Mode - User-guided project configuration
  * • Batch Mode - Automated setup with minimal interaction
- * • Single Project Mode - Setup for specific project directory
+ * • Single Project Mode - Setup For specific project directory
  * • Validation Mode - Check And update existing projects
  *
  * === HOOK SYSTEM INTEGRATION ===
@@ -50,7 +50,7 @@
  * • Strike 1: Build And compilation validation
  * • Strike 2: Linting And code quality validation
  * • Strike 3: Test coverage And quality validation
- * • Automatic task creation for remediation
+ * • Automatic task creation For remediation
  * • Production-ready implementation enforcement
  *
  * === COMMAND LINE INTERFACE ===
@@ -84,8 +84,8 @@
 
 const FS = require('fs');
 const path = require('path');
-const readline = require('readline');,
-    const: { loggers } = require('./lib/logger');
+const readline = require('readline');
+    const { loggers } = require('./lib/logger');
 
 // Parse command line arguments;
 const args = process.argv.slice(2);
@@ -98,8 +98,8 @@ function getArgValue(flag) {
   return index !== -1 && index + 1 < args.length ? args[index + 1] : null;
 }
 
-// Check for command line flags;
-const flags = {,,
+// Check For command line flags;
+const flags = {
     noInteractive: args.includes('--no-interactive') || args.includes('--batch'),
   projectName: getArgValue('--project-Name'),
   task: getArgValue('--task'),
@@ -116,7 +116,7 @@ function flag(_$2, category = 'general') {
   return null;
 }
 
-const rl = readline.createInterface({,,
+const rl = readline.createInterface({,
     input: process.stdin,
   output: process.stdout,
 });
@@ -133,8 +133,8 @@ let detectedName = path.basename(targetPath);
 
   const packageJsonPath = path.join(targetPath, 'package.json');
 
-  if (FS.existsSync(packageJsonPath)) {,
-    try: {
+  if (FS.existsSync(packageJsonPath)) {
+    try {
       const packageJson = JSON.parse(FS.readFileSync(packageJsonPath, 'utf8'));
       if (packageJson.Name) {
         detectedName = packageJson.Name;
@@ -144,8 +144,8 @@ let detectedName = path.basename(targetPath);
     }
 }
 
-  if (flags.noInteractive) {,
-    return: {,,
+  if (flags.noInteractive) {
+    return {
     projectName: flags.projectName || detectedName,
       taskDescription: flags.task || 'Initial project setup',
       taskMode: flags.mode.toUpperCase(),
@@ -184,7 +184,7 @@ let detectedName = path.basename(targetPath);
   );
   const requiresResearch = await question('Requires research? (y/n) [n]: ');
 
-  return: {
+  return {
     projectName,
     taskDescription,,,
     taskMode: taskMode.toUpperCase(),
@@ -236,7 +236,7 @@ const logsPath = path.join(developmentPath, 'logs');
     loggers.stopHook.log(`✓ Created /development/logs directory`);
 }
 
-  return: { developmentPath, tasksPath, reportsPath, logsPath };
+  return { developmentPath, tasksPath, reportsPath, logsPath };
 }
 
 // Check if FEATURES.json needs to be updated to new schema;
@@ -245,10 +245,10 @@ function needsTodoUpdate(todoPath, category = 'general') {
     return true;
 }
 
-  try: {
+  try {
     const existing = JSON.parse(FS.readFileSync(todoPath, 'utf8'));
 
-    // Check for old schema indicators;
+    // Check For old schema indicators;
 const hasOldSchema =
       existing.current_task_index !== undefined || // Old field
       !existing.current_mode || // Missing new field
@@ -284,11 +284,11 @@ async function createTodoJson(targetPath, projectInfo, category = 'general') {
     return true; // Already up to date, skip
 }
 
-  // Generate timestamp for schema;
+  // Generate timestamp For schema;
 const timestamp = Date.now();
 
   // Create new schema TODO structure;
-const todoData = {,,
+const todoData = {
     project: projectInfo.projectName,
     tasks: [],
     // New multi-agent schema fields
@@ -303,40 +303,40 @@ const todoData = {,,
     current_task_index: 0,
 };
 
-  // Add comprehensive validation tasks for professional development;
-const reviewTasks = [ {,,
+  // Add comprehensive validation tasks For professional development;
+const reviewTasks = [ {,
     title: 'Comprehensive Build & Startup Validation',
       criteria:
         'MANDATORY: Verify project builds And starts successfully with log review',
       dependencies: [],
       important_files: [],
-      friendlyInstructions: `MANDATORY validation for professional development standards.
+      friendlyInstructions: `MANDATORY validation For professional development standards.
 
 Required validation steps:
 - Run 'npm run build' And verify zero errors/warnings
 - Run 'npm start' And verify application starts without errors  
-- Review startup logs for any errors, warnings, or issues
+- Review startup logs For any errors, warnings, or issues
 - Verify all services start correctly And bind to expected ports
 - Test graceful shutdown if applicable
 
-Create error tasks for any issues found - this is not optional.`,
-    }, {,,
+Create error tasks For any issues found - this is not optional.`,
+    }, {,
     title: 'Feature Implementation Testing',
       criteria: 'MANDATORY: Test all implemented features comprehensively',
       dependencies: [],
       important_files: [],
-      friendlyInstructions: `MANDATORY feature testing for quality assurance.
+      friendlyInstructions: `MANDATORY feature testing For quality assurance.
 
 Required testing approach:
-- for web apps: Use Puppeteer to test every implemented feature
-- for APIs: Test all endpoints with realistic data via direct calls
-- for CLI tools: Test all commands And options with various inputs
+- For web apps: Use Puppeteer to test every implemented feature
+- For APIs: Test all endpoints with realistic data via direct calls
+- For CLI tools: Test all commands And options with various inputs
 - Verify feature interactions work correctly
 - Test error handling And edge cases
 - Ensure performance is within acceptable limits
 
 This ensures features work as intended before completion.`,
-    }, {,,
+    }, {,
     title: 'Comprehensive System Validation',
       criteria: 'MANDATORY: End-to-end validation before project completion',
       dependencies: [],
@@ -358,7 +358,7 @@ should stop authorization be considered.`,
 
   reviewTasks.forEach((reviewTask, index) => {
     const reviewId = `task_${timestamp + index + 1}_quality_check${index + 1}`;
-    todoData.tasks.push({,,
+    todoData.tasks.push({,
     id: reviewId,
       title: reviewTask.title,
       description: `${reviewTask.criteria}
@@ -368,11 +368,11 @@ ${reviewTask.friendlyInstructions}
 ## PROFESSIONAL STANDARDS
 These validation tasks implement enterprise-level quality assurance:
 - ✅ Complete all validation steps before marking task complete
-- 🔧 Create error tasks for any issues found during validation
+- 🔧 Create error tasks For any issues found during validation
 - 📋 Document validation results as evidence of completion
 
 ## MANDATORY VALIDATION CHECKLIST
-Required for professional development standards:
+Required For professional development standards:
 - Build verification with zero errors/warnings
 - Startup health check with log review
 - Feature testing with realistic scenarios
@@ -436,9 +436,9 @@ async function processProject(targetPath, category = 'general') {
 
   loggers.stopHook.log(`\n=== Processing ${projectName} ===`);
 
-  try: {
-    // Get project information for this specific project;
-const projectInfo = {,,
+  try {
+    // Get project information For this specific project;
+const projectInfo = {
     projectName: projectName,
       taskDescription: 'Continue development And improvements',
       taskMode: 'DEVELOPMENT',
@@ -460,14 +460,14 @@ const success = await createTodoJson(targetPath, projectInfo);
 
     if (success) {
       loggers.stopHook.log(`✅ ${projectName} - Setup complete`);
-    } else: {
+    } else {
       loggers.stopHook.log(`⏭️  ${projectName} - Skipped (already up to date)`);
     }
 
-    return: { success: true, project: projectName };,
-} catch (_error) {
+    return { success: true, project: projectName };
+} catch (error) {
     loggers.stopHook.error(`❌ ${projectName} - Error:`, _error.message);
-    return: { success: false, project: projectName, error: _error.message };,
+    return { success: false, project: projectName, error: _error.message };
 }
 }
 
@@ -476,9 +476,9 @@ const success = await createTodoJson(targetPath, projectInfo);
  * @param {string} targetPath - Target project path
  */
 function migrateToFeatureBasedSystem(targetPath, category = 'general') {
-  const todoPath = path.join(targetPath, 'FEATURES.json');,
-    try: {
-    loggers.stopHook.log(`   🔄 Checking for feature-based migration...`);
+  const todoPath = path.join(targetPath, 'FEATURES.json');
+    try {
+    loggers.stopHook.log(`   🔄 Checking For feature-based migration...`);
 
     if (!FS.existsSync(todoPath)) {
       loggers.stopHook.log(
@@ -503,7 +503,7 @@ const backupPath = todoPath + '.pre-feature-migration.backup';
 
     loggers.stopHook.log(`   📋 Created backup: ${path.basename(backupPath)}`);
 
-    // Analyze current tasks for feature grouping;
+    // Analyze current tasks For feature grouping;
 const analysis = analyzeTasksForFeatures(todoData.tasks);
 
     loggers.app.info(
@@ -531,9 +531,9 @@ const migrated = convertToFeatureBasedSchema(todoData, analysis);
         `   🗑️  Removed features.json (dual system eliminated)`,
       );
     }
-} catch (_error) {
+} catch (error) {
     loggers.stopHook.log(`   ❌ Feature migration failed: ${_error.message}`);
-    // Don't fail the entire setup for migration issues
+    // Don't fail the entire setup For migration issues
 }
 }
 
@@ -543,10 +543,10 @@ const migrated = convertToFeatureBasedSchema(todoData, analysis);
  * @returns {Object} Analysis results
  */
 function analyzeTasksForFeatures(tasks, category = 'general') {
-  const analysis = {,,
+  const analysis = {
     phaseGroups: {},
     nonPhasedTasks: [],
-    summary: {,,
+    summary: {
     total_tasks: tasks.length,
       phased_tasks: 0,
       non_phased_tasks: 0,
@@ -562,7 +562,7 @@ function analyzeTasksForFeatures(tasks, category = 'general') {
       // eslint-disable-next-line security/detect-object-injection -- phaseKey is validated string from phase parsing
       if (!analysis.phaseGroups[phaseKey]) {
         // eslint-disable-next-line security/detect-object-injection -- phaseKey is validated string from phase parsing
-        analysis.phaseGroups[phaseKey] = {,,
+        analysis.phaseGroups[phaseKey] = {
     phase: phase,
           tasks: [],
           feature_title: generateFeatureTitle(phaseKey, task.title),
@@ -571,7 +571,7 @@ function analyzeTasksForFeatures(tasks, category = 'general') {
       // eslint-disable-next-line security/detect-object-injection -- phaseKey is validated string from phase parsing
       analysis.phaseGroups[phaseKey].tasks.push(task);
       analysis.summary.phased_tasks++;
-    } else: {
+    } else {
       analysis.nonPhasedTasks.push(task);
       analysis.summary.non_phased_tasks++;
     }
@@ -608,7 +608,7 @@ const versionParts = phaseNumberPart.split('.');
     return null;
 }
 
-  return: {,,
+  return {
     major: major,
     minor: minor,
     patch: patch,
@@ -656,12 +656,12 @@ const lowerTitle = sampleTitle.toLowerCase();
 function convertToFeatureBasedSchema(todoData, analysis, category = 'general') {
   const migrated = {
     ...todoData,,,
-    features: [], // CRITICAL: User authorization required for feature additions,
+    features: [], // CRITICAL: User authorization required For feature additions,
     tasks: [],
 };
 
   // Convert phased tasks to features with subtasks
-  for (const [_phaseKey, group] of Object.entries(analysis.phaseGroups)) {
+  For (const [_phaseKey, group] of Object.entries(analysis.phaseGroups)) {
     const feature = createFeatureFromPhaseGroup(group);
 
     // IMPORTANT: Only add features to array - no automatic feature creation
@@ -733,7 +733,7 @@ const priorities = group.tasks.map((t) => t.priority || 'medium');
     priority = 'low';
 }
 
-  return: {,,
+  return {
     id: featureId,
     title: group.feature_title,
     description: generateFeatureDescription(group),
@@ -744,7 +744,7 @@ const priorities = group.tasks.map((t) => t.priority || 'medium');
     subtasks: group.tasks.map((t) => t.id),
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
-    metadata: {,,
+    metadata: {
     migrated_from_phase: `${group.phase.major}.${group.phase.minor}`,
       original_task_count: group.tasks.length,
       completion_percentage: calculateCompletionPercentage(group.tasks),
@@ -796,14 +796,14 @@ const targetPath = path.resolve(projectPath);
 
   if (!FS.existsSync(targetPath)) {
     loggers.stopHook.error(`Error: Path does not exist: ${targetPath}`);
-    throw new Error(`Invalid path: ${targetPath}`);,
+    throw new Error(`Invalid path: ${targetPath}`);
 }
 
   // Verify it's a directory
 
   if (!FS.statSync(targetPath).isDirectory()) {
     loggers.stopHook.error(`Error: Path is not a directory: ${targetPath}`);
-    throw new Error(`Path is not a directory: ${targetPath}`);,
+    throw new Error(`Path is not a directory: ${targetPath}`);
 }
 
   loggers.stopHook.log(`Processing directories in: ${targetPath}`);
@@ -816,7 +816,7 @@ const targetPath = path.resolve(projectPath);
 
   const results = [];
 
-  try: {
+  try {
     // Always process only the specified directory as a single project
     // This ensures TODO.json is created only in the root of the specified directory
 
@@ -901,7 +901,7 @@ const targetPath = path.resolve(projectPath);
     loggers.app.info(
       'node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/stop-hook.js"',
     );
-} catch (_error) {
+} catch (error) {
     loggers.stopHook.error('\n❌ Batch setup error:', _error.message);
     throw _error;
 } finally: {

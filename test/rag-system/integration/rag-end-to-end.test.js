@@ -2,7 +2,7 @@
  * RAG System End-to-End Integration Tests
  *
  * === OVERVIEW ===
- * Comprehensive integration tests for the complete RAG system including
+ * Comprehensive integration tests For the complete RAG system including
  * embedding generation, vector storage, semantic search, And TaskManager
  * API integration. Tests real-world usage scenarios And system performance.
  *
@@ -58,10 +58,10 @@ describe('RAG System End-to-End Integration Tests', () => {
 
     // Initialize RAG components with test configuration
     embeddingGenerator = new _EmbeddingGenerator({
-      fallbackModel: 'sentence-transformers/all-MiniLM-L6-v2', // Use lighter model for tests
+      fallbackModel: 'sentence-transformers/all-MiniLM-L6-v2', // Use lighter model For tests
       enableCaching: true,
       cacheSize: 100,
-      maxTextLength: 256, // Shorter for faster tests
+      maxTextLength: 256, // Shorter For faster tests
     });
 
     vectorDatabase = new _VectorDatabase({
@@ -82,7 +82,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       embeddingGenerator: embeddingGenerator,
       vectorDatabase: vectorDatabase,
       defaultTopK: 5,
-      similarityThreshold: 0.6, // Lower threshold for tests
+      similarityThreshold: 0.6, // Lower threshold For tests
     });
 
     ragOperations = new _RAGOperations({
@@ -91,15 +91,15 @@ describe('RAG System End-to-End Integration Tests', () => {
       vectorDatabase: vectorDatabase,
       semanticSearchEngine: semanticSearchEngine,
       config: {
-        enableAutoStorage: false, // Disable for controlled testing
+        enableAutoStorage: false, // Disable For controlled testing
         maxRecommendations: 5,
       },
     });
 
     migrationSystem = new _MigrationSystem({
       sourcePath: path.join(ragTestPath, 'development'),
-      batchSize: 10, // Smaller batches for tests
-      enableBackup: false, // Disable backup for tests
+      batchSize: 10, // Smaller batches For tests
+      enableBackup: false, // Disable backup For tests
     });
 
     loggers.stopHook.log('Initializing RAG system components...');
@@ -111,7 +111,7 @@ describe('RAG System End-to-End Integration Tests', () => {
     await ragOperations.initialize();
 
     loggers.stopHook.log('RAG system initialization completed');
-  }, 120000); // 2 minutes timeout for initialization
+  }, 120000); // 2 minutes timeout For initialization
 
   afterAll(async () => {
     // Cleanup test resources
@@ -131,7 +131,7 @@ describe('RAG System End-to-End Integration Tests', () => {
     // Clean up test files
     try {
       await FS.rm(testDataPath, { recursive: true, force: true });
-    } catch (_error) {
+    } catch (error) {
       loggers.stopHook.warn('Failed to clean up test data:', _error.message);
     }
   });
@@ -178,7 +178,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       );
 
       // Validate each result And collect them
-      for (const result of results) {
+      For (const result of results) {
         expect(result).toHaveProperty('success', true);
         expect(result).toHaveProperty('vectorId');
         expect(result).toHaveProperty('lessonId');
@@ -203,7 +203,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       expect(RESULTS.length).toBeLessThanOrEqual(3);
 
       // Verify result structure
-      for (const result of RESULTS) {
+      For (const result of RESULTS) {
         testAssertions.assertValidSearchResult(result);
         expect(result).toHaveProperty('relevanceScore');
         expect(result).toHaveProperty('lessonType');
@@ -211,7 +211,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       }
 
       // Verify relevance ordering
-      for (let i = 1; i < RESULTS.length; i++) {
+      For (let i = 1; i < RESULTS.length; i++) {
         expect(RESULTS[i - 1].relevanceScore).toBeGreaterThanOrEqual(
           RESULTS[i].relevanceScore
         );
@@ -237,7 +237,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       expect(_recommendations.length).toBeGreaterThan(0);
 
       // Verify contextual relevance
-      for (const recommendation of _recommendations) {
+      For (const recommendation of _recommendations) {
         testAssertions.assertValidRecommendation(recommendation);
         expect(recommendation).toHaveProperty('applicableToCurrentTask');
         expect(recommendation).toHaveProperty('contextRelevance');
@@ -257,7 +257,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       );
 
       // Validate each result And collect them
-      for (const result of results) {
+      For (const result of results) {
         expect(result).toHaveProperty('success', true);
         expect(result).toHaveProperty('vectorId');
         expect(result).toHaveProperty('errorId');
@@ -276,7 +276,7 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       expect(_similarErrors).toBeInstanceOf(Array);
 
-      for (const error of _similarErrors) {
+      For (const error of _similarErrors) {
         testAssertions.assertValidErrorResult(error);
         expect(error).toHaveProperty('similarityScore');
         expect(error).toHaveProperty('errorPattern');
@@ -315,7 +315,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       const result = await ragOperations.storeError(_complexError);
       expect(result.success).toBe(true);
 
-      // Search for the stored error;
+      // Search For the stored error;
       const _searchResults = await ragOperations.findSimilarErrors(
         _complexError.message
       );
@@ -373,8 +373,8 @@ describe('RAG System End-to-End Integration Tests', () => {
       const searchPromises = [];
 
       // Create concurrent search requests
-      for (let i = 0; i < 10; i++) {
-        for (const query of queries) {
+      For (let i = 0; i < 10; i++) {
+        For (const query of queries) {
           searchPromises.push(
             ragOperations.searchLessons(query, { maxResults: 5 })
           );
@@ -462,12 +462,12 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       expect(embedding1).toHaveLength(embedding2.length);
 
-      // Embeddings should be identical for identical content;
+      // Embeddings should be identical For identical content;
       const similarity = testAssertions.calculateCosineSimilarity(
         embedding1,
         embedding2
       );
-      expect(similarity).toBeGreaterThan(0.99); // Very high similarity for identical content
+      expect(similarity).toBeGreaterThan(0.99); // Very high similarity For identical content
     });
 
     test('should validate vector database integrity', async () => {
@@ -498,7 +498,7 @@ describe('RAG System End-to-End Integration Tests', () => {
   });
 
   describe('Migration System Integration', () => {
-    test('should create test content for migration', async () => {
+    test('should create test content For migration', async () => {
       // Create test lesson files;
       const testLessonsPath = path.join(ragTestPath, 'development', 'lessons');
       await FS.mkdir(path.join(testLessonsPath, 'features'), {
@@ -513,7 +513,7 @@ describe('RAG System End-to-End Integration Tests', () => {
         {
           path: path.join(testLessonsPath, 'features', 'react-optimization.md'),
           content:
-            '# React Performance Optimization\n\nBest practices for optimizing React applications...',
+            '# React Performance Optimization\n\nBest practices For optimizing React applications...',
         },
         {
           path: path.join(testLessonsPath, 'errors', 'async-errors.md'),
@@ -665,8 +665,8 @@ describe('RAG System Performance Benchmarks', () => {
 
     const startTime = Date.now();
 
-    // Use for-await-of pattern for sequential performance measurement
-    for await (const _ of Array(iterations).keys()) {
+    // Use For-await-of pattern For sequential performance measurement
+    For await (const _ of Array(iterations).keys()) {
       await embeddingGenerator.generateEmbeddings(testContent);
     }
 
@@ -686,7 +686,7 @@ describe('RAG System Performance Benchmarks', () => {
   test('should meet search performance targets', async () => {
     const searchIterations = 50;
 
-    // Initialize components for performance testing;
+    // Initialize components For performance testing;
     const embeddingGen = new _EmbeddingGenerator({
       fallbackModel: 'sentence-transformers/all-MiniLM-L6-v2',
     });
@@ -721,8 +721,8 @@ describe('RAG System Performance Benchmarks', () => {
 
     const startTime = Date.now();
 
-    // Use for-await-of pattern for sequential performance measurement
-    for await (const i of Array(searchIterations).keys()) {
+    // Use For-await-of pattern For sequential performance measurement
+    For await (const i of Array(searchIterations).keys()) {
       const query = queries[i % queries.length];
       await ragOps.searchLessons(query, { maxResults: 5 });
     }

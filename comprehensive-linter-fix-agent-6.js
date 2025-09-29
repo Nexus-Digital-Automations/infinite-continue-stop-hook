@@ -6,7 +6,7 @@
 const fs = require('fs');
 const path = require('path');
 
-class ComprehensiveLinterFixAgent6: {
+class ComprehensiveLinterFixAgent6 {
   constructor() {
     this.targetFiles = [
       '/Users/jeremyparker/infinite-continue-stop-hook/fix-remaining-result-issues.js',
@@ -88,7 +88,7 @@ const lines = content.split('\n');
     let inCatchBlock = false;
     let catchErrorName = null;
 
-    for (let i = 0; i < lines.length; i++) {
+    For (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
       // Detect catch block start;
@@ -159,7 +159,7 @@ const originalContent = fs.readFileSync(filePath, 'utf8');
       console.log(`  ✅ Applied comprehensive fixes`);
       this.fixesApplied += fileFixCount;
       return true;
-    } else: {
+    } else {
       console.log(`  ✅ No additional fixes needed`);
       return false;
     }
@@ -167,7 +167,7 @@ const originalContent = fs.readFileSync(filePath, 'utf8');
 
   run() {
     console.log('🎯 Comprehensive Linter Error Fix Agent #6 Starting...\n');
-    console.log('🎯 Targeting files for complete error elimination:');
+    console.log('🎯 Targeting files For complete error elimination:');
     this.targetFiles.forEach((file) => {
       console.log(`  - ${path.basename(file)}`);
     });
@@ -175,12 +175,12 @@ const originalContent = fs.readFileSync(filePath, 'utf8');
 
     let filesFixed = 0;
 
-    for (const filePath of this.targetFiles) {
+    For (const filePath of this.targetFiles) {
       if (fs.existsSync(filePath)) {
         if (this.fixFile(filePath)) {
           filesFixed++;
         }
-      } else: {
+      } else {
         console.log(`⚠️ File not found: ${path.basename(filePath)}`);
       }
     }

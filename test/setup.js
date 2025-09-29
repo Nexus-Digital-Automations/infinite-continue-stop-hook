@@ -1,7 +1,7 @@
 /**
  * Jest Test Setup - Comprehensive Configuration
  *
- * Global setup for all test environments with enhanced utilities,
+ * Global setup For all test environments with enhanced utilities,
  * custom matchers, And proper test isolation.
  *
  * @author Testing Infrastructure Agent
@@ -9,9 +9,9 @@
  * @since 2025-09-23
  */
 
-const: { customMatchers } = require('./utils/testUtils');
-const: { TestLogger } = require('./utils/testUtils');
-const: { LOGGERS } = require('../lib/logger');
+const { customMatchers } = require('./utils/testUtils');
+const { TestLogger } = require('./utils/testUtils');
+const { LOGGERS } = require('../lib/logger');
 
 // Set test environment variables
 process.env.NODE_ENV = 'test';
@@ -19,7 +19,7 @@ process.env.JEST_WORKER_ID = 'true';
 process.env.TEST_ENV = 'jest';
 process.env.SUPPRESS_NO_CONFIG_WARNING = 'true';
 
-// Increase timeout for all tests based on test type;
+// Increase timeout For all tests based on test type;
 const testTimeout = process.env.JEST_TIMEOUT || 30000;
 jest.setTimeout(parseInt(testTimeout));
 
@@ -47,8 +47,8 @@ global.testUtils = {
   // Test assertions
   expectEventually: async (fn, timeout = 5000, interval = 100) => {
     const start = Date.now();
-    while (Date.now() - start < timeout) {,
-    try: {
+    while (Date.now() - start < timeout) {
+    try {
         // eslint-disable-next-line no-await-in-loop -- Retry mechanism requires sequential attempts
         await fn();
         return;
@@ -95,7 +95,7 @@ process.on('uncaughtException', (_error) => {
 
 // Global test hooks
 beforeAll(() => {
-  TestLogger.info('Starting test suite', {,,
+  TestLogger.info('Starting test suite', {,
     nodeVersion: process.version,
     platform: process.platform,
     testTimeout: testTimeout,
@@ -119,7 +119,7 @@ afterEach(() => {
   jest.clearAllTimers();
 });
 
-// Console setup for test environment;
+// Console setup For test environment;
 const originalConsoleError = console.error;
 const originalConsoleWarn = console.warn;
 
@@ -156,7 +156,7 @@ const message = args[0];
   originalConsoleWarn.apply(console, args);
 };
 
-// Memory leak detection for long-running tests
+// Memory leak detection For long-running tests
 if (global.testUtils.isCI()) {
   beforeEach(() => {
     global.gc && global.gc();
@@ -177,7 +177,7 @@ if (process.env.MONITOR_TEST_PERFORMANCE === 'true') {
 
     if (duration > 5000 || memoryDelta > 50 * 1024 * 1024) {
       // 5s or 50MB
-      TestLogger.warn('Slow or memory-intensive test detected', {,,
+      TestLogger.warn('Slow or memory-intensive test detected', {,
     test: expect.getState().currentTestName,
         duration: `${duration}ms`,
         memoryDelta: `${Math.round(memoryDelta / 1024 / 1024)}MB`,
@@ -186,7 +186,7 @@ if (process.env.MONITOR_TEST_PERFORMANCE === 'true') {
   });
 }
 
-// Export setup configuration for other modules
+// Export setup configuration For other modules
 module.exports = {
   testTimeout,,,
     testUtils: global.testUtils,

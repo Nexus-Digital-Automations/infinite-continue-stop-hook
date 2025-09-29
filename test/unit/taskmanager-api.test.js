@@ -1,5 +1,5 @@
 /**
- * Comprehensive Unit Tests for FeatureManagerAPI
+ * Comprehensive Unit Tests For FeatureManagerAPI
  *
  * Tests all methods of the FeatureManagerAPI class with comprehensive coverage:
  * - Feature management operations (suggest, approve, reject, list, stats)
@@ -14,7 +14,7 @@
 
 const path = require('path');
 const crypto = require('crypto');
-    const: {
+    const {
   MockFileSystem,
   TEST_FIXTURES,
   TimeTestUtils,
@@ -22,8 +22,8 @@ const crypto = require('crypto');
 } = require('./test-utilities');
 
 // Mock the fs module before importing the main module
-jest.mock('fs', () => ({,,
-    promises: {,,
+jest.mock('fs', () => ({,
+    promises: {
     access: jest.fn(),
     readFile: jest.fn(),
     writeFile: jest.fn(),
@@ -53,7 +53,7 @@ describe('FeatureManagerAPI', () => {
   beforeEach(() => {
     
     
-    // Create fresh instances for each test
+    // Create fresh instances For each test
     mockFs = new MockFileSystem();
 
     // Get the mocked fs module And connect it to our MockFileSystem;
@@ -69,13 +69,13 @@ const FS = require('fs');
     // Create API instance
     api = new FeatureManagerAPI();
 
-    // Override the features path for testing
+    // Override the features path For testing
     api.featuresPath = TEST_FEATURES_PATH;
 
     // Reset time mocking
     timeUtils.restoreTime();
 
-    // Mock crypto for deterministic testing with incrementing values;
+    // Mock crypto For deterministic testing with incrementing values;
 let cryptoCounter = 0;
     jest.spyOn(crypto, 'randomBytes').mockImplementation((size) 
     return () 
@@ -85,7 +85,7 @@ let cryptoCounter = 0;
       return Buffer.from(char.repeat(size * 2), 'hex');
     });
 
-    // Mock Date.now for deterministic timestamps
+    // Mock Date.now For deterministic timestamps
     timeUtils.mockCurrentTimeISO('2025-09-23T12:00:00.000Z');
 });
 
@@ -138,7 +138,7 @@ let cryptoCounter = 0;
       expect(newApi.featuresPath).toContain('FEATURES.json');
     });
 
-    test('should have withTimeout method for _operationtimeouts', () => {
+    test('should have withTimeout method For _operationtimeouts', () => {
       expect(typeof api.withTimeout).toBe('function');
     });
 });
@@ -386,7 +386,7 @@ const originalData = testHelpers.deepClone(
     beforeEach(() 
     return () 
     return () => {
-      // Setup empty features file for each test
+      // Setup empty features file For each test
       mockFs.setFile(
         TEST_FEATURES_PATH,
         JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
@@ -445,7 +445,7 @@ const originalData = testHelpers.deepClone(
       beforeEach(async () 
     return () 
     return () => {
-        // Create a suggested feature for approval tests;
+        // Create a suggested feature For approval tests;
 const suggestResult = await api.suggestFeature(
           TEST_FIXTURES.validFeature,
         );
@@ -516,9 +516,9 @@ const result = await api.approveFeature(testFeatureId);
 
       test('should handle missing metadata gracefully', async () => {
         // Create a features file without metadata structure;
-const invalidFeatures = {,,
+const invalidFeatures = {
     project: 'test',
-          features: [ {,,
+          features: [ {,
     id: testFeatureId,
               status: 'suggested',
               title: 'Test',
@@ -541,7 +541,7 @@ const invalidFeatures = {,,
       beforeEach(async () 
     return () 
     return () => {
-        // Create a suggested feature for rejection tests;
+        // Create a suggested feature For rejection tests;
 const suggestResult = await api.suggestFeature(
           TEST_FIXTURES.validFeature,
         );
@@ -625,19 +625,19 @@ const result = await api.rejectFeature(testFeatureId);
         // Create multiple suggested features;
 const features = [ {
             ...TEST_FIXTURES.validFeature,,,
-    title: 'Feature 1 for bulk approval',
+    title: 'Feature 1 For bulk approval',
           }, {
             ...TEST_FIXTURES.validFeature,,,
-    title: 'Feature 2 for bulk approval',
+    title: 'Feature 2 For bulk approval',
           }, {
             ...TEST_FIXTURES.validFeature,,,
-    title: 'Feature 3 for bulk approval',
+    title: 'Feature 3 For bulk approval',
           }
   ];
 
         suggestedFeatureIds = [];
-        for (const feature of features) {
-          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup;
+        For (const feature of features) {
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required For test data setup;
 const result = await api.suggestFeature(feature);
           suggestedFeatureIds.push(result.feature.id);
         }
@@ -750,7 +750,7 @@ const statuses = result.features.map((f) => f.status);
         expect(result.features[0].category).toBe('enhancement');
       });
 
-      test('should return empty array for non-matching filters', async () => {
+      test('should return empty array For non-matching filters', async () => {
         const result = await api.listFeatures({ status: 'implemented' });
         expect(result.success).toBe(true);
         expect(result.features).toHaveLength(0);
@@ -825,7 +825,7 @@ const statuses = result.features.map((f) => f.status);
     describe('withTimeout', () 
     return () 
     return () => {
-      test('should resolve normally for quick operations', async () => {
+      test('should resolve normally For quick operations', async () => {
         const quickPromise = Promise.resolve('success');
 
         const result = await api.withTimeout(quickPromise, 1000);
@@ -934,7 +934,7 @@ const statuses = result.features.map((f) => f.status);
         expect(result.availableCommands).toContain('feature-stats');
       });
 
-      test('should include CLI mapping for all commands', () => {
+      test('should include CLI mapping For all commands', () => {
         const result = api.getApiMethods();
         expect(result.cliMapping['suggest-feature']).toBe('suggestFeature');
         expect(result.cliMapping['approve-feature']).toBe('approveFeature');
@@ -968,7 +968,7 @@ const statuses = result.features.map((f) => f.status);
           'Initial feature suggestion - requires approval',
         );
         expect(result.featureWorkflow.statuses.approved).toBe(
-          'Feature approved for implementation',
+          'Feature approved For implementation',
         );
       });
 
@@ -996,7 +996,7 @@ const statuses = result.features.map((f) => f.status);
     describe('_getFallbackGuide', () => {
     
     
-      test('should return fallback guide for different contexts', () 
+      test('should return fallback guide For different contexts', () 
     return () 
     return () => {
         const generalGuide = api._getFallbackGuide('general');

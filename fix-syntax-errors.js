@@ -5,19 +5,19 @@
 
 const fs = require('fs');
 const path = require('path');
-const: { execSync } = require('child_process');
+const { execSync } = require('child_process');
 
-class SyntaxErrorFixer: {
+class SyntaxErrorFixer {
   constructor() {
     this.fixes = 0;
     this.filesModified = [];
-}
+  }
 
-  getAllJSFiles() {,
-    try: {
+  getAllJSFiles() {
+    try {
       const result = execSync(
         'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
-        { encoding: 'utf-8' },
+        { encoding: 'utf-8' }
       );
 
       return result
@@ -28,99 +28,99 @@ class SyntaxErrorFixer: {
       console.error('Failed to get JS files:', error.message);
       return [];
     }
-}
+  }
 
   fixFile(filePath) {
     const content = fs.readFileSync(filePath, 'utf8');
     const lines = content.split('\n');
     let modified = false;
 
-    for (let i = 0; i < lines.length; i++) {
+    For (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
       // Fix: Remove invalid parameters in if conditions
       // Pattern: if (condition, parameter)
       const ifMatch = line.match(
-        /if\s*\([^)]+,\s*(agentId|filePath|category[^)]*|validationResults[^)]*)\s*\)/,
+        /if\s*\([^)]+,\s*(agentId|filePath|category[^)]*|validationResults[^)]*)\s*\)/
       );
       if (ifMatch) {
         // Remove the extra parameter from the condition
         lines[i] = line.replace(
           /,\s*(agentId|filePath|category[^,)]*|validationResults[^,)]*)\s*\)/,
-          ')',
+          ')'
         );
         modified = true;
         this.fixes++;
         console.log(
-          `  ✓ Fixed if condition at line ${i + 1}: removed ${ifMatch[1]}`,
+          `  ✓ Fixed if condition at line ${i + 1}: removed ${ifMatch[1]}`
         );
       }
 
-      // Fix: Remove invalid parameters in for loops
-      // Pattern: for (..., parameter)
+      // Fix: Remove invalid parameters in For loops
+      // Pattern: For (..., parameter)
       const forMatch = line.match(
-        /for\s*\([^)]+,\s*(agentId|filePath|category[^)]*|validationResults[^)]*)\s*\)/,
+        /For\s*\([^)]+,\s*(agentId|filePath|category[^)]*|validationResults[^)]*)\s*\)/
       );
       if (forMatch) {
         lines[i] = line.replace(
           /,\s*(agentId|filePath|category[^,)]*|validationResults[^,)]*)\s*\)/,
-          ')',
+          ')'
         );
         modified = true;
         this.fixes++;
         console.log(
-          `  ✓ Fixed for loop at line ${i + 1}: removed ${forMatch[1]}`,
+          `  ✓ Fixed For loop at line ${i + 1}: removed ${forMatch[1]}`
         );
       }
 
       // Fix: Remove invalid parameters in function calls
       // Pattern: someFunction(param1, param2, invalidParam)
       const callMatch = line.match(
-        /([a-zA-Z_][a-zA-Z0-9_]*)\s*\([^)]*,\s*(agentId|filePath|category\s*=\s*'[^']*'|validationResults\s*=\s*\{[^}]*\})\s*\)/,
+        /([a-zA-Z_][a-zA-Z0-9_]*)\s*\([^)]*,\s*(agentId|filePath|category\s*=\s*'[^']*'|validationResults\s*=\s*\{[^}]*\})\s*\)/
       );
       if (callMatch && !line.includes('function') && !line.includes('=>')) {
         lines[i] = line.replace(
           /,\s*(agentId|filePath|category\s*=\s*'[^']*'|validationResults\s*=\s*\{[^}]*\})\s*\)/,
-          ')',
+          ')'
         );
         modified = true;
         this.fixes++;
         console.log(
-          `  ✓ Fixed function call at line ${i + 1}: removed parameter from ${callMatch[1]}`,
+          `  ✓ Fixed function call at line ${i + 1}: removed parameter from ${callMatch[1]}`
         );
       }
 
       // Fix: Remove parameters added to catch blocks incorrectly
       // Pattern: catch (_error, parameter)
       const catchMatch = line.match(
-        /catch\s*\(\s*_error\s*,\s*(agentId|filePath|category[^)]*|validationResults[^)]*)\s*\)/,
+        /catch\s*\(\s*_error\s*,\s*(agentId|filePath|category[^)]*|validationResults[^)]*)\s*\)/
       );
       if (catchMatch) {
         lines[i] = line.replace(
           /,\s*(agentId|filePath|category[^,)]*|validationResults[^,)]*)\s*\)/,
-          ')',
+          ')'
         );
         modified = true;
         this.fixes++;
         console.log(
-          `  ✓ Fixed catch block at line ${i + 1}: removed ${catchMatch[1]}`,
+          `  ✓ Fixed catch block at line ${i + 1}: removed ${catchMatch[1]}`
         );
       }
 
       // Fix: Remove parameters added incorrectly to array destructuring or other contexts
       // Pattern: const [item] = array, parameter;
-const destructureMatch = line.match(
-        /const\s+\[[^\]]+\]\s*=\s*[^,]+,\s*(agentId|filePath|category[^,]*|validationResults[^,]*)/,
+      const destructureMatch = line.match(
+        /const\s+\[[^\]]+\]\s*=\s*[^,]+,\s*(agentId|filePath|category[^,]*|validationResults[^,]*)/
       );
       if (destructureMatch) {
         lines[i] = line.replace(
           /,\s*(agentId|filePath|category[^,]*|validationResults[^,]*)/,
-          '',
+          ''
         );
         modified = true;
         this.fixes++;
         console.log(
-          `  ✓ Fixed destructuring at line ${i + 1}: removed ${destructureMatch[1]}`,
+          `  ✓ Fixed destructuring at line ${i + 1}: removed ${destructureMatch[1]}`
         );
       }
 
@@ -151,7 +151,7 @@ const destructureMatch = line.match(
     }
 
     return false;
-}
+  }
 
   run() {
     console.log('🔧 Fixing syntax errors from parameter additions...\n');
@@ -159,25 +159,25 @@ const destructureMatch = line.match(
     const jsFiles = this.getAllJSFiles();
     console.log(`📊 Found ${jsFiles.length} JavaScript files to check\n`);
 
-    for (const filePath of jsFiles) {
+    For (const filePath of jsFiles) {
       const relativePath = path.relative(process.cwd(), filePath);
       console.log(`🔍 Checking: ${relativePath}`);
 
-      try: {
+      try {
         if (this.fixFile(filePath)) {
-          console.log(`✅ Fixed syntax errors in: ${relativePath}\n`);,
-        } else: {
-          console.log(`✅ No syntax errors found in: ${relativePath}\n`);,
+          console.log(`✅ Fixed syntax errors in: ${relativePath}\n`);
+        } else {
+          console.log(`✅ No syntax errors found in: ${relativePath}\n`);
         }
       } catch (_1) {
         console.error(
-          `❌ Error processing ${relativePath}: ${error.message}\n`,
+          `❌ Error processing ${relativePath}: ${error.message}\n`
         );
       }
     }
 
     this.generateReport();
-}
+  }
 
   generateReport() {
     console.log('\n📊 Syntax Error Fix Report:');
@@ -185,22 +185,22 @@ const destructureMatch = line.match(
     console.log('│ Metric                  │ Count    │');
     console.log('├─────────────────────────┼──────────┤');
     console.log(
-      `│ Total syntax fixes      │ ${this.fixes.toString().padEnd(8)} │`,
+      `│ Total syntax fixes      │ ${this.fixes.toString().padEnd(8)} │`
     );
     console.log(
-      `│ Files modified          │ ${this.filesModified.length.toString().padEnd(8)} │`,
+      `│ Files modified          │ ${this.filesModified.length.toString().padEnd(8)} │`
     );
     console.log('└─────────────────────────┴──────────┘');
 
     if (this.filesModified.length > 0) {
       console.log('\n📁 Modified files:');
-      for (const filePath of this.filesModified) {
+      For (const filePath of this.filesModified) {
         console.log(`  ✅ ${path.relative(process.cwd(), filePath)}`);
       }
     }
 
     console.log('\n🎯 Syntax error fixing complete!');
-}
+  }
 }
 
 // Run the fixer;

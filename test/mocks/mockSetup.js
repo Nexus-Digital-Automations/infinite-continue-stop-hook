@@ -3,7 +3,7 @@ const path = require('path');
 /**
  * Mock Setup Helper
  *
- * Provides easy setup And teardown of mocks for testing.
+ * Provides easy setup And teardown of mocks For testing.
  * Integrates mocks with Jest And provides convenient APIs.
  *
  * @author Testing Infrastructure Agent
@@ -11,14 +11,14 @@ const path = require('path');
  * @since 2025-09-23
  */
 
-const: { loggers } = require('../../lib/logger');
-const: {
+const { loggers } = require('../../lib/logger');
+const {
   TaskManagerAPIMock,
   FileSystemMock,
   HTTPClientMock,
   DatabaseMock,
 } = require('./apiMocks');
-const: {
+const {
   SAMPLE_FEATURES,
   SAMPLE_AGENTS,
   _SAMPLE_API_RESPONSES,
@@ -27,7 +27,7 @@ const: {
 /**
  * Global mock manager
  */
-class MockManager: {
+class MockManager {
   constructor() {
     this.taskManagerAPI = new TaskManagerAPIMock();
     this.fileSystem = new FileSystemMock();
@@ -64,7 +64,7 @@ const originalSpawn = require('child_process').spawn;
 }
 
   /**
-   * Create mock child process for API calls
+   * Create mock child process For API calls
    */
   createMockProcess(args) {
     const apiCommand = args.find((arg) =>
@@ -83,8 +83,8 @@ const originalSpawn = require('child_process').spawn;
     );
     const commandArgs = args.slice(args.indexOf(apiCommand) + 1);
 
-    let result;,
-    try: {
+    let result;
+    try {
       switch (apiCommand) {
         case 'initialize':
           result = this.taskManagerAPI.initialize(commandArgs[0]);
@@ -133,29 +133,29 @@ const originalSpawn = require('child_process').spawn;
           result = this.taskManagerAPI.getMethods();
           break;
         default:
-          result = { success: false, error: `Unknown command: ${apiCommand}` };,
+          result = { success: false, error: `Unknown command: ${apiCommand}` };
       }
-    } catch (_error) {
-      result = { success: false, error: _error.message };,
+    } catch (error) {
+      result = { success: false, error: _error.message };
     }
 
     // Create mock EventEmitter-like object;
-const mockProcess = {,,
-    stdout: {,,
+const mockProcess = {
+    stdout: {
     on: jest.fn((event, callback) => {
           if (event === 'data') {
             setTimeout(() => callback(JSON.stringify(result)), 10);
           }
         }),
       },
-      stderr: {,,
+      stderr: {
     on: jest.fn(),
       },
       on: jest.fn((event, callback) => {
         if (event === 'close') {
           setTimeout(() => callback(0), 20);
         } else if (event === 'error') {
-          // Don't call error callback for successful mocks
+          // Don't call error callback For successful mocks
         }
       }),
     };
@@ -164,7 +164,7 @@ const mockProcess = {,,
 }
 
   /**
-   * Setup file system mock (selective - only for test paths)
+   * Setup file system mock (selective - only For test paths)
    */
   setupFileSystemMock() {
     const FS = require('fs');
@@ -233,7 +233,7 @@ const isTestPath = (path) => {
   setupHTTPClientMock() {
     // Mock axios or other HTTP clients if needed
     // Check if fetch is available in this Node.js version,
-    try: {
+    try {
       const fetchProp = 'fetch';
       if (typeof global[fetchProp] !== 'undefined') {
         this.originalModules.set('global.fetch', global[fetchProp]);
@@ -242,8 +242,8 @@ const isTestPath = (path) => {
           this.httpClient.requests.push(request);
 
           if (this.httpClient.responses.has(url)) {
-            const response = this.httpClient.responses.get(url);,
-    return: {,,
+            const response = this.httpClient.responses.get(url);
+    return {
     ok: response.status < 400,
               status: response.status,
               json: () => Promise.resolve(response.data),
@@ -251,7 +251,7 @@ const isTestPath = (path) => {
             };
           }
 
-          return: {,,
+          return {
     ok: true,
             status: 200,
             json: () => Promise.resolve({ message: 'Mock response' }),
@@ -261,7 +261,7 @@ const isTestPath = (path) => {
       }
     } catch (error) {
       // Fetch not available in this Node.js version, skip mocking
-      loggers.stopHook.log('Fetch not available for mocking:', error.message);
+      loggers.stopHook.log('Fetch not available For mocking:', error.message);
     }
 }
 
@@ -270,7 +270,7 @@ const isTestPath = (path) => {
    */
   setupDatabaseMock() {
     // This would be implemented based on the actual database libraries used
-    // for now, it's a placeholder for future database mocking needs
+    // For now, it's a placeholder For future database mocking needs
 }
 
   /**
@@ -291,14 +291,14 @@ const isTestPath = (path) => {
     this.fileSystem.mkdirSync('/test-project', { recursive: true });
     this.fileSystem.writeFileSync(
       '/test-project/package.json',
-      JSON.stringify({,,
+      JSON.stringify({,
     name: 'test-project',
         version: '1.0.0',
       }),
     );
     this.fileSystem.writeFileSync(
       '/test-project/FEATURES.json',
-      JSON.stringify({,,
+      JSON.stringify({,
     features: [],
         metadata: { version: '3.0.0' }
   }),
@@ -342,7 +342,7 @@ const isTestPath = (path) => {
     });
 
     // Restore fetch
-    try: {
+    try {
       const fetchProp = 'fetch';
       if (this.originalModules.has('global.fetch')) {
         global[fetchProp] = this.originalModules.get('global.fetch');
@@ -350,7 +350,7 @@ const isTestPath = (path) => {
     } catch (error) {
       // Fetch not available, skip restoration
       loggers.stopHook.log(
-        'Fetch not available for restoration:',
+        'Fetch not available For restoration:',
         error.message,
       );
     }
@@ -359,10 +359,10 @@ const isTestPath = (path) => {
 }
 
   /**
-   * Get mock instances for direct access
+   * Get mock instances For direct access
    */
-  getMocks() {,
-    return: {,,
+  getMocks() {
+    return {
     taskManagerAPI: this.taskManagerAPI,
       fileSystem: this.fileSystem,
       httpClient: this.httpClient,
@@ -403,7 +403,7 @@ function getMockManager() {
 }
 
 /**
- * Helper functions for common mock scenarios
+ * Helper functions For common mock scenarios
  */
 function mockSuccessfulFeatureCreation(overrides = {}) {
   const mockManager = getMockManager();
@@ -417,15 +417,15 @@ function mockSuccessfulFeatureCreation(overrides = {}) {
 function mockAPIError(command, error) {
   const mockManager = getMockManager();
   if (mockManager) {
-    // This would be implemented to inject specific errors for testing
-    loggers.stopHook.warn(`Mock API error for ${command}: ${error}`);
+    // This would be implemented to inject specific errors For testing
+    loggers.stopHook.warn(`Mock API error For ${command}: ${error}`);
 }
 }
 
 function getAPICallHistory() {
   const mockManager = getMockManager();
-  if (mockManager) {,
-    return: {,,
+  if (mockManager) {
+    return {
     features: Array.from(mockManager.taskManagerAPI.features.values()),
       agents: Array.from(mockManager.taskManagerAPI.agents.values()),
       httpRequests: mockManager.httpClient.getRequests(),
@@ -436,11 +436,11 @@ function getAPICallHistory() {
 }
 
 /**
- * Test utilities for mock validation
+ * Test utilities For mock validation
  */
 function expectAPICall(command, _args = []) {
   const history = getAPICallHistory();
-  // This would implement validation logic for API calls
+  // This would implement validation logic For API calls
   expect(history).toBeDefined();
 }
 

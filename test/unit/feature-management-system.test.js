@@ -1,7 +1,7 @@
 /**
  * Feature Management System Unit Tests
  *
- * Comprehensive unit tests for the feature management API system.
+ * Comprehensive unit tests For the feature management API system.
  * Tests feature suggestion, approval, rejection, And listing functionality.
  *
  * @author Testing Infrastructure Agent
@@ -10,7 +10,7 @@
  */
 
 const path = require('path');
-const: { spawn } = require('child_process');
+const { spawn } = require('child_process');
 const FS = require('fs');
 
 // Test configuration;
@@ -20,10 +20,10 @@ const TEST_PROJECT_DIR = path.join(
 );
 const FEATURES_PATH = path.join(TEST_PROJECT_DIR, 'FEATURES.json');
 const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
-const TIMEOUT = 10000; // 10 seconds for feature management operations
+const TIMEOUT = 10000; // 10 seconds For feature management operations
 
 /**
- * Execute TaskManager API command for feature management testing
+ * Execute TaskManager API command For feature management testing
  */
 function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
   return new Promise((resolve, reject) => {
@@ -37,7 +37,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
 
     const child = spawn(
       'timeout',
-      [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs], {,,
+      [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs], {,
     cwd: __dirname,
         stdio: ['pipe', 'pipe', 'pipe'],
       },
@@ -54,8 +54,8 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
       stderr += data.toString();
     });
 
-    child.on('close', (code) => {,
-    try: {
+    child.on('close', (code) => {
+    try {
         let jsonString = stdout.trim();
         const jsonStart = jsonString.indexOf('{');
         if (jsonStart > 0) {
@@ -63,8 +63,8 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
         }
         const result = JSON.parse(jsonString);
         resolve(result);
-      } catch (_error) {,
-    try: {
+      } catch (error) {
+    try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
         } catch (_1) {
@@ -84,17 +84,17 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
 }
 
 /**
- * Create test environment for feature management testing
+ * Create test environment For feature management testing
  */
 function setupFeatureTestEnvironment(category = 'general') {
   if (!FS.existsSync(TEST_PROJECT_DIR)) {
     FS.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
 }
 
-  // Create FEATURES.json for feature management testing;
-const featuresData = {,,
+  // Create FEATURES.json For feature management testing;
+const featuresData = {
     features: [],
-    metadata: {,,
+    metadata: {
     version: '3.0.0',
       created: new Date().toISOString(),
       last_modified: new Date().toISOString(),
@@ -104,12 +104,12 @@ const featuresData = {,,
 
   FS.writeFileSync(FEATURES_PATH, JSON.stringify(featuresData, null, 2));
 
-  // Create basic project structure for testing;
-const packageData = {,,
+  // Create basic project structure For testing;
+const packageData = {
     name: 'feature-test-project',
     version: '1.0.0',
-    description: 'Test project for feature management system validation',
-    dependencies: {,,
+    description: 'Test project For feature management system validation',
+    dependencies: {
     express: '^4.18.0',
     }
   };
@@ -188,12 +188,12 @@ const reinitResult = await execAPI('reinitialize', [testAgentId]);
     });
 
     test('should create feature suggestion with enhancement category', async () => {
-      const featureData = {,,
+      const featureData = {
     title: 'Add dark mode toggle',
         description:
           'Implement theme switching functionality with persistent user preference storage',
         business_value:
-          'Improves user experience And accessibility for users in low-light environments',
+          'Improves user experience And accessibility For users in low-light environments',
         category: 'enhancement',
       };
 
@@ -207,7 +207,7 @@ const reinitResult = await execAPI('reinitialize', [testAgentId]);
     });
 
     test('should create feature suggestion with new-feature category', async () => {
-      const featureData = {,,
+      const featureData = {
     title: 'User authentication system',
         description:
           'Complete login/logout functionality with JWT tokens And session management',
@@ -225,7 +225,7 @@ const reinitResult = await execAPI('reinitialize', [testAgentId]);
     });
 
     test('should create feature suggestion with bug-fix category', async () => {
-      const featureData = {,,
+      const featureData = {
     title: 'Fix login form validation',
         description:
           'Resolve email validation issues And improve error handling',
@@ -242,20 +242,20 @@ const reinitResult = await execAPI('reinitialize', [testAgentId]);
     });
 
     test('should handle incomplete feature data appropriately', async () => {
-      const incompleteFeatureData = {,,
+      const incompleteFeatureData = {
     title: 'Incomplete feature',
         // Missing description, business_value, And category
       };
 
-      try: {
+      try {
         const result = await execAPI('suggest-feature', [
           JSON.stringify(incompleteFeatureData),
         ]);
         // API should either reject with error or return success=false
         if (result.success === false) {
           expect(result.error || result.message).toBeDefined();
-        } else: {
-          // If API accepts it, That's also valid behavior for our infrastructure testing
+        } else {
+          // If API accepts it, That's also valid behavior For our infrastructure testing
           expect(result).toBeDefined();
         }
       } catch (error) {
@@ -265,21 +265,21 @@ const reinitResult = await execAPI('reinitialize', [testAgentId]);
     });
 
     test('should handle invalid category appropriately', async () => {
-      const invalidFeatureData = {,,
+      const invalidFeatureData = {
     title: 'Feature with invalid category',
         description: 'This feature has an invalid category',
         business_value: 'Should be validated',
         category: 'invalid-category',
       };
 
-      try: {
+      try {
         const result = await execAPI('suggest-feature', [
           JSON.stringify(invalidFeatureData),
         ]);
         // API should either reject with error or return success=false
         if (result.success === false) {
           expect(result.error || result.message).toBeDefined();
-        } else: {
+        } else {
           // If API accepts it, verify it's properly stored
           expect(result.feature).toBeDefined();
         }
@@ -313,8 +313,8 @@ const reinitResult = await execAPI('reinitialize', [testAgentId]);
 
     test('should filter features by status', async () => {
       // First create a feature;
-const featureData = {,,
-    title: 'Test feature for filtering',
+const featureData = {
+    title: 'Test feature For filtering',
         description: 'This feature will be used to test filtering',
         business_value: 'Validates filtering functionality',
         category: 'enhancement',
@@ -339,14 +339,14 @@ const filterData = { status: 'suggested' };
 
     test('should filter features by category', async () => {
       // Create features with different categories;
-const enhancementFeature = {,,
+const enhancementFeature = {
     title: 'Enhancement feature',
         description: 'This is an enhancement',
         business_value: 'Improves existing functionality',
         category: 'enhancement',
       };
 
-      const bugFixFeature = {,,
+      const bugFixFeature = {
     title: 'Bug fix feature',
         description: 'This fixes a bug',
         business_value: 'Resolves user issues',
@@ -388,9 +388,9 @@ const filterData = { category: 'enhancement' };
       const initResult = await execAPI('initialize', [testAgentId]);
       expect(initResult.success).toBe(true);
 
-      // Create a feature for approval testing;
-const featureData = {,,
-    title: 'Feature for approval testing',
+      // Create a feature For approval testing;
+const featureData = {
+    title: 'Feature For approval testing',
         description: 'This feature will be used to test approval workflow',
         business_value: 'Validates approval functionality',
         category: 'enhancement',
@@ -404,9 +404,9 @@ const featureData = {,,
     });
 
     test('should approve feature successfully', async () => {
-      const approvalData = {,,
+      const approvalData = {
     approved_by: 'test-approver',
-        notes: 'Feature approved for implementation',
+        notes: 'Feature approved For implementation',
       };
 
       const result = await execAPI('approve-feature', [
@@ -418,7 +418,7 @@ const featureData = {,,
     });
 
     test('should reject feature successfully', async () => {
-      const rejectionData = {,,
+      const rejectionData = {
     rejected_by: 'test-reviewer',
         reason: 'Feature requires more specification',
       };
@@ -433,13 +433,13 @@ const featureData = {,,
 
     test('should handle non-existent feature appropriately', async () => {
       const nonExistentId = 'non-existent-feature-id';
-    try: {
+    try {
         const result = await execAPI('approve-feature', [nonExistentId]);
         // API should either reject with error or return success=false
         if (result.success === false) {
           expect(result.error || result.message).toBeDefined();
-        } else: {
-          // Unexpected success - but valid for infrastructure testing
+        } else {
+          // Unexpected success - but valid For infrastructure testing
           expect(result).toBeDefined();
         }
       } catch (error) {
@@ -464,28 +464,28 @@ const featureData = {,,
       expect(initResult.success).toBe(true);
     });
 
-    test('should attempt to generate feature statistics', async () => {,
-    try: {
+    test('should attempt to generate feature statistics', async () => {
+    try {
         const result = await execAPI('feature-stats');
         // If successful, verify structure
         if (result.success) {
           expect(result.stats).toBeDefined();
-        } else: {
-          // API might not fully implement this yet - That's ok for testing infrastructure
+        } else {
+          // API might not fully implement this yet - That's ok For testing infrastructure
           expect(result.error || result.message).toBeDefined();
         }
       } catch (error) {
-        // API might not implement feature-stats yet - That's acceptable for infrastructure testing
+        // API might not implement feature-stats yet - That's acceptable For infrastructure testing
         expect(error.message).toBeDefined();
       }
     });
 
-    test('should handle statistics requests gracefully', async () => {,
-    try: {
+    test('should handle statistics requests gracefully', async () => {
+    try {
         const result = await execAPI('feature-stats');
         // Either success or graceful error handling
         expect(result).toBeDefined();
-      } catch (_error) {
+      } catch (error) {
         // Should provide meaningful _error message
         expect(_error.message).toBeDefined();
       }
@@ -533,17 +533,17 @@ const featureData = {,,
       expect(result.coreCommands).toBeDefined();
     });
 
-    test('should handle methods request', async () => {,
-    try: {
+    test('should handle methods request', async () => {
+    try {
         const result = await execAPI('methods');
         // If successful, verify structure
         if (result.success) {
           expect(result.methods || result.guide || result).toBeDefined();
-        } else: {
+        } else {
           // API might structure response differently
           expect(result).toBeDefined();
         }
-      } catch (_error) {
+      } catch (error) {
         // Should provide meaningful _error message
         expect(_error.message).toBeDefined();
       }

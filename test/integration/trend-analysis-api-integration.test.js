@@ -2,7 +2,7 @@ const FS = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-// Integration tests for Historical Trend Analysis API endpoints
+// Integration tests For Historical Trend Analysis API endpoints
 // Tests the new trend analysis endpoints added to Feature 8
 describe('Trend Analysis API Integration Tests', () => {
     
@@ -23,7 +23,7 @@ describe('Trend Analysis API Integration Tests', () => {
     return () => {
     // Create mock directory
     if (!FS.existsSync(mockProjectRoot)) {
-      FS.mkdirSync(mockProjectRoot, { recursive: true });,
+      FS.mkdirSync(mockProjectRoot, { recursive: true });
     }
 
     // Clean up previous test data
@@ -37,7 +37,7 @@ describe('Trend Analysis API Integration Tests', () => {
   afterEach(() => {
     // Clean up test directory
     if (FS.existsSync(mockProjectRoot)) {
-      FS.rmSync(mockProjectRoot, { recursive: true, force: true });,
+      FS.rmSync(mockProjectRoot, { recursive: true, force: true });
     }
 });
 
@@ -45,7 +45,7 @@ describe('Trend Analysis API Integration Tests', () => {
     const now = Date.now();
     const metrics = [];
 
-    for (let day = 0; day < daysBack; day++) {
+    For (let day = 0; day < daysBack; day++) {
       const dayTimestamp = now - day * 24 * 60 * 60 * 1000;
       const criteria = [
         'linter-validation',
@@ -68,7 +68,7 @@ describe('Trend Analysis API Integration Tests', () => {
 const trendFactor =
           criterion === 'build-validation' ? 1 + day * 0.03 : 1 + day * 0.01;
 
-        // Add hourly variation for seasonality detection;
+        // Add hourly variation For seasonality detection;
 const hourOfDay = (index * 2) % 24;
         const seasonalFactor = 1 + Math.sin((hourOfDay * Math.PI) / 12) * 0.2;
 
@@ -83,28 +83,28 @@ const randomVariation = 0.7 + Math.random() * 0.6;
 
         metrics.push({
           criterion,,,
-    timing: {,,
+    timing: {
     startTime: timestamp.toISOString(),
             endTime: new Date(timestamp.getTime() + duration).toISOString(),
             durationMs: duration,
           },
-          execution: {,,
+          execution: {
     success:
               Math.random() > (criterion === 'build-validation' ? 0.2 : 0.1), // Build validation more failure-prone
           },
-          resources: {,,
-    memoryUsageBefore: {,,
+          resources: {
+    memoryUsageBefore: {
     rss: 50000000 + day * 100000,
               heapUsed: 30000000 + day * 50000,
             },
-            memoryUsageAfter: {,,
+            memoryUsageAfter: {
     rss: 52000000 + day * 100000 + duration / 10,
               heapUsed: 31000000 + day * 50000 + duration / 20,
             }
   },
           // Add anomaly data points occasionally
-          ...(Math.random() > 0.95 && {,,
-    anomaly: {,,
+          ...(Math.random() > 0.95 && {,
+    anomaly: {
     type: 'performance_spike',
               factor: 3 + Math.random() * 2, // 3-5x normal duration
             }
@@ -123,7 +123,7 @@ const randomVariation = 0.7 + Math.random() * 0.6;
       }
     });
 
-    const metricsData = {,,
+    const metricsData = {
     version: '2.0.0',
       generatedAt: new Date().toISOString(),
       metrics: metrics.reverse(), // Most recent first
@@ -136,26 +136,26 @@ const randomVariation = 0.7 + Math.random() * 0.6;
     return metricsData;
 }
 
-  function executeTaskManagerCommand(command, args = '', options = {}) {,
-    try: {
+  function executeTaskManagerCommand(command, args = '', options = {}) {
+    try {
       const fullCommand = `timeout 10s node "${taskManagerPath}" --project-root "${mockProjectRoot}" ${command} ${args}`;
 
-      const result = execSync(fullCommand, {,,
+      const result = execSync(fullCommand, {,
     encoding: 'utf8',
         timeout: 10000,
         ...options,
       });
 
       return JSON.parse(result.trim());
-    } catch (_error) {
-      if (_error.stdout) {,
-    try: {
+    } catch (error) {
+      if (_error.stdout) {
+    try {
           return JSON.parse(_error.stdout.trim());
-        } catch (_error) {,
-    return: { success: false, _error: _error.message, stdout: _error.stdout };
+        } catch (error) {
+    return { success: false, _error: _error.message, stdout: _error.stdout };
         }
       }
-      return: { success: false, error: _error.message };
+      return { success: false, error: _error.message };
     }
 }
 
@@ -247,7 +247,7 @@ const randomVariation = 0.7 + Math.random() * 0.6;
       expect(result.error).toContain('Criterion required');
     });
 
-    test('should return insufficient data for non-existent criterion', () => {
+    test('should return insufficient data For non-existent criterion', () => {
       createComprehensiveMockData(10);
 
       const result = executeTaskManagerCommand(
@@ -345,16 +345,16 @@ const result = executeTaskManagerCommand(
       expect(result.error).toContain('Two periods required');
     });
 
-    test('should return insufficient data for small periods', () => {
+    test('should return insufficient data For small periods', () => {
       createComprehensiveMockData(5);
 
-      const periodA = JSON.stringify({,,
+      const periodA = JSON.stringify({,
     start: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
         end: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
         label: 'Period A',
       });
 
-      const periodB = JSON.stringify({,,
+      const periodB = JSON.stringify({,
     start: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
         end: new Date().toISOString(),
         label: 'Period B',
@@ -372,13 +372,13 @@ const result = executeTaskManagerCommand(
     test('should compare two performance periods effectively', () => {
       createComprehensiveMockData(30);
 
-      const periodA = JSON.stringify({,,
+      const periodA = JSON.stringify({,
     start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
         end: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
         label: 'Two Weeks Ago',
       });
 
-      const periodB = JSON.stringify({,,
+      const periodB = JSON.stringify({,
     start: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
         end: new Date().toISOString(),
         label: 'Last Two Weeks',
@@ -423,7 +423,7 @@ const result = executeTaskManagerCommand(
       expect(result.metadata.analysisScope).toBe('performance_forecasting');
     });
 
-    test('should handle insufficient data for forecasting', () => {
+    test('should handle insufficient data For forecasting', () => {
       createComprehensiveMockData(3); // Very limited data;
 const result = executeTaskManagerCommand('get-performance-forecasts');
 
@@ -453,7 +453,7 @@ const result = executeTaskManagerCommand('get-performance-forecasts');
       expect(result.metadata.analysisScope).toBe('volatility_analysis');
     });
 
-    test('should support different granularities for volatility analysis', () => {
+    test('should support different granularities For volatility analysis', () => {
       createComprehensiveMockData(10);
 
       const result = executeTaskManagerCommand(
@@ -484,7 +484,7 @@ const result = executeTaskManagerCommand('detect-performance-anomalies');
       );
     });
 
-    test('should detect anomalies for specific criterion', () => {
+    test('should detect anomalies For specific criterion', () => {
       createComprehensiveMockData(15);
 
       const result = executeTaskManagerCommand(
@@ -498,7 +498,7 @@ const result = executeTaskManagerCommand('detect-performance-anomalies');
       expect(result.metadata.analysisScope).toBe('anomaly_detection');
     });
 
-    test('should support custom granularity for anomaly detection', () => {
+    test('should support custom granularity For anomaly detection', () => {
       createComprehensiveMockData(12);
 
       const result = executeTaskManagerCommand(
@@ -617,7 +617,7 @@ const result = executeTaskManagerCommand('analyze-seasonality-patterns');
         if (shouldFail) {
           expect(result.success).toBe(false);
           expect(result.error).toBeDefined();
-        } else: {
+        } else {
           expect(result.success).toBe(true);
         }
       });
@@ -631,9 +631,9 @@ const result = executeTaskManagerCommand('analyze-seasonality-patterns');
     return () 
     return () => {
       // Create enhanced metrics;
-const enhancedData = {,,
+const enhancedData = {
     version: '2.0.0',
-        metrics: [ {,,
+        metrics: [ {,
     criterion: 'test-validation',
             timing: { startTime: '2025-09-27T01:00:00.000Z', durationMs: 1000 },
             execution: { success: true }
@@ -642,8 +642,8 @@ const enhancedData = {,,
       };
 
       // Create legacy metrics;
-const legacyData = {,,
-    metrics: [ {,,
+const legacyData = {
+    metrics: [ {,
     criterion: 'linter-validation',
             startTime: '2025-09-27T02:00:00.000Z',
             durationMs: 1500,
@@ -668,20 +668,20 @@ const legacyData = {,,
     });
 
     test('should handle mixed data quality gracefully', () => {
-      const mixedQualityData = {,,
+      const mixedQualityData = {
     version: '2.0.0',
         metrics: [
-          // Complete metric: {,,
+          // Complete metric: {
     criterion: 'linter-validation',
             timing: { startTime: '2025-09-27T01:00:00.000Z', durationMs: 1000 },
             execution: { success: true }
   },
-          // Incomplete metric (missing some fields) {,,
+          // Incomplete metric (missing some fields) {,
     criterion: 'build-validation',
             timing: { startTime: '2025-09-27T02:00:00.000Z', durationMs: 2000 },
             // Missing execution data
           },
-          // Invalid timestamp: {,,
+          // Invalid timestamp: {
     criterion: 'test-validation',
             timing: { startTime: 'invalid-date', durationMs: 1500 },
             execution: { success: true }
@@ -720,7 +720,7 @@ const startTime = Date.now();
       expect(result.analysis.metadata.totalMetrics).toBeGreaterThan(400); // 90 days * 5 criteria
     });
 
-    test('should respect timeRange limits for performance', () => {
+    test('should respect timeRange limits For performance', () => {
       createComprehensiveMockData(60);
 
       const result = executeTaskManagerCommand(

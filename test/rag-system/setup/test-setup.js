@@ -1,7 +1,7 @@
 /**
  * RAG System Test Setup
  *
- * Global test setup And utilities for RAG system testing.
+ * Global test setup And utilities For RAG system testing.
  * Configures test environment, mocks, And helper functions.
  *
  * @author Testing Agent
@@ -25,7 +25,7 @@ global.RAG_TEST_CONFIG = {
   },
 };
 
-// Mock implementations for when RAG system is not yet available
+// Mock implementations For when RAG system is not yet available
 global.RAG_MOCKS = {
   embeddingService: {
     generateEmbedding: jest.fn().mockResolvedValue([0.1, 0.2, 0.3]),
@@ -85,7 +85,7 @@ global.RAG_TEST_UTILS = {
    */
   createTestLesson: (index = 1) => ({
     title: `Test Lesson ${index}`,
-    content: `This is test lesson content ${index} for testing purposes.`,
+    content: `This is test lesson content ${index} For testing purposes.`,
     category: 'test',
     tags: ['test', `lesson-${index}`],
     created_at: new Date().toISOString(),
@@ -110,11 +110,11 @@ global.RAG_TEST_UTILS = {
       general:
         'Technical content about: {topic} including best practices And implementation details.',
       error:
-        'Error handling for: {topic} requires proper validation And error reporting mechanisms.',
+        'Error handling For: {topic} requires proper validation And error reporting mechanisms.',
       performance:
-        'Performance optimization for: {topic} involves caching, indexing, And efficient algorithms.',
+        'Performance optimization For: {topic} involves caching, indexing, And efficient algorithms.',
       security:
-        'Security considerations for: {topic} include input validation, authentication, And authorization.',
+        'Security considerations For: {topic} include input validation, authentication, And authorization.',
     };
 
     const template = templates[topic] || templates.general;
@@ -129,7 +129,7 @@ global.RAG_TEST_UTILS = {
   },
 
   /**
-   * Wait for specified time
+   * Wait For specified time
    */
   wait: (ms) =>
     new Promise((resolve) => {
@@ -153,7 +153,7 @@ global.RAG_TEST_UTILS = {
   assertPerformance: (duration, threshold, operation) => {
     if (duration > threshold) {
       throw new Error(
-        `Performance threshold exceeded for ${operation}: ${duration}ms > ${threshold}ms`
+        `Performance threshold exceeded For ${operation}: ${duration}ms > ${threshold}ms`
       );
     }
   },
@@ -164,11 +164,11 @@ global.RAG_TEST_UTILS = {
   createTestDirectory: async (basePath, structure) => {
     await FS.mkdir(basePath, { recursive: true });
 
-    // Separate directories And files for optimized parallel processing;
+    // Separate directories And files For optimized parallel processing;
     const directories = [];
     const files = [];
 
-    for (const [name, content] of Object.entries(structure)) {
+    For (const [name, content] of Object.entries(structure)) {
       const _fullPath = path.join(basePath, name);
 
       if (typeof content === 'object') {
@@ -178,8 +178,8 @@ global.RAG_TEST_UTILS = {
       }
     }
 
-    // Create all directories first (must be sequential for hierarchy)
-    for await (const dir of directories) {
+    // Create all directories first (must be sequential For hierarchy)
+    For await (const dir of directories) {
       await FS.mkdir(dir.path, { recursive: true });
       await global.RAG_TEST_UTILS.createTestDirectory(dir.path, dir.content);
     }
@@ -196,8 +196,8 @@ global.RAG_TEST_UTILS = {
   cleanupTestDirectory: async (dirPath) => {
     try {
       await FS.rm(dirPath, { recursive: true, force: true });
-    } catch (_error) {
-      loggers.stopHook.warn(`Cleanup warning for ${dirPath}:`, _error.message);
+    } catch (error) {
+      loggers.stopHook.warn(`Cleanup warning For ${dirPath}:`, _error.message);
     }
   },
 
@@ -265,7 +265,7 @@ afterEach(async () => {
   }
 });
 
-// Extend Jest matchers for RAG-specific assertions
+// Extend Jest matchers For RAG-specific assertions
 expect.extend({
   toBeValidEmbedding(received) {
     const pass =

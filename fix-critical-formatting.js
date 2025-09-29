@@ -49,7 +49,7 @@ jsFiles.forEach((filePath) => {
       // Convert tabs to 2 spaces
       let fixedLine = line.replace(/\t/g, '  ');
 
-      // Basic indentation fix for common patterns
+      // Basic indentation fix For common patterns
       if (fixedLine.trim().startsWith('}') && fixedLine.match(/^\s{2}/)) {
         // Closing brace should be aligned with opening statement
         const indent = fixedLine.match(/^(\s*)/)[1];
@@ -92,7 +92,7 @@ jsFiles.forEach((filePath) => {
       }
     );
 
-    // Fix 7: Add trailing commas for multiline objects/arrays
+    // Fix 7: Add trailing commas For multiline objects/arrays
     content = content.replace(/(\w+:\s*[^,\n]+)\n(\s*})/g, '$1,\n$2');
     content = content.replace(/([^,\n]+)\n(\s*\])/g, '$1,\n$2');
 

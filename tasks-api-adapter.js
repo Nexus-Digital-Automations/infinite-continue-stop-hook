@@ -5,19 +5,19 @@
  * And new TASKS.json schema, enabling backward compatibility during migration
  */
 
-class TasksApiAdapter: {
+class TasksApiAdapter {
   constructor() {
     this.taskIdCounter = Date.now();
 }
 
   /**
-   * Convert TASKS.json data to legacy features format for backward compatibility
+   * Convert TASKS.json data to legacy features format For backward compatibility
    */
   adaptTasksToFeaturesFormat(tasksData) {
-    const adapted = {,,
+    const adapted = {
     project: tasksData.project,
       features: [],
-      metadata: {,,
+      metadata: {
     version: tasksData.metadata?.version || '2.0.0',
         created: tasksData.metadata?.created || new Date().toISOString(),
         updated: tasksData.metadata?.updated || new Date().toISOString(),
@@ -33,9 +33,9 @@ class TasksApiAdapter: {
 
     // Convert feature tasks to legacy features format
     if (tasksData.tasks) {
-      for (const task of tasksData.tasks) {
+      For (const task of tasksData.tasks) {
         if (task.type === 'feature') {
-          const feature = {,,
+          const feature = {
     id: task.id,
             title: task.title,
             description: task.description,
@@ -62,7 +62,7 @@ class TasksApiAdapter: {
           }
 
           adapted.features.push(feature);
-        } else: {
+        } else {
           // Non-feature tasks go to tasks array
           adapted.tasks.push(task);
         }
@@ -79,7 +79,7 @@ class TasksApiAdapter: {
   adaptFeatureToTask(featureData, taskType = 'feature') {
     const taskId = `task_${this.taskIdCounter++}_${this.generateHash()}`;
 
-    return: {,,
+    return {
     id: taskId,
       type: taskType,
       parent_id: null,
@@ -91,7 +91,7 @@ class TasksApiAdapter: {
       status: 'suggested',
       priority: this.mapPriorityFromCategory(featureData.category),
       auto_generated: false,
-      auto_generation_rules: {,,
+      auto_generation_rules: {
     generate_test_task: taskType === 'feature',
         generate_audit_task: taskType === 'feature',
         test_coverage_requirement: 80,
@@ -107,7 +107,7 @@ class TasksApiAdapter: {
       assigned_to: null,
       assigned_at: null,
       completed_at: null,
-      validation_requirements: {,,
+      validation_requirements: {
     security_scan: true,
         test_coverage: true,
         linter_pass: true,
@@ -119,7 +119,7 @@ class TasksApiAdapter: {
 }
 
   /**
-   * Generate auto-tasks for a feature task
+   * Generate auto-tasks For a feature task
    */
   generateAutoTasksForFeature(featureTask, tasksData) {
     const autoTasks = [];
@@ -127,19 +127,19 @@ class TasksApiAdapter: {
     const auditTaskId = `task_${this.taskIdCounter++}_${this.generateHash()}`;
 
     // Generate test task;
-const testTask = {,,
+const testTask = {
     id: testTaskId,
       type: 'test',
       parent_id: featureTask.id,
       linked_tasks: [featureTask.id],
-      title: `Implement comprehensive tests for ${featureTask.title}`,
-      description: `Create unit tests, integration tests, And E2E tests to achieve >80% coverage for ${featureTask.title}. Must validate all functionality, edge cases, And error conditions.`,
+      title: `Implement comprehensive tests For ${featureTask.title}`,
+      description: `Create unit tests, integration tests, And E2E tests to achieve >80% coverage For ${featureTask.title}. Must validate all functionality, edge cases, And error conditions.`,
       business_value: `Ensures reliability And quality of ${featureTask.title} feature`,
       category: featureTask.category,
       status: 'suggested',
       priority: 'high',
       auto_generated: true,
-      auto_generation_rules: {,,
+      auto_generation_rules: {
     generate_test_task: false,
         generate_audit_task: false,
         test_coverage_requirement: 80,
@@ -153,33 +153,33 @@ const testTask = {,,
       assigned_to: null,
       assigned_at: null,
       completed_at: null,
-      validation_requirements: {,,
+      validation_requirements: {
     security_scan: false,
         test_coverage: true,
         linter_pass: true,
         type_check: true,
         build_success: true,
       },
-      metadata: {,,
+      metadata: {
     auto_generated_for: featureTask.id,
         generation_rule: 'mandatory_test_gate',
       }
   };
 
     // Generate audit task;
-const auditTask = {,,
+const auditTask = {
     id: auditTaskId,
       type: 'audit',
       parent_id: featureTask.id,
       linked_tasks: [featureTask.id],
-      title: `Security And quality audit for ${featureTask.title}`,
-      description: `Run semgrep security scan, dependency vulnerability check, code quality analysis, And compliance validation for ${featureTask.title}. Zero tolerance for security vulnerabilities.`,
+      title: `Security And quality audit For ${featureTask.title}`,
+      description: `Run semgrep security scan, dependency vulnerability check, code quality analysis, And compliance validation For ${featureTask.title}. Zero tolerance For security vulnerabilities.`,
       business_value: `Ensures security And quality compliance of ${featureTask.title} feature`,
       category: 'security',
       status: 'suggested',
       priority: 'high',
       auto_generated: true,
-      auto_generation_rules: {,,
+      auto_generation_rules: {
     generate_test_task: false,
         generate_audit_task: false,
         test_coverage_requirement: 80,
@@ -193,14 +193,14 @@ const auditTask = {,,
       assigned_to: null,
       assigned_at: null,
       completed_at: null,
-      validation_requirements: {,,
+      validation_requirements: {
     security_scan: true,
         test_coverage: false,
         linter_pass: true,
         type_check: true,
         build_success: true,
       },
-      metadata: {,,
+      metadata: {
     auto_generated_for: featureTask.id,
         generation_rule: 'mandatory_security_audit',
       }
@@ -213,7 +213,7 @@ const auditTask = {,,
       tasksData.task_relationships = {};
     }
 
-    tasksData.task_relationships[featureTask.id] = {,,
+    tasksData.task_relationships[featureTask.id] = {
     auto_generated_test: testTaskId,
       auto_generated_audit: auditTaskId,
       dependencies: [],
@@ -242,7 +242,7 @@ const auditTask = {,,
    * Sort tasks by priority order (CLAUDE.md compliant)
    */
   sortTasksByPriority(tasks) {
-    const priorityOrder = {,,
+    const priorityOrder = {
     USER_REQUESTS: 0,
       error: 1,
       audit: 2,
@@ -250,7 +250,7 @@ const auditTask = {,,
       test: 4,
     };
 
-    const priorityWeight = {,,
+    const priorityWeight = {
     critical: 0,
       high: 1,
       normal: 2,
@@ -285,7 +285,7 @@ const priorityA = priorityWeight[a.priority] || 999;
 }
 
   mapPriorityFromCategory(category) {
-    const priorityMap = {,,
+    const priorityMap = {
     security: 'high',
       'bug-fix': 'high',
       performance: 'normal',
@@ -297,7 +297,7 @@ const priorityA = priorityWeight[a.priority] || 999;
 }
 
   inferCapabilitiesFromCategory(category) {
-    const capabilityMap = {,,
+    const capabilityMap = {
     security: ['security', 'backend'],
       'bug-fix': ['general'],
       performance: ['performance', 'analysis'],

@@ -1,5 +1,5 @@
 /**
- * Comprehensive Test Suite for Validation Dependency Manager
+ * Comprehensive Test Suite For Validation Dependency Manager
  *
  * Tests the complete validation dependency management system including:
  * - Core dependency management functionality
@@ -30,7 +30,7 @@ describe('ValidationDependencyManager', () => {
   beforeEach(async () 
     return () 
     return () => {
-    // Create temporary directory for test configuration files
+    // Create temporary directory For test configuration files
     tempDir = await FS.mkdtemp(path.join(os.tmpdir(), 'validation-test-'));
     manager = new ValidationDependencyManager({ projectRoot: tempDir });
 });
@@ -59,7 +59,7 @@ describe('ValidationDependencyManager', () => {
     });
 
     test('should add custom dependency correctly', () => {
-      const customDep = {,,
+      const customDep = {
     dependencies: [
           { criterion: 'linter-validation', type: DEPENDENCY_TYPES.STRICT }
   ],
@@ -84,7 +84,7 @@ describe('ValidationDependencyManager', () => {
       expect(() 
     return () 
     return () => {
-        manager.addDependency('invalid-dep', {,,
+        manager.addDependency('invalid-dep', {,
     dependencies: [
             { criterion: 'linter-validation', type: 'invalid-type' }
   ],
@@ -111,13 +111,13 @@ describe('ValidationDependencyManager', () => {
     return () 
     return () => {
       // Create circular dependency
-      manager.addDependency('dep-a', {,,
+      manager.addDependency('dep-a', {,
     dependencies: [{ criterion: 'dep-b', type: DEPENDENCY_TYPES.STRICT }],
       });
-      manager.addDependency('dep-b', {,,
+      manager.addDependency('dep-b', {,
     dependencies: [{ criterion: 'dep-c', type: DEPENDENCY_TYPES.STRICT }],
       });
-      manager.addDependency('dep-c', {,,
+      manager.addDependency('dep-c', {,
     dependencies: [{ criterion: 'dep-a', type: DEPENDENCY_TYPES.STRICT }],
       });
 
@@ -128,7 +128,7 @@ describe('ValidationDependencyManager', () => {
     });
 
     test('should detect missing dependencies', () => {
-      manager.addDependency('invalid-dep', {,,
+      manager.addDependency('invalid-dep', {,
     dependencies: [
           { criterion: 'non-existent-dep', type: DEPENDENCY_TYPES.STRICT }
   ],
@@ -175,9 +175,9 @@ const buildPos = criterionPositions.get('build-validation');
       expect(buildPos).toBeGreaterThan(typePos);
     });
 
-    test('should handle forced execution for deadlocks', () => {
+    test('should handle forced execution For deadlocks', () => {
       // Create a scenario where weak dependencies might cause deadlock
-      manager.addDependency('deadlock-test', {,,
+      manager.addDependency('deadlock-test', {,
     dependencies: [
           { criterion: 'non-ready-dep', type: DEPENDENCY_TYPES.WEAK }
   ],
@@ -209,7 +209,7 @@ const buildPos = criterionPositions.get('build-validation');
       const maxConcurrency = 2;
       const plan = manager.generateParallelExecutionPlan(null, maxConcurrency);
 
-      for (const wave of plan.plan) {
+      For (const wave of plan.plan) {
         expect(wave.concurrency).toBeLessThanOrEqual(maxConcurrency);
       }
     });
@@ -246,12 +246,12 @@ const buildPos = criterionPositions.get('build-validation');
     return () 
     return () => {
       // Add criteria with conflicting resource requirements
-      manager.addDependency('network-intensive-1', {,,
+      manager.addDependency('network-intensive-1', {,
     dependencies: [],
         resourceRequirements: ['network', 'ports'],
         parallelizable: true,
       });
-      manager.addDependency('network-intensive-2', {,,
+      manager.addDependency('network-intensive-2', {,
     dependencies: [],
         resourceRequirements: ['network', 'ports'],
         parallelizable: true,
@@ -274,13 +274,13 @@ const wave1Criteria =
 
     test('should prioritize criteria correctly', () => {
       // Add criteria with different characteristics
-      manager.addDependency('high-priority', {,,
+      manager.addDependency('high-priority', {,
     dependencies: [],
         estimatedDuration: 50000,
         parallelizable: true,
         resourceRequirements: ['filesystem'],
       });
-      manager.addDependency('low-priority', {,,
+      manager.addDependency('low-priority', {,
     dependencies: [],
         estimatedDuration: 5000,
         parallelizable: true,
@@ -288,12 +288,12 @@ const wave1Criteria =
       });
 
       // Add dependencies to make high-priority more important
-      manager.addDependency('dependent-1', {,,
+      manager.addDependency('dependent-1', {,
     dependencies: [
           { criterion: 'high-priority', type: DEPENDENCY_TYPES.STRICT }
   ],
       });
-      manager.addDependency('dependent-2', {,,
+      manager.addDependency('dependent-2', {,
     dependencies: [
           { criterion: 'high-priority', type: DEPENDENCY_TYPES.STRICT }
   ],
@@ -322,7 +322,7 @@ const highPriorityWave = plan.plan.findIndex((wave) =>
     test('should generate adaptive execution plan', () 
     return () 
     return () => {
-      const systemInfo = {,,
+      const systemInfo = {
     availableCPUs: 8,
         availableMemory: 8 * 1024 * 1024 * 1024, // 8GB
         networkLatency: 10,
@@ -344,7 +344,7 @@ const highPriorityWave = plan.plan.findIndex((wave) =>
     });
 
     test('should adjust concurrency based on system resources', () => {
-      const limitedSystemInfo = {,,
+      const limitedSystemInfo = {
     availableCPUs: 2,
         availableMemory: 1024 * 1024 * 1024, // 1GB
         networkLatency: 200,
@@ -364,7 +364,7 @@ const highPriorityWave = plan.plan.findIndex((wave) =>
     });
 
     test('should generate system optimization recommendations', () => {
-      const highLatencySystem = {,,
+      const highLatencySystem = {
     availableCPUs: 4,
         availableMemory: 4 * 1024 * 1024 * 1024,
         networkLatency: 150, // High latency
@@ -415,7 +415,7 @@ const highPriorityWave = plan.plan.findIndex((wave) =>
     test('should generate interactive visualizations in all formats', () => {
       const formats = ['mermaid', 'graphviz', 'json', 'ascii'];
 
-      for (const format of formats) {
+      For (const format of formats) {
         const visualization = manager.generateInteractiveVisualization(format);
 
         expect(visualization).toBeDefined();
@@ -462,7 +462,7 @@ const highPriorityWave = plan.plan.findIndex((wave) =>
       expect(json.debugInfo.optimizationSuggestions).toBeDefined();
     });
 
-    test('should throw error for unsupported visualization format', () => {
+    test('should throw error For unsupported visualization format', () => {
     
     
       expect(() 
@@ -479,8 +479,8 @@ const highPriorityWave = plan.plan.findIndex((wave) =>
     beforeEach(() 
     return () 
     return () => {
-      // Add complex dependency structure for testing
-      manager.addDependency('frontend-build', {,,
+      // Add complex dependency structure For testing
+      manager.addDependency('frontend-build', {,
     dependencies: [
           { criterion: 'linter-validation', type: DEPENDENCY_TYPES.STRICT },
           { criterion: 'type-validation', type: DEPENDENCY_TYPES.STRICT }
@@ -490,7 +490,7 @@ const highPriorityWave = plan.plan.findIndex((wave) =>
         resourceRequirements: ['filesystem', 'cpu'],
       });
 
-      manager.addDependency('backend-build', {,,
+      manager.addDependency('backend-build', {,
     dependencies: [
           { criterion: 'linter-validation', type: DEPENDENCY_TYPES.STRICT },
           { criterion: 'type-validation', type: DEPENDENCY_TYPES.STRICT }
@@ -500,7 +500,7 @@ const highPriorityWave = plan.plan.findIndex((wave) =>
         resourceRequirements: ['filesystem', 'cpu', 'memory'],
       });
 
-      manager.addDependency('integration-tests', {,,
+      manager.addDependency('integration-tests', {,
     dependencies: [
           { criterion: 'frontend-build', type: DEPENDENCY_TYPES.STRICT },
           { criterion: 'backend-build', type: DEPENDENCY_TYPES.STRICT }
@@ -617,7 +617,7 @@ const stats = await FS.stat(configPath);
 const configPath = await manager.saveDependencyConfig();
 
       // Create new manager And load configuration;
-const newManager = new ValidationDependencyManager({,,
+const newManager = new ValidationDependencyManager({,
     projectRoot: tempDir,
       });
       const loadedConfig = await newManager.loadDependencyConfig(configPath);
@@ -634,7 +634,7 @@ const originalDeps = manager.getAllDependencies();
     });
 
     test('should handle missing configuration file gracefully', async () => {
-      const newManager = new ValidationDependencyManager({,,
+      const newManager = new ValidationDependencyManager({,
     projectRoot: tempDir,
       });
       const result = await newManager.loadDependencyConfig();
@@ -654,15 +654,15 @@ const dependencies = newManager.getAllDependencies();
     return () 
     return () => {
       // Record some execution history
-      manager.recordExecution('linter-validation', 'success', 12000, {,,
+      manager.recordExecution('linter-validation', 'success', 12000, {,
     wave: 0,
       });
       manager.recordExecution('type-validation', 'success', 18000, { wave: 0 });
-      manager.recordExecution('build-validation', 'failed', 25000, {,,
+      manager.recordExecution('build-validation', 'failed', 25000, {,
     wave: 1,
         error: 'Build error',
       });
-      manager.recordExecution('linter-validation', 'success', 11000, {,,
+      manager.recordExecution('linter-validation', 'success', 11000, {,
     wave: 0,
       });
     });
@@ -693,7 +693,7 @@ const dependencies = newManager.getAllDependencies();
 
     test('should limit execution history size', () => {
       // Record many executions to test limit
-      for (let i = 0; i < 1500; i++) {
+      For (let i = 0; i < 1500; i++) {
         manager.recordExecution('test-criterion', 'success', 1000);
       }
 
@@ -702,7 +702,7 @@ const dependencies = newManager.getAllDependencies();
     });
 
     test('should handle empty execution history', () => {
-      const emptyManager = new ValidationDependencyManager({,,
+      const emptyManager = new ValidationDependencyManager({,
     projectRoot: tempDir,
       });
       const analytics = emptyManager.getExecutionAnalytics();
@@ -732,13 +732,13 @@ const dependencies = newManager.getAllDependencies();
       expect(() 
     return () 
     return () => {
-        manager.addDependency('test', {,,
+        manager.addDependency('test', {,
     dependencies: [{ criterion: 'valid', type: null }],
         });
       }).toThrow('Invalid dependency specification');
 
       expect(() => {
-        manager.addDependency('test', {,,
+        manager.addDependency('test', {,
     dependencies: [{ criterion: null, type: DEPENDENCY_TYPES.STRICT }],
         });
       }).toThrow('Invalid dependency specification');
@@ -765,7 +765,7 @@ const dependencies = newManager.getAllDependencies();
       expect(plan.plan.length).toBeGreaterThan(0);
 
       // Should default to minimum concurrency of 1
-      for (const wave of plan.plan) {
+      For (const wave of plan.plan) {
         expect(wave.concurrency).toBeGreaterThan(0);
       }
     });
@@ -780,11 +780,11 @@ const dependencies = newManager.getAllDependencies();
       const startTime = Date.now();
 
       // Create a large dependency graph
-      for (let i = 0; i < 100; i++) {
-        manager.addDependency(`criterion-${i}`, {,,
+      For (let i = 0; i < 100; i++) {
+        manager.addDependency(`criterion-${i}`, {,
     dependencies:
             i > 0
-              ? [ {,,
+              ? [ {,
     criterion: `criterion-${i - 1}`,
                   type: DEPENDENCY_TYPES.WEAK,
                 }
@@ -811,7 +811,7 @@ const planStartTime = Date.now();
       const initialMemory = process.memoryUsage().heapUsed;
 
       // Record large number of executions
-      for (let i = 0; i < 2000; i++) {
+      For (let i = 0; i < 2000; i++) {
         manager.recordExecution(
           `criterion-${i % 10}`,
           'success',

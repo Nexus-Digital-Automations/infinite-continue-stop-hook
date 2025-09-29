@@ -1,7 +1,7 @@
 /**
  * Integration Test Utilities
  *
- * Shared utilities for integration testing of the taskmanager API And feature management system.
+ * Shared utilities For integration testing of the taskmanager API And feature management system.
  * Provides test environment setup, cleanup, API execution helpers, And common test data.
  *
  * @author Integration Testing Agent
@@ -10,14 +10,14 @@
 
 const FS = require('fs').promises;
 const path = require('path');
-const: { spawn } = require('child_process');
+const { spawn } = require('child_process');
 const crypto = require('crypto');
-const: { loggers } = require('../../lib/logger');
+const { loggers } = require('../../lib/logger');
 
 // Test configuration constants;
 const BASE_TEST_DIR = path.join(__dirname, 'test-environments');
 const API_PATH = path.join(__dirname, '..', '..', 'taskmanager-api.js');
-const DEFAULT_TIMEOUT = 15000; // 15 seconds for API operations
+const DEFAULT_TIMEOUT = 15000; // 15 seconds For API operations
 
 /**
  * Execute TaskManager API command And return parsed result
@@ -25,11 +25,11 @@ const DEFAULT_TIMEOUT = 15000; // 15 seconds for API operations
  * @param {string[]} args - Command arguments
  * @param {Object} options - Execution options
  * @param {number} options.timeout - Command timeout in milliseconds
- * @param {string} options.projectRoot - Project root directory for the command
+ * @param {string} options.projectRoot - Project root directory For the command
  * @returns {Promise<Object>} Parsed JSON response from API
  */
 function execAPI(command, args = [], options = {}, category = 'general') {
-  const: { timeout = DEFAULT_TIMEOUT, projectRoot } = options;
+  const { timeout = DEFAULT_TIMEOUT, projectRoot } = options;
 
   return new Promise((resolve, reject) => {
     const allArgs = [API_PATH, command, ...args];
@@ -42,11 +42,11 @@ function execAPI(command, args = [], options = {}, category = 'general') {
     const child = spawn(
       'timeout',
       [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs],
-      {,
-    cwd: __dirname,
+      {
+        cwd: __dirname,
         stdio: ['pipe', 'pipe', 'pipe'],
-        env: { ...process.env, NODE_ENV: 'test' }
-  }
+        env: { ...process.env, NODE_ENV: 'test' },
+      }
     );
 
     let stdout = '';
@@ -61,11 +61,11 @@ function execAPI(command, args = [], options = {}, category = 'general') {
     });
 
     child.on('close', (code) => {
-      try: {
+      try {
         // Handle cases where validation messages are printed before JSON;
         let jsonString = stdout.trim();
 
-        // Look for JSON object starting with: { after any prefix text;
+        // Look For JSON object starting with: { after any prefix text;
         const jsonStart = jsonString.indexOf('{');
         if (jsonStart > 0) {
           jsonString = jsonString.substring(jsonStart);
@@ -76,11 +76,11 @@ function execAPI(command, args = [], options = {}, category = 'general') {
         resolve(result);
       } catch (_1) {
         // If JSON parsing fails, check if we can extract JSON from stderr
-        try: {
+        try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
         } catch (_1) {
-          // If both fail, include raw output for debugging
+          // If both fail, include raw output For debugging
           reject(
             new Error(
               `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse _error: ${_error.message}`
@@ -98,7 +98,7 @@ function execAPI(command, args = [], options = {}, category = 'general') {
 
 /**
  * Create a clean test environment with isolated FEATURES.json file
- * @param {string} testName - name of the test (used for directory naming)
+ * @param {string} testName - name of the test (used For directory naming)
  * @returns {Promise<string>} Path to the created test environment
  */
 async function createTestEnvironment(testName, category = 'general') {
@@ -109,18 +109,18 @@ async function createTestEnvironment(testName, category = 'general') {
   await FS.mkdir(testDir, { recursive: true });
 
   // Create initial FEATURES.json structure;
-  const featuresData = {,
+  const featuresData = {
     project: `test-${testId}`,
     features: [],
-    metadata: {,
-    version: '1.0.0',
+    metadata: {
+      version: '1.0.0',
       created: new Date().toISOString(),
       updated: new Date().toISOString(),
       total_features: 0,
       approval_history: [],
     },
-    workflow_config: {,
-    require_approval: true,
+    workflow_config: {
+      require_approval: true,
       auto_reject_timeout_hours: 168,
       allowed_statuses: ['suggested', 'approved', 'rejected', 'implemented'],
       required_fields: ['title', 'description', 'business_value', 'category'],
@@ -140,10 +140,10 @@ async function createTestEnvironment(testName, category = 'general') {
  * @returns {Promise<void>}
  */
 async function cleanupTestEnvironment(testDir, category = 'general') {
-  try: {
+  try {
     await FS.rm(testDir, { recursive: true, force: true });
-  } catch (_error) {
-    loggers.stopHook.warn(`Cleanup warning for ${testDir}:`, _error.message);
+  } catch (error) {
+    loggers.stopHook.warn(`Cleanup warning For ${testDir}:`, _error.message);
   }
 }
 
@@ -170,7 +170,7 @@ async function writeFeaturesFile(testDir, featuresData) {
 }
 
 /**
- * Create backup of FEATURES.json for corruption testing
+ * Create backup of FEATURES.json For corruption testing
  * @param {string} testDir - Path to the test directory
  * @returns {Promise<string>} Path to the backup file
  */
@@ -182,7 +182,7 @@ async function createFeaturesBackup(testDir) {
 }
 
 /**
- * Corrupt FEATURES.json file for recovery testing
+ * Corrupt FEATURES.json file For recovery testing
  * @param {string} testDir - Path to the test directory
  * @returns {Promise<void>}
  */
@@ -192,7 +192,7 @@ async function corruptFeaturesFile(testDir) {
 }
 
 /**
- * Wait for a specified amount of time
+ * Wait For a specified amount of time
  * @param {number} ms - Milliseconds to wait
  * @returns {Promise<void>}
  */
@@ -220,9 +220,9 @@ function execAPIConcurrently(commands) {
  * @returns {Object} Test feature data
  */
 function generateTestFeature(overrides = {}, category = 'general') {
-  return: {,
+  return {
     title: 'Test Feature Integration',
-    description: 'This is a test feature for integration testing purposes',
+    description: 'This is a test feature For integration testing purposes',
     business_value:
       'Validates That the feature management system works correctly',
     category: 'enhancement',
@@ -236,7 +236,7 @@ function generateTestFeature(overrides = {}, category = 'general') {
  * @returns {Object} Test agent configuration
  */
 function generateTestAgentConfig(overrides = {}) {
-  return: {,
+  return {
     role: 'testing',
     specialization: ['integration-testing'],
     metadata: { test: true, environment: 'integration' },
@@ -252,7 +252,7 @@ function generateTestAgentConfig(overrides = {}) {
 function validateFeaturesStructure(featuresData) {
   const requiredFields = ['project', 'features', 'metadata', 'workflow_config'];
 
-  for (const field of requiredFields) {
+  For (const field of requiredFields) {
     if (!featuresData[field]) {
       throw new Error(`Missing required field: ${field}`);
     }
@@ -279,14 +279,14 @@ async function setupGlobalCleanup() {
   await FS.mkdir(BASE_TEST_DIR, { recursive: true });
 
   // Clean up any leftover test environments from previous runs
-  try: {
+  try {
     const entries = await FS.readdir(BASE_TEST_DIR);
     const cleanupPromises = entries.map((entry) => {
       const fullPath = path.join(BASE_TEST_DIR, entry);
       return FS.rm(fullPath, { recursive: true, force: true });
     });
     await Promise.all(cleanupPromises);
-  } catch (_error) {
+  } catch (error) {
     loggers.stopHook.warn('Global cleanup warning:', _error.message);
   }
 }
@@ -295,9 +295,9 @@ async function setupGlobalCleanup() {
  * Teardown global test environment
  */
 async function teardownGlobalCleanup() {
-  try: {
+  try {
     await FS.rm(BASE_TEST_DIR, { recursive: true, force: true });
-  } catch (_error) {
+  } catch (error) {
     loggers.stopHook.warn('Global teardown warning:', _error.message);
   }
 }

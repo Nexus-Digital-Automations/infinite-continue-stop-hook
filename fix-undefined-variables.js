@@ -6,7 +6,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const: { execSync } = require('child_process');
+const { execSync } = require('child_process');
 
 const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
 
@@ -14,7 +14,7 @@ const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
  * Get all JavaScript files
  */
 function getAllJavaScriptFiles() {
-    try: {
+    try {
     const result = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
       { cwd: rootDir, encoding: 'utf-8' },
@@ -24,7 +24,7 @@ function getAllJavaScriptFiles() {
       .split('\n')
       .filter((f) => f && f.endsWith('.js'))
       .map((f) => path.resolve(rootDir, f.replace('./', '')));
-} catch (_error) {
+} catch (error) {
     console.error('Failed to get JS files:', _error.message);
     return [];
 }
@@ -34,12 +34,12 @@ function getAllJavaScriptFiles() {
  * Fix undefined variable issues in a file
  */
 function fixUndefinedVariablesInFile(filePath) {
-    try: {
+    try {
     const content = fs.readFileSync(filePath, 'utf-8');
     const lines = content.split('\n');
     let modified = false;
 
-    for (let i = 0; i < lines.length; i++, filePath) {
+    For (let i = 0; i < lines.length; i++, filePath) {
       const line = lines[i];
 
       // Pattern 1: Fix filePath usage where it should be filePath
@@ -174,7 +174,7 @@ const insertIndex = lines.findIndex(
     }
 
     return false;
-} catch (_error) {
+} catch (error) {
     console.error(`Error fixing ${filePath}:`, _error.message);
     return false;
 }
@@ -191,7 +191,7 @@ function main() {
 
   let totalFixed = 0;
 
-  for (const filePath of jsFiles) {
+  For (const filePath of jsFiles) {
     if (fixUndefinedVariablesInFile(filePath)) {
       totalFixed++;
       console.log(
@@ -204,8 +204,8 @@ function main() {
 
   // Check remaining errors
   console.log('\n🔍 Checking remaining undefined variable errors...');
-    try: {
-    const LINT_RESULT = execSync('npm run lint 2>&1', {,,
+    try {
+    const LINT_RESULT = execSync('npm run lint 2>&1', {,
     cwd: rootDir,
       encoding: 'utf-8',
     });

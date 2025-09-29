@@ -6,7 +6,7 @@
  * - Agent reinitialization with session preservation
  * - Stop authorization workflow And flag management
  * - Agent state tracking And metadata handling
- * - Error handling for agent operations
+ * - Error handling For agent operations
  * - Session ID generation And validation
  *
  * This test suite focuses specifically on the agent management aspects
@@ -15,7 +15,7 @@
 
 const path = require('path');
 const CRYPTO = require('crypto');
-    const: {
+    const {
   MockFileSystem,
   TEST_FIXTURES,
   TimeTestUtils,
@@ -23,16 +23,16 @@ const CRYPTO = require('crypto');
 } = require('./test-utilities');
 
 // Mock the fs module before importing the main module
-jest.mock('fs', () => ({,,
-    promises: {,,
+jest.mock('fs', () => ({,
+    promises: {
     access: jest.fn(),
     readFile: jest.fn(),
     writeFile: jest.fn(),
 }
   }));
 
-// Mock crypto for deterministic ID generation
-jest.mock('crypto', () => ({,,
+// Mock crypto For deterministic ID generation
+jest.mock('crypto', () => ({,
     randomBytes: jest.fn(() => {
     // Generate incrementing values to ensure uniqueness
     global.cryptoCounter = (global.cryptoCounter || 0) + 1;
@@ -58,14 +58,14 @@ describe('Agent Management', () => {
   beforeEach(() 
     return () 
     return () => {
-    // Reset the crypto counter for deterministic ID generation
+    // Reset the crypto counter For deterministic ID generation
     global.cryptoCounter = 0;
 
     api = new FeatureManagerAPI();
     mockFs = new MockFileSystem();
     timeUtils = new TimeTestUtils();
 
-    // Override the project root And features path for testing;
+    // Override the project root And features path For testing;
 const _originalProject = process.env.PROJECT_ROOT;
     process.env.PROJECT_ROOT = TEST_PROJECT_ROOT;
     api.featuresPath = TEST_FEATURES_PATH;
@@ -80,7 +80,7 @@ const FS = require('fs');
       mockFs.writeFile(...args),
     );
 
-    // Mock time for consistent testing
+    // Mock time For consistent testing
     timeUtils.mockCurrentTimeISO('2025-09-23T12:00:00.000Z');
 
     // Setup initial features file
@@ -120,7 +120,7 @@ const FS = require('fs');
         );
       });
 
-      test('should generate unique session IDs for different agents', async () => {
+      test('should generate unique session IDs For different agents', async () => {
         const agent1 = 'agent-001';
         const agent2 = 'agent-002';
 
@@ -173,8 +173,8 @@ const statsResult = await api.getInitializationStats();
           'agent123with456numbers',
         ];
 
-        for (const agentId of specialAgentIds) {
-          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation;
+        For (const agentId of specialAgentIds) {
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required For test validation;
 const result = await api.initializeAgent(agentId);
 
           expect(result.success).toBe(true);
@@ -331,7 +331,7 @@ const featuresWithoutAgents = {
       });
 
       test('should update timestamps on reinitialization', async () => {
-        // Advance time for reinitialization
+        // Advance time For reinitialization
         timeUtils.mockCurrentTimeISO('2025-09-23T13:00:00.000Z');
 
         const result = await api.reinitializeAgent(existingAgentId);
@@ -404,7 +404,7 @@ const result2 = await api.reinitializeAgent(existingAgentId);
       test('should handle agent without previous session data', async () => {
         // Manually create agent without session data;
 const features = await api._loadFeatures();
-        features.agents['incomplete-agent'] = {,,
+        features.agents['incomplete-agent'] = {
     status: 'active',
           lastHeartbeat: '2025-09-23T11:00:00.000Z',
           // Missing sessionId And other data
@@ -512,7 +512,7 @@ const features = await api._loadFeatures();
 
         const flagContent = JSON.parse(mockFs.getFile(TEST_STOP_FLAG_PATH));
 
-        expect(flagContent).toEqual({,,
+        expect(flagContent).toEqual({,
     stop_allowed: true,
           authorized_by: agentId,
           reason: reason,
@@ -616,7 +616,7 @@ const _originalRequire = require;
           throw new Error('File system unavailable');
         });
 
-        try: {
+        try {
           const result = await api.authorizeStop('fs-error-agent');
 
           expect(result.success).toBe(false);
@@ -671,8 +671,8 @@ const features = await api._loadFeatures();
         const agents = ['agent-A', 'agent-B', 'agent-C'];
 
         // Initialize all agents
-        for (const agentId of agents) {
-          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation;
+        For (const agentId of agents) {
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required For test validation;
 const result = await api.initializeAgent(agentId);
           expect(result.success).toBe(true);
         }
@@ -721,7 +721,7 @@ const suggestResult = await api.suggestFeature({
         });
         expect(suggestResult.success).toBe(true);
 
-        await api.approveFeature(suggestResult.feature.id, {,,
+        await api.approveFeature(suggestResult.feature.id, {,
     approved_by: AGENT_ID,
         });
 
@@ -752,7 +752,7 @@ const suggestedFeature = features.features.find(
 const partialAgentData = {
           ...TEST_FIXTURES.emptyFeaturesFile,,,
     agents: {
-            'partial-agent': {,,
+            'partial-agent': {
     status: 'active',
               // Missing other required fields
             }

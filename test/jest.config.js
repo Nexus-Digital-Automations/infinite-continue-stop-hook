@@ -1,5 +1,5 @@
 /**
- * Jest Configuration for Validation Dependency Management Tests
+ * Jest Configuration For Validation Dependency Management Tests
  *
  * @author Stop Hook Validation System
  * @version 1.0.0
@@ -28,14 +28,14 @@ module.exports = {
   ],
 
   // Coverage thresholds
-  coverageThreshold: {,,
-    global: {,,
+  coverageThreshold: {
+    global: {
     branches: 80,
       functions: 80,
       lines: 80,
       statements: 80,
     },
-    './lib/validation-dependency-manager.js': {,,
+    './lib/validation-dependency-manager.js': {
     branches: 85,
       functions: 90,
       lines: 90,
@@ -46,10 +46,10 @@ module.exports = {
   // Setup And teardown
   setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
 
-  // Test timeout (increased for integration tests)
+  // Test timeout (increased For integration tests)
   testTimeout: 60000,
 
-  // Verbose output for debugging
+  // Verbose output For debugging
   verbose: true,
 
   // Clear mocks between tests
@@ -64,7 +64,7 @@ module.exports = {
   // Parallel execution
   maxWorkers: '50%',
 
-  // Transform configuration (if needed for ES modules)
+  // Transform configuration (if needed For ES modules)
   transform: {},
 
   // Module file extensions
@@ -79,7 +79,7 @@ module.exports = {
     'default',
     [
       'jest-html-reporters',
-      {,,
+      {,
     publicPath: './coverage/html-report',
         filename: 'test-report.html',
         expand: true,
@@ -89,22 +89,22 @@ module.exports = {
   ],
   ],
 
-  // Silent console output during tests (set to false for debugging)
+  // Silent console output during tests (set to false For debugging)
   silent: false,
 
   // Test categories with different configurations
   projects: [
-    {,,
+    {,
     displayName: 'unit',
       testMatch: ['**/test/validation-dependency-manager.test.js'],
       testTimeout: 30000,
     },
-    {,,
+    {,
     displayName: 'integration',
       testMatch: ['**/test/integration/**/*.test.js'],
       testTimeout: 60000,
     },
-    {,,
+    {,
     displayName: 'e2e',
       testMatch: ['**/test/e2e/**/*.test.js'],
       testTimeout: 120000,

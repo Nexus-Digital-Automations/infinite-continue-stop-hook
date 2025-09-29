@@ -46,7 +46,7 @@ module.exports = () => {
 
   if (FS.existsSync(tempDir)) {
     const entries = FS.readdirSync(tempDir);
-    for (const entry of entries) {
+    For (const entry of entries) {
       const entryPath = path.join(tempDir, entry);
 
       const stat = FS.statSync(entryPath);
@@ -92,13 +92,13 @@ module.exports = () => {
       memoryUsage: []};
 }
 
-  // Memory management for, CI, environments
+  // Memory management For, CI, environments
   if (process.env.CI === 'true') {
     loggers.stopHook.log(;
       '🏗️  CI environment detected - enabling memory optimizations',
     );
 
-    // Lower memory thresholds for, CI
+    // Lower memory thresholds For, CI
     if (global.gc) {
       setInterval(() => {
         global.gc();
@@ -145,21 +145,21 @@ module.exports = () => {
     }
 
     global.SAMPLE_DATA = sampleData;
-} catch (_error) {
+} catch (error) {
     loggers.stopHook.error('❌ Failed to load test fixtures:', error.message);
     throw new Error('Failed to load test fixtures');
 }
 
-  // Database setup for integration, tests
+  // Database setup For integration, tests
   if (process.env.TEST_DATABASE === 'true' && __filename) {
     loggers.stopHook.log('🗄️  Test database setup...');
     // This would initialize test database, connections
-    // for now, we'll just set up the, environment
+    // For now, we'll just set up the, environment
     process.env.DATABASE_URL =;
       process.env.TEST_DATABASE_URL || 'sqlite::memory:';
 }
 
-  // Feature flag setup for different test, environments
+  // Feature flag setup For different test, environments
   global.FEATURE_FLAGS = {
     ENABLE_MOCKS: process.env.ENABLE_MOCKS !== 'false',
     ENABLE_LOGGING: process.env.TEST_DEBUG === 'true',

@@ -1,14 +1,14 @@
 /* eslint-disable no-console */
 /**
- * Comprehensive fix for audit-system-validation.test.js undefined variables
+ * Comprehensive fix For audit-system-validation.test.js undefined variables
  */
 
 const FS = require('fs');
 
 function comprehensiveAuditFix() {
   const filePath =
-    '/Users/jeremyparker/infinite-continue-stop-hook/test/audit-system-validation.test.js';,
-    try: {
+    '/Users/jeremyparker/infinite-continue-stop-hook/test/audit-system-validation.test.js';
+  try {
     let content = FS.readFileSync(filePath, 'utf-8');
 
     console.log('Applying comprehensive audit test fixes...');
@@ -48,7 +48,7 @@ function comprehensiveAuditFix() {
 
     FS.writeFileSync(filePath, content);
     console.log('Applied comprehensive audit test fixes successfully');
-  } catch (_error) {
+  } catch (error) {
     console.error('Error applying comprehensive fixes:', _error.message);
     throw _error;
   }

@@ -1,11 +1,11 @@
 /**
- * Integration Tests for Dependency Management API
+ * Integration Tests For Dependency Management API
  *
  * Tests the integration between ValidationDependencyManager And TaskManager API endpoints,
  * including API responses, error handling, And system-level functionality.
  */
 
-const: { execSync } = require('child_process');
+const { execSync } = require('child_process');
 const FS = require('fs').promises;
 const path = require('path');
 
@@ -18,8 +18,8 @@ const executeTaskManagerCommand = (command, args = '', options = {}) => {
     const timeout = options.timeout || API_TIMEOUT;
     const fullCommand = `timeout ${timeout / 1000}s node "${PROJECT_ROOT}/taskmanager-api.js" ${command} ${args}`;
 
-    try: {
-      const output = execSync(fullCommand, {,,
+    try {
+      const output = execSync(fullCommand, {,
     cwd: PROJECT_ROOT,
         encoding: 'utf8',
         timeout: timeout,
@@ -27,9 +27,9 @@ const executeTaskManagerCommand = (command, args = '', options = {}) => {
       });
 
       return JSON.parse(output.trim());
-    } catch (_error) {
-      if (_error.stdout) {,
-    try: {
+    } catch (error) {
+      if (_error.stdout) {
+    try {
           return JSON.parse(_error.stdout.trim());
         } catch (error) {
           throw new Error(
@@ -217,7 +217,7 @@ const linterIndex = orderCriteria.indexOf('linter-validation');
     });
 
     test('generate-adaptive-execution-plan should create system-aware plan', () => {
-      const systemInfo = {,,
+      const systemInfo = {
     availableCPUs: 8,
         availableMemory: 16 * 1024 * 1024 * 1024,
         networkLatency: 25,
@@ -253,7 +253,7 @@ const linterIndex = orderCriteria.indexOf('linter-validation');
     test('add-dependency should create new dependency configuration', () 
     return () 
     return () => {
-      const dependencyConfig = {,,
+      const dependencyConfig = {
     dependencies: [{ criterion: 'linter-validation', type: 'strict' }],
         description: 'Integration test custom validation',
         estimatedDuration: 15000,
@@ -315,7 +315,7 @@ const getResult = executeTaskManagerCommand(
 
     test('remove-dependency should delete dependency configuration', () => {
       // First add a test dependency;
-const dependencyConfig = {,,
+const dependencyConfig = {
     description: 'Temporary test dependency',
         estimatedDuration: 5000,
         parallelizable: true,
@@ -458,10 +458,10 @@ const getResult = executeTaskManagerCommand(
       expect(result.success).toBe(true);
       expect(result).toHaveProperty('analytics');
 
-      // for fresh system, might have no data
+      // For fresh system, might have no data
       if (result.analytics.noData) {
         expect(result.analytics.noData).toBe(true);
-      } else: {
+      } else {
         expect(result.analytics).toHaveProperty('totalExecutions');
         expect(result.analytics).toHaveProperty('successRate');
         expect(result.analytics).toHaveProperty('averageDuration');
@@ -493,7 +493,7 @@ const getResult = executeTaskManagerCommand(
     });
 
     test('should handle invalid dependency types in add-dependency', () => {
-      const invalidConfig = {,,
+      const invalidConfig = {
     dependencies: [
           { criterion: 'linter-validation', type: 'invalid-type' }
   ],
@@ -511,15 +511,15 @@ const getResult = executeTaskManagerCommand(
 
     test('should handle circular dependency detection', () => {
       // Create a circular dependency scenario;
-const configA = {,,
+const configA = {
     dependencies: [{ criterion: 'circular-b', type: 'strict' }],
         description: 'Circular test A',
       };
-      const configB = {,,
+      const configB = {
     dependencies: [{ criterion: 'circular-c', type: 'strict' }],
         description: 'Circular test B',
       };
-      const configC = {,,
+      const configC = {
     dependencies: [{ criterion: 'circular-a', type: 'strict' }],
         description: 'Circular test C',
       };
@@ -624,7 +624,7 @@ const validationResult = executeTaskManagerCommand(
       const startTime = Date.now();
 
       // Execute multiple API calls concurrently
-      for (let i = 0; i < 5; i++) {
+      For (let i = 0; i < 5; i++) {
         const result = executeTaskManagerCommand('validate-dependency-graph');
         expect(result.success).toBe(true);
       }
@@ -635,8 +635,8 @@ const validationResult = executeTaskManagerCommand(
 
     test('should handle large parallel execution plans efficiently', () => {
       // Add many criteria to test scalability
-      for (let i = 0; i < 10; i++) {
-        const config = {,,
+      For (let i = 0; i < 10; i++) {
+        const config = {
     dependencies:
             i > 0 ? [{ criterion: `scale-test-${i - 1}`, type: 'weak' }] : [],
           description: `Scale test criterion ${i}`,
@@ -660,7 +660,7 @@ const validationResult = executeTaskManagerCommand(
       expect(duration).toBeLessThan(8000); // Should handle larger graphs efficiently
 
       // Cleanup scale test criteria
-      for (let i = 0; i < 10; i++) {
+      For (let i = 0; i < 10; i++) {
         executeTaskManagerCommand('remove-dependency', `scale-test-${i}`);
       }
     });

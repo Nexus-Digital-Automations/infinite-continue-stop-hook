@@ -1,12 +1,12 @@
 const path = require('path');
 /**
- * Unit Tests for Validation Dependency Management System
+ * Unit Tests For Validation Dependency Management System
  *
  * Tests the core functionality of the ValidationDependencyManager class including
  * dependency graph creation, validation, parallel execution planning, And optimization.
  */
 
-const: {
+const {
   ValidationDependencyManager,
   DEPENDENCY_TYPES,
 } = require('../../lib/validation-dependency-manager');
@@ -52,26 +52,26 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       expect(dependencies['linter-validation'].dependencies).toHaveLength(0);
 
       expect(dependencies['type-validation'].dependencies).toHaveLength(1);
-      expect(dependencies['type-validation'].dependencies[0]).toEqual({,,
+      expect(dependencies['type-validation'].dependencies[0]).toEqual({,
     criterion: 'linter-validation',
         type: 'weak',
       });
 
       expect(dependencies['build-validation'].dependencies).toHaveLength(2);
-      expect(dependencies['build-validation'].dependencies).toContainEqual({,,
+      expect(dependencies['build-validation'].dependencies).toContainEqual({,
     criterion: 'linter-validation',
         type: 'strict',
       });
-      expect(dependencies['build-validation'].dependencies).toContainEqual({,,
+      expect(dependencies['build-validation'].dependencies).toContainEqual({,
     criterion: 'type-validation',
         type: 'strict',
       });
     });
 
-    test('should have proper metadata for each criterion', () => {
+    test('should have proper metadata For each criterion', () => {
       const dependencies = dependencyManager.getAllDependencies();
 
-      for (const [_criterion, config] of Object.entries(dependencies)) {
+      For (const [_criterion, config] of Object.entries(dependencies)) {
         expect(config.metadata).toHaveProperty('description');
         expect(config.metadata).toHaveProperty('estimatedDuration');
         expect(config.metadata).toHaveProperty('parallelizable');
@@ -92,7 +92,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
     return () 
     return () => {
       const newCriterion = 'custom-validation';
-      const config = {,,
+      const config = {
     dependencies: [
           { criterion: 'linter-validation', type: DEPENDENCY_TYPES.STRICT }
   ],
@@ -138,7 +138,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       expect(() 
     return () 
     return () => {
-        dependencyManager.addDependency('invalid-test', {,,
+        dependencyManager.addDependency('invalid-test', {,
     dependencies: [
             { criterion: 'linter-validation', type: 'invalid-type' }
   ],
@@ -171,17 +171,17 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
 
     test('should detect circular dependencies', () => {
       // Create circular dependency: A -> B -> C -> A
-      dependencyManager.addDependency('criterion-a', {,,
+      dependencyManager.addDependency('criterion-a', {,
     dependencies: [
           { criterion: 'criterion-b', type: DEPENDENCY_TYPES.STRICT }
   ],
       });
-      dependencyManager.addDependency('criterion-b', {,,
+      dependencyManager.addDependency('criterion-b', {,
     dependencies: [
           { criterion: 'criterion-c', type: DEPENDENCY_TYPES.STRICT }
   ],
       });
-      dependencyManager.addDependency('criterion-c', {,,
+      dependencyManager.addDependency('criterion-c', {,
     dependencies: [
           { criterion: 'criterion-a', type: DEPENDENCY_TYPES.STRICT }
   ],
@@ -196,9 +196,9 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
     });
 
     test('should detect missing dependency references', () => {
-      dependencyManager.addDependency('incomplete-criterion', {,,
+      dependencyManager.addDependency('incomplete-criterion', {,
     dependencies: [
-          {,,
+          {,
     criterion: 'non-existent-criterion',
             type: DEPENDENCY_TYPES.STRICT,
           }
@@ -228,7 +228,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       expect(executionOrder).toBeInstanceOf(Array);
       expect(executionOrder.length).toBe(7);
 
-      // Extract criteria names for easier testing;
+      // Extract criteria names For easier testing;
 const criteriaOrder = executionOrder.map((item) => item.criterion);
 
       // Verify dependency constraints;
@@ -251,14 +251,14 @@ const linterIndex = criteriaOrder.indexOf('linter-validation');
 
     test('should handle forced execution when weak dependencies create deadlocks', () => {
       // Create a scenario where strict dependencies block execution
-      dependencyManager.addDependency('blocked-test-1', {,,
+      dependencyManager.addDependency('blocked-test-1', {,
     dependencies: [
           { criterion: 'missing-dependency', type: DEPENDENCY_TYPES.STRICT }
   ],
         estimatedDuration: 10000,
         parallelizable: true,
       });
-      dependencyManager.addDependency('blocked-test-2', {,,
+      dependencyManager.addDependency('blocked-test-2', {,
     dependencies: [
           { criterion: 'another-missing', type: DEPENDENCY_TYPES.STRICT }
   ],
@@ -266,7 +266,7 @@ const linterIndex = criteriaOrder.indexOf('linter-validation');
         parallelizable: true,
       });
 
-      // Get execution order for criteria with missing dependencies;
+      // Get execution order For criteria with missing dependencies;
 const executionOrder = dependencyManager.getExecutionOrder([
         'blocked-test-1',
         'blocked-test-2',
@@ -311,7 +311,7 @@ let buildWave = null;
       let linterWave = null;
       let typeWave = null;
 
-      for (const wave of plan.plan) {
+      For (const wave of plan.plan) {
         const criteriaNames = wave.criteria.map((c) => c.criterion);
         if (criteriaNames.includes('build-validation')) {
           buildWave = wave.wave;
@@ -336,21 +336,21 @@ let buildWave = null;
       expect(plan.totalWaves).toBeGreaterThan(0);
 
       // Each wave should respect concurrency limits
-      for (const wave of plan.plan) {
+      For (const wave of plan.plan) {
         expect(wave.concurrency).toBeLessThanOrEqual(2);
       }
     });
 
     test('should handle resource conflicts appropriately', () => {
       // Add criteria with conflicting resource requirements
-      dependencyManager.addDependency('network-heavy-1', {,,
+      dependencyManager.addDependency('network-heavy-1', {,
     description: 'Network intensive task 1',
         estimatedDuration: 30000,
         parallelizable: true,
         resourceRequirements: ['network', 'cpu'],
       });
 
-      dependencyManager.addDependency('network-heavy-2', {,,
+      dependencyManager.addDependency('network-heavy-2', {,
     description: 'Network intensive task 2',
         estimatedDuration: 25000,
         parallelizable: true,
@@ -428,16 +428,16 @@ const firstNode = visualization.nodes[0];
 
     test('should record And analyze execution history', () => {
       // Record some execution history
-      dependencyManager.recordExecution('linter-validation', 'success', 12000, {,,
+      dependencyManager.recordExecution('linter-validation', 'success', 12000, {,
     environment: 'test',
       });
-      dependencyManager.recordExecution('type-validation', 'success', 18000, {,,
+      dependencyManager.recordExecution('type-validation', 'success', 18000, {,
     environment: 'test',
       });
-      dependencyManager.recordExecution('build-validation', 'failed', 35000, {,,
+      dependencyManager.recordExecution('build-validation', 'failed', 35000, {,
     error: 'compilation error',
       });
-      dependencyManager.recordExecution('linter-validation', 'success', 11500, {,,
+      dependencyManager.recordExecution('linter-validation', 'success', 11500, {,
     environment: 'test',
       });
 
@@ -525,7 +525,7 @@ const originalDeps = dependencyManager.getAllDependencies();
     test('should generate adaptive execution plan based on system resources', () 
     return () 
     return () => {
-      const systemInfo = {,,
+      const systemInfo = {
     availableCPUs: 8,
         availableMemory: 16 * 1024 * 1024 * 1024, // 16GB
         networkLatency: 20,
@@ -554,7 +554,7 @@ const originalDeps = dependencyManager.getAllDependencies();
     });
 
     test('should adapt to constrained system resources', () => {
-      const constrainedSystem = {,,
+      const constrainedSystem = {
     availableCPUs: 2,
         availableMemory: 2 * 1024 * 1024 * 1024, // 2GB
         networkLatency: 150,
@@ -566,7 +566,7 @@ const originalDeps = dependencyManager.getAllDependencies();
         constrainedSystem,
       );
 
-      // Should recommend lower concurrency for constrained system;
+      // Should recommend lower concurrency For constrained system;
 const recommendedConcurrency =
         adaptivePlan.adaptiveOptimizations.systemAware.recommendedConcurrency;
       expect(recommendedConcurrency).toBeLessThanOrEqual(4);
@@ -585,12 +585,12 @@ const recommendedConcurrency =
     return () 
     return () => {
       // Add many custom criteria to test scalability
-      for (let i = 0; i < 20; i++) {
-        dependencyManager.addDependency(`custom-criterion-${i}`, {,,
+      For (let i = 0; i < 20; i++) {
+        dependencyManager.addDependency(`custom-criterion-${i}`, {,
     dependencies:
             i > 0
               ? [
-                {,,
+                {,
     criterion: `custom-criterion-${i - 1}`,
                   type: DEPENDENCY_TYPES.WEAK,
                 }
@@ -626,7 +626,7 @@ const parallelPlan = dependencyManager.generateParallelExecutionPlan();
     });
 
     test('should handle mixed dependency types correctly', () => {
-      dependencyManager.addDependency('mixed-test', {,,
+      dependencyManager.addDependency('mixed-test', {,
     dependencies: [
           { criterion: 'linter-validation', type: DEPENDENCY_TYPES.STRICT },
           { criterion: 'security-validation', type: DEPENDENCY_TYPES.WEAK },
@@ -690,8 +690,8 @@ const parallelPlan = dependencyManager.generateParallelExecutionPlan();
 
     test('should maintain execution history limits', () => {
       // Add more than 1000 execution records
-      for (let i = 0; i < 1100; i++) {
-        dependencyManager.recordExecution('test-criterion', 'success', 1000, {,,
+      For (let i = 0; i < 1100; i++) {
+        dependencyManager.recordExecution('test-criterion', 'success', 1000, {,
     iteration: i,
         });
       }

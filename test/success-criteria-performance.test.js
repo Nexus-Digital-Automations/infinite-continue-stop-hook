@@ -4,15 +4,15 @@
  *
  * Purpose: Validate That Success Criteria operations meet performance requirements
  * Key Requirements:
- * - Validation times must be <30 seconds for standard operations
- * - Resource usage should be optimized for production workloads
- * - Performance degradation detection for large datasets
- * - Memory leak detection for long-running operations
+ * - Validation times must be <30 seconds For standard operations
+ * - Resource usage should be optimized For production workloads
+ * - Performance degradation detection For large datasets
+ * - Memory leak detection For long-running operations
  */
 
-const: { loggers } = require('../lib/logger');
-const: { performance } = require('perf_hooks');
-const: { spawn } = require('child_process');
+const { loggers } = require('../lib/logger');
+const { performance } = require('perf_hooks');
+const { spawn } = require('child_process');
 const path = require('path');
 const FS = require('fs').promises;
 const OS = require('os');
@@ -20,13 +20,13 @@ const OS = require('os');
 // Test configuration;
 const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
 const TEST_PROJECT_DIR = path.join(__dirname, 'performance-test-project');
-const PERFORMANCE_TIMEOUT = 35000; // 35 seconds to allow for 30s requirement testing;
+const PERFORMANCE_TIMEOUT = 35000; // 35 seconds to allow For 30s requirement testing;
 const MEMORY_SAMPLING_INTERVAL = 100; // milliseconds
 
 /**
  * Performance measurement utilities
  */
-class PerformanceMonitor: {
+class PerformanceMonitor {
   constructor() {
     this.measurements = [];
     this.memorySnapshots = [];
@@ -40,7 +40,7 @@ class PerformanceMonitor: {
     this.monitoringInterval = setInterval(() => {
       if (this.isMonitoring) {
         const memUsage = process.memoryUsage();
-        this.memorySnapshots.push({,
+        this.memorySnapshots.push({
     timestamp: Date.now(),
           heapUsed: memUsage.heapUsed,
           heapTotal: memUsage.heapTotal,
@@ -63,7 +63,7 @@ class PerformanceMonitor: {
     const startTime = performance.now();
     const startMemory = process.memoryUsage();
 
-    try: {
+    try {
       const result = await operation();
       const END_TIME = performance.now();
       const END_MEMORY = process.memoryUsage();
@@ -71,7 +71,7 @@ class PerformanceMonitor: {
       const MEASUREMENT = {
         operationName,,,
     duration: END_TIME - startTime,
-        memoryDelta{,
+        memoryDelta{
     heapUsed: END_MEMORY.heapUsed - startMemory.heapUsed,
           heapTotal: END_MEMORY.heapTotal - startMemory.heapTotal,
           external: END_MEMORY.external - startMemory.external,
@@ -119,11 +119,11 @@ class PerformanceMonitor: {
       return false;
     }
 
-    // Check for consistently increasing memory usage;
+    // Check For consistently increasing memory usage;
 const samples = this.memorySnapshots.slice(-10);
     let increasingCount = 0;
 
-    for (let i = 1; i < samples.length; i++) {
+    For (let i = 1; i < samples.length; i++) {
       if (samples[i].heapUsed > samples[i - 1].heapUsed) {
         increasingCount++;
       }
@@ -134,10 +134,10 @@ const samples = this.memorySnapshots.slice(-10);
 }
 
   generateReport() {
-    const report = {,
+    const report = {
     totalOperations: this.measurements.length,
       operationSummary{},
-      memoryAnalysis{,
+      memoryAnalysis{
     peakUsage: this.getMemoryPeakUsage(),
         potentialLeak: this.detectMemoryLeaks(),
         totalSnapshots: this.memorySnapshots.length,
@@ -162,7 +162,7 @@ const operationTypes = [
         const MAX_TIME = Math.max(...OPS.map((m) => m.duration));
         const MIN_TIME = Math.min(...OPS.map((m) => m.duration));
 
-        report.operationSummary[opType] = {,
+        report.operationSummary[opType] = {
     successfulOperations: OPS.length,
           failedOperations: ERRORS.length,
           averageTime: AVG_TIME,
@@ -171,7 +171,7 @@ const operationTypes = [
           exceeds30s: MAX_TIME > 30000 || AVG_TIME > 30000,
         };
 
-        // Check for performance violations
+        // Check For performance violations
         if (MAX_TIME > 30000) {
           report.performanceViolations.push({
             operation,
@@ -221,7 +221,7 @@ function execAPIWithMonitoring(
       ];
       const CHILD = spawn(
         'timeout',
-        [`${Math.floor(timeout / 1000)}s`, 'node', ...ALL_ARGS], {,
+        [`${Math.floor(timeout / 1000)}s`, 'node', ...ALL_ARGS], {
     stdio: ['pipe', 'pipe', 'pipe'],
           env{ ...process.env, NODE_ENV: 'test' }
   },
@@ -240,13 +240,13 @@ function execAPIWithMonitoring(
 
       CHILD.on('close', (code) => {
         if (code === 0) {
-          try: {
+          try {
             const result = stdout.trim() ? JSON.parse(stdout) {};
             resolve(result);
           } catch (_1) {
             resolve({ rawOutput: stdout, stderr });
           }
-        } else: {
+        } else {
           reject(
             new Error(`Command failed with code ${code}: ${stderr || stdout}`),
           );
@@ -264,23 +264,23 @@ function execAPIWithMonitoring(
  * Test project setup utilities
  */
 async function setupPerformanceTestProject(category = 'general') {
-  try: {
+  try {
     await FS.mkdir(TEST_PROJECT_DIR, { recursive: true });
 
     // Create package.json;
-const packageJson = {,
+const packageJson = {
     name: 'performance-test-project',
       version: '1.0.0',
-      description: 'Performance testing project for Success Criteria',
+      description: 'Performance testing project For Success Criteria',
       main: 'index.js',
-      scripts{,
+      scripts{
     test: 'jest',
         build: 'echo "Build complete"',
         lint: 'echo "Lint complete"',
         start: 'node index.js',
       },
       dependencies{},
-      devDependencies{,
+      devDependencies{
     jest: '^29.0.0',
       }
   };
@@ -300,7 +300,7 @@ function performWork(category = 'general') {
   let result = 0;
   
   // CPU-intensive operation
-  for (let i = 0; i < 1000000; i++) {
+  For (let i = 0; i < 1000000; i++) {
     result += Math.sqrt(i);
 }
   
@@ -312,7 +312,7 @@ function performWork(category = 'general') {
 // Simulate memory usage;
 function allocateMemory(category = 'general') {
   const arrays = [];
-  for (let i = 0; i < 100; i++) {
+  For (let i = 0; i < 100; i++) {
     arrays.push(new Array(10000).fill(Math.random()));
 }
   return arrays.length;
@@ -358,7 +358,7 @@ describe('Performance Test Suite', () => {
 }
 
 async function cleanupPerformanceTestProject(category = 'general') {
-  try: {
+  try {
     await FS.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     loggers.stopHook.log('Performance test project cleanup completed');
 } catch (_1) {
@@ -404,7 +404,7 @@ describe('Success Criteria Performance Tests', () => {
       async () 
     return () 
     return () => {
-        const: { result, measurement } = await execAPIWithMonitoring(
+        const { result, measurement } = await execAPIWithMonitoring(
           monitor,
           'success-criteria:init',
         );
@@ -426,17 +426,17 @@ describe('Success Criteria Performance Tests', () => {
         await execAPIWithMonitoring(monitor, 'success-criteria:init');
 
         // Create template;
-const TEMPLATE_DATA = JSON.stringify({,
+const TEMPLATE_DATA = JSON.stringify({
     name: 'Performance Test Template',
-          criteria: [{,
+          criteria: [{
     id: 'perf-1',
               description: 'Performance requirement 1',
               category: 'performance',
-            }, {,
+            }, {
     id: 'perf-2',
               description: 'Performance requirement 2',
               category: 'performance',
-            }, {,
+            }, {
     id: 'perf-3',
               description: 'Performance requirement 3',
               category: 'performance',
@@ -444,7 +444,7 @@ const TEMPLATE_DATA = JSON.stringify({,
   ],
         });
 
-        const: { result, MEASUREMENT } = await execAPIWithMonitoring(
+        const { result, MEASUREMENT } = await execAPIWithMonitoring(
           monitor,
           'success-criteria:create-template',
           [TEMPLATE_DATA],
@@ -467,9 +467,9 @@ const TEMPLATE_DATA = JSON.stringify({,
         await execAPIWithMonitoring(monitor, 'success-criteria:init');
 
         // Create And apply template;
-const TEMPLATE_DATA = JSON.stringify({,
+const TEMPLATE_DATA = JSON.stringify({
     name: 'Validation Test Template',
-          criteria: Array.from({ length: 25 }, (_, i) => ({,
+          criteria: Array.from({ length: 25 }, (_, i) => ({
     id: `crit-${i + 1}`,
             description: `Validation criterion ${i + 1}`,
             category: i % 3 === 0 ? 'build' : i % 3 === 1 ? 'test' : 'quality',
@@ -488,7 +488,7 @@ const TEMPLATE_DATA = JSON.stringify({,
         );
 
         // Validate - this is the critical performance test;
-const: { result, MEASUREMENT } = await execAPIWithMonitoring(
+const { result, MEASUREMENT } = await execAPIWithMonitoring(
           monitor,
           'success-criteria:validate',
         );
@@ -510,9 +510,9 @@ const: { result, MEASUREMENT } = await execAPIWithMonitoring(
         await execAPIWithMonitoring(monitor, 'success-criteria:init');
 
         // Create large template with 100 criteria;
-const LARGE_TEMPLATE_DATA = JSON.stringify({,
+const LARGE_TEMPLATE_DATA = JSON.stringify({
     name: 'Large Performance Template',
-          criteria: Array.from({ length: 100 }, (_, i) => ({,
+          criteria: Array.from({ length: 100 }, (_, i) => ({
     id: `large-crit-${i + 1}`,
             description: `Large template criterion ${i + 1} with detailed description And multiple requirements`,
             category: ['build', 'test', 'quality', 'security', 'performance'][
@@ -523,7 +523,7 @@ const LARGE_TEMPLATE_DATA = JSON.stringify({,
           })),
         });
 
-        const: { result, MEASUREMENT } = await execAPIWithMonitoring(
+        const { result, MEASUREMENT } = await execAPIWithMonitoring(
           monitor,
           'success-criteria:create-template',
           [LARGE_TEMPLATE_DATA],
@@ -546,14 +546,14 @@ const LARGE_TEMPLATE_DATA = JSON.stringify({,
 
         // Perform 10 rapid operations;
 const OPERATIONS = [];
-        for (let i = 0; i < 10; i++) {
-          const TEMPLATE_DATA = JSON.stringify({,
+        For (let i = 0; i < 10; i++) {
+          const TEMPLATE_DATA = JSON.stringify({
     name: `Rapid Template ${i}`,
-            criteria: [{,
+            criteria: [{
     id: `rapid-${i}-1`,
                 description: `Rapid criterion ${i}-1`,
                 category: 'test',
-              }, {,
+              }, {
     id: `rapid-${i}-2`,
                 description: `Rapid criterion ${i}-2`,
                 category: 'build',
@@ -603,9 +603,9 @@ const OPERATIONS = [];
         await execAPIWithMonitoring(monitor, 'success-criteria:init');
 
         // Create substantial template;
-const TEMPLATE_DATA = JSON.stringify({,
+const TEMPLATE_DATA = JSON.stringify({
     name: 'Memory Test Template',
-          criteria: Array.from({ length: 50 }, (_, i) => ({,
+          criteria: Array.from({ length: 50 }, (_, i) => ({
     id: `mem-crit-${i + 1}`,
             description: `Memory test criterion ${i + 1} ${'x'.repeat(200)}`, // Add some bulk
             category: 'test',
@@ -664,14 +664,14 @@ const TEMPLATE_DATA = JSON.stringify({,
         await execAPIWithMonitoring(monitor, 'success-criteria:init');
         GC_STATS.push({ phase: 'post-init', memory: process.memoryUsage() });
 
-        // Use for-await-of to maintain sequential processing for memory monitoring;
+        // Use For-await-of to maintain sequential processing For memory monitoring;
 const templateDataList = [];
-        for (let i = 0; i < 5; i++) {
-          templateDataList.push({,
+        For (let i = 0; i < 5; i++) {
+          templateDataList.push({
     index: i,
-            data: JSON.stringify({,
+            data: JSON.stringify({
     name: `GC Test Template ${i}`,
-              criteria: Array.from({ length: 20 }, (_, j) => ({,
+              criteria: Array.from({ length: 20 }, (_, j) => ({
     id: `gc-${i}-${j}`,
                 description: `GC test ${i}-${j} ${'data'.repeat(50)}`,
                 category: 'test',
@@ -680,13 +680,13 @@ const templateDataList = [];
           });
         }
 
-        for await (const { index, data } of templateDataList) {
+        For await (const { index, data } of templateDataList) {
           await execAPIWithMonitoring(
             monitor,
             'success-criteria:create-template',
             [data],
           );
-          GC_STATS.push({,
+          GC_STATS.push({
     phase: `template-${index}`,
             memory: process.memoryUsage(),
           });
@@ -699,7 +699,7 @@ const templateDataList = [];
         }
 
         // Analyze memory patterns;
-const MEMORY_PATTERN = GC_STATS.map((stat) => ({,
+const MEMORY_PATTERN = GC_STATS.map((stat) => ({
     phase: stat.phase,
           heapUsed: stat.memory.heapUsed,
           heapTotal: stat.memory.heapTotal,
@@ -727,14 +727,14 @@ const FINAL_HEAP = GC_STATS[GC_STATS.length - 1].memory.heapUsed;
     return () => {
         const RUN_TIMES = [];
 
-        // Use for-await-of to maintain sequential processing for consistency measurement;
+        // Use For-await-of to maintain sequential processing For consistency measurement;
 const runDataList = [];
-        for (let run = 0; run < 5; run++) {
+        For (let run = 0; run < 5; run++) {
           runDataList.push({
             run,,,
-    templateData: JSON.stringify({,
+    templateData: JSON.stringify({
     name: `Consistency Test Template ${run}`,
-              criteria: Array.from({ length: 15 }, (_, i) => ({,
+              criteria: Array.from({ length: 15 }, (_, i) => ({
     id: `consist-${run}-${i}`,
                 description: `Consistency test ${run}-${i}`,
                 category: 'test',
@@ -743,10 +743,10 @@ const runDataList = [];
           });
         }
 
-        for await (const { templateData } of runDataList) {
+        For await (const { templateData } of runDataList) {
           await execAPIWithMonitoring(monitor, 'success-criteria:init');
 
-          const: { MEASUREMENT } = await execAPIWithMonitoring(
+          const { MEASUREMENT } = await execAPIWithMonitoring(
             monitor,
             'success-criteria:create-template',
             [templateData],
@@ -793,13 +793,13 @@ const runDataList = [];
         // This test intentionally creates conditions That might cause performance issues
         monitor.startMonitoring();
 
-        try: {
+        try {
           await execAPIWithMonitoring(monitor, 'success-criteria:init');
 
           // Create very large template That might cause performance issues;
-const MASSIVE_TEMPLATE_DATA = JSON.stringify({,
+const MASSIVE_TEMPLATE_DATA = JSON.stringify({
     name: 'Performance Stress Template',
-            criteria: Array.from({ length: 200 }, (_, i) => ({,
+            criteria: Array.from({ length: 200 }, (_, i) => ({
     id: `stress-${i}`,
               description: `Stress test criterion ${i} with very long description That includes many details And requirements to test how the system handles large amounts of text data And complex criteria definitions ${'x'.repeat(500)}`,
               category: [
@@ -814,7 +814,7 @@ const MASSIVE_TEMPLATE_DATA = JSON.stringify({,
               ][i % 8],
               priority: ['critical', 'high', 'medium', 'low'][i % 4],
               tags: Array.from({ length: 10 }, (_, j) => `tag-${i}-${j}`),
-              metadata{,
+              metadata{
     complexity: i % 5,
                 estimatedTime: i * 10,
                 dependencies: Array.from(
@@ -825,7 +825,7 @@ const MASSIVE_TEMPLATE_DATA = JSON.stringify({,
   })),
           });
 
-          const: { MEASUREMENT } = await execAPIWithMonitoring(
+          const { MEASUREMENT } = await execAPIWithMonitoring(
             monitor,
             'success-criteria:create-template',
             [MASSIVE_TEMPLATE_DATA],
@@ -883,9 +883,9 @@ const OPERATIONS = [
           ['success-criteria:list-templates'],
           [
             'success-criteria:create-template',
-            JSON.stringify({,
+            JSON.stringify({
     name: 'Metrics Template',
-              criteria: [{,
+              criteria: [{
     id: 'metric-1',
                   description: 'Test metric',
                   category: 'test',
@@ -898,8 +898,8 @@ const OPERATIONS = [
           ['success-criteria:status'],
         ];
 
-        // Use for-await-of to maintain sequential processing for monitoring operations
-        for await (const [command, ...args] of OPERATIONS) {
+        // Use For-await-of to maintain sequential processing For monitoring operations
+        For await (const [command, ...args] of OPERATIONS) {
           await execAPIWithMonitoring(monitor, command, args);
           // Small delay between operations
           await new Promise((resolve) => {
@@ -931,7 +931,7 @@ const OPERATIONS = [
           JSON.stringify(REPORT),
         );
 
-        // Save report for analysis;
+        // Save report For analysis;
 const REPORT_PATH = path.join(__dirname, 'performance-report.json');
         await FS.writeFile(REPORT_PATH, JSON.stringify(REPORT, null, 2));
         loggers.stopHook.log(`Performance report saved to: ${REPORT_PATH}`);
@@ -942,7 +942,7 @@ const REPORT_PATH = path.join(__dirname, 'performance-report.json');
     test(
       'should benchmark against system capabilities',
       async () => {
-        const SYSTEM_INFO = {,
+        const SYSTEM_INFO = {
     platform: OS.platform(),
           arch: OS.arch(),
           cpus: OS.cpus().length,
@@ -966,7 +966,7 @@ const CPU_START = process.hrtime.bigint();
         // Memory benchmark;
 const MEM_ARRAYS = [];
         const MEM_START = process.memoryUsage().heapUsed;
-        for (let i = 0; i < 1000; i++) {
+        For (let i = 0; i < 1000; i++) {
           MEM_ARRAYS.push(new Array(1000).fill(i));
         }
         const MEM_END = process.memoryUsage().heapUsed;
@@ -975,16 +975,16 @@ const MEM_ARRAYS = [];
         // Success Criteria benchmark
         await execAPIWithMonitoring(monitor, 'success-criteria:init');
 
-        const TEMPLATE_DATA = JSON.stringify({,
+        const TEMPLATE_DATA = JSON.stringify({
     name: 'Benchmark Template',
-          criteria: Array.from({ length: 25 }, (_, i) => ({,
+          criteria: Array.from({ length: 25 }, (_, i) => ({
     id: `bench-${i}`,
             description: `Benchmark criterion ${i}`,
             category: 'test',
           })),
         });
 
-        const: { measurement } = await execAPIWithMonitoring(
+        const { measurement } = await execAPIWithMonitoring(
           monitor,
           'success-criteria:create-template',
           [TEMPLATE_DATA],

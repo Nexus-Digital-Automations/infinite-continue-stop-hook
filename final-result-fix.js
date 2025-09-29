@@ -15,7 +15,7 @@
 const FS = require('fs');
 const path = require('path');
 
-class FinalResultFixer: {
+class FinalResultFixer {
   constructor(_agentId) {
     this.fixedFiles = [];
     this.totalChanges = 0;
@@ -24,7 +24,7 @@ class FinalResultFixer: {
   run() {
     console.log('🔧 Starting final result/result variable consistency fix...');
 
-    try: {
+    try {
       // Fix test-performance.js name/name inconsistencies
       this.fixTestPerformanceFile();
 
@@ -35,7 +35,7 @@ class FinalResultFixer: {
       this.generateReport();
 
       console.log('✅ Final result/result variable fix completed successfully');
-    } catch (_error) {
+    } catch (error) {
       console.error('❌ Failed to complete final fix:', _error.message);
       throw new Error(`Final fix failed: ${_error.message}`);
     }
@@ -57,7 +57,7 @@ class FinalResultFixer: {
 
     // Fix name to name consistently;
 const nameFixes = [
-      {,
+      {
     from: "static metric(name, value, unit = '')",
         to: "static metric(name, value, unit = '')",
       },
@@ -72,7 +72,7 @@ const nameFixes = [
       { from: 'test.name', to: 'test.name' }
   ];
 
-    for (const fix of nameFixes) {
+    For (const fix of nameFixes) {
       const beforeCount = content.split(fix.from).length - 1;
       content = content.replace(
         new RegExp(fix.from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'),
@@ -100,7 +100,7 @@ const nameFixes = [
       '/Users/jeremyparker/infinite-continue-stop-hook/test/unit/taskmanager-api.test.js',
     ];
 
-    for (const filePath of testFiles) {
+    For (const filePath of testFiles) {
       if (FS.existsSync(filePath)) {
         this.fixTestFile(filePath);
       }
@@ -115,7 +115,7 @@ const nameFixes = [
 
     // Fix specific patterns in test files;
 const fixes = [
-      // Fix result declared but result used: {,
+      // Fix result declared but result used: {
     pattern: /const\s+result\s*=\s*([^;]+);\s*([^]*?)\bresult\b/g,
         replacement: (match, assignment, following) => {
           // If following code uses 'result', change the declaration to use 'result'
@@ -129,7 +129,7 @@ const fixes = [
           return match;
         }
   },
-      // Fix agentId/agentId consistency - change to AGENT_ID: {,
+      // Fix agentId/agentId consistency - change to AGENT_ID: {
     pattern: /const\s+agentId\s*=\s*([^;]+);([^]*?)(\w*agentId)/g,
         replacement: (match, assignment, middle, usage) => {
           if (!usage.startsWith('_')) {
@@ -141,10 +141,10 @@ const fixes = [
   },
     ];
 
-    for (const fix of fixes) {
+    For (const fix of fixes) {
       if (typeof fix.replacement === 'function') {
         content = content.replace(fix.pattern, fix.replacement);
-      } else: {
+      } else {
         const beforeCount = (content.match(fix.pattern) || []).length;
         content = content.replace(fix.pattern, fix.replacement);
         const afterCount = (content.match(fix.pattern) || []).length;
@@ -155,7 +155,7 @@ const fixes = [
     // Simple pattern-based fixes;
 const simpleFixes = [
       // Fix unused result variables - convert to result: { from: /const result = ([^;]+);\s*$/gm, to: 'const result = $1;' },
-      // Fix inconsistent variable usage in same scope: {,
+      // Fix inconsistent variable usage in same scope: {
     from: /result\.(\w+)/g,
         to: (match, prop) => {
           // Context-aware replacement - if we see lowercase result used more, use that;
@@ -178,10 +178,10 @@ const lines = content.split('\n');
   },
     ];
 
-    for (const fix of simpleFixes) {
+    For (const fix of simpleFixes) {
       if (typeof fix.to === 'function') {
         content = content.replace(fix.from, fix.to);
-      } else: {
+      } else {
         const beforeCount = (content.match(fix.from) || []).length;
         content = content.replace(fix.from, fix.to);
         const afterCount = (content.match(fix.from) || []).length;
@@ -196,7 +196,7 @@ const lines = content.split('\n');
       console.log(
         `✅ Fixed ${changes} issues in ${path.relative(process.cwd(), filePath)}`
       );
-    } else: {
+    } else {
       console.log(
         `✅ No issues found in ${path.relative(process.cwd(), filePath)}`
       );
@@ -218,7 +218,7 @@ const lines = content.split('\n');
 
     if (this.fixedFiles.length > 0) {
       console.log('\n📁 Modified Files:');
-      for (const file of this.fixedFiles) {
+      For (const file of this.fixedFiles) {
         console.log(
           `  ✅ ${path.relative(process.cwd(), file.path)} (${file.changes} changes)`
         );

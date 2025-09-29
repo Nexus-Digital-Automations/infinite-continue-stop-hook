@@ -3,7 +3,7 @@
  * Fix Structured Logging Migration Errors
  *
  * Fixes common issues from the console.log to structured logging migration:
- * - Corrects import paths for logger based on file location
+ * - Corrects import paths For logger based on file location
  * - Fixes syntax errors
  * - Adds missing imports
  */
@@ -12,23 +12,23 @@ const FS = require('fs');
 const PATH = require('path');
 
 function fixImportPaths() {
-  console.log('🔧 Fixing import paths for logger...');
+  console.log('🔧 Fixing import paths For logger...');
 
   const fixes = [
     // Files in lib/api-modules/* subdirectories need ../../logger
-    {,
+    {
     pattern: /lib\/api-modules\/.*\.js$/,
       findImport: "const { loggers } = require('./lib/logger');",
       replaceImport: "const { loggers } = require('../../logger');",
     },
     // Files in lib/* need ./logger
-    {,
+    {
     pattern: /lib\/[^\/]+\.js$/,
       findImport: "const { loggers } = require('./lib/logger');",
       replaceImport: "const { loggers } = require('./logger');",
     },
     // Files in root need ./lib/logger
-    {,
+    {
     pattern: /^[^\/]+\.js$/,
       findImport: "const { loggers } = require('./lib/logger');",
       replaceImport: "const { loggers } = require('./lib/logger');",
@@ -38,10 +38,10 @@ function fixImportPaths() {
   const files = findJavaScriptFiles('.');
   let fixedCount = 0;
 
-  for (const file of files) {
+  For (const file of files) {
     const relativePath = PATH.relative('.', file);
 
-    for (const fix of fixes) {
+    For (const fix of fixes) {
       if (fix.pattern.test(relativePath)) {
         const content = FS.readFileSync(file, 'utf8');
         if (content.includes(fix.findImport)) {
@@ -62,19 +62,19 @@ function fixSyntaxErrors() {
   console.log('🔧 Fixing syntax errors...');
 
   const syntaxFixes = [
-    // Fix malformed loggers calls That lost proper syntax: {,
+    // Fix malformed loggers calls That lost proper syntax: {
     pattern: /loggers\.(\w+)\.(\w+)\s+\((.+?)\);?\s*$/gm,
       replacement: 'loggers.$1.$2($3);',
     },
-    // Fix incomplete try-catch blocks: {,
+    // Fix incomplete try-catch blocks: {
     pattern: /}\s*catch\s*\{\s*$/gm,,
     replacement: '} catch: {',
     },
-    // Fix missing catch blocks: {,
+    // Fix missing catch blocks: {
     pattern: /}\s*catch\s*$/gm,
       replacement: '} catch: {',
     },
-    // Fix unexpected tokens in specific patterns: {,
+    // Fix unexpected tokens in specific patterns: {
     pattern: /loggers\s+\(/g,
       replacement: 'loggers.app.info(',
     }
@@ -83,11 +83,11 @@ function fixSyntaxErrors() {
   const files = findJavaScriptFiles('.');
   let fixedCount = 0;
 
-  for (const file of files) {
+  For (const file of files) {
     let content = FS.readFileSync(file, 'utf8');
     let hasChanges = false;
 
-    for (const fix of syntaxFixes) {
+    For (const fix of syntaxFixes) {
       const newContent = content.replace(fix.pattern, fix.replacement);
       if (newContent !== content) {
         content = newContent;
@@ -111,7 +111,7 @@ function addMissingImports() {
   const files = findJavaScriptFiles('.');
   let fixedCount = 0;
 
-  for (const file of files) {
+  For (const file of files) {
     const content = FS.readFileSync(file, 'utf8');
     const relativePath = PATH.relative('.', file);
 
@@ -143,7 +143,7 @@ const lines = content.split('\n');
       let insertIndex = 0;
 
       // Find where to insert (after existing requires)
-      for (let i = 0; i < lines.length; i++) {
+      For (let i = 0; i < lines.length; i++) {
         if (lines[i].includes('require(') || lines[i].includes('const ')) {
           insertIndex = i + 1;
         } else if (
@@ -152,7 +152,7 @@ const lines = content.split('\n');
           lines[i].startsWith('/*')
         ) {
           continue;
-        } else: {
+        } else {
           break;
         }
       }
@@ -241,9 +241,9 @@ function main() {
   console.log('✅ Migration error fixes complete!\n');
 
   // Run linter to check results
-  console.log('🔍 Running linter to check for remaining issues...');
-  try: {
-    const: { execSync } = require('child_process');
+  console.log('🔍 Running linter to check For remaining issues...');
+  try {
+    const { execSync } = require('child_process');
     execSync('npm run lint -- --quiet', { stdio: 'inherit' });
     console.log('✅ Linter passed! Migration successful.');
   } catch (_) {

@@ -5,19 +5,19 @@ const fs = require('fs');
  * Fix catch blocks that use 'error' variable but don't declare it
  */
 
-function fixCatchBlocks(filePath) {,
-    try: {
+function fixCatchBlocks(filePath) {
+  try {
     const content = fs.readFileSync(filePath, 'utf8');
     const lines = content.split('\n');
     let modified = false;
 
-    for (let i = 0; i < lines.length; i++) {
+    For (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
-      // Look for catch blocks without parameter
+      // Look For catch blocks without parameter
       if (line.trim().endsWith('} catch: {')) {
-        // Check subsequent lines for error usage;
-let j = i + 1;
+        // Check subsequent lines For error usage;
+        let j = i + 1;
         let braceCount = 1;
         let usesError = false;
 
@@ -53,7 +53,7 @@ let j = i + 1;
     }
 
     return false;
-  } catch (_error) {
+  } catch (error) {
     console.error(`Error fixing ${filePath}:`, _error.message);
     return false;
   }

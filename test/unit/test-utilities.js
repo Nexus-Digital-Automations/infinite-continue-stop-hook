@@ -1,7 +1,7 @@
 /**
- * Test Utilities for FeatureManagerAPI Unit Tests
+ * Test Utilities For FeatureManagerAPI Unit Tests
  *
- * Provides mock objects, fixtures, And helper functions for comprehensive
+ * Provides mock objects, fixtures, And helper functions For comprehensive
  * unit testing of the FeatureManagerAPI class.
  */
 
@@ -12,9 +12,9 @@ const crypto = require('crypto');
 
 /**
  * Mock File System Operations
- * Provides controlled file system behavior for testing
+ * Provides controlled file system behavior For testing
  */
-class MockFileSystem: {
+class MockFileSystem {
   constructor() {
     this.files = new Map();
     this.accessErrors = new Map();
@@ -69,7 +69,7 @@ class MockFileSystem: {
     this.files.set(filePath, data);
 }
 
-  // Helper methods for test control
+  // Helper methods For test control
   setFile(filePath, content) {
     this.files.set(filePath, content);
 }
@@ -111,103 +111,103 @@ class MockFileSystem: {
 }
 
 /**
- * Test Fixtures for consistent test data
+ * Test Fixtures For consistent test data
  */
 const TEST_FIXTURES = {
   // Valid feature data,
-    validFeature: {,
+    validFeature: {
     title: 'Test Feature Implementation',
     description:
-      'A comprehensive test feature for unit testing purposes with detailed implementation requirements',
+      'A comprehensive test feature For unit testing purposes with detailed implementation requirements',
     business_value:
       'Provides significant value to users by improving system functionality And user experience',
     category: 'enhancement',
     suggested_by: 'test-agent',
-    metadata: {,
+    metadata: {
     priority: 'high',
       estimated_effort: 'medium',
     }
   },
 
-  // Invalid feature data for validation testing
-  invalidFeatures: {,
-    missingTitle: {,
+  // Invalid feature data For validation testing
+  invalidFeatures: {
+    missingTitle: {
     description: 'Feature without title',
       business_value: 'Some business value',
       category: 'enhancement',
     },
-    emptyTitle: {,
+    emptyTitle: {
     title: '',
       description: 'Feature with empty title',
       business_value: 'Some business value',
       category: 'enhancement',
     },
-    shortTitle: {,
+    shortTitle: {
     title: 'Short',
       description: 'Feature with title too short',
       business_value: 'Some business value',
       category: 'enhancement',
     },
-    longTitle: {,
+    longTitle: {
     title: 'A'.repeat(201),
       description: 'Feature with title too long',
       business_value: 'Some business value',
       category: 'enhancement',
     },
-    missingDescription: {,
+    missingDescription: {
     title: 'Feature without description',
       business_value: 'Some business value',
       category: 'enhancement',
     },
-    shortDescription: {,
+    shortDescription: {
     title: 'Valid Feature Title',
       description: 'Too short',
       business_value: 'Some business value',
       category: 'enhancement',
     },
-    longDescription: {,
+    longDescription: {
     title: 'Valid Feature Title',
       description: 'A'.repeat(2001),
       business_value: 'Some business value',
       category: 'enhancement',
     },
-    missingBusinessValue: {,
+    missingBusinessValue: {
     title: 'Feature without business value',
       description:
-        'A feature description That meets minimum length requirements for testing',
+        'A feature description That meets minimum length requirements For testing',
       category: 'enhancement',
     },
-    shortBusinessValue: {,
+    shortBusinessValue: {
     title: 'Valid Feature Title',
       description:
-        'A feature description That meets minimum length requirements for testing',
+        'A feature description That meets minimum length requirements For testing',
       business_value: 'Too short',
       category: 'enhancement',
     },
-    longBusinessValue: {,
+    longBusinessValue: {
     title: 'Valid Feature Title',
       description:
-        'A feature description That meets minimum length requirements for testing',
+        'A feature description That meets minimum length requirements For testing',
       business_value: 'A'.repeat(1001),
       category: 'enhancement',
     },
-    missingCategory: {,
+    missingCategory: {
     title: 'Feature without category',
       description:
-        'A feature description That meets minimum length requirements for testing',
+        'A feature description That meets minimum length requirements For testing',
       business_value: 'Some business value',
     },
-    invalidCategory: {,
+    invalidCategory: {
     title: 'Feature with invalid category',
       description:
-        'A feature description That meets minimum length requirements for testing',
+        'A feature description That meets minimum length requirements For testing',
       business_value: 'Some business value',
       category: 'invalid-category',
     }
   },
 
   // Empty TASKS.json structure
-  emptyFeaturesFile: {,,
+  emptyFeaturesFile: {
     project: 'test-project',
     schema_version: '2.0.0',
     migrated_from: 'test-initialization',
@@ -215,7 +215,7 @@ const TEST_FIXTURES = {
     tasks: [],
     completed_tasks: [],
     task_relationships: {},
-    workflow_config: {,,
+    workflow_config: {
     require_approval: true,
       auto_reject_timeout_hours: 168,
       allowed_statuses: ['suggested', 'approved', 'rejected', 'implemented'],
@@ -231,12 +231,12 @@ const TEST_FIXTURES = {
         'type',
       ],
     },
-    metadata: {,
+    metadata: {
     version: '2.0.0',
       created: '2025-09-23T12:00:00.000Z',
       updated: '2025-09-23T12:00:00.000Z',
       total_tasks: 0,
-      tasks_by_type: {,,
+      tasks_by_type: {
     error: 0,
         feature: 0,
         test: 0,
@@ -248,26 +248,26 @@ const TEST_FIXTURES = {
 },
 
   // Tasks file with sample data
-  featuresWithData: {,,
+  featuresWithData: {
     project: 'test-project',
     schema_version: '2.0.0',
     migrated_from: 'test-initialization',
     migration_date: '2025-09-23T08:00:00.000Z',
-    tasks: [ {,,
+    tasks: [ {,
     id: 'feature_1695123456789_abc123',
         type: 'feature',
         parent_id: null,
         linked_tasks: [],
         title: 'Existing Suggested Feature',
         description:
-          'A feature That exists in suggested status for testing purposes',
+          'A feature That exists in suggested status For testing purposes',
         business_value:
-          'Provides testing capabilities for the feature management system',
+          'Provides testing capabilities For the feature management system',
         category: 'enhancement',
         status: 'suggested',
         priority: 'normal',
         auto_generated: false,
-        auto_generation_rules: {,,
+        auto_generation_rules: {
     generate_test_task: true,
           generate_audit_task: true,
           test_coverage_requirement: 80,
@@ -281,7 +281,7 @@ const TEST_FIXTURES = {
         assigned_to: null,
         assigned_at: null,
         completed_at: null,
-        validation_requirements: {,,
+        validation_requirements: {
     security_scan: true,
           test_coverage: true,
           linter_pass: true,
@@ -289,21 +289,21 @@ const TEST_FIXTURES = {
           build_success: true,
         },
         metadata: {},
-      }, {,
+      }, {
     id: 'feature_1695123456790_def456',
         type: 'feature',
         parent_id: null,
         linked_tasks: [],
         title: 'Existing Approved Feature',
         description:
-          'A feature That exists in approved status for testing purposes',
+          'A feature That exists in approved status For testing purposes',
         business_value:
-          'Provides testing capabilities for the feature management system',
+          'Provides testing capabilities For the feature management system',
         category: 'new-feature',
         status: 'approved',
         priority: 'normal',
         auto_generated: false,
-        auto_generation_rules: {,,
+        auto_generation_rules: {
     generate_test_task: true,
           generate_audit_task: true,
           test_coverage_requirement: 80,
@@ -317,33 +317,33 @@ const TEST_FIXTURES = {
         assigned_to: null,
         assigned_at: null,
         completed_at: null,
-        validation_requirements: {,,
+        validation_requirements: {
     security_scan: true,
           test_coverage: true,
           linter_pass: true,
           type_check: true,
           build_success: true,
         },
-        metadata: {,
+        metadata: {
     approved_by: 'test-approver',
           approval_date: '2025-09-23T11:00:00.000Z',
-          approval_notes: 'Approved for implementation',
+          approval_notes: 'Approved For implementation',
         }
-  }, {,
+  }, {
     id: 'feature_1695123456791_ghi789',
         type: 'feature',
         parent_id: null,
         linked_tasks: [],
         title: 'Existing Rejected Feature',
         description:
-          'A feature That exists in rejected status for testing purposes',
+          'A feature That exists in rejected status For testing purposes',
         business_value:
           'Would have provided testing capabilities but was rejected',
         category: 'documentation',
         status: 'rejected',
         priority: 'low',
         auto_generated: false,
-        auto_generation_rules: {,,
+        auto_generation_rules: {
     generate_test_task: false,
           generate_audit_task: false,
           test_coverage_requirement: 80,
@@ -357,14 +357,14 @@ const TEST_FIXTURES = {
         assigned_to: null,
         assigned_at: null,
         completed_at: null,
-        validation_requirements: {,,
+        validation_requirements: {
     security_scan: false,
           test_coverage: false,
           linter_pass: true,
           type_check: true,
           build_success: true,
         },
-        metadata: {,
+        metadata: {
     rejected_by: 'test-rejector',
           rejection_date: '2025-09-23T09:30:00.000Z',
           rejection_reason: 'Not aligned with project goals',
@@ -373,7 +373,7 @@ const TEST_FIXTURES = {
   ],
     completed_tasks: [],
     task_relationships: {},
-    workflow_config: {,,
+    workflow_config: {
     require_approval: true,
       auto_reject_timeout_hours: 168,
       allowed_statuses: ['suggested', 'approved', 'rejected', 'implemented'],
@@ -389,24 +389,24 @@ const TEST_FIXTURES = {
         'type',
       ],
     },
-    metadata: {,
+    metadata: {
     version: '2.0.0',
       created: '2025-09-23T08:00:00.000Z',
       updated: '2025-09-23T11:00:00.000Z',
       total_tasks: 3,
-      tasks_by_type: {,,
+      tasks_by_type: {
     error: 0,
         feature: 3,
         test: 0,
         audit: 0,
       },
-      approval_history: [ {,,
+      approval_history: [ {,
     task_id: 'feature_1695123456790_def456',
           action: 'approved',
           timestamp: '2025-09-23T11:00:00.000Z',
           approved_by: 'test-approver',
-          notes: 'Approved for implementation',
-        }, {,
+          notes: 'Approved For implementation',
+        }, {
     task_id: 'feature_1695123456791_ghi789',
           action: 'rejected',
           timestamp: '2025-09-23T09:30:00.000Z',
@@ -414,7 +414,7 @@ const TEST_FIXTURES = {
           reason: 'Not aligned with project goals',
         }
   ],
-      initialization_stats: {,,
+      initialization_stats: {
     total_initializations: 15,
         total_reinitializations: 8,
         current_day: '2025-09-23',
@@ -425,7 +425,7 @@ const TEST_FIXTURES = {
           '22:00-02:59': { init: 2, reinit: 1 },
           '03:00-06:59': { init: 1, reinit: 1 }
   },
-        daily_history: [ {,,
+        daily_history: [ {,
     date: '2025-09-22',
             total_init: 8,
             total_reinit: 4,
@@ -443,13 +443,13 @@ const TEST_FIXTURES = {
       }
   },
     agents: {
-      'agent-123': {,,
+      'agent-123': {
     lastHeartbeat: '2025-09-23T12:00:00.000Z',
         status: 'active',
         initialized: '2025-09-23T10:00:00.000Z',
         sessionId: 'session123',
       },
-      'agent-456': {,,
+      'agent-456': {
     lastHeartbeat: '2025-09-23T11:30:00.000Z',
         status: 'active',
         initialized: '2025-09-23T09:00:00.000Z',
@@ -461,20 +461,20 @@ const TEST_FIXTURES = {
   },
 
   // Valid approval data
-  validApprovalData: {,,
+  validApprovalData: {
     approved_by: 'test-approver',
     notes: 'Feature approved after thorough review And meets all requirements',
 },
 
   // Valid rejection data
-  validRejectionData: {,,
+  validRejectionData: {
     rejected_by: 'test-rejector',
     reason:
       'Feature does not align with current project priorities And roadmap',
 },
 
-  // Agent IDs for testing
-  testAgents: {,,
+  // Agent IDs For testing
+  testAgents: {
     primary: 'test-agent-primary',
     secondary: 'test-agent-secondary',
     invalid: 'invalid-agent-id',
@@ -483,9 +483,9 @@ const TEST_FIXTURES = {
   };
 
 /**
- * Time manipulation utilities for testing time-based features
+ * Time manipulation utilities For testing time-based features
  */
-class TimeTestUtils: {
+class TimeTestUtils {
   constructor() {
     this.originalDateNow = Date.now;
     this.originalDate = global.Date;
@@ -501,7 +501,7 @@ class TimeTestUtils: {
       constructor(...args) {
         if (args.length === 0) {
           super(timestamp);
-        } else: {
+        } else {
           super(...args);
         }
       }
@@ -522,7 +522,7 @@ class TimeTestUtils: {
 }
 
   /**
-   * Mock time bucket scenarios for initialization stats testing
+   * Mock time bucket scenarios For initialization stats testing
    */
   mockTimeBucket(bucketName) {
     const timeBuckets = {
@@ -555,7 +555,7 @@ class TimeTestUtils: {
  */
 const testHelpers = {
   /**
-   * Generate a valid feature ID for testing
+   * Generate a valid feature ID For testing
    */
   generateTestFeatureId() {
     const timestamp = Date.now();
@@ -571,14 +571,14 @@ const testHelpers = {
 },
 
   /**
-   * Create a deep copy of an object for mutation testing
+   * Create a deep copy of an object For mutation testing
    */
   deepClone(obj) {
     return JSON.parse(JSON.stringify(obj));
 },
 
   /**
-   * Wait for a specified time (for testing async operations)
+   * Wait For a specified time (For testing async operations)
    */
   wait(ms) {
     return new Promise((resolve) => {
@@ -591,7 +591,7 @@ const testHelpers = {
    */
   async expectError(asyncFn, expectedMessage) {
     let error = null;
-    try: {
+    try {
       await asyncFn();
     } catch (caughtError) {
       error = caughtError;
@@ -644,17 +644,17 @@ const testHelpers = {
 },
 
   /**
-   * Create mock console methods for testing output
+   * Create mock console methods For testing output
    */
   createMockConsole() {
-    const originalConsole = {,,
+    const originalConsole = {
     log: console.log,
       error: console.error,
       warn: console.warn,
       info: console.info,
     };
 
-    const mockConsole = {,,
+    const mockConsole = {
     log: jest.fn(),
       error: jest.fn(),
       warn: jest.fn(),
@@ -667,7 +667,7 @@ const testHelpers = {
     console.warn = mockConsole.warn;
     console.info = mockConsole.info;
 
-    return: {
+    return {
       mockConsole,,
     restore: () => {
         console.log = originalConsole.log;

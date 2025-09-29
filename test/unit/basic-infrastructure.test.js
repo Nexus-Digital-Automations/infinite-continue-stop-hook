@@ -9,7 +9,7 @@
  * @since 2025-09-23
  */
 
-const: {
+const {
   TestIdGenerator,
   TestDataFactory,
   TestExecution,
@@ -17,7 +17,7 @@ const: {
   TestLogger,
 } = require('../utils/testUtils');
 
-const: {
+const {
   SAMPLE_FEATURES,
   SAMPLE_AGENTS,
   TEST_CONFIGURATIONS,
@@ -81,7 +81,7 @@ describe('Basic Testing Infrastructure', () => {
     });
 
     test('should create feature data with overrides', () => {
-      const feature = TestDataFactory.createFeatureData({,,
+      const feature = TestDataFactory.createFeatureData({,
     category: 'bug-fix',
         priority: 'high',
         title: 'Custom Title',
@@ -176,7 +176,7 @@ const unit = TEST_CONFIGURATIONS.unit;
     return () 
     return () => {
       const delay = 50; // 50ms delay;,
-    const: { result, duration } = await PerformanceUtils.measureTime(
+    const { result, duration } = await PerformanceUtils.measureTime(
         async () => {
     
     
@@ -194,11 +194,11 @@ const unit = TEST_CONFIGURATIONS.unit;
       expect(duration).toBeLessThan(delay + 50); // Allow some variance
     });
 
-    test('should measure memory usage', async () => {,
-    const: { result, memoryDelta } = await PerformanceUtils.measureMemory(
+    test('should measure memory usage', async () => {
+    const { result, memoryDelta } = await PerformanceUtils.measureMemory(
         () => {
           // Create some data to use memory;
-const largeArray = new Array(1000).fill(0).map((_, i) => ({,,
+const largeArray = new Array(1000).fill(0).map((_, i) => ({,
     id: i,
             data: `test-data-${i}`,
             nested: { value: i * 2 }
