@@ -1,8 +1,12 @@
+/* eslint-disable no-console */
+
 /**
  * Structured Logging and Observability Validation Script
  *
  * Validates implementation against 25-point success criteria For:
  * Feature: Add Structured Logging and Observability (feature_1759082400000_struct_logging)
+ *
+ * Console output is intentional for validation reporting and CLI feedback.
  */
 
 const fs = require('fs');
