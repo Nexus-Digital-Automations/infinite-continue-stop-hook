@@ -239,7 +239,7 @@ function fixCatchBlocksInFile(filePath) {
 
     return false;
   } catch (_error) {
-    console.error(`Error fixing ${ filePath: _filePath }:`, _error.message);
+    console.error(`Error fixing ${filePath}:`, _error.message);
     return false;
   }
 }

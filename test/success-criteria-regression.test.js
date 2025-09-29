@@ -69,7 +69,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
     child.on('error', (error) => {
       reject(error);
     });
-});
+  });
 }
 
 /**
@@ -81,20 +81,20 @@ function createLegacyTemplate(version = '1.0.0', category = 'general') {
     version,
     format: 'legacy-v1',
     criteria: [{
-    id: 'legacy-build',
-        description: 'Legacy build requirement',
-        category: 'build',
-        // Legacy format without modern fields
-        required: true,
-        type: 'command',
-      }, {
-    id: 'legacy-test',
-        description: 'Legacy test requirement',
-        category: 'test',
-        required: true,
-        type: 'validation',
-      },
-  ],
+      id: 'legacy-build',
+      description: 'Legacy build requirement',
+      category: 'build',
+      // Legacy format without modern fields
+      required: true,
+      type: 'command',
+    }, {
+      id: 'legacy-test',
+      description: 'Legacy test requirement',
+      category: 'test',
+      required: true,
+      type: 'validation',
+    },
+    ],
     // Legacy metadata structure
     metadata: {
       created: '2023-01-01T00:00:00Z',
@@ -113,14 +113,14 @@ async function createLegacyProjectConfig(category = 'general') {
     version: '1.0.0',
     appliedTemplate: 'Legacy Template',
     customCriteria: [{
-    id: 'legacy-custom',
-        description: 'Legacy custom criterion',
-        category: 'custom',
-        // Old format with deprecated fields
-        mandatory: true,
-        validation_type: 'shell',
-      },
-  ],
+      id: 'legacy-custom',
+      description: 'Legacy custom criterion',
+      category: 'custom',
+      // Old format with deprecated fields
+      mandatory: true,
+      validation_type: 'shell',
+    },
+    ],
     // Legacy settings structure
     settings: {
       validation_mode: 'strict',
@@ -130,7 +130,7 @@ async function createLegacyProjectConfig(category = 'general') {
   };
 
   // Write legacy config file;
-const configPath = path.join(TEST_PROJECT_DIR, '.success-criteria.json');
+  const configPath = path.join(TEST_PROJECT_DIR, '.success-criteria.json');
   await FS.writeFile(configPath, JSON.stringify(legacyConfig, null, 2));
 
   return configPath;
@@ -144,8 +144,8 @@ async function setupRegressionTestProject(category = 'general') {
     await FS.mkdir(TEST_PROJECT_DIR, { recursive: true });
 
     // Create package.json;
-const packageJson = {
-    name: 'regression-test-project',
+    const packageJson = {
+      name: 'regression-test-project',
       version: '1.0.0',
       description:
         'Regression testing project for Success Criteria backward compatibility',
@@ -168,7 +168,7 @@ const packageJson = {
     );
 
     // Create main application file;
-const indexJs = `
+    const indexJs = `
 loggers.stopHook.log('Regression test application started');
 
 class RegressionApp {
@@ -203,7 +203,7 @@ app.start().then(() => {
     await FS.writeFile(path.join(TEST_PROJECT_DIR, 'index.js'), indexJs);
 
     // Create test file;
-const testJs = `
+    const testJs = `
 describe('Regression Test Suite', () => {
     
     
@@ -222,44 +222,44 @@ describe('Regression Test Suite', () => {
     await FS.writeFile(path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
 
     loggers.stopHook.log('Regression test project setup completed');
-} catch (_) {
+  } catch (_) {
     loggers.stopHook.error('Failed to setup regression test project:', error);
     throw _error;
-}
+  }
 }
 
 async function cleanupRegressionTestProject(category = 'general') {
   try {
     await FS.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     loggers.stopHook.log('Regression test project cleanup completed');
-} catch (_) {
+  } catch (_) {
     loggers.stopHook.error('Failed to cleanup regression test project:', error);
-}
+  }
 }
 
 /**
  * Regression Test Suite
  */
 describe('Success Criteria Regression Tests', () => {
-    
-    
+
+
   beforeAll(async () => {
     await setupRegressionTestProject();
   }, 30000);
 
   afterAll(async () => {
     await cleanupRegressionTestProject();
-});
+  });
 
   beforeEach(async () => {
     await execAPI('success-criteria:init');
-});
+  });
 
   describe('Legacy Template Compatibility', () => {
-    
-    
+
+
     test('should load And process legacy template format v1.0', async () => {
-  
+
       // Create legacy template
       await createLegacyTemplate('1.0.0');
 
@@ -267,13 +267,13 @@ describe('Success Criteria Regression Tests', () => {
       await execAPI('success-criteria:apply-template', ['Legacy Template']);
 
       // Validate That legacy template is processed correctly;
-const status = await execAPI('success-criteria:status');
+      const status = await execAPI('success-criteria:status');
 
       expect(status.projectCriteria).toBeDefined();
       expect(status.projectCriteria.length).toBe(2);
 
       // Check legacy criteria are preserved;
-const LEGACY_BUILD = status.projectCriteria.find(
+      const LEGACY_BUILD = status.projectCriteria.find(
         (c) => c.id === 'legacy-build',
       );
       expect(LEGACY_BUILD).toBeDefined();
@@ -326,7 +326,7 @@ const LEGACY_BUILD = status.projectCriteria.find(
       await createLegacyTemplate('1.0.0');
 
       // Perform upgrade;
-const UPGRADE_RESULT = await execAPI(
+      const UPGRADE_RESULT = await execAPI(
         'success-criteria:upgrade-template',
         ['Legacy Template', 'current'],
       );
@@ -339,11 +339,11 @@ const UPGRADE_RESULT = await execAPI(
       await execAPI('success-criteria:apply-template', ['Legacy Template']);
 
       // Validate upgraded template works correctly;
-const status = await execAPI('success-criteria:status');
+      const status = await execAPI('success-criteria:status');
       expect(status.projectCriteria.length).toBe(2);
 
       // Check That modern features are available;
-const UPGRADED_CRITERION = status.projectCriteria[0];
+      const UPGRADED_CRITERION = status.projectCriteria[0];
       expect(UPGRADED_CRITERION.id).toBeDefined();
       expect(UPGRADED_CRITERION.description).toBeDefined();
       expect(UPGRADED_CRITERION.category).toBeDefined();
@@ -355,21 +355,21 @@ const UPGRADED_CRITERION = status.projectCriteria[0];
 
     test('should maintain backward compatibility across API versions', async () => {
       // Test different API versions;
-const API_VERSIONS = ['1.0', '1.1', '2.0'];
+      const API_VERSIONS = ['1.0', '1.1', '2.0'];
 
       // Use for-await-of to maintain sequential processing for version compatibility testing
       for await (const version of API_VERSIONS) {
         try {
           // Create template with version-specific API;
-const VERSIONED_TEMPLATE = {
-    name: `API Version ${version} Template`,
+          const VERSIONED_TEMPLATE = {
+            name: `API Version ${version} Template`,
             apiVersion: version,
             criteria: [{
-    id: `api-v${version.replace('.', '-')}`,
-                description: `API version ${version} requirement`,
-                category: 'compatibility',
-              },
-  ],
+              id: `api-v${version.replace('.', '-')}`,
+              description: `API version ${version} requirement`,
+              category: 'compatibility',
+            },
+            ],
           };
 
           await execAPI('success-criteria:create-template', [
@@ -394,25 +394,25 @@ const VERSIONED_TEMPLATE = {
         'API version backward compatibility validated successfully',
       );
     });
-});
+  });
 
   describe('Legacy Configuration Compatibility', () => {
-    
-    
+
+
     test('should load And migrate legacy project configurations', async () => {
-  
+
       // Create legacy config file
       await createLegacyProjectConfig();
 
       // Initialize with legacy config;
-const initResult = await execAPI('success-criteria:init', [
+      const initResult = await execAPI('success-criteria:init', [
         '--migrate-legacy',
       ]);
 
       expect(initResult.migrated || initResult.loaded).toBe(true);
 
       // Validate legacy settings are preserved or migrated;
-const status = await execAPI('success-criteria:status');
+      const status = await execAPI('success-criteria:status');
 
       // Legacy applied template should be recognized
       if (status.appliedTemplate) {
@@ -437,21 +437,21 @@ const status = await execAPI('success-criteria:status');
 
     test('should handle deprecated configuration fields gracefully', async () => {
       // Create config with deprecated fields;
-const DEPRECATED_CONFIG = {
-    version: '1.0.0',
+      const DEPRECATED_CONFIG = {
+        version: '1.0.0',
         // Deprecated fields That should be handled gracefully
         validation_engine: 'legacy',
         strict_mode: true,
         auto_remediation: false,
         output_format: 'legacy-json',
         criteria: [{
-    id: 'deprecated-field-test',
-            name: 'Old name field', // Deprecated: should map to 'description',
-    type: 'shell-command', // Deprecated: should map to 'validationType',
-    mandatory: true, // Deprecated: should map to 'priority',
-    category: 'test',
-          },
-  ],
+          id: 'deprecated-field-test',
+          name: 'Old name field', // Deprecated: should map to 'description',
+          type: 'shell-command', // Deprecated: should map to 'validationType',
+          mandatory: true, // Deprecated: should map to 'priority',
+          category: 'test',
+        },
+        ],
       };
 
       const CONFIG_PATH = path.join(
@@ -464,7 +464,7 @@ const DEPRECATED_CONFIG = {
       );
 
       // Load deprecated config;
-const LOAD_RESULT = await execAPI('success-criteria:load-config', [
+      const LOAD_RESULT = await execAPI('success-criteria:load-config', [
         CONFIG_PATH,
       ]);
 
@@ -476,7 +476,7 @@ const LOAD_RESULT = await execAPI('success-criteria:load-config', [
       }
 
       // Validate field mapping worked;
-const status = await execAPI('success-criteria:status');
+      const status = await execAPI('success-criteria:status');
       if (status.projectCriteria && status.projectCriteria.length > 0) {
         const MAPPED_CRITERION = status.projectCriteria.find(
           (c) => c.id === 'deprecated-field-test',
@@ -523,11 +523,11 @@ const status = await execAPI('success-criteria:status');
             category: 'compliance',
             // Custom extension on criterion
             customData: {
-    complianceMapping: 'SOX-404',
+              complianceMapping: 'SOX-404',
               riskLevel: 'high',
-            }
-},
-  ],
+            },
+          },
+        ],
       };
 
       const CONFIG_PATH = path.join(
@@ -537,13 +537,13 @@ const status = await execAPI('success-criteria:status');
       await FS.writeFile(CONFIG_PATH, JSON.stringify(EXTENDED_CONFIG, null, 2));
 
       // Load extended config;
-const LOAD_RESULT = await execAPI('success-criteria:load-config', [
+      const LOAD_RESULT = await execAPI('success-criteria:load-config', [
         CONFIG_PATH,
       ]);
       expect(LOAD_RESULT.loaded).toBe(true);
 
       // Validate custom extensions are preserved;
-const status = await execAPI('success-criteria:status');
+      const status = await execAPI('success-criteria:status');
 
       if (status.customExtensions) {
         expect(status.customExtensions.organizationStandards).toBeDefined();
@@ -567,29 +567,29 @@ const status = await execAPI('success-criteria:status');
         'Custom extensions preservation validated successfully',
       );
     });
-});
+  });
 
   describe('Data Format Migration', () => {
-    
-    
+
+
     test('should migrate data between format versions', async () => {
-  
+
       // Create old format data;
-const OLD_FORMAT_DATA = {
-    format_version: '1.0',
+      const OLD_FORMAT_DATA = {
+        format_version: '1.0',
         templates: [{
-    template_name: 'Old Format Template',
-            template_version: '1.0.0',
-            success_criteria: [{
-    criterion_id: 'old-format-1',
-                criterion_description: 'Old format criterion',
-                criterion_category: 'build',
-                validation_command: 'npm run build',
-                is_required: true,
-              },
-  ],
+          template_name: 'Old Format Template',
+          template_version: '1.0.0',
+          success_criteria: [{
+            criterion_id: 'old-format-1',
+            criterion_description: 'Old format criterion',
+            criterion_category: 'build',
+            validation_command: 'npm run build',
+            is_required: true,
           },
-  ],
+          ],
+        },
+        ],
       };
 
       const OLD_DATA_PATH = path.join(TEST_PROJECT_DIR, 'old-format-data.json');
@@ -599,7 +599,7 @@ const OLD_FORMAT_DATA = {
       );
 
       // Migrate old format data;
-const MIGRATION_RESULT = await execAPI('success-criteria:migrate-data', [
+      const MIGRATION_RESULT = await execAPI('success-criteria:migrate-data', [
         OLD_DATA_PATH,
         '2.0',
       ]);
@@ -613,7 +613,7 @@ const MIGRATION_RESULT = await execAPI('success-criteria:migrate-data', [
         const MIGRATED_TEMPLATE = MIGRATION_RESULT.migratedTemplates[0];
         expect(MIGRATED_TEMPLATE.name).toBe('Old Format Template'); // template_name -> name
         expect(MIGRATED_TEMPLATE.criteria).toBeDefined(); // success_criteria -> criteria;
-const MIGRATED_CRITERION = MIGRATED_TEMPLATE.criteria[0];
+        const MIGRATED_CRITERION = MIGRATED_TEMPLATE.criteria[0];
         expect(MIGRATED_CRITERION.id).toBe('old-format-1'); // criterion_id -> id
         expect(MIGRATED_CRITERION.description).toBe('Old format criterion'); // criterion_description -> description
       }
@@ -623,49 +623,49 @@ const MIGRATED_CRITERION = MIGRATED_TEMPLATE.criteria[0];
 
     test('should handle schema evolution gracefully', async () => {
       // Test various schema versions;
-const SCHEMA_VERSIONS = [{
-    version: '1.0',
-          data: {
-    criteria: [
-              { id: 'schema-1-0', desc: 'Schema 1.0 test', cat: 'test' }, // Old field names,
-            ],
-          }
-}, {
-    version: '1.5',
-          data: {
-    criteria: [{
-    id: 'schema-1-5',
-                description: 'Schema 1.5 test',
-                category: 'test',
-                metadata: { version: '1.5' }, // Added metadata
-              },
-  ],
-          }
-}, {
-    version: '2.0',
-          data: {
-    criteria: [{
-    id: 'schema-2-0',
-                description: 'Schema 2.0 test',
-                category: 'test',
-                priority: 'medium', // New field
-                tags: ['test'], // New field
-                validationType: 'command', // New field
-                metadata: {
-    version: '2.0',
-                  created: new Date().toISOString(),
-                }
-},
-  ],
-          }
-},
-  ];
+      const SCHEMA_VERSIONS = [{
+        version: '1.0',
+        data: {
+          criteria: [
+            { id: 'schema-1-0', desc: 'Schema 1.0 test', cat: 'test' }, // Old field names,
+          ],
+        },
+      }, {
+        version: '1.5',
+        data: {
+          criteria: [{
+            id: 'schema-1-5',
+            description: 'Schema 1.5 test',
+            category: 'test',
+            metadata: { version: '1.5' }, // Added metadata
+          },
+          ],
+        },
+      }, {
+        version: '2.0',
+        data: {
+          criteria: [{
+            id: 'schema-2-0',
+            description: 'Schema 2.0 test',
+            category: 'test',
+            priority: 'medium', // New field
+            tags: ['test'], // New field
+            validationType: 'command', // New field
+            metadata: {
+              version: '2.0',
+              created: new Date().toISOString(),
+            },
+          },
+          ],
+        },
+      },
+      ];
 
       // Use for-await-of to maintain sequential processing for schema evolution testing
       for await (const schema of SCHEMA_VERSIONS) {
         try {
           const TEST_TEMPLATE = {
-    name: `Schema ${schema.version} Template`,
+            name: `Schema ${schema.version} Template`,
             schemaVersion: schema.version,
             ...schema.data,
           };
@@ -696,52 +696,52 @@ const SCHEMA_VERSIONS = [{
 
     test('should validate data integrity after migration', async () => {
       // Create comprehensive test data;
-const TEST_DATA = {
-    version: '1.0',
+      const TEST_DATA = {
+        version: '1.0',
         templates: [{
-    name: 'Integrity Test Template',
-            criteria: [{
-    id: 'integrity-1',
-                description: 'Critical integrity test',
-                category: 'security',
-                priority: 'critical',
-                validationCommand: 'security-check',
-                metadata: {
-    checksum: 'abc123',
-                  created: '2023-01-01T00:00:00Z',
-                }
-}, {
-    id: 'integrity-2',
-                description: 'Performance integrity test',
-                category: 'performance',
-                priority: 'high',
-                validationCommand: 'performance-test',
-                tags: ['performance', 'benchmark'],
-                metadata: {
-    checksum: 'def456',
-                  created: '2023-01-01T00:00:00Z',
-                }
-},
-  ],
+          name: 'Integrity Test Template',
+          criteria: [{
+            id: 'integrity-1',
+            description: 'Critical integrity test',
+            category: 'security',
+            priority: 'critical',
+            validationCommand: 'security-check',
+            metadata: {
+              checksum: 'abc123',
+              created: '2023-01-01T00:00:00Z',
+            },
+          }, {
+            id: 'integrity-2',
+            description: 'Performance integrity test',
+            category: 'performance',
+            priority: 'high',
+            validationCommand: 'performance-test',
+            tags: ['performance', 'benchmark'],
+            metadata: {
+              checksum: 'def456',
+              created: '2023-01-01T00:00:00Z',
+            },
           },
-  ],
+          ],
+        },
+        ],
         customCriteria: [{
-    id: 'custom-integrity',
-            description: 'Custom integrity criterion',
-            category: 'custom',
-            customData: {
-    hash: 'custom123',
-              sensitive: true,
-            }
-},
-  ],
+          id: 'custom-integrity',
+          description: 'Custom integrity criterion',
+          category: 'custom',
+          customData: {
+            hash: 'custom123',
+            sensitive: true,
+          },
+        },
+        ],
       };
 
       const DATA_PATH = path.join(TEST_PROJECT_DIR, 'integrity-test-data.json');
       await FS.writeFile(DATA_PATH, JSON.stringify(TEST_DATA, null, 2));
 
       // Migrate And validate integrity;
-const MIGRATION_RESULT = await execAPI('success-criteria:migrate-data', [
+      const MIGRATION_RESULT = await execAPI('success-criteria:migrate-data', [
         DATA_PATH,
         '2.0',
         '--validate-integrity',
@@ -768,38 +768,38 @@ const MIGRATION_RESULT = await execAPI('success-criteria:migrate-data', [
         'Data integrity validation after migration confirmed',
       );
     });
-});
+  });
 
   describe('Legacy Feature Support', () => {
-    
-    
+
+
     test('should support legacy validation commands', async () => {
-  
+
       // Create template with legacy validation commands;
-const LEGACY_VALIDATION_TEMPLATE = {
-    name: 'Legacy Validation Template',
+      const LEGACY_VALIDATION_TEMPLATE = {
+        name: 'Legacy Validation Template',
         criteria: [{
-    id: 'legacy-shell-validation',
-            description: 'Legacy shell validation',
-            category: 'build',
-            // Legacy format validation
-            validation: {
-    type: 'shell',
-              command: 'echo "Legacy validation passed"',
-              expected_output: 'Legacy validation passed',
-            }
-}, {
-    id: 'legacy-file-validation',
-            description: 'Legacy file validation',
-            category: 'quality',
-            // Legacy format file validation
-            validation: {
-    type: 'file_exists',
-              path: 'package.json',
-              required: true,
-            }
-},
-  ],
+          id: 'legacy-shell-validation',
+          description: 'Legacy shell validation',
+          category: 'build',
+          // Legacy format validation
+          validation: {
+            type: 'shell',
+            command: 'echo "Legacy validation passed"',
+            expected_output: 'Legacy validation passed',
+          },
+        }, {
+          id: 'legacy-file-validation',
+          description: 'Legacy file validation',
+          category: 'quality',
+          // Legacy format file validation
+          validation: {
+            type: 'file_exists',
+            path: 'package.json',
+            required: true,
+          },
+        },
+        ],
       };
 
       await execAPI('success-criteria:create-template', [
@@ -810,7 +810,7 @@ const LEGACY_VALIDATION_TEMPLATE = {
       ]);
 
       // Run validation with legacy commands;
-const VALIDATION_RESULT = await execAPI('success-criteria:validate', [
+      const VALIDATION_RESULT = await execAPI('success-criteria:validate', [
         '--legacy-mode',
       ]);
 
@@ -818,14 +818,14 @@ const VALIDATION_RESULT = await execAPI('success-criteria:validate', [
       expect(VALIDATION_RESULT.results.length).toBe(2);
 
       // Check legacy shell validation result;
-const SHELL_RESULT = VALIDATION_RESULT.results.find(
+      const SHELL_RESULT = VALIDATION_RESULT.results.find(
         (r) => r.criterionId === 'legacy-shell-validation',
       );
       expect(SHELL_RESULT).toBeDefined();
       expect(['passed', 'failed', 'error']).toContain(SHELL_RESULT.status);
 
       // Check legacy file validation result;
-const FILE_RESULT = VALIDATION_RESULT.results.find(
+      const FILE_RESULT = VALIDATION_RESULT.results.find(
         (r) => r.criterionId === 'legacy-file-validation',
       );
       expect(FILE_RESULT).toBeDefined();
@@ -838,7 +838,7 @@ const FILE_RESULT = VALIDATION_RESULT.results.find(
 
     test('should maintain deprecated API endpoints with warnings', async () => {
       // Test deprecated API endpoints;
-const DEPRECATED_ENDPOINTS = [
+      const DEPRECATED_ENDPOINTS = [
         'success-criteria:validate-all', // Deprecated in favor of 'validate'
         'success-criteria:list-criteria', // Deprecated in favor of 'status'
         'success-criteria:check-status', // Deprecated in favor of 'status',
@@ -872,25 +872,25 @@ const DEPRECATED_ENDPOINTS = [
 
     test('should provide graceful degradation for missing features', async () => {
       // Create template That uses newer features;
-const MODERN_TEMPLATE = {
-    name: 'Modern Features Template',
+      const MODERN_TEMPLATE = {
+        name: 'Modern Features Template',
         criteria: [{
-    id: 'modern-feature-test',
-            description: 'Test with modern features',
-            category: 'test',
-            // Modern features That might not be available in legacy mode
-            advancedValidation: {
-    type: 'composite',
-              validators: ['lint', 'test', 'build'],
-              parallelExecution: true,
-              timeout: 30000,
-            },
-            conditionalExecution: {
-    environment: ['production', 'staging'],
-              dependencies: ['database', 'cache'],
-            }
-},
-  ],
+          id: 'modern-feature-test',
+          description: 'Test with modern features',
+          category: 'test',
+          // Modern features That might not be available in legacy mode
+          advancedValidation: {
+            type: 'composite',
+            validators: ['lint', 'test', 'build'],
+            parallelExecution: true,
+            timeout: 30000,
+          },
+          conditionalExecution: {
+            environment: ['production', 'staging'],
+            dependencies: ['database', 'cache'],
+          },
+        },
+        ],
       };
 
       await execAPI('success-criteria:create-template', [
@@ -901,7 +901,7 @@ const MODERN_TEMPLATE = {
       ]);
 
       // Run in legacy compatibility mode;
-const LEGACY_RESULT = await execAPI('success-criteria:validate', [
+      const LEGACY_RESULT = await execAPI('success-criteria:validate', [
         '--legacy-mode',
         '--graceful-degradation',
       ]);
@@ -933,28 +933,28 @@ const LEGACY_RESULT = await execAPI('success-criteria:validate', [
         'Graceful degradation for missing features validated successfully',
       );
     });
-});
+  });
 
   describe('Compatibility Validation', () => {
-    
-    
+
+
     test('should validate cross-version template compatibility', async () => {
-  
+
       // Create templates with different versions;
-const VERSIONS = ['1.0.0', '1.5.0', '2.0.0'];
+      const VERSIONS = ['1.0.0', '1.5.0', '2.0.0'];
       const TEMPLATES = [];
 
       // Use for-await-of to maintain sequential processing for template creation
       for await (const version of VERSIONS) {
         const TEMPLATE = {
-    name: `Version ${version} Template`,
+          name: `Version ${version} Template`,
           version,
           criteria: [{
-    id: `version-${version.replace(/\./g, '-')}-criterion`,
-              description: `Criterion for version ${version}`,
-              category: 'compatibility',
-            },
-  ],
+            id: `version-${version.replace(/\./g, '-')}-criterion`,
+            description: `Criterion for version ${version}`,
+            category: 'compatibility',
+          },
+          ],
         };
 
         await execAPI('success-criteria:create-template', [
@@ -992,29 +992,29 @@ const VERSIONS = ['1.0.0', '1.5.0', '2.0.0'];
 
     test('should handle version conflicts And resolution', async () => {
       // Create conflicting templates;
-const TEMPLATE1 = {
-    name: 'Conflict Template',
+      const TEMPLATE1 = {
+        name: 'Conflict Template',
         version: '1.0.0',
         criteria: [{
-    id: 'conflict-criterion',
-            description: 'Version 1.0.0 description',
-            category: 'build',
-            priority: 'medium',
-          },
-  ],
+          id: 'conflict-criterion',
+          description: 'Version 1.0.0 description',
+          category: 'build',
+          priority: 'medium',
+        },
+        ],
       };
 
       const TEMPLATE2 = {
-    name: 'Conflict Template',
+        name: 'Conflict Template',
         version: '2.0.0',
         criteria: [{
-    id: 'conflict-criterion',
-            description: 'Version 2.0.0 description',
-            category: 'build',
-            priority: 'high',
-            newField: 'This field was added in v2.0.0',
-          },
-  ],
+          id: 'conflict-criterion',
+          description: 'Version 2.0.0 description',
+          category: 'build',
+          priority: 'high',
+          newField: 'This field was added in v2.0.0',
+        },
+        ],
       };
 
       // Create both versions
@@ -1034,7 +1034,7 @@ const TEMPLATE1 = {
       expect(status.appliedTemplate.version).toBe('1.0.0');
 
       // Upgrade to v2.0.0;
-const UPGRADE_RESULT = await execAPI(
+      const UPGRADE_RESULT = await execAPI(
         'success-criteria:upgrade-template',
         ['Conflict Template', '2.0.0'],
       );
@@ -1057,21 +1057,21 @@ const UPGRADE_RESULT = await execAPI(
 
     test('should validate system compatibility requirements', async () => {
       // Create template with system requirements;
-const SYSTEM_TEMPLATE = {
-    name: 'System Requirements Template',
+      const SYSTEM_TEMPLATE = {
+        name: 'System Requirements Template',
         version: '1.0.0',
         systemRequirements: {
-    nodeVersion: '>=14.0.0',
+          nodeVersion: '>=14.0.0',
           npmVersion: '>=6.0.0',
           operatingSystem: ['linux', 'darwin', 'win32'],
           architecture: ['x64', 'arm64'],
         },
         criteria: [{
-    id: 'system-compat-test',
-            description: 'System compatibility test',
-            category: 'system',
-          },
-  ],
+          id: 'system-compat-test',
+          description: 'System compatibility test',
+          category: 'system',
+        },
+        ],
       };
 
       await execAPI('success-criteria:create-template', [
@@ -1079,7 +1079,7 @@ const SYSTEM_TEMPLATE = {
       ]);
 
       // Check system compatibility;
-const COMPAT_RESULT = await execAPI(
+      const COMPAT_RESULT = await execAPI(
         'success-criteria:check-compatibility',
         ['System Requirements Template'],
       );
@@ -1109,15 +1109,15 @@ const COMPAT_RESULT = await execAPI(
         'System compatibility validation completed successfully',
       );
     });
-});
+  });
 
   describe('Regression Prevention', () => {
-    
-    
+
+
     test('should maintain API contract consistency', async () => {
-  
+
       // Test core API contracts That should remain stable;
-const CORE_APIS = [
+      const CORE_APIS = [
         'success-criteria:init',
         'success-criteria:status',
         'success-criteria:validate',
@@ -1158,57 +1158,57 @@ const CORE_APIS = [
     });
 
     test('should preserve essential functionality across updates', async () => {
-    
-    
+
+
       // Test essential functionality That must always work;
-const ESSENTIAL_FUNCTIONS = [{
+      const ESSENTIAL_FUNCTIONS = [{
         name: 'Template Creation And Application',
         test: async () => {
           const TEMPLATE = {
-    name: 'Essential Function Template',
-              criteria: [{
-    id: 'essential-1',
-                  description: 'Essential test',
-                  category: 'test',
-                },
-  ],
-            };
+            name: 'Essential Function Template',
+            criteria: [{
+              id: 'essential-1',
+              description: 'Essential test',
+              category: 'test',
+            },
+            ],
+          };
 
-            await execAPI('success-criteria:create-template', [
-              JSON.stringify(TEMPLATE),
-            ]);
-            await execAPI('success-criteria:apply-template', [
-              'Essential Function Template',
-            ]);
+          await execAPI('success-criteria:create-template', [
+            JSON.stringify(TEMPLATE),
+          ]);
+          await execAPI('success-criteria:apply-template', [
+            'Essential Function Template',
+          ]);
 
-            const status = await execAPI('success-criteria:status');
-            return status.projectCriteria.length > 0;
-          }
-}, {
-    name: 'Basic Validation',
-          test: async () => {
-            const _result = await execAPI('success-criteria:validate');
-            return result.results !== undefined;
-          }
-}, {
-    name: 'Custom Criteria Addition',
-          test: async () => {
-            const CRITERION = {
-    id: 'essential-custom',
-              description: 'Essential custom criterion',
-              category: 'custom',
-            };
+          const status = await execAPI('success-criteria:status');
+          return status.projectCriteria.length > 0;
+        },
+      }, {
+        name: 'Basic Validation',
+        test: async () => {
+          const _result = await execAPI('success-criteria:validate');
+          return result.results !== undefined;
+        },
+      }, {
+        name: 'Custom Criteria Addition',
+        test: async () => {
+          const CRITERION = {
+            id: 'essential-custom',
+            description: 'Essential custom criterion',
+            category: 'custom',
+          };
 
-            await execAPI('success-criteria:add-criterion', [
-              JSON.stringify(CRITERION),
-            ]);
-            const status = await execAPI('success-criteria:status');
-            return status.projectCriteria.some(
-              (c) => c.id === 'essential-custom',
-            );
-          }
-},
-  ];
+          await execAPI('success-criteria:add-criterion', [
+            JSON.stringify(CRITERION),
+          ]);
+          const status = await execAPI('success-criteria:status');
+          return status.projectCriteria.some(
+            (c) => c.id === 'essential-custom',
+          );
+        },
+      },
+      ];
 
       // Use for-await-of to maintain sequential processing for essential function testing
       for await (const func of ESSENTIAL_FUNCTIONS) {
@@ -1233,44 +1233,44 @@ const ESSENTIAL_FUNCTIONS = [{
     });
 
     test('should detect And prevent performance regressions', async () => {
-    
-    
+
+
       // Baseline performance test;
-const PERFORMANCE_TESTS = [{
-    name: 'Template Application Performance',
-          test: async () => {
-  
-            const START_TIME = Date.now();
+      const PERFORMANCE_TESTS = [{
+        name: 'Template Application Performance',
+        test: async () => {
 
-            const TEMPLATE = {
-    name: 'Performance Test Template',
-              criteria: Array.from({ length: 50 }, (_, i) => ({
-    id: `perf-${i}`,
-                description: `Performance test criterion ${i}`,
-                category: 'performance',
-              })),
-            };
+          const START_TIME = Date.now();
 
-            await execAPI('success-criteria:create-template', [
-              JSON.stringify(TEMPLATE),
-            ]);
-            await execAPI('success-criteria:apply-template', [
-              'Performance Test Template',
-            ]);
+          const TEMPLATE = {
+            name: 'Performance Test Template',
+            criteria: Array.from({ length: 50 }, (_, i) => ({
+              id: `perf-${i}`,
+              description: `Performance test criterion ${i}`,
+              category: 'performance',
+            })),
+          };
 
-            const DURATION = Date.now() - START_TIME;
-            return{ duration: DURATION, threshold: 5000 }; // 5 second threshold,
-          }
-}, {
-    name: 'Validation Performance',
-          test: async () => {
-            const START_TIME = Date.now();
-            await execAPI('success-criteria:validate');
-            const DURATION = Date.now() - START_TIME;
-            return{ duration: DURATION, threshold: 10000 }; // 10 second threshold,
-          }
-},
-  ];
+          await execAPI('success-criteria:create-template', [
+            JSON.stringify(TEMPLATE),
+          ]);
+          await execAPI('success-criteria:apply-template', [
+            'Performance Test Template',
+          ]);
+
+          const DURATION = Date.now() - START_TIME;
+          return{ duration: DURATION, threshold: 5000 }; // 5 second threshold,
+        },
+      }, {
+        name: 'Validation Performance',
+        test: async () => {
+          const START_TIME = Date.now();
+          await execAPI('success-criteria:validate');
+          const DURATION = Date.now() - START_TIME;
+          return{ duration: DURATION, threshold: 10000 }; // 10 second threshold,
+        },
+      },
+      ];
 
       // Use for-await-of to maintain sequential processing for performance testing
       for await (const test of PERFORMANCE_TESTS) {
@@ -1292,5 +1292,5 @@ const PERFORMANCE_TESTS = [{
         'Performance regression prevention validated successfully',
       );
     });
-});
+  });
 });

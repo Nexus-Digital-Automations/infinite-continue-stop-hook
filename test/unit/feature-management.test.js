@@ -15,7 +15,7 @@
  */
 
 const path = require('path');
-    const {
+const {
   MockFileSystem,
   TEST_FIXTURES,
   TimeTestUtils,
@@ -38,15 +38,15 @@ jest.mock('crypto', () => ({
     global.cryptoCounter = (global.cryptoCounter || 0) + 1;
     const counterStr = global.cryptoCounter.toString().padStart(12, '0');
     return Buffer.from(counterStr, 'ascii');
-}),
+  }),
 }));
 
 // Import the FeatureManagerAPI class AFTER mocking fs;
 const FeatureManagerAPI = require('../../taskmanager-api.js');
 
 describe('Feature Management Lifecycle', () => {
-    
-    
+
+
   let api;
   let mockFs;
   let timeUtils;
@@ -66,7 +66,7 @@ describe('Feature Management Lifecycle', () => {
     api.featuresPath = TEST_FEATURES_PATH;
 
     // Connect jest mocks to MockFileSystem instance;
-const FS = require('fs');
+    const FS = require('fs');
     FS.promises.access.mockImplementation((...args) => mockFs.access(...args));
     FS.promises.readFile.mockImplementation((...args) =>
       mockFs.readFile(...args),
@@ -77,19 +77,19 @@ const FS = require('fs');
 
     // Mock time for consistent testing
     timeUtils.mockCurrentTimeISO('2025-09-23T12:00:00.000Z');
-});
+  });
 
   afterEach(() => {
     jest.clearAllMocks();
     mockFs.clearAll();
     timeUtils.restoreTime();
-});
+  });
 
   // =================== FEATURE SUGGESTION LIFECYCLE ===================
 
   describe('Feature Suggestion Lifecycle', () => {
-    
-    
+
+
     beforeEach(() => {
       mockFs.setFile(
         TEST_FEATURES_PATH,
@@ -98,11 +98,11 @@ const FS = require('fs');
     });
 
     describe('Basic Feature Suggestion', () => {
-    
-    
+
+
       test('should create feature suggestion with all required fields', async () => {
         const featureData = {
-    title: 'User Authentication System Implementation',
+          title: 'User Authentication System Implementation',
           description:
             'Implement a comprehensive user authentication system with JWT tokens, OAuth integration, And role-based access control',
           business_value:
@@ -110,11 +110,11 @@ const FS = require('fs');
           category: 'new-feature',
           suggested_by: 'development-team',
           metadata: {
-    priority: 'high',
+            priority: 'high',
             estimated_effort: 'large',
             dependencies: ['database-setup', 'security-framework'],
-          }
-};
+          },
+        };
 
         const _result = await api.suggestFeature(featureData);
 
@@ -131,8 +131,8 @@ const FS = require('fs');
       });
 
       test('should handle different feature categories correctly', async () => {
-    
-    
+
+
         const categories = [
           'enhancement',
           'bug-fix',
@@ -143,11 +143,11 @@ const FS = require('fs');
         ];
 
         // Create features in parallel for better test performance;
-const results = await Promise.all(
+        const results = await Promise.all(
           categories.map(async (_category) => {
             const featureData = {
               ...TEST_FIXTURES.validFeature,
-    title: `${category} Feature Test`,
+              title: `${category} Feature Test`,
               category: category,
             };
 
@@ -173,11 +173,11 @@ const results = await Promise.all(
         const numFeatures = 5;
 
         // Create features in parallel for better test performance;
-const results = await Promise.all(
+        const results = await Promise.all(
           Array.from({ length: numFeatures }, (_, i) => {
             const featureData = {
               ...TEST_FIXTURES.validFeature,
-    title: `Test Feature Number ${i + 1} Implementation`,
+              title: `Test Feature Number ${i + 1} Implementation`,
             };
 
             return api.suggestFeature(featureData);
@@ -190,7 +190,7 @@ const results = await Promise.all(
         });
 
         // Extract feature IDs;
-const featureIds = new Set(results.map((result) => result.feature.id));
+        const featureIds = new Set(results.map((result) => result.feature.id));
 
         // All IDs should be unique
         expect(featureIds.size).toBe(numFeatures);
@@ -203,7 +203,7 @@ const featureIds = new Set(results.map((result) => result.feature.id));
 
       test('should preserve custom metadata in feature suggestions', async () => {
         const customMetadata = {
-    priority: 'critical',
+          priority: 'critical',
           estimated_effort: 'small',
           stakeholders: ['product-owner', 'ux-designer'],
           deadline: '2025-12-31',
@@ -212,7 +212,7 @@ const featureIds = new Set(results.map((result) => result.feature.id));
 
         const featureData = {
           ...TEST_FIXTURES.validFeature,
-    metadata: customMetadata,
+          metadata: customMetadata,
         };
 
         const _result = await api.suggestFeature(featureData);
@@ -225,12 +225,12 @@ const featureIds = new Set(results.map((result) => result.feature.id));
     });
 
     describe('Feature Suggestion Validation', () => {
-    
-    
+
+
       test('should enforce minimum title length requirements', async () => {
         const invalidFeature = {
           ...TEST_FIXTURES.validFeature,
-    title: 'Short', // Only 5 characters, minimum is 10
+          title: 'Short', // Only 5 characters, minimum is 10
         };
 
         const _result = await api.suggestFeature(invalidFeature);
@@ -244,7 +244,7 @@ const featureIds = new Set(results.map((result) => result.feature.id));
       test('should enforce maximum title length requirements', async () => {
         const invalidFeature = {
           ...TEST_FIXTURES.validFeature,
-    title: 'A'.repeat(201), // 201 characters, maximum is 200
+          title: 'A'.repeat(201), // 201 characters, maximum is 200
         };
 
         const _result = await api.suggestFeature(invalidFeature);
@@ -258,7 +258,7 @@ const featureIds = new Set(results.map((result) => result.feature.id));
       test('should enforce minimum description length requirements', async () => {
         const invalidFeature = {
           ...TEST_FIXTURES.validFeature,
-    description: 'Too short', // Only 9 characters, minimum is 20
+          description: 'Too short', // Only 9 characters, minimum is 20
         };
 
         const _result = await api.suggestFeature(invalidFeature);
@@ -272,7 +272,7 @@ const featureIds = new Set(results.map((result) => result.feature.id));
       test('should enforce maximum description length requirements', async () => {
         const invalidFeature = {
           ...TEST_FIXTURES.validFeature,
-    description: 'A'.repeat(2001), // 2001 characters, maximum is 2000
+          description: 'A'.repeat(2001), // 2001 characters, maximum is 2000
         };
 
         const _result = await api.suggestFeature(invalidFeature);
@@ -290,7 +290,7 @@ const featureIds = new Set(results.map((result) => result.feature.id));
 
         for (const invalidFeature of invalidFeatures) {
           // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation;
-const _result = await api.suggestFeature(invalidFeature);
+          const _result = await api.suggestFeature(invalidFeature);
           expect(result.success).toBe(false);
           expect(result.error).toContain(
             'Business value must be between 10 And 1000 characters',
@@ -298,9 +298,9 @@ const _result = await api.suggestFeature(invalidFeature);
         }
 
         // Test empty business value separately with different error message;
-const emptyBusinessValueFeature = {
+        const emptyBusinessValueFeature = {
           ...TEST_FIXTURES.validFeature,
-    business_value: '',
+          business_value: '',
         };
         const _result = await api.suggestFeature(emptyBusinessValueFeature);
         expect(result.success).toBe(false);
@@ -312,7 +312,7 @@ const emptyBusinessValueFeature = {
       test('should validate category field against allowed values', async () => {
         const invalidFeature = {
           ...TEST_FIXTURES.validFeature,
-    category: 'invalid-category',
+          category: 'invalid-category',
         };
 
         const _result = await api.suggestFeature(invalidFeature);
@@ -337,7 +337,7 @@ const emptyBusinessValueFeature = {
           delete invalidFeature[field];
 
           // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation;
-const _result = await api.suggestFeature(invalidFeature);
+          const _result = await api.suggestFeature(invalidFeature);
 
           expect(result.success).toBe(false);
           expect(result.error).toContain(
@@ -348,8 +348,8 @@ const _result = await api.suggestFeature(invalidFeature);
     });
 
     describe('Feature Suggestion Metadata Management', () => {
-    
-    
+
+
       test('should update total feature count after suggestion', async () => {
         const initialFeatures = await api._loadFeatures();
         expect(initialFeatures.metadata.total_features).toBe(0);
@@ -370,15 +370,15 @@ const _result = await api.suggestFeature(invalidFeature);
 
       test('should preserve existing features when adding new ones', async () => {
         // Add first feature;
-const firstResult = await api.suggestFeature({
+        const firstResult = await api.suggestFeature({
           ...TEST_FIXTURES.validFeature,
-    title: 'First Feature Suggestion',
+          title: 'First Feature Suggestion',
         });
 
         // Add second feature;
-const secondResult = await api.suggestFeature({
+        const secondResult = await api.suggestFeature({
           ...TEST_FIXTURES.validFeature,
-    title: 'Second Feature Suggestion',
+          title: 'Second Feature Suggestion',
         });
 
         expect(firstResult.success).toBe(true);
@@ -390,13 +390,13 @@ const secondResult = await api.suggestFeature({
         expect(features.features[1].title).toBe('Second Feature Suggestion');
       });
     });
-});
+  });
 
   // =================== FEATURE APPROVAL LIFECYCLE ===================
 
   describe('Feature Approval Lifecycle', () => {
-    
-    
+
+
     let suggestedFeatureId;
 
     beforeEach(async () => {
@@ -406,18 +406,18 @@ const secondResult = await api.suggestFeature({
       );
 
       // Create a suggested feature for approval tests;
-const suggestResult = await api.suggestFeature(
+      const suggestResult = await api.suggestFeature(
         TEST_FIXTURES.validFeature,
       );
       suggestedFeatureId = suggestResult.feature.id;
     });
 
     describe('Basic Feature Approval', () => {
-    
-    
+
+
       test('should approve suggested feature with full approval data', async () => {
         const approvalData = {
-    approved_by: 'product-manager',
+          approved_by: 'product-manager',
           notes:
             'Feature aligns with Q4 roadmap And provides significant user value. Approved for implementation in next sprint.',
         };
@@ -470,11 +470,11 @@ const suggestResult = await api.suggestFeature(
     });
 
     describe('Approval History Management', () => {
-    
-    
+
+
       test('should add approval entry to history', async () => {
         const approvalData = {
-    approved_by: 'lead-architect',
+          approved_by: 'lead-architect',
           notes: 'Technical review complete. Architecture approved.',
         };
 
@@ -499,20 +499,20 @@ const suggestResult = await api.suggestFeature(
 
       test('should handle multiple feature approvals in history', async () => {
         // Create And approve multiple features;
-const feature1Result = await api.suggestFeature({
+        const feature1Result = await api.suggestFeature({
           ...TEST_FIXTURES.validFeature,
-    title: 'First Feature for History Test',
+          title: 'First Feature for History Test',
         });
         const feature2Result = await api.suggestFeature({
           ...TEST_FIXTURES.validFeature,
-    title: 'Second Feature for History Test',
+          title: 'Second Feature for History Test',
         });
 
         await api.approveFeature(feature1Result.feature.id, {
-    approved_by: 'approver-1',
+          approved_by: 'approver-1',
         });
         await api.approveFeature(feature2Result.feature.id, {
-    approved_by: 'approver-2',
+          approved_by: 'approver-2',
         });
 
         const features = await api._loadFeatures();
@@ -525,14 +525,14 @@ const feature1Result = await api.suggestFeature({
 
       test('should handle approval when metadata structure is missing', async () => {
         // Create features file without proper metadata;
-const invalidFeatures = {
-    project: 'test',
-          features: [ {
-    id: suggestedFeatureId,
-              status: 'suggested',
-              title: 'Test Feature',
-            },
-  ],
+        const invalidFeatures = {
+          project: 'test',
+          features: [{
+            id: suggestedFeatureId,
+            status: 'suggested',
+            title: 'Test Feature',
+          },
+          ],
         };
         mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(invalidFeatures));
 
@@ -541,7 +541,7 @@ const invalidFeatures = {
         expect(result.feature.status).toBe('approved');
 
         // Verify metadata was created;
-const features = await api._loadFeatures();
+        const features = await api._loadFeatures();
         expect(features.metadata).toBeDefined();
         expect(features.metadata.approval_history).toBeDefined();
         expect(features.metadata.approval_history).toHaveLength(1);
@@ -549,8 +549,8 @@ const features = await api._loadFeatures();
     });
 
     describe('Approval Validation And Constraints', () => {
-    
-    
+
+
       test('should reject approval of non-existent feature', async () => {
         const nonExistentId = 'feature_nonexistent_123';
 
@@ -563,11 +563,11 @@ const features = await api._loadFeatures();
 
       test('should reject approval of already approved feature', async () => {
         // First approval;
-const firstResult = await api.approveFeature(suggestedFeatureId);
+        const firstResult = await api.approveFeature(suggestedFeatureId);
         expect(firstResult.success).toBe(true);
 
         // Attempt second approval;
-const secondResult = await api.approveFeature(suggestedFeatureId);
+        const secondResult = await api.approveFeature(suggestedFeatureId);
 
         expect(secondResult.success).toBe(false);
         expect(secondResult.error).toContain(
@@ -578,11 +578,11 @@ const secondResult = await api.approveFeature(suggestedFeatureId);
 
       test('should reject approval of rejected feature', async () => {
         // First reject the feature;
-const rejectResult = await api.rejectFeature(suggestedFeatureId);
+        const rejectResult = await api.rejectFeature(suggestedFeatureId);
         expect(rejectResult.success).toBe(true);
 
         // Attempt to approve rejected feature;
-const approveResult = await api.approveFeature(suggestedFeatureId);
+        const approveResult = await api.approveFeature(suggestedFeatureId);
 
         expect(approveResult.success).toBe(false);
         expect(approveResult.error).toContain(
@@ -591,13 +591,13 @@ const approveResult = await api.approveFeature(suggestedFeatureId);
         expect(approveResult.error).toContain('Current status: rejected');
       });
     });
-});
+  });
 
   // =================== FEATURE REJECTION LIFECYCLE ===================
 
   describe('Feature Rejection Lifecycle', () => {
-    
-    
+
+
     let suggestedFeatureId;
 
     beforeEach(async () => {
@@ -607,18 +607,18 @@ const approveResult = await api.approveFeature(suggestedFeatureId);
       );
 
       // Create a suggested feature for rejection tests;
-const suggestResult = await api.suggestFeature(
+      const suggestResult = await api.suggestFeature(
         TEST_FIXTURES.validFeature,
       );
       suggestedFeatureId = suggestResult.feature.id;
     });
 
     describe('Basic Feature Rejection', () => {
-    
-    
+
+
       test('should reject suggested feature with full rejection data', async () => {
         const rejectionData = {
-    rejected_by: 'technical-lead',
+          rejected_by: 'technical-lead',
           reason:
             'Feature complexity exceeds current team capacity And conflicts with architectural decisions made in Q3 planning.',
         };
@@ -653,11 +653,11 @@ const suggestResult = await api.suggestFeature(
     });
 
     describe('Rejection History Management', () => {
-    
-    
+
+
       test('should add rejection entry to approval history', async () => {
         const rejectionData = {
-    rejected_by: 'product-owner',
+          rejected_by: 'product-owner',
           reason:
             'Feature does not align with current product strategy And user research findings.',
         };
@@ -683,8 +683,8 @@ const suggestResult = await api.suggestFeature(
     });
 
     describe('Rejection Validation And Constraints', () => {
-    
-    
+
+
       test('should reject rejection of non-existent feature', async () => {
         const nonExistentId = 'feature_nonexistent_456';
 
@@ -697,11 +697,11 @@ const suggestResult = await api.suggestFeature(
 
       test('should reject rejection of already approved feature', async () => {
         // First approve the feature;
-const approveResult = await api.approveFeature(suggestedFeatureId);
+        const approveResult = await api.approveFeature(suggestedFeatureId);
         expect(approveResult.success).toBe(true);
 
         // Attempt to reject approved feature;
-const rejectResult = await api.rejectFeature(suggestedFeatureId);
+        const rejectResult = await api.rejectFeature(suggestedFeatureId);
 
         expect(rejectResult.success).toBe(false);
         expect(rejectResult.error).toContain(
@@ -712,11 +712,11 @@ const rejectResult = await api.rejectFeature(suggestedFeatureId);
 
       test('should reject rejection of already rejected feature', async () => {
         // First rejection;
-const firstResult = await api.rejectFeature(suggestedFeatureId);
+        const firstResult = await api.rejectFeature(suggestedFeatureId);
         expect(firstResult.success).toBe(true);
 
         // Attempt second rejection;
-const secondResult = await api.rejectFeature(suggestedFeatureId);
+        const secondResult = await api.rejectFeature(suggestedFeatureId);
 
         expect(secondResult.success).toBe(false);
         expect(secondResult.error).toContain(
@@ -725,13 +725,13 @@ const secondResult = await api.rejectFeature(suggestedFeatureId);
         expect(secondResult.error).toContain('Current status: rejected');
       });
     });
-});
+  });
 
   // =================== BULK OPERATIONS ===================
 
   describe('Bulk Operations', () => {
-    
-    
+
+
     let suggestedFeatureIds;
 
     beforeEach(async () => {
@@ -752,20 +752,20 @@ const secondResult = await api.rejectFeature(suggestedFeatureId);
 
       for (const title of featureTitles) {
         // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup;
-const _result = await api.suggestFeature({
+        const _result = await api.suggestFeature({
           ...TEST_FIXTURES.validFeature,
-    title: title,
+          title: title,
         });
         suggestedFeatureIds.push(result.feature.id);
       }
     });
 
     describe('Bulk Approval Operations', () => {
-    
-    
+
+
       test('should approve all features in bulk successfully', async () => {
         const approvalData = {
-    approved_by: 'batch-approver',
+          approved_by: 'batch-approver',
           notes: 'Batch approval for sprint planning session',
         };
 
@@ -816,8 +816,8 @@ const _result = await api.suggestFeature({
       });
 
       test('should handle non-existent feature IDs in bulk approval', async () => {
-    
-    
+
+
         const nonExistentIds = ['fake_id_1', 'fake_id_2', 'fake_id_3'];
 
         const _result = await api.bulkApproveFeatures(nonExistentIds);
@@ -832,8 +832,8 @@ const _result = await api.suggestFeature({
       });
 
       test('should update approval history correctly for bulk operations', async () => {
-    
-    
+
+
         const _result = await api.bulkApproveFeatures(suggestedFeatureIds);
         expect(result.success).toBe(true);
 
@@ -847,13 +847,13 @@ const _result = await api.suggestFeature({
         });
       });
     });
-});
+  });
 
   // =================== FEATURE LISTING AND FILTERING ===================
 
   describe('Feature Listing And Filtering', () => {
-    
-    
+
+
     beforeEach(() => {
       // Use features file with diverse test data
       mockFs.setFile(
@@ -863,8 +863,8 @@ const _result = await api.suggestFeature({
     });
 
     describe('Basic Feature Listing', () => {
-    
-    
+
+
       test('should list all features without filters', async () => {
         const _result = await api.listFeatures();
         expect(result.success).toBe(true);
@@ -888,14 +888,14 @@ const _result = await api.suggestFeature({
     });
 
     describe('Feature Filtering', () => {
-    
-    
+
+
       test('should filter features by status', async () => {
         const statuses = ['suggested', 'approved', 'rejected'];
 
         for (const status of statuses) {
           // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation;
-const _result = await api.listFeatures({ status });
+          const _result = await api.listFeatures({ status });
           expect(result.success).toBe(true);
           expect(result.features).toHaveLength(1);
           expect(result.features[0].status).toBe(status);
@@ -908,7 +908,7 @@ const _result = await api.listFeatures({ status });
 
         for (const category of categories) {
           // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation;
-const _result = await api.listFeatures({ category });
+          const _result = await api.listFeatures({ category });
           expect(result.success).toBe(true);
           expect(result.features).toHaveLength(1);
           expect(result.features[0].category).toBe(_category);
@@ -925,8 +925,8 @@ const _result = await api.listFeatures({ category });
 
       test('should handle combined filters', async () => {
         // This would require features That match both criteria;
-const _result = await api.listFeatures({
-    status: 'approved',
+        const _result = await api.listFeatures({
+          status: 'approved',
           category: 'new-feature',
         });
         expect(result.success).toBe(true);
@@ -935,13 +935,13 @@ const _result = await api.listFeatures({
         expect(result.features[0].category).toBe('new-feature');
       });
     });
-});
+  });
 
   // =================== FEATURE STATISTICS ===================
 
   describe('Feature Statistics And Analytics', () => {
-    
-    
+
+
     beforeEach(() => {
       mockFs.setFile(
         TEST_FEATURES_PATH,
@@ -950,8 +950,8 @@ const _result = await api.listFeatures({
     });
 
     describe('Basic Statistics', () => {
-    
-    
+
+
       test('should calculate feature statistics correctly', async () => {
         const _result = await api.getFeatureStats();
         expect(result.success).toBe(true);
@@ -961,20 +961,20 @@ const _result = await api.listFeatures({
         const stats = result.stats;
         expect(stats.total).toBe(3);
         expect(stats.by_status).toEqual({
-    suggested: 1,
+          suggested: 1,
           approved: 1,
           rejected: 1,
         });
         expect(stats.by_category).toEqual({
-    enhancement: 1,
+          enhancement: 1,
           'new-feature': 1,
           documentation: 1,
         });
       });
 
       test('should include recent activity from approval history', async () => {
-    
-    
+
+
         const _result = await api.getFeatureStats();
         expect(result.success).toBe(true);
         expect(result.stats.recent_activity).toBeDefined();
@@ -1005,20 +1005,20 @@ const _result = await api.listFeatures({
     });
 
     describe('Advanced Statistics Scenarios', () => {
-    
-    
+
+
       test('should handle features with duplicate categories', async () => {
         // Add more features with duplicate categories;
-const additionalFeatures = [ {
-            ...TEST_FIXTURES.validFeature,
-    title: 'Additional Enhancement Feature',
-            category: 'enhancement',
-          }, {
-            ...TEST_FIXTURES.validFeature,
-    title: 'Another Enhancement Feature',
-            category: 'enhancement',
-          },
-  ];
+        const additionalFeatures = [{
+          ...TEST_FIXTURES.validFeature,
+          title: 'Additional Enhancement Feature',
+          category: 'enhancement',
+        }, {
+          ...TEST_FIXTURES.validFeature,
+          title: 'Another Enhancement Feature',
+          category: 'enhancement',
+        },
+        ];
 
         // Add features to existing data
         for (const feature of additionalFeatures) {
@@ -1034,18 +1034,18 @@ const additionalFeatures = [ {
 
       test('should limit recent activity to last 10 entries', async () => {
         // This tests the slice(-10) in the recent activity calculation;
-const _result = await api.getFeatureStats();
+        const _result = await api.getFeatureStats();
         expect(result.success).toBe(true);
         expect(result.stats.recent_activity.length).toBeLessThanOrEqual(10);
       });
     });
-});
+  });
 
   // =================== ERROR SCENARIOS ===================
 
   describe('Error Scenarios And Edge Cases', () => {
-    
-    
+
+
     describe('File System Error Handling', () => {
       test('should handle file read errors in feature listing', async () => {
         mockFs.setReadError(TEST_FEATURES_PATH, 'Permission denied');
@@ -1069,8 +1069,8 @@ const _result = await api.getFeatureStats();
     });
 
     describe('Data Corruption Handling', () => {
-    
-    
+
+
       test('should handle corrupted JSON gracefully', async () => {
         mockFs.setFile(TEST_FEATURES_PATH, '{ invalid json structure }');
 
@@ -1081,10 +1081,10 @@ const _result = await api.getFeatureStats();
 
       test('should handle missing feature file during operations', async () => {
         // Don't create the file - it will be created automatically;
-const _result = await api.suggestFeature(TEST_FIXTURES.validFeature);
+        const _result = await api.suggestFeature(TEST_FIXTURES.validFeature);
         expect(result.success).toBe(true);
         expect(mockFs.hasFile(TEST_FEATURES_PATH)).toBe(true);
       });
     });
-});
+  });
 });

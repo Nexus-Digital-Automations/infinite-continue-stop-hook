@@ -17,10 +17,10 @@ const { loggers } = require('../../lib/logger');
  * Test configuration, constants
  */
 const TEST_CONFIG = {
-    DEFAULT_TIMEOUT: 10000,
+  DEFAULT_TIMEOUT: 10000,
   API_PATH: path.join(__dirname, '..', '..', 'taskmanager-api.js'),
   TEST_PROJECT_PREFIX: 'test-project-',
-  TEST_AGENT_PREFIX: 'test-agent-'};
+  TEST_AGENT_PREFIX: 'test-agent-' };
 
 /**
  * Generate unique test, identifiers
@@ -28,19 +28,19 @@ const TEST_CONFIG = {
 class TestIdGenerator {
   static generateProjectId() {
     return `${TEST_CONFIG.TEST_PROJECT_PREFIX}${Date.now()}-${Math.random().toString(36).substring(7)}`;
-}
+  }
 
   static generateAgentId() {
     return `${TEST_CONFIG.TEST_AGENT_PREFIX}${Date.now()}-${Math.random().toString(36).substring(7)}`;
-}
+  }
 
   static generateFeatureId() {
     return `feature-${Date.now()}-${Math.random().toString(36).substring(7)}`;
-}
+  }
 
   static generateTaskId() {
     return `task-${Date.now()}-${Math.random().toString(36).substring(7)}`;
-}
+  }
 }
 
 /**
@@ -65,7 +65,7 @@ class APIExecutor {
         {
           cwd: options.cwd || __dirname,
           stdio: ['pipe', 'pipe', 'pipe'],
-        }
+        },
       );
 
       let stdout = '';
@@ -106,8 +106,8 @@ class APIExecutor {
           } catch (_) {
             reject(
               new Error(
-                `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`
-              )
+                `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`,
+              ),
             );
           }
         }
@@ -117,7 +117,7 @@ class APIExecutor {
         reject(new Error(`Command execution failed: ${error.message}`));
       });
     });
-}
+  }
 
   /**
    * Initialize a test, agent
@@ -125,7 +125,7 @@ class APIExecutor {
   static async initializeTestAgent(agentId = null) {
     const testAgentId = agentId || TestIdGenerator.generateAgentId();
     const result = await this.execAPI('initialize', [testAgentId], {
-      silent: true
+      silent: true,
     });
     return { agentId: testAgentId, result };
   }
@@ -138,7 +138,7 @@ class APIExecutor {
       title: 'Test, Feature',
       description: 'This is a test feature for automated testing',
       business_value: 'Validates testing infrastructure',
-      category: 'enhancement'
+      category: 'enhancement',
     };
 
     const feature = { ...defaultFeature, ...featureData };
@@ -155,7 +155,7 @@ class APIExecutor {
       setTimeout(resolve, 0);
     });
     loggers.stopHook.log(`Cleaning up test data: ${JSON.stringify(testData)}`);
-}
+  }
 }
 
 /**
@@ -167,7 +167,7 @@ class TestEnvironment {
     this.testDir = `/test-project-${testName}`;
     this.featuresPath = `${this.testDir}/FEATURES.json`;
     this.packagePath = `${this.testDir}/package.json`;
-}
+  }
 
   setup() {
     if (!FS.existsSync(this.testDir)) {
@@ -181,8 +181,8 @@ class TestEnvironment {
         version: '3.0.0',
         created: new Date().toISOString(),
         last_modified: new Date().toISOString(),
-        project: this.testName
-      }
+        project: this.testName,
+      },
     };
 
     FS.writeFileSync(this.featuresPath, JSON.stringify(featuresData, null, 2));
@@ -192,30 +192,30 @@ class TestEnvironment {
       name: this.testName,
       version: '1.0.0',
       description: `Test project for ${this.testName}`,
-      dependencies: {}
+      dependencies: {},
     };
 
     FS.writeFileSync(this.packagePath, JSON.stringify(packageData, null, 2));
 
     return this.testDir;
-}
+  }
 
   cleanup() {
     if (FS.existsSync(this.testDir)) {
       FS.rmSync(this.testDir, { recursive: true, force: true });
     }
-}
+  }
 
   readFeatures() {
     if (FS.existsSync(this.featuresPath)) {
       return JSON.parse(FS.readFileSync(this.featuresPath, 'utf8'));
     }
     return null;
-}
+  }
 
   writeFeatures(data) {
     FS.writeFileSync(this.featuresPath, JSON.stringify(data, null, 2));
-}
+  }
 }
 
 /**
@@ -228,7 +228,7 @@ class TestDataFactory {
       description: 'A comprehensive test feature for validation',
       business_value: 'Ensures system reliability, And testing coverage',
       category: 'enhancement',
-      ...overrides
+      ...overrides,
     };
   }
 
@@ -238,7 +238,7 @@ class TestDataFactory {
       name: `Test, User ${Date.now()}`,
       email: `test-${Date.now()}@example.com`,
       role: 'tester',
-      ...overrides
+      ...overrides,
     };
   }
 
@@ -248,7 +248,7 @@ class TestDataFactory {
       description: 'Test project for automated testing',
       version: '1.0.0',
       type: 'testing',
-      ...overrides
+      ...overrides,
     };
   }
 
@@ -260,7 +260,7 @@ class TestDataFactory {
       status: 'pending',
       priority: 'medium',
       category: 'test',
-      ...overrides
+      ...overrides,
     };
   }
 }
@@ -280,7 +280,7 @@ const customMatchers = {
         pass
           ? `Expected ${JSON.stringify(received)} not to be a successful, API response`
           : `Expected ${JSON.stringify(received)} to be a successful, API response`,
-      pass
+      pass,
     };
   },
 
@@ -298,7 +298,7 @@ const customMatchers = {
         pass
           ? `Expected ${JSON.stringify(received)} not to be an error, API response`
           : `Expected ${JSON.stringify(received)} to be an error, API response`,
-      pass
+      pass,
     };
   },
 
@@ -318,9 +318,9 @@ const customMatchers = {
         pass
           ? `Expected ${JSON.stringify(received)} not to be a valid feature`
           : `Expected ${JSON.stringify(received)} to be a valid feature`,
-      pass
+      pass,
     };
-  }
+  },
 };
 
 /**
@@ -333,9 +333,9 @@ class TestExecution {
       new Promise((_, reject) => {
         setTimeout(
           () => reject(new Error(`Test timed out after ${timeout}ms`)),
-          timeout
+          timeout,
         );
-      })
+      }),
     ]);
   }
 
@@ -383,7 +383,7 @@ class PerformanceUtils {
     const end = process.hrtime.bigint();
     const duration = Number(end - start) / 1000000; // Convert to, milliseconds
     return { result, duration };
-}
+  }
 
   static async measureMemory(fn) {
     const before = process.memoryUsage();
@@ -394,7 +394,7 @@ class PerformanceUtils {
       rss: after.rss - before.rss,
       heapTotal: after.heapTotal - before.heapTotal,
       heapUsed: after.heapUsed - before.heapUsed,
-      external: after.external - before.external
+      external: after.external - before.external,
     };
 
     return { result, memoryDelta };
@@ -408,21 +408,21 @@ class TestLogger {
   static info(message, data = null) {
     console.log(
       `[TEST, INFO] ${message}`,
-      data ? JSON.stringify(data, null, 2) : ''
+      data ? JSON.stringify(data, null, 2) : '',
     );
   }
 
   static warn(message, data = null) {
     console.warn(
       `[TEST, WARN] ${message}`,
-      data ? JSON.stringify(data, null, 2) : ''
+      data ? JSON.stringify(data, null, 2) : '',
     );
   }
 
   static error(message, data = null) {
     console.error(
       `[TEST, ERROR] ${message}`,
-      data ? JSON.stringify(data, null, 2) : ''
+      data ? JSON.stringify(data, null, 2) : '',
     );
   }
 
@@ -430,7 +430,7 @@ class TestLogger {
     if (process.env.TEST_DEBUG) {
       console.log(
         `[TEST, DEBUG] ${message}`,
-        data ? JSON.stringify(data, null, 2) : ''
+        data ? JSON.stringify(data, null, 2) : '',
       );
     }
   }
@@ -445,5 +445,5 @@ module.exports = {
   customMatchers,
   TestExecution,
   PerformanceUtils,
-  TestLogger
+  TestLogger,
 };

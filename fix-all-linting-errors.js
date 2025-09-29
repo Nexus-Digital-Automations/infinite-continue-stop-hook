@@ -9,7 +9,7 @@ const path = require('path');
 const { execSync: _execSync } = require('child_process');
 
 class LintingErrorFixer {
-  constructor(), {
+  constructor() {
     this.fixedFiles = 0;
     this.totalFixes = 0;
   }

@@ -12,7 +12,7 @@
 
 const FS = require('fs');
 const path = require('path');
-    const { execSync: _EXEC_SYNC } = require('child_process');
+const { execSync: _EXEC_SYNC } = require('child_process');
 const AutonomousTaskManagerAPI = require('../../taskmanager-api');
 
 // Mock fs module for controlled testing
@@ -21,7 +21,7 @@ jest.mock('fs', () => ({
     access: jest.fn(),
     readFile: jest.fn(),
     writeFile: jest.fn(),
-},
+  },
   existsSync: jest.fn().mockReturnValue(true),
   mkdirSync: jest.fn(),
   writeFileSync: jest.fn(),
@@ -46,7 +46,7 @@ jest.mock('sqlite3', () => ({
       get: jest.fn(),
       all: jest.fn(),
     })),
-})),
+  })),
 }));
 
 // Mock the RAG database to prevent SQLite dependencies
@@ -56,7 +56,7 @@ jest.mock('../../lib/rag-database.js', () => {
     searchLessons: jest.fn(),
     storeError: jest.fn(),
     findSimilarErrors: jest.fn(),
-}));
+  }));
 
   // Export as both named export and default to handle different import patterns
   return mockRagDatabase;
@@ -69,12 +69,12 @@ jest.mock('../../lib/api-modules/rag/ragOperations.js', () => {
     searchLessons: jest.fn(),
     storeError: jest.fn(),
     findSimilarErrors: jest.fn(),
-}));
+  }));
 });
 
 describe('Verification Endpoints', () => {
-    
-    
+
+
   let api;
   let mockFs;
   let testProjectRoot;
@@ -93,44 +93,44 @@ describe('Verification Endpoints', () => {
 
     // Setup fs mock references
     mockFs = FS.promises;
-});
+  });
 
   describe('get-verification-requirements', () => {
     it('should successfully retrieve verification requirements for a task', async () => {
       // Setup test data;
-const testTask = {
-    id: 'task_123',
+      const testTask = {
+        id: 'task_123',
         title: 'Test Task',
         verificationGate: {
-    status: 'pending',
+          status: 'pending',
           requirements: [
             {
-    type: 'file',
+              type: 'file',
               description: 'Review existing codebase patterns',
               critical: true,
             },
             {
-    type: 'function',
+              type: 'function',
               description: 'Review API patterns and error handling',
               critical: true,
             },
-  ],
+          ],
           verifiedAt: null,
           verifiedBy: null,
-        }
-};
+        },
+      };
 
       const mockTasksData = {
-    tasks: [testTask],
+        tasks: [testTask],
         metadata: { version: '2.0.0' },
-};
+      };
 
       // Mock file system responses
       mockFs.access.mockResolvedValue(undefined);
       mockFs.readFile.mockResolvedValue(JSON.stringify(mockTasksData));
 
       // Execute test;
-const _result = await api.getVerificationRequirements('task_123');
+      const _result = await api.getVerificationRequirements('task_123');
 
       // Verify results
       expect(result.success).toBe(true);
@@ -147,16 +147,16 @@ const _result = await api.getVerificationRequirements('task_123');
 
     it('should throw error when task ID does not exist', async () => {
       // Setup mock data without the requested task;
-const mockTasksData = {
+      const mockTasksData = {
         tasks: [
           {
             id: 'other_task',
             title: 'Other Task',
             verificationGate: { status: 'pending', requirements: [] },
-},
-  ],
+          },
+        ],
         metadata: { version: '2.0.0' },
-};
+      };
 
       mockFs.access.mockResolvedValue(undefined);
       mockFs.readFile.mockResolvedValue(JSON.stringify(mockTasksData));
@@ -171,16 +171,16 @@ const mockTasksData = {
 
     it('should throw error when task has no verification gate', async () => {
       // Setup task without verification gate;
-const testTask = {
-    id: 'task_123',
+      const testTask = {
+        id: 'task_123',
         title: 'Task Without Verification',
         // No verificationGate property
       };
 
       const mockTasksData = {
-    tasks: [testTask],
+        tasks: [testTask],
         metadata: { version: '2.0.0' },
-};
+      };
 
       mockFs.access.mockResolvedValue(undefined);
       mockFs.readFile.mockResolvedValue(JSON.stringify(mockTasksData));
@@ -193,7 +193,7 @@ const testTask = {
 
     it('should throw error when no tasks exist in system', async () => {
       // Setup data without tasks;
-const mockTasksData = {
+      const mockTasksData = {
         metadata: { version: '2.0.0' },
         // No tasks property
       };
@@ -206,23 +206,23 @@ const mockTasksData = {
         'Failed to get verification requirements: No tasks exist in the system',
       );
     });
-});
+  });
 
   describe('submit-verification-evidence', () => {
     it('should successfully submit valid verification evidence', async () => {
       // Setup test data;
-const testTask = {
-    id: 'task_123',
+      const testTask = {
+        id: 'task_123',
         title: 'Test Task',
         verificationGate: {
-    status: 'pending',
+          status: 'pending',
           requirements: [
             {
-    type: 'file',
+              type: 'file',
               description: 'Review existing codebase patterns',
               critical: true,
             },
-  ],
+          ],
           evidence: null,
           verifiedAt: null,
           verifiedBy: null,
@@ -231,19 +231,19 @@ const testTask = {
       };
 
       const mockTasksData = {
-    tasks: [testTask],
+        tasks: [testTask],
         metadata: { version: '2.0.0' },
-};
+      };
 
       const validEvidence = {
-    agentId: 'test_agent_001',
+        agentId: 'test_agent_001',
         reviewedItems: [
           {
-    type: 'file',
+            type: 'file',
             description: 'Reviewed taskmanager-api.js for patterns',
             details: 'Examined existing API structure and conventions',
           },
-  ],
+        ],
         summary:
           'Successfully reviewed existing codebase patterns and API conventions',
       };
@@ -254,7 +254,7 @@ const testTask = {
       mockFs.writeFile.mockResolvedValue(undefined);
 
       // Execute test;
-const _result = await api.submitVerificationEvidence(
+      const _result = await api.submitVerificationEvidence(
         'task_123',
         validEvidence,
       );
@@ -281,34 +281,34 @@ const _result = await api.submitVerificationEvidence(
 
     it('should reject evidence when verification gate already passed', async () => {
       // Setup task with already passed verification;
-const testTask = {
+      const testTask = {
         id: 'task_123',
         title: 'Test Task',
         verificationGate: {
-    status: 'passed',
+          status: 'passed',
           requirements: [
             {
-    type: 'file',
+              type: 'file',
               description: 'Review existing codebase patterns',
               critical: true,
             },
-  ],
+          ],
           evidence: { agentId: 'previous_agent' },
           verifiedAt: '2025-09-28T01:00:00.000Z',
           verifiedBy: 'previous_agent',
-        }
-};
+        },
+      };
 
       const mockTasksData = {
-    tasks: [testTask],
+        tasks: [testTask],
         metadata: { version: '2.0.0' },
-};
+      };
 
       mockFs.access.mockResolvedValue(undefined);
       mockFs.readFile.mockResolvedValue(JSON.stringify(mockTasksData));
 
       const validEvidence = {
-    agentId: 'test_agent_001',
+        agentId: 'test_agent_001',
         reviewedItems: [{ type: 'file', description: 'Review attempt' }],
         summary: 'Attempting to verify already passed gate',
       };
@@ -323,34 +323,34 @@ const testTask = {
 
     it('should reject evidence missing required fields', async () => {
       // Setup test task;
-const testTask = {
-    id: 'task_123',
+      const testTask = {
+        id: 'task_123',
         title: 'Test Task',
         verificationGate: {
-    status: 'pending',
+          status: 'pending',
           requirements: [
             {
-    type: 'file',
+              type: 'file',
               description: 'Review existing codebase patterns',
               critical: true,
             },
-  ],
+          ],
           evidence: null,
           verifiedAt: null,
           verifiedBy: null,
-        }
-};
+        },
+      };
 
       const mockTasksData = {
-    tasks: [testTask],
+        tasks: [testTask],
         metadata: { version: '2.0.0' },
-};
+      };
 
       mockFs.access.mockResolvedValue(undefined);
       mockFs.readFile.mockResolvedValue(JSON.stringify(mockTasksData));
 
       // Test missing agentId;
-const invalidEvidence1 = {
+      const invalidEvidence1 = {
         // Missing agentId
         reviewedItems: [{ type: 'file', description: 'Review' }],
         summary: 'Some summary',
@@ -363,7 +363,7 @@ const invalidEvidence1 = {
       );
 
       // Test missing reviewedItems;
-const invalidEvidence2 = {
+      const invalidEvidence2 = {
         agentId: 'test_agent',
         // Missing reviewedItems
         summary: 'Some summary',
@@ -376,7 +376,7 @@ const invalidEvidence2 = {
       );
 
       // Test missing summary;
-const invalidEvidence3 = {
+      const invalidEvidence3 = {
         agentId: 'test_agent',
         reviewedItems: [{ type: 'file', description: 'Review' }],
         // Missing summary
@@ -391,34 +391,34 @@ const invalidEvidence3 = {
 
     it('should reject evidence with invalid reviewedItems format', async () => {
       // Setup test task;
-const testTask = {
-    id: 'task_123',
+      const testTask = {
+        id: 'task_123',
         title: 'Test Task',
         verificationGate: {
-    status: 'pending',
+          status: 'pending',
           requirements: [
             {
-    type: 'file',
+              type: 'file',
               description: 'Review existing codebase patterns',
               critical: true,
             },
-  ],
+          ],
           evidence: null,
           verifiedAt: null,
           verifiedBy: null,
-        }
-};
+        },
+      };
 
       const mockTasksData = {
-    tasks: [testTask],
+        tasks: [testTask],
         metadata: { version: '2.0.0' },
-};
+      };
 
       mockFs.access.mockResolvedValue(undefined);
       mockFs.readFile.mockResolvedValue(JSON.stringify(mockTasksData));
 
       // Test reviewedItems as non-array;
-const invalidEvidence = {
+      const invalidEvidence = {
         agentId: 'test_agent',
         reviewedItems: 'not an array',
         summary: 'Some summary',
@@ -433,22 +433,22 @@ const invalidEvidence = {
 
     it('should reject null or undefined evidence data', async () => {
       // Setup test task;
-const testTask = {
-    id: 'task_123',
+      const testTask = {
+        id: 'task_123',
         title: 'Test Task',
         verificationGate: {
-    status: 'pending',
+          status: 'pending',
           requirements: [],
           evidence: null,
           verifiedAt: null,
           verifiedBy: null,
-        }
-};
+        },
+      };
 
       const mockTasksData = {
-    tasks: [testTask],
+        tasks: [testTask],
         metadata: { version: '2.0.0' },
-};
+      };
 
       mockFs.access.mockResolvedValue(undefined);
       mockFs.readFile.mockResolvedValue(JSON.stringify(mockTasksData));
@@ -470,16 +470,16 @@ const testTask = {
 
     it('should handle task without verification gate', async () => {
       // Setup task without verification gate;
-const testTask = {
-    id: 'task_123',
+      const testTask = {
+        id: 'task_123',
         title: 'Task Without Verification',
         // No verificationGate property
       };
 
       const mockTasksData = {
-    tasks: [testTask],
+        tasks: [testTask],
         metadata: { version: '2.0.0' },
-};
+      };
 
       mockFs.access.mockResolvedValue(undefined);
       mockFs.readFile.mockResolvedValue(JSON.stringify(mockTasksData));
@@ -496,66 +496,66 @@ const testTask = {
         'Failed to submit verification evidence: Task task_123 does not have a verification gate',
       );
     });
-});
+  });
 
   describe('Evidence validation logic', () => {
     it('should validate evidence against requirements properly', async () => {
       // Setup task with multiple requirement types;
-const testTask = {
+      const testTask = {
         id: 'task_123',
         title: 'Multi-requirement Task',
         verificationGate: {
-    status: 'pending',
+          status: 'pending',
           requirements: [
             {
-    type: 'file',
+              type: 'file',
               description: 'Review existing codebase patterns',
               critical: true,
             },
             {
-    type: 'function',
+              type: 'function',
               description: 'Review API patterns and error handling',
               critical: true,
             },
             {
-    type: 'convention',
+              type: 'convention',
               description: 'Review coding conventions',
               critical: false,
             },
-  ],
+          ],
           evidence: null,
           verifiedAt: null,
           verifiedBy: null,
-        }
-};
+        },
+      };
 
       const mockTasksData = {
-    tasks: [testTask],
+        tasks: [testTask],
         metadata: { version: '2.0.0' },
-};
+      };
 
       const comprehensiveEvidence = {
         agentId: 'thorough_agent',
         reviewedItems: [
           {
-    type: 'file',
+            type: 'file',
             description: 'Reviewed taskmanager-api.js structure and patterns',
             details:
               'Examined class structure, method organization, and file patterns',
           },
           {
-    type: 'function',
+            type: 'function',
             description: 'Reviewed API endpoint patterns and error handling',
             details:
               'Analyzed error response formats, status codes, and exception handling',
           },
           {
-    type: 'convention',
+            type: 'convention',
             description: 'Reviewed naming conventions and code style',
             details:
               'Verified camelCase usage, consistent indentation, and comment style',
           },
-  ],
+        ],
         summary:
           'Comprehensive review of all required verification areas completed successfully',
       };
@@ -565,7 +565,7 @@ const testTask = {
       mockFs.writeFile.mockResolvedValue(undefined);
 
       // Execute test;
-const _result = await api.submitVerificationEvidence(
+      const _result = await api.submitVerificationEvidence(
         'task_123',
         comprehensiveEvidence,
       );
@@ -575,54 +575,54 @@ const _result = await api.submitVerificationEvidence(
       expect(result.verificationGate.status).toBe('passed');
       expect(result.verificationGate.evidence.reviewedItems).toHaveLength(3);
     });
-});
+  });
 
   describe('Integration scenarios', () => {
     it('should handle complete verification workflow', async () => {
       // Setup initial task;
-const testTask = {
+      const testTask = {
         id: 'workflow_task',
         title: 'Workflow Test Task',
         verificationGate: {
-    status: 'pending',
+          status: 'pending',
           requirements: [
             {
-    type: 'file',
+              type: 'file',
               description: 'Review existing patterns',
               critical: true,
             },
-  ],
+          ],
           evidence: null,
           verifiedAt: null,
           verifiedBy: null,
-        }
-};
+        },
+      };
 
       const mockTasksData = {
-    tasks: [testTask],
+        tasks: [testTask],
         metadata: { version: '2.0.0' },
-};
+      };
 
       mockFs.access.mockResolvedValue(undefined);
       mockFs.readFile.mockResolvedValue(JSON.stringify(mockTasksData));
       mockFs.writeFile.mockResolvedValue(undefined);
 
       // Step 1: Get verification requirements;
-const requirements =
+      const requirements =
         await api.getVerificationRequirements('workflow_task');
       expect(requirements.success).toBe(true);
       expect(requirements.verificationGate.status).toBe('pending');
 
       // Step 2: Submit evidence;
-const evidence = {
+      const evidence = {
         agentId: 'workflow_agent',
         reviewedItems: [
           {
-    type: 'file',
+            type: 'file',
             description: 'Reviewed existing patterns thoroughly',
             details: 'Complete analysis of codebase structure and conventions',
           },
-  ],
+        ],
         summary: 'Workflow verification completed successfully',
       };
 
@@ -643,5 +643,5 @@ const evidence = {
       );
       expect(submitResult.verificationGate.verifiedAt).toBeTruthy();
     });
-});
+  });
 });

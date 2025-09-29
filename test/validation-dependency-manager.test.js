@@ -15,15 +15,15 @@
 
 const {
   ValidationDependencyManager,
-  DEPENDENCY_TYPES
+  DEPENDENCY_TYPES,
 } = require('../lib/validation-dependency-manager');
 const FS = require('fs').promises;
 const path = require('path');
 const os = require('os');
 
 describe('ValidationDependencyManager', () => {
-    
-    
+
+
   let manager;
   let tempDir;
 
@@ -36,11 +36,11 @@ describe('ValidationDependencyManager', () => {
   afterEach(async () => {
     // Clean up temporary directory
     await FS.rmdir(tempDir, { recursive: true });
-});
+  });
 
   describe('Core Dependency Management', () => {
-    
-    
+
+
     test('should initialize with default dependencies', () => {
       const dependencies = manager.getAllDependencies();
 
@@ -56,9 +56,9 @@ describe('ValidationDependencyManager', () => {
 
     test('should add custom dependency correctly', () => {
       const customDep = {
-    dependencies: [
+        dependencies: [
           { criterion: 'linter-validation', type: DEPENDENCY_TYPES.STRICT },
-  ],
+        ],
         description: 'Custom validation step',
         estimatedDuration: 15000,
         parallelizable: true,
@@ -75,13 +75,13 @@ describe('ValidationDependencyManager', () => {
     });
 
     test('should validate dependency types correctly', () => {
-    
-    
+
+
       expect(() => {
         manager.addDependency('invalid-dep', {
           dependencies: [
             { criterion: 'linter-validation', type: 'invalid-type' },
-  ],
+          ],
         });
       }).toThrow('Invalid dependency type');
     });
@@ -96,21 +96,21 @@ describe('ValidationDependencyManager', () => {
       const removedAgain = manager.removeDependency('non-existent');
       expect(removedAgain).toBe(false);
     });
-});
+  });
 
   describe('Dependency Graph Validation', () => {
-    
-    
+
+
     test('should detect circular dependencies', () => {
       // Create circular dependency
       manager.addDependency('dep-a', {
-        dependencies: [{ criterion: 'dep-b', type: DEPENDENCY_TYPES.STRICT }]
+        dependencies: [{ criterion: 'dep-b', type: DEPENDENCY_TYPES.STRICT }],
       });
       manager.addDependency('dep-b', {
-        dependencies: [{ criterion: 'dep-c', type: DEPENDENCY_TYPES.STRICT }]
+        dependencies: [{ criterion: 'dep-c', type: DEPENDENCY_TYPES.STRICT }],
       });
       manager.addDependency('dep-c', {
-        dependencies: [{ criterion: 'dep-a', type: DEPENDENCY_TYPES.STRICT }]
+        dependencies: [{ criterion: 'dep-a', type: DEPENDENCY_TYPES.STRICT }],
       });
 
       const validation = manager.validateDependencyGraph();
@@ -123,7 +123,7 @@ describe('ValidationDependencyManager', () => {
       manager.addDependency('invalid-dep', {
         dependencies: [
           { criterion: 'non-existent-dep', type: DEPENDENCY_TYPES.STRICT },
-  ],
+        ],
       });
 
       const validation = manager.validateDependencyGraph();
@@ -138,11 +138,11 @@ describe('ValidationDependencyManager', () => {
       expect(validation.valid).toBe(true);
       expect(validation.issues).toHaveLength(0);
     });
-});
+  });
 
   describe('Execution Order Planning', () => {
-    
-    
+
+
     test('should generate correct execution order', () => {
       const executionOrder = manager.getExecutionOrder();
 
@@ -170,18 +170,18 @@ describe('ValidationDependencyManager', () => {
       manager.addDependency('deadlock-test', {
         dependencies: [
           { criterion: 'non-ready-dep', type: DEPENDENCY_TYPES.WEAK },
-  ],
+        ],
       });
 
       const executionOrder = manager.getExecutionOrder(['deadlock-test']);
       expect(executionOrder).toHaveLength(1);
       expect(executionOrder[0].forced).toBe(true);
     });
-});
+  });
 
   describe('Parallel Execution Planning', () => {
-    
-    
+
+
     test('should generate parallel execution plan', () => {
       const plan = manager.generateParallelExecutionPlan(null, 4);
 
@@ -225,11 +225,11 @@ describe('ValidationDependencyManager', () => {
         expect(recommendation.impact).toBeDefined();
       }
     });
-});
+  });
 
   describe('Advanced Parallel Execution Features', () => {
-    
-    
+
+
     test('should handle resource conflicts correctly', () => {
       // Add criteria with conflicting resource requirements
       manager.addDependency('network-intensive-1', {
@@ -277,12 +277,12 @@ describe('ValidationDependencyManager', () => {
       manager.addDependency('dependent-1', {
         dependencies: [
           { criterion: 'high-priority', type: DEPENDENCY_TYPES.STRICT },
-  ],
+        ],
       });
       manager.addDependency('dependent-2', {
         dependencies: [
           { criterion: 'high-priority', type: DEPENDENCY_TYPES.STRICT },
-  ],
+        ],
       });
 
       const plan = manager.generateParallelExecutionPlan(
@@ -300,11 +300,11 @@ describe('ValidationDependencyManager', () => {
 
       expect(highPriorityWave).toBeLessThanOrEqual(lowPriorityWave);
     });
-});
+  });
 
   describe('Adaptive Execution Planning', () => {
-    
-    
+
+
     test('should generate adaptive execution plan', () => {
       const systemInfo = {
         availableCPUs: 8,
@@ -370,11 +370,11 @@ describe('ValidationDependencyManager', () => {
         ),
       ).toBe(true);
     });
-});
+  });
 
   describe('Visualization And Debugging', () => {
-    
-    
+
+
     test('should generate basic visualization data', () => {
       const visualization = manager.getDependencyVisualization();
 
@@ -449,18 +449,18 @@ describe('ValidationDependencyManager', () => {
         manager.generateInteractiveVisualization('unsupported');
       }).toThrow('Unsupported visualization format');
     });
-});
+  });
 
   describe('Advanced Debugging Analysis', () => {
-    
-    
+
+
     beforeEach(() => {
       // Add complex dependency structure for testing
       manager.addDependency('frontend-build', {
         dependencies: [
           { criterion: 'linter-validation', type: DEPENDENCY_TYPES.STRICT },
           { criterion: 'type-validation', type: DEPENDENCY_TYPES.STRICT },
-  ],
+        ],
         estimatedDuration: 30000,
         parallelizable: false,
         resourceRequirements: ['filesystem', 'cpu'],
@@ -470,7 +470,7 @@ describe('ValidationDependencyManager', () => {
         dependencies: [
           { criterion: 'linter-validation', type: DEPENDENCY_TYPES.STRICT },
           { criterion: 'type-validation', type: DEPENDENCY_TYPES.STRICT },
-  ],
+        ],
         estimatedDuration: 45000,
         parallelizable: false,
         resourceRequirements: ['filesystem', 'cpu', 'memory'],
@@ -480,7 +480,7 @@ describe('ValidationDependencyManager', () => {
         dependencies: [
           { criterion: 'frontend-build', type: DEPENDENCY_TYPES.STRICT },
           { criterion: 'backend-build', type: DEPENDENCY_TYPES.STRICT },
-  ],
+        ],
         estimatedDuration: 60000,
         parallelizable: true,
         resourceRequirements: ['network', 'filesystem'],
@@ -569,11 +569,11 @@ describe('ValidationDependencyManager', () => {
         expect(suggestion.impact).toBeDefined();
       }
     });
-});
+  });
 
   describe('Configuration Persistence', () => {
-    
-    
+
+
     test('should save configuration to file', async () => {
       const configPath = await manager.saveDependencyConfig();
 
@@ -592,7 +592,7 @@ describe('ValidationDependencyManager', () => {
 
       // Create new manager And load configuration
       const newManager = new ValidationDependencyManager({
-        projectRoot: tempDir
+        projectRoot: tempDir,
       });
       const loadedConfig = await newManager.loadDependencyConfig(configPath);
 
@@ -609,7 +609,7 @@ describe('ValidationDependencyManager', () => {
 
     test('should handle missing configuration file gracefully', async () => {
       const newManager = new ValidationDependencyManager({
-        projectRoot: tempDir
+        projectRoot: tempDir,
       });
       const result = await newManager.loadDependencyConfig();
 
@@ -619,15 +619,15 @@ describe('ValidationDependencyManager', () => {
       const dependencies = newManager.getAllDependencies();
       expect(Object.keys(dependencies).length).toBeGreaterThan(0);
     });
-});
+  });
 
   describe('Execution Analytics And History', () => {
-    
-    
+
+
     beforeEach(() => {
       // Record some execution history
       manager.recordExecution('linter-validation', 'success', 12000, {
-        wave: 0
+        wave: 0,
       });
       manager.recordExecution('type-validation', 'success', 18000, { wave: 0 });
       manager.recordExecution('build-validation', 'failed', 25000, {
@@ -635,7 +635,7 @@ describe('ValidationDependencyManager', () => {
         error: 'Build error',
       });
       manager.recordExecution('linter-validation', 'success', 11000, {
-        wave: 0
+        wave: 0,
       });
     });
 
@@ -675,17 +675,17 @@ describe('ValidationDependencyManager', () => {
 
     test('should handle empty execution history', () => {
       const emptyManager = new ValidationDependencyManager({
-        projectRoot: tempDir
+        projectRoot: tempDir,
       });
       const analytics = emptyManager.getExecutionAnalytics();
 
       expect(analytics.noData).toBe(true);
     });
-});
+  });
 
   describe('Error Handling And Edge Cases', () => {
-    
-    
+
+
     test('should handle invalid criterion names', () => {
       expect(() => {
         manager.addDependency('', {});
@@ -697,17 +697,17 @@ describe('ValidationDependencyManager', () => {
     });
 
     test('should handle invalid dependency specifications', () => {
-    
-    
+
+
       expect(() => {
         manager.addDependency('test', {
-          dependencies: [{ criterion: 'valid', type: null }]
+          dependencies: [{ criterion: 'valid', type: null }],
         });
       }).toThrow('Invalid dependency specification');
 
       expect(() => {
         manager.addDependency('test', {
-          dependencies: [{ criterion: null, type: DEPENDENCY_TYPES.STRICT }]
+          dependencies: [{ criterion: null, type: DEPENDENCY_TYPES.STRICT }],
         });
       }).toThrow('Invalid dependency specification');
     });
@@ -737,11 +737,11 @@ describe('ValidationDependencyManager', () => {
         expect(wave.concurrency).toBeGreaterThan(0);
       }
     });
-});
+  });
 
   describe('Performance And Memory Management', () => {
-    
-    
+
+
     test('should handle large dependency graphs efficiently', () => {
       const startTime = Date.now();
 
@@ -751,11 +751,11 @@ describe('ValidationDependencyManager', () => {
           dependencies:
             i > 0
               ? [
-                  {
-                    criterion: `criterion-${i - 1}`,
-                    type: DEPENDENCY_TYPES.WEAK
-                  }
-                ]
+                {
+                  criterion: `criterion-${i - 1}`,
+                  type: DEPENDENCY_TYPES.WEAK,
+                },
+              ]
               : [],
           estimatedDuration: Math.random() * 20000 + 5000,
           parallelizable: Math.random() > 0.3,
@@ -794,5 +794,5 @@ describe('ValidationDependencyManager', () => {
       // Memory increase should be reasonable (less than 50MB)
       expect(memoryIncrease).toBeLessThan(50 * 1024 * 1024);
     });
-});
+  });
 });

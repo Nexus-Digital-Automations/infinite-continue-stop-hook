@@ -13,13 +13,13 @@ const {
 const FS = require('fs').promises;
 
 describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
-    
-    
+
+
   let dependencyManager;
 
   beforeEach(() => {
     dependencyManager = new ValidationDependencyManager();
-});
+  });
 
   describe('Initialization And Default Dependencies', () => {
     test('should initialize with default validation criteria', () => {
@@ -77,7 +77,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
         expect(Array.isArray(config.metadata.resourceRequirements)).toBe(true);
       }
     });
-});
+  });
 
   describe('Dependency Management Operations', () => {
     test('should add new dependency configuration correctly', () => {
@@ -85,7 +85,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       const config = {
         dependencies: [
           { criterion: 'linter-validation', type: DEPENDENCY_TYPES.STRICT },
-  ],
+        ],
         description: 'Custom validation check',
         estimatedDuration: 25000,
         parallelizable: true,
@@ -127,7 +127,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
         dependencyManager.addDependency('invalid-test', {
           dependencies: [
             { criterion: 'linter-validation', type: 'invalid-type' },
-  ],
+          ],
         });
       }).toThrow('Invalid dependency type');
     });
@@ -137,7 +137,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
         dependencyManager.addDependency('', {});
       }).toThrow('Criterion must be a non-empty string');
     });
-});
+  });
 
   describe('Dependency Graph Validation', () => {
     test('should validate clean dependency graph', () => {
@@ -152,17 +152,17 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       dependencyManager.addDependency('criterion-a', {
         dependencies: [
           { criterion: 'criterion-b', type: DEPENDENCY_TYPES.STRICT },
-  ],
+        ],
       });
       dependencyManager.addDependency('criterion-b', {
         dependencies: [
           { criterion: 'criterion-c', type: DEPENDENCY_TYPES.STRICT },
-  ],
+        ],
       });
       dependencyManager.addDependency('criterion-c', {
         dependencies: [
           { criterion: 'criterion-a', type: DEPENDENCY_TYPES.STRICT },
-  ],
+        ],
       });
 
       const validation = dependencyManager.validateDependencyGraph();
@@ -180,7 +180,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
             criterion: 'non-existent-criterion',
             type: DEPENDENCY_TYPES.STRICT,
           },
-  ],
+        ],
       });
 
       const validation = dependencyManager.validateDependencyGraph();
@@ -193,7 +193,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
         'non-existent-criterion',
       );
     });
-});
+  });
 
   describe('Execution Order Optimization', () => {
     test('should generate correct execution order respecting dependencies', () => {
@@ -203,10 +203,10 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       expect(executionOrder.length).toBe(7);
 
       // Extract criteria names for easier testing;
-const criteriaOrder = executionOrder.map((item) => item.criterion);
+      const criteriaOrder = executionOrder.map((item) => item.criterion);
 
       // Verify dependency constraints;
-const linterIndex = criteriaOrder.indexOf('linter-validation');
+      const linterIndex = criteriaOrder.indexOf('linter-validation');
       const typeIndex = criteriaOrder.indexOf('type-validation');
       const buildIndex = criteriaOrder.indexOf('build-validation');
       const startIndex = criteriaOrder.indexOf('start-validation');
@@ -228,20 +228,20 @@ const linterIndex = criteriaOrder.indexOf('linter-validation');
       dependencyManager.addDependency('blocked-test-1', {
         dependencies: [
           { criterion: 'missing-dependency', type: DEPENDENCY_TYPES.STRICT },
-  ],
+        ],
         estimatedDuration: 10000,
         parallelizable: true,
       });
       dependencyManager.addDependency('blocked-test-2', {
         dependencies: [
           { criterion: 'another-missing', type: DEPENDENCY_TYPES.STRICT },
-  ],
+        ],
         estimatedDuration: 15000,
         parallelizable: true,
       });
 
       // Get execution order for criteria with missing dependencies;
-const executionOrder = dependencyManager.getExecutionOrder([
+      const executionOrder = dependencyManager.getExecutionOrder([
         'blocked-test-1',
         'blocked-test-2',
       ]);
@@ -254,7 +254,7 @@ const executionOrder = dependencyManager.getExecutionOrder([
       // execution, we test the completion instead
       expect(executionOrder.every((item) => item.criterion)).toBe(true);
     });
-});
+  });
 
   describe('Parallel Execution Planning', () => {
     test('should generate efficient parallel execution plan', () => {
@@ -277,7 +277,7 @@ const executionOrder = dependencyManager.getExecutionOrder([
       const plan = dependencyManager.generateParallelExecutionPlan();
 
       // Find waves containing specific criteria;
-let buildWave = null;
+      let buildWave = null;
       let linterWave = null;
       let typeWave = null;
 
@@ -335,7 +335,7 @@ let buildWave = null;
       // Should still produce valid execution plan
       expect(plan.plan.length).toBeGreaterThan(0);
     });
-});
+  });
 
   describe('Advanced Analytics And Optimization', () => {
     test('should generate dependency visualization data', () => {
@@ -350,7 +350,7 @@ let buildWave = null;
       expect(visualization.nodes.length).toBe(7);
 
       // Check node structure;
-const firstNode = visualization.nodes[0];
+      const firstNode = visualization.nodes[0];
       expect(firstNode).toHaveProperty('id');
       expect(firstNode).toHaveProperty('label');
       expect(firstNode).toHaveProperty('description');
@@ -423,7 +423,7 @@ const firstNode = visualization.nodes[0];
       const analytics = dependencyManager.getExecutionAnalytics();
       expect(analytics.noData).toBe(true);
     });
-});
+  });
 
   describe('Configuration Persistence', () => {
     test('should save dependency configuration to file', async () => {
@@ -433,7 +433,7 @@ const firstNode = visualization.nodes[0];
       expect(configPath).toContain('.validation-dependencies.json');
 
       // Verify file exists And contains valid JSON;
-const configData = await FS.readFile(configPath, 'utf8');
+      const configData = await FS.readFile(configPath, 'utf8');
       const config = JSON.parse(configData);
 
       expect(config).toHaveProperty('version');
@@ -447,17 +447,17 @@ const configData = await FS.readFile(configPath, 'utf8');
 
     test('should load dependency configuration from file', async () => {
       // First save current config;
-const configPath = await dependencyManager.saveDependencyConfig();
+      const configPath = await dependencyManager.saveDependencyConfig();
 
       // Create new manager And load config;
-const newManager = new ValidationDependencyManager();
+      const newManager = new ValidationDependencyManager();
       const loadedConfig = await newManager.loadDependencyConfig(configPath);
 
       expect(loadedConfig).toBeTruthy();
       expect(loadedConfig.dependencies).toBeTruthy();
 
       // Verify loaded dependencies match original;
-const originalDeps = dependencyManager.getAllDependencies();
+      const originalDeps = dependencyManager.getAllDependencies();
       const loadedDeps = newManager.getAllDependencies();
 
       expect(Object.keys(loadedDeps)).toHaveLength(
@@ -475,7 +475,7 @@ const originalDeps = dependencyManager.getAllDependencies();
       );
       expect(result).toBeNull();
     });
-});
+  });
 
   describe('Adaptive Execution Planning', () => {
     test('should generate adaptive execution plan based on system resources', () => {
@@ -521,7 +521,7 @@ const originalDeps = dependencyManager.getAllDependencies();
       );
 
       // Should recommend lower concurrency for constrained system;
-const recommendedConcurrency =
+      const recommendedConcurrency =
         adaptivePlan.adaptiveOptimizations.systemAware.recommendedConcurrency;
       expect(recommendedConcurrency).toBeLessThanOrEqual(4);
 
@@ -530,7 +530,7 @@ const recommendedConcurrency =
         adaptivePlan.adaptiveOptimizations.resourceScheduling.length,
       ).toBeGreaterThan(0);
     });
-});
+  });
 
   describe('Complex Workflow Scenarios', () => {
     test('should handle large dependency graphs efficiently', () => {
@@ -540,11 +540,11 @@ const recommendedConcurrency =
           dependencies:
             i > 0
               ? [
-                  {
-                    criterion: `custom-criterion-${i - 1}`,
+                {
+                  criterion: `custom-criterion-${i - 1}`,
                   type: DEPENDENCY_TYPES.WEAK,
                 },
-  ]
+              ]
               : [],
           description: `Custom validation criterion ${i}`,
           estimatedDuration: 5000 + i * 1000,
@@ -555,7 +555,7 @@ const recommendedConcurrency =
 
       const executionOrder = dependencyManager.getExecutionOrder();
       expect(executionOrder.length).toBe(27); // 7 default + 20 custom;
-const parallelPlan = dependencyManager.generateParallelExecutionPlan();
+      const parallelPlan = dependencyManager.generateParallelExecutionPlan();
       expect(parallelPlan.plan.length).toBeGreaterThan(0);
       expect(parallelPlan.parallelizationGain).toBeGreaterThan(0);
     });
@@ -581,7 +581,7 @@ const parallelPlan = dependencyManager.generateParallelExecutionPlan();
           { criterion: 'linter-validation', type: DEPENDENCY_TYPES.STRICT },
           { criterion: 'security-validation', type: DEPENDENCY_TYPES.WEAK },
           { criterion: 'focused-codebase', type: DEPENDENCY_TYPES.OPTIONAL },
-  ],
+        ],
         description: 'Test with mixed dependency types',
         estimatedDuration: 15000,
         parallelizable: true,
@@ -600,7 +600,7 @@ const parallelPlan = dependencyManager.generateParallelExecutionPlan();
       // Strict dependency must be satisfied
       expect(mixedTestIndex).toBeGreaterThan(linterIndex);
     });
-});
+  });
 
   describe('Error Handling And Edge Cases', () => {
     test('should handle empty criteria lists', () => {
@@ -645,5 +645,5 @@ const parallelPlan = dependencyManager.generateParallelExecutionPlan();
       const analytics = dependencyManager.getExecutionAnalytics();
       expect(analytics.totalExecutions).toBe(1000); // Should be capped at 1000
     });
-});
+  });
 });

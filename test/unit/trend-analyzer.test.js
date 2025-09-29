@@ -3,8 +3,8 @@ const path = require('path');
 const TrendAnalyzer = require('../../lib/trend-analyzer');
 
 describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
-    
-    
+
+
   const mockProjectRoot = '/tmp/test-trend-analyzer';
   const mockEnhancedMetricsFile = path.join(
     mockProjectRoot,
@@ -34,14 +34,14 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
     );
 
     trendAnalyzer = new TrendAnalyzer(mockProjectRoot);
-});
+  });
 
   afterEach(() => {
     // Clean up test directory
     if (FS.existsSync(mockProjectRoot)) {
       FS.rmSync(mockProjectRoot, { recursive: true, force: true });
     }
-});
+  });
 
   function createMockMetricsData(daysBack = 30) {
     const now = Date.now();
@@ -52,7 +52,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
       const dayTimestamp = now - day * 24 * 60 * 60 * 1000;
 
       // Add metrics for each validation criterion per day;
-const criteria = [
+      const criteria = [
         'linter-validation',
         'type-validation',
         'build-validation',
@@ -62,7 +62,7 @@ const criteria = [
 
       criteria.forEach((criterion, index) => {
         // Add some variation And trends;
-const baseDuration = {
+        const baseDuration = {
           'linter-validation': 1500,
           'type-validation': 2500,
           'build-validation': 20000,
@@ -71,17 +71,17 @@ const baseDuration = {
         }[criterion];
 
         // Add trend: performance degradation over time for some criteria;
-const trendFactor =
+        const trendFactor =
           criterion === 'build-validation' ? 1 + day * 0.02 : 1;
         const randomVariation = 0.8 + Math.random() * 0.4; // ±20% variation;
-const duration = Math.round(
+        const duration = Math.round(
           baseDuration * trendFactor * randomVariation,
         );
 
         metrics.push({
           criterion,
           timing: {
-    startTime: new Date(
+            startTime: new Date(
               dayTimestamp + index * 60 * 60 * 1000,
             ).toISOString(),
             endTime: new Date(
@@ -90,21 +90,21 @@ const duration = Math.round(
             durationMs: duration,
           },
           execution: {
-    success: Math.random() > 0.1, // 90% success rate
+            success: Math.random() > 0.1, // 90% success rate
           },
           resources: {
-    memoryUsageBefore: { rss: 50000000, heapUsed: 30000000 },
+            memoryUsageBefore: { rss: 50000000, heapUsed: 30000000 },
             memoryUsageAfter: {
-    rss: 52000000 + duration / 10,
+              rss: 52000000 + duration / 10,
               heapUsed: 31000000 + duration / 20,
-            }
-}
-});
+            },
+          },
+        });
       });
     }
 
     const metricsData = {
-    version: '2.0.0',
+      version: '2.0.0',
       generatedAt: new Date().toISOString(),
       metrics: metrics.reverse(), // Most recent first
     };
@@ -114,7 +114,7 @@ const duration = Math.round(
       JSON.stringify(metricsData, null, 2),
     );
     return metricsData;
-}
+  }
 
   describe('analyzeTrends', () => {
     test('should return insufficient data message when not enough metrics', async () => {
@@ -187,7 +187,7 @@ const duration = Math.round(
       expect(hourlyResult.analysis.metadata.granularity).toBe('hourly');
       expect(dailyResult.analysis.metadata.granularity).toBe('daily');
     });
-});
+  });
 
   describe('analyzeCriterionTrend', () => {
     test('should return insufficient data for single criterion', async () => {
@@ -236,7 +236,7 @@ const duration = Math.round(
       expect(result.analysis.trend.strength).toBeLessThanOrEqual(1);
       expect(typeof result.analysis.trend.slope).toBe('number');
     });
-});
+  });
 
   describe('generateHealthScoreTrends', () => {
     test('should generate health score trends over time', async () => {
@@ -273,7 +273,7 @@ const duration = Math.round(
       expect(typeof result.healthTrends.summary.volatility).toBe('number');
       expect(result.healthTrends.summary.recommendation).toBeDefined();
     });
-});
+  });
 
   describe('comparePerformancePeriods', () => {
     test('should return insufficient data for small periods', async () => {
@@ -331,18 +331,18 @@ const duration = Math.round(
       expect(result.comparison.byCriterion).toBeDefined();
       expect(result.comparison.summary).toBeDefined();
     });
-});
+  });
 
   describe('Helper Methods', () => {
     test('should load metrics from both enhanced And legacy files', async () => {
       // Create both enhanced And legacy data;
-const enhancedData = {
+      const enhancedData = {
         metrics: [
           {
             criterion: 'test1',
             timing: { startTime: '2025-09-27T01:00:00.000Z', durationMs: 1000 },
-},
-  ],
+          },
+        ],
       };
       const legacyData = {
         metrics: [
@@ -351,7 +351,7 @@ const enhancedData = {
             startTime: '2025-09-27T02:00:00.000Z',
             durationMs: 2000,
           },
-  ],
+        ],
       };
 
       FS.writeFileSync(
@@ -399,7 +399,7 @@ const enhancedData = {
         { criterion: 'linter-validation' },
         { criterion: 'build-validation' },
         { criterion: 'linter-validation' },
-  ];
+      ];
 
       const grouped = trendAnalyzer._groupByCriterion(metrics);
 
@@ -410,21 +410,21 @@ const enhancedData = {
 
     test('should calculate trend direction correctly', () => {
       // Increasing trend;
-const increasingValues = [1, 2, 3, 4, 5];
+      const increasingValues = [1, 2, 3, 4, 5];
       const increasingTrend =
         trendAnalyzer._calculateTrendDirection(increasingValues);
       expect(increasingTrend.direction).toBe('increasing');
       expect(increasingTrend.slope).toBeGreaterThan(0);
 
       // Decreasing trend;
-const decreasingValues = [5, 4, 3, 2, 1];
+      const decreasingValues = [5, 4, 3, 2, 1];
       const decreasingTrend =
         trendAnalyzer._calculateTrendDirection(decreasingValues);
       expect(decreasingTrend.direction).toBe('decreasing');
       expect(decreasingTrend.slope).toBeLessThan(0);
 
       // Stable trend;
-const stableValues = [3, 3, 3, 3, 3];
+      const stableValues = [3, 3, 3, 3, 3];
       const stableTrend = trendAnalyzer._calculateTrendDirection(stableValues);
       expect(stableTrend.direction).toBe('stable');
       expect(Math.abs(stableTrend.slope)).toBeLessThan(0.001);
@@ -449,13 +449,13 @@ const stableValues = [3, 3, 3, 3, 3];
         { timing: { durationMs: 1000 }, execution: { success: true } },
         { timing: { durationMs: 1200 }, execution: { success: true } },
         { timing: { durationMs: 900 }, execution: { success: true } },
-  ];
+      ];
 
       const poorMetrics = [
         { timing: { durationMs: 25000 }, execution: { success: false } },
         { timing: { durationMs: 30000 }, execution: { success: false } },
         { timing: { durationMs: 28000 }, execution: { success: true } },
-  ];
+      ];
 
       const goodScore = trendAnalyzer._calculateHealthScore(goodMetrics);
       const poorScore = trendAnalyzer._calculateHealthScore(poorMetrics);
@@ -466,7 +466,7 @@ const stableValues = [3, 3, 3, 3, 3];
       expect(poorScore).toBeGreaterThanOrEqual(0);
       expect(poorScore).toBeLessThanOrEqual(100);
     });
-});
+  });
 
   describe('Statistical Analysis', () => {
     test('should calculate median correctly', () => {
@@ -487,12 +487,12 @@ const stableValues = [3, 3, 3, 3, 3];
       expect(trendAnalyzer._calculatePercentile(values, 0.0)).toBe(1); // 0th percentile (min)
       expect(trendAnalyzer._calculatePercentile(values, 1.0)).toBe(10); // 100th percentile (max)
     });
-});
+  });
 
   describe('Pattern Detection', () => {
     test('should detect cyclical patterns', () => {
       const durations = [10, 20, 15, 25, 12, 22, 14, 24]; // High variance;
-const timestamps = durations.map(
+      const timestamps = durations.map(
         (_, i) => new Date(Date.now() + i * 60 * 60 * 1000),
       );
 
@@ -508,7 +508,7 @@ const timestamps = durations.map(
 
     test('should detect seasonal patterns', () => {
       const durations = [10, 15, 20, 25, 30, 25, 20, 15]; // Variation throughout day;
-const timestamps = durations.map((_, i) => {
+      const timestamps = durations.map((_, i) => {
         const date = new Date();
         date.setHours(i * 3); // Every 3 hours
         return date;
@@ -540,7 +540,7 @@ const timestamps = durations.map((_, i) => {
       expect(pattern.strength).toBeGreaterThan(0.6);
       expect(pattern.pattern).toBe('increasing_performance_trend');
     });
-});
+  });
 
   describe('Error Handling', () => {
     test('should handle missing metrics files gracefully', async () => {
@@ -577,7 +577,7 @@ const timestamps = durations.map((_, i) => {
       const filtered = trendAnalyzer._filterMetricsByTimeRange(metrics, 7);
       expect(filtered).toHaveLength(0);
     });
-});
+  });
 
   describe('Storage And Persistence', () => {
     test('should store trend analysis results', async () => {
@@ -587,15 +587,15 @@ const timestamps = durations.map((_, i) => {
       expect(result.success).toBe(true);
 
       // Check if trends file was created;
-const trendsFileExists = await trendAnalyzer._fileExists(mockTrendsFile);
+      const trendsFileExists = await trendAnalyzer._fileExists(mockTrendsFile);
       expect(trendsFileExists).toBe(true);
 
       // Verify stored content;
-const storedData = JSON.parse(FS.readFileSync(mockTrendsFile, 'utf8'));
+      const storedData = JSON.parse(FS.readFileSync(mockTrendsFile, 'utf8'));
       expect(storedData.generatedAt).toBeDefined();
       expect(storedData.version).toBe('1.0.0');
       expect(storedData.analysis).toBeDefined();
       expect(storedData.summary).toBeDefined();
     });
-});
+  });
 });

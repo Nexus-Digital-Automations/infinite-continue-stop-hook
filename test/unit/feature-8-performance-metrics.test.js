@@ -540,12 +540,12 @@ const mockMetrics = {
             durationMs: 1000,
             success: true,
             startTime: '2025-09-27T01:00:00.000Z',
-          }, {,
+          }, {
     criterion: 'test-validation',
             durationMs: 2000,
             success: true,
             startTime: '2025-09-27T02:00:00.000Z',
-          }, {,
+          }, {
     criterion: 'test-validation',
             durationMs: 3000,
             success: false,
@@ -585,9 +585,7 @@ const mockMetrics = {
   describe('identifyPerformanceBottlenecks', () => {
     
     
-    test('should return empty bottlenecks when no data available', async () 
-    return () 
-    return () => {
+    test('should return empty bottlenecks when no data available', async () => {
       const _result = await taskManager.identifyPerformanceBottlenecks();
 
       expect(result.success).toBe(true);
@@ -611,7 +609,7 @@ const mockMetrics = {
             durationMs: 7000, // Moderate bottleneck (>5000ms but <10000ms)
             success: true,
             startTime: '2025-09-27T02:00:00.000Z',
-          }, {,
+          }, {
     criterion: 'test-validation',
             durationMs: 2000, // No bottleneck
             success: true,
@@ -690,7 +688,7 @@ const mockMetrics = {
             durationMs: 25000,
             success: true,
             startTime: '2025-09-27T02:00:00.000Z',
-          }, {,
+          }, {
     criterion: 'test-validation',
             durationMs: 8000,
             success: false,
@@ -734,7 +732,7 @@ const mockMetrics = {
             durationMs: 3000, // Exceeds 2000ms target
             success: true,
             startTime: '2025-09-27T01:00:00.000Z',
-          }, {,
+          }, {
     criterion: 'test-validation',
             durationMs: 15000, // Exceeds 10000ms target
             success: true,
