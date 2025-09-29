@@ -16,7 +16,7 @@ function finalAuditFix() {
     // Fix error.message in child process error handler
     content = content.replace(
       /reject\(new Error\(`Command execution failed: \$\{error\.message\}`\)\);/g,
-      'reject(new Error(`Command execution failed: ${error.message}`));'
+      'reject(new Error(`Command execution failed: ${error.message}`));',
     );
 
     // Replace ALL instances of result (uppercase) with result (lowercase)
@@ -29,7 +29,7 @@ function finalAuditFix() {
     // Ensure proper catch parameter naming
     content = content.replace(
       /} catch \{([^}]+)\$\{error\.message\}/g,
-      '} catch (_) {$1${err.message}'
+      '} catch (_) {$1${err.message}',
     );
 
     // Clean up any remaining unused variable assignments

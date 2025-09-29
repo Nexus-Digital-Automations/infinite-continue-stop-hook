@@ -1,14 +1,14 @@
 {
   "metadata": {
-    "timestamp": "2025-09-29T23:34:25.392Z",
+    "timestamp": "2025-09-29T23:37:24.792Z",
     "reporter": "jest-cicd-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System",
-    "duration_ms": 2424
+    "duration_ms": 15267
   },
   "cicd_summary": {
     "pipeline_status": "FAILURE",
-    "total_duration_ms": 2424,
+    "total_duration_ms": 15267,
     "should_block_deployment": true,
     "quality_gate_status": {
       "status": "FAILED",
@@ -22,7 +22,7 @@
         {
           "type": "test_failures",
           "severity": "critical",
-          "message": "1 test(s) failed",
+          "message": "10 test(s) failed",
           "action": "Fix failing tests before deployment"
         },
         {
@@ -33,7 +33,7 @@
         }
       ]
     },
-    "test_health_score": 95
+    "test_health_score": 40
   },
   "test_execution": {
     "summary": {
@@ -42,47 +42,102 @@
       "failed_suites": 1,
       "total_tests": 10,
       "passed_tests": 0,
-      "failed_tests": 1,
-      "pending_tests": 9,
+      "failed_tests": 10,
+      "pending_tests": 0,
       "success_rate": "0.00",
-      "execution_time_ms": 2424
+      "execution_time_ms": 15267
     },
     "performance_metrics": {
-      "average_test_duration": 242.4,
+      "average_test_duration": 1526.7,
       "slowest_suite": {
         "path": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
-        "duration_ms": 1902,
-        "num_tests": 1
+        "duration_ms": 14259,
+        "num_tests": 10
       },
       "memory_usage": {
-        "rss": 303611904,
-        "heap_total": 180043776,
-        "heap_used": 150406112,
-        "external": 4984329,
-        "heap_usage_percent": "83.54"
+        "rss": 127729664,
+        "heap_total": 156925952,
+        "heap_used": 141788392,
+        "external": 4976203,
+        "heap_usage_percent": "90.35"
       },
       "parallel_efficiency": {
-        "parallel_efficiency_percent": "78.43",
-        "total_execution_time_ms": 2425,
-        "serial_time_ms": 1902,
+        "parallel_efficiency_percent": "93.40",
+        "total_execution_time_ms": 15267,
+        "serial_time_ms": 14259,
         "time_saved_ms": 0
       }
     },
     "failure_analysis": {
-      "total_failures": 1,
+      "total_failures": 10,
       "failed_suites": 1,
       "failure_details": [
         {
           "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
           "test": "Success Criteria End-to-End Tests Complete Validation Workflows should execute full feature validation workflow",
-          "duration": 1069,
+          "duration": 1397,
+          "error": "Error: expect(received).toContain(expected) // indexOf\n\nExpected substring: \"suggested\"\nReceived string:    \"[dotenv@17.2.2] injecting env (0) from .env -- tip: 📡 version env with Radar: https://dote"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
+          "test": "Success Criteria End-to-End Tests Complete Validation Workflows should handle validation failures gracefully",
+          "duration": 1122,
           "error": "Error: expect(received).toContain(expected) // indexOf\n\nExpected substring: \"suggested\"\nReceived string:    \"[dotenv@17.2.2] injecting env (0) from .env -- tip: 🔐 prevent committing .env to code: htt"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
+          "test": "Success Criteria End-to-End Tests Complete Validation Workflows should validate feature categorization workflow",
+          "duration": 1975,
+          "error": "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:481:46)\n    at processTicksAndReje"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
+          "test": "Success Criteria End-to-End Tests Real-World Usage Scenarios should handle typical development workflow",
+          "duration": 1440,
+          "error": "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:575:47)\n    at processTicksAndReje"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
+          "test": "Success Criteria End-to-End Tests Real-World Usage Scenarios should handle bug fix workflow with criteria",
+          "duration": 1106,
+          "error": "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:654:46)\n    at processTicksAndReje"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
+          "test": "Success Criteria End-to-End Tests Real-World Usage Scenarios should handle refactoring workflow with quality gates",
+          "duration": 1543,
+          "error": "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:741:48)\n    at processTicksAndReje"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
+          "test": "Success Criteria End-to-End Tests Multi-Agent Coordination should coordinate feature validation across multiple agents",
+          "duration": 1136,
+          "error": "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:864:46)\n    at processTicksAndReje"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
+          "test": "Success Criteria End-to-End Tests Performance Validation And Benchmarking should validate performance criteria with actual benchmarks",
+          "duration": 1091,
+          "error": "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:954:46)\n    at processTicksAndReje"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
+          "test": "Success Criteria End-to-End Tests Performance Validation And Benchmarking should handle performance regression detection",
+          "duration": 1062,
+          "error": "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:1031:46)\n    at processTicksAndRej"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
+          "test": "Success Criteria End-to-End Tests Evidence Collection And Reporting should collect And store validation evidence",
+          "duration": 1163,
+          "error": "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:1111:46)\n    at processTicksAndRej"
         }
       ],
       "failure_patterns": {
-        "assertion": 1
+        "assertion": 2,
+        "type": 8
       },
-      "common_failure_type": "assertion"
+      "common_failure_type": "type"
     },
     "flaky_test_detection": {
       "potentially_flaky": [],
@@ -91,11 +146,11 @@
     }
   },
   "git": {
-    "commit_sha": "7889ce306ae3c786ad2d1792b60dedaa274e65b9",
+    "commit_sha": "ae958d9e959b5c2dac3cb818e43016f9b3513db0",
     "branch": "main",
     "author": "Claude <claude@anthropic.com>",
-    "commit_message": "fix: resolve JavaScript syntax errors in test files",
-    "commit_date": "2025-09-29 18:30:14 -0500",
+    "commit_message": "fix: resolve systematic JavaScript syntax errors preventing TaskManager API execution",
+    "commit_date": "2025-09-29 18:36:32 -0500",
     "tag": null,
     "is_dirty": true,
     "remote_url": "https://github.com/Nexus-Digital-Automations/infinite-continue-stop-hook.git"
@@ -111,7 +166,7 @@
     "locale": "en-US",
     "memory": {
       "total": 25769803776,
-      "available": 190005248
+      "available": 396738560
     },
     "cpu": {
       "cores": 8,
@@ -134,7 +189,7 @@
       "category": "testing",
       "priority": "high",
       "recommendation": "Fix failing tests immediately",
-      "details": "1 tests are currently failing"
+      "details": "10 tests are currently failing"
     }
   ]
 }

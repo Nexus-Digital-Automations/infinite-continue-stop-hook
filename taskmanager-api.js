@@ -90,7 +90,7 @@ class FileLock {
   }
 
   async acquire(_filePath) {
-    const lockPath = `${filePath}.lock`;
+    const lockPath = `${_filePath}.lock`;
 
     for (let attempt = 0; attempt < this.maxRetries; attempt++) {
       try {
@@ -473,7 +473,7 @@ class AutonomousTaskManagerAPI {
       // Validate required fields before atomic operation
       this._validateFeatureData(featureData);
 
-      const _result = await this._atomicFeatureOperation((features) => {
+      const result = await this._atomicFeatureOperation((features) => {
         const feature = {
           id: this._generateFeatureId(),
           title: featureData.title,
@@ -12109,6 +12109,9 @@ async function main(category = 'general') {
       component: 'TaskManagerAPI',
       operation: 'mainExecution',
     });
+
+    // Output result as JSON for E2E tests and CLI consumption
+    console.log(JSON.stringify(result, null, 2));
   } catch (_) {
     const errorResponse = {
       success: false,
@@ -12126,6 +12129,9 @@ async function main(category = 'general') {
       operation: 'autonomousTaskManagement',
       errorType: 'execution_failure',
     });
+
+    // Output error response as JSON for E2E tests and CLI consumption
+    console.log(JSON.stringify(errorResponse, null, 2));
     throw new Error('Autonomous Task Management API execution failed');
   } finally {
     await api.cleanup();

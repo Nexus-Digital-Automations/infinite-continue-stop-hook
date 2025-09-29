@@ -1,4 +1,4 @@
-/* eslint-disable no-console, security/detect-non-literal-fs-filename */
+/* eslint-disable no-console */
 /**
  * Fix undefined variables in audit-system-validation.test.js
  */
@@ -17,13 +17,13 @@ function fixAuditTestVariables(_filePath, _filePath) {
     // Fix the error.message issue in catch block
     content = content.replace(
       /`Command failed \(code \$\{code\}\): \$\{stderr\}\\nStdout: \$\{stdout\}\\nParse error: \$\{error\.message\}`/g,
-      '`Command failed (code ${code}): ${stderr}\\nStdout: ${stdout}\\nParse error: Unknown parse error`'
+      '`Command failed (code ${code}): ${stderr}\\nStdout: ${stdout}\\nParse error: Unknown parse error`',
     );
 
     // Fix variable declarations at the top
     content = content.replace(
       /const TEST_AGENT_ID = null;\s*const AUDIT_AGENT_ID = null;/g,
-      'let testAgentId = null;\n  let auditAgentId = null;'
+      'let testAgentId = null;\n  let auditAgentId = null;',
     );
 
     // Fix all instances of result.taskId to result.taskId
@@ -37,7 +37,7 @@ function fixAuditTestVariables(_filePath, _filePath) {
       // Add at the top of describe block if not present
       content = content.replace(
         /(describe\('Audit System Validation Tests', \(\) => \{[\s\S]*?)let implementationAgentId = null;/,
-        '$1let implementationAgentId = null;\n  let testAgentId = null;\n  let auditAgentId = null;'
+        '$1let implementationAgentId = null;\n  let testAgentId = null;\n  let auditAgentId = null;',
       );
     }
 

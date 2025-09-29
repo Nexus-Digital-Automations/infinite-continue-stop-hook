@@ -11,7 +11,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
   );
 
   // Mock TaskManager class for testing
-class MockTaskManager {
+  class MockTaskManager {
     constructor() {
       this.PROJECT_ROOT = mockProjectRoot;
     }
@@ -35,8 +35,8 @@ class MockTaskManager {
         );
 
         if (!(await this._fileExists(metricsFile))) {
-    return {
-    success: true,
+          return {
+            success: true,
             metrics: [],
             statistics: null,
             message: 'No performance metrics available yet',
@@ -47,7 +47,7 @@ class MockTaskManager {
         const metricsData = JSON.parse(data);
 
         // Apply filtering options;
-let filteredMetrics = metricsData.metrics || [];
+        let filteredMetrics = metricsData.metrics || [];
         if (options.timeRange) {
           const cutoffTime = new Date(
             Date.now() - options.timeRange * 24 * 60 * 60 * 1000,
@@ -68,25 +68,25 @@ let filteredMetrics = metricsData.metrics || [];
         }
 
         // Calculate enhanced statistics;
-const enhancedStats =
+        const enhancedStats =
           this._calculateEnhancedPerformanceStatistics(filteredMetrics);
 
         return {
-    success: true,
+          success: true,
           metrics: options.limit
             ? filteredMetrics.slice(-options.limit)
             : filteredMetrics,
           statistics: enhancedStats,
           filtering: {
-    applied: options,
+            applied: options,
             totalRecords: metricsData.metrics?.length || 0,
             filteredRecords: filteredMetrics.length,
           },
           featureId: 'feature_1758946499841_cd5eba625370',
         };
       } catch (_) {
-    return {
-    success: false,
+        return {
+          success: false,
           error: error.message,
           metrics: [],
           statistics: null,
@@ -103,8 +103,8 @@ const enhancedStats =
         );
 
         if (!(await this._fileExists(metricsFile))) {
-    return {
-    success: true,
+          return {
+            success: true,
             bottlenecks: [],
             message: 'No performance data available for bottleneck analysis',
           };
@@ -115,27 +115,27 @@ const enhancedStats =
         const metrics = metricsData.metrics || [];
 
         // Analyze bottlenecks by criterion;
-const bottleneckAnalysis = this._analyzeBottlenecks(metrics, options);
+        const bottleneckAnalysis = this._analyzeBottlenecks(metrics, options);
 
         return {
-    success: true,
+          success: true,
           bottlenecks: bottleneckAnalysis.bottlenecks,
           recommendations: bottleneckAnalysis.recommendations,
           analysis: {
-    totalCriteria: bottleneckAnalysis.totalCriteria,
+            totalCriteria: bottleneckAnalysis.totalCriteria,
             averageExecutionTime: bottleneckAnalysis.averageExecutionTime,
             slowestCriterion: bottleneckAnalysis.slowestCriterion,
             fastestCriterion: bottleneckAnalysis.fastestCriterion,
           },
           thresholds: {
-    slowThreshold: options.slowThreshold || 5000,
+            slowThreshold: options.slowThreshold || 5000,
             criticalThreshold: options.criticalThreshold || 10000,
           },
           featureId: 'feature_1758946499841_cd5eba625370',
         };
       } catch (_) {
-    return {
-    success: false,
+        return {
+          success: false,
           error: error.message,
           bottlenecks: [],
         };
@@ -151,8 +151,8 @@ const bottleneckAnalysis = this._analyzeBottlenecks(metrics, options);
         );
 
         if (!(await this._fileExists(metricsFile))) {
-    return {
-    success: true,
+          return {
+            success: true,
             benchmarks: null,
             message: 'No performance data available for benchmarking',
           };
@@ -163,26 +163,26 @@ const bottleneckAnalysis = this._analyzeBottlenecks(metrics, options);
         const metrics = metricsData.metrics || [];
 
         // Calculate benchmarks;
-const benchmarks = this._calculatePerformanceBenchmarks(
+        const benchmarks = this._calculatePerformanceBenchmarks(
           metrics,
           options,
         );
 
         return {
-    success: true,
+          success: true,
           benchmarks,
           industry_standards: {
-    linter_validation: { target: '< 2000ms', acceptable: '< 5000ms' },
+            linter_validation: { target: '< 2000ms', acceptable: '< 5000ms' },
             type_validation: { target: '< 3000ms', acceptable: '< 8000ms' },
             build_validation: { target: '< 30000ms', acceptable: '< 60000ms' },
             test_validation: { target: '< 10000ms', acceptable: '< 30000ms' },
-},
+          },
           recommendations: this._generateBenchmarkRecommendations(benchmarks),
           featureId: 'feature_1758946499841_cd5eba625370',
         };
       } catch (_) {
-    return {
-    success: false,
+        return {
+          success: false,
           error: error.message,
           benchmarks: null,
         };
@@ -200,30 +200,30 @@ const benchmarks = this._calculatePerformanceBenchmarks(
         (metrics.filter((m) => m.success).length / metrics.length) * 100;
 
       // Calculate percentiles;
-const sortedDurations = durations.slice().sort((a, b) => a - b);
+      const sortedDurations = durations.slice().sort((a, b) => a - b);
       const p50 = sortedDurations[Math.floor(sortedDurations.length * 0.5)];
       const p90 = sortedDurations[Math.floor(sortedDurations.length * 0.9)];
       const p95 = sortedDurations[Math.floor(sortedDurations.length * 0.95)];
       const p99 = sortedDurations[Math.floor(sortedDurations.length * 0.99)];
 
       return {
-    totalMeasurements: metrics.length,
+        totalMeasurements: metrics.length,
         successRate: Math.round(successRate * 100) / 100,
         timing: {
-    average: Math.round(
+          average: Math.round(
             durations.reduce((sum, d) => sum + d, 0) / durations.length,
           ),
           median: p50,
           min: Math.min(...durations),
           max: Math.max(...durations),
-          percentiles: { p50, p90, p95, p99 }
-},
+          percentiles: { p50, p90, p95, p99 },
+        },
         criteriaBreakdown: this._groupMetricsByCriteria(metrics),
         timeRange: {
-    from: metrics[0]?.startTime,
+          from: metrics[0]?.startTime,
           to: metrics[metrics.length - 1]?.startTime,
-        }
-};
+        },
+      };
     }
 
     _analyzeBottlenecks(metrics, options) {
@@ -231,7 +231,7 @@ const sortedDurations = durations.slice().sort((a, b) => a - b);
       const criticalThreshold = options.criticalThreshold || 10000;
 
       // Group by criterion;
-const byCriterion = this._groupMetricsByCriteria(metrics);
+      const byCriterion = this._groupMetricsByCriteria(metrics);
       const bottlenecks = [];
       const recommendations = [];
 
@@ -294,7 +294,7 @@ const byCriterion = this._groupMetricsByCriteria(metrics);
       metrics.forEach((metric) => {
         if (!byCriterion[metric.criterion]) {
           byCriterion[metric.criterion] = {
-    count: 0,
+            count: 0,
             totalDuration: 0,
             maxDuration: 0,
             successCount: 0,
@@ -325,7 +325,7 @@ const byCriterion = this._groupMetricsByCriteria(metrics);
     _calculatePerformanceBenchmarks(metrics, options) {
       const byCriterion = this._groupMetricsByCriteria(metrics);
       const timeRange = options.timeRange || 30; // days;
-const cutoffDate = new Date(Date.now() - timeRange * 24 * 60 * 60 * 1000);
+      const cutoffDate = new Date(Date.now() - timeRange * 24 * 60 * 60 * 1000);
       const recentMetrics = metrics.filter(
         (m) => new Date(m.startTime) >= cutoffDate,
       );
@@ -354,13 +354,13 @@ const cutoffDate = new Date(Date.now() - timeRange * 24 * 60 * 60 * 1000);
         })),
         comparison_period: `${timeRange} days`,
         data_quality: {
-    total_data_points: metrics.length,
+          total_data_points: metrics.length,
           recent_data_points: recentMetrics.length,
           data_completeness: Math.round(
             (recentMetrics.length / Math.min(metrics.length, 100)) * 100,
           ),
-        }
-};
+        },
+      };
     }
 
     _calculateImprovementPercentage(allMetrics, recentMetrics) {
@@ -454,7 +454,7 @@ const cutoffDate = new Date(Date.now() - timeRange * 24 * 60 * 60 * 1000);
         'Review And optimize validation implementation'
       );
     }
-}
+  }
 
   let taskManager;
 
@@ -470,7 +470,7 @@ const cutoffDate = new Date(Date.now() - timeRange * 24 * 60 * 60 * 1000);
     }
 
     taskManager = new MockTaskManager();
-});
+  });
 
   afterEach(() => {
     // Clean up test directory
@@ -480,11 +480,11 @@ const cutoffDate = new Date(Date.now() - timeRange * 24 * 60 * 60 * 1000);
     if (FS.existsSync(mockProjectRoot)) {
       FS.rmSync(mockProjectRoot, { recursive: true, force: true });
     }
-});
+  });
 
   describe('getValidationPerformanceMetrics', () => {
-    
-    
+
+
     test('should return empty metrics when no data available', async () => {
       const _result = await taskManager.getValidationPerformanceMetrics();
 
@@ -496,25 +496,25 @@ const cutoffDate = new Date(Date.now() - timeRange * 24 * 60 * 60 * 1000);
 
     test('should return metrics with proper filtering', async () => {
       // Create mock metrics data;
-const mockMetrics = {
-    metrics: [ {
-    criterion: 'linter-validation',
-            startTime: '2025-09-27T01:00:00.000Z',
-            durationMs: 1500,
-            success: true,
-          },
-          {
-            criterion: 'build-validation',
-            startTime: '2025-09-27T02:00:00.000Z',
-            durationMs: 8000,
-            success: false,
-          },
-          {
-            criterion: 'test-validation',
-            startTime: '2025-09-27T03:00:00.000Z',
-            durationMs: 3000,
-            success: true,
-          },
+      const mockMetrics = {
+        metrics: [{
+          criterion: 'linter-validation',
+          startTime: '2025-09-27T01:00:00.000Z',
+          durationMs: 1500,
+          success: true,
+        },
+        {
+          criterion: 'build-validation',
+          startTime: '2025-09-27T02:00:00.000Z',
+          durationMs: 8000,
+          success: false,
+        },
+        {
+          criterion: 'test-validation',
+          startTime: '2025-09-27T03:00:00.000Z',
+          durationMs: 3000,
+          success: true,
+        },
         ],
       };
 
@@ -535,34 +535,34 @@ const mockMetrics = {
 
     test('should calculate enhanced performance statistics correctly', async () => {
       const mockMetrics = {
-    metrics: [ {
-    criterion: 'test-validation',
-            durationMs: 1000,
-            success: true,
-            startTime: '2025-09-27T01:00:00.000Z',
-          }, {
-    criterion: 'test-validation',
-            durationMs: 2000,
-            success: true,
-            startTime: '2025-09-27T02:00:00.000Z',
-          }, {
-    criterion: 'test-validation',
-            durationMs: 3000,
-            success: false,
-            startTime: '2025-09-27T03:00:00.000Z',
-          },
-          {
-            criterion: 'test-validation',
-            durationMs: 4000,
-            success: true,
-            startTime: '2025-09-27T04:00:00.000Z',
-          },
-          {
-            criterion: 'test-validation',
-            durationMs: 5000,
-            success: true,
-            startTime: '2025-09-27T05:00:00.000Z',
-          },
+        metrics: [{
+          criterion: 'test-validation',
+          durationMs: 1000,
+          success: true,
+          startTime: '2025-09-27T01:00:00.000Z',
+        }, {
+          criterion: 'test-validation',
+          durationMs: 2000,
+          success: true,
+          startTime: '2025-09-27T02:00:00.000Z',
+        }, {
+          criterion: 'test-validation',
+          durationMs: 3000,
+          success: false,
+          startTime: '2025-09-27T03:00:00.000Z',
+        },
+        {
+          criterion: 'test-validation',
+          durationMs: 4000,
+          success: true,
+          startTime: '2025-09-27T04:00:00.000Z',
+        },
+        {
+          criterion: 'test-validation',
+          durationMs: 5000,
+          success: true,
+          startTime: '2025-09-27T05:00:00.000Z',
+        },
         ],
       };
 
@@ -580,11 +580,11 @@ const mockMetrics = {
       expect(_result.statistics.timing.max).toBe(5000);
       expect(_result.statistics.timing.percentiles).toBeDefined();
     });
-});
+  });
 
   describe('identifyPerformanceBottlenecks', () => {
-    
-    
+
+
     test('should return empty bottlenecks when no data available', async () => {
       const _result = await taskManager.identifyPerformanceBottlenecks();
 
@@ -610,12 +610,12 @@ const mockMetrics = {
             success: true,
             startTime: '2025-09-27T02:00:00.000Z',
           }, {
-    criterion: 'test-validation',
+            criterion: 'test-validation',
             durationMs: 2000, // No bottleneck
             success: true,
             startTime: '2025-09-27T03:00:00.000Z',
           },
-  ],
+        ],
       };
 
       FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
@@ -636,12 +636,12 @@ const mockMetrics = {
 
     test('should respect custom thresholds', async () => {
       const mockMetrics = {
-    metrics: [ {
-    criterion: 'test-validation',
-            durationMs: 3000,
-            success: true,
-            startTime: '2025-09-27T01:00:00.000Z',
-          },
+        metrics: [{
+          criterion: 'test-validation',
+          durationMs: 3000,
+          success: true,
+          startTime: '2025-09-27T01:00:00.000Z',
+        },
         ],
       };
 
@@ -658,11 +658,11 @@ const mockMetrics = {
       expect(_result.thresholds.slowThreshold).toBe(2000);
       expect(_result.thresholds.criticalThreshold).toBe(4000);
     });
-});
+  });
 
   describe('getPerformanceBenchmarks', () => {
-    
-    
+
+
     test('should return null benchmarks when no data available', async () => {
       const _result = await taskManager.getPerformanceBenchmarks();
 
@@ -675,24 +675,24 @@ const mockMetrics = {
 
     test('should calculate benchmarks correctly', async () => {
       const mockMetrics = {
-    metrics: [ {
-    criterion: 'linter-validation',
-            durationMs: 1500,
-            success: true,
-            startTime: '2025-09-27T01:00:00.000Z',
-          },
-          {
-            criterion: 'build-validation',
-            durationMs: 25000,
-            success: true,
-            startTime: '2025-09-27T02:00:00.000Z',
-          }, {
-    criterion: 'test-validation',
-            durationMs: 8000,
-            success: false,
-            startTime: '2025-09-27T03:00:00.000Z',
-          },
-  ],
+        metrics: [{
+          criterion: 'linter-validation',
+          durationMs: 1500,
+          success: true,
+          startTime: '2025-09-27T01:00:00.000Z',
+        },
+        {
+          criterion: 'build-validation',
+          durationMs: 25000,
+          success: true,
+          startTime: '2025-09-27T02:00:00.000Z',
+        }, {
+          criterion: 'test-validation',
+          durationMs: 8000,
+          success: false,
+          startTime: '2025-09-27T03:00:00.000Z',
+        },
+        ],
       };
 
       FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
@@ -725,17 +725,17 @@ const mockMetrics = {
 
     test('should generate benchmark recommendations for slow criteria', async () => {
       const mockMetrics = {
-    metrics: [ {
-    criterion: 'linter-validation',
-            durationMs: 3000, // Exceeds 2000ms target
-            success: true,
-            startTime: '2025-09-27T01:00:00.000Z',
-          }, {
-    criterion: 'test-validation',
-            durationMs: 15000, // Exceeds 10000ms target
-            success: true,
-            startTime: '2025-09-27T02:00:00.000Z',
-          },
+        metrics: [{
+          criterion: 'linter-validation',
+          durationMs: 3000, // Exceeds 2000ms target
+          success: true,
+          startTime: '2025-09-27T01:00:00.000Z',
+        }, {
+          criterion: 'test-validation',
+          durationMs: 15000, // Exceeds 10000ms target
+          success: true,
+          startTime: '2025-09-27T02:00:00.000Z',
+        },
         ],
       };
 
@@ -760,17 +760,17 @@ const mockMetrics = {
       expect(testRec.target).toBe('< 10000ms');
       expect(testRec.suggestion).toContain('Implement parallel test execution');
     });
-});
+  });
 
   describe('Performance Analysis Helper Methods', () => {
-    
-    
+
+
     test('should group metrics by criteria correctly', () => {
       const metrics = [
         { criterion: 'linter-validation', durationMs: 1000, success: true },
         { criterion: 'linter-validation', durationMs: 2000, success: false },
         { criterion: 'build-validation', durationMs: 15000, success: true },
-  ];
+      ];
 
       const grouped = taskManager._groupMetricsByCriteria(metrics);
 
@@ -811,11 +811,11 @@ const mockMetrics = {
         taskManager._meetsPerformanceTarget('unknown-validation', 6000),
       ).toBe(false);
     });
-});
+  });
 
   describe('Error Handling', () => {
-    
-    
+
+
     test('should handle corrupted metrics file gracefully', async () => {
       // Write invalid JSON to metrics file
       FS.writeFileSync(mockMetricsFile, 'invalid json content');
@@ -849,5 +849,5 @@ const mockMetrics = {
       expect(_result.metrics).toEqual([]);
       expect(_result.statistics).toBe(null);
     });
-});
+  });
 });

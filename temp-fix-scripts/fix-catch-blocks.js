@@ -1,4 +1,4 @@
-/* eslint-disable no-console, security/detect-non-literal-fs-filename */
+/* eslint-disable no-console */
 const fs = require('fs');
 
 /**

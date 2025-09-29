@@ -103,10 +103,10 @@ class APIExecutor {
           try {
             const stderrJson = JSON.parse(stderr.trim());
             resolve(stderrJson);
-          } catch (_) {
+          } catch (stderrParseError) {
             reject(
               new Error(
-                `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`,
+                `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}\nStderr parse error: ${stderrParseError.message}`,
               ),
             );
           }
