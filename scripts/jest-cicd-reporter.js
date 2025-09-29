@@ -219,11 +219,11 @@ class JestCiCdReporter {
 
             // Track failure patterns
             const errorType = this.categorizeError(
-              test.failureMessages?.[0] || ''
+              test.failureMessages?.[0] || '',
             );
             failurePatterns.set(
               errorType,
-              (failurePatterns.get(errorType) || 0) + 1
+              (failurePatterns.get(errorType) || 0) + 1,
             );
           }
         });
@@ -368,7 +368,7 @@ class JestCiCdReporter {
     const totalTime = Date.now() - this.startTime;
     const serialTime = results.testResults.reduce(
       (sum, result) => sum + (result.perfStats.end - result.perfStats.start),
-      0
+      0,
     );
 
     const efficiency =
@@ -566,19 +566,19 @@ class JestCiCdReporter {
 
     FS.writeFileSync(
       path.join(outputDir, 'deployment-gate.json'),
-      JSON.stringify(deploymentStatus, null, 2)
+      JSON.stringify(deploymentStatus, null, 2),
     );
 
     // Write simple status for shell scripts
     FS.writeFileSync(
       path.join(outputDir, 'test-status.txt'),
-      report.cicd_summary.pipeline_status
+      report.cicd_summary.pipeline_status,
     );
 
     // Write health score
     FS.writeFileSync(
       path.join(outputDir, 'health-score.txt'),
-      report.cicd_summary.test_health_score.toString()
+      report.cicd_summary.test_health_score.toString(),
     );
   }
 

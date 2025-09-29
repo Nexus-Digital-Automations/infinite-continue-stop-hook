@@ -83,7 +83,7 @@ function fixFileUnusedVars(filePath) {
           content = newContent;
           modified = true;
           console.log(
-            `  ✓ Applied function pattern in ${path.relative(process.cwd(), filePath)}`
+            `  ✓ Applied function pattern in ${path.relative(process.cwd(), filePath)}`,
           );
         }
       } else {
@@ -93,7 +93,7 @@ function fixFileUnusedVars(filePath) {
             content = newContent;
             modified = true;
             console.log(
-              `  ✓ Applied pattern in ${path.relative(process.cwd(), filePath)}`
+              `  ✓ Applied pattern in ${path.relative(process.cwd(), filePath)}`,
             );
           }
         }
@@ -140,12 +140,12 @@ function main() {
     console.log('✅ All linting errors resolved!');
   } catch (_error) {
     console.log(
-      '⚠️  Some linting errors may remain. Running detailed check...'
+      '⚠️  Some linting errors may remain. Running detailed check...',
     );
     try {
       const output = execSync(
         'npm run lint 2>&1 | grep "no-unused-vars" | head -10',
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       );
       if (output.trim()) {
         console.log('Remaining no-unused-vars errors:');

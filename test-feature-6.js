@@ -8,7 +8,7 @@ const { loggers } = require('lib/logger');
 async function testLearningRecommendationEngine() {
   try {
     loggers.stopHook.log(
-      'Testing Feature 6: Learning Recommendation Engine...'
+      'Testing Feature 6: Learning Recommendation Engine...',
     );
 
     // Create RAG operations instance
@@ -42,7 +42,7 @@ async function testLearningRecommendationEngine() {
       {
         strategy: 'hybrid',
         limit: 5,
-      }
+      },
     );
     loggers.app.info('Recommendations result:', {
       success: recommendations.success,
@@ -87,7 +87,7 @@ async function testLearningRecommendationEngine() {
     });
 
     loggers.app.info(
-      '\n✅ Feature 6: Learning Recommendation Engine integration test completed successfully!'
+      '\n✅ Feature 6: Learning Recommendation Engine integration test completed successfully!',
     );
   } catch {
     loggers.stopHook.error('❌ Feature 6 test failed:', _error.message);

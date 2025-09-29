@@ -16,7 +16,7 @@ const FS = require('fs');
 // Test configuration
 const TEST_PROJECT_DIR = path.join(
   __dirname,
-  'feature-management-test-project'
+  'feature-management-test-project',
 );
 const FEATURES_PATH = path.join(TEST_PROJECT_DIR, 'FEATURES.json');
 const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
@@ -41,7 +41,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
       {
         cwd: __dirname,
         stdio: ['pipe', 'pipe', 'pipe'],
-      }
+      },
     );
 
     let stdout = '';
@@ -71,8 +71,8 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         } catch {
           reject(
             new Error(
-              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${error.message}`
-            )
+              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${error.message}`,
+            ),
           );
         }
       }
@@ -117,7 +117,7 @@ function setupFeatureTestEnvironment() {
 
   FS.writeFileSync(
     path.join(TEST_PROJECT_DIR, 'package.json'),
-    JSON.stringify(packageData, null, 2)
+    JSON.stringify(packageData, null, 2),
   );
 }
 
@@ -206,12 +206,12 @@ describe('Feature Management System Unit Tests', () => {
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);
       const researchSubtask = task.subtasks.find(
-        (st) => st.type === 'research'
+        (st) => st.type === 'research',
       );
 
       // Should prioritize API-related paths
       const codebaseLocation = researchSubtask.research_locations.find(
-        (loc) => loc.type === 'codebase'
+        (loc) => loc.type === 'codebase',
       );
       expect(codebaseLocation.paths).toContain('/api');
       expect(codebaseLocation.paths).toContain('/routes');
@@ -219,7 +219,7 @@ describe('Feature Management System Unit Tests', () => {
 
       // Should include API-related keywords
       const internetLocation = researchSubtask.research_locations.find(
-        (loc) => loc.type === 'internet'
+        (loc) => loc.type === 'internet',
       );
       expect(internetLocation.keywords).toContain('api');
       expect(internetLocation.keywords).toContain('rest');
@@ -243,12 +243,12 @@ describe('Feature Management System Unit Tests', () => {
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);
       const researchSubtask = task.subtasks.find(
-        (st) => st.type === 'research'
+        (st) => st.type === 'research',
       );
 
       // Should include security-focused keywords
       const internetLocation = researchSubtask.research_locations.find(
-        (loc) => loc.type === 'internet'
+        (loc) => loc.type === 'internet',
       );
       expect(internetLocation.keywords).toContain('oauth');
       expect(internetLocation.keywords).toContain('security');
@@ -275,12 +275,12 @@ describe('Feature Management System Unit Tests', () => {
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);
       const researchSubtask = task.subtasks.find(
-        (st) => st.type === 'research'
+        (st) => st.type === 'research',
       );
 
       // Should include performance-related keywords
       const internetLocation = researchSubtask.research_locations.find(
-        (loc) => loc.type === 'internet'
+        (loc) => loc.type === 'internet',
       );
       expect(internetLocation.keywords).toContain('optimize');
       expect(internetLocation.keywords).toContain('performance');
@@ -314,11 +314,11 @@ describe('Feature Management System Unit Tests', () => {
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);
       const researchSubtask = task.subtasks.find(
-        (st) => st.type === 'research'
+        (st) => st.type === 'research',
       );
 
       const internetLocation = researchSubtask.research_locations.find(
-        (loc) => loc.type === 'internet'
+        (loc) => loc.type === 'internet',
       );
 
       // Should extract key technical terms
@@ -333,7 +333,7 @@ describe('Feature Management System Unit Tests', () => {
           'kubernetes',
           'distributed',
           'scalability',
-        ].includes(keyword.toLowerCase())
+        ].includes(keyword.toLowerCase()),
       );
       expect(hasRelatedTerms).toBe(true);
     });
@@ -355,17 +355,17 @@ describe('Feature Management System Unit Tests', () => {
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);
       const researchSubtask = task.subtasks.find(
-        (st) => st.type === 'research'
+        (st) => st.type === 'research',
       );
 
       const internetLocation = researchSubtask.research_locations.find(
-        (loc) => loc.type === 'internet'
+        (loc) => loc.type === 'internet',
       );
 
       // Should avoid overly generic terms
       const genericTerms = ['good', 'better', 'excellent', 'well', 'new'];
       const hasGenericTerms = internetLocation.keywords.some((keyword) =>
-        genericTerms.includes(keyword.toLowerCase())
+        genericTerms.includes(keyword.toLowerCase()),
       );
       expect(hasGenericTerms).toBe(false);
 
@@ -391,11 +391,11 @@ describe('Feature Management System Unit Tests', () => {
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);
       const researchSubtask = task.subtasks.find(
-        (st) => st.type === 'research'
+        (st) => st.type === 'research',
       );
 
       const internetLocation = researchSubtask.research_locations.find(
-        (loc) => loc.type === 'internet'
+        (loc) => loc.type === 'internet',
       );
 
       // Should limit keywords to reasonable number (typically 5-10)
@@ -435,19 +435,19 @@ describe('Feature Management System Unit Tests', () => {
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);
       const researchSubtask = task.subtasks.find(
-        (st) => st.type === 'research'
+        (st) => st.type === 'research',
       );
 
       expect(researchSubtask.deliverables).toBeDefined();
       expect(researchSubtask.deliverables).toContain(
-        'Technical analysis report'
+        'Technical analysis report',
       );
       expect(researchSubtask.deliverables).toContain(
-        'Implementation recommendations'
+        'Implementation recommendations',
       );
       expect(researchSubtask.deliverables).toContain('Risk assessment');
       expect(researchSubtask.deliverables).toContain(
-        'Alternative approaches evaluation'
+        'Alternative approaches evaluation',
       );
     });
 
@@ -468,7 +468,7 @@ describe('Feature Management System Unit Tests', () => {
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);
       const researchSubtask = task.subtasks.find(
-        (st) => st.type === 'research'
+        (st) => st.type === 'research',
       );
 
       expect(researchSubtask.estimated_hours).toBeDefined();
@@ -494,7 +494,7 @@ describe('Feature Management System Unit Tests', () => {
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);
       const researchSubtask = task.subtasks.find(
-        (st) => st.type === 'research'
+        (st) => st.type === 'research',
       );
 
       expect(researchSubtask.prevents_implementation).toBe(true);
@@ -529,26 +529,26 @@ describe('Feature Management System Unit Tests', () => {
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);
       const researchSubtask = task.subtasks.find(
-        (st) => st.type === 'research'
+        (st) => st.type === 'research',
       );
 
       // Check codebase research focus
       const codebaseLocation = researchSubtask.research_locations.find(
-        (loc) => loc.type === 'codebase'
+        (loc) => loc.type === 'codebase',
       );
       expect(codebaseLocation.focus).toBeDefined();
       expect(codebaseLocation.focus).toContain('architecture');
 
       // Check internet research focus
       const internetLocation = researchSubtask.research_locations.find(
-        (loc) => loc.type === 'internet'
+        (loc) => loc.type === 'internet',
       );
       expect(internetLocation.focus).toBeDefined();
       expect(internetLocation.focus).toContain('practices');
 
       // Check documentation research focus
       const docsLocation = researchSubtask.research_locations.find(
-        (loc) => loc.type === 'documentation'
+        (loc) => loc.type === 'documentation',
       );
       expect(docsLocation.focus).toBeDefined();
     });
@@ -570,11 +570,11 @@ describe('Feature Management System Unit Tests', () => {
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);
       const researchSubtask = task.subtasks.find(
-        (st) => st.type === 'research'
+        (st) => st.type === 'research',
       );
 
       const docsLocation = researchSubtask.research_locations.find(
-        (loc) => loc.type === 'documentation'
+        (loc) => loc.type === 'documentation',
       );
 
       // Should include standard documentation sources
@@ -617,7 +617,7 @@ describe('Feature Management System Unit Tests', () => {
         const listResult = await execAPI('list');
         const task = listResult.tasks.find((t) => t.id === result.taskId);
         const researchSubtask = task.subtasks.find(
-          (st) => st.type === 'research'
+          (st) => st.type === 'research',
         );
 
         if (researchSubtask) {
@@ -648,7 +648,7 @@ describe('Feature Management System Unit Tests', () => {
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);
       const researchSubtask = task.subtasks.find(
-        (st) => st.type === 'research'
+        (st) => st.type === 'research',
       );
 
       if (researchSubtask) {
@@ -689,7 +689,7 @@ describe('Feature Management System Unit Tests', () => {
 
       if (task.subtasks.length > 0) {
         const researchSubtask = task.subtasks.find(
-          (st) => st.type === 'research'
+          (st) => st.type === 'research',
         );
         if (researchSubtask) {
           expect(researchSubtask.research_locations).toBeDefined();
@@ -714,7 +714,7 @@ describe('Feature Management System Unit Tests', () => {
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);
       const researchSubtask = task.subtasks.find(
-        (st) => st.type === 'research'
+        (st) => st.type === 'research',
       );
 
       if (researchSubtask) {
@@ -723,13 +723,13 @@ describe('Feature Management System Unit Tests', () => {
 
         // Should extract meaningful keywords despite special characters
         const internetLocation = researchSubtask.research_locations.find(
-          (loc) => loc.type === 'internet'
+          (loc) => loc.type === 'internet',
         );
         expect(internetLocation.keywords).toContain('api');
         expect(
           internetLocation.keywords.some(
-            (k) => k.includes('oauth') || k.includes('jwt')
-          )
+            (k) => k.includes('oauth') || k.includes('jwt'),
+          ),
         ).toBe(true);
       }
     });
@@ -738,7 +738,7 @@ describe('Feature Management System Unit Tests', () => {
       const longTitle =
         'Implement comprehensive enterprise-grade authentication authorization security framework with advanced features including multi-factor authentication single sign-on role-based access control fine-grained permissions user management session handling token management JWT OAuth SAML integration'.substring(
           0,
-          500
+          500,
         );
 
       const longTaskData = {
@@ -755,18 +755,18 @@ describe('Feature Management System Unit Tests', () => {
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);
       const researchSubtask = task.subtasks.find(
-        (st) => st.type === 'research'
+        (st) => st.type === 'research',
       );
 
       if (researchSubtask) {
         expect(researchSubtask.title.length).toBeLessThan(
-          longTitle.length + 20
+          longTitle.length + 20,
         );
         expect(researchSubtask.research_locations).toBeDefined();
 
         // Should still extract relevant keywords
         const internetLocation = researchSubtask.research_locations.find(
-          (loc) => loc.type === 'internet'
+          (loc) => loc.type === 'internet',
         );
         expect(internetLocation.keywords).toContain('authentication');
         expect(internetLocation.keywords).toContain('security');

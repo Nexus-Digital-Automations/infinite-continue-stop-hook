@@ -38,7 +38,7 @@ class FinalSystematicResultFix {
 
       this.reportResults();
     } catch (_error) {
-      console.error('❌ Error during systematic fixes:', error.message);
+      console.error('❌ Error during systematic fixes:', _error.message);
       process.exit(1);
     }
   }
@@ -75,7 +75,7 @@ class FinalSystematicResultFix {
         }
       }
     } catch (_error) {
-      console.error('Error finding files:', error.message);
+      console.error('Error finding files:', _error.message);
     }
 
     return files;
@@ -111,7 +111,7 @@ class FinalSystematicResultFix {
         console.log(`✅ Fixed: ${path.relative(this.projectRoot, filePath)}`);
       }
     } catch (_error) {
-      console.error(`❌ Error processing ${filePath}:`, error.message);
+      console.error(`❌ Error processing ${filePath}:`, _error.message);
     }
   }
 

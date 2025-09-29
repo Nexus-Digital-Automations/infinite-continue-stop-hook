@@ -99,7 +99,7 @@ class TasksApiAdapter {
       dependencies: [],
       estimated_effort: 5,
       required_capabilities: this.inferCapabilitiesFromCategory(
-        featureData.category
+        featureData.category,
       ),
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),

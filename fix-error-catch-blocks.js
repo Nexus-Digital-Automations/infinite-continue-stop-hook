@@ -40,14 +40,16 @@ function fixErrorCatchBlocks(_filePath) {
     if (modified) {
       FS.writeFileSync(filePath, content, 'utf8');
       loggers.app.info(
-        `✅ Fixed error catch blocks in ${PATH.relative('.', _filePath)}`
+        `✅ Fixed error catch blocks in ${PATH.relative('.', _filePath)}`,
       );
       return true;
     }
 
     return false;
   } catch (_error) {
-    loggers.app.error(`❌ Error fixing ${filePath}:`, { error: error.message });
+    loggers.app.error(`❌ Error fixing ${_filePath}:`, {
+      error: _error.message,
+    });
     return false;
   }
 }
@@ -80,7 +82,7 @@ function getFilesWithErrorIssues() {
 loggers.app.info('🎯 Fixing undefined error variables in catch blocks...');
 const filesToFix = getFilesWithErrorIssues();
 loggers.app.info(
-  `📊 Processing ${filesToFix.length} files with error issues...`
+  `📊 Processing ${filesToFix.length} files with error issues...`,
 );
 
 let totalFixed = 0;

@@ -32,7 +32,7 @@ class SecurityUtils {
    * @throws {Error} If path is invalid or outside base directory
    */
   static validatePath(basePath, _filePath) {
-    if (!filePath || typeof filePath !== 'string') {
+    if (!_filePath || typeof _filePath !== 'string') {
       throw new Error('Invalid file path provided');
     }
 
@@ -46,7 +46,7 @@ class SecurityUtils {
       resolvedPath !== resolvedBase
     ) {
       throw new Error(
-        `Path ${filePath} is outside allowed directory ${basePath}`,
+        `Path ${_filePath} is outside allowed directory ${basePath}`,
       );
     }
 
@@ -376,7 +376,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
 
       return criteria;
     } catch (_error) {
-      this.logger.log(`⚠️ Could not load task requirements: ${error.message}`);
+      this.logger.log(`⚠️ Could not load task requirements: ${_error.message}`);
       return {};
     }
   }
@@ -484,8 +484,8 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
         throw new Error(`TaskManager API error: ${JSON.stringify(result)}`);
       }
     } catch (_error) {
-      this.logger.error(`❌ Failed to create audit task: ${error.message}`);
-      throw error;
+      this.logger.error(`❌ Failed to create audit task: ${_error.message}`);
+      throw _error;
     }
   }
 
@@ -566,7 +566,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
         JSON.stringify(logEntry) + '\n',
       );
     } catch (_error) {
-      this.logger.log(`⚠️ Failed to log audit task creation: ${error.message}`);
+      this.logger.log(`⚠️ Failed to log audit task creation: ${_error.message}`);
     }
   }
 

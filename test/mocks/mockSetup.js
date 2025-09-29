@@ -134,7 +134,7 @@ class MockManager {
           result = { success: false, error: `Unknown command: ${apiCommand}` };
       }
     } catch (_error) {
-      result = { success: false, error: error.message };
+      result = { success: false, error: _error.message };
     }
 
     // Create mock EventEmitter-like object

@@ -55,14 +55,14 @@ const SPECIFIC_FIXES = [
       },
       // Fix class Name
       {
-        pattern: /class\s+ResourceMonitor/g,
-        replacement: 'class ResourceMonitor',
-        description: 'Fix class Name from ResourceMonitor to ResourceMonitor',
+        pattern: /class\s+RESOURCE_MONITOR/g,
+        replacement: 'class RESOURCE_MONITOR',
+        description: 'Fix class Name from RESOURCE_MONITOR to RESOURCE_MONITOR',
       },
       // Fix constructor call
       {
-        pattern: /new\s+ResourceMonitor\(\)/g,
-        replacement: 'new ResourceMonitor()',
+        pattern: /new\s+RESOURCE_MONITOR\(\)/g,
+        replacement: 'new RESOURCE_MONITOR()',
         description: 'Fix constructor call',
       },
     ],
@@ -102,7 +102,7 @@ class RemainingResultFixer {
       this.generateReport();
 
       console.log(
-        '✅ Remaining result/result variable issues fixed successfully'
+        '✅ Remaining result/result variable issues fixed successfully',
       );
     } catch (_error) {
       console.error('❌ Failed to fix remaining issues:', _error.message);
@@ -144,18 +144,18 @@ class RemainingResultFixer {
         changes: totalChanges,
       });
       console.log(
-        `✅ Fixed ${totalChanges} issues in ${PATH.relative(process.cwd(), file)}`
+        `✅ Fixed ${totalChanges} issues in ${PATH.relative(process.cwd(), file)}`,
       );
     } else {
       console.log(
-        `✅ No issues found in ${PATH.relative(process.cwd(), file)}`
+        `✅ No issues found in ${PATH.relative(process.cwd(), file)}`,
       );
     }
   }
 
   fixTestFile(_filePath) {
     console.log(
-      `🔧 Processing test file: ${PATH.relative(process.cwd(), _filePath)}`
+      `🔧 Processing test file: ${PATH.relative(process.cwd(), _filePath)}`,
     );
 
     let content = FS.readFileSync(filePath, 'utf8');
@@ -259,11 +259,11 @@ class RemainingResultFixer {
         changes: totalChanges,
       });
       console.log(
-        `✅ Fixed ${totalChanges} issues in ${PATH.relative(process.cwd(), _filePath)}`
+        `✅ Fixed ${totalChanges} issues in ${PATH.relative(process.cwd(), _filePath)}`,
       );
     } else {
       console.log(
-        `✅ No issues found in ${PATH.relative(process.cwd(), _filePath)}`
+        `✅ No issues found in ${PATH.relative(process.cwd(), _filePath)}`,
       );
     }
   }
@@ -274,10 +274,10 @@ class RemainingResultFixer {
     console.log('│ Metric                  │ Count    │');
     console.log('├─────────────────────────┼──────────┤');
     console.log(
-      `│ Files Modified          │ ${this.fixedFiles.length.toString().padEnd(8)} │`
+      `│ Files Modified          │ ${this.fixedFiles.length.toString().padEnd(8)} │`,
     );
     console.log(
-      `│ Errors Encountered      │ ${this.errors.length.toString().padEnd(8)} │`
+      `│ Errors Encountered      │ ${this.errors.length.toString().padEnd(8)} │`,
     );
     console.log('└─────────────────────────┴──────────┘');
 
@@ -285,7 +285,7 @@ class RemainingResultFixer {
       console.log('\n📁 Modified Files:');
       for (const file of this.fixedFiles) {
         console.log(
-          `  ✅ ${PATH.relative(process.cwd(), file.path)} (${file.changes} changes)`
+          `  ✅ ${PATH.relative(process.cwd(), file.path)} (${file.changes} changes)`,
         );
       }
     }
