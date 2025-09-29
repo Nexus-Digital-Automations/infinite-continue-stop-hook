@@ -1,14 +1,14 @@
 {
   "metadata": {
-    "timestamp": "2025-09-29T22:05:42.282Z",
+    "timestamp": "2025-09-29T22:27:32.523Z",
     "reporter": "jest-cicd-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System",
-    "duration_ms": 551
+    "duration_ms": 3736
   },
   "cicd_summary": {
     "pipeline_status": "FAILURE",
-    "total_duration_ms": 551,
+    "total_duration_ms": 3736,
     "should_block_deployment": true,
     "quality_gate_status": {
       "status": "FAILED",
@@ -43,36 +43,36 @@
   },
   "test_execution": {
     "summary": {
-      "total_suites": 1,
+      "total_suites": 33,
       "passed_suites": 0,
-      "failed_suites": 1,
+      "failed_suites": 33,
       "total_tests": 0,
       "passed_tests": 0,
       "failed_tests": 0,
       "pending_tests": 0,
       "success_rate": "NaN",
-      "execution_time_ms": 551
+      "execution_time_ms": 3736
     },
     "performance_metrics": {
       "average_test_duration": null,
       "slowest_suite": null,
       "memory_usage": {
-        "rss": 283672576,
-        "heap_total": 175554560,
-        "heap_used": 147480368,
-        "external": 4752870,
-        "heap_usage_percent": "84.01"
+        "rss": 187645952,
+        "heap_total": 119078912,
+        "heap_used": 91742224,
+        "external": 2282110,
+        "heap_usage_percent": "77.04"
       },
       "parallel_efficiency": {
         "parallel_efficiency_percent": 0,
-        "total_execution_time_ms": 551,
+        "total_execution_time_ms": 3736,
         "serial_time_ms": 0,
         "time_saved_ms": 0
       }
     },
     "failure_analysis": {
       "total_failures": 0,
-      "failed_suites": 1,
+      "failed_suites": 33,
       "failure_details": [],
       "failure_patterns": {},
       "common_failure_type": "none"
@@ -84,11 +84,11 @@
     }
   },
   "git": {
-    "commit_sha": "21fe6ff6a8256ae118e95ebe83c7beb70822ca9f",
+    "commit_sha": "3119a2befdce1efbd8a82013dc01746af55a53ba",
     "branch": "main",
     "author": "Claude <claude@anthropic.com>",
-    "commit_message": "fix: auto-fix linting errors across codebase - trailing commas, unused variables, formatting",
-    "commit_date": "2025-09-29 17:03:37 -0500",
+    "commit_message": "fix: resolve JavaScript syntax errors in taskmanager-api.js and stop-hook.js",
+    "commit_date": "2025-09-29 17:22:35 -0500",
     "tag": null,
     "is_dirty": true,
     "remote_url": "https://github.com/Nexus-Digital-Automations/infinite-continue-stop-hook.git"
@@ -104,7 +104,7 @@
     "locale": "en-US",
     "memory": {
       "total": 25769803776,
-      "available": 142819328
+      "available": 166723584
     },
     "cpu": {
       "cores": 8,

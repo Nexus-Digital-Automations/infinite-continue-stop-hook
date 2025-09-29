@@ -1,26 +1,666 @@
 {
   "metadata": {
-    "timestamp": "2025-09-29T22:05:42.281Z",
+    "timestamp": "2025-09-29T22:27:32.522Z",
     "reporter": "jest-json-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System"
   },
   "summary": {
-    "numTotalTestSuites": 1,
+    "numTotalTestSuites": 33,
     "numPassedTestSuites": 0,
-    "numFailedTestSuites": 1,
+    "numFailedTestSuites": 33,
     "numPendingTestSuites": 0,
     "numTotalTests": 0,
     "numPassedTests": 0,
     "numFailedTests": 0,
     "numPendingTests": 0,
     "numTodoTests": 0,
-    "startTime": 1759183541731,
-    "endTime": 1759183542282,
-    "duration": 551,
+    "startTime": 1759184848787,
+    "endTime": 1759184852522,
+    "duration": 3735,
     "success": false
   },
   "testResults": [
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/dependency-management-e2e.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/agent-lifecycle.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/taskmanager-api.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/feature-management-e2e.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/feature-lifecycle.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-8-performance-metrics.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/stress-and-recovery.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/feature-7-taskmanager-integration.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/api-workflow.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/validation-dependency-manager.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/dependency-management-api-integration.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/custom-validation-integration.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-validation.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/trend-analysis-api-integration.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/file-operations.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/cli-commands.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/feature-8-performance-metrics-integration.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/taskmanager-validation-dependency.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/validation-dependency-e2e.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/trend-analyzer.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-7-custom-validation-rules.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-metrics-e2e.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/multi-agent-scenarios.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management-system.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/stop-hook-integration.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/basic-infrastructure.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/example-with-mocks.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [],
+      "failureDetails": []
+    },
     {
       "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/complete-workflows.test.js",
       "status": "passed",

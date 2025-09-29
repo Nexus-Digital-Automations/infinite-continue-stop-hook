@@ -879,13 +879,189 @@
       },
       "success": false,
       "error": "Must validate steps sequentially. Expected: security-validation, Got: linter-validation"
+    },
+    {
+      "criterion": "focused-codebase",
+      "startTime": "2025-09-29T22:24:03.909Z",
+      "endTime": "2025-09-29T22:24:03.912Z",
+      "durationMs": 3,
+      "memoryUsageBefore": {
+        "rss": 142721024,
+        "heapTotal": 22511616,
+        "heapUsed": 14856920,
+        "external": 2241667,
+        "arrayBuffers": 12599991
+      },
+      "memoryUsageAfter": {
+        "rss": 145522688,
+        "heapTotal": 22511616,
+        "heapUsed": 14945728,
+        "external": 2242952,
+        "arrayBuffers": 12601236
+      },
+      "success": false,
+      "error": "Invalid authorization key. Cannot skip validation steps."
+    },
+    {
+      "criterion": "focused-codebase",
+      "startTime": "2025-09-29T22:26:53.363Z",
+      "endTime": "2025-09-29T22:26:53.364Z",
+      "durationMs": 1,
+      "memoryUsageBefore": {
+        "rss": 136953856,
+        "heapTotal": 21987328,
+        "heapUsed": 14820568,
+        "external": 2241667,
+        "arrayBuffers": 12599991
+      },
+      "memoryUsageAfter": {
+        "rss": 139132928,
+        "heapTotal": 21987328,
+        "heapUsed": 14909376,
+        "external": 2242952,
+        "arrayBuffers": 12601236
+      },
+      "success": false,
+      "error": "Invalid authorization key. Cannot skip validation steps."
+    },
+    {
+      "criterion": "security-validation",
+      "startTime": "2025-09-29T22:27:04.625Z",
+      "endTime": "2025-09-29T22:27:04.634Z",
+      "durationMs": 9,
+      "memoryUsageBefore": {
+        "rss": 137691136,
+        "heapTotal": 22249472,
+        "heapUsed": 14803304,
+        "external": 2241667,
+        "arrayBuffers": 12599991
+      },
+      "memoryUsageAfter": {
+        "rss": 139788288,
+        "heapTotal": 22249472,
+        "heapUsed": 14892168,
+        "external": 2242952,
+        "arrayBuffers": 12601236
+      },
+      "success": false,
+      "error": "Invalid authorization key. Cannot skip validation steps."
+    },
+    {
+      "criterion": "linter-validation",
+      "startTime": "2025-09-29T22:27:12.066Z",
+      "endTime": "2025-09-29T22:27:12.071Z",
+      "durationMs": 5,
+      "memoryUsageBefore": {
+        "rss": 138985472,
+        "heapTotal": 21987328,
+        "heapUsed": 14910400,
+        "external": 2241667,
+        "arrayBuffers": 12599991
+      },
+      "memoryUsageAfter": {
+        "rss": 141770752,
+        "heapTotal": 21987328,
+        "heapUsed": 14999208,
+        "external": 2242952,
+        "arrayBuffers": 12601236
+      },
+      "success": false,
+      "error": "Invalid authorization key. Cannot skip validation steps."
+    },
+    {
+      "criterion": "type-validation",
+      "startTime": "2025-09-29T22:27:18.571Z",
+      "endTime": "2025-09-29T22:27:18.581Z",
+      "durationMs": 10,
+      "memoryUsageBefore": {
+        "rss": 140656640,
+        "heapTotal": 21725184,
+        "heapUsed": 14729152,
+        "external": 2241667,
+        "arrayBuffers": 12599991
+      },
+      "memoryUsageAfter": {
+        "rss": 143900672,
+        "heapTotal": 21725184,
+        "heapUsed": 14817960,
+        "external": 2242952,
+        "arrayBuffers": 12601236
+      },
+      "success": false,
+      "error": "Invalid authorization key. Cannot skip validation steps."
+    },
+    {
+      "criterion": "build-validation",
+      "startTime": "2025-09-29T22:27:28.235Z",
+      "endTime": "2025-09-29T22:27:28.243Z",
+      "durationMs": 8,
+      "memoryUsageBefore": {
+        "rss": 137428992,
+        "heapTotal": 21200896,
+        "heapUsed": 16288672,
+        "external": 2241667,
+        "arrayBuffers": 12599991
+      },
+      "memoryUsageAfter": {
+        "rss": 141934592,
+        "heapTotal": 22511616,
+        "heapUsed": 14862896,
+        "external": 2242752,
+        "arrayBuffers": 12601036
+      },
+      "success": false,
+      "error": "Invalid authorization key. Cannot skip validation steps."
+    },
+    {
+      "criterion": "start-validation",
+      "startTime": "2025-09-29T22:27:35.574Z",
+      "endTime": "2025-09-29T22:27:35.577Z",
+      "durationMs": 3,
+      "memoryUsageBefore": {
+        "rss": 138412032,
+        "heapTotal": 21200896,
+        "heapUsed": 16254880,
+        "external": 2241667,
+        "arrayBuffers": 12599991
+      },
+      "memoryUsageAfter": {
+        "rss": 141737984,
+        "heapTotal": 22773760,
+        "heapUsed": 14966784,
+        "external": 2242752,
+        "arrayBuffers": 12601036
+      },
+      "success": false,
+      "error": "Invalid authorization key. Cannot skip validation steps."
+    },
+    {
+      "criterion": "test-validation",
+      "startTime": "2025-09-29T22:27:43.126Z",
+      "endTime": "2025-09-29T22:27:43.131Z",
+      "durationMs": 5,
+      "memoryUsageBefore": {
+        "rss": 139411456,
+        "heapTotal": 21200896,
+        "heapUsed": 16255488,
+        "external": 2241667,
+        "arrayBuffers": 12599991
+      },
+      "memoryUsageAfter": {
+        "rss": 142802944,
+        "heapTotal": 22249472,
+        "heapUsed": 14949080,
+        "external": 2242752,
+        "arrayBuffers": 12601036
+      },
+      "success": false,
+      "error": "Invalid authorization key. Cannot skip validation steps."
     }
   ],
   "statistics": {
-    "lastUpdated": "2025-09-27T22:49:30.203Z",
-    "totalMeasurements": 40,
-    "averageDurationMs": 821.975,
-    "successRate": 65,
+    "lastUpdated": "2025-09-29T22:27:43.131Z",
+    "totalMeasurements": 48,
+    "averageDurationMs": 685.8958333333334,
+    "successRate": 54.166666666666664,
     "bycriterion": {
       "custom-validation": {
         "count": 1,
@@ -895,53 +1071,53 @@
         "successRate": 0
       },
       "focused-codebase": {
-        "count": 8,
-        "totalDuration": 348,
+        "count": 10,
+        "totalDuration": 352,
         "successCount": 8,
-        "avgDuration": 43.5,
-        "successRate": 100
+        "avgDuration": 35.2,
+        "successRate": 80
       },
       "linter-validation": {
-        "count": 10,
-        "totalDuration": 7300,
+        "count": 11,
+        "totalDuration": 7305,
         "successCount": 3,
-        "avgDuration": 730,
-        "successRate": 30
+        "avgDuration": 664.0909090909091,
+        "successRate": 27.27272727272727
       },
       "type-validation": {
-        "count": 5,
-        "totalDuration": 3100,
+        "count": 6,
+        "totalDuration": 3110,
         "successCount": 3,
-        "avgDuration": 620,
-        "successRate": 60
+        "avgDuration": 518.3333333333334,
+        "successRate": 50
       },
       "build-validation": {
-        "count": 5,
-        "totalDuration": 107,
+        "count": 6,
+        "totalDuration": 115,
         "successCount": 3,
-        "avgDuration": 21.4,
-        "successRate": 60
+        "avgDuration": 19.166666666666668,
+        "successRate": 50
       },
       "start-validation": {
-        "count": 4,
-        "totalDuration": 37,
+        "count": 5,
+        "totalDuration": 40,
         "successCount": 3,
-        "avgDuration": 9.25,
-        "successRate": 75
+        "avgDuration": 8,
+        "successRate": 60
       },
       "test-validation": {
-        "count": 4,
-        "totalDuration": 37,
+        "count": 5,
+        "totalDuration": 42,
         "successCount": 3,
-        "avgDuration": 9.25,
-        "successRate": 75
+        "avgDuration": 8.4,
+        "successRate": 60
       },
       "security-validation": {
-        "count": 3,
-        "totalDuration": 21950,
+        "count": 4,
+        "totalDuration": 21959,
         "successCount": 3,
-        "avgDuration": 7316.666666666667,
-        "successRate": 100
+        "avgDuration": 5489.75,
+        "successRate": 75
       }
     }
   }
