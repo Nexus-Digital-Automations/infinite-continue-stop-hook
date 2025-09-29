@@ -253,8 +253,9 @@ const TEST_FIXTURES = {
     schema_version: '2.0.0',
     migrated_from: 'test-initialization',
     migration_date: '2025-09-23T08:00:00.000Z',
-    tasks: [ {,
-    id: 'feature_1695123456789_abc123',
+    tasks: [
+      {
+        id: 'feature_1695123456789_abc123',
         type: 'feature',
         parent_id: null,
         linked_tasks: [],
@@ -400,8 +401,9 @@ const TEST_FIXTURES = {
         test: 0,
         audit: 0,
       },
-      approval_history: [ {,
-    task_id: 'feature_1695123456790_def456',
+      approval_history: [
+        {
+          task_id: 'feature_1695123456790_def456',
           action: 'approved',
           timestamp: '2025-09-23T11:00:00.000Z',
           approved_by: 'test-approver',
@@ -425,8 +427,9 @@ const TEST_FIXTURES = {
           '22:00-02:59': { init: 2, reinit: 1 },
           '03:00-06:59': { init: 1, reinit: 1 },
 },
-        daily_history: [ {,
-    date: '2025-09-22',
+        daily_history: [
+          {
+            date: '2025-09-22',
             total_init: 8,
             total_reinit: 4,
             buckets: {
@@ -497,7 +500,7 @@ class TimeTestUtils {
    */
   mockCurrentTime(timestamp) {
     this.mockTime = timestamp;
-    global.Date = class extends Date: {
+    global.Date = class extends Date {
       constructor(...args) {
         if (args.length === 0) {
           super(timestamp);
@@ -668,8 +671,8 @@ const testHelpers = {
     console.info = mockConsole.info;
 
     return {
-      mockConsole,,
-    restore: () => {
+      mockConsole,
+      restore: () => {
         console.log = originalConsole.log;
         console.error = originalConsole.error;
         console.warn = originalConsole.warn;

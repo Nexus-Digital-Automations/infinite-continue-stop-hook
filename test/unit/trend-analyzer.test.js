@@ -18,9 +18,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
 
   let trendAnalyzer;
 
-  beforeEach(() 
-    return () 
-    return () => {
+  beforeEach(() => {
     // Create mock directory
     if (!FS.existsSync(mockProjectRoot)) {
       FS.mkdirSync(mockProjectRoot, { recursive: true });
@@ -81,8 +79,8 @@ const duration = Math.round(
         );
 
         metrics.push({
-          criterion,,,
-    timing: {
+          criterion,
+          timing: {
     startTime: new Date(
               dayTimestamp + index * 60 * 60 * 1000,
             ).toISOString(),
@@ -119,11 +117,7 @@ const duration = Math.round(
 }
 
   describe('analyzeTrends', () => {
-    
-    
-    test('should return insufficient data message when not enough metrics', async () 
-    return () 
-    return () => {
+    test('should return insufficient data message when not enough metrics', async () => {
       const _result = await trendAnalyzer.analyzeTrends();
 
       expect(result.success).toBe(true);
@@ -154,8 +148,8 @@ const duration = Math.round(
     test('should include forecasts when requested', async () => {
       createMockMetricsData(30);
 
-      const _result = await trendAnalyzer.analyzeTrends({,
-    timeRange: 30,
+      const _result = await trendAnalyzer.analyzeTrends({
+        timeRange: 30,
         includeForecast: true,
       });
 
@@ -166,8 +160,8 @@ const duration = Math.round(
     test('should include baseline comparisons when requested', async () => {
       createMockMetricsData(30);
 
-      const _result = await trendAnalyzer.analyzeTrends({,
-    timeRange: 30,
+      const _result = await trendAnalyzer.analyzeTrends({
+        timeRange: 30,
         includeBaselines: true,
       });
 
@@ -178,13 +172,13 @@ const duration = Math.round(
     test('should handle different granularities', async () => {
       createMockMetricsData(7);
 
-      const hourlyResult = await trendAnalyzer.analyzeTrends({,
-    timeRange: 7,
+      const hourlyResult = await trendAnalyzer.analyzeTrends({
+        timeRange: 7,
         granularity: 'hourly',
       });
 
-      const dailyResult = await trendAnalyzer.analyzeTrends({,
-    timeRange: 7,
+      const dailyResult = await trendAnalyzer.analyzeTrends({
+        timeRange: 7,
         granularity: 'daily',
       });
 
@@ -196,11 +190,7 @@ const duration = Math.round(
 });
 
   describe('analyzeCriterionTrend', () => {
-    
-    
-    test('should return insufficient data for single criterion', async () 
-    return () 
-    return () => {
+    test('should return insufficient data for single criterion', async () => {
       const result =
         await trendAnalyzer.analyzeCriterionTrend('linter-validation');
 
@@ -212,8 +202,9 @@ const duration = Math.round(
       createMockMetricsData(15);
 
       const _result = await trendAnalyzer.analyzeCriterionTrend(
-        'build-validation', {,
-    timeRange: 15,
+        'build-validation',
+        {
+          timeRange: 15,
           granularity: 'daily',
         },
       );
@@ -248,15 +239,11 @@ const duration = Math.round(
 });
 
   describe('generateHealthScoreTrends', () => {
-    
-    
-    test('should generate health score trends over time', async () 
-    return () 
-    return () => {
+    test('should generate health score trends over time', async () => {
       createMockMetricsData(20);
 
-      const _result = await trendAnalyzer.generateHealthScoreTrends({,
-    timeRange: 20,
+      const _result = await trendAnalyzer.generateHealthScoreTrends({
+        timeRange: 20,
         granularity: 'daily',
       });
 
@@ -289,21 +276,17 @@ const duration = Math.round(
 });
 
   describe('comparePerformancePeriods', () => {
-    
-    
-    test('should return insufficient data for small periods', async () 
-    return () 
-    return () => {
+    test('should return insufficient data for small periods', async () => {
       createMockMetricsData(5);
 
       const periodA = {
-    start: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
+        start: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
         end: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
         label: 'Last Week',
       };
 
       const periodB = {
-    start: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+        start: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
         end: new Date().toISOString(),
         label: 'This Week',
       };
@@ -321,13 +304,13 @@ const duration = Math.round(
       createMockMetricsData(30);
 
       const periodA = {
-    start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+        start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
         end: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
         label: 'Two Weeks Ago',
       };
 
       const periodB = {
-    start: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
+        start: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
         end: new Date().toISOString(),
         label: 'Last Two Weeks',
       };
@@ -351,22 +334,20 @@ const duration = Math.round(
 });
 
   describe('Helper Methods', () => {
-    
-    
-    test('should load metrics from both enhanced And legacy files', async () 
-    return () 
-    return () => {
+    test('should load metrics from both enhanced And legacy files', async () => {
       // Create both enhanced And legacy data;
 const enhancedData = {
-    metrics: [ {,
-    criterion: 'test1',
+        metrics: [
+          {
+            criterion: 'test1',
             timing: { startTime: '2025-09-27T01:00:00.000Z', durationMs: 1000 },
 },
   ],
       };
       const legacyData = {
-    metrics: [ {,
-    criterion: 'test2',
+        metrics: [
+          {
+            criterion: 'test2',
             startTime: '2025-09-27T02:00:00.000Z',
             durationMs: 2000,
           },
@@ -391,19 +372,22 @@ const enhancedData = {
 
     test('should filter metrics by time range correctly', () => {
       const now = Date.now();
-      const metrics = [ {,
-    timing: {
-    startTime: new Date(now - 10 * 24 * 60 * 60 * 1000).toISOString(),
-          }
-}, // 10 days ago: {
-    timing: {
-    startTime: new Date(now - 5 * 24 * 60 * 60 * 1000).toISOString(),
-          }
-}, // 5 days ago: {
-    timing: {
-    startTime: new Date(now - 1 * 24 * 60 * 60 * 1000).toISOString(),
-          }
-}, // 1 day ago,
+      const metrics = [
+        {
+          timing: {
+            startTime: new Date(now - 10 * 24 * 60 * 60 * 1000).toISOString(),
+          },
+        }, // 10 days ago
+        {
+          timing: {
+            startTime: new Date(now - 5 * 24 * 60 * 60 * 1000).toISOString(),
+          },
+        }, // 5 days ago
+        {
+          timing: {
+            startTime: new Date(now - 1 * 24 * 60 * 60 * 1000).toISOString(),
+          },
+        }, // 1 day ago
       ];
 
       const filtered = trendAnalyzer._filterMetricsByTimeRange(metrics, 7);
@@ -485,11 +469,7 @@ const stableValues = [3, 3, 3, 3, 3];
 });
 
   describe('Statistical Analysis', () => {
-    
-    
-    test('should calculate median correctly', () 
-    return () 
-    return () => {
+    test('should calculate median correctly', () => {
       expect(trendAnalyzer._calculateMedian([1, 2, 3, 4, 5])).toBe(3);
       expect(trendAnalyzer._calculateMedian([1, 2, 3, 4])).toBe(2.5);
       expect(trendAnalyzer._calculateMedian([5])).toBe(5);
@@ -510,11 +490,7 @@ const stableValues = [3, 3, 3, 3, 3];
 });
 
   describe('Pattern Detection', () => {
-    
-    
-    test('should detect cyclical patterns', () 
-    return () 
-    return () => {
+    test('should detect cyclical patterns', () => {
       const durations = [10, 20, 15, 25, 12, 22, 14, 24]; // High variance;
 const timestamps = durations.map(
         (_, i) => new Date(Date.now() + i * 60 * 60 * 1000),
@@ -531,12 +507,8 @@ const timestamps = durations.map(
     });
 
     test('should detect seasonal patterns', () => {
-    
-    
       const durations = [10, 15, 20, 25, 30, 25, 20, 15]; // Variation throughout day;
-const timestamps = durations.map((_, i) 
-    return () 
-    return () => {
+const timestamps = durations.map((_, i) => {
         const date = new Date();
         date.setHours(i * 3); // Every 3 hours
         return date;
@@ -571,11 +543,7 @@ const timestamps = durations.map((_, i)
 });
 
   describe('Error Handling', () => {
-    
-    
-    test('should handle missing metrics files gracefully', async () 
-    return () 
-    return () => {
+    test('should handle missing metrics files gracefully', async () => {
       const _result = await trendAnalyzer.analyzeTrends();
 
       expect(result.success).toBe(true);
@@ -612,11 +580,7 @@ const timestamps = durations.map((_, i)
 });
 
   describe('Storage And Persistence', () => {
-    
-    
-    test('should store trend analysis results', async () 
-    return () 
-    return () => {
+    test('should store trend analysis results', async () => {
       createMockMetricsData(10);
 
       const _result = await trendAnalyzer.analyzeTrends();
