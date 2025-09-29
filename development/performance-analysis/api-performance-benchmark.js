@@ -48,7 +48,7 @@ class APIPerformanceBenchmark {
       const startMemory = process.memoryUsage();
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential execution required for accurate performance measurement;
-        const RESULT = await this.runCommand(command, args);
+        const result = await this.runCommand(command, args);
         const endTime = process.hrtime.bigint();
         const endMemory = process.memoryUsage();
 
@@ -67,7 +67,7 @@ class APIPerformanceBenchmark {
         // Small delay between iterations
         // eslint-disable-next-line no-await-in-loop -- Sequential delay required for benchmark accuracy
         await this.sleep(100);
-      } catch (_) {
+      } catch (error) {
         results.push({
           iteration: i + 1,
           responseTime: -1,
@@ -107,7 +107,7 @@ class APIPerformanceBenchmark {
         try {
           // Extract JSON from stdout (handle mixed output)
           const jsonMatch = stdout.match(/\{[\s\S]*\}/);
-          const RESULT = jsonMatch
+          const result = jsonMatch
             ? JSON.parse(jsonMatch[0])
             : { success: false, error: 'No JSON output' };
           resolve({
@@ -115,7 +115,7 @@ class APIPerformanceBenchmark {
             exitCode: code,
             stderr: stderr,
           });
-        } catch (_) {
+        } catch (error) {
           resolve({
             success: false,
             error: `Parse error: ${error.message}`,
@@ -464,7 +464,7 @@ class APIPerformanceBenchmark {
       const startTime = process.hrtime.bigint();
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential load testing requires controlled timing;
-        const RESULT = await this.runCommand(endpoint);
+        const result = await this.runCommand(endpoint);
         const responseTime =
           Number(process.hrtime.bigint() - startTime) / 1000000;
 
@@ -475,7 +475,7 @@ class APIPerformanceBenchmark {
           success: result.success,
           timestamp: Date.now(),
         });
-      } catch (_) {
+      } catch (error) {
         results.push({
           workerId,
           requestCount: ++requestCount,
@@ -748,7 +748,7 @@ async function main() {
     }
 
     loggers.stopHook.log(`\n📄 Full report: ${outputFile}`);
-  } catch (_) {
+  } catch (error) {
     loggers.stopHook.error('❌ Benchmark failed:', error);
     throw error;
   }

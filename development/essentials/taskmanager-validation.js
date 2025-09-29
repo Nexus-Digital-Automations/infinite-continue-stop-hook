@@ -222,7 +222,7 @@ class TaskManagerValidator {
    * @returns {string} Formatted output
    */
   formatResult(result) {
-    const _output = '';
+    let output = '';
 
     if (result.errors.length > 0) {
       output += '❌ ERRORS:\n';
@@ -282,7 +282,7 @@ if (require.main === module) {
 
   testCases.forEach((testCase) => {
     ValidationTestLogger.log(`Testing: ${testCase.name}`);
-    const _result = validator.validateTaskCreation(testCase.data);
+    const result = validator.validateTaskCreation(testCase.data);
     ValidationTestLogger.log(validator.formatResult(result));
   });
 
@@ -299,7 +299,7 @@ if (require.main === module) {
 
   commandTests.forEach((test) => {
     ValidationTestLogger.log(`Testing command: ${test.name}`);
-    const _result = validator.validateCommand(test.command, test.args);
+    const result = validator.validateCommand(test.command, test.args);
     ValidationTestLogger.log(validator.formatResult(result));
   });
 }

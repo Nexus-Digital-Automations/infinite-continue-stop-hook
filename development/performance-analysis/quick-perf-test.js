@@ -5,7 +5,7 @@ const { loggers } = require('../../lib/logger');
  */
 
 // Console output is intentional for this development/analysis tool;
-const { execSync } = require('child_process');
+const { execSync: _execSync } = require('child_process');
 const FS = require('fs');
 
 class QuickPerfTest {
@@ -69,7 +69,7 @@ class QuickPerfTest {
       if (arg.startsWith('{') || arg.startsWith('[')) {
         try {
           JSON.parse(arg);
-        } catch (_) {
+        } catch (_error) {
           throw new Error(`Invalid JSON argument: ${arg}`);
         }
       } else {
@@ -95,7 +95,7 @@ class QuickPerfTest {
       try {
         const startTime = process.hrtime.bigint();
         const cmd = `timeout 10s node ${this.apiPath} ${command} ${args.join(' ')}`;
-        const _result = execSync(cmd, { encoding: 'utf8', timeout: 15000 });
+        const result = execSync(cmd, { encoding: 'utf8', timeout: 15000 });
         const endTime = process.hrtime.bigint();
 
         const responseTime = Number(endTime - startTime) / 1000000; // Convert to ms
@@ -106,7 +106,7 @@ class QuickPerfTest {
         if (result.includes('"success": false') || result.includes('error')) {
           errors.push(`Iteration ${i + 1}: API returned error`);
         }
-      } catch (_) {
+      } catch (error) {
         errors.push(`Iteration ${i + 1}: ${error.message}`);
         times.push(-1); // Mark as failed
       }
@@ -153,7 +153,7 @@ class QuickPerfTest {
         endpoint.args,
       );
 
-      const _result = this.results[endpoint.cmd];
+      const result = this.results[endpoint.cmd];
       loggers.stopHook.log(
         `  ✅ Success Rate: ${result.successRate.toFixed(1)}%`,
       );
@@ -329,7 +329,7 @@ function main() {
     }
 
     loggers.stopHook.log(`\n📄 Full report saved to: ${outputFile}`);
-  } catch (_) {
+  } catch (error) {
     loggers.stopHook.error('❌ Performance test failed:', error);
     throw error;
   }
