@@ -20,7 +20,7 @@ class ComprehensiveLinterFixAgent6 {
   fixFile(_filePath) {
     console.log(`🔧 Comprehensively fixing: ${path.basename(_filePath)}`);
 
-    let content = fs.readFileSync(filePath, 'utf8');
+    let content = fs.readFileSync(_filePath, 'utf8');
     let modified = false;
     let fileFixCount = 0;
 
