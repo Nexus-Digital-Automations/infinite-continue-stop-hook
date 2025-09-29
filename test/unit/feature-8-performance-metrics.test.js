@@ -84,10 +84,10 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
           },
           featureId: 'feature_1758946499841_cd5eba625370',
         };
-      } catch (_) {
+      } catch (error) {
         return {
           success: false,
-          _error: _error.message,
+          error: error.message,
           metrics: [],
           statistics: null,
         };
@@ -133,10 +133,10 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
           },
           featureId: 'feature_1758946499841_cd5eba625370',
         };
-      } catch (_) {
+      } catch (error) {
         return {
           success: false,
-          _error: _error.message,
+          error: error.message,
           bottlenecks: [],
         };
       }
@@ -180,10 +180,10 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
           recommendations: this._generateBenchmarkRecommendations(benchmarks),
           featureId: 'feature_1758946499841_cd5eba625370',
         };
-      } catch (_) {
+      } catch (error) {
         return {
           success: false,
-          _error: _error.message,
+          error: error.message,
           benchmarks: null,
         };
       }
