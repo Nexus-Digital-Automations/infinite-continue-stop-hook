@@ -23,7 +23,7 @@ describe('RAG System End-to-End Workflows', () => {
     // Setup test project directory
     __testProjectRoot = path.join(
       __dirname,
-      '../../test-projects/rag-e2e-test'
+      '../../test-projects/rag-e2e-test',
     );
     await __fs.mkdir(__testProjectRoot, { recursive: true });
 
@@ -34,7 +34,7 @@ describe('RAG System End-to-End Workflows', () => {
     };
     await __fs.writeFile(
       path.join(__testProjectRoot, 'TODO.json'),
-      JSON.stringify(todoData, null, 2)
+      JSON.stringify(todoData, null, 2),
     );
 
     // Placeholder For TaskManager initialization

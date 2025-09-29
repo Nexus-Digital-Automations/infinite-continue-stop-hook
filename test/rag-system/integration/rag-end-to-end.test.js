@@ -146,7 +146,7 @@ describe('RAG System End-to-End Integration Tests', () => {
 
     test('should have proper component connections', () => {
       expect(semanticSearchEngine.config.embeddingGenerator).toBe(
-        embeddingGenerator
+        embeddingGenerator,
       );
       expect(semanticSearchEngine.config.vectorDatabase).toBe(vectorDatabase);
     });
@@ -174,7 +174,7 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // Store all lessons in parallel since they are independent operations;
       const results = await Promise.all(
-        _lessons.map((lesson) => ragOperations.storeLesson(lesson))
+        _lessons.map((lesson) => ragOperations.storeLesson(lesson)),
       );
 
       // Validate each result And collect them
@@ -213,7 +213,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       // Verify relevance ordering
       for (let i = 1; i < RESULTS.length; i++) {
         expect(RESULTS[i - 1].relevanceScore).toBeGreaterThanOrEqual(
-          RESULTS[i].relevanceScore
+          RESULTS[i].relevanceScore,
         );
       }
     });
@@ -230,7 +230,7 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       const _recommendations = await ragOperations.getRelevantLessons(
         _taskContext,
-        { maxResults: 5 }
+        { maxResults: 5 },
       );
 
       expect(_recommendations).toBeInstanceOf(Array);
@@ -253,7 +253,7 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // Store all errors in parallel since they are independent operations;
       const results = await Promise.all(
-        ERRORS.map((error) => ragOperations.storeError(error))
+        ERRORS.map((error) => ragOperations.storeError(error)),
       );
 
       // Validate each result And collect them
@@ -271,7 +271,7 @@ describe('RAG System End-to-End Integration Tests', () => {
         'TypeError: Cannot read property of undefined in async function';
       const _similarErrors = await ragOperations.findSimilarErrors(
         _errorDescription,
-        { maxResults: 3 }
+        { maxResults: 3 },
       );
 
       expect(_similarErrors).toBeInstanceOf(Array);
@@ -285,10 +285,10 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // Verify errors with resolutions are ranked higher;
       const _errorsWithResolutions = _similarErrors.filter(
-        (e) => e.hasResolution
+        (e) => e.hasResolution,
       );
       const _errorsWithoutResolutions = _similarErrors.filter(
-        (e) => !e.hasResolution
+        (e) => !e.hasResolution,
       );
 
       if (
@@ -296,7 +296,7 @@ describe('RAG System End-to-End Integration Tests', () => {
         _errorsWithoutResolutions.length > 0
       ) {
         expect(
-          _errorsWithResolutions[0].similarityScore
+          _errorsWithResolutions[0].similarityScore,
         ).toBeGreaterThanOrEqual(_errorsWithoutResolutions[0].similarityScore);
       }
     });
@@ -317,16 +317,16 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // Search for the stored error;
       const _searchResults = await ragOperations.findSimilarErrors(
-        _complexError.message
+        _complexError.message,
       );
       const _foundError = _searchResults.find(
-        (e) => e.error_type === _complexError.type
+        (e) => e.error_type === _complexError.type,
       );
 
       expect(_foundError).toBeDefined();
       expect(_foundError.errorPattern).toHaveProperty('complexity');
       expect(['high', 'medium', 'low', 'trivial']).toContain(
-        _foundError.errorPattern.complexity
+        _foundError.errorPattern.complexity,
       );
     });
   });
@@ -340,7 +340,7 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // Store lessons in batch;
       const RESULTS = await Promise.all(
-        _lessons.map((lesson) => ragOperations.storeLesson(lesson))
+        _lessons.map((lesson) => ragOperations.storeLesson(lesson)),
       );
 
       const END_TIME = Date.now();
@@ -357,7 +357,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       expect(_avgTimePerLesson).toBeLessThan(5000); // Less than 5 seconds per lesson
 
       console.log(
-        `Batch processing: ${_batchSize} lessons in ${_processingTime}ms (avg: ${_avgTimePerLesson.toFixed(2)}ms/lesson)`
+        `Batch processing: ${_batchSize} lessons in ${_processingTime}ms (avg: ${_avgTimePerLesson.toFixed(2)}ms/lesson)`,
       );
     });
 
@@ -376,7 +376,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       for (let i = 0; i < 10; i++) {
         for (const query of queries) {
           searchPromises.push(
-            ragOperations.searchLessons(query, { maxResults: 5 })
+            ragOperations.searchLessons(query, { maxResults: 5 }),
           );
         }
       }
@@ -399,7 +399,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       expect(avgTimePerQuery).toBeLessThan(2000); // Less than 2 seconds per query
 
       console.log(
-        `Concurrent search performance: ${totalQueries} queries in ${totalTime}ms (avg: ${avgTimePerQuery.toFixed(2)}ms/query)`
+        `Concurrent search performance: ${totalQueries} queries in ${totalTime}ms (avg: ${avgTimePerQuery.toFixed(2)}ms/query)`,
       );
     });
 
@@ -423,7 +423,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       expect(time2).toBeLessThan(time1 * 0.5); // At least 50% faster
 
       console.log(
-        `Cache performance: First search ${time1}ms, cached search ${time2}ms (${((1 - time2 / time1) * 100).toFixed(1)}% improvement)`
+        `Cache performance: First search ${time1}ms, cached search ${time2}ms (${((1 - time2 / time1) * 100).toFixed(1)}% improvement)`,
       );
     });
   });
@@ -446,7 +446,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       // Search should not return excessive duplicates;
       const searchResults = await ragOperations.searchLessons(lesson.title);
       const duplicateResults = searchResults.filter(
-        (r) => r.title === lesson.title
+        (r) => r.title === lesson.title,
       );
 
       // Should have reasonable duplicate handling
@@ -465,7 +465,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       // Embeddings should be identical for identical content;
       const similarity = testAssertions.calculateCosineSimilarity(
         embedding1,
-        embedding2
+        embedding2,
       );
       expect(similarity).toBeGreaterThan(0.99); // Very high similarity for identical content
     });
@@ -524,15 +524,15 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // Write all sample lesson files in parallel
       await Promise.all(
-        sampleLessons.map((lesson) => FS.writeFile(lesson.path, lesson.content))
+        sampleLessons.map((lesson) => FS.writeFile(lesson.path, lesson.content)),
       );
 
       // Verify files were created;
       const featuresFiles = await FS.readdir(
-        path.join(testLessonsPath, 'features')
+        path.join(testLessonsPath, 'features'),
       );
       const errorsFiles = await FS.readdir(
-        path.join(testLessonsPath, 'errors')
+        path.join(testLessonsPath, 'errors'),
       );
 
       expect(featuresFiles).toContain('react-optimization.md');
@@ -677,7 +677,7 @@ describe('RAG System Performance Benchmarks', () => {
     expect(avgTime).toBeLessThan(3000); // Less than 3 seconds per embedding
 
     console.log(
-      `Embedding generation benchmark: ${avgTime.toFixed(2)}ms average per embedding`
+      `Embedding generation benchmark: ${avgTime.toFixed(2)}ms average per embedding`,
     );
 
     await embeddingGenerator.cleanup();
@@ -734,7 +734,7 @@ describe('RAG System Performance Benchmarks', () => {
     expect(avgSearchTime).toBeLessThan(1000); // Less than 1 second per search
 
     console.log(
-      `Search performance benchmark: ${avgSearchTime.toFixed(2)}ms average per search`
+      `Search performance benchmark: ${avgSearchTime.toFixed(2)}ms average per search`,
     );
 
     // Cleanup performance test components

@@ -140,7 +140,7 @@ function main() {
   try {
     const finalCount = execSync(
       'npm run lint 2>&1 | grep "no-unused-vars" | wc -l',
-      { encoding: 'utf8' }
+      { encoding: 'utf8' },
     ).trim();
     console.log(`Final no-unused-vars violations: ${finalCount}`);
 
@@ -150,7 +150,7 @@ function main() {
       console.log('📋 Showing remaining violations:');
       const remaining = execSync(
         'npm run lint 2>&1 | grep "no-unused-vars" | head -10',
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       );
       console.log(remaining);
     }

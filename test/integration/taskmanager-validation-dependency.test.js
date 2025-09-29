@@ -69,7 +69,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
 
       const RESULT = await api.updateValidationDependency(
         'test-validation',
-        dependencyConfig
+        dependencyConfig,
       );
 
       expect(result.success).toBe(true);
@@ -159,7 +159,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
       expect(report.dependencyAnalysis.dependencyChains).toBeDefined();
       expect(report.dependencyAnalysis.resourceConflicts).toBeDefined();
       expect(
-        report.dependencyAnalysis.parallelizationOpportunities
+        report.dependencyAnalysis.parallelizationOpportunities,
       ).toBeDefined();
 
       // Check execution planning
@@ -174,7 +174,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
       expect(Array.isArray(report.recommendations.immediate)).toBe(true);
       expect(Array.isArray(report.recommendations.future)).toBe(true);
       expect(Array.isArray(report.recommendations.systemOptimizations)).toBe(
-        true
+        true,
       );
     });
 
@@ -205,7 +205,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
           {
             cwd: tempDir,
             stdio: 'pipe',
-          }
+          },
         );
 
         let stdout = '';
@@ -225,7 +225,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
             resolve({ code, result: result, stderr });
           } catch (_) {
             reject(
-              new Error(`Failed to parse JSON: ${stdout}\nStderr: ${stderr}`)
+              new Error(`Failed to parse JSON: ${stdout}\nStderr: ${stderr}`),
             );
           }
         });
@@ -335,7 +335,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
 
       const RESULT = await api.updateValidationDependency(
         'invalid-test',
-        invalidConfig
+        invalidConfig,
       );
 
       expect(result.success).toBe(false);
@@ -387,7 +387,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
 
         await api.updateValidationDependency(
           `perf-test-${i}`,
-          dependencyConfig
+          dependencyConfig,
         );
       }
 
@@ -447,7 +447,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
 
       const updateResult = await api.updateValidationDependency(
         'persistence-test',
-        customConfig
+        customConfig,
       );
       expect(updateResult.success).toBe(true);
 
@@ -458,7 +458,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
       expect(loadResult.success).toBe(true);
       expect(loadResult.dependencies['persistence-test']).toBeDefined();
       expect(loadResult.dependencies['persistence-test'].criterion).toBe(
-        'persistence-test'
+        'persistence-test',
       );
     });
 
@@ -550,7 +550,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
       for (const validation of customValidations) {
         const RESULT = await api.updateValidationDependency(
           validation.name,
-          validation.config
+          validation.config,
         );
         expect(result.success).toBe(true);
       }
@@ -562,7 +562,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
 
       // 5. Generate execution plan;
       const executionPlan = await api.generateValidationExecutionPlan(
-        customValidations.map((v) => v.name)
+        customValidations.map((v) => v.name),
       );
       expect(executionPlan.success).toBe(true);
       expect(executionPlan.parallelPlan.totalWaves).toBeGreaterThan(0);
@@ -571,7 +571,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
       const analysis = await api.generateDependencyAnalysisReport();
       expect(analysis.success).toBe(true);
       expect(analysis.report.summary.totalCriteria).toBeGreaterThanOrEqual(
-        customValidations.length
+        customValidations.length,
       );
 
       // 7. Generate visualizations;
@@ -586,16 +586,16 @@ describe('TaskManager API Validation Dependency Integration', () => {
       // 8. Verify workflow order respects dependencies;
       const order = executionPlan.executionOrder;
       const setupPos = order.findIndex(
-        (step) => step.criterion === 'workflow-setup'
+        (step) => step.criterion === 'workflow-setup',
       );
       const lintPos = order.findIndex(
-        (step) => step.criterion === 'workflow-lint'
+        (step) => step.criterion === 'workflow-lint',
       );
       const testPos = order.findIndex(
-        (step) => step.criterion === 'workflow-test'
+        (step) => step.criterion === 'workflow-test',
       );
       const deployPos = order.findIndex(
-        (step) => step.criterion === 'workflow-deploy'
+        (step) => step.criterion === 'workflow-deploy',
       );
 
       expect(setupPos).toBeLessThan(lintPos);

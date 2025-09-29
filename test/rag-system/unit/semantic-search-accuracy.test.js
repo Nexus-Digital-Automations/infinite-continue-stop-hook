@@ -18,7 +18,7 @@ describe('Semantic Search Accuracy Validation', () => {
 
   beforeAll(async () => {
     loggers.stopHook.log(
-      'Setting up semantic search accuracy test environment...'
+      'Setting up semantic search accuracy test environment...',
     );
 
     // Initialize test dataset with known technical content

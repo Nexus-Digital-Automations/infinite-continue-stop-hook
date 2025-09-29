@@ -73,7 +73,7 @@ function getAllJSFiles(dir) {
       // Skip certain directories
       if (
         ['node_modules', '.git', 'coverage', 'dist', 'build'].includes(
-          entry.name
+          entry.name,
         )
       ) {
         continue;

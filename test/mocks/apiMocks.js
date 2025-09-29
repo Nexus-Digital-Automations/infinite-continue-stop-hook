@@ -30,7 +30,7 @@ class TaskManagerAPIMock {
         '03:00-06:59': { initializations: 0, reinitializations: 1, total: 1 },
       },
     };
-}
+  }
 
   /**
    * Mock initialize command
@@ -50,7 +50,7 @@ class TaskManagerAPIMock {
       agent,
       message: `Agent ${agentId} initialized successfully`,
     };
-}
+  }
 
   /**
    * Mock reinitialize command
@@ -72,7 +72,7 @@ class TaskManagerAPIMock {
       error: `Agent ${agentId} not found`,
       message: 'Cannot reinitialize non-existent agent',
     };
-}
+  }
 
   /**
    * Mock suggest-feature command
@@ -122,7 +122,7 @@ class TaskManagerAPIMock {
       feature,
       message: 'Feature suggested successfully',
     };
-}
+  }
 
   /**
    * Mock list-features command
@@ -145,7 +145,7 @@ class TaskManagerAPIMock {
       count: features.length,
       filter,
     };
-}
+  }
 
   /**
    * Mock approve-feature command
@@ -170,7 +170,7 @@ class TaskManagerAPIMock {
       feature,
       message: `Feature ${featureId} approved successfully`,
     };
-}
+  }
 
   /**
    * Mock reject-feature command
@@ -195,7 +195,7 @@ class TaskManagerAPIMock {
       feature,
       message: `Feature ${featureId} rejected successfully`,
     };
-}
+  }
 
   /**
    * Mock feature-stats command
@@ -224,7 +224,7 @@ class TaskManagerAPIMock {
         last_updated: new Date().toISOString(),
       },
     };
-}
+  }
 
   /**
    * Mock get-initialization-stats command
@@ -238,7 +238,7 @@ class TaskManagerAPIMock {
         current_bucket: this.getCurrentTimeBucket(),
       },
     };
-}
+  }
 
   /**
    * Mock guide command
@@ -265,7 +265,7 @@ class TaskManagerAPIMock {
         },
       },
     };
-}
+  }
 
   /**
    * Mock methods command
@@ -287,7 +287,7 @@ class TaskManagerAPIMock {
       ],
       message: 'Available API methods',
     };
-}
+  }
 
   /**
    * Helper method to get current time bucket
@@ -307,7 +307,7 @@ class TaskManagerAPIMock {
       return '22:00-02:59';
     }
     return '03:00-06:59';
-}
+  }
 
   /**
    * Reset mock state
@@ -317,7 +317,7 @@ class TaskManagerAPIMock {
     this.agents.clear();
     this.initializationStats.total_initializations = 0;
     this.initializationStats.total_reinitializations = 0;
-}
+  }
 }
 
 /**
@@ -327,22 +327,22 @@ class FileSystemMock {
   constructor(_agentId) {
     this.files = new Map();
     this.directories = new Set();
-}
+  }
 
   existsSync(path) {
     return this.files.has(path) || this.directories.has(path);
-}
+  }
 
   readFileSync(path, _encoding = 'utf8') {
     if (!this.files.has(path)) {
       throw new Error(`ENOENT: no such file or directory, open '${path}'`);
     }
     return this.files.get(path);
-}
+  }
 
   writeFileSync(path, data) {
     this.files.set(path, data);
-}
+  }
 
   mkdirSync(path, options = {}) {
     if (options.recursive) {
@@ -358,7 +358,7 @@ class FileSystemMock {
     } else {
       this.directories.add(path);
     }
-}
+  }
 
   rmSync(path, options = {}) {
     if (options.recursive) {
@@ -377,7 +377,7 @@ class FileSystemMock {
       this.files.delete(path);
       this.directories.delete(path);
     }
-}
+  }
 
   readdirSync(path) {
     const entries = [];
@@ -403,12 +403,12 @@ class FileSystemMock {
     }
 
     return entries;
-}
+  }
 
   reset() {
     this.files.clear();
     this.directories.clear();
-}
+  }
 }
 
 /**
@@ -418,11 +418,11 @@ class HTTPClientMock {
   constructor(_agentId) {
     this.responses = new Map();
     this.requests = [];
-}
+  }
 
   setResponse(url, response) {
     this.responses.set(url, response);
-}
+  }
 
   get(url, options = {}) {
     this.requests.push({ method: 'GET', url, options });
@@ -436,7 +436,7 @@ class HTTPClientMock {
       data: { message: 'Mock response' },
       headers: { 'content-type': 'application/json' },
     };
-}
+  }
 
   post(url, data, options = {}) {
     this.requests.push({ method: 'POST', url, data, options });
@@ -450,16 +450,16 @@ class HTTPClientMock {
       data: { message: 'Mock response', created: data },
       headers: { 'content-type': 'application/json' },
     };
-}
+  }
 
   getRequests() {
     return [...this.requests];
-}
+  }
 
   reset() {
     this.responses.clear();
     this.requests.length = 0;
-}
+  }
 }
 
 /**
@@ -469,13 +469,13 @@ class DatabaseMock {
   constructor(_agentId) {
     this.collections = new Map();
     this.queries = [];
-}
+  }
 
   createCollection(name) {
     if (!this.collections.has(name)) {
       this.collections.set(name, new Map());
     }
-}
+  }
 
   insert(collection, data) {
     this.createCollection(collection);
@@ -484,7 +484,7 @@ class DatabaseMock {
     this.collections.get(collection).set(id, record);
     this.queries.push({ operation: 'insert', collection, data: record });
     return record;
-}
+  }
 
   find(collection, query = {}) {
     this.createCollection(collection);
@@ -494,10 +494,10 @@ class DatabaseMock {
     // Simple query filtering
     return records.filter((record) => {
       return Object.entries(query).every(
-        ([key, value]) => record[key] === value
+        ([key, value]) => record[key] === value,
       );
     });
-}
+  }
 
   update(collection, id, updates) {
     this.createCollection(collection);
@@ -513,7 +513,7 @@ class DatabaseMock {
       return record;
     }
     return null;
-}
+  }
 
   delete(collection, id) {
     this.createCollection(collection);
@@ -521,16 +521,16 @@ class DatabaseMock {
     const deleted = records.delete(id);
     this.queries.push({ operation: 'delete', collection, id });
     return deleted;
-}
+  }
 
   getQueries() {
     return [...this.queries];
-}
+  }
 
   reset() {
     this.collections.clear();
     this.queries.length = 0;
-}
+  }
 }
 
 module.exports = {

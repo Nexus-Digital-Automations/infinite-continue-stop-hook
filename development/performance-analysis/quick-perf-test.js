@@ -48,7 +48,7 @@ class QuickPerfTest {
     // Validate command is in whitelist
     if (!this.allowedCommands.has(command)) {
       throw new Error(
-        `Invalid command: ${command}. Only whitelisted commands are allowed.`
+        `Invalid command: ${command}. Only whitelisted commands are allowed.`,
       );
     }
 
@@ -61,7 +61,7 @@ class QuickPerfTest {
     const sanitizedArgs = args.map((arg) => {
       if (typeof arg !== 'string') {
         throw new Error(
-          `All arguments must be strings. Received: ${typeof arg}`
+          `All arguments must be strings. Received: ${typeof arg}`,
         );
       }
 
@@ -150,18 +150,18 @@ class QuickPerfTest {
       loggers.stopHook.log(`\n📊 Testing: ${endpoint.description}`);
       this.results[endpoint.cmd] = this.measureEndpoint(
         endpoint.cmd,
-        endpoint.args
+        endpoint.args,
       );
 
       const _result = this.results[endpoint.cmd];
       loggers.stopHook.log(
-        `  ✅ Success Rate: ${result.successRate.toFixed(1)}%`
+        `  ✅ Success Rate: ${result.successRate.toFixed(1)}%`,
       );
       loggers.app.info(
-        `  ⏱️  Avg Response: ${result.averageResponseTime.toFixed(2)}ms`
+        `  ⏱️  Avg Response: ${result.averageResponseTime.toFixed(2)}ms`,
       );
       loggers.app.info(
-        `  📈 Range: ${result.minResponseTime.toFixed(2)} - ${result.maxResponseTime.toFixed(2)}ms`
+        `  📈 Range: ${result.minResponseTime.toFixed(2)} - ${result.maxResponseTime.toFixed(2)}ms`,
       );
 
       if (result.errors.length > 0) {
@@ -189,7 +189,7 @@ class QuickPerfTest {
 
     // Calculate summary metrics;
     const validResults = Object.values(this.results).filter(
-      (r) => r.successRate > 0
+      (r) => r.successRate > 0,
     );
 
     if (validResults.length > 0) {
@@ -202,7 +202,7 @@ class QuickPerfTest {
 
       // Find fastest And slowest;
       const sorted = validResults.sort(
-        (a, b) => a.averageResponseTime - b.averageResponseTime
+        (a, b) => a.averageResponseTime - b.averageResponseTime,
       );
       report.summary.fastestEndpoint = {
         command: sorted[0].command,
@@ -298,24 +298,24 @@ function main() {
     loggers.stopHook.log('\n\n📊 QUICK PERFORMANCE TEST RESULTS');
     loggers.stopHook.log('===================================');
     loggers.stopHook.log(
-      `Total Endpoints Tested: ${report.summary.totalEndpoints}`
+      `Total Endpoints Tested: ${report.summary.totalEndpoints}`,
     );
     loggers.app.info(
-      `Overall Success Rate: ${report.summary.overallSuccessRate.toFixed(2)}%`
+      `Overall Success Rate: ${report.summary.overallSuccessRate.toFixed(2)}%`,
     );
     loggers.app.info(
-      `Average Response Time: ${report.summary.averageResponseTime.toFixed(2)}ms`
+      `Average Response Time: ${report.summary.averageResponseTime.toFixed(2)}ms`,
     );
 
     if (report.summary.fastestEndpoint) {
       loggers.app.info(
-        `Fastest Endpoint: ${report.summary.fastestEndpoint.command} (${report.summary.fastestEndpoint.time.toFixed(2)}ms)`
+        `Fastest Endpoint: ${report.summary.fastestEndpoint.command} (${report.summary.fastestEndpoint.time.toFixed(2)}ms)`,
       );
     }
 
     if (report.summary.slowestEndpoint) {
       loggers.app.info(
-        `Slowest Endpoint: ${report.summary.slowestEndpoint.command} (${report.summary.slowestEndpoint.time.toFixed(2)}ms)`
+        `Slowest Endpoint: ${report.summary.slowestEndpoint.command} (${report.summary.slowestEndpoint.time.toFixed(2)}ms)`,
       );
     }
 
@@ -323,7 +323,7 @@ function main() {
       loggers.stopHook.log('\n🔧 Key Recommendations:');
       report.recommendations.forEach((rec, i) => {
         loggers.stopHook.log(
-          `  ${i + 1}. [${rec.priority}] ${rec.recommendation}`
+          `  ${i + 1}. [${rec.priority}] ${rec.recommendation}`,
         );
       });
     }

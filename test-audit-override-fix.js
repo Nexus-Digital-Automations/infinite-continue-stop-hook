@@ -37,7 +37,7 @@ async function testAuditOverrideFix(category = 'general') {
 
     if (!featureResult.success) {
       TestLogger.error(
-        '❌ Failed to create feature task: ' + featureResult.reason
+        '❌ Failed to create feature task: ' + featureResult.reason,
       );
       return false;
     }
@@ -68,12 +68,12 @@ async function testAuditOverrideFix(category = 'general') {
 
     if (claimAttempt1.success) {
       TestLogger.error(
-        '❌ BUG: Agent was able to claim their own audit task without override!'
+        '❌ BUG: Agent was able to claim their own audit task without override!',
       );
       return false;
     } else {
       TestLogger.log(
-        '✅ Objectivity enforcement working - agent cannot claim own audit task normally'
+        '✅ Objectivity enforcement working - agent cannot claim own audit task normally',
       );
       TestLogger.log('   Reason: ' + claimAttempt1.reason);
     }
@@ -87,16 +87,16 @@ async function testAuditOverrideFix(category = 'general') {
 
     if (!claimAttempt2.success) {
       TestLogger.error(
-        '❌ FAILED: Agent cannot override audit task even with allowOutOfOrder: true'
+        '❌ FAILED: Agent cannot override audit task even with allowOutOfOrder: true',
       );
       TestLogger.error('   Reason: ' + claimAttempt2.reason);
       return false;
     } else {
       TestLogger.log(
-        '✅ SUCCESS: Agent can now override audit task with allowOutOfOrder: true'
+        '✅ SUCCESS: Agent can now override audit task with allowOutOfOrder: true',
       );
       TestLogger.log(
-        '   This allows agents to move on to other work when needed'
+        '   This allows agents to move on to other work when needed',
       );
     }
 
@@ -104,11 +104,11 @@ async function testAuditOverrideFix(category = 'general') {
     await tm.updateTaskStatus(
       auditId,
       'completed',
-      'Test completed successfully'
+      'Test completed successfully',
     );
 
     TestLogger.log(
-      '🎉 All tests passed! The audit task override bug is fixed.'
+      '🎉 All tests passed! The audit task override bug is fixed.',
     );
     return true;
   } catch (_) {

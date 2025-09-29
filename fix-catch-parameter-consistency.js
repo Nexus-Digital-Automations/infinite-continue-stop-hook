@@ -14,7 +14,7 @@ function getAllJavaScriptFiles() {
   try {
     const _result = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
-      { cwd: rootDir, encoding: 'utf-8' }
+      { cwd: rootDir, encoding: 'utf-8' },
     );
 
     return result
@@ -66,7 +66,7 @@ function fixCatchParameterConsistency(_filePath) {
           lines[i] = line.replace('catch (_)', 'catch (_)');
           modified = true;
           console.log(
-            `  ✓ Fixed catch (_) -> catch (_): ${path.relative(rootDir, _filePath)}:${i + 1}`
+            `  ✓ Fixed catch (_) -> catch (_): ${path.relative(rootDir, _filePath)}:${i + 1}`,
           );
         }
         // If block uses error, change parameter to error
@@ -77,7 +77,7 @@ function fixCatchParameterConsistency(_filePath) {
           lines[i] = line.replace('catch (_)', 'catch (_)'); // Already correct
           modified = true;
           console.log(
-            `  ✓ Fixed catch (_) -> catch (_): ${path.relative(rootDir, _filePath)}:${i + 1}`
+            `  ✓ Fixed catch (_) -> catch (_): ${path.relative(rootDir, _filePath)}:${i + 1}`,
           );
         }
         // If block uses lintError, change parameter to lintError
@@ -88,7 +88,7 @@ function fixCatchParameterConsistency(_filePath) {
           lines[i] = line.replace('catch (_)', 'catch (_)');
           modified = true;
           console.log(
-            `  ✓ Fixed catch (_) -> catch (_): ${path.relative(rootDir, _filePath)}:${i + 1}`
+            `  ✓ Fixed catch (_) -> catch (_): ${path.relative(rootDir, _filePath)}:${i + 1}`,
           );
         }
       }
@@ -121,7 +121,7 @@ function fixCatchParameterConsistency(_filePath) {
           lines[i] = line.replace('catch (_)', 'catch (_)');
           modified = true;
           console.log(
-            `  ✓ Fixed catch (_) -> catch (_): ${path.relative(rootDir, _filePath)}:${i + 1}`
+            `  ✓ Fixed catch (_) -> catch (_): ${path.relative(rootDir, _filePath)}:${i + 1}`,
           );
         }
         // If block uses lintError but parameter is _error, change parameter to lintError
@@ -132,7 +132,7 @@ function fixCatchParameterConsistency(_filePath) {
           lines[i] = line.replace('catch (_)', 'catch (_)');
           modified = true;
           console.log(
-            `  ✓ Fixed catch (_) -> catch (_): ${path.relative(rootDir, _filePath)}:${i + 1}`
+            `  ✓ Fixed catch (_) -> catch (_): ${path.relative(rootDir, _filePath)}:${i + 1}`,
           );
         }
       }
@@ -165,7 +165,7 @@ function fixCatchParameterConsistency(_filePath) {
           lines[i] = line.replace('catch (_)', 'catch (_)');
           modified = true;
           console.log(
-            `  ✓ Fixed catch (_) -> catch (_): ${path.relative(rootDir, _filePath)}:${i + 1}`
+            `  ✓ Fixed catch (_) -> catch (_): ${path.relative(rootDir, _filePath)}:${i + 1}`,
           );
         }
       }
@@ -195,13 +195,13 @@ function main() {
     if (fixCatchParameterConsistency(_filePath)) {
       totalFixed++;
       console.log(
-        `✅ Fixed catch consistency in: ${path.relative(rootDir, _filePath)}`
+        `✅ Fixed catch consistency in: ${path.relative(rootDir, _filePath)}`,
       );
     }
   }
 
   console.log(
-    `\n📈 Summary: Fixed catch parameter consistency in ${totalFixed} files`
+    `\n📈 Summary: Fixed catch parameter consistency in ${totalFixed} files`,
   );
 
   // Run autofix after our fixes

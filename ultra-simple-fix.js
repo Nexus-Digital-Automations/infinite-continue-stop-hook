@@ -13,7 +13,7 @@ console.log('🎯 Ultra Simple Undefined Variable Fixer\n');
 // Get all JS files;
 const jsFiles = execSync(
   'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
-  { encoding: 'utf-8' }
+  { encoding: 'utf-8' },
 )
   .split('\n')
   .filter((f) => f && f.endsWith('.js'))
@@ -68,7 +68,7 @@ jsFiles.forEach((_filePath) => {
       lines.splice(
         insertIndex,
         0,
-        `const { loggers } = require('${loggerPath}');`
+        `const { loggers } = require('${loggerPath}');`,
       );
       modified = true;
       totalFixes++;
@@ -154,7 +154,7 @@ try {
     100
   ).toFixed(1);
   console.log(
-    `📈 Total reduction achieved: ${reduction}% (from ${originalCount} to ${undefinedCount})`
+    `📈 Total reduction achieved: ${reduction}% (from ${originalCount} to ${undefinedCount})`,
   );
 
   const target = originalCount * 0.2; // 80% reduction target
@@ -162,7 +162,7 @@ try {
     console.log('🎯 SUCCESS: Achieved 80%+ reduction target!');
   } else {
     console.log(
-      `🎯 Progress: Need to reduce to ${Math.floor(target)} or fewer for 80% target`
+      `🎯 Progress: Need to reduce to ${Math.floor(target)} or fewer for 80% target`,
     );
   }
 

@@ -22,7 +22,7 @@ class StructuredLoggingValidator {
    */
   async validate() {
     console.log(
-      '🔍 Validating Structured Logging and Observability Implementation'
+      '🔍 Validating Structured Logging and Observability Implementation',
     );
     console.log('==========================================\n');
 
@@ -59,7 +59,7 @@ class StructuredLoggingValidator {
         const loggerPath = path.join(this.projectRoot, 'lib', 'logger.js');
         const content = fs.readFileSync(loggerPath, 'utf8');
         return content.includes('pino') && content.includes('JSON');
-      }
+      },
     );
 
     // Criterion 2: Console.log statements replaced in core files
@@ -69,7 +69,7 @@ class StructuredLoggingValidator {
       () => {
         const taskManagerPath = path.join(
           this.projectRoot,
-          'taskmanager-api.js'
+          'taskmanager-api.js',
         );
         const stopHookPath = path.join(this.projectRoot, 'stop-hook.js');
 
@@ -82,7 +82,7 @@ class StructuredLoggingValidator {
           stopHookContent.includes('loggers.stopHook');
 
         return hasStructuredLogging;
-      }
+      },
     );
 
     // Criterion 3: Contextual logging with metadata
@@ -98,7 +98,7 @@ class StructuredLoggingValidator {
           content.includes('taskId') &&
           content.includes('operationId')
         );
-      }
+      },
     );
 
     // Criterion 4: Error logging with stack traces
@@ -113,7 +113,7 @@ class StructuredLoggingValidator {
           content.includes('stack') &&
           content.includes('categorizeError')
         );
-      }
+      },
     );
 
     // Criterion 5: Performance timing utilities
@@ -128,7 +128,7 @@ class StructuredLoggingValidator {
           content.includes('duration_ms') &&
           content.includes('hrtime')
         );
-      }
+      },
     );
 
     // Criterion 6: API call logging with sensitive data sanitization
@@ -143,7 +143,7 @@ class StructuredLoggingValidator {
           content.includes('sanitized') &&
           content.includes('REDACTED')
         );
-      }
+      },
     );
 
     // Criterion 7: Specialized component loggers
@@ -160,7 +160,7 @@ class StructuredLoggingValidator {
           content.includes('performance:') &&
           content.includes('security:')
         );
-      }
+      },
     );
 
     // Criterion 8: Legacy logger backward compatibility
@@ -175,7 +175,7 @@ class StructuredLoggingValidator {
           content.includes('logInput') &&
           content.includes('logProjectState')
         );
-      }
+      },
     );
 
     // Criterion 9: Environment-based configuration
@@ -190,7 +190,7 @@ class StructuredLoggingValidator {
           content.includes('production') &&
           content.includes('transport')
         );
-      }
+      },
     );
 
     // Criterion 10: Log level configuration
@@ -206,7 +206,7 @@ class StructuredLoggingValidator {
           content.includes('info') &&
           content.includes('debug')
         );
-      }
+      },
     );
   }
 
@@ -225,10 +225,10 @@ class StructuredLoggingValidator {
         const configPath = path.join(
           this.projectRoot,
           'config',
-          'logging-production.js'
+          'logging-production.js',
         );
         return fs.existsSync(configPath);
-      }
+      },
     );
 
     // Criterion 12: Production logger factory
@@ -239,7 +239,7 @@ class StructuredLoggingValidator {
         const prodLoggerPath = path.join(
           this.projectRoot,
           'lib',
-          'logger-production.js'
+          'logger-production.js',
         );
         if (!fs.existsSync(prodLoggerPath)) {
           return false;
@@ -251,7 +251,7 @@ class StructuredLoggingValidator {
           content.includes('enhanceLogger') &&
           content.includes('sanitizeLogData')
         );
-      }
+      },
     );
 
     // Criterion 13: Log rotation and retention
@@ -262,7 +262,7 @@ class StructuredLoggingValidator {
         const configPath = path.join(
           this.projectRoot,
           'config',
-          'logging-production.js'
+          'logging-production.js',
         );
         if (!fs.existsSync(configPath)) {
           return false;
@@ -275,7 +275,7 @@ class StructuredLoggingValidator {
           content.includes('maxFiles') &&
           content.includes('maxAge')
         );
-      }
+      },
     );
 
     // Criterion 14: Production initialization script
@@ -286,10 +286,10 @@ class StructuredLoggingValidator {
         const scriptPath = path.join(
           this.projectRoot,
           'scripts',
-          'initialize-production-logging.js'
+          'initialize-production-logging.js',
         );
         return fs.existsSync(scriptPath);
-      }
+      },
     );
 
     // Criterion 15: Environment template and deployment configs
@@ -300,7 +300,7 @@ class StructuredLoggingValidator {
         const scriptPath = path.join(
           this.projectRoot,
           'scripts',
-          'initialize-production-logging.js'
+          'initialize-production-logging.js',
         );
         if (!fs.existsSync(scriptPath)) {
           return false;
@@ -312,7 +312,7 @@ class StructuredLoggingValidator {
           content.includes('createDockerLoggingConfig') &&
           content.includes('createSystemdServiceTemplate')
         );
-      }
+      },
     );
   }
 
@@ -321,7 +321,7 @@ class StructuredLoggingValidator {
    */
   async validateObservabilityFeatures() {
     console.log(
-      '\n📊 Observability and Monitoring Validation (Criteria 16-20)'
+      '\n📊 Observability and Monitoring Validation (Criteria 16-20)',
     );
     console.log('==========================================================\n');
 
@@ -338,7 +338,7 @@ class StructuredLoggingValidator {
           content.includes('cpuUsage') &&
           content.includes('uptime')
         );
-      }
+      },
     );
 
     // Criterion 17: Business metrics tracking
@@ -355,7 +355,7 @@ class StructuredLoggingValidator {
           content.includes('agentInitialized') &&
           content.includes('validationRun')
         );
-      }
+      },
     );
 
     // Criterion 18: Alert detection and thresholds
@@ -372,7 +372,7 @@ class StructuredLoggingValidator {
           content.includes('taskFailureRate') &&
           content.includes('threshold')
         );
-      }
+      },
     );
 
     // Criterion 19: Error categorization and trending
@@ -388,7 +388,7 @@ class StructuredLoggingValidator {
           content.includes('trackErrorTrend') &&
           content.includes('severity')
         );
-      }
+      },
     );
 
     // Criterion 20: Health check endpoints
@@ -403,7 +403,7 @@ class StructuredLoggingValidator {
           content.includes('performSystemCheck') &&
           content.includes('status')
         );
-      }
+      },
     );
   }
 
@@ -422,7 +422,7 @@ class StructuredLoggingValidator {
         const configPath = path.join(
           this.projectRoot,
           'config',
-          'logging-production.js'
+          'logging-production.js',
         );
         if (!fs.existsSync(configPath)) {
           return false;
@@ -435,7 +435,7 @@ class StructuredLoggingValidator {
           content.includes('token') &&
           content.includes('secret')
         );
-      }
+      },
     );
 
     // Criterion 22: Audit logging For compliance
@@ -446,7 +446,7 @@ class StructuredLoggingValidator {
         const prodLoggerPath = path.join(
           this.projectRoot,
           'lib',
-          'logger-production.js'
+          'logger-production.js',
         );
         if (!fs.existsSync(prodLoggerPath)) {
           return false;
@@ -458,7 +458,7 @@ class StructuredLoggingValidator {
           content.includes('GDPR') &&
           content.includes('compliance')
         );
-      }
+      },
     );
 
     // Criterion 23: Data retention policies
@@ -469,7 +469,7 @@ class StructuredLoggingValidator {
         const configPath = path.join(
           this.projectRoot,
           'config',
-          'logging-production.js'
+          'logging-production.js',
         );
         if (!fs.existsSync(configPath)) {
           return false;
@@ -482,7 +482,7 @@ class StructuredLoggingValidator {
           content.includes('performanceLogDays') &&
           content.includes('errorLogDays')
         );
-      }
+      },
     );
 
     // Criterion 24: External monitoring integrations
@@ -493,7 +493,7 @@ class StructuredLoggingValidator {
         const configPath = path.join(
           this.projectRoot,
           'config',
-          'logging-production.js'
+          'logging-production.js',
         );
         if (!fs.existsSync(configPath)) {
           return false;
@@ -506,7 +506,7 @@ class StructuredLoggingValidator {
           content.includes('elk') &&
           content.includes('prometheus')
         );
-      }
+      },
     );
 
     // Criterion 25: Performance optimization For production
@@ -517,7 +517,7 @@ class StructuredLoggingValidator {
         const configPath = path.join(
           this.projectRoot,
           'config',
-          'logging-production.js'
+          'logging-production.js',
         );
         if (!fs.existsSync(configPath)) {
           return false;
@@ -530,7 +530,7 @@ class StructuredLoggingValidator {
           content.includes('buffer') &&
           content.includes('sampling')
         );
-      }
+      },
     );
   }
 
@@ -542,7 +542,7 @@ class StructuredLoggingValidator {
       const passed = validator();
       const status = passed ? '✅ PASS' : '❌ FAIL';
       console.log(
-        `${number.toString().padStart(2, '0')}. ${status} - ${description}`
+        `${number.toString().padStart(2, '0')}. ${status} - ${description}`,
       );
 
       this.results.push({
@@ -557,7 +557,7 @@ class StructuredLoggingValidator {
       }
     } catch (_) {
       console.log(
-        `${number.toString().padStart(2, '0')}. ❌ ERROR - ${description}`
+        `${number.toString().padStart(2, '0')}. ❌ ERROR - ${description}`,
       );
       console.log(`    Error: ${error.message}`);
 
@@ -580,10 +580,10 @@ class StructuredLoggingValidator {
     console.log('='.repeat(60));
 
     const passRate = ((this.passedCriteria / this.totalCriteria) * 100).toFixed(
-      1
+      1,
     );
     console.log(
-      `\n📊 Results: ${this.passedCriteria}/${this.totalCriteria} criteria passed (${passRate}%)`
+      `\n📊 Results: ${this.passedCriteria}/${this.totalCriteria} criteria passed (${passRate}%)`,
     );
 
     if (this.passedCriteria === this.totalCriteria) {
@@ -597,7 +597,7 @@ class StructuredLoggingValidator {
         .filter((r) => !r.passed)
         .forEach((result) => {
           console.log(
-            `   ${result.number.toString().padStart(2, '0')}. ${result.description}`
+            `   ${result.number.toString().padStart(2, '0')}. ${result.description}`,
           );
           if (result.error) {
             console.log(`       Error: ${result.error}`);
@@ -613,23 +613,23 @@ class StructuredLoggingValidator {
 
     console.log('\n📈 Category Breakdown:');
     console.log(
-      `   Core Implementation (1-10):     ${coreResults.filter((r) => r.passed).length}/10`
+      `   Core Implementation (1-10):     ${coreResults.filter((r) => r.passed).length}/10`,
     );
     console.log(
-      `   Production Readiness (11-15):   ${prodResults.filter((r) => r.passed).length}/5`
+      `   Production Readiness (11-15):   ${prodResults.filter((r) => r.passed).length}/5`,
     );
     console.log(
-      `   Observability Features (16-20): ${obsResults.filter((r) => r.passed).length}/5`
+      `   Observability Features (16-20): ${obsResults.filter((r) => r.passed).length}/5`,
     );
     console.log(
-      `   Security & Compliance (21-25):  ${secResults.filter((r) => r.passed).length}/5`
+      `   Security & Compliance (21-25):  ${secResults.filter((r) => r.passed).length}/5`,
     );
 
     // Generate detailed report file
     this.generateDetailedReport();
 
     console.log(
-      '\n📝 Detailed report saved to: structured-logging-validation-report.json'
+      '\n📝 Detailed report saved to: structured-logging-validation-report.json',
     );
     console.log('='.repeat(60));
   }
@@ -687,7 +687,7 @@ class StructuredLoggingValidator {
 
     fs.writeFileSync(
       path.join(this.projectRoot, 'structured-logging-validation-report.json'),
-      JSON.stringify(report, null, 2)
+      JSON.stringify(report, null, 2),
     );
   }
 }

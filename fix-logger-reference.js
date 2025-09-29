@@ -12,7 +12,7 @@ const content = fs.readFileSync(filePath, 'utf8');
 // Fix the specific logger reference issue;
 const fixed = content.replace(
   "this.logger.warn('Running in development mode with missing secrets',",
-  "loggers.taskManager.warn('Running in development mode with missing secrets',"
+  "loggers.taskManager.warn('Running in development mode with missing secrets',",
 );
 
 if (content !== fixed) {

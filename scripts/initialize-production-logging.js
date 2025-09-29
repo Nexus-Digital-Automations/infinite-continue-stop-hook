@@ -23,10 +23,10 @@ async function initializeLogging() {
 
     if (environment !== 'production') {
       console.log(
-        '⚠️  Warning: Running production logging setup in non-production environment'
+        '⚠️  Warning: Running production logging setup in non-production environment',
       );
       console.log(
-        '   This is fine for testing, but ensure NODE_ENV=production for actual deployments\n'
+        '   This is fine for testing, but ensure NODE_ENV=production for actual deployments\n',
       );
     }
 
@@ -76,7 +76,7 @@ async function initializeLogging() {
         initialization: 'successful',
         timestamp: new Date().toISOString(),
       },
-      'Production logging test message'
+      'Production logging test message',
     );
 
     testLogger.performance(
@@ -85,7 +85,7 @@ async function initializeLogging() {
         duration_ms: 100,
         success: true,
       },
-      'Performance logging test'
+      'Performance logging test',
     );
 
     testLogger.audit(
@@ -94,7 +94,7 @@ async function initializeLogging() {
         resource: 'logging_system',
         user_id: 'system',
       },
-      'Audit logging test'
+      'Audit logging test',
     );
 
     console.log('✅ All logging tests passed');
@@ -104,25 +104,25 @@ async function initializeLogging() {
     console.log(`   Log Level: ${config.logging.level}`);
     console.log(`   Environment: ${config.logging.base.environment}`);
     console.log(
-      `   Audit Retention: ${config.security.dataRetention.auditLogDays} days`
+      `   Audit Retention: ${config.security.dataRetention.auditLogDays} days`,
     );
     console.log(
-      `   Performance Retention: ${config.security.dataRetention.performanceLogDays} days`
+      `   Performance Retention: ${config.security.dataRetention.performanceLogDays} days`,
     );
 
     // Display monitoring integrations
     console.log('\n🔍 Monitoring Integrations:');
     console.log(
-      `   CloudWatch: ${config.monitoring.cloudwatch.enabled ? '✅ Enabled' : '❌ Disabled'}`
+      `   CloudWatch: ${config.monitoring.cloudwatch.enabled ? '✅ Enabled' : '❌ Disabled'}`,
     );
     console.log(
-      `   Datadog: ${config.monitoring.datadog.enabled ? '✅ Enabled' : '❌ Disabled'}`
+      `   Datadog: ${config.monitoring.datadog.enabled ? '✅ Enabled' : '❌ Disabled'}`,
     );
     console.log(
-      `   ELK Stack: ${config.monitoring.elk.enabled ? '✅ Enabled' : '❌ Disabled'}`
+      `   ELK Stack: ${config.monitoring.elk.enabled ? '✅ Enabled' : '❌ Disabled'}`,
     );
     console.log(
-      `   Prometheus: ${config.monitoring.prometheus.enabled ? '✅ Enabled' : '❌ Disabled'}`
+      `   Prometheus: ${config.monitoring.prometheus.enabled ? '✅ Enabled' : '❌ Disabled'}`,
     );
 
     // Display alerting configuration
@@ -130,10 +130,10 @@ async function initializeLogging() {
     console.log(`   Memory Warning: ${config.alerting.memory.warning}%`);
     console.log(`   Memory Critical: ${config.alerting.memory.critical}%`);
     console.log(
-      `   Error Rate Warning: ${config.alerting.errorRate.warningPerMinute}/min`
+      `   Error Rate Warning: ${config.alerting.errorRate.warningPerMinute}/min`,
     );
     console.log(
-      `   Error Rate Critical: ${config.alerting.errorRate.criticalPerMinute}/min`
+      `   Error Rate Critical: ${config.alerting.errorRate.criticalPerMinute}/min`,
     );
 
     // Create environment file template if it doesn't exist
@@ -144,14 +144,14 @@ async function initializeLogging() {
       fs.writeFileSync(envPath, envTemplate);
       console.log(`   Created: ${envPath}`);
       console.log(
-        '   Please review and configure environment variables for your deployment'
+        '   Please review and configure environment variables for your deployment',
       );
     }
 
     // Create Docker logging configuration if needed
     const dockerComposePath = path.join(
       process.cwd(),
-      'docker-compose.logging.yml'
+      'docker-compose.logging.yml',
     );
     if (!fs.existsSync(dockerComposePath)) {
       console.log('\n🐳 Creating Docker logging configuration...');
@@ -164,7 +164,7 @@ async function initializeLogging() {
     const systemdPath = path.join(
       process.cwd(),
       'deploy',
-      'infinite-continue-stop-hook.service'
+      'infinite-continue-stop-hook.service',
     );
     const deployDir = path.dirname(systemdPath);
     if (!fs.existsSync(deployDir)) {
@@ -178,12 +178,12 @@ async function initializeLogging() {
     }
 
     console.log(
-      '\n🎉 Production logging initialization completed successfully!'
+      '\n🎉 Production logging initialization completed successfully!',
     );
     console.log('\n📋 Next Steps:');
     console.log('   1. Review and configure .env.production file');
     console.log(
-      '   2. Set up external monitoring integrations (CloudWatch, Datadog, etc.)'
+      '   2. Set up external monitoring integrations (CloudWatch, Datadog, etc.)',
     );
     console.log('   3. Configure log aggregation and retention policies');
     console.log('   4. Test alerting workflows');

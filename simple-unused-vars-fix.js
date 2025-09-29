@@ -124,7 +124,7 @@ function main() {
   try {
     const beforeCount = execSync(
       'npm run lint 2>&1 | grep "no-unused-vars" | wc -l',
-      { encoding: 'utf8' }
+      { encoding: 'utf8' },
     ).trim();
     console.log(`Remaining no-unused-vars violations: ${beforeCount}`);
 

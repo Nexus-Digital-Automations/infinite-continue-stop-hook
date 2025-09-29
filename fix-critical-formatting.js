@@ -12,7 +12,7 @@ console.log('🔧 Critical Formatting Fix Script\n');
 // Get all JS files
 const jsFiles = execSync(
   'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
-  { encoding: 'utf-8' }
+  { encoding: 'utf-8' },
 )
   .split('\n')
   .filter((f) => f && f.endsWith('.js'))
@@ -32,7 +32,7 @@ jsFiles.forEach((_filePath) => {
     // Replace unused variables with underscore prefix
     content = content.replace(
       /\bcatch\s*\(\s*([a-zA-Z_$][a-zA-Z0-9_$]*)\s*\)/g,
-      'catch (_)'
+      'catch (_)',
     );
 
     // Fix 2: Fix undefined _error variables in catch blocks
@@ -40,7 +40,7 @@ jsFiles.forEach((_filePath) => {
       /catch\s*\(\s*_\s*\)\s*{[^}]*_error[^}]*}/g,
       (match) => {
         return match.replace(/_error/g, '_');
-      }
+      },
     );
 
     // Fix 3: Fix basic indentation issues (convert tabs to spaces, fix common indentation)
@@ -78,7 +78,7 @@ jsFiles.forEach((_filePath) => {
           return `${keyword} _${varName} =`;
         }
         return match;
-      }
+      },
     );
 
     // Fix 6: Fix function parameters that are unused
@@ -89,7 +89,7 @@ jsFiles.forEach((_filePath) => {
           return match.replace(param, `_${param}`);
         }
         return match;
-      }
+      },
     );
 
     // Fix 7: Add trailing commas for multiline objects/arrays
@@ -104,7 +104,7 @@ jsFiles.forEach((_filePath) => {
     }
   } catch (_) {
     console.error(
-      `❌ Error processing ${path.basename(_filePath)}: ${error.message}`
+      `❌ Error processing ${path.basename(_filePath)}: ${error.message}`,
     );
   }
 });

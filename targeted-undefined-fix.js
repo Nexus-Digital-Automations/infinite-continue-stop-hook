@@ -26,7 +26,7 @@ class TargetedUndefinedFixer {
     try {
       const _result = execSync(
         'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
-        { encoding: 'utf-8' }
+        { encoding: 'utf-8' },
       );
 
       return result
@@ -93,7 +93,7 @@ class TargetedUndefinedFixer {
         lines.splice(
           insertIndex,
           0,
-          `const { loggers } = require('${loggerPath}');`
+          `const { loggers } = require('${loggerPath}');`,
         );
         modified = true;
         this.fixes.loggers++;
@@ -136,7 +136,7 @@ class TargetedUndefinedFixer {
           modified = true;
           this.fixes.__filename++;
           console.log(
-            `  ✓ Converted __filename to __filename in ${path.basename(_filePath)}`
+            `  ✓ Converted __filename to __filename in ${path.basename(_filePath)}`,
           );
         }
       }
@@ -162,7 +162,7 @@ class TargetedUndefinedFixer {
             modified = true;
             this.fixes.category++;
             console.log(
-              `  ✓ Added category parameter to function in ${path.basename(_filePath)}`
+              `  ✓ Added category parameter to function in ${path.basename(_filePath)}`,
             );
           }
         }
@@ -181,7 +181,7 @@ class TargetedUndefinedFixer {
             modified = true;
             this.fixes._error++;
             console.log(
-              `  ✓ Fixed error to _error in catch block in ${path.basename(_filePath)}`
+              `  ✓ Fixed error to _error in catch block in ${path.basename(_filePath)}`,
             );
           }
         }
@@ -200,7 +200,7 @@ class TargetedUndefinedFixer {
             return cleanParams
               ? `constructor(${cleanParams}, _agentId)`
               : 'constructor(_agentId)';
-          }
+          },
         );
 
         if (updated !== line) {
@@ -208,7 +208,7 @@ class TargetedUndefinedFixer {
           modified = true;
           this.fixes.agentId++;
           console.log(
-            `  ✓ Added agentId to constructor in ${path.basename(_filePath)}`
+            `  ✓ Added agentId to constructor in ${path.basename(_filePath)}`,
           );
         }
       }
@@ -241,7 +241,7 @@ class TargetedUndefinedFixer {
 
         if (processedCount % 50 === 0) {
           console.log(
-            `📊 Processed ${processedCount}/${jsFiles.length} files...`
+            `📊 Processed ${processedCount}/${jsFiles.length} files...`,
           );
         }
       } catch (_) {
@@ -267,7 +267,7 @@ class TargetedUndefinedFixer {
 
     const totalFixes = Object.values(this.fixes).reduce(
       (sum, count) => sum + count,
-      0
+      0,
     );
     console.log(`\n📈 Total fixes applied: ${totalFixes}`);
     console.log(`📁 Files modified: ${this.filesModified.length}`);

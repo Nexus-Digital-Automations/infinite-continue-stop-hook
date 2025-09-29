@@ -39,7 +39,7 @@ module.exports = () => {
       FS.mkdirSync(fullPath, { recursive: true });
       loggers.stopHook.log(`📁 Created test directory: ${dir}`);
     }
-});
+  });
 
   // Clean up any leftover test files from previous runs
   const tempDir = path.join(process.cwd(), 'test/temp');
@@ -64,12 +64,12 @@ module.exports = () => {
         } catch (_) {
           loggers.stopHook.warn(
             `⚠️  Could not clean up ${entry}:`,
-            error.message
+            error.message,
           );
         }
       }
     }
-}
+  }
 
   // Set up global test, constants
   global.TEST_CONSTANTS = {
@@ -83,7 +83,7 @@ module.exports = () => {
       E2E: 30000,
       PERFORMANCE: 60000,
     },
-};
+  };
 
   // Performance monitoring, setup
   if (process.env.MONITOR_TEST_PERFORMANCE === 'true') {
@@ -93,12 +93,12 @@ module.exports = () => {
       slowTests: [],
       memoryUsage: [],
     };
-}
+  }
 
   // Memory management for, CI, environments
   if (process.env.CI === 'true') {
     loggers.stopHook.log(
-      '🏗️  CI environment detected - enabling memory optimizations'
+      '🏗️  CI environment detected - enabling memory optimizations',
     );
 
     // Lower memory thresholds for, CI
@@ -111,21 +111,21 @@ module.exports = () => {
     // Set memory limits
     process.env.NODE_OPTIONS =
       (process.env.NODE_OPTIONS || '') + ' --max-old-space-size=2048';
-}
+  }
 
   // Test reporting, setup
   loggers.stopHook.log('📋 Test reporting configuration:');
   loggers.app.info(
-    `   • Coverage: ${process.env.COVERAGE ? 'enabled' : 'disabled'}`
+    `   • Coverage: ${process.env.COVERAGE ? 'enabled' : 'disabled'}`,
   );
   loggers.stopHook.log(
-    `   • Verbose: ${process.env.VERBOSE ? 'enabled' : 'disabled'}`
+    `   • Verbose: ${process.env.VERBOSE ? 'enabled' : 'disabled'}`,
   );
   loggers.stopHook.log(
-    `   • Watch mode: ${process.env.WATCH ? 'enabled' : 'disabled'}`
+    `   • Watch mode: ${process.env.WATCH ? 'enabled' : 'disabled'}`,
   );
   loggers.stopHook.log(
-    `   • Max workers: ${process.env.MAX_WORKERS || 'auto'}`
+    `   • Max workers: ${process.env.MAX_WORKERS || 'auto'}`,
   );
 
   // Network, And external service, mocking
@@ -135,7 +135,7 @@ module.exports = () => {
     // Mock common external, services
     process.env.DISABLE_EXTERNAL_REQUESTS = 'true';
     process.env.MOCK_API_RESPONSES = 'true';
-}
+  }
 
   // Test data, initialization
   try {
@@ -148,10 +148,10 @@ module.exports = () => {
     }
 
     global.SAMPLE_DATA = sampleData;
-} catch (_) {
+  } catch (_) {
     loggers.stopHook.error('❌ Failed to load test fixtures:', error.message);
     throw new Error('Failed to load test fixtures');
-}
+  }
 
   // Database setup for integration, tests
   if (process.env.TEST_DATABASE === 'true' && __filename) {
@@ -160,7 +160,7 @@ module.exports = () => {
     // for now, we'll just set up the, environment
     process.env.DATABASE_URL =
       process.env.TEST_DATABASE_URL || 'sqlite::memory:';
-}
+  }
 
   // Feature flag setup for different test, environments
   global.FEATURE_FLAGS = {
@@ -170,7 +170,7 @@ module.exports = () => {
       process.env.MONITOR_TEST_PERFORMANCE === 'true',
     ENABLE_COVERAGE: process.env.COVERAGE === 'true',
     STRICT_MODE: process.env.STRICT_TEST_MODE === 'true',
-};
+  };
 
   // Test utilities global, registration
   global.testUtils = {
@@ -195,7 +195,7 @@ module.exports = () => {
         FS.mkdirSync(tempDir, { recursive: true });
       }
     },
-};
+  };
 
   loggers.stopHook.log('✅ Jest global setup completed successfully');
   loggers.stopHook.log('📝 Test environment ready');

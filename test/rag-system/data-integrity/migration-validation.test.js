@@ -165,7 +165,7 @@ Category: database-optimization,
               ],
             },
             null,
-            2
+            2,
           ),
         },
       ];
@@ -804,17 +804,17 @@ Category: api-design,
           _testMigrationPath,
           'development',
           'lessons',
-          category
+          category,
         );
         await FS.mkdir(_categoryPath, { recursive: true });
 
         // Create all files in this category in parallel
         await Promise.all(
           Object.entries(files).map(([filename, content]) =>
-            FS.writeFile(path.join(_categoryPath, filename), content)
-          )
+            FS.writeFile(path.join(_categoryPath, filename), content),
+          ),
         );
-      })
+      }),
     );
   }
 
@@ -824,7 +824,7 @@ Category: api-design,
     async function scanDirectory(
       dirPath,
       relativePath = '',
-      category = 'general'
+      category = 'general',
     ) {
       const _entries = await FS.readdir(dirPath, { withFileTypes: true });
 

@@ -14,7 +14,7 @@ function getAllJSFiles() {
   try {
     const result = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
-      { encoding: 'utf-8' }
+      { encoding: 'utf-8' },
     );
     return result.split('\n').filter((f) => f && f.endsWith('.js'));
   } catch (_) {
@@ -48,23 +48,23 @@ function fixStringSyntaxErrors(filePath) {
     // Fix 3: Fix unquoted string literals in function parameters
     content = content.replace(
       /category\s*=\s*'general'/g,
-      "category = 'general'"
+      "category = 'general'",
     );
     content = content.replace(
       /category\s*=\s*general\b/g,
-      "category = 'general'"
+      "category = 'general'",
     );
 
     // Fix 4: Fix template literal quote escaping issues
     content = content.replace(
       /'([^']*category\s*=\s*'general'[^']*)'/g,
-      "'$1'"
+      "'$1'",
     );
 
     if (modified) {
       fs.writeFileSync(filePath, content);
       console.log(
-        `✅ Fixed ${fixCount} issues in: ${path.relative(process.cwd(), filePath)}`
+        `✅ Fixed ${fixCount} issues in: ${path.relative(process.cwd(), filePath)}`,
       );
       return true;
     }
@@ -104,7 +104,7 @@ function main() {
     try {
       const output = execSync(
         'npm run lint 2>&1 | grep -E "(Parsing error|Unexpected token)" | head -5',
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       );
       if (output.trim()) {
         console.log('Remaining parsing errors:');

@@ -15,7 +15,7 @@ function getAllJsFiles() {
   try {
     const _output = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./.git/*"',
-      { cwd: rootDir, encoding: 'utf8' }
+      { cwd: rootDir, encoding: 'utf8' },
     );
     return output
       .trim()
@@ -227,7 +227,7 @@ function fixAllCatchBlocks(_filePath) {
     if (modified && content !== originalContent) {
       fs.writeFileSync(filePath, content, 'utf8');
       console.log(
-        `Fixed catch blocks in: ${path.relative(rootDir, _filePath)}`
+        `Fixed catch blocks in: ${path.relative(rootDir, _filePath)}`,
       );
       return true;
     }
@@ -280,7 +280,7 @@ try {
   const warningCount = warningMatches ? parseInt(warningMatches[1]) : 0;
 
   console.log(
-    `📊 Final status: ${errorCount} errors, ${warningCount} warnings remaining`
+    `📊 Final status: ${errorCount} errors, ${warningCount} warnings remaining`,
   );
 
   if (errorCount === 0) {

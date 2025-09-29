@@ -32,7 +32,7 @@ TestLogger.log('🧪 Testing audit task override fix...');
 
 // Test 1: Create a simple audit task;
 const createResult = runCommand(
-  `timeout 10s node taskmanager-api.js create '{"title": "AUDIT: Test Audit Override", "description": "Test audit task for override functionality", "category": "audit", "original_implementer": "test_agent_123"}'`
+  `timeout 10s node taskmanager-api.js create '{"title": "AUDIT: Test Audit Override", "description": "Test audit task for override functionality", "category": "audit", "original_implementer": "test_agent_123"}'`,
 );
 
 if (!createResult.success) {
@@ -46,15 +46,15 @@ TestLogger.log('✅ Created audit task: ' + auditTaskId);
 // Test 2: Try to claim normally (should fail)
 TestLogger.log('🔒 Testing normal claim (should fail)...');
 const normalClaim = runCommand(
-  `timeout 10s node taskmanager-api.js claim ${auditTaskId} test_agent_123`
+  `timeout 10s node taskmanager-api.js claim ${auditTaskId} test_agent_123`,
 );
 
 if (normalClaim.success) {
   TestLogger.error(
-    '❌ BUG: Agent was able to claim their own audit task normally!'
+    '❌ BUG: Agent was able to claim their own audit task normally!',
   );
   throw new Error(
-    'BUG: Agent was able to claim their own audit task normally!'
+    'BUG: Agent was able to claim their own audit task normally!',
   );
 }
 
@@ -75,16 +75,16 @@ TestLogger.log('🎉 AUDIT TASK OVERRIDE BUG IS FIXED!');
 TestLogger.log('');
 TestLogger.log('Summary of the fix:');
 TestLogger.log(
-  '- Issue: Duplicate objectivity checks prevented audit task override'
+  '- Issue: Duplicate objectivity checks prevented audit task override',
 );
 TestLogger.log(
-  '- Root cause: First check ran ALWAYS regardless of allowOutOfOrder'
+  '- Root cause: First check ran ALWAYS regardless of allowOutOfOrder',
 );
 TestLogger.log(
-  '- Solution: Added "!options.allowOutOfOrder" condition to first check'
+  '- Solution: Added "!options.allowOutOfOrder" condition to first check',
 );
 TestLogger.log(
-  '- Result: Agents can override audit tasks when needed for new work'
+  '- Result: Agents can override audit tasks when needed for new work',
 );
 TestLogger.log('- Objectivity: Still enforced for actual audit work execution');
 

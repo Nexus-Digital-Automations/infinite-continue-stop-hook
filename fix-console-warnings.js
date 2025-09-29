@@ -41,14 +41,14 @@ function getScriptFiles() {
     try {
       const _result = execSync(
         `find . -name "${pattern}" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"`,
-        { cwd: rootDir, encoding: 'utf-8' }
+        { cwd: rootDir, encoding: 'utf-8' },
       );
 
       result
         .split('\n')
         .filter((f) => f && f.endsWith('.js'))
         .forEach((f) =>
-          scriptFiles.add(path.resolve(rootDir, f.replace('./', '')))
+          scriptFiles.add(path.resolve(rootDir, f.replace('./', ''))),
         );
     } catch (_) {
       // Pattern not found - continue
@@ -85,7 +85,7 @@ function addEslintDisableToFile(_filePath) {
  */
 function main() {
   console.log(
-    '🔧 Adding eslint-disable comments to fix and utility scripts...'
+    '🔧 Adding eslint-disable comments to fix and utility scripts...',
   );
 
   const scriptFiles = getScriptFiles();
@@ -97,11 +97,11 @@ function main() {
     if (addEslintDisableToFile(_filePath)) {
       totalProcessed++;
       console.log(
-        `✅ Added eslint-disable to: ${path.relative(rootDir, _filePath)}`
+        `✅ Added eslint-disable to: ${path.relative(rootDir, _filePath)}`,
       );
     } else {
       console.log(
-        `⏭️ Already has eslint-disable: ${path.relative(rootDir, _filePath)}`
+        `⏭️ Already has eslint-disable: ${path.relative(rootDir, _filePath)}`,
       );
     }
   }

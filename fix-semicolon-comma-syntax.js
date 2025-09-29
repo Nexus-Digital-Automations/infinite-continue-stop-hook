@@ -145,7 +145,7 @@ class SemicolonCommaFixer {
           console.log(`✅ Fixed semicolon-comma issues in: ${relativePath}`);
         } else {
           console.log(
-            `ℹ️  No semicolon-comma issues found in: ${relativePath}`
+            `ℹ️  No semicolon-comma issues found in: ${relativePath}`,
           );
         }
       } else {
@@ -157,12 +157,12 @@ class SemicolonCommaFixer {
     console.log(`   Files processed: ${this.processedFiles}`);
     console.log(`   Files fixed: ${this.fixedCount}`);
     console.log(
-      `   Syntax errors resolved: Successfully fixed all semicolon-comma patterns\n`
+      `   Syntax errors resolved: Successfully fixed all semicolon-comma patterns\n`,
     );
 
     if (this.fixedCount > 0) {
       console.log(
-        '🎯 SUCCESS: All semicolon-comma syntax errors have been fixed!'
+        '🎯 SUCCESS: All semicolon-comma syntax errors have been fixed!',
       );
     } else {
       console.log('✨ All files were already clean of semicolon-comma issues.');

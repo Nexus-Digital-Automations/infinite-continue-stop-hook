@@ -17,7 +17,7 @@ class SyntaxErrorFixer {
     try {
       const _result = execSync(
         'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
-        { encoding: 'utf-8' }
+        { encoding: 'utf-8' },
       );
 
       return result
@@ -41,86 +41,86 @@ class SyntaxErrorFixer {
       // Fix: Remove invalid parameters in if conditions
       // Pattern: if (condition, parameter)
       const ifMatch = line.match(
-        /if\s*\([^)]+,\s*(agentId|filePath|category[^)]*|validationResults[^)]*)\s*\)/
+        /if\s*\([^)]+,\s*(agentId|filePath|category[^)]*|validationResults[^)]*)\s*\)/,
       );
       if (ifMatch) {
         // Remove the extra parameter from the condition
         lines[i] = line.replace(
           /,\s*(agentId|filePath|category[^,)]*|validationResults[^,)]*)\s*\)/,
-          ')'
+          ')',
         );
         modified = true;
         this.fixes++;
         console.log(
-          `  ✓ Fixed if condition at line ${i + 1}: removed ${ifMatch[1]}`
+          `  ✓ Fixed if condition at line ${i + 1}: removed ${ifMatch[1]}`,
         );
       }
 
       // Fix: Remove invalid parameters in for loops
       // Pattern: for (..., parameter)
       const forMatch = line.match(
-        /for\s*\([^)]+,\s*(agentId|filePath|category[^)]*|validationResults[^)]*)\s*\)/
+        /for\s*\([^)]+,\s*(agentId|filePath|category[^)]*|validationResults[^)]*)\s*\)/,
       );
       if (forMatch) {
         lines[i] = line.replace(
           /,\s*(agentId|filePath|category[^,)]*|validationResults[^,)]*)\s*\)/,
-          ')'
+          ')',
         );
         modified = true;
         this.fixes++;
         console.log(
-          `  ✓ Fixed for loop at line ${i + 1}: removed ${forMatch[1]}`
+          `  ✓ Fixed for loop at line ${i + 1}: removed ${forMatch[1]}`,
         );
       }
 
       // Fix: Remove invalid parameters in function calls
       // Pattern: someFunction(param1, param2, invalidParam)
       const callMatch = line.match(
-        /([a-zA-Z_][a-zA-Z0-9_]*)\s*\([^)]*,\s*(agentId|filePath|category\s*=\s*'[^']*'|validationResults\s*=\s*\{[^}]*\})\s*\)/
+        /([a-zA-Z_][a-zA-Z0-9_]*)\s*\([^)]*,\s*(agentId|filePath|category\s*=\s*'[^']*'|validationResults\s*=\s*\{[^}]*\})\s*\)/,
       );
       if (callMatch && !line.includes('function') && !line.includes('=>')) {
         lines[i] = line.replace(
           /,\s*(agentId|filePath|category\s*=\s*'[^']*'|validationResults\s*=\s*\{[^}]*\})\s*\)/,
-          ')'
+          ')',
         );
         modified = true;
         this.fixes++;
         console.log(
-          `  ✓ Fixed function call at line ${i + 1}: removed parameter from ${callMatch[1]}`
+          `  ✓ Fixed function call at line ${i + 1}: removed parameter from ${callMatch[1]}`,
         );
       }
 
       // Fix: Remove parameters added to catch blocks incorrectly
       // Pattern: catch (_error, parameter)
       const catchMatch = line.match(
-        /catch\s*\(\s*_error\s*,\s*(agentId|filePath|category[^)]*|validationResults[^)]*)\s*\)/
+        /catch\s*\(\s*_error\s*,\s*(agentId|filePath|category[^)]*|validationResults[^)]*)\s*\)/,
       );
       if (catchMatch) {
         lines[i] = line.replace(
           /,\s*(agentId|filePath|category[^,)]*|validationResults[^,)]*)\s*\)/,
-          ')'
+          ')',
         );
         modified = true;
         this.fixes++;
         console.log(
-          `  ✓ Fixed catch block at line ${i + 1}: removed ${catchMatch[1]}`
+          `  ✓ Fixed catch block at line ${i + 1}: removed ${catchMatch[1]}`,
         );
       }
 
       // Fix: Remove parameters added incorrectly to array destructuring or other contexts
       // Pattern: const [item] = array, parameter;
       const destructureMatch = line.match(
-        /const\s+\[[^\]]+\]\s*=\s*[^,]+,\s*(agentId|filePath|category[^,]*|validationResults[^,]*)/
+        /const\s+\[[^\]]+\]\s*=\s*[^,]+,\s*(agentId|filePath|category[^,]*|validationResults[^,]*)/,
       );
       if (destructureMatch) {
         lines[i] = line.replace(
           /,\s*(agentId|filePath|category[^,]*|validationResults[^,]*)/,
-          ''
+          '',
         );
         modified = true;
         this.fixes++;
         console.log(
-          `  ✓ Fixed destructuring at line ${i + 1}: removed ${destructureMatch[1]}`
+          `  ✓ Fixed destructuring at line ${i + 1}: removed ${destructureMatch[1]}`,
         );
       }
 
@@ -171,7 +171,7 @@ class SyntaxErrorFixer {
         }
       } catch (_) {
         console.error(
-          `❌ Error processing ${relativePath}: ${error.message}\n`
+          `❌ Error processing ${relativePath}: ${error.message}\n`,
         );
       }
     }
@@ -185,10 +185,10 @@ class SyntaxErrorFixer {
     console.log('│ Metric                  │ Count    │');
     console.log('├─────────────────────────┼──────────┤');
     console.log(
-      `│ Total syntax fixes      │ ${this.fixes.toString().padEnd(8)} │`
+      `│ Total syntax fixes      │ ${this.fixes.toString().padEnd(8)} │`,
     );
     console.log(
-      `│ Files modified          │ ${this.filesModified.length.toString().padEnd(8)} │`
+      `│ Files modified          │ ${this.filesModified.length.toString().padEnd(8)} │`,
     );
     console.log('└─────────────────────────┴──────────┘');
 
