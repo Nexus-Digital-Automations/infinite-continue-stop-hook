@@ -103,6 +103,57 @@ All work must be committed and pushed before a task is marked as complete.
 timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-project-task '{"title":"Specific Task Title", "description":"Detailed description with acceptance criteria", "type":"feature|error|test|audit", "priority":"normal|high|urgent"}'
 ```
 
+## 🚨 FEATURES.MD MANAGEMENT PROTOCOL
+
+**MANDATORY PROJECT FEATURE DEFINITION:**
+
+**FEATURES.MD AS SOURCE OF TRUTH**: All projects MUST have a `development/essentials/features.md` file that defines the complete scope of project features. This file is the single source of truth for what should and should not be implemented.
+
+**PROJECT INITIALIZATION REQUIREMENTS:**
+
+- **CHECK FOR FEATURES.MD**: Always verify if `development/essentials/features.md` exists at project start
+- **CREATE IF MISSING**: If file doesn't exist, create it with user approval before any implementation work
+- **USER APPROVAL REQUIRED**: Never create or modify features.md without explicit user consent
+- **COMPLETE SCOPE DEFINITION**: File must contain comprehensive list of all approved project features
+
+**FEATURE IMPLEMENTATION RESTRICTIONS:**
+
+- **❌ NEVER IMPLEMENT**: Features not explicitly listed in `development/essentials/features.md`
+- **❌ NEVER EXPAND**: Feature scope beyond what's defined in the file
+- **❌ NEVER ASSUME**: Additional features are needed without user approval
+- **✅ STRICTLY FOLLOW**: Only implement features exactly as defined in features.md
+- **✅ SUGGEST ADDITIONS**: May propose new features for user approval and addition to file
+
+**FEATURES.MD MANAGEMENT COMMANDS:**
+
+```bash
+# Check if features.md exists
+ls -la development/essentials/features.md
+
+# Create features.md with user approval (template)
+mkdir -p development/essentials
+cat > development/essentials/features.md << 'EOF'
+# Project Features
+
+## Core Features
+[List core features approved by user]
+
+## Planned Features
+[List planned features for future implementation]
+
+## Suggested Features
+[List suggested features pending user approval]
+EOF
+```
+
+**FEATURE APPROVAL WORKFLOW:**
+
+1. **VERIFY FEATURES.MD**: Check file exists and is current
+2. **VALIDATE SCOPE**: Ensure requested work aligns with defined features
+3. **SEEK APPROVAL**: Request user approval for any new feature suggestions
+4. **UPDATE FILE**: Add approved features to features.md before implementation
+5. **CREATE TASKS**: Generate project tasks only for features listed in file
+
 ## 🚨 HUMBLE CODE VERIFICATION PROTOCOL
 
 **THE DEFINING CHARACTERISTIC OF TOP DEVELOPERS:**
