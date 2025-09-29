@@ -274,7 +274,7 @@ function main() {
       stdio: 'inherit',
     });
     console.log('✅ Autofix completed successfully');
-  } catch {
+  } catch (_) {
     console.log('⚠️ Autofix completed with some remaining issues');
   }
 
@@ -286,7 +286,7 @@ function main() {
       stdio: 'inherit',
     });
     console.log('🎉 ALL LINTING ERRORS RESOLVED!');
-  } catch {
+  } catch (_) {
     console.log('⚠️ Some linting issues remain - running final diagnostic...');
 
     try {

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Ultimate Linting Optimization Script
  * Applies final bulk corrections for maximum error reduction
@@ -81,7 +82,7 @@ class UltimateLintingOptimizer {
 
         // Pattern 1: catch (_error) where _error is truly unused
         const catchBlocks = content.match(
-          /catch\s*\(\s*_error\s*\)\s*\{[^}]*\}/g,
+          /catch\s*\(\s*_error\s*\)\s*\{[^}]*\}/g
         );
         if (catchBlocks) {
           for (const block of catchBlocks) {
@@ -165,7 +166,7 @@ class UltimateLintingOptimizer {
         if (fileModified) {
           fs.writeFileSync(filePath, content);
           console.log(
-            `  ✓ Fixed undefined vars in ${path.relative(this.rootDir, filePath)}`,
+            `  ✓ Fixed undefined vars in ${path.relative(this.rootDir, filePath)}`
           );
         }
       } catch (_) {
@@ -209,7 +210,7 @@ class UltimateLintingOptimizer {
               return newMatch;
             }
             return match;
-          },
+          }
         );
 
         if (modified) {
@@ -272,7 +273,7 @@ class UltimateLintingOptimizer {
         if (modified) {
           fs.writeFileSync(filePath, content);
           console.log(
-            `  ✓ Added security disables to ${path.relative(this.rootDir, filePath)}`,
+            `  ✓ Added security disables to ${path.relative(this.rootDir, filePath)}`
           );
         }
       } catch (_) {
@@ -314,7 +315,7 @@ class UltimateLintingOptimizer {
           // Add underscore prefix to unused variables
           const regex = new RegExp(
             `\\b(const|let|var)\\s+(${varName})\\s*=`,
-            'g',
+            'g'
           );
           content = content.replace(regex, (match, keyword, variable) => {
             modified = true;
@@ -326,7 +327,7 @@ class UltimateLintingOptimizer {
         if (modified) {
           fs.writeFileSync(filePath, content);
           console.log(
-            `  ✓ Prefixed unused vars in ${path.relative(this.rootDir, filePath)}`,
+            `  ✓ Prefixed unused vars in ${path.relative(this.rootDir, filePath)}`
           );
         }
       } catch (_) {
@@ -358,7 +359,7 @@ class UltimateLintingOptimizer {
     try {
       const result = execSync(
         'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
-        { cwd: this.rootDir, encoding: 'utf-8' },
+        { cwd: this.rootDir, encoding: 'utf-8' }
       );
 
       return result
@@ -391,16 +392,16 @@ class UltimateLintingOptimizer {
 
     const totalFixed = Object.values(this.results.categorizedFixes).reduce(
       (sum, count) => sum + count,
-      0,
+      0
     );
 
     const reductionPercentage =
       this.results.initialErrorCount > 0
         ? (
-          ((this.results.initialErrorCount - this.results.finalErrorCount) /
+            ((this.results.initialErrorCount - this.results.finalErrorCount) /
               this.results.initialErrorCount) *
             100
-        ).toFixed(1)
+          ).toFixed(1)
         : 0;
 
     console.log('\n🎉 ULTIMATE LINTING OPTIMIZATION COMPLETE');
@@ -414,7 +415,7 @@ class UltimateLintingOptimizer {
     Object.entries(this.results.categorizedFixes).forEach(
       ([category, count]) => {
         console.log(`  • ${category}: ${count} fixes`);
-      },
+      }
     );
 
     // Analyze remaining issues
@@ -423,7 +424,7 @@ class UltimateLintingOptimizer {
     // Save report
     const reportPath = path.join(
       this.rootDir,
-      'linting-optimization-report.json',
+      'linting-optimization-report.json'
     );
     fs.writeFileSync(reportPath, JSON.stringify(this.results, null, 2));
     console.log(`\n📄 Full report saved: ${reportPath}`);
@@ -484,29 +485,29 @@ class UltimateLintingOptimizer {
 
       if (remainingIssues.byRule['no-undef'] > 0) {
         console.log(
-          '  • Review no-undef errors - may need proper imports or variable declarations',
+          '  • Review no-undef errors - may need proper imports or variable declarations'
         );
       }
 
       if (remainingIssues.byRule['no-unused-vars'] > 0) {
         console.log(
-          '  • Review remaining unused variables - consider removing or prefixing with _',
+          '  • Review remaining unused variables - consider removing or prefixing with _'
         );
       }
 
       if (remainingIssues.byRule['no-console'] > 0) {
         console.log(
-          '  • Review console statements - add eslint-disable comments for development tools',
+          '  • Review console statements - add eslint-disable comments for development tools'
         );
       }
 
       if (
         Object.keys(remainingIssues.byRule).some((rule) =>
-          rule.startsWith('security/'),
+          rule.startsWith('security/')
         )
       ) {
         console.log(
-          '  • Review security warnings - add specific disable comments for false positives',
+          '  • Review security warnings - add specific disable comments for false positives'
         );
       }
     }

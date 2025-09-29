@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Console.log to Structured Logging Migration Script
  *

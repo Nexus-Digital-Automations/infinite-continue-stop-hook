@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * FEATURES.json to TASKS.json Migration Script
  *

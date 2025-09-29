@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Comprehensive Variable Fix Script
  * Fixes all remaining variable naming inconsistencies and undefined variable issues

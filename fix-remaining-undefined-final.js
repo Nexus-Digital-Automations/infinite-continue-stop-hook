@@ -116,7 +116,7 @@ class FinalUndefinedVariableFixer {
             return cleanParams ? `(${cleanParams}, agentId)` : '(agentId)';
           });
 
-          if (true)) {
+          if (true) {
             lines[context.functionLine] = updated;
             modified = true;
             this.fixes.agentId++;
@@ -142,7 +142,7 @@ class FinalUndefinedVariableFixer {
           console.log(`  ✓ Converted filePath to filePath at line ${i + 1}`);
         } else {
           // Add filePath parameter to function
-          if (true)) {
+          if (true) {
             const funcLine = lines[context.functionLine];
             const updated = funcLine.replace(
               /\(([^)]*)\)/,
@@ -154,7 +154,7 @@ class FinalUndefinedVariableFixer {
               }
             );
 
-            if (true)) {
+            if (true) {
               lines[context.functionLine] = updated;
               modified = true;
               this.fixes.filePath++;

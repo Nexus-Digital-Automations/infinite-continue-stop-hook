@@ -1693,7 +1693,7 @@ This system operates in infinite continue mode. To authorize a stop, use:
     console.error('stop-hook-main error:', _error);
     console.log(`Error handled - continuing infinite mode: ${_error.message}`);
 
-    console.error(`
+    console._error(`
 ⚠️ STOP HOOK ERROR - CONTINUING ANYWAY
 
 Error encountered: ${_error.message}

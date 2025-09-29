@@ -18,7 +18,7 @@ function getAllJavaScriptFiles() {
   try {
     const result = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
-      { cwd: rootDir, encoding: 'utf-8' },
+      { cwd: rootDir, encoding: 'utf-8' }
     );
 
     return result
@@ -46,12 +46,12 @@ function fixPathVariableInconsistencies(filePath) {
       // Replace lowercase path method calls with PATH when PATH is declared
       fixed = fixed.replace(
         /\bpath\.(resolve|join|dirname|basename|extname|relative|parse|format|sep)\b/g,
-        'PATH.$1',
+        'PATH.$1'
       );
       if (beforePathUsage !== fixed) {
         changes++;
         console.log(
-          `  ✓ Fixed lowercase path.* calls to PATH.* in ${PATH.basename(filePath)}`,
+          `  ✓ Fixed lowercase path.* calls to PATH.* in ${PATH.basename(filePath)}`
         );
       }
     }
@@ -62,12 +62,12 @@ function fixPathVariableInconsistencies(filePath) {
       // Fix path in template literals and error messages
       fixed = fixed.replace(
         /\$\{path\.(relative|resolve|join|dirname|basename)\(/g,
-        '${PATH.$1(',
+        '${PATH.$1('
       );
       if (beforeTemplateFix !== fixed) {
         changes++;
         console.log(
-          `  ✓ Fixed path references in template literals to PATH in ${PATH.basename(filePath)}`,
+          `  ✓ Fixed path references in template literals to PATH in ${PATH.basename(filePath)}`
         );
       }
     }
@@ -79,7 +79,7 @@ function fixPathVariableInconsistencies(filePath) {
       /catch\s*\(\s*_error\s*\)\s*\{([^}]*)\berror\.(message|stack|code|name)\b/g,
       (match, catchBody, prop) => {
         return match.replace(`error.${prop}`, `_error.${prop}`);
-      },
+      }
     );
 
     // Fix standalone error references in catch(_error) blocks
@@ -105,7 +105,7 @@ function fixPathVariableInconsistencies(filePath) {
         if (line.includes('error.') && !line.includes('_error.')) {
           lines[i] = line.replace(
             /\berror\.(message|stack|code|name|stdout|stderr)\b/g,
-            '_error.$1',
+            '_error.$1'
           );
           changes++;
         }
@@ -125,23 +125,23 @@ function fixPathVariableInconsistencies(filePath) {
       /function\s+\w+\s*\(\s*filePath\s*\)[^{]*\{[^}]*\b_filePath\b/g,
       (match) => {
         return match.replace(/\b_filePath\b/g, 'filePath');
-      },
+      }
     );
 
     // Fix fs.readFileSync(filePath, ...) when parameter is filePath
     fixed = fixed.replace(
       /fs\.readFileSync\(\s*filePath\s*,/g,
-      'fs.readFileSync(filePath,',
+      'fs.readFileSync(filePath,'
     );
     fixed = fixed.replace(
       /fs\.writeFileSync\(\s*filePath\s*,/g,
-      'fs.writeFileSync(filePath,',
+      'fs.writeFileSync(filePath,'
     );
 
     if (beforeFilePathFix !== fixed) {
       changes++;
       console.log(
-        `  ✓ Fixed filePath vs filePath inconsistencies in ${PATH.basename(filePath)}`,
+        `  ✓ Fixed filePath vs filePath inconsistencies in ${PATH.basename(filePath)}`
       );
     }
 
@@ -151,18 +151,18 @@ function fixPathVariableInconsistencies(filePath) {
     if (fixed.includes('const PATH = require(') && !fixed.includes('PATH.')) {
       fixed = fixed.replace(
         /const PATH = require\('path'\)/g,
-        "const PATH = require('path')",
+        "const PATH = require('path')"
       );
       changes++;
       console.log(
-        `  ✓ Fixed unused PATH variable to PATH in ${PATH.basename(filePath)}`,
+        `  ✓ Fixed unused PATH variable to PATH in ${PATH.basename(filePath)}`
       );
     }
 
     if (changes > 0) {
       fs.writeFileSync(filePath, fixed);
       console.log(
-        `✅ Fixed ${changes} PATH variable inconsistencies in: ${PATH.relative(rootDir, filePath)}`,
+        `✅ Fixed ${changes} PATH variable inconsistencies in: ${PATH.relative(rootDir, filePath)}`
       );
       return true;
     }
@@ -192,7 +192,7 @@ function main() {
   }
 
   console.log(
-    `\n📈 Summary: Fixed PATH inconsistencies in ${totalFixed} files`,
+    `\n📈 Summary: Fixed PATH inconsistencies in ${totalFixed} files`
   );
 
   // Run linting to see current status
@@ -203,7 +203,7 @@ function main() {
       stdio: 'inherit',
     });
     console.log('🎉 ALL LINTING ERRORS RESOLVED!');
-  } catch {
+  } catch (_) {
     console.log('⚠️ Some linting issues remain - running diagnostic...');
 
     try {
@@ -221,7 +221,7 @@ function main() {
       const warningCount = warningMatches ? parseInt(warningMatches[1]) : 0;
 
       console.log(
-        `📊 Final status: ${errorCount} errors, ${warningCount} warnings remaining`,
+        `📊 Final status: ${errorCount} errors, ${warningCount} warnings remaining`
       );
     }
   }

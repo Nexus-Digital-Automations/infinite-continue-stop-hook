@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
 const { loggers } = require('./lib/logger');
  * Quick TaskManager Performance Test

@@ -72,7 +72,7 @@ function applySystematicFixes(filePath) {
         const errorVar = blockContent.includes('error') ? 'error' : 'error';
         const replacement = match[0].replace(
           /catch\s*\(\s*\)\s*\{/,
-          `catch (${errorVar}) {`,
+          `catch (${errorVar}) {`
         );
         content = content.replace(match[0], replacement);
         modified = true;
@@ -113,7 +113,7 @@ function getAllJsFiles() {
   try {
     const output = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./.git/*"',
-      { cwd: rootDir, encoding: 'utf8' },
+      { cwd: rootDir, encoding: 'utf8' }
     );
     return output
       .trim()
@@ -156,7 +156,7 @@ try {
   const warningCount = warningMatches ? parseInt(warningMatches[1]) : 0;
 
   loggers.app.info(
-    `📊 Progress: ${errorCount} errors, ${warningCount} warnings remaining`,
+    `📊 Progress: ${errorCount} errors, ${warningCount} warnings remaining`
   );
 
   if (errorCount === 0) {
