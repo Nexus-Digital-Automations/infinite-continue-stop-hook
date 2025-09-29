@@ -31,11 +31,12 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
 const allArgs = [API_PATH, command, ...args];
     const child = spawn(
       'timeout',
-      [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs], {
-    stdio: ['pipe', 'pipe', 'pipe'],
+      [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs],
+      {
+        stdio: ['pipe', 'pipe', 'pipe'],
         cwd: TEST_PROJECT_DIR, // Execute from test project directory
-        env{ ...process.env, NODE_ENV: 'test' },
-},
+        env: { ...process.env, NODE_ENV: 'test' },
+      },
     );
 
     let stdout = '';
@@ -52,7 +53,7 @@ const allArgs = [API_PATH, command, ...args];
     child.on('close', (code) => {
       if (code === 0) {
         try {
-          const _result = stdout.trim() ? JSON.parse(stdout) {};
+          const _result = stdout.trim() ? JSON.parse(stdout) : {};
           resolve(result);
         } catch (_) {
           resolve({ rawOutput: stdout, stderr });
@@ -83,17 +84,17 @@ const packageJson = {
       version: '1.0.0',
       description: 'Test project for FEATURES.json system validation',
       main: 'index.js',
-      scripts{
-    test: 'jest',
+      scripts: {
+        test: 'jest',
         build: 'echo "Build complete"',
         lint: 'echo "Lint complete"',
         start: 'node index.js',
       },
-      dependencies{},
-      devDependencies{
-    jest: '^29.0.0',
-      }
-};
+      dependencies: {},
+      devDependencies: {
+        jest: '^29.0.0',
+      },
+    };
 
     await FS.writeFile(
       path.join(TEST_PROJECT_DIR, 'package.json'),
@@ -148,22 +149,22 @@ app.start().then(() => {
 const initialFeatures = {
     project: 'features-test-project',
       features: [],
-      metadata{
-    version: '1.0.0',
+      metadata: {
+        version: '1.0.0',
         created: new Date().toISOString(),
         updated: new Date().toISOString(),
         total_features: 0,
         approval_history: [],
       },
-      workflow_config{
-    require_approval: true,
+      workflow_config: {
+        require_approval: true,
         auto_reject_timeout_hours: 168,
         allowed_statuses: ['suggested', 'approved', 'rejected', 'implemented'],
         required_fields: ['title', 'description', 'business_value', 'category'],
       },
       tasks: [],
       completed_tasks: [],
-      agents{},
+      agents: {},
     };
 
     await FS.writeFile(FEATURES_PATH, JSON.stringify(initialFeatures, null, 2));
@@ -339,12 +340,12 @@ const CHILD_CRITERIA = [{
   ];
 
       const OVERRIDES = {
-        'override-test-1'{
-    description: 'Overridden description',
+        'override-test-1': {
+          description: 'Overridden description',
           priority: 'high',
           tags: ['override', 'critical'],
-        }
-};
+        },
+      };
 
       await createChildTemplate(
         'Override Child Template',
@@ -537,11 +538,12 @@ const CUSTOM_CRITERIA = [{
           category: 'custom',
           priority: 'medium',
           tags: ['project-specific', 'custom'],
-          metadata{
-    source: 'project-requirements',
+          metadata: {
+            source: 'project-requirements',
             addedBy: 'testing-agent',
-          }
-}, {
+          },
+        },
+        {
     id: 'custom-2',
           description: 'Another custom requirement',
           category: 'integration',
@@ -721,11 +723,11 @@ const VERSIONED_CRITERIA = [
     name: 'Versioned Template',
         version: '1.0.0',
         criteria: VERSIONED_CRITERIA,
-        compatibility{
-    minSystemVersion: '2.0.0',
+        compatibility: {
+          minSystemVersion: '2.0.0',
           maxSystemVersion: '3.0.0',
-        }
-};
+        },
+      };
 
       await execAPI('success-criteria:create-template', [
         JSON.stringify(versionedTemplate),
@@ -938,7 +940,7 @@ const DEVELOPMENT_CRITERIA = {
       };
 
       const PRODUCTION_CRITERIA = {
-    id: 'prod-specific',
+        id: 'prod-specific',
         description: 'Production environment requirement',
         category: 'production',
         environments: ['production'],
@@ -989,25 +991,25 @@ const BASE_CRITERIA = [{
       ]);
 
       // Add conditional criteria based on project type;
-const WEB_APP_CRITERIA = {
-    id: 'webapp-specific',
+      const WEB_APP_CRITERIA = {
+        id: 'webapp-specific',
         description: 'Web application specific requirement',
         category: 'web',
-        conditions{
-    projectType: 'webapp',
+        conditions: {
+          projectType: 'webapp',
           hasPackageJson: true,
-        }
-};
+        },
+      };
 
       const API_CRITERIA = {
-    id: 'api-specific',
+        id: 'api-specific',
         description: 'API specific requirement',
         category: 'api',
-        conditions{
-    projectType: 'api',
+        conditions: {
+          projectType: 'api',
           hasDockerfile: true,
-        }
-};
+        },
+      };
 
       await execAPI('success-criteria:add-criterion', [
         JSON.stringify(WEB_APP_CRITERIA),

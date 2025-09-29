@@ -23,17 +23,17 @@ const path = require('path');
 } = require('./test-utilities');
 
 // Mock the fs module before importing the main module
-jest.mock('fs', () => ({,
-    promises: {
+jest.mock('fs', () => ({
+  promises: {
     access: jest.fn(),
     readFile: jest.fn(),
     writeFile: jest.fn(),
-}
+  },
 }));
 
 // Mock crypto for deterministic ID generation
-jest.mock('crypto', () => ({,
-    randomBytes: jest.fn(() => {
+jest.mock('crypto', () => ({
+  randomBytes: jest.fn(() => {
     // Generate incrementing values to ensure uniqueness
     global.cryptoCounter = (global.cryptoCounter || 0) + 1;
     const counterStr = global.cryptoCounter.toString().padStart(12, '0');
@@ -54,9 +54,7 @@ describe('Feature Management Lifecycle', () => {
   const TEST_PROJECT_ROOT = '/test/feature-project';
   const TEST_FEATURES_PATH = path.join(TEST_PROJECT_ROOT, 'FEATURES.json');
 
-  beforeEach(() 
-    return () 
-    return () => {
+  beforeEach(() => {
     // Reset the crypto counter for deterministic ID generation
     global.cryptoCounter = 0;
 
@@ -92,9 +90,7 @@ const FS = require('fs');
   describe('Feature Suggestion Lifecycle', () => {
     
     
-    beforeEach(() 
-    return () 
-    return () => {
+    beforeEach(() => {
       mockFs.setFile(
         TEST_FEATURES_PATH,
         JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
@@ -104,9 +100,7 @@ const FS = require('fs');
     describe('Basic Feature Suggestion', () => {
     
     
-      test('should create feature suggestion with all required fields', async () 
-    return () 
-    return () => {
+      test('should create feature suggestion with all required fields', async () => {
         const featureData = {
     title: 'User Authentication System Implementation',
           description:
@@ -150,9 +144,7 @@ const FS = require('fs');
 
         // Create features in parallel for better test performance;
 const results = await Promise.all(
-          categories.map(async (_category) 
-    return () 
-    return () => {
+          categories.map(async (_category) => {
             const featureData = {
               ...TEST_FIXTURES.validFeature,,,
     title: `${category} Feature Test`,
@@ -235,9 +227,7 @@ const featureIds = new Set(results.map((result) => result.feature.id));
     describe('Feature Suggestion Validation', () => {
     
     
-      test('should enforce minimum title length requirements', async () 
-    return () 
-    return () => {
+      test('should enforce minimum title length requirements', async () => {
         const invalidFeature = {
           ...TEST_FIXTURES.validFeature,,,
     title: 'Short', // Only 5 characters, minimum is 10
@@ -360,9 +350,7 @@ const _result = await api.suggestFeature(invalidFeature);
     describe('Feature Suggestion Metadata Management', () => {
     
     
-      test('should update total feature count after suggestion', async () 
-    return () 
-    return () => {
+      test('should update total feature count after suggestion', async () => {
         const initialFeatures = await api._loadFeatures();
         expect(initialFeatures.metadata.total_features).toBe(0);
 
@@ -411,9 +399,7 @@ const secondResult = await api.suggestFeature({
     
     let suggestedFeatureId;
 
-    beforeEach(async () 
-    return () 
-    return () => {
+    beforeEach(async () => {
       mockFs.setFile(
         TEST_FEATURES_PATH,
         JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
@@ -429,9 +415,7 @@ const suggestResult = await api.suggestFeature(
     describe('Basic Feature Approval', () => {
     
     
-      test('should approve suggested feature with full approval data', async () 
-    return () 
-    return () => {
+      test('should approve suggested feature with full approval data', async () => {
         const approvalData = {
     approved_by: 'product-manager',
           notes:
@@ -488,9 +472,7 @@ const suggestResult = await api.suggestFeature(
     describe('Approval History Management', () => {
     
     
-      test('should add approval entry to history', async () 
-    return () 
-    return () => {
+      test('should add approval entry to history', async () => {
         const approvalData = {
     approved_by: 'lead-architect',
           notes: 'Technical review complete. Architecture approved.',
@@ -569,9 +551,7 @@ const features = await api._loadFeatures();
     describe('Approval Validation And Constraints', () => {
     
     
-      test('should reject approval of non-existent feature', async () 
-    return () 
-    return () => {
+      test('should reject approval of non-existent feature', async () => {
         const nonExistentId = 'feature_nonexistent_123';
 
         const _result = await api.approveFeature(nonExistentId);
@@ -620,9 +600,7 @@ const approveResult = await api.approveFeature(suggestedFeatureId);
     
     let suggestedFeatureId;
 
-    beforeEach(async () 
-    return () 
-    return () => {
+    beforeEach(async () => {
       mockFs.setFile(
         TEST_FEATURES_PATH,
         JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
@@ -638,9 +616,7 @@ const suggestResult = await api.suggestFeature(
     describe('Basic Feature Rejection', () => {
     
     
-      test('should reject suggested feature with full rejection data', async () 
-    return () 
-    return () => {
+      test('should reject suggested feature with full rejection data', async () => {
         const rejectionData = {
     rejected_by: 'technical-lead',
           reason:
@@ -679,9 +655,7 @@ const suggestResult = await api.suggestFeature(
     describe('Rejection History Management', () => {
     
     
-      test('should add rejection entry to approval history', async () 
-    return () 
-    return () => {
+      test('should add rejection entry to approval history', async () => {
         const rejectionData = {
     rejected_by: 'product-owner',
           reason:
@@ -711,9 +685,7 @@ const suggestResult = await api.suggestFeature(
     describe('Rejection Validation And Constraints', () => {
     
     
-      test('should reject rejection of non-existent feature', async () 
-    return () 
-    return () => {
+      test('should reject rejection of non-existent feature', async () => {
         const nonExistentId = 'feature_nonexistent_456';
 
         const _result = await api.rejectFeature(nonExistentId);
@@ -762,9 +734,7 @@ const secondResult = await api.rejectFeature(suggestedFeatureId);
     
     let suggestedFeatureIds;
 
-    beforeEach(async () 
-    return () 
-    return () => {
+    beforeEach(async () => {
       mockFs.setFile(
         TEST_FEATURES_PATH,
         JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
@@ -793,9 +763,7 @@ const _result = await api.suggestFeature({
     describe('Bulk Approval Operations', () => {
     
     
-      test('should approve all features in bulk successfully', async () 
-    return () 
-    return () => {
+      test('should approve all features in bulk successfully', async () => {
         const approvalData = {
     approved_by: 'batch-approver',
           notes: 'Batch approval for sprint planning session',
@@ -858,9 +826,7 @@ const _result = await api.suggestFeature({
         expect(result.error_count).toBe(3);
         expect(result.errors).toHaveLength(3);
 
-        result.errors.forEach((error) 
-    return () 
-    return () => {
+        result.errors.forEach((error) => {
           expect(error).toContain('not found');
         });
       });
@@ -875,9 +841,7 @@ const _result = await api.suggestFeature({
         expect(features.metadata.approval_history).toHaveLength(5);
 
         // All history entries should be approvals
-        features.metadata.approval_history.forEach((entry) 
-    return () 
-    return () => {
+        features.metadata.approval_history.forEach((entry) => {
           expect(entry.action).toBe('approved');
           expect(suggestedFeatureIds).toContain(entry.feature_id);
         });
@@ -890,9 +854,7 @@ const _result = await api.suggestFeature({
   describe('Feature Listing And Filtering', () => {
     
     
-    beforeEach(() 
-    return () 
-    return () => {
+    beforeEach(() => {
       // Use features file with diverse test data
       mockFs.setFile(
         TEST_FEATURES_PATH,
@@ -903,9 +865,7 @@ const _result = await api.suggestFeature({
     describe('Basic Feature Listing', () => {
     
     
-      test('should list all features without filters', async () 
-    return () 
-    return () => {
+      test('should list all features without filters', async () => {
         const _result = await api.listFeatures();
         expect(result.success).toBe(true);
         expect(result.features).toHaveLength(3);
@@ -930,9 +890,7 @@ const _result = await api.suggestFeature({
     describe('Feature Filtering', () => {
     
     
-      test('should filter features by status', async () 
-    return () 
-    return () => {
+      test('should filter features by status', async () => {
         const statuses = ['suggested', 'approved', 'rejected'];
 
         for (const status of statuses) {
@@ -984,9 +942,7 @@ const _result = await api.listFeatures({,
   describe('Feature Statistics And Analytics', () => {
     
     
-    beforeEach(() 
-    return () 
-    return () => {
+    beforeEach(() => {
       mockFs.setFile(
         TEST_FEATURES_PATH,
         JSON.stringify(TEST_FIXTURES.featuresWithData),
@@ -996,9 +952,7 @@ const _result = await api.listFeatures({,
     describe('Basic Statistics', () => {
     
     
-      test('should calculate feature statistics correctly', async () 
-    return () 
-    return () => {
+      test('should calculate feature statistics correctly', async () => {
         const _result = await api.getFeatureStats();
         expect(result.success).toBe(true);
         expect(result.stats).toBeDefined();
@@ -1028,9 +982,7 @@ const _result = await api.listFeatures({,
         expect(result.stats.recent_activity.length).toBe(2); // From test fixtures
 
         // Verify recent activity structure
-        result.stats.recent_activity.forEach((activity) 
-    return () 
-    return () => {
+        result.stats.recent_activity.forEach((activity) => {
           expect(activity).toHaveProperty('feature_id');
           expect(activity).toHaveProperty('action');
           expect(activity).toHaveProperty('timestamp');
@@ -1055,9 +1007,7 @@ const _result = await api.listFeatures({,
     describe('Advanced Statistics Scenarios', () => {
     
     
-      test('should handle features with duplicate categories', async () 
-    return () 
-    return () => {
+      test('should handle features with duplicate categories', async () => {
         // Add more features with duplicate categories;
 const additionalFeatures = [ {
             ...TEST_FIXTURES.validFeature,,,
@@ -1096,9 +1046,7 @@ const _result = await api.getFeatureStats();
   describe('Error Scenarios And Edge Cases', () => {
     
     
-    describe('File System Error Handling', () 
-    return () 
-    return () => {
+    describe('File System Error Handling', () => {
       test('should handle file read errors in feature listing', async () => {
         mockFs.setReadError(TEST_FEATURES_PATH, 'Permission denied');
 
@@ -1123,9 +1071,7 @@ const _result = await api.getFeatureStats();
     describe('Data Corruption Handling', () => {
     
     
-      test('should handle corrupted JSON gracefully', async () 
-    return () 
-    return () => {
+      test('should handle corrupted JSON gracefully', async () => {
         mockFs.setFile(TEST_FEATURES_PATH, '{ invalid json structure }');
 
         const _result = await api.suggestFeature(TEST_FIXTURES.validFeature);

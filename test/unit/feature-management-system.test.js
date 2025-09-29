@@ -37,8 +37,9 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
 
     const child = spawn(
       'timeout',
-      [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs], {,
-    cwd: __dirname,
+      [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs],
+      {
+        cwd: __dirname,
         stdio: ['pipe', 'pipe', 'pipe'],
       },
     );
@@ -134,9 +135,7 @@ describe('Feature Management System Unit Tests', () => {
     
   let testAgentId = null;
 
-  beforeEach(() 
-    return () 
-    return () => {
+  beforeEach(() => {
     setupFeatureTestEnvironment();
 });
 
@@ -151,9 +150,7 @@ describe('Feature Management System Unit Tests', () => {
   describe('Agent Initialization', () => {
     
     
-    test('should initialize agent successfully', async () 
-    return () 
-    return () => {
+    test('should initialize agent successfully', async () => {
       testAgentId = 'test-agent-' + Date.now();
       const initResult = await execAPI('initialize', [testAgentId]);
       expect(initResult.success).toBe(true);
@@ -179,9 +176,7 @@ const reinitResult = await execAPI('reinitialize', [testAgentId]);
   describe('Feature Suggestion', () => {
     
     
-    beforeEach(async () 
-    return () 
-    return () => {
+    beforeEach(async () => {
       testAgentId = 'feature-test-agent-' + Date.now();
       const initResult = await execAPI('initialize', [testAgentId]);
       expect(initResult.success).toBe(true);
@@ -297,9 +292,7 @@ const reinitResult = await execAPI('reinitialize', [testAgentId]);
   describe('Feature Listing', () => {
     
     
-    beforeEach(async () 
-    return () 
-    return () => {
+    beforeEach(async () => {
       testAgentId = 'list-test-agent-' + Date.now();
       const initResult = await execAPI('initialize', [testAgentId]);
       expect(initResult.success).toBe(true);
@@ -381,9 +374,7 @@ const filterData = { category: 'enhancement' };
     
     let _createdFeatureId = null;
 
-    beforeEach(async () 
-    return () 
-    return () => {
+    beforeEach(async () => {
       testAgentId = 'approval-test-agent-' + Date.now();
       const initResult = await execAPI('initialize', [testAgentId]);
       expect(initResult.success).toBe(true);
@@ -456,9 +447,7 @@ const featureData = {
   describe('Feature Statistics', () => {
     
     
-    beforeEach(async () 
-    return () 
-    return () => {
+    beforeEach(async () => {
       testAgentId = 'stats-test-agent-' + Date.now();
       const initResult = await execAPI('initialize', [testAgentId]);
       expect(initResult.success).toBe(true);
@@ -499,9 +488,7 @@ const featureData = {
   describe('Initialization Statistics', () => {
     
     
-    test('should get initialization statistics', async () 
-    return () 
-    return () => {
+    test('should get initialization statistics', async () => {
       const _result = await execAPI('get-initialization-stats');
       expect(result.success).toBe(true);
       expect(result.stats).toBeDefined();
@@ -524,9 +511,7 @@ const featureData = {
   describe('API Documentation', () => {
     
     
-    test('should provide API guide', async () 
-    return () 
-    return () => {
+    test('should provide API guide', async () => {
       const _result = await execAPI('guide');
       expect(result.success).toBe(true);
       expect(result.featureManager).toBeDefined();

@@ -46,10 +46,11 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
 
     const child = spawn(
       'timeout',
-      [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs], {
-    cwd: __dirname,
+      [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs],
+      {
+        cwd: __dirname,
         stdio: ['pipe', 'pipe', 'pipe'],
-      }
+      },
     );
 
     let stdout = '';
@@ -106,7 +107,7 @@ function createTestTodoFile(category = 'general') {
   const todoData = {
     project: 'test-taskmanager-api',
     tasks: [],
-    agents{},
+    agents: {},
     features: [],
     current_mode: 'DEVELOPMENT',
     last_mode: null,
@@ -114,11 +115,11 @@ function createTestTodoFile(category = 'general') {
     review_strikes: 0,
     strikes_completed_last_run: false,
     last_hook_activation: Date.now(),
-    settings{
-    version: '2.0.0',
+    settings: {
+      version: '2.0.0',
       created: new Date().toISOString(),
-    }
-};
+    },
+  };
 
   FS.writeFileSync(TODO_PATH, JSON.stringify(todoData, null, 2));
   return todoData;
@@ -241,10 +242,10 @@ const taskTypes = result.taskClassification.types;
 
     test('should initialize agent with custom configuration', async () => {
       const config = {
-    role: 'testing',
+        role: 'testing',
         specialization: ['unit-tests', 'integration-tests'],
-        metadata{ environment: 'ci' },
-};
+        metadata: { environment: 'ci' },
+      };
 
       const _result = await execAPI('init', [JSON.stringify(config)]);
 
@@ -282,9 +283,9 @@ const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
 
       // Reinitialize with updated config;
-const updateConfig = {
-    metadata{ updated: true, timestamp: new Date().toISOString() },
-};
+      const updateConfig = {
+        metadata: { updated: true, timestamp: new Date().toISOString() },
+      };
 
       const _result = await execAPI('reinitialize', [
         testAgentId,
@@ -362,11 +363,11 @@ const initResult = await execAPI('init');
 
     test('should create subtask', async () => {
       const taskData = {
-    title: 'Implement login form component',
+        title: 'Implement login form component',
         description: 'Create React component for user login form',
         task_type: 'subtask',
         priority: 'medium',
-        task.category: 'ui-component',
+        category: 'ui-component',
       };
 
       const _result = await execAPI('create', [JSON.stringify(taskData)]);
@@ -380,11 +381,11 @@ const initResult = await execAPI('init');
 
     test('should create test task', async () => {
       const taskData = {
-    title: 'Add unit tests for UserService',
+        title: 'Add unit tests for UserService',
         description: 'Comprehensive unit test coverage for user management',
         task_type: 'test',
         priority: 'medium',
-        task.category: 'test-coverage',
+        category: 'test-coverage',
       };
 
       const _result = await execAPI('create', [JSON.stringify(taskData)]);

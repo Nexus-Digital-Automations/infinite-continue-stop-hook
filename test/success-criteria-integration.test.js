@@ -43,10 +43,11 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
 
     const child = spawn(
       'timeout',
-      [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs], {
-    stdio: ['pipe', 'pipe', 'pipe'],
-        env{ ...process.env, NODE_ENV: 'test' },
-}
+      [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs],
+      {
+        stdio: ['pipe', 'pipe', 'pipe'],
+        env: { ...process.env, NODE_ENV: 'test' },
+      }
     );
 
     let stdout = '';

@@ -877,9 +877,9 @@ class AutonomousTaskManagerAPI {
     }
   }
 
-  async initializeAgent(_agentId) {
+  async initializeAgent(agentId) {
     try {
-      const _result = await this._atomicFeatureOperation((features) => {
+      const result = await this._atomicFeatureOperation((features) => {
         // Initialize agents section if it doesn't exist
         if (!features.agents) {
           features.agents = {};
@@ -915,10 +915,10 @@ class AutonomousTaskManagerAPI {
       result.comprehensiveGuide = guideData;
 
       return result;
-    } catch (_) {
+    } catch (error) {
       return {
         success: false,
-        error: `Failed to initialize agent: ${_.message}`,
+        error: `Failed to initialize agent: ${error.message}`,
         timestamp: new Date().toISOString(),
       };
     }

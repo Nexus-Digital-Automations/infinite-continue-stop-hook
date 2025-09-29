@@ -15,7 +15,7 @@ const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
  */
 function getAllJavaScriptFiles() {
   try {
-    const _result = execSync(
+    const result = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
       { cwd: rootDir, encoding: 'utf-8' }
     );
@@ -24,8 +24,8 @@ function getAllJavaScriptFiles() {
       .split('\n')
       .filter((f) => f && f.endsWith('.js'))
       .map((f) => path.resolve(rootDir, f.replace('./', '')));
-  } catch (_) {
-    console.error('Failed to get JS files:', error.message);
+  } catch (_error) {
+    console.error('Failed to get JS files:', _error.message);
     return [];
   }
 }
@@ -33,7 +33,7 @@ function getAllJavaScriptFiles() {
 /**
  * Fix all catch block issues in a file
  */
-function fixCatchBlocksInFile(_filePath) {
+function fixCatchBlocksInFile(filePath) {
   try {
     const content = fs.readFileSync(filePath, 'utf-8');
     const lines = content.split('\n');
@@ -47,7 +47,7 @@ function fixCatchBlocksInFile(_filePath) {
         lines[i] = line.replace('} catch: {', '} catch (_) {');
         modified = true;
         console.log(
-          `  ✓ Fixed missing parameter: ${path.relative(rootDir, _filePath)}:${i + 1}`
+          `  ✓ Fixed missing parameter: ${path.relative(rootDir, filePath)}:${i + 1}`
         );
       }
 
@@ -73,7 +73,7 @@ function fixCatchBlocksInFile(_filePath) {
             );
             modified = true;
             console.log(
-              `  ✓ Fixed error.message -> _error.message: ${path.relative(rootDir, _filePath)}:${j + 1}`
+              `  ✓ Fixed error.message -> _error.message: ${path.relative(rootDir, filePath)}:${j + 1}`
             );
           }
           if (
@@ -83,7 +83,7 @@ function fixCatchBlocksInFile(_filePath) {
             lines[j] = nextLine.replace(/\berror\.stack\b/g, '_error.stack');
             modified = true;
             console.log(
-              `  ✓ Fixed error.stack -> _error.stack: ${path.relative(rootDir, _filePath)}:${j + 1}`
+              `  ✓ Fixed error.stack -> _error.stack: ${path.relative(rootDir, filePath)}:${j + 1}`
             );
           }
           if (
@@ -93,7 +93,7 @@ function fixCatchBlocksInFile(_filePath) {
             lines[j] = nextLine.replace(/\berror\.code\b/g, '_error.code');
             modified = true;
             console.log(
-              `  ✓ Fixed error.code -> _error.code: ${path.relative(rootDir, _filePath)}:${j + 1}`
+              `  ✓ Fixed error.code -> _error.code: ${path.relative(rootDir, filePath)}:${j + 1}`
             );
           }
           if (
@@ -103,7 +103,7 @@ function fixCatchBlocksInFile(_filePath) {
             lines[j] = nextLine.replace(/\berror\.stdout\b/g, '_error.stdout');
             modified = true;
             console.log(
-              `  ✓ Fixed error.stdout -> _error.stdout: ${path.relative(rootDir, _filePath)}:${j + 1}`
+              `  ✓ Fixed error.stdout -> _error.stdout: ${path.relative(rootDir, filePath)}:${j + 1}`
             );
           }
           if (
@@ -113,7 +113,7 @@ function fixCatchBlocksInFile(_filePath) {
             lines[j] = nextLine.replace(/\berror\.stderr\b/g, '_error.stderr');
             modified = true;
             console.log(
-              `  ✓ Fixed error.stderr -> _error.stderr: ${path.relative(rootDir, _filePath)}:${j + 1}`
+              `  ✓ Fixed error.stderr -> _error.stderr: ${path.relative(rootDir, filePath)}:${j + 1}`
             );
           }
           if (
@@ -123,7 +123,7 @@ function fixCatchBlocksInFile(_filePath) {
             lines[j] = nextLine.replace(/\berror\.name\b/g, '_error.name');
             modified = true;
             console.log(
-              `  ✓ Fixed error.name -> _error.name: ${path.relative(rootDir, _filePath)}:${j + 1}`
+              `  ✓ Fixed error.name -> _error.name: ${path.relative(rootDir, filePath)}:${j + 1}`
             );
           }
 
@@ -137,7 +137,7 @@ function fixCatchBlocksInFile(_filePath) {
             lines[j] = nextLine.replace(/(\W)error(\W)/g, '$1_error$2');
             modified = true;
             console.log(
-              `  ✓ Fixed error -> _error: ${path.relative(rootDir, _filePath)}:${j + 1}`
+              `  ✓ Fixed error -> _error: ${path.relative(rootDir, filePath)}:${j + 1}`
             );
           }
         }
@@ -167,7 +167,7 @@ function fixCatchBlocksInFile(_filePath) {
           lines[i] = line.replace('catch (_)', 'catch (_)');
           modified = true;
           console.log(
-            `  ✓ Changed unused error to _error: ${path.relative(rootDir, _filePath)}:${i + 1}`
+            `  ✓ Changed unused error to _error: ${path.relative(rootDir, filePath)}:${i + 1}`
           );
         }
       }
@@ -191,7 +191,7 @@ function fixCatchBlocksInFile(_filePath) {
             lines[j] = nextLine.replace(/\berror\.message\b/g, 'err.message');
             modified = true;
             console.log(
-              `  ✓ Fixed error.message -> err.message: ${path.relative(rootDir, _filePath)}:${j + 1}`
+              `  ✓ Fixed error.message -> err.message: ${path.relative(rootDir, filePath)}:${j + 1}`
             );
           }
           if (
@@ -201,7 +201,7 @@ function fixCatchBlocksInFile(_filePath) {
             lines[j] = nextLine.replace(/\berror\.stack\b/g, 'err.stack');
             modified = true;
             console.log(
-              `  ✓ Fixed error.stack -> err.stack: ${path.relative(rootDir, _filePath)}:${j + 1}`
+              `  ✓ Fixed error.stack -> err.stack: ${path.relative(rootDir, filePath)}:${j + 1}`
             );
           }
         }
@@ -225,7 +225,7 @@ function fixCatchBlocksInFile(_filePath) {
             lines[j] = nextLine.replace(/\berror\.message\b/g, 'e.message');
             modified = true;
             console.log(
-              `  ✓ Fixed error.message -> e.message: ${path.relative(rootDir, _filePath)}:${j + 1}`
+              `  ✓ Fixed error.message -> e.message: ${path.relative(rootDir, filePath)}:${j + 1}`
             );
           }
         }
@@ -238,8 +238,8 @@ function fixCatchBlocksInFile(_filePath) {
     }
 
     return false;
-  } catch (_) {
-    console.error(`Error fixing ${filePath}:`, error.message);
+  } catch (_error) {
+    console.error(`Error fixing ${filePath}:`, _error.message);
     return false;
   }
 }
@@ -256,10 +256,10 @@ function main() {
   let totalFixed = 0;
 
   for (const filePath of jsFiles) {
-    if (fixCatchBlocksInFile(_filePath)) {
+    if (fixCatchBlocksInFile(filePath)) {
       totalFixed++;
       console.log(
-        `✅ Fixed catch blocks in: ${path.relative(rootDir, _filePath)}`
+        `✅ Fixed catch blocks in: ${path.relative(rootDir, filePath)}`
       );
     }
   }
@@ -290,13 +290,13 @@ function main() {
     console.log('⚠️ Some linting issues remain - running final diagnostic...');
 
     try {
-      const _result = execSync('npm run lint 2>&1', {
+      execSync('npm run lint 2>&1', {
         cwd: rootDir,
         encoding: 'utf-8',
       });
       console.log('Unexpected success - all issues resolved!');
-    } catch (_) {
-      const _output = lintError.stdout || lintError.message;
+    } catch (lintError) {
+      const output = lintError.stdout || lintError.message;
       const errorMatches = output.match(/(\d+) errors?/);
       const warningMatches = output.match(/(\d+) warnings?/);
 
@@ -316,9 +316,9 @@ function main() {
 if (require.main === module) {
   try {
     main();
-  } catch (_) {
-    console.error('Fatal error:', _1.message);
-    throw new Error(`Script execution failed: ${_1.message}`);
+  } catch (fatalError) {
+    console.error('Fatal error:', fatalError.message);
+    throw new Error(`Script execution failed: ${fatalError.message}`);
   }
 }
 

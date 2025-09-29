@@ -181,85 +181,42 @@ EOF
 
 ## 🚨 COMPREHENSIVE LOGGING MANDATE
 
-**MANDATORY LOGGING FOR ALL CODE IMPLEMENTATIONS:**
+**MANDATORY LOGGING**: Every function, method, and significant code block MUST include comprehensive logging. No code without proper logging instrumentation.
 
-**ABSOLUTE REQUIREMENT**: Every function, method, class, and significant code block MUST include comprehensive logging. No code shall be written without proper logging instrumentation.
-
-**MANDATORY LOGGING COMPONENTS:**
-
-- **FUNCTION ENTRY/EXIT**: Log function name, parameters (sanitized), and return values
-- **ERROR LOGGING**: All errors, exceptions, and failure conditions with full context
-- **PERFORMANCE METRICS**: Execution timing, resource usage, and bottleneck identification
+**REQUIRED LOGGING:**
+- **FUNCTION ENTRY/EXIT**: Function name, parameters (sanitized), return values, execution timing
+- **ERROR LOGGING**: All errors/exceptions with full context, stack traces, error types
+- **PERFORMANCE METRICS**: Execution timing, resource usage, bottleneck identification
 - **STATE CHANGES**: Database updates, file operations, configuration changes
-- **SECURITY EVENTS**: Authentication, authorization, access attempts, security violations
-- **BUSINESS LOGIC**: Decision points, workflow transitions, validation results
-- **EXTERNAL INTERACTIONS**: API calls, network requests, third-party service communications
+- **SECURITY EVENTS**: Authentication, authorization, access attempts
 
-**LOGGING IMPLEMENTATION REQUIREMENTS:**
-
+**IMPLEMENTATION PATTERN:**
 ```javascript
-// MANDATORY: Function entry/exit logging pattern
-function processUserData(userId, userData) {
-  const logger = getLogger('UserProcessor');
+function processData(id, data) {
+  const logger = getLogger('Processor');
   const startTime = Date.now();
 
-  logger.info('Function started', {
-    function: 'processUserData',
-    userId: userId,
-    dataSize: userData ? Object.keys(userData).length : 0,
-    timestamp: new Date().toISOString()
-  });
+  logger.info('Function started', { function: 'processData', id, dataSize: data?.length });
 
   try {
-    // Business logic implementation
-    const result = validateAndProcessData(userData);
-
-    const duration = Date.now() - startTime;
-    logger.info('Function completed successfully', {
-      function: 'processUserData',
-      userId: userId,
-      duration: duration,
-      resultSize: result ? Object.keys(result).length : 0
-    });
-
+    const result = validateAndProcess(data);
+    logger.info('Function completed', { function: 'processData', id, duration: Date.now() - startTime });
     return result;
   } catch (error) {
-    const duration = Date.now() - startTime;
     logger.error('Function failed', {
-      function: 'processUserData',
-      userId: userId,
-      duration: duration,
-      error: error.message,
-      stack: error.stack,
-      errorType: error.constructor.name
+      function: 'processData', id, duration: Date.now() - startTime,
+      error: error.message, stack: error.stack, errorType: error.constructor.name
     });
     throw error;
   }
 }
 ```
 
-**STRUCTURED LOGGING STANDARDS:**
-
-- **FORMAT**: JSON structured logging with consistent field names
-- **LEVELS**: ERROR, WARN, INFO, DEBUG with appropriate usage
-- **CONTEXT**: Always include timestamp, function name, relevant IDs
-- **SANITIZATION**: Never log sensitive data (passwords, tokens, PII)
-- **CORRELATION**: Include request/session IDs for tracing
-
-**LOGGING COMPLIANCE ENFORCEMENT:**
-
+**COMPLIANCE:**
 - **❌ NEVER SUBMIT**: Code without comprehensive logging
-- **❌ NEVER SKIP**: Error logging or performance metrics
-- **❌ NEVER LOG**: Sensitive information or credentials
-- **✅ ALWAYS LOG**: Function entry/exit, errors, performance, state changes
-- **✅ QUALITY GATES**: Logging completeness verified in pre-commit hooks and CI/CD
-
-**MONITORING AND OBSERVABILITY:**
-
-- **REAL-TIME MONITORING**: All logs must be immediately available for monitoring
-- **ALERTING**: Critical errors automatically trigger alerts
-- **METRICS COLLECTION**: Performance and usage metrics for optimization
-- **TROUBLESHOOTING**: Logs must provide sufficient detail for debugging
+- **❌ NEVER LOG**: Sensitive information (passwords, tokens, PII)
+- **✅ ALWAYS**: JSON structured logging with timestamps, function names, error context
+- **✅ QUALITY GATES**: Logging verified in pre-commit hooks and CI/CD pipeline
 
 ## CLAUDE.md PROTECTION
 

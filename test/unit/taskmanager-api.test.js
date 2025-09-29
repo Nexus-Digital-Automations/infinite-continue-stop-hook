@@ -22,12 +22,12 @@ const crypto = require('crypto');
 } = require('./test-utilities');
 
 // Mock the fs module before importing the main module
-jest.mock('fs', () => ({,
-    promises: {
+jest.mock('fs', () => ({
+  promises: {
     access: jest.fn(),
     readFile: jest.fn(),
     writeFile: jest.fn(),
-}
+  },
 }));
 
 // Import the FeatureManagerAPI class AFTER mocking fs;
@@ -44,9 +44,7 @@ describe('FeatureManagerAPI', () => {
   let mockFs;
   let timeUtils;
 
-  beforeAll(() 
-    return () 
-    return () => {
+  beforeAll(() => {
     timeUtils = new TimeTestUtils();
 });
 
@@ -77,9 +75,7 @@ const FS = require('fs');
 
     // Mock crypto for deterministic testing with incrementing values;
 let cryptoCounter = 0;
-    jest.spyOn(crypto, 'randomBytes').mockImplementation((size) 
-    return () 
-    return () => {
+    jest.spyOn(crypto, 'randomBytes').mockImplementation((size) => {
       const char = String.fromCharCode(97 + (cryptoCounter % 26)); // a, b, c, etc.
       cryptoCounter++;
       return Buffer.from(char.repeat(size * 2), 'hex');
@@ -105,9 +101,7 @@ let cryptoCounter = 0;
   describe('Constructor And Initialization', () => {
     
     
-    test('should initialize with correct default values', () 
-    return () 
-    return () => {
+    test('should initialize with correct default values', () => {
       const newApi = new FeatureManagerAPI();
 
       expect(newApi.timeout).toBe(10000);
@@ -148,9 +142,7 @@ let cryptoCounter = 0;
   describe('File Operations', () => {
     
     
-    describe('_ensureFeaturesFile', () 
-    return () 
-    return () => {
+    describe('_ensureFeaturesFile', () => {
       test('should create FEATURES.json if it does not exist', async () => {
         // File doesn't exist (default mockFs state)
         expect(mockFs.hasFile(TEST_FEATURES_PATH)).toBe(false);
@@ -183,9 +175,7 @@ const originalData = testHelpers.deepClone(
     describe('_loadFeatures', () => {
     
     
-      test('should load existing features file successfully', async () 
-    return () 
-    return () => {
+      test('should load existing features file successfully', async () => {
         mockFs.setFile(
           TEST_FEATURES_PATH,
           JSON.stringify(TEST_FIXTURES.featuresWithData),
@@ -228,9 +218,7 @@ const originalData = testHelpers.deepClone(
     describe('_saveFeatures', () => {
     
     
-      test('should save features to file successfully', async () 
-    return () 
-    return () => {
+      test('should save features to file successfully', async () => {
         const testData = testHelpers.deepClone(TEST_FIXTURES.emptyFeaturesFile);
 
         await api._saveFeatures(testData);
@@ -256,9 +244,7 @@ const originalData = testHelpers.deepClone(
   describe('Feature Validation', () => {
     
     
-    describe('_validateFeatureData', () 
-    return () 
-    return () => {
+    describe('_validateFeatureData', () => {
       test('should validate correct feature data successfully', () => {
         expect(() =>
           api._validateFeatureData(TEST_FIXTURES.validFeature),
@@ -281,9 +267,7 @@ const originalData = testHelpers.deepClone(
     
     
         Object.entries(TEST_FIXTURES.invalidFeatures).forEach(
-          ([key, invalidFeature]) 
-    return () 
-    return () => {
+          ([key, invalidFeature]) => {
             if (key.startsWith('missing')) {
               expect(() => api._validateFeatureData(invalidFeature)).toThrow(
                 /Required field.*is missing or empty/,
@@ -297,9 +281,7 @@ const originalData = testHelpers.deepClone(
     
     
         const emptyFeatures = ['emptyTitle'];
-        emptyFeatures.forEach((key) 
-    return () 
-    return () => {
+        emptyFeatures.forEach((key) => {
           if (TEST_FIXTURES.invalidFeatures[key]) {
             expect(() =>
               api._validateFeatureData(TEST_FIXTURES.invalidFeatures[key]),
@@ -355,9 +337,7 @@ const originalData = testHelpers.deepClone(
     describe('_generateFeatureId', () => {
     
     
-      test('should generate unique feature IDs', () 
-    return () 
-    return () => {
+      test('should generate unique feature IDs', () => {
         const id1 = api._generateFeatureId();
         const id2 = api._generateFeatureId();
 
@@ -383,9 +363,7 @@ const originalData = testHelpers.deepClone(
   describe('Feature Management', () => {
     
     
-    beforeEach(() 
-    return () 
-    return () => {
+    beforeEach(() => {
       // Setup empty features file for each test
       mockFs.setFile(
         TEST_FEATURES_PATH,
@@ -396,9 +374,7 @@ const originalData = testHelpers.deepClone(
     describe('suggestFeature', () => {
     
     
-      test('should create new feature suggestion successfully', async () 
-    return () 
-    return () => {
+      test('should create new feature suggestion successfully', async () => {
         const _result = await api.suggestFeature(TEST_FIXTURES.validFeature);
         expect(result.success).toBe(true);
         expect(result.feature).toBeDefined();
@@ -442,9 +418,7 @@ const originalData = testHelpers.deepClone(
     
       let testFeatureId;
 
-      beforeEach(async () 
-    return () 
-    return () => {
+      beforeEach(async () => {
         // Create a suggested feature for approval tests;
 const suggestResult = await api.suggestFeature(
           TEST_FIXTURES.validFeature,
@@ -538,9 +512,7 @@ const invalidFeatures = {
     
       let testFeatureId;
 
-      beforeEach(async () 
-    return () 
-    return () => {
+      beforeEach(async () => {
         // Create a suggested feature for rejection tests;
 const suggestResult = await api.suggestFeature(
           TEST_FIXTURES.validFeature,
@@ -619,9 +591,7 @@ const _result = await api.rejectFeature(testFeatureId);
     
       let suggestedFeatureIds;
 
-      beforeEach(async () 
-    return () 
-    return () => {
+      beforeEach(async () => {
         // Create multiple suggested features;
 const features = [ {
             ...TEST_FIXTURES.validFeature,,,
@@ -657,9 +627,7 @@ const _result = await api.suggestFeature(feature);
         expect(result.errors).toHaveLength(0);
 
         // Verify all features are approved
-        result.approved_features.forEach((approvedFeature) 
-    return () 
-    return () => {
+        result.approved_features.forEach((approvedFeature) => {
           expect(approvedFeature.status).toBe('approved');
           expect(approvedFeature.success).toBe(true);
         });
@@ -691,9 +659,7 @@ const _result = await api.suggestFeature(feature);
         expect(result.approved_count).toBe(0);
         expect(result.error_count).toBe(2);
         expect(result.errors).toHaveLength(2);
-        result.errors.forEach((error) 
-    return () 
-    return () => {
+        result.errors.forEach((error) => {
           expect(error).toContain('not found');
         });
       });
@@ -711,9 +677,7 @@ const _result = await api.suggestFeature(feature);
     describe('listFeatures', () => {
     
     
-      beforeEach(() 
-    return () 
-    return () => {
+      beforeEach(() => {
         // Use features file with test data
         mockFs.setFile(
           TEST_FEATURES_PATH,
@@ -769,9 +733,7 @@ const statuses = result.features.map((f) => f.status);
     describe('getFeatureStats', () => {
     
     
-      beforeEach(() 
-    return () 
-    return () => {
+      beforeEach(() => {
         mockFs.setFile(
           TEST_FEATURES_PATH,
           JSON.stringify(TEST_FIXTURES.featuresWithData),
@@ -822,9 +784,7 @@ const statuses = result.features.map((f) => f.status);
   describe('Timeout Handling', () => {
     
     
-    describe('withTimeout', () 
-    return () 
-    return () => {
+    describe('withTimeout', () => {
       test('should resolve normally for quick operations', async () => {
         const quickPromise = Promise.resolve('success');
 
@@ -835,9 +795,7 @@ const statuses = result.features.map((f) => f.status);
       test('should timeout slow operations with custom timeout', async () => {
     
     
-        const slowPromise = new Promise((resolve) 
-    return () 
-    return () => {
+        const slowPromise = new Promise((resolve) => {
           setTimeout(() => resolve('slow'), 200);
         });
 
@@ -849,9 +807,7 @@ const statuses = result.features.map((f) => f.status);
       test('should use default timeout when not specified', async () => {
     
     
-        const slowPromise = new Promise((resolve) 
-    return () 
-    return () => {
+        const slowPromise = new Promise((resolve) => {
           setTimeout(() => resolve('slow'), 15000);
         });
 
@@ -875,9 +831,7 @@ const statuses = result.features.map((f) => f.status);
   describe('Error Handling', () => {
     
     
-    test('should handle corrupted FEATURES.json gracefully', async () 
-    return () 
-    return () => {
+    test('should handle corrupted FEATURES.json gracefully', async () => {
       mockFs.setFile(TEST_FEATURES_PATH, '{ invalid json }');
 
       const _result = await api.suggestFeature(TEST_FIXTURES.validFeature);
@@ -898,9 +852,7 @@ const statuses = result.features.map((f) => f.status);
     
     
       // Mock a method to throw an unexpected error
-      jest.spyOn(api, '_generateFeatureId').mockImplementation(() 
-    return () 
-    return () => {
+      jest.spyOn(api, '_generateFeatureId').mockImplementation(() => {
         throw new Error('Unexpected error');
       });
 
@@ -915,9 +867,7 @@ const statuses = result.features.map((f) => f.status);
   describe('API Documentation Methods', () => {
     
     
-    describe('getApiMethods', () 
-    return () 
-    return () => {
+    describe('getApiMethods', () => {
       test('should return API methods information', () => {
         const _result = api.getApiMethods();
         expect(result.success).toBe(true);
@@ -947,9 +897,7 @@ const statuses = result.features.map((f) => f.status);
     describe('getComprehensiveGuide', () => {
     
     
-      test('should return comprehensive guide with timeout', async () 
-    return () 
-    return () => {
+      test('should return comprehensive guide with timeout', async () => {
         const _result = await api.getComprehensiveGuide();
         expect(result.success).toBe(true);
         expect(result.featureManager).toBeDefined();
@@ -996,9 +944,7 @@ const statuses = result.features.map((f) => f.status);
     describe('_getFallbackGuide', () => {
     
     
-      test('should return fallback guide for different contexts', () 
-    return () 
-    return () => {
+      test('should return fallback guide for different contexts', () => {
         const generalGuide = api._getFallbackGuide('general');
         const apiGuide = api._getFallbackGuide('api-methods');
 
@@ -1027,9 +973,7 @@ const statuses = result.features.map((f) => f.status);
   describe('Agent Management', () => {
     
     
-    beforeEach(() 
-    return () 
-    return () => {
+    beforeEach(() => {
       mockFs.setFile(
         api.featuresPath,
         JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
@@ -1039,9 +983,7 @@ const statuses = result.features.map((f) => f.status);
     describe('initializeAgent', () => {
     
     
-      test('should initialize new agent successfully', async () 
-    return () 
-    return () => {
+      test('should initialize new agent successfully', async () => {
         const AGENT_ID = 'test-agent-001';
         const _result = await api.initializeAgent(AGENT_ID);
         expect(result.success).toBe(true);
@@ -1062,9 +1004,7 @@ const statuses = result.features.map((f) => f.status);
     describe('reinitializeAgent', () => {
     
     
-      test('should reinitialize existing agent', async () 
-    return () 
-    return () => {
+      test('should reinitialize existing agent', async () => {
         const AGENT_ID = 'test-agent-002';
         // First initialize
         await api.initializeAgent(AGENT_ID);
@@ -1088,9 +1028,7 @@ const _result = await api.reinitializeAgent(AGENT_ID);
     describe('authorizeStop', () => {
     
     
-      test('should authorize stop with reason', async () 
-    return () 
-    return () => {
+      test('should authorize stop with reason', async () => {
         const AGENT_ID = 'test-agent-003';
         const reason = 'Task completed successfully';
 
@@ -1126,9 +1064,7 @@ const _result = await api.authorizeStop('');
   describe('Initialization Statistics', () => {
     
     
-    beforeEach(() 
-    return () 
-    return () => {
+    beforeEach(() => {
       mockFs.setFile(
         api.featuresPath,
         JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
@@ -1138,9 +1074,7 @@ const _result = await api.authorizeStop('');
     describe('getInitializationStats', () => {
     
     
-      test('should return initialization statistics', async () 
-    return () 
-    return () => {
+      test('should return initialization statistics', async () => {
         const _result = await api.getInitializationStats();
         expect(result.success).toBe(true);
         expect(result.stats).toBeDefined();
@@ -1185,9 +1119,7 @@ const _result = await api.authorizeStop('');
   describe('Cleanup', () => {
     
     
-    test('should cleanup resources', () 
-    return () 
-    return () => {
+    test('should cleanup resources', () => {
       expect(() => api.cleanup()).not.toThrow();
     });
 });

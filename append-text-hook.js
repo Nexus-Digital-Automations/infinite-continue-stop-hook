@@ -37,8 +37,9 @@ process.stdin.on('end', () => {
     };
 
     _loggers.stopHook.info(JSON.stringify(modifiedData));
-  } catch (_) {
+  } catch (error) {
     // If JSON parsing fails, treat as plain text And append;
+    _loggers.stopHook.warn('JSON parsing failed:', error.message);
     const appendText =
       '\n\ncontinue. make sure to think And use concurrent subagents when appropriate';
     const modifiedMessage = inputData.trim() + appendText;
@@ -47,7 +48,7 @@ process.stdin.on('end', () => {
 });
 
 // Handle errors
-process.on('error', (_err) => {
-  _loggers.stopHook.error('Error in append-text-hook:', _err);
-  throw new Error(`append-text-hook error: ${_err.message}`);
+process.on('error', (err) => {
+  _loggers.stopHook.error('Error in append-text-hook:', err);
+  throw new Error(`append-text-hook error: ${err.message}`);
 });

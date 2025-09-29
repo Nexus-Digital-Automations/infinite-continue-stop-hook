@@ -216,9 +216,7 @@ describe('Security System', () => {
   describe('Integration Tests', () => {
     
     
-    test('should integrate all security components', async () 
-    return () 
-    return () => {
+    test('should integrate all security components', async () => {
       const mockTaskManager = {
     createTask: jest
           .fn()

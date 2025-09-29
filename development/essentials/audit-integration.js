@@ -32,7 +32,7 @@ class SecurityUtils {
    * @throws {Error} If path is invalid or outside base directory
    */
   static validatePath(basePath, _filePath) {
-    if (!filePath || typeof filePath !== 'string') {
+    if (!_filePath || typeof _filePath !== 'string') {
       throw new Error('Invalid file path provided');
     }
 
@@ -46,7 +46,7 @@ class SecurityUtils {
       resolvedPath !== resolvedBase
     ) {
       throw new Error(
-        `Path ${filePath} is outside allowed directory ${basePath}`,
+        `Path ${_filePath} is outside allowed directory ${basePath}`,
       );
     }
 
@@ -60,7 +60,7 @@ class SecurityUtils {
    * @param {string} encoding - File encoding
    * @returns {Promise<string>} File contents
    */
-  static safeReadFile(basePath, filePath, encoding = 'utf-8') {
+  static safeReadFile(basePath, _filePath, encoding = 'utf-8') {
     const safePath = this.validatePath(basePath, _filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
     return FS.readFile(safePath, encoding);
@@ -73,7 +73,7 @@ class SecurityUtils {
    * @param {string} content - Content to write
    * @returns {Promise<void>}
    */
-  static async safeWriteFile(basePath, filePath, content) {
+  static async safeWriteFile(basePath, _filePath, content) {
     const safePath = this.validatePath(basePath, _filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
     await FS.mkdir(path.dirname(safePath), { recursive: true });
@@ -88,7 +88,7 @@ class SecurityUtils {
    * @param {string} content - Content to append
    * @returns {Promise<void>}
    */
-  static async safeAppendFile(basePath, filePath, content) {
+  static async safeAppendFile(basePath, _filePath, content) {
     const safePath = this.validatePath(basePath, _filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
     await FS.mkdir(path.dirname(safePath), { recursive: true });
@@ -375,7 +375,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
       };
 
       return criteria;
-    } catch (_) {
+    } catch (error) {
       this.logger.log(`⚠️ Could not load task requirements: ${error.message}`);
       return {};
     }
@@ -419,7 +419,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
       );
       await FS.access(packageJsonPath);
       hasPackageJson = true;
-    } catch (_) {
+    } catch (error) {
       // Package.json not found or access denied
     }
 
@@ -471,18 +471,18 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
     const command = `timeout ${this.config.auditTimeoutMs / 1000}s node "${this.taskManagerApiPath}" create '${JSON.stringify(auditTaskData)}'`;
 
     try {
-      const _output = execSync(command, {
+      const output = execSync(command, {
         encoding: 'utf-8',
         cwd: this.projectRoot,
       });
-      const _result = JSON.parse(output);
+      const result = JSON.parse(output);
 
       if (result.success) {
         return result;
       } else {
         throw new Error(`TaskManager API error: ${JSON.stringify(result)}`);
       }
-    } catch (_) {
+    } catch (error) {
       this.logger.error(`❌ Failed to create audit task: ${error.message}`);
       throw error;
     }
@@ -528,7 +528,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
    * @param {string} agentId - Agent ID to analyze
    * @returns {string|null} Detected role or null
    */
-  detectAgentRole(_agentId) {
+  detectAgentRole(agentId) {
     const lowerAgentId = agentId.toLowerCase();
 
     for (const [role, patterns] of Object.entries(this.agentRolePatterns)) {
@@ -564,7 +564,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
         'development/logs/audit_integration.log',
         JSON.stringify(logEntry) + '\n',
       );
-    } catch (_) {
+    } catch (error) {
       this.logger.log(`⚠️ Failed to log audit task creation: ${error.message}`);
     }
   }

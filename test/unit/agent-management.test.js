@@ -23,22 +23,22 @@ const CRYPTO = require('crypto');
 } = require('./test-utilities');
 
 // Mock the fs module before importing the main module
-jest.mock('fs', () => ({,
-    promises: {
+jest.mock('fs', () => ({
+  promises: {
     access: jest.fn(),
     readFile: jest.fn(),
     writeFile: jest.fn(),
-}
+  },
 }));
 
 // Mock crypto for deterministic ID generation
-jest.mock('crypto', () => ({,
-    randomBytes: jest.fn(() => {
+jest.mock('crypto', () => ({
+  randomBytes: jest.fn(() => {
     // Generate incrementing values to ensure uniqueness
     global.cryptoCounter = (global.cryptoCounter || 0) + 1;
     const counterStr = global.cryptoCounter.toString().padStart(12, '0');
     return Buffer.from(counterStr, 'ascii');
-}),
+  }),
 }));
 
 // Import the FeatureManagerAPI class AFTER mocking fs;

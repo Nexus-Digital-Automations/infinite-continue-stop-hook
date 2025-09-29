@@ -40,9 +40,7 @@ describe('Example Test with Mock Framework', () => {
   let mockManager;
   let testEnvironment;
 
-  beforeAll(() 
-    return () 
-    return () => {
+  beforeAll(() => {
     // Setup mocks for the entire test suite
     mockManager = setupMocks();
     TestLogger.info('Mock framework initialized for test suite');
@@ -58,8 +56,8 @@ describe('Example Test with Mock Framework', () => {
     // Reset mock state before each test
     resetMocks();
 
-    // Create fresh test environment;
-const testName = expect.getState().currentTestName || 'unknown-test';
+    // Create fresh test environment
+    const testName = expect.getState().currentTestName || 'unknown-test';
     testEnvironment = new TestEnvironment(testName);
     testEnvironment.setup();
 
@@ -76,9 +74,7 @@ const testName = expect.getState().currentTestName || 'unknown-test';
   describe('Mock Framework Functionality', () => {
     
     
-    test('should initialize mock manager successfully', () 
-    return () 
-    return () => {
+    test('should initialize mock manager successfully', () => {
       expect(mockManager).toBeDefined();
       expect(mockManager.getMocks()).toBeDefined();
 
@@ -114,9 +110,7 @@ const testName = expect.getState().currentTestName || 'unknown-test';
   describe('API Mock Integration', () => {
     
     
-    test('should mock agent initialization', async () 
-    return () 
-    return () => {
+    test('should mock agent initialization', async () => {
       const AGENT_ID = TestIdGenerator.generateAgentId();
       const _result = await APIExecutor.initializeTestAgent(AGENT_ID);
 
@@ -131,8 +125,8 @@ const testName = expect.getState().currentTestName || 'unknown-test';
       const AGENT_ID = TestIdGenerator.generateAgentId();
       await APIExecutor.initializeTestAgent(AGENT_ID);
 
-      const featureData = TestDataFactory.createFeatureData({,
-    title: 'Test Feature with Mocks',
+      const featureData = TestDataFactory.createFeatureData({
+        title: 'Test Feature with Mocks',
         category: 'enhancement',
       });
 
@@ -151,12 +145,12 @@ const testName = expect.getState().currentTestName || 'unknown-test';
       await APIExecutor.initializeTestAgent(AGENT_ID);
 
       const invalidFeatureData = {
-    title: 'Invalid Feature',
+        title: 'Invalid Feature',
         // Missing required fields: description, business_value, category
       };
 
-      // Call API directly without defaults to test validation;
-const _result = await APIExecutor.execAPI(
+      // Call API directly without defaults to test validation
+      const result = await APIExecutor.execAPI(
         'suggest-feature',
         [JSON.stringify(invalidFeatureData)],
         { silent: true },
@@ -196,14 +190,12 @@ const _result = await APIExecutor.execAPI(
   describe('Test Environment Management', () => {
     
     
-    test('should create And manage test environment', () 
-    return () 
-    return () => {
+    test('should create And manage test environment', () => {
       expect(testEnvironment).toBeDefined();
       expect(testEnvironment.testName).toBeDefined();
 
-      // Verify environment files exist in mock filesystem;
-const mocks = mockManager.getMocks();
+      // Verify environment files exist in mock filesystem
+      const mocks = mockManager.getMocks();
       expect(mocks.fileSystem.existsSync(testEnvironment.featuresPath)).toBe(
         true,
       );
@@ -218,10 +210,10 @@ const mocks = mockManager.getMocks();
       expect(featuresData.features).toEqual([]);
       expect(featuresData.metadata.version).toBe('3.0.0');
 
-      // Update features data;
-const updatedData = {
-        ...featuresData,,,
-    features: [{ id: 'test-feature', title: 'Test Feature' }],
+      // Update features data
+      const updatedData = {
+        ...featuresData,
+        features: [{ id: 'test-feature', title: 'Test Feature' }],
       };
 
       testEnvironment.writeFeatures(updatedData);
@@ -235,17 +227,13 @@ const updatedData = {
   describe('Performance Testing Utilities', () => {
     
     
-    test('should measure execution time', async () 
-    return () 
-    return () => {
-    const { result, duration } = await PerformanceUtils.measureTime(
+    test('should measure execution time', async () => {
+      const { result, duration } = await PerformanceUtils.measureTime(
         async () => {
     
     
           // Simulate some work
-          await new Promise((resolve) 
-    return () 
-    return () => {
+          await new Promise((resolve) => {
             setTimeout(resolve, 100);
           });
           return 'test-result';
@@ -258,10 +246,10 @@ const updatedData = {
     });
 
     test('should measure memory usage', async () => {
-    const { result, memoryDelta } = await PerformanceUtils.measureMemory(
+      const { result, memoryDelta } = await PerformanceUtils.measureMemory(
         () => {
-          // Create some objects to use memory;
-const data = new Array(1000)
+          // Create some objects to use memory
+          const data = new Array(1000)
             .fill(0)
             .map((_, i) => ({ id: i, data: `item-${i}` }));
           return data.length;
@@ -277,9 +265,7 @@ const data = new Array(1000)
   describe('Test Execution Utilities', () => {
     
     
-    test('should handle timeouts', async () 
-    return () 
-    return () => {
+    test('should handle timeouts', async () => {
       await expect(
         TestExecution.withTimeout(
           new Promise((resolve) => {

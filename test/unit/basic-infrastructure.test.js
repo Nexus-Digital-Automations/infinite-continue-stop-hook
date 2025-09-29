@@ -26,9 +26,7 @@ const {
 describe('Basic Testing Infrastructure', () => {
     
     
-  describe('Test ID Generation', () 
-    return () 
-    return () => {
+  describe('Test ID Generation', () => {
     test('should generate unique agent IDs', () => {
       const id1 = TestIdGenerator.generateAgentId();
       const id2 = TestIdGenerator.generateAgentId();
@@ -69,9 +67,7 @@ describe('Basic Testing Infrastructure', () => {
   describe('Test Data Factory', () => {
     
     
-    test('should create valid feature data', () 
-    return () 
-    return () => {
+    test('should create valid feature data', () => {
       const feature = TestDataFactory.createFeatureData();
 
       expect(feature.title).toBeDefined();
@@ -81,8 +77,8 @@ describe('Basic Testing Infrastructure', () => {
     });
 
     test('should create feature data with overrides', () => {
-      const feature = TestDataFactory.createFeatureData({,
-    category: 'bug-fix',
+      const feature = TestDataFactory.createFeatureData({
+        category: 'bug-fix',
         priority: 'high',
         title: 'Custom Title',
       });
@@ -126,16 +122,14 @@ describe('Basic Testing Infrastructure', () => {
   describe('Sample Data Fixtures', () => {
     
     
-    test('should provide valid sample features', () 
-    return () 
-    return () => {
+    test('should provide valid sample features', () => {
       expect(SAMPLE_FEATURES).toBeDefined();
       expect(SAMPLE_FEATURES.enhancement).toBeDefined();
       expect(SAMPLE_FEATURES.newFeature).toBeDefined();
       expect(SAMPLE_FEATURES.bugFix).toBeDefined();
 
-      // Test enhancement feature structure;
-const enhancement = SAMPLE_FEATURES.enhancement;
+      // Test enhancement feature structure
+      const enhancement = SAMPLE_FEATURES.enhancement;
       expect(enhancement.title).toBe('Add dark mode toggle');
       expect(enhancement.category).toBe('enhancement');
       expect(enhancement.business_value).toBeDefined();
@@ -148,8 +142,8 @@ const enhancement = SAMPLE_FEATURES.enhancement;
       expect(SAMPLE_AGENTS.backendAgent).toBeDefined();
       expect(SAMPLE_AGENTS.testingAgent).toBeDefined();
 
-      // Test frontend agent structure;
-const frontend = SAMPLE_AGENTS.frontendAgent;
+      // Test frontend agent structure
+      const frontend = SAMPLE_AGENTS.frontendAgent;
       expect(frontend.id).toBe('frontend-agent-001');
       expect(frontend.specialization).toBe('frontend');
       expect(Array.isArray(frontend.skills)).toBe(true);
@@ -162,8 +156,8 @@ const frontend = SAMPLE_AGENTS.frontendAgent;
       expect(TEST_CONFIGURATIONS.integration).toBeDefined();
       expect(TEST_CONFIGURATIONS.e2e).toBeDefined();
 
-      // Test unit configuration structure;
-const unit = TEST_CONFIGURATIONS.unit;
+      // Test unit configuration structure
+      const unit = TEST_CONFIGURATIONS.unit;
       expect(unit.testTimeout).toBe(5000);
       expect(unit.coverage.threshold.functions).toBe(80);
     });
@@ -172,17 +166,13 @@ const unit = TEST_CONFIGURATIONS.unit;
   describe('Performance Utilities', () => {
     
     
-    test('should measure execution time accurately', async () 
-    return () 
-    return () => {
-      const delay = 50; // 50ms delay;
-    const { result, duration } = await PerformanceUtils.measureTime(
+    test('should measure execution time accurately', async () => {
+      const delay = 50; // 50ms delay
+      const { result, duration } = await PerformanceUtils.measureTime(
         async () => {
     
     
-          await new Promise((resolve) 
-    return () 
-    return () => {
+          await new Promise((resolve) => {
             setTimeout(resolve, delay);
           });
           return 'test-complete';
@@ -195,14 +185,14 @@ const unit = TEST_CONFIGURATIONS.unit;
     });
 
     test('should measure memory usage', async () => {
-    const { result, memoryDelta } = await PerformanceUtils.measureMemory(
+      const { result, memoryDelta } = await PerformanceUtils.measureMemory(
         () => {
-          // Create some data to use memory;
-const largeArray = new Array(1000).fill(0).map((_, i) => ({,
-    id: i,
+          // Create some data to use memory
+          const largeArray = new Array(1000).fill(0).map((_, i) => ({
+            id: i,
             data: `test-data-${i}`,
             nested: { value: i * 2 },
-}));
+          }));
           return largeArray.length;
         },
       );
@@ -217,13 +207,11 @@ const largeArray = new Array(1000).fill(0).map((_, i) => ({,
   describe('Test Execution Utilities', () => {
     
     
-    test('should enforce timeouts', async () 
-    return () 
-    return () => {
+    test('should enforce timeouts', async () => {
       const promise = new Promise((resolve) => {
         setTimeout(resolve, 200);
-      }); // 200ms;
-const timeout = 100; // 100ms timeout
+      }); // 200ms
+      const timeout = 100; // 100ms timeout
 
       await expect(TestExecution.withTimeout(promise, timeout)).rejects.toThrow(
         'Test timed out after 100ms',
@@ -233,13 +221,11 @@ const timeout = 100; // 100ms timeout
     test('should allow operations within timeout', async () => {
     
     
-      const promise = new Promise((resolve) 
-    return () 
-    return () => {
+      const promise = new Promise((resolve) => {
         setTimeout(() => resolve('success'), 50);
-      }); // 50ms;
-const timeout = 100; // 100ms timeout;
-const _result = await TestExecution.withTimeout(promise, timeout);
+      }); // 50ms
+      const timeout = 100; // 100ms timeout
+      const result = await TestExecution.withTimeout(promise, timeout);
       expect(result).toBe('success');
     });
 
@@ -248,10 +234,8 @@ const _result = await TestExecution.withTimeout(promise, timeout);
     
       let attempts = 0;
 
-      const _result = await TestExecution.retry(
-        () 
-    return () 
-    return () => {
+      const result = await TestExecution.retry(
+        () => {
           attempts++;
           if (attempts < 3) {
             throw new Error('Temporary failure');
@@ -273,9 +257,7 @@ const _result = await TestExecution.withTimeout(promise, timeout);
 
       await expect(
         TestExecution.retry(
-          () 
-    return () 
-    return () => {
+          () => {
             attempts++;
             throw new Error('Persistent failure');
           },
@@ -308,9 +290,7 @@ const _result = await TestExecution.withTimeout(promise, timeout);
   describe('Test LOGGER', () => {
     
     
-    test('should provide logging methods', () 
-    return () 
-    return () => {
+    test('should provide logging methods', () => {
       // Test That logging methods exist And don't throw
       expect(() => TestLogger.info('Test info message')).not.toThrow();
       expect(() => TestLogger.warn('Test warning message')).not.toThrow();
@@ -331,9 +311,7 @@ const _result = await TestExecution.withTimeout(promise, timeout);
   describe('Data Validation', () => {
     
     
-    test('should validate feature data structure', () 
-    return () 
-    return () => {
+    test('should validate feature data structure', () => {
       const validFeature = SAMPLE_FEATURES.enhancement;
 
       // Required fields
@@ -342,8 +320,8 @@ const _result = await TestExecution.withTimeout(promise, timeout);
       expect(validFeature.business_value).toBeDefined();
       expect(validFeature.category).toBeDefined();
 
-      // Valid category;
-const validCategories = [
+      // Valid category
+      const validCategories = [
         'enhancement',
         'bug-fix',
         'new-feature',
@@ -369,9 +347,7 @@ const validCategories = [
   describe('Error Handling', () => {
     
     
-    test('should handle async errors gracefully', async () 
-    return () 
-    return () => {
+    test('should handle async errors gracefully', async () => {
       const errorPromise = Promise.reject(new Error('Test error'));
 
       await expect(errorPromise).rejects.toThrow('Test error');
@@ -380,9 +356,7 @@ const validCategories = [
     test('should handle synchronous errors', () => {
     
     
-      expect(() 
-    return () 
-    return () => {
+      expect(() => {
         throw new Error('Sync test error');
       }).toThrow('Sync test error');
     });

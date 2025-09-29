@@ -96,12 +96,12 @@ function createLegacyTemplate(version = '1.0.0', category = 'general') {
       },
   ],
     // Legacy metadata structure
-    metadata{
-    created: '2023-01-01T00:00:00Z',
+    metadata: {
+      created: '2023-01-01T00:00:00Z',
       author: 'legacy-system',
       format_version: '1.0',
-    }
-};
+    },
+  };
 
   return execAPI('success-criteria:create-template', [
     JSON.stringify(legacyTemplate),
@@ -150,17 +150,17 @@ const packageJson = {
       description:
         'Regression testing project for Success Criteria backward compatibility',
       main: 'index.js',
-      scripts{
-    test: 'jest',
+      scripts: {
+        test: 'jest',
         build: 'echo "Build complete"',
         lint: 'echo "Lint complete"',
         start: 'node index.js',
       },
-      dependencies{},
-      devDependencies{
-    jest: '^29.0.0',
-      }
-};
+      dependencies: {},
+      devDependencies: {
+        jest: '^29.0.0',
+      },
+    };
 
     await FS.writeFile(
       path.join(TEST_PROJECT_DIR, 'package.json'),
