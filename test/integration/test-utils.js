@@ -41,8 +41,7 @@ function execAPI(command, args = [], options = {}, category = 'general') {
 
     const child = spawn(
       'timeout',
-      [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs],
-      {
+      [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs], {
         cwd: __dirname,
         stdio: ['pipe', 'pipe', 'pipe'],
         env: { ...process.env, NODE_ENV: 'test' },
@@ -72,14 +71,14 @@ function execAPI(command, args = [], options = {}, category = 'general') {
         }
 
         // Try to parse JSON response
-        const result = JSON.parse(jsonString);
+        const _result = JSON.parse(jsonString);
         resolve(result);
-      } catch (_1) {
+      } catch (_) {
         // If JSON parsing fails, check if we can extract JSON from stderr
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch (_1) {
+        } catch (_) {
           // If both fail, include raw output for debugging
           reject(
             new Error(
@@ -91,9 +90,9 @@ function execAPI(command, args = [], options = {}, category = 'general') {
     });
 
     child.on('error', (error) => {
-      reject(new Error(`Command execution failed: ${error.message}`));
+      reject(new Error(`Command execution failed: ${error.message}`));,
     });
-  });
+});
 }
 
 /**
@@ -126,7 +125,7 @@ async function createTestEnvironment(testName, category = 'general') {
       required_fields: ['title', 'description', 'business_value', 'category'],
     },
     agents: {},
-  };
+};
 
   const featuresPath = path.join(testDir, 'FEATURES.json');
   await FS.writeFile(featuresPath, JSON.stringify(featuresData, null, 2));
@@ -141,10 +140,10 @@ async function createTestEnvironment(testName, category = 'general') {
  */
 async function cleanupTestEnvironment(testDir, category = 'general') {
   try {
-    await FS.rm(testDir, { recursive: true, force: true });
-  } catch (error) {
+    await FS.rm(testDir, { recursive: true, force: true });,
+} catch (_) {
     loggers.stopHook.warn(`Cleanup warning for ${testDir}:`, error.message);
-  }
+}
 }
 
 /**
@@ -199,7 +198,7 @@ async function corruptFeaturesFile(testDir) {
 function delay(ms) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
-  });
+});
 }
 
 /**
@@ -227,7 +226,7 @@ function generateTestFeature(overrides = {}, category = 'general') {
       'Validates That the feature management system works correctly',
     category: 'enhancement',
     ...overrides,
-  };
+};
 }
 
 /**
@@ -241,7 +240,7 @@ function generateTestAgentConfig(overrides = {}) {
     specialization: ['integration-testing'],
     metadata: { test: true, environment: 'integration' },
     ...overrides,
-  };
+};
 }
 
 /**
@@ -254,21 +253,21 @@ function validateFeaturesStructure(featuresData) {
 
   for (const field of requiredFields) {
     if (!featuresData[field]) {
-      throw new Error(`Missing required field: ${field}`);
+      throw new Error(`Missing required field: ${field}`);,
     }
-  }
+}
 
   if (!Array.isArray(featuresData.features)) {
     throw new Error('features must be an array');
-  }
+}
 
   if (!featuresData.metadata.version) {
     throw new Error('metadata.version is required');
-  }
+}
 
   if (!Array.isArray(featuresData.workflow_config.allowed_statuses)) {
     throw new Error('workflow_config.allowed_statuses must be an array');
-  }
+}
 }
 
 /**
@@ -283,12 +282,12 @@ async function setupGlobalCleanup() {
     const entries = await FS.readdir(BASE_TEST_DIR);
     const cleanupPromises = entries.map((entry) => {
       const fullPath = path.join(BASE_TEST_DIR, entry);
-      return FS.rm(fullPath, { recursive: true, force: true });
+      return FS.rm(fullPath, { recursive: true, force: true });,
     });
     await Promise.all(cleanupPromises);
-  } catch (error) {
+} catch (_) {
     loggers.stopHook.warn('Global cleanup warning:', error.message);
-  }
+}
 }
 
 /**
@@ -296,10 +295,10 @@ async function setupGlobalCleanup() {
  */
 async function teardownGlobalCleanup() {
   try {
-    await FS.rm(BASE_TEST_DIR, { recursive: true, force: true });
-  } catch (error) {
+    await FS.rm(BASE_TEST_DIR, { recursive: true, force: true });,
+} catch (_) {
     loggers.stopHook.warn('Global teardown warning:', error.message);
-  }
+}
 }
 
 module.exports = {

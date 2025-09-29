@@ -7,7 +7,7 @@ const PATH = require('path');
  * Fix catch blocks that use 'error' variable but don't declare it in E2E tests
  */
 
-function fixCatchBlocks(filePath) {
+function fixCatchBlocks(_filePath) {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
     const lines = content.split('\n');
@@ -48,21 +48,21 @@ function fixCatchBlocks(filePath) {
 
         // If error is used, fix the catch declaration
         if (usesError) {
-          lines[i] = line.replace('} catch: {', '} catch (_1) {');
+          lines[i] = line.replace('} catch: {', '} catch (_) {');
           modified = true;
           console.log(`Fixed catch block at line ${i + 1} in ${filePath}`);
         }
       }
     }
 
-    if ((modified, filePath)) {
+    if ((modified, _filePath)) {
       fs.writeFileSync(filePath, lines.join('\n'));
       console.log(`Fixed catch blocks in: ${filePath}`);
       return true;
     }
 
     return false;
-  } catch (error) {
+  } catch (_) {
     console.error(`Error fixing ${filePath}:`, error.message);
     return false;
   }

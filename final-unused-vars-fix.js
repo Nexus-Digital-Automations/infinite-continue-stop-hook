@@ -11,43 +11,39 @@ const additionalPatterns = [
   {
     search: /^(\s*)const PATH = require\('path'\);/gm,
     replace: "$1const path = require('path');",
-  },
-  {
+  }, {
     search: /^(\s*)const path = require\('path'\);/gm,
     replace: "$1const path = require('path');",
-  },
+},
 
-  // execSync patterns
-  {
+  // execSync patterns {
     search: /const EXEC_SYNC = require/g,
     replace: 'const EXEC_SYNC = require',
-  },
+},
 
   // result variables
-  { search: /(\s+)const result = /g, replace: '$1const result = ' },
-  { search: /(\s+)let result = /g, replace: '$1let result = ' },
+  { search: /(\s+)const _result = /g, replace: '$1const _result = ' },
+  { search: /(\s+)let _result = /g, replace: '$1let _result = ' },
 
   // Catch error patterns - more specific
-  { search: /} catch \(error\) \{/g, replace: '} catch (error) {' },
-  { search: /catch \(error\) \{/g, replace: 'catch (error) {' },
-  { search: /catch\(error\) \{/g, replace: 'catch (_1) {' },
+  { search: /} catch \(error\) \{/g, replace: '} catch (_) {' },
+  { search: /catch \(error\) \{/g, replace: 'catch (_) {' },
+  { search: /catch\(error\) \{/g, replace: 'catch (_) {' },
 
-  // Function parameter patterns
-  {
+  // Function parameter patterns {
     search: /function[^(]*\(([^)]*\b_filePath\b[^)]*)\)/g,
     replace: function (match, _params, ___filename) {
       return match.replace(/\b_filePath\b/g, '__filename');
     },
-  },
-  {
+}, {
     search: /\(([^)]*\b_filePath\b[^)]*)\) =>/g,
     replace: function (match, _params, ___filename) {
       return match.replace(/\b_filePath\b/g, '__filename');
     },
-  },
+},
 
   // LINT_RESULT
-  { search: /const LINT_RESULT = /g, replace: 'const LINT_RESULT = ' },
+  { search: /const _LINT_RESULT = /g, replace: 'const _LINT_RESULT = ' },
 ];
 
 function getAllJSFiles(dir) {
@@ -67,12 +63,12 @@ function getAllJSFiles(dir) {
     } else if (item.endsWith('.js') && !item.startsWith('.')) {
       files.push(fullPath);
     }
-  }
+}
 
   return files;
 }
 
-function fixFileUnusedVars(filePath) {
+function fixFileUnusedVars(_filePath) {
   try {
     let content = fs.readFileSync(filePath, 'utf8');
     let modified = false;
@@ -84,7 +80,7 @@ function fixFileUnusedVars(filePath) {
           content = newContent;
           modified = true;
           console.log(
-            `  ✓ Applied function pattern in ${path.relative(process.cwd(), filePath)}`
+            `  ✓ Applied function pattern in ${path.relative(process.cwd(), _filePath)}`
           );
         }
       } else {
@@ -94,7 +90,7 @@ function fixFileUnusedVars(filePath) {
             content = newContent;
             modified = true;
             console.log(
-              `  ✓ Applied pattern in ${path.relative(process.cwd(), filePath)}`
+              `  ✓ Applied pattern in ${path.relative(process.cwd(), _filePath)}`
             );
           }
         }
@@ -107,10 +103,10 @@ function fixFileUnusedVars(filePath) {
     }
 
     return false;
-  } catch (error) {
+} catch (_) {
     console.error(`  ✗ Error processing ${filePath}:`, error.message);
     return false;
-  }
+}
 }
 
 function main() {
@@ -122,13 +118,13 @@ function main() {
   let totalModified = 0;
 
   for (const filePath of jsFiles) {
-    const relativePath = path.relative(projectRoot, filePath);
+    const relativePath = path.relative(projectRoot, _filePath);
 
-    if (fixFileUnusedVars(filePath)) {
+    if (fixFileUnusedVars(_filePath)) {
       console.log(`Processing: ${relativePath} - MODIFIED`);
       totalModified++;
     }
-  }
+}
 
   console.log(`\n🎉 Processing complete!`);
   console.log(`   Modified files: ${totalModified}`);
@@ -139,12 +135,12 @@ function main() {
   try {
     execSync('npm run lint', { stdio: 'pipe' });
     console.log('✅ All linting errors resolved!');
-  } catch (_1) {
+} catch (_) {
     console.log(
       '⚠️  Some linting errors may remain. Running detailed check...'
     );
     try {
-      const output = execSync(
+      const _output = execSync(
         'npm run lint 2>&1 | grep "no-unused-vars" | head -10',
         { encoding: 'utf8' }
       );
@@ -154,10 +150,10 @@ function main() {
       } else {
         console.log('✅ All no-unused-vars errors resolved!');
       }
-    } catch (_1) {
+    } catch (_) {
       console.log('✅ All no-unused-vars errors resolved!');
     }
-  }
+}
 }
 
 if (require.main === module) {

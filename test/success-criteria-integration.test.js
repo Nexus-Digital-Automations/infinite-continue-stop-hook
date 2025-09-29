@@ -45,8 +45,8 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
       'timeout',
       [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs], {
     stdio: ['pipe', 'pipe', 'pipe'],
-        env{ ...process.env, NODE_ENV: 'test' }
-  }
+        env{ ...process.env, NODE_ENV: 'test' },
+}
     );
 
     let stdout = '';
@@ -63,9 +63,9 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
     child.on('close', (code) => {
       if (code === 0) {
         try {
-          const result = JSON.parse(stdout);
+          const _result = JSON.parse(stdout);
           resolve(result);
-        } catch (error) {
+        } catch (_) {
           reject(
             new Error(`JSON parse error: ${error.message}\nOutput: ${stdout}`)
           );
@@ -80,7 +80,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
     });
 
     child.on('error', (_error) => {
-      reject(new Error(`Spawn error: ${error.message}`));
+      reject(new Error(`Spawn error: ${error.message}`));,
     });
 });
 }
@@ -109,7 +109,7 @@ const initialTodoData = {
         pending_tasks: 0,
         in_progress_tasks: 0,
       }
-  };
+};
 
     await FS.writeFile(TODO_PATH, JSON.stringify(initialTodoData, null, 2));
 
@@ -123,13 +123,13 @@ const packageJson = {
         lint: 'echo "Lint script"',
         build: 'echo "Build script"',
       }
-  };
+};
 
     await FS.writeFile(
       path.join(TEST_PROJECT_DIR, 'package.json'),
       JSON.stringify(packageJson, null, 2)
     );
-} catch (_1) {
+} catch (_) {
     loggers.stopHook.error('Failed to setup test project:', error);
     throw _error;
 }
@@ -140,8 +140,8 @@ const packageJson = {
  */
 async function cleanupTestProject(category = 'general') {
   try {
-    await FS.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
-} catch (_error, agentId) {
+    await FS.rm(TEST_PROJECT_DIR, { recursive: true, force: true });,
+} catch (_error, _agentId) {
     // Ignore cleanup errors
 }
 }
@@ -195,7 +195,7 @@ const CRITERIA = ['Linter Perfection', 'Build Success', 'Test Integrity'];
 
       // Note: Success criteria endpoints would be added to TaskManager API
       // for now, we test the underlying functionality through task updates;
-const result = await execAPI('list', [
+const _result = await execAPI('list', [
         JSON.stringify({ status: 'pending' }),
       ]);
       expect(result.success).toBe(true);
@@ -216,7 +216,7 @@ const listResult = await execAPI('list');
     test('should apply template to task success criteria', async () => {
       // Test template application
       // This would use POST /api/success-criteria/task/:taskId with template option;
-const result = await execAPI('list', [JSON.stringify({ id: taskId })]);
+const _result = await execAPI('list', [JSON.stringify({ id: taskId })]);
       expect(result.success).toBe(true);
     });
 
@@ -239,7 +239,7 @@ const claimResult = await execAPI('claim', [taskId, agentId]);
     test('should handle project-wide criteria templates', async () => {
       // Test project-wide template management
       // This would use GET /api/success-criteria/project-wide endpoint;
-const result = await execAPI('status', [agentId]);
+const _result = await execAPI('status', [agentId]);
       expect(result.success).toBe(true);
       expect(result.agent).toBeDefined();
     });
@@ -282,7 +282,7 @@ const completeResult = await execAPI('complete', [
             build: 'passed',
             runtime: 'passed',
           }
-  }),
+}),
       ]);
       expect(completeResult.success).toBe(true);
     });
@@ -440,7 +440,7 @@ const createResult = await execAPI('create', [
     test('should handle missing task for criteria operations', async () => {
       // Test operations on non-existent task
       try {
-        const result = await execAPI('complete', ['non_existent_task_id']);
+        const _result = await execAPI('complete', ['non_existent_task_id']);
         expect(result.success).toBe(false);
       } catch (_error, category = 'general') {
         // Expected to fail
@@ -475,7 +475,7 @@ const completeResult = await execAPI('complete', [
             build: 'passed',
             runtime: 'failed',
           }
-  }),
+}),
       ]);
 
       // Should still complete but record validation issues
@@ -546,7 +546,7 @@ const tasks = [{
     title: 'No criteria task',
           description: 'Task without criteria',
           category: 'feature',
-        }
+        },
   ];
 
       const CREATE_PROMISES = tasks.map((task) =>

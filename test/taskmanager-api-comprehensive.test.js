@@ -75,14 +75,14 @@ const jsonStart = jsonString.indexOf('{');
         }
 
         // Try to parse JSON response;
-const result = JSON.parse(jsonString);
+const _result = JSON.parse(jsonString);
         resolve(result);
-      } catch (_1) {
+      } catch (_) {
         // If JSON parsing fails, check if we can extract JSON from stderr
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch (_1) {
+        } catch (_) {
           // If both fail, include raw output for debugging
           reject(
             new Error(
@@ -94,7 +94,7 @@ const result = JSON.parse(jsonString);
     });
 
     child.on('error', (error) => {
-      reject(new Error(`Command execution failed: ${error.message}`));
+      reject(new Error(`Command execution failed: ${error.message}`));,
     });
 });
 }
@@ -118,7 +118,7 @@ function createTestTodoFile(category = 'general') {
     version: '2.0.0',
       created: new Date().toISOString(),
     }
-  };
+};
 
   FS.writeFileSync(TODO_PATH, JSON.stringify(todoData, null, 2));
   return todoData;
@@ -130,7 +130,7 @@ function createTestTodoFile(category = 'general') {
 function setupTestEnvironment(category = 'general') {
   // Create test project directory
   if (!FS.existsSync(TEST_PROJECT_DIR)) {
-    FS.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
+    FS.mkdirSync(TEST_PROJECT_DIR, { recursive: true });,
 }
 
   // Create clean TODO.json
@@ -143,7 +143,7 @@ function setupTestEnvironment(category = 'general') {
 async function cleanupTestEnvironment(agentId, category = 'general') {
   // Remove test project directory And all contents
   if (FS.existsSync(TEST_PROJECT_DIR)) {
-    FS.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
+    FS.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });,
 }
 }
 
@@ -174,7 +174,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
     test('should return comprehensive guide', async () 
     return () 
     return () => {
-      const result = await execAPI('guide');
+      const _result = await execAPI('guide');
 
       expect(result.success).toBe(true);
       expect(result.taskManager).toBeDefined();
@@ -199,7 +199,7 @@ const taskTypes = result.taskClassification.types;
     });
 
     test('should list all available methods', async () => {
-      const result = await execAPI('methods');
+      const _result = await execAPI('methods');
 
       expect(result.success).toBe(true);
       expect(result.taskManagerMethods).toBeDefined();
@@ -228,7 +228,7 @@ const taskTypes = result.taskClassification.types;
     test('should initialize agent with default configuration', async () 
     return () 
     return () => {
-      const result = await execAPI('init');
+      const _result = await execAPI('init');
 
       expect(result.success).toBe(true);
       expect(result.agentId).toBeDefined();
@@ -243,10 +243,10 @@ const taskTypes = result.taskClassification.types;
       const config = {
     role: 'testing',
         specialization: ['unit-tests', 'integration-tests'],
-        metadata{ environment: 'ci' }
-  };
+        metadata{ environment: 'ci' },
+};
 
-      const result = await execAPI('init', [JSON.stringify(config)]);
+      const _result = await execAPI('init', [JSON.stringify(config)]);
 
       expect(result.success).toBe(true);
       expect(result.agentId).toBeDefined();
@@ -266,7 +266,7 @@ const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
 
       // Get agent status;
-const result = await execAPI('status', [testAgentId]);
+const _result = await execAPI('status', [testAgentId]);
 
       expect(result.success).toBe(true);
       expect(result.agent).toBeDefined();
@@ -283,10 +283,10 @@ const initResult = await execAPI('init');
 
       // Reinitialize with updated config;
 const updateConfig = {
-    metadata{ updated: true, timestamp: new Date().toISOString() }
-  };
+    metadata{ updated: true, timestamp: new Date().toISOString() },
+};
 
-      const result = await execAPI('reinitialize', [
+      const _result = await execAPI('reinitialize', [
         testAgentId,
         JSON.stringify(updateConfig),
       ]);
@@ -298,7 +298,7 @@ const updateConfig = {
     });
 
     test('should handle agent status request without agent initialization', async () => {
-      const result = await execAPI('status');
+      const _result = await execAPI('status');
 
       expect(result.success).toBe(false);
       expect(result.error).toBe(
@@ -331,7 +331,7 @@ const initResult = await execAPI('init');
         category: 'linter-error',
       };
 
-      const result = await execAPI('create', [JSON.stringify(taskData)]);
+      const _result = await execAPI('create', [JSON.stringify(taskData)]);
 
       expect(result.success).toBe(true);
       expect(result.taskId).toBeDefined();
@@ -351,7 +351,7 @@ const initResult = await execAPI('init');
         category: 'authentication',
       };
 
-      const result = await execAPI('create', [JSON.stringify(taskData)]);
+      const _result = await execAPI('create', [JSON.stringify(taskData)]);
 
       expect(result.success).toBe(true);
       expect(result.taskId).toBeDefined();
@@ -369,7 +369,7 @@ const initResult = await execAPI('init');
         task.category: 'ui-component',
       };
 
-      const result = await execAPI('create', [JSON.stringify(taskData)]);
+      const _result = await execAPI('create', [JSON.stringify(taskData)]);
 
       expect(result.success).toBe(true);
       expect(result.taskId).toBeDefined();
@@ -387,7 +387,7 @@ const initResult = await execAPI('init');
         task.category: 'test-coverage',
       };
 
-      const result = await execAPI('create', [JSON.stringify(taskData)]);
+      const _result = await execAPI('create', [JSON.stringify(taskData)]);
 
       expect(result.success).toBe(true);
       expect(result.taskId).toBeDefined();
@@ -403,7 +403,7 @@ const initResult = await execAPI('init');
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [JSON.stringify(taskData)]);
+      const _result = await execAPI('create', [JSON.stringify(taskData)]);
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('task_type');
@@ -418,7 +418,7 @@ const initResult = await execAPI('init');
         category: 'system-error',
       };
 
-      const result = await execAPI('create-error', [JSON.stringify(taskData)]);
+      const _result = await execAPI('create-error', [JSON.stringify(taskData)]);
 
       expect(result.success).toBe(true);
       expect(result.taskId).toBeDefined();
@@ -454,7 +454,7 @@ const taskData = {
     });
 
     test('should claim available task successfully', async () => {
-      const result = await execAPI('claim', [testTaskId, testAgentId]);
+      const _result = await execAPI('claim', [testTaskId, testAgentId]);
 
       expect(result.success).toBe(true);
       expect(result.task).toBeDefined();
@@ -472,7 +472,7 @@ const secondInitResult = await execAPI('init');
       const secondAgentId = secondInitResult.agentId;
 
       // Try to claim the same task;
-const result = await execAPI('claim', [testTaskId, secondAgentId]);
+const _result = await execAPI('claim', [testTaskId, secondAgentId]);
 
       expect(result.success).toBe(false);
       expect(result.reason).toContain('not available for claiming');
@@ -500,7 +500,7 @@ const taskData = {
       const mainTaskId = createResult.taskId;
 
       // Try to claim task with incomplete dependency;
-const result = await execAPI('claim', [mainTaskId, testAgentId]);
+const _result = await execAPI('claim', [mainTaskId, testAgentId]);
 
       expect(result.success).toBe(false);
       expect(result.blockedByDependencies).toBe(true);
@@ -513,7 +513,7 @@ const result = await execAPI('claim', [mainTaskId, testAgentId]);
       await execAPI('claim', [testTaskId, testAgentId]);
 
       // Get current task;
-const result = await execAPI('current', [testAgentId]);
+const _result = await execAPI('current', [testAgentId]);
 
       expect(result.success).toBe(true);
       expect(result.task).toBeDefined();
@@ -555,7 +555,7 @@ const initResult = await execAPI('init');
         evidence: 'All tests passing, linting clean',
       };
 
-      const result = await execAPI('complete', [
+      const _result = await execAPI('complete', [
         testTaskId,
         JSON.stringify(completionData),
       ]);
@@ -580,7 +580,7 @@ const featureTaskData = {
 
       // Claim And complete the feature task
       await execAPI('claim', [featureTaskId, testAgentId]);
-      const result = await execAPI('complete', [featureTaskId]);
+      const _result = await execAPI('complete', [featureTaskId]);
 
       expect(result.success).toBe(true);
       expect(result.documentationInstructions).toBeDefined();
@@ -591,7 +591,7 @@ const featureTaskData = {
     });
 
     test('should complete task without optional completion data', async () => {
-      const result = await execAPI('complete', [testTaskId]);
+      const _result = await execAPI('complete', [testTaskId]);
 
       expect(result.success).toBe(true);
       expect(result.taskId).toBe(testTaskId);
@@ -634,7 +634,7 @@ const tasks = [{
           task_type: 'subtask',
           priority: 'low',
           category: 'ui-component',
-        }
+        },
   ];
 
       await Promise.all(
@@ -643,7 +643,7 @@ const tasks = [{
     });
 
     test('should list all tasks without filter', async () => {
-      const result = await execAPI('list');
+      const _result = await execAPI('list');
 
       expect(result.success).toBe(true);
       expect(result.tasks).toHaveLength(4);
@@ -655,7 +655,7 @@ const tasks = [{
     });
 
     test('should filter tasks by status', async () => {
-      const result = await execAPI('list', [
+      const _result = await execAPI('list', [
         JSON.stringify({ status: 'pending' }),
       ]);
 
@@ -667,7 +667,7 @@ const tasks = [{
     });
 
     test('should filter tasks by task_type', async () => {
-      const result = await execAPI('list', [
+      const _result = await execAPI('list', [
         JSON.stringify({ task_type: 'error' }),
       ]);
 
@@ -677,7 +677,7 @@ const tasks = [{
     });
 
     test('should filter tasks by priority', async () => {
-      const result = await execAPI('list', [
+      const _result = await execAPI('list', [
         JSON.stringify({ priority: 'high' }),
       ]);
 
@@ -687,7 +687,7 @@ const tasks = [{
     });
 
     test('should filter tasks by category', async () => {
-      const result = await execAPI('list', [
+      const _result = await execAPI('list', [
         JSON.stringify({ category: 'authentication' }),
       ]);
 
@@ -714,7 +714,7 @@ const initResult = await execAPI('init');
       const tasks = [
         { title: 'First task', task_type: 'feature', priority: 'medium' },
         { title: 'Second task', task_type: 'feature', priority: 'low' },
-        { title: 'Third task', task_type: 'feature', priority: 'high' }
+        { title: 'Third task', task_type: 'feature', priority: 'high' },
   ];
 
       const createResults = await Promise.all(
@@ -723,14 +723,14 @@ const initResult = await execAPI('init');
 
       // Find the test task ID from results
       tasks.forEach((taskData, index) => {
-        if (taskData.title === 'Second task', agentId) {
+        if (taskData.title === 'Second task', _agentId) {
           testTaskId = createResults[index].taskId;
         }
       });
     });
 
     test('should move task to top', async () => {
-      const result = await execAPI('move-top', [testTaskId]);
+      const _result = await execAPI('move-top', [testTaskId]);
 
       expect(result.success).toBe(true);
       expect(result.moved).toBe(true);
@@ -742,7 +742,7 @@ const listResult = await execAPI('list');
     });
 
     test('should move task up one position', async () => {
-      const result = await execAPI('move-up', [testTaskId]);
+      const _result = await execAPI('move-up', [testTaskId]);
 
       expect(result.success).toBe(true);
       expect(result.moved).toBe(true);
@@ -750,7 +750,7 @@ const listResult = await execAPI('list');
     });
 
     test('should move task down one position', async () => {
-      const result = await execAPI('move-down', [testTaskId]);
+      const _result = await execAPI('move-down', [testTaskId]);
 
       expect(result.success).toBe(true);
       expect(result.moved).toBe(true);
@@ -758,7 +758,7 @@ const listResult = await execAPI('list');
     });
 
     test('should move task to bottom', async () => {
-      const result = await execAPI('move-bottom', [testTaskId]);
+      const _result = await execAPI('move-bottom', [testTaskId]);
 
       expect(result.success).toBe(true);
       expect(result.moved).toBe(true);
@@ -796,7 +796,7 @@ const initResult = await execAPI('init');
         estimated_effort: 'medium',
       };
 
-      const result = await execAPI('suggest-feature', [
+      const _result = await execAPI('suggest-feature', [
         JSON.stringify(featureData),
         testAgentId,
       ]);
@@ -823,7 +823,7 @@ const featureData = {
       ]);
 
       // List suggested features;
-const result = await execAPI('list-suggested-features');
+const _result = await execAPI('list-suggested-features');
 
       expect(result.success).toBe(true);
       expect(result.suggested_features).toHaveLength(1);
@@ -846,7 +846,7 @@ const featureData = {
       testFeatureId = suggestResult.featureId;
 
       // Approve the feature;
-const result = await execAPI('approve-feature', [
+const _result = await execAPI('approve-feature', [
         testFeatureId,
         'test-user',
       ]);
@@ -873,7 +873,7 @@ const featureData = {
 
       // Reject the feature;
 const reason = 'Not aligned with project goals';
-      const result = await execAPI('reject-feature', [
+      const _result = await execAPI('reject-feature', [
         testFeatureId,
         'test-user',
         reason,
@@ -901,7 +901,7 @@ const featureData = {
       await execAPI('approve-feature', [suggestResult.featureId, 'test-user']);
 
       // List all features;
-const result = await execAPI('list-features');
+const _result = await execAPI('list-features');
 
       expect(result.success).toBe(true);
       expect(result.features.length).toBeGreaterThan(0);
@@ -921,7 +921,7 @@ const approvedResult = await execAPI('list-features', [
       // Create some features in different states;
 const features = [
         { title: 'Suggested feature', status: 'suggested' },
-        { title: 'Another suggested feature', status: 'suggested' }
+        { title: 'Another suggested feature', status: 'suggested' },
   ];
 
       await Promise.all(
@@ -930,7 +930,7 @@ const features = [
         )
       );
 
-      const result = await execAPI('feature-stats');
+      const _result = await execAPI('feature-stats');
 
       expect(result.success).toBe(true);
       expect(result.feature_statistics).toBeDefined();
@@ -965,7 +965,7 @@ const initResult = await execAPI('init');
     });
 
     test('should delete existing task', async () => {
-      const result = await execAPI('delete', [testTaskId]);
+      const _result = await execAPI('delete', [testTaskId]);
 
       expect(result.success).toBe(true);
       expect(result.taskId).toBe(testTaskId);
@@ -979,7 +979,7 @@ const listResult = await execAPI('list');
 
     test('should handle deletion of non-existent task', async () => {
       const fakeTaskId = 'fake_task_12345_abc';
-      const result = await execAPI('delete', [fakeTaskId]);
+      const _result = await execAPI('delete', [fakeTaskId]);
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Task not found');
@@ -1003,7 +1003,7 @@ const initResult = await execAPI('init');
       // Create And claim some tasks for statistics;
 const tasks = [
         { title: 'Active task 1', task_type: 'feature', priority: 'high' },
-        { title: 'Active task 2', task_type: 'error', priority: 'critical' }
+        { title: 'Active task 2', task_type: 'error', priority: 'critical' },
   ];
 
       const createResults = await Promise.all(
@@ -1018,7 +1018,7 @@ const tasks = [
     });
 
     test('should get orchestration statistics', async () => {
-      const result = await execAPI('stats');
+      const _result = await execAPI('stats');
 
       expect(result.success).toBe(true);
       expect(result.statistics).toBeDefined();
@@ -1043,7 +1043,7 @@ const stats = result.statistics;
     return () => {
       try {
         await execAPI('invalid-command');
-      } catch (error) {
+      } catch (_) {
         expect(_error.message).toContain('Command failed');
       }
     });
@@ -1052,7 +1052,7 @@ const stats = result.statistics;
       // Initialize agent first
       await execAPI('init');
 
-      const result = await execAPI('create', ['{ invalid json }']);
+      const _result = await execAPI('create', ['{ invalid json }']);
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Invalid JSON');
@@ -1067,7 +1067,7 @@ const taskData = {
       };
       const createResult = await execAPI('create', [JSON.stringify(taskData)]);
 
-      const result = await execAPI('claim', [createResult.taskId]);
+      const _result = await execAPI('claim', [createResult.taskId]);
 
       expect(result.success).toBe(false);
       expect(result.error).toBe(
@@ -1077,7 +1077,7 @@ const taskData = {
 
     test('should handle missing required parameters', async () => {
       // Try to claim task without task ID;
-const result = await execAPI('claim');
+const _result = await execAPI('claim');
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Task ID required');
@@ -1088,7 +1088,7 @@ const result = await execAPI('claim');
       // by using a very short timeout
       try {
         await execAPI('guide', [], 100); // 100ms timeout
-      } catch (error) {
+      } catch (_) {
         expect(_error.message).toContain('Command failed');
       }
     }, 10000);

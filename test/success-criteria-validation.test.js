@@ -34,8 +34,8 @@ const allArgs = [API_PATH, command, ...args];
       [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs], {
     stdio: ['pipe', 'pipe', 'pipe'],
         cwd: TEST_PROJECT_DIR, // Execute from test project directory
-        env{ ...process.env, NODE_ENV: 'test' }
-  },
+        env{ ...process.env, NODE_ENV: 'test' },
+},
     );
 
     let stdout = '';
@@ -52,9 +52,9 @@ const allArgs = [API_PATH, command, ...args];
     child.on('close', (code) => {
       if (code === 0) {
         try {
-          const result = stdout.trim() ? JSON.parse(stdout) {};
+          const _result = stdout.trim() ? JSON.parse(stdout) {};
           resolve(result);
-        } catch (_1) {
+        } catch (_) {
           resolve({ rawOutput: stdout, stderr });
         }
       } else {
@@ -93,7 +93,7 @@ const packageJson = {
       devDependencies{
     jest: '^29.0.0',
       }
-  };
+};
 
     await FS.writeFile(
       path.join(TEST_PROJECT_DIR, 'package.json'),
@@ -106,7 +106,7 @@ loggers.stopHook.log('Features test application started');
 
 // Simulate a test application for feature validation;
 class FeaturesTestApp {
-  constructor(agentId) {
+  constructor(_agentId) {
     this.status = 'initialized';
     this.features = [];
 }
@@ -119,7 +119,7 @@ class FeaturesTestApp {
 
   addFeature(feature) {
     this.features.push(feature);
-    loggers.stopHook.log(\`Feature added: \${feature.title}\`);
+    loggers.stopHook.log(\`Feature added: \${feature.title}\`);,
 }
 
   stop(category = 'general') {
@@ -169,7 +169,7 @@ const initialFeatures = {
     await FS.writeFile(FEATURES_PATH, JSON.stringify(initialFeatures, null, 2));
 
     loggers.stopHook.log('Features test project setup completed');
-} catch (_1) {
+} catch (_) {
     loggers.stopHook.error('Failed to setup features test project:', error);
     throw _error;
 }
@@ -179,7 +179,7 @@ async function cleanupFeaturesTestProject(category = 'general') {
   try {
     await FS.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     loggers.stopHook.log('Features test project cleanup completed');
-} catch (_1) {
+} catch (_) {
     loggers.stopHook.error('Failed to cleanup features test project:', error);
 }
 }
@@ -277,13 +277,13 @@ const features = [{
           business_value:
             'Improves application performance And user satisfaction',
           category: 'performance',
-        }
+        },
   ];
 
       const createdFeatures = [];
       for (const feature of features) {
         // eslint-disable-next-line no-await-in-loop -- Sequential feature creation required for validation;
-const result = await createFeature(feature);
+const _result = await createFeature(feature);
         expect(result.success).toBe(true);
         expect(result.feature).toBeDefined();
         expect(result.feature.status).toBe('suggested');
@@ -325,7 +325,7 @@ const BASE_CRITERIA = [{
     id: 'override-test-3',
           description: 'Base requirement 3',
           category: 'quality',
-        }
+        },
   ];
 
       await createBaseTemplate('Override Base Template', BASE_CRITERIA);
@@ -335,7 +335,7 @@ const CHILD_CRITERIA = [{
     id: 'child-new',
           description: 'New child requirement',
           category: 'security',
-        }
+        },
   ];
 
       const OVERRIDES = {
@@ -344,7 +344,7 @@ const CHILD_CRITERIA = [{
           priority: 'high',
           tags: ['override', 'critical'],
         }
-  };
+};
 
       await createChildTemplate(
         'Override Child Template',
@@ -389,7 +389,7 @@ const GRANDPARENT_CRITERIA = [{
     id: 'gp-2',
           description: 'Grandparent requirement 2',
           category: 'core',
-        }
+        },
   ];
 
       await createBaseTemplate('Grandparent Template', GRANDPARENT_CRITERIA);
@@ -403,7 +403,7 @@ const PARENT_CRITERIA = [{
     id: 'parent-2',
           description: 'Parent requirement 2',
           category: 'test',
-        }
+        },
   ];
 
       await createChildTemplate(
@@ -417,7 +417,7 @@ const CHILD_CRITERIA = [{
     id: 'child-1',
           description: 'Child requirement 1',
           category: 'deploy',
-        }
+        },
   ];
 
       await createChildTemplate(
@@ -459,7 +459,7 @@ const BASE_CRITERIA = [{
     id: 'base-unique',
           description: 'Base unique requirement',
           category: 'test',
-        }
+        },
   ];
 
       await createBaseTemplate('Conflict Base Template', BASE_CRITERIA);
@@ -474,7 +474,7 @@ const BASE_CRITERIA = [{
     id: 'child-unique',
           description: 'Child unique requirement',
           category: 'performance',
-        }
+        },
   ];
 
       await createChildTemplate(
@@ -522,7 +522,7 @@ const BASE_CRITERIA = [{
       // Create base template;
 const BASE_CRITERIA = [
         { id: 'base-1', description: 'Base requirement 1', category: 'build' },
-        { id: 'base-2', description: 'Base requirement 2', category: 'test' }
+        { id: 'base-2', description: 'Base requirement 2', category: 'test' },
   ];
 
       await createBaseTemplate('Custom Base Template', BASE_CRITERIA);
@@ -541,12 +541,12 @@ const CUSTOM_CRITERIA = [{
     source: 'project-requirements',
             addedBy: 'testing-agent',
           }
-  }, {
+}, {
     id: 'custom-2',
           description: 'Another custom requirement',
           category: 'integration',
           priority: 'high',
-        }
+        },
   ];
 
       // Use for-await-of to maintain sequential processing for criteria addition
@@ -579,7 +579,7 @@ const customCriterion1 = status.PROJECT_CRITERIA.find(
     test('should validate custom criteria modification And removal', async () => {
       // Setup base template And custom criterion;
 const BASE_CRITERIA = [
-        { id: 'base-1', description: 'Base requirement', category: 'build' }
+        { id: 'base-1', description: 'Base requirement', category: 'build' },
   ];
 
       await createBaseTemplate('Modification Base Template', BASE_CRITERIA);
@@ -643,7 +643,7 @@ const INITIAL_CRITERIA = [{
     id: 'initial-1',
           description: 'Initial requirement',
           category: 'build',
-        }
+        },
   ];
 
       await createBaseTemplate('Initial Template', INITIAL_CRITERIA);
@@ -666,7 +666,7 @@ const NEW_CRITERIA = [
     id: 'new-2',
           description: 'Another new requirement',
           category: 'quality',
-        }
+        },
   ];
 
       await createBaseTemplate('New Template', NEW_CRITERIA);
@@ -714,7 +714,7 @@ const VERSIONED_CRITERIA = [
     id: 'v1-2',
           description: 'Version 1 requirement 2',
           category: 'test',
-        }
+        },
   ];
 
       const versionedTemplate = {
@@ -725,7 +725,7 @@ const VERSIONED_CRITERIA = [
     minSystemVersion: '2.0.0',
           maxSystemVersion: '3.0.0',
         }
-  };
+};
 
       await execAPI('success-criteria:create-template', [
         JSON.stringify(versionedTemplate),
@@ -753,7 +753,7 @@ const status = await execAPI('success-criteria:status');
       // Create initial version of template;
 const V1CRITERIA = [
         { id: 'upgrade-1', description: 'V1 requirement', category: 'build' },
-        { id: 'upgrade-2', description: 'V1 requirement 2', category: 'test' }
+        { id: 'upgrade-2', description: 'V1 requirement 2', category: 'test' },
   ];
 
       const v1Template = {
@@ -834,7 +834,7 @@ const DEPENDENCY_CRITERIA = [{
     id: 'dep-2',
           description: 'Dependency requirement 2',
           category: 'core',
-        }
+        },
   ];
 
       const DEPENDENCY_TEMPLATE = {
@@ -850,7 +850,7 @@ const DEPENDENCY_CRITERIA = [{
       // Create main template with dependencies;
 const MAIN_CRITERIA = [
         { id: 'main-1', description: 'Main requirement 1', category: 'build' },
-        { id: 'main-2', description: 'Main requirement 2', category: 'test' }
+        { id: 'main-2', description: 'Main requirement 2', category: 'test' },
   ];
 
       const MAIN_TEMPLATE = {
@@ -861,7 +861,7 @@ const MAIN_CRITERIA = [
     template: 'Dependency Template',
             version: '>=1.0.0',
             required: true,
-          }
+          },
   ],
       };
 
@@ -918,7 +918,7 @@ const BASE_CRITERIA = [{
     id: 'env-base-1',
           description: 'Base requirement',
           category: 'build',
-        }
+        },
   ];
 
       await createBaseTemplate('Environment Base Template', BASE_CRITERIA);
@@ -980,7 +980,7 @@ const BASE_CRITERIA = [{
     id: 'conditional-base',
           description: 'Base requirement',
           category: 'build',
-        }
+        },
   ];
 
       await createBaseTemplate('Conditional Base Template', BASE_CRITERIA);
@@ -997,7 +997,7 @@ const WEB_APP_CRITERIA = {
     projectType: 'webapp',
           hasPackageJson: true,
         }
-  };
+};
 
       const API_CRITERIA = {
     id: 'api-specific',
@@ -1007,7 +1007,7 @@ const WEB_APP_CRITERIA = {
     projectType: 'api',
           hasDockerfile: true,
         }
-  };
+};
 
       await execAPI('success-criteria:add-criterion', [
         JSON.stringify(WEB_APP_CRITERIA),
@@ -1070,7 +1070,7 @@ const PRIORITIZED_CRITERIA = [{
           description: 'Low priority requirement 1',
           category: 'documentation',
           priority: 'low',
-        }
+        },
   ];
 
       await createBaseTemplate('Prioritized Template', PRIORITIZED_CRITERIA);
@@ -1130,7 +1130,7 @@ const ORG_CRITERIA = [{
           description: 'Organizational compliance requirement',
           category: 'compliance',
           priority: 'high',
-        }
+        },
   ];
 
       await createBaseTemplate('Organization Standard Template', ORG_CRITERIA);
@@ -1146,7 +1146,7 @@ const TEAM_CRITERIA = [{
           description: 'Team performance standard',
           category: 'performance',
           priority: 'medium',
-        }
+        },
   ];
 
       await createChildTemplate(
@@ -1161,7 +1161,7 @@ const PROJECT_CRITERIA = [{
           description: 'Project-specific requirement',
           category: 'project',
           priority: 'medium',
-        }
+        },
   ];
 
       await createChildTemplate(
@@ -1236,7 +1236,7 @@ const VALIDATION_CRITERIA = [{
           validationType: 'command',
           validationCommand: 'npm run lint',
           priority: 'medium',
-        }
+        },
   ];
 
       await createBaseTemplate('Validation Template', VALIDATION_CRITERIA);

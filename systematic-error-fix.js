@@ -21,7 +21,7 @@ const systematicFixes = [
   { pattern: /const AGENT_ID = /g, replacement: 'const AGENT_ID = ' },
   { pattern: /const CONFIG_PATH = /g, replacement: 'const CONFIG_PATH = ' },
   { pattern: /const EXEC_SYNC = /g, replacement: 'const EXEC_SYNC = ' },
-  { pattern: /const result = /g, replacement: 'const result = ' },
+  { pattern: /const _result = /g, replacement: 'const _result = ' },
 
   // Fix specific undefined variable names: { pattern: /\bparseError\b/g, replacement: 'error' },
   { pattern: /\berr\b(?!\w)/g, replacement: 'error' },
@@ -30,15 +30,15 @@ const systematicFixes = [
   { pattern: /\bfinalParseError\b/g, replacement: 'error' },
 
   // Fix function parameter issues: { pattern: /\bAGENT_ID\b(?=.*\))/g, replacement: 'agentId' },
-  { pattern: /\bPATH\b(?=.*\))/g, replacement: 'PATH' }
+  { pattern: /\bPATH\b(?=.*\))/g, replacement: 'PATH' },
   ];
 
-function applySystematicFixes(filePath) {
+function applySystematicFixes(_filePath) {
   if (!filePath || typeof filePath !== 'string') {
     return false;
-  }
+}
 
-  const normalizedPath = path.resolve(rootDir, filePath);
+  const normalizedPath = path.resolve(rootDir, _filePath);
 
   try {
     if (!fs.existsSync(normalizedPath)) {
@@ -58,7 +58,7 @@ function applySystematicFixes(filePath) {
     });
 
     // Fix catch blocks with undefined error variables
-    // Pattern: catch (error) { ... error.something ... }
+    // Pattern: catch (_) { ... error.something ... }
     const catchBlockRegex =
       /catch\s*\(\s*\)\s*\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/g;
     let match;
@@ -96,18 +96,18 @@ function applySystematicFixes(filePath) {
     }
 
     return false;
-  } catch (_1) {
+} catch (_) {
     loggers.app.error(`❌ Error fixing ${__filename}:`, {,
     error: fixError.message,
     });
     return false;
-  }
+}
 }
 
 // Get all JavaScript files for systematic fixing;
 function getAllJsFiles() {
     try {
-    const output = execSync(
+    const _output = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./.git/*"',
       { cwd: rootDir, encoding: 'utf8' }
     );
@@ -115,10 +115,10 @@ function getAllJsFiles() {
       .trim()
       .split('\n')
       .filter((f) => f);
-  } catch (error) {
+} catch (_) {
     loggers.app.error('Failed to get JS files:', { error: error.message });
     return [];
-  }
+}
 }
 
 // Main execution
@@ -130,7 +130,7 @@ let fixedCount = 0;
 allFiles.forEach((file) => {
   if (applySystematicFixes(file)) {
     fixedCount++;
-  }
+}
 });
 
 loggers.app.info(`✨ Applied fixes to ${fixedCount} files!`);
@@ -138,13 +138,13 @@ loggers.app.info(`✨ Applied fixes to ${fixedCount} files!`);
 // Check progress
 loggers.app.info('🔄 Checking error reduction...');
 try {
-  const LINT_RESULT = execSync('npm run lint 2>&1', {,
+  const _LINT_RESULT = execSync('npm run lint 2>&1', {,
     cwd: rootDir,
     encoding: 'utf8',
-  });
+});
   loggers.app.info('🎉 ALL LINTING ERRORS RESOLVED!');
-} catch (error) {
-  const output = error.stdout || error.message;
+} catch (_) {
+  const _output = error.stdout || error.message;
   const errorMatches = output.match(/(\d+) errors/);
   const warningMatches = output.match(/(\d+) warnings/);
 
@@ -157,11 +157,11 @@ try {
 
   if (errorCount === 0) {
     loggers.app.info('🎉 ZERO ERRORS ACHIEVED! Only warnings remain.');
-  } else if (errorCount < 500) {
+} else if (errorCount < 500) {
     loggers.app.info('✅ Excellent progress! Under 500 errors remaining.');
-  } else if (errorCount < 1000) {
+} else if (errorCount < 1000) {
     loggers.app.info('✅ Good progress! Under 1000 errors remaining.');
-  } else if (errorCount < 2000) {
+} else if (errorCount < 2000) {
     loggers.app.info('✅ Significant progress! Under 2000 errors remaining.');
-  }
+}
 }

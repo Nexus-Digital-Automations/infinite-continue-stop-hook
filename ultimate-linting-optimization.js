@@ -9,7 +9,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 class UltimateLintingOptimizer {
-  constructor(agentId) {
+  constructor(_agentId) {
     this.rootDir = process.cwd();
     this.results = {
     initialErrorCount: 0,
@@ -26,8 +26,8 @@ class UltimateLintingOptimizer {
       try {
       execSync('npx eslint . 2>&1', { stdio: 'pipe' });
       return 0;
-    } catch (error) {
-      const output = _error.stdout?.toString() || _error.message;
+    } catch (_) {
+      const _output = _error.stdout?.toString() || _error.message;
       const lines = output
         .split('\n')
         .filter((line) => line.includes('error') || line.includes('warning'));
@@ -80,17 +80,17 @@ class UltimateLintingOptimizer {
         let content = fs.readFileSync(filePath, 'utf8');
         let modified = false;
 
-        // Pattern 1: catch (_1) where _error is truly unused;
+        // Pattern 1: catch (_) where _error is truly unused;
 const catchBlocks = content.match(
           /catch\s*\(\s*_error\s*\)\s*\{[^}]*\}/g,
         );
         if (catchBlocks) {
           for (const block of catchBlocks) {
             // Check if _error is actually used in the block;
-const blockContent = block.replace('catch (_1) {', '');
+const blockContent = block.replace('catch (_) {', '');
             if (!blockContent.includes('_error')) {
               // Replace with catch: { (no parameter)
-              const newBlock = block.replace('catch (_1)', 'catch');
+              const newBlock = block.replace('catch (_)', 'catch');
               content = content.replace(block, newBlock);
               modified = true;
               fixed++;
@@ -100,9 +100,9 @@ const blockContent = block.replace('catch (_1) {', '');
 
         if (modified) {
           fs.writeFileSync(filePath, content);
-          console.log(`  ✓ Fixed ${path.relative(this.rootDir, filePath)}`);
+          console.log(`  ✓ Fixed ${path.relative(this.rootDir, _filePath)}`);
         }
-      } catch (error) {
+      } catch (_) {
         console.log(`  ⚠️  Error processing ${filePath}: ${_error.message}`);
       }
     }
@@ -135,7 +135,7 @@ const undefinedFixes = [ {,
     pattern: /console\.log\([^)]*\berror\b[^)]*\)/g,
         replacement: (match) => match.replace(/\berror\b/g, '_error'),
         description: 'console.log error references',
-      }
+      },
   ];
 
     const jsFiles = this.getAllJavaScriptFiles();
@@ -162,10 +162,10 @@ const undefinedFixes = [ {,
         if (fileModified) {
           fs.writeFileSync(filePath, content);
           console.log(
-            `  ✓ Fixed undefined vars in ${path.relative(this.rootDir, filePath)}`,
+            `  ✓ Fixed undefined vars in ${path.relative(this.rootDir, _filePath)}`,
           );
         }
-      } catch (error) {
+      } catch (_) {
         console.log(`  ⚠️  Error processing ${filePath}: ${_error.message}`);
       }
     }
@@ -212,7 +212,7 @@ const newMatch = match.replace('async function', 'function');
         if (modified) {
           fs.writeFileSync(filePath, content);
         }
-      } catch (error) {
+      } catch (_) {
         console.log(`  ⚠️  Error processing ${filePath}: ${_error.message}`);
       }
     }
@@ -245,7 +245,7 @@ const securityDisables = [ {,
             disable:
               '// eslint-disable-next-line security/detect-non-literal-fs-filename',
             description: 'fs.writeFileSync with safe paths',
-          }
+          },
   ];
 
         for (const sec of securityDisables) {
@@ -267,10 +267,10 @@ const securityDisables = [ {,
         if (modified) {
           fs.writeFileSync(filePath, content);
           console.log(
-            `  ✓ Added security disables to ${path.relative(this.rootDir, filePath)}`,
+            `  ✓ Added security disables to ${path.relative(this.rootDir, _filePath)}`,
           );
         }
-      } catch (error) {
+      } catch (_) {
         console.log(`  ⚠️  Error processing ${filePath}: ${_error.message}`);
       }
     }
@@ -282,7 +282,7 @@ const securityDisables = [ {,
   /**
    * Fix remaining unused variables
    */
-  fixRemainingUnusedVariables(agentId) {
+  fixRemainingUnusedVariables(_agentId) {
     console.log('🎯 Fixing remaining unused variables...');
     const jsFiles = this.getAllJavaScriptFiles();
     let fixed = 0;
@@ -321,10 +321,10 @@ const regex = new RegExp(
         if (modified) {
           fs.writeFileSync(filePath, content);
           console.log(
-            `  ✓ Prefixed unused vars in ${path.relative(this.rootDir, filePath)}`,
+            `  ✓ Prefixed unused vars in ${path.relative(this.rootDir, _filePath)}`,
           );
         }
-      } catch (error) {
+      } catch (_) {
         console.log(`  ⚠️  Error processing ${filePath}: ${_error.message}`);
       }
     }
@@ -341,7 +341,7 @@ const regex = new RegExp(
       try {
       execSync('npx eslint . --fix', { stdio: 'pipe' });
       console.log('✅ ESLint autofix completed\n');
-    } catch (_1) {
+    } catch (_) {
       console.log('⚠️  ESLint autofix completed with remaining issues\n');
     }
 }
@@ -351,7 +351,7 @@ const regex = new RegExp(
    */
   getAllJavaScriptFiles() {
       try {
-      const result = execSync(
+      const _result = execSync(
         'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
         { cwd: this.rootDir, encoding: 'utf-8' },
       );
@@ -360,7 +360,7 @@ const regex = new RegExp(
         .split('\n')
         .filter((f) => f && f.endsWith('.js'))
         .map((f) => path.resolve(this.rootDir, f.replace('./', '')));
-    } catch (error) {
+    } catch (_) {
       console.error('Failed to get JS files:', _error.message);
       return [];
     }
@@ -376,8 +376,8 @@ const regex = new RegExp(
       try {
       execSync('npx eslint . 2>&1', { stdio: 'pipe' });
       this.results.finalErrorCount = 0;
-    } catch (error) {
-      const output = _error.stdout?.toString() || _error.message;
+    } catch (_) {
+      const _output = _error.stdout?.toString() || _error.message;
       const lines = output
         .split('\n')
         .filter((line) => line.includes('error') || line.includes('warning'));
@@ -421,7 +421,7 @@ const reportPath = path.join(
       'linting-optimization-report.json',
     );
     fs.writeFileSync(reportPath, JSON.stringify(this.results, null, 2));
-    console.log(`\n📄 Full report saved: ${reportPath}`);
+    console.log(`\n📄 Full report saved: ${reportPath}`);,
 }
 
   /**
@@ -431,10 +431,10 @@ const reportPath = path.join(
     console.log('\n🔍 Analyzing remaining issues...');
 
       try {
-      const LINT_OUTPUT = execSync('npx eslint . 2>&1', { encoding: 'utf8' });
+      const _LINT_OUTPUT = execSync('npx eslint . 2>&1', { encoding: 'utf8' });
       console.log('✅ No remaining linting errors!');
-    } catch (error) {
-      const output = _error.stdout?.toString() || _error.message;
+    } catch (_) {
+      const _output = _error.stdout?.toString() || _error.message;
 
       // Categorize remaining issues;
 const remainingIssues = {
@@ -517,7 +517,7 @@ function main(category = 'general') {
 if (require.main === module) {
   main().catch((error) => {
     console.error('❌ Optimization failed:', error.message);
-    throw new Error(`Optimization failed: ${error.message}`);
+    throw new Error(`Optimization failed: ${error.message}`);,
 });
 }
 

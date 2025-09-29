@@ -77,14 +77,14 @@ describe('File Operations Integration Tests', () => {
         [JSON.stringify(featureData1)],
         {
           projectRoot: testDir,
-        }
+        },
       );
       const suggest2Result = await execAPI(
         'suggest-feature',
         [JSON.stringify(featureData2)],
         {
           projectRoot: testDir,
-        }
+        },
       );
 
       expect(suggest1Result.success && suggest2Result.success).toBe(true);
@@ -105,7 +105,7 @@ describe('File Operations Integration Tests', () => {
             notes: 'Testing persistence',
           }),
         ],
-        { projectRoot: testDir }
+        { projectRoot: testDir },
       );
 
       expect(approveResult.success).toBe(true);
@@ -114,7 +114,7 @@ describe('File Operations Integration Tests', () => {
       validateFeaturesStructure(featuresData);
       expect(featuresData.metadata.approval_history).toHaveLength(1);
       expect(featuresData.metadata.approval_history[0].feature_id).toBe(
-        suggest1Result.feature.id
+        suggest1Result.feature.id,
       );
 
       // 5. Initialize agent And verify structure;
@@ -146,7 +146,7 @@ describe('File Operations Integration Tests', () => {
         generateTestFeature({
           title: `Concurrent Feature ${i + 1}`,
           category: 'enhancement',
-        })
+        }),
       );
 
       const concurrentCommands = features.map((featureData) => ({
@@ -206,7 +206,7 @@ describe('File Operations Integration Tests', () => {
         [JSON.stringify(featureData)],
         {
           projectRoot: testDir,
-        }
+        },
       );
       expect(suggestResult.success).toBe(true);
 
@@ -244,7 +244,7 @@ describe('File Operations Integration Tests', () => {
         [JSON.stringify(featureData)],
         {
           projectRoot: testDir,
-        }
+        },
       );
 
       expect(suggestResult.success).toBe(true);
@@ -271,7 +271,7 @@ describe('File Operations Integration Tests', () => {
         [JSON.stringify(featureData)],
         {
           projectRoot: testDir,
-        }
+        },
       );
       expect(suggestResult.success).toBe(true);
 
@@ -292,7 +292,7 @@ describe('File Operations Integration Tests', () => {
         [JSON.stringify(newFeatureData)],
         {
           projectRoot: testDir,
-        }
+        },
       );
 
       // The API should either:
@@ -317,7 +317,7 @@ describe('File Operations Integration Tests', () => {
           description: 'A'.repeat(1000), // 1KB description
           business_value: 'B'.repeat(500), // 500B business value
           category: 'enhancement',
-        })
+        }),
       );
 
       // 2. Add features in batches to test large file handling
@@ -363,7 +363,7 @@ describe('File Operations Integration Tests', () => {
         operations.push(
           execAPI('suggest-feature', [JSON.stringify(featureData)], {
             projectRoot: testDir,
-          })
+          }),
         );
       }
 
@@ -395,7 +395,7 @@ describe('File Operations Integration Tests', () => {
         generateTestFeature({
           title: `Initial Feature ${i + 1}`,
           category: 'enhancement',
-        })
+        }),
       );
 
       const initialCommands = initialFeatures.map((featureData) => ({
@@ -423,7 +423,7 @@ describe('File Operations Integration Tests', () => {
             initialResults[0].feature.id,
             JSON.stringify({ approved_by: 'mixed-ops-test' }),
           ],
-          { projectRoot: testDir }
+          { projectRoot: testDir },
         ),
         execAPI(
           'approve-feature',
@@ -431,7 +431,7 @@ describe('File Operations Integration Tests', () => {
             initialResults[1].feature.id,
             JSON.stringify({ approved_by: 'mixed-ops-test' }),
           ],
-          { projectRoot: testDir }
+          { projectRoot: testDir },
         ),
 
         // More read operations
@@ -483,7 +483,7 @@ describe('File Operations Integration Tests', () => {
         [JSON.stringify(featureData)],
         {
           projectRoot: testDir,
-        }
+        },
       );
 
       expect(suggestResult.success).toBe(true);
@@ -523,7 +523,7 @@ describe('File Operations Integration Tests', () => {
         [JSON.stringify(featureData)],
         {
           projectRoot: testDir,
-        }
+        },
       );
 
       expect(suggestResult.success).toBe(true);
@@ -575,7 +575,7 @@ describe('File Operations Integration Tests', () => {
         [JSON.stringify(newFeatureData)],
         {
           projectRoot: testDir,
-        }
+        },
       );
 
       expect(suggestResult.success).toBe(true);
@@ -585,7 +585,7 @@ describe('File Operations Integration Tests', () => {
       expect(featuresData.features).toHaveLength(2);
 
       const legacyFeature = featuresData.features.find(
-        (f) => f.id === 'legacy_feature_001'
+        (f) => f.id === 'legacy_feature_001',
       );
       expect(legacyFeature).toBeDefined();
       expect(legacyFeature.title).toBe('Legacy Feature');
@@ -593,7 +593,7 @@ describe('File Operations Integration Tests', () => {
 
       // 4. Verify new feature was added correctly;
       const newFeature = featuresData.features.find(
-        (f) => f.title === 'New Feature After Upgrade'
+        (f) => f.title === 'New Feature After Upgrade',
       );
       expect(newFeature).toBeDefined();
       expect(newFeature.status).toBe('suggested');
@@ -610,7 +610,7 @@ describe('File Operations Integration Tests', () => {
       const invalidData = {
         project: 'invalid-project',
         features: 'not-an-array', // Invalid: should be array
-        metadata: null, // Invalid: should be object
+        metadata: null, // Invalid: should be object,
       };
 
       await writeFeaturesFile(testDir, invalidData);
@@ -626,7 +626,7 @@ describe('File Operations Integration Tests', () => {
         [JSON.stringify(featureData)],
         {
           projectRoot: testDir,
-        }
+        },
       );
 
       // 3. Should either fail gracefully or fix the structure
@@ -658,7 +658,7 @@ describe('File Operations Integration Tests', () => {
           [JSON.stringify(featureData)],
           {
             projectRoot: testDir,
-          }
+          },
         );
         expect(initialResult.success).toBe(true);
 
@@ -673,18 +673,18 @@ describe('File Operations Integration Tests', () => {
           [JSON.stringify(secondFeatureData)],
           {
             projectRoot: testDir,
-          }
+          },
         );
 
         // Should either succeed or fail gracefully
         if (!secondResult.success) {
           expect(secondResult.error).toBeDefined();
         }
-      } catch (error) {
+      } catch (_) {
         // If permission operations fail, skip this test
         console.warn(
           'Permission test skipped due to system limitations:',
-          error.message
+          error.message,
         );
       }
     });

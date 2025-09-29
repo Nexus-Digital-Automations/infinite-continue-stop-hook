@@ -31,7 +31,7 @@ class FeaturesMigration {
       errors: [],
       warnings: [],
     };
-  }
+}
 
   /**
    * Main migration method
@@ -62,12 +62,12 @@ class FeaturesMigration {
 
       loggers.stopHook.log('✅ Migration completed successfully!');
       return true;
-    } catch (error) {
+    } catch (_) {
       loggers.stopHook.error('❌ Migration failed:', _error.message);
       this.migrationReport.errors.push(_error.message);
       return false;
     }
-  }
+}
 
   /**
    * Load And validate TODO.json data
@@ -90,7 +90,7 @@ class FeaturesMigration {
       `📊 Found ${this.migrationReport.totalTasks} tasks to migrate`
     );
     return todoData;
-  }
+}
 
   /**
    * Create backup with timestamp
@@ -99,8 +99,8 @@ class FeaturesMigration {
     loggers.stopHook.log('💾 Creating backup...');
 
     FS.writeFileSync(this.backupPath, JSON.stringify(todoData, null, 2));
-    loggers.stopHook.log(`✅ Backup created: ${this.backupPath}`);
-  }
+    loggers.stopHook.log(`✅ Backup created: ${this.backupPath}`);,
+}
 
   /**
    * Create new FEATURES.json schema structure
@@ -177,7 +177,7 @@ class FeaturesMigration {
       // Migration metadata
       migration_stats: this.migrationReport,
     };
-  }
+}
 
   /**
    * Transform TODO.json data to FEATURES.json format
@@ -194,7 +194,7 @@ class FeaturesMigration {
           const transformedFeature = this.transformTask(task);
           transformedData.features.push(transformedFeature);
           this.migrationReport.migratedFeatures++;
-        } catch (_1) {
+        } catch (_) {
           this.migrationReport.errors.push(
             `Failed to transform task ${task.id || index}: ${_error.message}`
           );
@@ -211,7 +211,7 @@ class FeaturesMigration {
         try {
           const transformedFeature = this.transformTask(task, true);
           transformedData.completed_features.push(transformedFeature);
-        } catch (_1) {
+        } catch (_) {
           this.migrationReport.errors.push(
             `Failed to transform completed task ${task.id || index}: ${_error.message}`
           );
@@ -226,7 +226,7 @@ class FeaturesMigration {
       `✅ Transformed ${this.migrationReport.migratedFeatures} features`
     );
     return transformedData;
-  }
+}
 
   /**
    * Transform individual task to feature format
@@ -306,7 +306,7 @@ class FeaturesMigration {
     };
 
     return feature;
-  }
+}
 
   /**
    * Write the new FEATURES.json file
@@ -321,7 +321,7 @@ class FeaturesMigration {
     loggers.app.info(
       `📊 File size: ${Math.round(featuresContent.length / 1024)} KB`
     );
-  }
+}
 
   /**
    * Generate comprehensive migration report
@@ -359,7 +359,7 @@ class FeaturesMigration {
         loggers.stopHook.log(`   ${index + 1}. ${warning}`);
       });
     }
-  }
+}
 
   /**
    * Validate migration results
@@ -397,11 +397,11 @@ class FeaturesMigration {
 
       loggers.stopHook.log('✅ Migration validation passed');
       return true;
-    } catch (error) {
+    } catch (_) {
       loggers.stopHook.error('❌ Migration validation failed:', _error.message);
       return false;
     }
-  }
+}
 }
 
 // Main execution

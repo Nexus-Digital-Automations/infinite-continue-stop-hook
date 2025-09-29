@@ -129,7 +129,7 @@ module.exports = {
     'json', // JSON data for CI/CD
     'json-summary', // Summary JSON
     'lcov', // LCOV format for external tools
-    'clover', // Clover XML format
+    'clover', // Clover XML format,
   ],
   coverageThreshold: {
     global: {

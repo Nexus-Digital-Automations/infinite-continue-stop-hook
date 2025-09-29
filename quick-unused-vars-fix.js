@@ -22,7 +22,7 @@ function quickFixUnusedVars() {
       { cwd: process.cwd() },
     );
     console.log('✅ Fixed catch blocks');
-} catch (_1) {
+} catch (_) {
     console.log('⚠️ Some catch blocks may need manual review');
 }
 
@@ -30,11 +30,11 @@ function quickFixUnusedVars() {
   console.log('📋 Fixing RESULT variables...');
     try {
     execSync(
-      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/const RESULT =/const RESULT =/g' {} \\;`,
+      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/const _RESULT =/const _RESULT =/g' {} \\;`,
       { cwd: process.cwd() },
     );
     console.log('✅ Fixed RESULT variables');
-} catch (_1) {
+} catch (_) {
     console.log('⚠️ Some RESULT variables may need manual review');
 }
 
@@ -42,11 +42,11 @@ function quickFixUnusedVars() {
   console.log('📋 Fixing LINT_RESULT variables...');
     try {
     execSync(
-      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/const LINT_RESULT =/const LINT_RESULT =/g' {} \\;`,
+      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/const _LINT_RESULT =/const _LINT_RESULT =/g' {} \\;`,
       { cwd: process.cwd() },
     );
     console.log('✅ Fixed LINT_RESULT variables');
-} catch (_1) {
+} catch (_) {
     console.log('⚠️ Some LINT_RESULT variables may need manual review');
 }
 
@@ -54,11 +54,11 @@ function quickFixUnusedVars() {
   console.log('📋 Fixing common unused parameters...');
     try {
     execSync(
-      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/, _params)/, _params)/g; s/(params)/(params)/g; s/filePath/__filePath/g; s/, _category)/, _category)/g' {} \\;`,
+      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/, _params)/, _params)/g; s/(_params)/(_params)/g; s/filePath/__filePath/g; s/, _category)/, _category)/g' {} \\;`,
       { cwd: process.cwd() },
     );
     console.log('✅ Fixed common parameters');
-} catch (_1) {
+} catch (_) {
     console.log('⚠️ Some parameters may need manual review');
 }
 
@@ -66,11 +66,11 @@ function quickFixUnusedVars() {
   console.log('📋 Fixing unused assignments...');
     try {
     execSync(
-      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/const REPLACEMENTS =/const REPLACEMENTS =/g; s/const CHECK_ERROR =/const CHECK_ERROR =/g; s/const LINT_RESULT =/const LINT_RESULT =/g' {} \\;`,
+      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/const REPLACEMENTS =/const REPLACEMENTS =/g; s/const CHECK_ERROR =/const CHECK_ERROR =/g; s/const _LINT_RESULT =/const _LINT_RESULT =/g' {} \\;`,
       { cwd: process.cwd() },
     );
     console.log('✅ Fixed unused assignments');
-} catch (_1) {
+} catch (_) {
     console.log('⚠️ Some assignments may need manual review');
 }
 
@@ -82,7 +82,7 @@ function quickFixUnusedVars() {
       { cwd: process.cwd() },
     );
     console.log('✅ Fixed logger variables');
-} catch (_1) {
+} catch (_) {
     console.log('⚠️ Some logger variables may need manual review');
 }
 
@@ -93,7 +93,7 @@ function quickFixUnusedVars() {
       stdio: 'inherit',
     });
     console.log('✅ Layout autofix completed');
-} catch (_1) {
+} catch (_) {
     console.log('⚠️ Layout autofix completed with some issues');
 }
 }
@@ -105,7 +105,7 @@ if (require.main === module) {
   // Final verification
   console.log('\n🔍 Checking remaining unused variables...');
     try {
-    const result = execSync(
+    const _result = execSync(
       'npm run lint 2>&1 | grep -E "(is defined but never used|is assigned a value but never used)" | wc -l',
       { encoding: 'utf-8' },
     );
@@ -113,7 +113,7 @@ if (require.main === module) {
     console.log(`📊 Remaining unused variable violations: ${count}`);
 
     if (count === 0) {
-      console.log('🎉 SUCCESS: All unused variable violations resolved!');
+      console.log('🎉 SUCCESS: All unused variable violations resolved!');,
     } else if (count < 10) {
       console.log('📋 Showing remaining violations:');
       const violations = execSync(
@@ -122,7 +122,7 @@ if (require.main === module) {
       );
       console.log(violations);
     }
-} catch (_1) {
+} catch (_) {
     console.log('⚠️ Could not check final status');
 }
 

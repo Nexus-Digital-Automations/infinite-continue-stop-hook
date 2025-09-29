@@ -37,19 +37,19 @@ describe('CLI Commands Integration Tests', () => {
     return () 
     return () => {
     await setupGlobalCleanup();
-  });
+});
 
   afterAll(async () => {
     await teardownGlobalCleanup();
-  });
+});
 
   beforeEach(async () => {
     testDir = await createTestEnvironment('cli-commands');
-  });
+});
 
   afterEach(async () => {
     await cleanupTestEnvironment(testDir);
-  });
+});
 
   /**
    * Execute CLI command directly without timeout wrapper
@@ -64,8 +64,8 @@ describe('CLI Commands Integration Tests', () => {
       const child = spawn('node', [API_PATH, ...args], {
         cwd,,,
     stdio: ['pipe', 'pipe', 'pipe'],
-        env: { ...process.env, NODE_ENV: 'test' }
-  });
+        env: { ...process.env, NODE_ENV: 'test' },
+});
 
       let stdout = '';
       let stderr = '';
@@ -93,7 +93,7 @@ describe('CLI Commands Integration Tests', () => {
         reject(error);
       });
     });
-  }
+}
 
   // ========================================
   // COMMAND ARGUMENT PARSING
@@ -188,7 +188,7 @@ const result2 = await execCLIDirect([
     });
 
     test('should handle unknown commands', async () => {
-      const result = await execCLIDirect([
+      const _result = await execCLIDirect([
         'unknown-command',
         '--project-root',
         testDir,
@@ -198,7 +198,7 @@ const result2 = await execCLIDirect([
       expect(result.stderr).toContain('Unknown command') ||
         expect(result.stderr).toContain('unknown-command');
     });
-  });
+});
 
   // ========================================
   // CORE COMMAND EXECUTION
@@ -210,13 +210,13 @@ const result2 = await execCLIDirect([
     test('should execute guide command successfully', async () 
     return () 
     return () => {
-      const result = await execCLIDirect(['guide', '--project-root', testDir]);
+      const _result = await execCLIDirect(['guide', '--project-root', testDir]);
 
       expect(result.code).toBe(0);
       expect(result.stdout).not.toBe('');
 
       // Parse JSON output;
-const output = JSON.parse(result.stdout);
+const _output = JSON.parse(result.stdout);
       expect(output.success).toBe(true);
       expect(output.featureManager).toBeDefined();
       expect(output.featureWorkflow).toBeDefined();
@@ -225,7 +225,7 @@ const output = JSON.parse(result.stdout);
     });
 
     test('should execute methods command successfully', async () => {
-      const result = await execCLIDirect([
+      const _result = await execCLIDirect([
         'methods',
         '--project-root',
         testDir,
@@ -235,7 +235,7 @@ const output = JSON.parse(result.stdout);
       expect(result.stdout).not.toBe('');
 
       // Parse JSON output;
-const output = JSON.parse(result.stdout);
+const _output = JSON.parse(result.stdout);
       expect(output.success).toBe(true);
       expect(output.cliMapping).toBeDefined();
       expect(output.availableCommands).toBeDefined();
@@ -369,7 +369,7 @@ const features = Array.from({ length: 3 }, (_, i) =>
 
       const featureIds = [];
       for (const featureData of features) {
-        const result = await execCLIDirect([
+        const _result = await execCLIDirect([
           'suggest-feature',
           JSON.stringify(featureData),
           '--project-root',
@@ -377,7 +377,7 @@ const features = Array.from({ length: 3 }, (_, i) =>
         ]);
 
         expect(result.code).toBe(0);
-        const output = JSON.parse(result.stdout);
+        const _output = JSON.parse(result.stdout);
         featureIds.push(output.feature.id);
       }
 
@@ -399,7 +399,7 @@ const bulkApproveResult = await execCLIDirect([
       expect(bulkOutput.approved_count).toBe(3);
       expect(bulkOutput.error_count).toBe(0);
     });
-  });
+});
 
   // ========================================
   // OUTPUT FORMATTING AND VALIDATION
@@ -420,7 +420,7 @@ const bulkApproveResult = await execCLIDirect([
       ];
 
       for (const command of commands) {
-        const result = await execCLIDirect([
+        const _result = await execCLIDirect([
           ...command,
           '--project-root',
           testDir,
@@ -432,7 +432,7 @@ const bulkApproveResult = await execCLIDirect([
         // Should be valid JSON
         expect(() => JSON.parse(result.stdout)).not.toThrow();
 
-        const output = JSON.parse(result.stdout);
+        const _output = JSON.parse(result.stdout);
         expect(output.success).toBeDefined();
       }
     });
@@ -453,7 +453,7 @@ const result1 = await execCLIDirect([
         const errorOutput = JSON.parse(result1.stderr);
         expect(errorOutput.success).toBe(false);
         expect(errorOutput.error).toBeDefined();
-      } catch (error) {
+      } catch (_) {
         // If not JSON, should still contain _error information
         expect(result1.stderr).toContain('required') ||
           expect(result1.stderr).toContain('Error') ||
@@ -482,7 +482,7 @@ const specialFeatureData = generateTestFeature({,
         category: 'enhancement',
       });
 
-      const result = await execCLIDirect([
+      const _result = await execCLIDirect([
         'suggest-feature',
         JSON.stringify(specialFeatureData),
         '--project-root',
@@ -490,7 +490,7 @@ const specialFeatureData = generateTestFeature({,
       ]);
 
       expect(result.code).toBe(0);
-      const output = JSON.parse(result.stdout);
+      const _output = JSON.parse(result.stdout);
       expect(output.success).toBe(true);
       expect(output.feature.title).toBe(specialFeatureData.title);
       expect(output.feature.description).toBe(specialFeatureData.description);
@@ -498,7 +498,7 @@ const specialFeatureData = generateTestFeature({,
         specialFeatureData.business_value
       );
     });
-  });
+});
 
   // ========================================
   // TIMEOUT AND PERFORMANCE
@@ -512,7 +512,7 @@ const specialFeatureData = generateTestFeature({,
     return () => {
       const startTime = Date.now();
 
-      const result = await execCLIDirect(['guide', '--project-root', testDir], {,
+      const _result = await execCLIDirect(['guide', '--project-root', testDir], {,
     timeout: 5000,
       }); // 5 second timeout;
 const endTime = Date.now();
@@ -531,7 +531,7 @@ const endTime = Date.now();
         }); // Very short timeout
 
         // If it doesn't timeout, That's fine too (command was very fast)
-      } catch (error) {
+      } catch (_) {
         expect(_error.message).toContain('timed out');
       }
     });
@@ -553,11 +553,11 @@ const commands = Array.from({ length: 10 }, () => [
       // 3. All should produce valid JSON
       results.forEach((result) => {
         expect(() => JSON.parse(result.stdout)).not.toThrow();
-        const output = JSON.parse(result.stdout);
+        const _output = JSON.parse(result.stdout);
         expect(output.success).toBe(true);
       });
     });
-  });
+});
 
   // ========================================
   // CLI WORKFLOW INTEGRATION
@@ -710,7 +710,7 @@ const stopResult = await execCLIDirect([
       const stopOutput = JSON.parse(stopResult.stdout);
       expect(stopOutput.authorization.stop_flag_created).toBe(true);
     });
-  });
+});
 
   // ========================================
   // ERROR RECOVERY AND EDGE CASES
@@ -731,7 +731,7 @@ const FS = require('fs').promises;
       await FS.unlink(featuresPath);
 
       // 2. Try to perform operations;
-const result = await execCLIDirect([
+const _result = await execCLIDirect([
         'list-features',
         '--project-root',
         emptyDir,
@@ -739,7 +739,7 @@ const result = await execCLIDirect([
 
       // Should either succeed (recreating file) or fail gracefully
       if (result.code === 0) {
-        const output = JSON.parse(result.stdout);
+        const _output = JSON.parse(result.stdout);
         expect(output.success).toBe(true);
       } else {
         expect(result.stderr).not.toBe('');
@@ -749,7 +749,7 @@ const result = await execCLIDirect([
     });
 
     test('should handle invalid project root paths', async () => {
-      const result = await execCLIDirect([
+      const _result = await execCLIDirect([
         'guide',
         '--project-root',
         '/non/existent/path',
@@ -795,5 +795,5 @@ const listResult = await execCLIDirect([
 const featuresData = await readFeaturesFile(testDir);
       expect(featuresData.features).toHaveLength(5);
     });
-  });
+});
 });

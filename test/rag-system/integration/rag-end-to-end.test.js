@@ -111,7 +111,7 @@ describe('RAG System End-to-End Integration Tests', () => {
     await ragOperations.initialize();
 
     loggers.stopHook.log('RAG system initialization completed');
-  }, 120000); // 2 minutes timeout for initialization
+}, 120000); // 2 minutes timeout for initialization
 
   afterAll(async () => {
     // Cleanup test resources
@@ -130,11 +130,11 @@ describe('RAG System End-to-End Integration Tests', () => {
 
     // Clean up test files
     try {
-      await FS.rm(testDataPath, { recursive: true, force: true });
-    } catch (error) {
+      await FS.rm(testDataPath, { recursive: true, force: true });,
+    } catch (_) {
       loggers.stopHook.warn('Failed to clean up test data:', _error.message);
     }
-  });
+});
 
   describe('System Initialization And Health Checks', () => {
     test('should initialize all components successfully', () => {
@@ -164,7 +164,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       expect(_vectorStats).toHaveProperty('totalVectors');
       expect(_searchStats).toHaveProperty('queriesProcessed');
     });
-  });
+});
 
   describe('Lesson Storage And Retrieval Workflow', () => {
     const storedLessons = [];
@@ -243,7 +243,7 @@ describe('RAG System End-to-End Integration Tests', () => {
         expect(recommendation).toHaveProperty('contextRelevance');
       }
     });
-  });
+});
 
   describe('Error Storage And Pattern Recognition', () => {
     const storedErrors = [];
@@ -312,7 +312,7 @@ describe('RAG System End-to-End Integration Tests', () => {
         tags: ['system', 'memory', 'distributed', 'cascade'],
       };
 
-      const result = await ragOperations.storeError(_complexError);
+      const _result = await ragOperations.storeError(_complexError);
       expect(result.success).toBe(true);
 
       // Search for the stored error;
@@ -329,7 +329,7 @@ describe('RAG System End-to-End Integration Tests', () => {
         _foundError.errorPattern.complexity
       );
     });
-  });
+});
 
   describe('Performance And Scalability Tests', () => {
     test('should handle batch operations efficiently', async () => {
@@ -426,7 +426,7 @@ describe('RAG System End-to-End Integration Tests', () => {
         `Cache performance: First search ${time1}ms, cached search ${time2}ms (${((1 - time2 / time1) * 100).toFixed(1)}% improvement)`
       );
     });
-  });
+});
 
   describe('Data Integrity And Consistency', () => {
     test('should prevent duplicate content storage', async () => {
@@ -495,7 +495,7 @@ describe('RAG System End-to-End Integration Tests', () => {
         expect(result.similarity).toBeLessThanOrEqual(1);
       });
     });
-  });
+});
 
   describe('Migration System Integration', () => {
     test('should create test content for migration', async () => {
@@ -509,13 +509,11 @@ describe('RAG System End-to-End Integration Tests', () => {
       });
 
       // Create sample lesson files;
-      const sampleLessons = [
-        {
+      const sampleLessons = [ {
           path: path.join(testLessonsPath, 'features', 'react-optimization.md'),
           content:
             '# React Performance Optimization\n\nBest practices for optimizing React applications...',
-        },
-        {
+        }, {
           path: path.join(testLessonsPath, 'errors', 'async-errors.md'),
           content:
             '# Async Function Errors\n\nCommon errors in async functions And how to fix them...',
@@ -570,7 +568,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       const reactResult = searchResults.find((r) => r.title?.includes('React'));
       expect(reactResult).toBeDefined();
     });
-  });
+});
 
   describe('Analytics And Monitoring', () => {
     test('should provide comprehensive system analytics', async () => {
@@ -617,7 +615,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       expect(finalStats.averageQueryTime).toBeGreaterThan(0);
       expect(finalStats.isInitialized).toBe(true);
     });
-  });
+});
 
   describe('Error Handling And Recovery', () => {
     test('should handle invalid input gracefully', async () => {
@@ -641,13 +639,13 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // System should continue to function;
       const lesson = testDataGenerator.generateLessons(1)[0];
-      const result = await ragOperations.storeLesson(lesson);
+      const _result = await ragOperations.storeLesson(lesson);
       expect(result.success).toBe(true);
 
       const searchResults = await ragOperations.searchLessons(lesson.title);
       expect(searchResults.length).toBeGreaterThan(0);
     });
-  });
+});
 });
 
 // Performance benchmark tests
@@ -681,7 +679,7 @@ describe('RAG System Performance Benchmarks', () => {
     );
 
     await embeddingGenerator.cleanup();
-  });
+});
 
   test('should meet search performance targets', async () => {
     const searchIterations = 50;
@@ -724,7 +722,7 @@ describe('RAG System Performance Benchmarks', () => {
     // Use for-await-of pattern for sequential performance measurement
     for await (const i of Array(searchIterations).keys()) {
       const query = queries[i % queries.length];
-      await ragOps.searchLessons(query, { maxResults: 5 });
+      await ragOps.searchLessons(query, { maxResults: 5 });,
     }
 
     const endTime = Date.now();
@@ -742,5 +740,5 @@ describe('RAG System Performance Benchmarks', () => {
     await searchEngine.cleanup();
     await vectorDB.cleanup();
     await embeddingGen.cleanup();
-  });
+});
 });

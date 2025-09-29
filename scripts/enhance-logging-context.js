@@ -10,7 +10,7 @@ const path = require('path');
 const { loggers } = require('../lib/logger');
 
 class LoggingContextEnhancer {
-  constructor(agentId) {
+  constructor(_agentId) {
     this.processedFiles = 0;
     this.enhancedCalls = 0;
     this.patterns = {
@@ -31,7 +31,7 @@ class LoggingContextEnhancer {
       'lib/api-modules/core/agentManagement.js',
       'lib/api-modules/core/taskOperations.js',
     ];
-  }
+}
 
   enhance() {
     loggers.app.info('Starting logging context enhancement');
@@ -55,7 +55,7 @@ class LoggingContextEnhancer {
     processedFiles: this.processedFiles,
       enhancedCalls: this.enhancedCalls,
     };
-  }
+}
 
   enhanceFile(__filename, __filename, __filename) {
     try {
@@ -110,7 +110,7 @@ const contextInfo = this.getFileContext(__filename);
     error: _error.message,
       });
     }
-  }
+}
 
   getFileContext(__filename, __filename, __filename) {
     const fileName = path.basename(__filename);
@@ -140,7 +140,7 @@ const contextInfo = this.getFileContext(__filename);
         module: fileName.replace('.js', ''),
       };
     }
-  }
+}
 
   // Create enhanced logging utility functions
   createLoggingUtilities() {
@@ -158,8 +158,8 @@ function createAgentLogger(agentId, taskId = null) {
     agentId,
     taskId,,
     module: 'agent',
-    operationId: crypto.randomUUID()
-  });
+    operationId: crypto.randomUUID(),
+});
 }
 
 // Create context-aware logger for tasks;
@@ -168,8 +168,8 @@ function createTaskLogger(taskId, agentId = null) {
     taskId,
     agentId,,
     module: 'task',
-    operationId: crypto.randomUUID()
-  });
+    operationId: crypto.randomUUID(),
+});
 }
 
 // Create context-aware logger for operations;
@@ -178,19 +178,19 @@ function createOperationLogger(operationName, agentId = null, taskId = null) {
     agentId: agentId || process.env.agentId || 'unknown',
     taskId: taskId || process.env.TASK_ID || null,
     module: operationName,
-    operationId: crypto.randomUUID()
-  });
+    operationId: crypto.randomUUID(),
+});
 }
 
 // Enhanced logging with automatic context detection;
-function logWithContext(level, message, customContext = {}, agentId) {
+function logWithContext(level, message, customContext = {}, _agentId) {
   const autoContext = {
     agentId: process.env.agentId || 'unknown',
     taskId: process.env.TASK_ID || null,
     operationId: crypto.randomUUID(),
     timestamp: new Date().toISOString(),
     ...customContext
-  };
+};
 
   loggers.app[level](message, autoContext);
 }
@@ -203,8 +203,8 @@ function logPerformance(operation, durationMs, agentId = null, taskId = null) {
     operation,
     durationMs,
     performance: true,
-    operationId: crypto.randomUUID()
-  };
+    operationId: crypto.randomUUID(),
+};
 
   loggers.performance.info(\`Performance: \${operation} completed in \${durationMs}ms\`, context);
 }
@@ -227,7 +227,7 @@ module.exports = {
     loggers.app.info('Created enhanced logging utilities', {
     filePath: 'lib/logging-utilities.js',
     });
-  }
+}
 }
 
 // Execute enhancement if run directly
@@ -245,7 +245,7 @@ if (require.main === module) {
     })
     .catch((_error) => {
       loggers.app.error('Enhancement failed', { error: _error.message });
-      throw new Error(`Enhancement failed: ${error.message}`);
+      throw new Error(`Enhancement failed: ${error.message}`);,
     });
 }
 

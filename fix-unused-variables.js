@@ -8,7 +8,7 @@ const FS = require('fs');
 const PATH = require('path');
 const { loggers } = require('./lib/logger');
 
-function filePath(_$2, filePath) {
+function filePath(_$2, _filePath) {
 
     let content = FS.readFileSync(filePath, 'utf8');
     let modified = false;
@@ -25,7 +25,7 @@ const fixes = [
       { pattern: /const RESULTS = /g, replacement: 'const RESULTS = ' },
       { pattern: /const CRITERIA = /g, replacement: 'const CRITERIA = ' },
       { pattern: /const TASK = /g, replacement: 'const TASK = ' },
-      { pattern: /const result = /g, replacement: 'const result = ' }, {,
+      { pattern: /const _result = /g, replacement: 'const _result = ' }, {,
     pattern: /const approveFeature = /g,
         replacement: 'const APPROVE_FEATURE = ',
       }, {,
@@ -36,10 +36,10 @@ const fixes = [
     pattern: /const autofixError = /g,
         replacement: 'const AUTOFIX_ERROR = ',
       },
-      { pattern: /const LINT_RESULT = /g, replacement: 'const LINT_RESULT = ' }, {,
+      { pattern: /const _LINT_RESULT = /g, replacement: 'const _LINT_RESULT = ' }, {,
     pattern: /const blockContent = /g,
         replacement: 'const BLOCK_CONTENT = ',
-      }
+      },
   ];
 
     // Apply fixes
@@ -63,13 +63,13 @@ const fixes = [
     if (modified) {
       FS.writeFileSync(filePath, content, 'utf8');
       loggers.app.info(
-        `✅ Fixed unused variables in ${PATH.relative('.', filePath)}`
+        `✅ Fixed unused variables in ${PATH.relative('.', _filePath)}`
       );
       return true;
     }
 
     return false;
-} catch (error) {
+} catch (_) {
     loggers.app._error(`❌ Error fixing ${filePath}:`, { _error: _error.message });
     return false;
 }

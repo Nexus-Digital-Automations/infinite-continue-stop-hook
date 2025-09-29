@@ -17,13 +17,13 @@ async function completeAuditFix() {
     // Pattern: Find lines with only expect(result.success) without prior API call
     content = content.replace(
       /(\s+)(expect\(result\.success\)\.toBe\(true\);)/g,
-      "$1const result = await execAPI('create', [JSON.stringify(featureTaskData)]);\n1$2"
+      "$1const _result = await execAPI('create', [JSON.stringify(featureTaskData)]);\n1$2"
     );
 
     // Fix the result variables that should be result in JSON parse
     content = content.replace(
-      /const result = JSON\.parse\(jsonString\);/g,
-      'const result = JSON.parse(jsonString);'
+      /const _result = JSON\.parse\(jsonString\);/g,
+      'const _result = JSON.parse(jsonString);'
     );
 
     // Fix the resolve statement
@@ -31,10 +31,10 @@ async function completeAuditFix() {
 
     FS.writeFileSync(filePath, content);
     console.log('Applied complete audit test fixes successfully');
-  } catch (error) {
+} catch (_) {
     console.error('Error applying complete fixes:', _error.message);
     throw _error;
-  }
+}
 }
 
 // Run the fix

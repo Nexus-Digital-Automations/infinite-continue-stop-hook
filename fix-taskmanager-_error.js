@@ -11,7 +11,7 @@
  *
  * PROBLEM RESOLVED:
  * - 80+ instances of _error references that should be 'error'
- * - Systematic pattern: catch (error) { error.message }
+ * - Systematic pattern: catch (_) { error.message }
  * - Prevented TaskManager API from executing properly
  *
  * TECHNICAL APPROACH:
@@ -58,7 +58,7 @@ const originalCount = (content.match(/\b_error\b/g) || []).length;
   console.log(
     `📊 Replaced ${originalCount} instances of '_error' with 'error'`
   );
-} catch (error) {
+} catch (_) {
   console.error('❌ Error fixing _error references:', error.message);
   process.exit(1);
 }

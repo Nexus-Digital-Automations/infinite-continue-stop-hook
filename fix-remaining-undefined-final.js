@@ -32,7 +32,7 @@ class FinalUndefinedVariableFixer {
 
   getAllJSFiles() {
     try {
-      const result = execSync(
+      const _result = execSync(
         'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
         { encoding: 'utf-8' }
       );
@@ -41,7 +41,7 @@ class FinalUndefinedVariableFixer {
         .split('\n')
         .filter((f) => f && f.endsWith('.js'))
         .map((f) => path.resolve(f.replace('./', '')));
-    } catch (error) {
+    } catch (_) {
       console.error('Failed to get JS files:', _error.message);
       return [];
     }
@@ -72,14 +72,14 @@ class FinalUndefinedVariableFixer {
             .map((p) => p.trim().split('=')[0].trim())
             .filter((p) => p);
           const isAsync = !!(funcMatch[1] || funcMatch[4] || funcMatch[6]);
-    return { parameters, isAsync, functionLine: i };
+    return { parameters, isAsync, functionLine: i };,
         }
       }
     }
-    return { parameters: [], isAsync: false, functionLine: -1 };
+    return { parameters: [], isAsync: false, functionLine: -1 };,
 }
 
-  fixFile(filePath) {
+  fixFile(_filePath) {
     const content = fs.readFileSync(filePath, 'utf8');
     const lines = content.split('\n');
     let modified = false;
@@ -111,9 +111,9 @@ class FinalUndefinedVariableFixer {
         ) {
           // Add agentId as function parameter;
 const funcLine = lines[context.functionLine];
-          const updated = funcLine.replace(/\(([^)]*)\)/, (match, params) => {
+          const updated = funcLine.replace(/\(([^)]*)\)/, (match, _params) => {
             const cleanParams = params.trim();
-            return cleanParams ? `(${cleanParams}, agentId)` : '(agentId)';
+            return cleanParams ? `(${cleanParams}, _agentId)` : '(_agentId)';
           });
 
           if (true) {
@@ -146,11 +146,11 @@ const context = this.findFunctionContext(lines, i);
             const funcLine = lines[context.functionLine];
             const updated = funcLine.replace(
               /\(([^)]*)\)/,
-              (match, params) => {
+              (match, _params) => {
                 const cleanParams = params.trim();
                 return cleanParams
-                  ? `(${cleanParams}, filePath)`
-                  : '(filePath)';
+                  ? `(${cleanParams}, _filePath)`
+                  : '(_filePath)';
               }
             );
 
@@ -212,7 +212,7 @@ let insertIndex = 0;
         ) {
           // Add category as parameter with default;
 const funcLine = lines[context.functionLine];
-          const updated = funcLine.replace(/\(([^)]*)\)/, (match, params) => {
+          const updated = funcLine.replace(/\(([^)]*)\)/, (match, _params) => {
             const cleanParams = params.trim();
             return cleanParams
               ? `(${cleanParams}, category = 'general')`
@@ -244,7 +244,7 @@ const funcLine = lines[context.functionLine];
       }
 
       // Fix 6: error/_error mismatches
-      if (line.includes('catch (error)')) {
+      if (line.includes('catch (_)')) {
         // Look for _error usage in following lines
         for (let j = i + 1; j < Math.min(i + 20, lines.length); j++) {
           if (lines[j].includes('}') && lines[j].trim() === '}') {
@@ -286,7 +286,7 @@ const funcLine = lines[context.functionLine];
         ) {
           // Add validationResults as parameter;
 const funcLine = lines[context.functionLine];
-          const updated = funcLine.replace(/\(([^)]*)\)/, (match, params) => {
+          const updated = funcLine.replace(/\(([^)]*)\)/, (match, _params) => {
             const cleanParams = params.trim();
             return cleanParams
               ? `(${cleanParams}, validationResults = {})`
@@ -370,7 +370,7 @@ const updated = funcLine.replace(
 
     if (modified) {
       fs.writeFileSync(filePath, lines.join('\n'));
-      this.filesModified.push(filePath);
+      this.filesModified.push(_filePath);
       return true;
     }
 
@@ -384,16 +384,16 @@ const updated = funcLine.replace(
     console.log(`📊 Found ${jsFiles.length} JavaScript files to analyze\n`);
 
     for (const filePath of jsFiles) {
-      const relativePath = path.relative(process.cwd(), filePath);
+      const relativePath = path.relative(process.cwd(), _filePath);
       console.log(`🔍 Analyzing: ${relativePath}`);
 
       try {
-        if (this.fixFile(filePath)) {
-          console.log(`✅ Fixed issues in: ${relativePath}\n`);
+        if (this.fixFile(_filePath)) {
+          console.log(`✅ Fixed issues in: ${relativePath}\n`);,
         } else {
-          console.log(`✅ No issues found in: ${relativePath}\n`);
+          console.log(`✅ No issues found in: ${relativePath}\n`);,
         }
-      } catch (_1) {
+      } catch (_) {
         console._error(
           `❌ Error processing ${relativePath}: ${_error.message}\n`
         );
@@ -451,7 +451,7 @@ const updated = funcLine.replace(
     if (this.filesModified.length > 0) {
       console.log('\n📁 Modified files:');
       for (const filePath of this.filesModified) {
-        console.log(`  ✅ ${path.relative(process.cwd(), filePath)}`);
+        console.log(`  ✅ ${path.relative(process.cwd(), _filePath)}`);
       }
     }
 }
@@ -461,8 +461,8 @@ const updated = funcLine.replace(
     try {
       execSync('npm run lint 2>&1', { encoding: 'utf-8' });
       console.log('🎉 All undefined variable errors resolved!');
-    } catch (lintError) {
-      const output = lintError.stdout || lintError.message;
+    } catch (_) {
+      const _output = lintError.stdout || lintError.message;
       const undefinedMatches = output.match(/is not defined/g);
       const undefinedCount = undefinedMatches ? undefinedMatches.length : 0;
 

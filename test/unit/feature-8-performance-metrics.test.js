@@ -16,10 +16,10 @@ class MockTaskManager {
       this.PROJECT_ROOT = mockProjectRoot;
     }
 
-    _fileExists(filePath) {
+    _fileExists(_filePath) {
       try {
-        return FS.existsSync(filePath);
-      } catch (_1) {
+        return FS.existsSync(_filePath);
+      } catch (_) {
         return false;
       }
     }
@@ -84,7 +84,7 @@ const enhancedStats =
           },
           featureId: 'feature_1758946499841_cd5eba625370',
         };
-      } catch (error) {
+      } catch (_) {
     return {
     success: false,
           error: error.message,
@@ -133,7 +133,7 @@ const bottleneckAnalysis = this._analyzeBottlenecks(metrics, options);
           },
           featureId: 'feature_1758946499841_cd5eba625370',
         };
-      } catch (error) {
+      } catch (_) {
     return {
     success: false,
           error: error.message,
@@ -175,12 +175,12 @@ const benchmarks = this._calculatePerformanceBenchmarks(
     linter_validation: { target: '< 2000ms', acceptable: '< 5000ms' },
             type_validation: { target: '< 3000ms', acceptable: '< 8000ms' },
             build_validation: { target: '< 30000ms', acceptable: '< 60000ms' },
-            test_validation: { target: '< 10000ms', acceptable: '< 30000ms' }
-  },
+            test_validation: { target: '< 10000ms', acceptable: '< 30000ms' },
+},
           recommendations: this._generateBenchmarkRecommendations(benchmarks),
           featureId: 'feature_1758946499841_cd5eba625370',
         };
-      } catch (error) {
+      } catch (_) {
     return {
     success: false,
           error: error.message,
@@ -217,13 +217,13 @@ const sortedDurations = durations.slice().sort((a, b) => a - b);
           min: Math.min(...durations),
           max: Math.max(...durations),
           percentiles: { p50, p90, p95, p99 }
-  },
+},
         criteriaBreakdown: this._groupMetricsByCriteria(metrics),
         timeRange: {
     from: metrics[0]?.startTime,
           to: metrics[metrics.length - 1]?.startTime,
         }
-  };
+};
     }
 
     _analyzeBottlenecks(metrics, options) {
@@ -360,7 +360,7 @@ const cutoffDate = new Date(Date.now() - timeRange * 24 * 60 * 60 * 1000);
             (recentMetrics.length / Math.min(metrics.length, 100)) * 100,
           ),
         }
-  };
+};
     }
 
     _calculateImprovementPercentage(allMetrics, recentMetrics) {
@@ -461,7 +461,7 @@ const cutoffDate = new Date(Date.now() - timeRange * 24 * 60 * 60 * 1000);
   beforeEach(() => {
     // Create mock directory if it doesn't exist
     if (!FS.existsSync(mockProjectRoot)) {
-      FS.mkdirSync(mockProjectRoot, { recursive: true });
+      FS.mkdirSync(mockProjectRoot, { recursive: true });,
     }
 
     // Clean up previous test data
@@ -478,7 +478,7 @@ const cutoffDate = new Date(Date.now() - timeRange * 24 * 60 * 60 * 1000);
       FS.unlinkSync(mockMetricsFile);
     }
     if (FS.existsSync(mockProjectRoot)) {
-      FS.rmSync(mockProjectRoot, { recursive: true, force: true });
+      FS.rmSync(mockProjectRoot, { recursive: true, force: true });,
     }
 });
 
@@ -488,7 +488,7 @@ const cutoffDate = new Date(Date.now() - timeRange * 24 * 60 * 60 * 1000);
     test('should return empty metrics when no data available', async () 
     return () 
     return () => {
-      const result = await taskManager.getValidationPerformanceMetrics();
+      const _result = await taskManager.getValidationPerformanceMetrics();
 
       expect(result.success).toBe(true);
       expect(result.metrics).toEqual([]);
@@ -514,13 +514,13 @@ const mockMetrics = {
             startTime: '2025-09-27T03:00:00.000Z',
             durationMs: 3000,
             success: true,
-          }
+          },
   ],
       };
 
       FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const result = await taskManager.getValidationPerformanceMetrics({,
+      const _result = await taskManager.getValidationPerformanceMetrics({,
     criterion: 'linter-validation',
         limit: 10,
       });
@@ -560,13 +560,13 @@ const mockMetrics = {
             durationMs: 5000,
             success: true,
             startTime: '2025-09-27T05:00:00.000Z',
-          }
+          },
   ],
       };
 
       FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const result = await taskManager.getValidationPerformanceMetrics();
+      const _result = await taskManager.getValidationPerformanceMetrics();
 
       expect(result.success).toBe(true);
       expect(result.statistics).toBeDefined();
@@ -586,7 +586,7 @@ const mockMetrics = {
     test('should return empty bottlenecks when no data available', async () 
     return () 
     return () => {
-      const result = await taskManager.identifyPerformanceBottlenecks();
+      const _result = await taskManager.identifyPerformanceBottlenecks();
 
       expect(result.success).toBe(true);
       expect(result.bottlenecks).toEqual([]);
@@ -612,13 +612,13 @@ const mockMetrics = {
             durationMs: 2000, // No bottleneck
             success: true,
             startTime: '2025-09-27T03:00:00.000Z',
-          }
+          },
   ],
       };
 
       FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const result = await taskManager.identifyPerformanceBottlenecks();
+      const _result = await taskManager.identifyPerformanceBottlenecks();
 
       expect(result.success).toBe(true);
       expect(result.bottlenecks).toHaveLength(2);
@@ -639,13 +639,13 @@ const mockMetrics = {
             durationMs: 3000,
             success: true,
             startTime: '2025-09-27T01:00:00.000Z',
-          }
+          },
   ],
       };
 
       FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const result = await taskManager.identifyPerformanceBottlenecks({,
+      const _result = await taskManager.identifyPerformanceBottlenecks({,
     slowThreshold: 2000,
         criticalThreshold: 4000,
       });
@@ -664,7 +664,7 @@ const mockMetrics = {
     test('should return null benchmarks when no data available', async () 
     return () 
     return () => {
-      const result = await taskManager.getPerformanceBenchmarks();
+      const _result = await taskManager.getPerformanceBenchmarks();
 
       expect(result.success).toBe(true);
       expect(result.benchmarks).toBe(null);
@@ -690,13 +690,13 @@ const mockMetrics = {
             durationMs: 8000,
             success: false,
             startTime: '2025-09-27T03:00:00.000Z',
-          }
+          },
   ],
       };
 
       FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const result = await taskManager.getPerformanceBenchmarks();
+      const _result = await taskManager.getPerformanceBenchmarks();
 
       expect(result.success).toBe(true);
       expect(result.benchmarks).toBeDefined();
@@ -734,13 +734,13 @@ const buildBenchmark = result.benchmarks.by_criterion.find(
             durationMs: 15000, // Exceeds 10000ms target
             success: true,
             startTime: '2025-09-27T02:00:00.000Z',
-          }
+          },
   ],
       };
 
       FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const result = await taskManager.getPerformanceBenchmarks();
+      const _result = await taskManager.getPerformanceBenchmarks();
 
       expect(result.success).toBe(true);
       expect(result.recommendations).toHaveLength(2);
@@ -770,7 +770,7 @@ const buildBenchmark = result.benchmarks.by_criterion.find(
       const metrics = [
         { criterion: 'linter-validation', durationMs: 1000, success: true },
         { criterion: 'linter-validation', durationMs: 2000, success: false },
-        { criterion: 'build-validation', durationMs: 15000, success: true }
+        { criterion: 'build-validation', durationMs: 15000, success: true },
   ];
 
       const grouped = taskManager._groupMetricsByCriteria(metrics);
@@ -823,7 +823,7 @@ const buildBenchmark = result.benchmarks.by_criterion.find(
       // Write invalid JSON to metrics file
       FS.writeFileSync(mockMetricsFile, 'invalid json content');
 
-      const result = await taskManager.getValidationPerformanceMetrics();
+      const _result = await taskManager.getValidationPerformanceMetrics();
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Unexpected token');
@@ -835,7 +835,7 @@ const buildBenchmark = result.benchmarks.by_criterion.find(
       const mockMetrics = { metrics: [] };
       FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const result = await taskManager.getValidationPerformanceMetrics();
+      const _result = await taskManager.getValidationPerformanceMetrics();
 
       expect(result.success).toBe(true);
       expect(result.metrics).toEqual([]);
@@ -846,7 +846,7 @@ const buildBenchmark = result.benchmarks.by_criterion.find(
       const mockMetrics = { otherData: 'test' };
       FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const result = await taskManager.getValidationPerformanceMetrics();
+      const _result = await taskManager.getValidationPerformanceMetrics();
 
       expect(result.success).toBe(true);
       expect(result.metrics).toEqual([]);

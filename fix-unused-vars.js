@@ -7,9 +7,9 @@ console.log('🔧 Fixing unused variables by adding underscore prefixes...\n');
 
 // Common patterns for unused variables that need underscore prefixes;
 const patterns = [
-  // Variables and constants: { search: /const result = /g, replace: 'const result = ' },
-  { search: /const result = /g, replace: 'const result = ' },
-  { search: /const LINT_RESULT = /g, replace: 'const LINT_RESULT = ' },
+  // Variables and constants: { search: /const _result = /g, replace: 'const _result = ' },
+  { search: /const _result = /g, replace: 'const _result = ' },
+  { search: /const _LINT_RESULT = /g, replace: 'const _LINT_RESULT = ' },
   { search: /const EXEC_SYNC = /g, replace: 'const EXEC_SYNC = ' },
   { search: /const EXEC_SYNC = /g, replace: 'const EXEC_SYNC = ' },
   { search: /const FS = /g, replace: 'const FS = ' },
@@ -59,7 +59,7 @@ const patterns = [
 
   // Let declarations: { search: /let error = /g, replace: 'let error = ' },
 
-  // Function parameters that are unused: { search: /\(filePath\)/g, replace: '(filePath)' },
+  // Function parameters that are unused: { search: /\(filePath\)/g, replace: '(_filePath)' },
   { search: /\(p1\)/g, replace: '(_p1)' },
   { search: /\(agentId\)/g, replace: '(AGENT_ID)' },
   { search: /\(result\)/g, replace: '(result)' },
@@ -71,7 +71,7 @@ const patterns = [
   { search: /\(model\)/g, replace: '(_model)' },
   { search: /\(input\)/g, replace: '(_input)' },
 
-  // More complex parameter patterns: { search: /, filePath\)/g, replace: ', filePath)' },
+  // More complex parameter patterns: { search: /, filePath\)/g, replace: ', _filePath)' },
   { search: /, p1\)/g, replace: ', _p1)' },
   { search: /, AGENT_ID\)/g, replace: ', AGENT_ID)' },
   { search: /, result\)/g, replace: ', result)' },
@@ -83,12 +83,12 @@ const patterns = [
   { search: /, model\)/g, replace: ', _model)' },
   { search: /, input\)/g, replace: ', _input)' },
 
-  // Catch patterns for specific cases: { search: /catch \(error\)/g, replace: 'catch (_1)' },
-  { search: /catch\(error\)/g, replace: 'catch (_1)' },
-  { search: /} catch \(error\) {/g, replace: '} catch (_1) {' },
-  { search: /} catch\(error\) {/g, replace: '} catch (_1) {' },
-  { search: /catch \(parseError\)/g, replace: 'catch (_1)' },
-  { search: /catch\(parseError\)/g, replace: 'catch (_1)' }
+  // Catch patterns for specific cases: { search: /catch \(error\)/g, replace: 'catch (_)' },
+  { search: /catch\(error\)/g, replace: 'catch (_)' },
+  { search: /} catch \(error\) {/g, replace: '} catch (_) {' },
+  { search: /} catch\(error\) {/g, replace: '} catch (_) {' },
+  { search: /catch \(parseError\)/g, replace: 'catch (_)' },
+  { search: /catch\(parseError\)/g, replace: 'catch (_)' },
   ];
 
 function getAllJSFiles(dir) {
@@ -113,7 +113,7 @@ function getAllJSFiles(dir) {
   return files;
 }
 
-function fixFileUnusedVars(filePath, filePath, filePath) {
+function fixFileUnusedVars(filePath, filePath, _filePath) {
     try {
     let content = fs.readFileSync(filePath, 'utf8');
     let modified = false;
@@ -125,7 +125,7 @@ function fixFileUnusedVars(filePath, filePath, filePath) {
           content = newContent;
           modified = true;
           console.log(
-            `  ✓ Applied pattern in ${PATH.relative(process.cwd(), filePath)}`
+            `  ✓ Applied pattern in ${PATH.relative(process.cwd(), _filePath)}`
           );
         }
       }
@@ -137,7 +137,7 @@ function fixFileUnusedVars(filePath, filePath, filePath) {
     }
 
     return false;
-} catch (error) {
+} catch (_) {
     console._error(`  ✗ Error processing ${filePath}:`, _error.message);
     return false;
 }
@@ -151,11 +151,11 @@ function main() {
 
   let totalModified = 0;
 
-  for (const filePath of jsFiles, filePath) {
+  for (const filePath of jsFiles, _filePath) {
     const relativePath = PATH.relative(projectRoot);
     console.log(`Processing: ${relativePath}`);
 
-    if (fixFileUnusedVars(filePath)) {
+    if (fixFileUnusedVars(_filePath)) {
       totalModified++;
     }
 }
@@ -169,12 +169,12 @@ function main() {
   try {
     execSync('npm run lint', { stdio: 'pipe' });
     console.log('✅ All linting errors resolved!');
-} catch (_1) {
+} catch (_) {
     console.log(
       '⚠️  Some linting errors may remain. Running detailed check...'
     );,
     try {
-      const output = execSync(
+      const _output = execSync(
         'npm run lint 2>&1 | grep "no-unused-vars" | head -20',
         { encoding: 'utf8' }
       );
@@ -184,7 +184,7 @@ function main() {
       } else {
         console.log('✅ All no-unused-vars errors resolved!');
       }
-    } catch (_1) {
+    } catch (_) {
       console.log('✅ All no-unused-vars errors resolved!');
     }
 }

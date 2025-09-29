@@ -126,7 +126,7 @@ const AGENT_IDS = [
       const initResults = [];
       for (const agentId of AGENT_IDS) {
         // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup with ordered agent initialization;
-const result = await execAPI('initialize', [agentId], {,
+const _result = await execAPI('initialize', [agentId], {,
     projectRoot: testDir,
         });
         expect(result.success).toBe(true);
@@ -165,8 +165,8 @@ const AGENT_IDS = Array.from(
       const concurrentCommands = AGENT_IDS.map((AGENT_ID) => ({,
     command: 'initialize',
         args: [AGENT_ID],
-        options: { projectRoot: testDir }
-  }));
+        options: { projectRoot: testDir },
+}));
 
       const results = await execAPIConcurrently(concurrentCommands);
 
@@ -366,8 +366,8 @@ const AGENT_IDS = [
 const reinitCommands = AGENT_IDS.map((AGENT_ID) => ({,
     command: 'reinitialize',
         args: [AGENT_ID],
-        options: { projectRoot: testDir }
-  }));
+        options: { projectRoot: testDir },
+}));
 
       const reinitResults = await execAPIConcurrently(reinitCommands);
 
@@ -453,7 +453,7 @@ const testCases = [ {,
         }, {,
     agentId: 'stop-agent-3',
           reason: 'Emergency stop requested by user',
-        }
+        },
   ];
 
       for (const testCase of testCases) {
@@ -654,7 +654,7 @@ const agents = ['persist-agent-1', 'persist-agent-2'];
 
       for (const agentId of agents) {
         await execAPI('initialize', [agentId], { projectRoot: testDir });
-        await execAPI('reinitialize', [agentId], { projectRoot: testDir });
+        await execAPI('reinitialize', [agentId], { projectRoot: testDir });,
       }
 
       // 2. Get stats after operations;
@@ -813,7 +813,7 @@ const agentTeam = [
 
       const initResults = [];
       for (const agentId of agentTeam) {
-        const result = await execAPI('initialize', [agentId], {,
+        const _result = await execAPI('initialize', [agentId], {,
     projectRoot: testDir,
         });
         expect(result.success).toBe(true);

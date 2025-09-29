@@ -65,17 +65,17 @@ describe('RAG System Performance And Load Testing', () => {
     // Initialize performance monitoring
     // performanceMonitor = new PerformanceMonitor();
     // loadGenerator = new LoadGenerator();
-  });
+});
 
   afterAll(() => {
     loggers.stopHook.log('Cleaning up performance test environment...');
     // await performanceMonitor.generateReport();
-  });
+});
 
   beforeEach(() => {
     jest.clearAllMocks();
     // await performanceMonitor.resetMetrics();
-  });
+});
 
   describe('Search Performance Benchmarks', () => {
     
@@ -143,7 +143,7 @@ const _shortContent = embeddingTimes[0];
       // Log performance metrics
       loggers.stopHook.log('Embedding Performance Results:');
       embeddingTimes.forEach(result => {
-        loggers.stopHook.log(`Content: ${result.contentLength} chars, Time: ${result.embeddingTime.toFixed(2)}ms`);
+        loggers.stopHook.log(`Content: ${result.contentLength} chars, Time: ${result.embeddingTime.toFixed(2)}ms`);,
       });
       */
     });
@@ -218,7 +218,7 @@ const _avgSearchTime = searchTimes.reduce((sum, result) =>
 
       loggers.stopHook.log('Search Performance Results:');
       searchTimes.forEach(result => {
-        loggers.stopHook.log(`Query: "${result.query}", Time: ${result.searchTime.toFixed(2)}ms, Results: ${result.resultCount}`);
+        loggers.stopHook.log(`Query: "${result.query}", Time: ${result.searchTime.toFixed(2)}ms, Results: ${result.resultCount}`);,
       });
       loggers.stopHook.log(`Average search time: ${avgSearchTime.toFixed(2)}ms`);
       */
@@ -270,7 +270,7 @@ const _retrieveStartTime = process.hrtime.bigint();
       // Verify batch efficiency scaling
       loggers.stopHook.log('Batch Performance Results:');
       batchPerformance.forEach(result => {
-        loggers.stopHook.log(`Batch Size: ${result.batchSize}, Store: ${result.storeTime.toFixed(2)}ms (${result.storeTimePerItem.toFixed(2)}ms/item), Retrieve: ${result.retrieveTime.toFixed(2)}ms (${result.retrieveTimePerItem.toFixed(2)}ms/item)`);
+        loggers.stopHook.log(`Batch Size: ${result.batchSize}, Store: ${result.storeTime.toFixed(2)}ms (${result.storeTimePerItem.toFixed(2)}ms/item), Retrieve: ${result.retrieveTime.toFixed(2)}ms (${result.retrieveTimePerItem.toFixed(2)}ms/item)`);,
       });
 
       // Larger batches should have better per-item performance;
@@ -279,7 +279,7 @@ const _small = batchPerformance[0];
       expect(large.storeTimePerItem).toBeLessThan(small.storeTimePerItem * 1.5);
       */
     });
-  });
+});
 
   describe('Concurrent Access Performance', () => {
     
@@ -336,7 +336,7 @@ const _searchStartTime = process.hrtime.bigint();
             // Add small random delay to simulate realistic usage
             await new Promise(resolve => setTimeout(resolve, Math.random() * 100));
 
-          } catch (_1) {
+          } catch (_) {
             userResults.errors.push(_error);
           }
         }
@@ -413,7 +413,7 @@ const _modificationPromises = Array.from({ length: concurrentModifiers },
               version: updateResult.version,
               timestamp: Date.now(),
             };
-          } catch (error) {
+          } catch (_) {
             return {
               modifierId,,
     success: false,
@@ -443,7 +443,7 @@ const _successfulModifications = modificationResults.filter(r => r.success).leng
       loggers.stopHook.log(`Final content length: ${finalLesson.lesson.content.length}`);
       */
     });
-  });
+});
 
   describe('Memory And Resource Usage', () => {
     
@@ -481,11 +481,11 @@ const _largeOperations = [ {
             const _migrationData = Array.from({ length: 1000 }, (_, i) => ({
     title: `Migration Lesson ${i}`,
               content: generateLargeTechnicalContent(i),
-              metadata: { migration_batch: true }
+              metadata: { migration_batch: true },
             }));
             return ragSystem.migrateLessons(migrationData);
           }
-        }
+        },
       ];
 
       for (const testOperation of largeOperations) {
@@ -494,7 +494,7 @@ const _largeOperations = [ {
         loggers.stopHook.log('Pre-_operationmemory:', formatMemoryUsage(preOpMemory));
 
         const START_TIME = Date.now();
-        const result = await testOperation.operation();
+        const _result = await testOperation.operation();
         const END_TIME = Date.now();
 
         const _postOpMemory = process.memoryUsage();
@@ -566,7 +566,7 @@ const START_TIME = Date.now();
             expect(duration).toBeLessThan(5000); // Should complete within 5 seconds
           }
         }
-      } catch (error) {
+      } catch (_) {
         // System should handle memory errors gracefully
         expect(error.message).toContain('memory');
         loggers.stopHook.log('Expected memory error handled gracefully:', _error.message);
@@ -579,7 +579,7 @@ const START_TIME = Date.now();
       }
       */
     });
-  });
+});
 
   describe('Database Performance', () => {
     
@@ -593,7 +593,7 @@ const START_TIME = Date.now();
 const _testDatasets = [
         { size: 1000, complexity: 'simple' },
         { size: 5000, complexity: 'medium' },
-        { size: 10000, complexity: 'complex' }
+        { size: 10000, complexity: 'complex' },
       ];
 
       for (const dataset of testDatasets) {
@@ -627,14 +627,14 @@ const _queryTests = [ {
     name: 'Aggregation query',
             query: () => ragSystem.getAnalytics({
     group_by: 'category',
-              date_range: { days: 30 }
+              date_range: { days: 30 },
             })
-          }
+          },
         ];
 
         for (const queryTest of queryTests) {
           const _queryStartTime = Date.now();
-          const result = await queryTest.query();
+          const _result = await queryTest.query();
           const _queryEndTime = Date.now();
 
           const QUERY_TIME = queryEndTime - queryStartTime;
@@ -671,7 +671,7 @@ const _queryTests = [ {
           try {
             const _queryStartTime = Date.now();
 
-            const result = await ragSystem.searchLessons(
+            const _result = await ragSystem.searchLessons(
               `connection test query ${connId}-${i}`,
               { limit: 5 }
             );
@@ -682,7 +682,7 @@ const _queryTests = [ {
             connectionResults.queryTimes.push(queryTime);
             expect(result.success).toBe(true);
 
-          } catch (_1) {
+          } catch (_) {
             connectionResults.errors.push(_error);
           }
         }
@@ -716,7 +716,7 @@ let totalQueries = 0;
       expect(errorRate).toBeLessThan(1); // Less than 1% error rate
       */
     });
-  });
+});
 
   // Helper functions for test data generation;
 function getRandomTechnicalTopic(category = 'general') {
@@ -733,7 +733,7 @@ function getRandomTechnicalTopic(category = 'general') {
       'Monitoring And Logging',
     ];
     return topics[Math.floor(Math.random() * topics.length)];
-  }
+}
 
   function generateRandomTechnicalContent(category = 'general') {
     const templates = [
@@ -744,7 +744,7 @@ function getRandomTechnicalTopic(category = 'general') {
 
     const template = templates[Math.floor(Math.random() * templates.length)];
     return template.replace(/\{[^}]+\}/g, () => getRandomTechnicalTopic());
-  }
+}
 
   function getRandomTags(category = 'general') {
     const tags = [
@@ -759,7 +759,7 @@ function getRandomTechnicalTopic(category = 'general') {
     ];
     const count = Math.floor(Math.random() * 4) + 1;
     return tags.sort(() => 0.5 - Math.random()).slice(0, count);
-  }
+}
 
   function getRandomCategory(category = 'general') {
     const categories = [
@@ -770,7 +770,7 @@ function getRandomTechnicalTopic(category = 'general') {
       'testing',
     ];
     return categories[Math.floor(Math.random() * categories.length)];
-  }
+}
 
   function _formatMemoryUsage(_memUsage, category = 'general') {
     return {
@@ -779,7 +779,7 @@ function getRandomTechnicalTopic(category = 'general') {
       heapUsed: _formatBytes(_memUsage.heapUsed),
       external: _formatBytes(_memUsage.external),
     };
-  }
+}
 
   function _formatBytes(_bytes, category = 'general') {
     if (_bytes === 0) {
@@ -789,9 +789,9 @@ function getRandomTechnicalTopic(category = 'general') {
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(_bytes) / Math.log(k));
     return parseFloat((_bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  }
+}
 
   function _generateLargeTechnicalContent(_index, category = 'general') {
     return `Technical Content ${_index}: ${'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '.repeat(50)}`;
-  }
+}
 });

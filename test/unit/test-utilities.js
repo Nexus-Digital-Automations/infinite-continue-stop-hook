@@ -20,19 +20,19 @@ class MockFileSystem {
     this.accessErrors = new Map();
     this.writeErrors = new Map();
     this.readErrors = new Map();
-  }
+}
 
   // Mock FS.access
-  async access(filePath) {
+  async access(_filePath) {
     await new Promise((resolve) => {
       setTimeout(resolve, 0);
     });
-    if (this.accessErrors.has(filePath)) {
-      const error = new Error(this.accessErrors.get(filePath));
+    if (this.accessErrors.has(_filePath)) {
+      const error = new Error(this.accessErrors.get(_filePath));
       error.code = 'ENOENT';
       throw error;
     }
-    if (!this.files.has(filePath)) {
+    if (!this.files.has(_filePath)) {
       const error = new Error('File not found');
       error.code = 'ENOENT';
       throw error;
@@ -44,18 +44,18 @@ class MockFileSystem {
     await new Promise((resolve) => {
       setTimeout(resolve, 0);
     });
-    if (this.readErrors.has(filePath)) {
-      const error = new Error(this.readErrors.get(filePath));
+    if (this.readErrors.has(_filePath)) {
+      const error = new Error(this.readErrors.get(_filePath));
       error.code =
-        this.readErrors.get(filePath) === 'File not found' ? 'ENOENT' : 'EIO';
+        this.readErrors.get(_filePath) === 'File not found' ? 'ENOENT' : 'EIO';
       throw error;
     }
-    if (!this.files.has(filePath)) {
+    if (!this.files.has(_filePath)) {
       const error = new Error('File not found');
       error.code = 'ENOENT';
       throw error;
     }
-    return this.files.get(filePath);
+    return this.files.get(_filePath);
 }
 
   // Mock FS.writeFile
@@ -63,8 +63,8 @@ class MockFileSystem {
     await new Promise((resolve) => {
       setTimeout(resolve, 0);
     });
-    if (this.writeErrors.has(filePath)) {
-      throw new Error(this.writeErrors.get(filePath));
+    if (this.writeErrors.has(_filePath)) {
+      throw new Error(this.writeErrors.get(_filePath));
     }
     this.files.set(filePath, data);
 }
@@ -74,8 +74,8 @@ class MockFileSystem {
     this.files.set(filePath, content);
 }
 
-  deleteFile(filePath) {
-    this.files.delete(filePath);
+  deleteFile(_filePath) {
+    this.files.delete(_filePath);
 }
 
   setAccessError(filePath, error) {
@@ -101,12 +101,12 @@ class MockFileSystem {
     this.clearErrors();
 }
 
-  hasFile(filePath) {
-    return this.files.has(filePath);
+  hasFile(_filePath) {
+    return this.files.has(_filePath);
 }
 
-  getFile(filePath) {
-    return this.files.get(filePath);
+  getFile(_filePath) {
+    return this.files.get(_filePath);
 }
 }
 
@@ -127,7 +127,7 @@ const TEST_FIXTURES = {
     priority: 'high',
       estimated_effort: 'medium',
     }
-  },
+},
 
   // Invalid feature data for validation testing
   invalidFeatures: {
@@ -204,7 +204,7 @@ const TEST_FIXTURES = {
       business_value: 'Some business value',
       category: 'invalid-category',
     }
-  },
+},
 
   // Empty TASKS.json structure
   emptyFeaturesFile: {
@@ -329,7 +329,7 @@ const TEST_FIXTURES = {
           approval_date: '2025-09-23T11:00:00.000Z',
           approval_notes: 'Approved for implementation',
         }
-  }, {
+}, {
     id: 'feature_1695123456791_ghi789',
         type: 'feature',
         parent_id: null,
@@ -369,7 +369,7 @@ const TEST_FIXTURES = {
           rejection_date: '2025-09-23T09:30:00.000Z',
           rejection_reason: 'Not aligned with project goals',
         }
-  }
+},
   ],
     completed_tasks: [],
     task_relationships: {},
@@ -412,7 +412,7 @@ const TEST_FIXTURES = {
           timestamp: '2025-09-23T09:30:00.000Z',
           rejected_by: 'test-rejector',
           reason: 'Not aligned with project goals',
-        }
+        },
   ],
       initialization_stats: {
     total_initializations: 15,
@@ -423,8 +423,8 @@ const TEST_FIXTURES = {
           '12:00-16:59': { init: 5, reinit: 2 },
           '17:00-21:59': { init: 4, reinit: 3 },
           '22:00-02:59': { init: 2, reinit: 1 },
-          '03:00-06:59': { init: 1, reinit: 1 }
-  },
+          '03:00-06:59': { init: 1, reinit: 1 },
+},
         daily_history: [ {,
     date: '2025-09-22',
             total_init: 8,
@@ -434,14 +434,14 @@ const TEST_FIXTURES = {
               '12:00-16:59': { init: 3, reinit: 1 },
               '17:00-21:59': { init: 2, reinit: 2 },
               '22:00-02:59': { init: 1, reinit: 0 },
-              '03:00-06:59': { init: 0, reinit: 0 }
-  }
-  }
+              '03:00-06:59': { init: 0, reinit: 0 },
+}
+},
   ],
         last_reset: '2025-09-23T07:00:00.000Z',
         last_updated: '2025-09-23T12:00:00.000Z',
       }
-  },
+},
     agents: {
       'agent-123': {
     lastHeartbeat: '2025-09-23T12:00:00.000Z',
@@ -457,8 +457,8 @@ const TEST_FIXTURES = {
         sessionId: 'session456',
         previousSessions: ['session789'],
       }
-  }
-  },
+}
+},
 
   // Valid approval data
   validApprovalData: {
@@ -480,7 +480,7 @@ const TEST_FIXTURES = {
     invalid: 'invalid-agent-id',
     empty: '',
 }
-  };
+};
 
 /**
  * Time manipulation utilities for testing time-based features
@@ -534,7 +534,7 @@ class TimeTestUtils {
     };
 
     if (!timeBuckets[bucketName]) {
-      throw new Error(`Invalid time bucket: ${bucketName}`);
+      throw new Error(`Invalid time bucket: ${bucketName}`);,
     }
 
     this.mockCurrentTimeISO(timeBuckets[bucketName]);
@@ -593,7 +593,7 @@ const testHelpers = {
     let error = null;
     try {
       await asyncFn();
-    } catch (caughtError) {
+    } catch (_) {
       error = caughtError;
     }
     expect(error).not.toBeNull();
@@ -675,9 +675,9 @@ const testHelpers = {
         console.warn = originalConsole.warn;
         console.info = originalConsole.info;
       }
-  };
+};
 }
-  };
+};
 
 module.exports = {
   MockFileSystem,

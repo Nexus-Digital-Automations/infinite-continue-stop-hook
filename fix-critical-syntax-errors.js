@@ -34,7 +34,7 @@ const fixes = [
   { pattern: /=\s*\{/g, replacement: '= {' },
 ];
 
-function fixFile(filePath) {
+function fixFile(_filePath) {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
     let fixedContent = content;
@@ -56,7 +56,7 @@ function fixFile(filePath) {
       console.log(`✅ Fixed: ${filePath}`);
       return true;
     }
-  } catch (error) {
+  } catch (_) {
     console.error(`❌ Error processing ${filePath}:`, error.message);
   }
   return false;

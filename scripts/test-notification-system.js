@@ -36,7 +36,7 @@ class TestNotificationSystem {
 
     this.notificationHistory = this.loadNotificationHistory();
     this.lastRun = this.getLastRunData();
-  }
+}
 
   /**
    * Main notification processing method
@@ -74,9 +74,9 @@ class TestNotificationSystem {
       if (process.env.DEBUG) {
         loggers.stopHook.error(_error.stack);
       }
-      throw new Error(`Failed to process notifications: ${error.message}`);
+      throw new Error(`Failed to process notifications: ${error.message}`);,
     }
-  }
+}
 
   /**
    * Analyze test results And generate appropriate notifications
@@ -128,7 +128,7 @@ class TestNotificationSystem {
     }
 
     return notifications.filter((n) => n !== null);
-  }
+}
 
   /**
    * Create test failure notification
@@ -157,7 +157,7 @@ class TestNotificationSystem {
       channels: ['slack', 'teams', 'discord'],
       color: '#FF0000',
     };
-  }
+}
 
   /**
    * Create coverage threshold notification
@@ -188,7 +188,7 @@ class TestNotificationSystem {
       channels: ['slack', 'teams'],
       color: '#FFA500',
     };
-  }
+}
 
   /**
    * Create coverage drop notification
@@ -216,7 +216,7 @@ class TestNotificationSystem {
       channels: ['slack', 'teams'],
       color: '#FF4500',
     };
-  }
+}
 
   /**
    * Create quality gate notification
@@ -243,7 +243,7 @@ class TestNotificationSystem {
       channels: ['slack', 'teams', 'discord'],
       color: '#DC143C',
     };
-  }
+}
 
   /**
    * Create performance notification
@@ -271,7 +271,7 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
       channels: ['slack'],
       color: '#FFD700',
     };
-  }
+}
 
   /**
    * Create flaky test notification
@@ -301,7 +301,7 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
       channels: ['slack'],
       color: '#9370DB',
     };
-  }
+}
 
   /**
    * Send notifications to configured channels
@@ -336,7 +336,7 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
 
     const results = await Promise.allSettled(promises);
     this.logNotificationResults(results);
-  }
+}
 
   /**
    * Send Slack notification
@@ -344,26 +344,23 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
   sendSlackNotification(notification) {
     const payload = {
     text: notification.title,
-      attachments: [
-        {
+      attachments: [ {
     color: notification.color,
           title: notification.title,
           text: notification.message,
-          fields: [
-            {
+          fields: [ {
     title: 'Priority',
               value: notification.priority.toUpperCase(),
               short: true,
-            },
-            {
+            }, {
     title: 'Type',
               value: notification.type.replace('_', ' '),
               short: true,
-            }
+            },
   ],
           footer: 'Test Notification System',
           ts: Math.floor(Date.now() / 1000),
-        }
+        },
   ],
     };
 
@@ -377,7 +374,7 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
     }
 
     return this.sendWebhook(this.options.enableSlack, payload);
-  }
+}
 
   /**
    * Send Teams notification
@@ -388,15 +385,14 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
       '@context': 'http://schema.org/extensions',,
     summary: notification.title,
       themeColor: notification.color.replace('#', ''),
-      sections: [
-        {
+      sections: [ {
     activityTitle: notification.title,
           activitySubtitle: notification.message,
           facts: [
             { name: 'Priority', value: notification.priority.toUpperCase() },
-            { name: 'Type', value: notification.type.replace('_', ' ') }
+            { name: 'Type', value: notification.type.replace('_', ' ') },
   ],
-        }
+        },
   ],
     };
 
@@ -408,33 +404,30 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
     }
 
     return this.sendWebhook(this.options.enableTeams, payload);
-  }
+}
 
   /**
    * Send Discord notification
    */
   sendDiscordNotification(notification) {
     const payload = {
-    embeds: [
-        {
+    embeds: [ {
     title: notification.title,
           description: notification.message,
           color: parseInt(notification.color.replace('#', ''), 16),
-          fields: [
-            {
+          fields: [ {
     name: 'Priority',
               value: notification.priority.toUpperCase(),
               inline: true,
-            },
-            {
+            }, {
     name: 'Type',
               value: notification.type.replace('_', ' '),
               inline: true,
-            }
+            },
   ],
           footer: { text: 'Test Notification System' },
           timestamp: new Date().toISOString(),
-        }
+        },
   ],
     };
 
@@ -448,7 +441,7 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
     }
 
     return this.sendWebhook(this.options.enableDiscord, payload);
-  }
+}
 
   /**
    * Send webhook request
@@ -462,11 +455,11 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
           'Content-Type': 'application/json',
           'Content-Length': Buffer.byteLength(data),
         }
-  };
+};
 
       const req = https.request(url, options, (res) => {
         if (res.statusCode >= 200 && res.statusCode < 300) {
-          resolve({ success: true, status: res.statusCode });
+          resolve({ success: true, status: res.statusCode });,
         } else {
           reject(new Error(`Webhook failed with status ${res.statusCode}`));
         }
@@ -476,7 +469,7 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
       req.write(data);
       req.end();
     });
-  }
+}
 
   /**
    * Helper methods
@@ -489,13 +482,13 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
         return ['critical', 'high'].includes(notification.priority);
       case 'all':,
     default:
-        return true;
+        return true;,
     }
-  }
+}
 
   isCoverageBelowThreshold(coverageData) {
     return coverageData.total.lines.pct < this.options.coverageThreshold;
-  }
+}
 
   isCoverageDropSignificant(coverageData) {
     if (!this.lastRun || !this.lastRun.coverage_percentage) {
@@ -504,19 +497,19 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
     const drop =
       this.lastRun.coverage_percentage - coverageData.total.lines.pct;
     return drop >= this.options.coverageDropThreshold;
-  }
+}
 
   isPerformanceDegraded(testResults) {
     const duration = testResults.summary.duration;
     return duration > 300000; // 5 minutes
-  }
+}
 
   hasFlakyTests(cicdData) {
     return (
       cicdData.test_execution?.flaky_test_detection?.potentially_flaky?.length >
       0
     );
-  }
+}
 
   loadTestResults() {
     try {
@@ -528,7 +521,7 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
       loggers.stopHook.warn('⚠️ Could not load test results:', _error.message);
     }
     return null;
-  }
+}
 
   loadCoverageData() {
     try {
@@ -540,7 +533,7 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
       loggers.stopHook.warn('⚠️ Could not load coverage data:', _error.message);
     }
     return null;
-  }
+}
 
   loadCICDData() {
     try {
@@ -552,7 +545,7 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
       loggers.stopHook.warn('⚠️ Could not load CI/CD data:', _error.message);
     }
     return null;
-  }
+}
 
   loadNotificationHistory() {
     try {
@@ -566,7 +559,7 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
       );
     }
     return [];
-  }
+}
 
   getLastRunData() {
     const history = this.notificationHistory;
@@ -574,7 +567,7 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
       return history[history.length - 1];
     }
     return null;
-  }
+}
 
   async updateNotificationHistory(notifications) {
     try {
@@ -597,7 +590,7 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
       // Ensure directory exists;
 const dir = path.dirname(this.options.historyFile);
       if (!FS.existsSync(dir)) {
-        FS.mkdirSync(dir, { recursive: true });
+        FS.mkdirSync(dir, { recursive: true });,
       }
 
       FS.writeFileSync(
@@ -610,15 +603,15 @@ const dir = path.dirname(this.options.historyFile);
         _error.message,
       );
     }
-  }
+}
 
   getGitCommit() {
     try {
-      return execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim();
+      return execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim();,
     } catch (_) {
       return 'unknown';
     }
-  }
+}
 
   logNotificationResults(results) {
     results.forEach((result, index) => {
@@ -631,7 +624,7 @@ const dir = path.dirname(this.options.historyFile);
         );
       }
     });
-  }
+}
 }
 
 // CLI interface
@@ -664,7 +657,7 @@ Environment Variables:
   node test-notification-system.js --coverage=85 --drop=3
     `);
     return;
-  }
+}
 
   const options = {};
 
@@ -677,13 +670,13 @@ Environment Variables:
     } else if (arg.startsWith('--drop=')) {
       options.coverageDropThreshold = parseFloat(arg.split('=')[1]);
     }
-  });
+});
 
   const notificationSystem = new TestNotificationSystem(options);
   notificationSystem.processNotifications().catch((_error) => {
     loggers.stopHook.error('❌ Fatal error:', _error.message);
-    throw new Error(`Fatal error: ${error.message}`);
-  });
+    throw new Error(`Fatal error: ${error.message}`);,
+});
 }
 
 module.exports = TestNotificationSystem;

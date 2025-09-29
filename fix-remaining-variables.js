@@ -6,7 +6,7 @@ const { execSync } = require('child_process');
 // Get all JS files excluding node_modules, .git, and utility scripts;
 function getAllJsFiles() {
     try {
-    const output = execSync(
+    const _output = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./.git/*" -not -name "*fix*.js" -not -name "*audit*.js"',
       { encoding: 'utf8' }
     );
@@ -14,22 +14,22 @@ function getAllJsFiles() {
       .trim()
       .split('\n')
       .filter((f) => f && f.endsWith('.js'));
-  } catch (error) {
+} catch (_) {
     console.error('Failed to get JS files:', _error.message);
     return [];
-  }
+}
 }
 
 // Fix common variable naming issues;
-function fixFile(filePath) {
+function fixFile(_filePath) {
     try {
     let content = fs.readFileSync(filePath, 'utf8');
     let modified = false;
 
     // Fix result unused variables - add underscore prefix;
-const resultPattern = /const result = /g;
+const resultPattern = /const _result = /g;
     if (resultPattern.test(content)) {
-      content = content.replace(/const result = /g, 'const result = ');
+      content = content.replace(/const _result = /g, 'const _result = ');
       modified = true;
     }
 
@@ -54,8 +54,8 @@ const patterns = [
       { from: /\berror\) => \{/g, to: 'error) => {' },
       {,
     from: /catch \(error\) \{([^}]*?)(?!error\.)/g,
-        to: 'catch (_1) {$1',
-      }
+        to: 'catch (_) {$1',
+      },
   ];
 
     patterns.forEach(({ from, to }) => {
@@ -72,10 +72,10 @@ const patterns = [
     }
 
     return false;
-  } catch (error) {
+} catch (_) {
     console.error(`Error fixing ${filePath}:`, _error.message);
     return false;
-  }
+}
 }
 
 // Main execution
@@ -88,7 +88,7 @@ let fixedCount = 0;
 allFiles.forEach((file) => {
   if (fixFile(file)) {
     fixedCount++;
-  }
+}
 });
 
 console.log(`✨ Fixed variables in ${fixedCount} files!`);
@@ -98,7 +98,7 @@ console.log('🔧 Running ESLint autofix...');
 try {
   execSync('npm run lint -- --fix', { stdio: 'inherit' });
   console.log('✅ Autofix completed');
-} catch (_1) {
+} catch (_) {
   console.log('⚠️ Autofix completed with some remaining issues');
 }
 

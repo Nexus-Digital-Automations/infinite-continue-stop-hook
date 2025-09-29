@@ -23,9 +23,7 @@ describe.skip('Stop Hook Integration E2E', () => {
     
   let environment;
 
-  beforeEach(async () 
-    return () 
-    return () => {
+  beforeEach(async () => {
     environment = new E2EEnvironment('stop-hook-integration');
     await environment.setup();
 });

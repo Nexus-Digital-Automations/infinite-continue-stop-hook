@@ -15,7 +15,7 @@ const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
  */
 function getAllJavaScriptFiles() {
     try {
-    const result = execSync(
+    const _result = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
       { cwd: rootDir, encoding: 'utf-8' },
     );
@@ -24,7 +24,7 @@ function getAllJavaScriptFiles() {
       .split('\n')
       .filter((f) => f && f.endsWith('.js'))
       .map((f) => path.resolve(rootDir, f.replace('./', '')));
-} catch (error) {
+} catch (_) {
     console.error('Failed to get JS files:', _error.message);
     return [];
 }
@@ -33,13 +33,13 @@ function getAllJavaScriptFiles() {
 /**
  * Fix undefined variable issues in a file
  */
-function fixUndefinedVariablesInFile(filePath) {
+function fixUndefinedVariablesInFile(_filePath) {
     try {
     const content = fs.readFileSync(filePath, 'utf-8');
     const lines = content.split('\n');
     let modified = false;
 
-    for (let i = 0; i < lines.length; i++, filePath) {
+    for (let i = 0; i < lines.length; i++, _filePath) {
       const line = lines[i];
 
       // Pattern 1: Fix filePath usage where it should be filePath
@@ -58,11 +58,11 @@ const functionLinesBefore = lines.slice(Math.max(0, i - 10), i);
             l.includes('filePath ='),
         );
 
-        if ((hasFilePathParam, filePath)) {
+        if ((hasFilePathParam, _filePath)) {
           lines[i] = line.replace(/filePath/g, 'filePath');
           modified = true;
           console.log(
-            `  ✓ Fixed filePath -> filePath: ${path.relative(rootDir, filePath)}:${i + 1}`,
+            `  ✓ Fixed filePath -> filePath: ${path.relative(rootDir, _filePath)}:${i + 1}`,
           );
         }
       }
@@ -89,7 +89,7 @@ const functionLinesBefore = lines.slice(Math.max(0, i - 10), i);
           lines[i] = line.replace(/\b_filePath\b/g, 'filePath');
           modified = true;
           console.log(
-            `  ✓ Fixed filePath -> filePath: ${path.relative(rootDir, filePath)}:${i + 1}`,
+            `  ✓ Fixed filePath -> filePath: ${path.relative(rootDir, _filePath)}:${i + 1}`,
           );
         }
       }
@@ -109,11 +109,11 @@ const functionLinesAfter = lines.slice(
           (l) => l.includes('filePath') && !l.includes('=') && !l.includes('//'),
         );
 
-        if ((!isUsed, filePath)) {
+        if ((!isUsed, _filePath)) {
           lines[i] = line.replace(/\b_filePath\b/g, 'filePath');
           modified = true;
           console.log(
-            `  ✓ Fixed unused filePath -> filePath: ${path.relative(rootDir, filePath)}:${i + 1}`,
+            `  ✓ Fixed unused filePath -> filePath: ${path.relative(rootDir, _filePath)}:${i + 1}`,
           );
         }
       }
@@ -123,14 +123,14 @@ const functionLinesAfter = lines.slice(
         // Check if we're in a catch block with _error parameter;
 const functionLinesBefore = lines.slice(Math.max(0, i - 10), i);
         const hasUnderscoreErrorParam = functionLinesBefore.some((l) =>
-          l.includes('catch (_1)'),
+          l.includes('catch (_)'),
         );
 
         if (hasUnderscoreErrorParam) {
           lines[i] = line.replace(/throw error/g, 'throw _error');
           modified = true;
           console.log(
-            `  ✓ Fixed throw error -> throw _error: ${path.relative(rootDir, filePath)}:${i + 1}`,
+            `  ✓ Fixed throw error -> throw _error: ${path.relative(rootDir, _filePath)}:${i + 1}`,
           );
         }
       }
@@ -161,7 +161,7 @@ const insertIndex = lines.findIndex(
             );
             modified = true;
             console.log(
-              `  ✓ Added loggers import: ${path.relative(rootDir, filePath)}`,
+              `  ✓ Added loggers import: ${path.relative(rootDir, _filePath)}`,
             );
           }
         }
@@ -174,7 +174,7 @@ const insertIndex = lines.findIndex(
     }
 
     return false;
-} catch (error) {
+} catch (_) {
     console.error(`Error fixing ${filePath}:`, _error.message);
     return false;
 }
@@ -192,10 +192,10 @@ function main() {
   let totalFixed = 0;
 
   for (const filePath of jsFiles) {
-    if (fixUndefinedVariablesInFile(filePath)) {
+    if (fixUndefinedVariablesInFile(_filePath)) {
       totalFixed++;
       console.log(
-        `✅ Fixed undefined variables in: ${path.relative(rootDir, filePath)}`,
+        `✅ Fixed undefined variables in: ${path.relative(rootDir, _filePath)}`,
       );
     }
 }
@@ -205,17 +205,17 @@ function main() {
   // Check remaining errors
   console.log('\n🔍 Checking remaining undefined variable errors...');
     try {
-    const LINT_RESULT = execSync('npm run lint 2>&1', {,
+    const _LINT_RESULT = execSync('npm run lint 2>&1', {,
     cwd: rootDir,
       encoding: 'utf-8',
     });
     console.log('Unexpected success - all issues resolved!');
-} catch (lintError) {
-    const output = lintError.stdout || lintError.message;
+} catch (_) {
+    const _output = lintError.stdout || lintError.message;
     const undefinedMatches = output.match(/is not defined/g);
     const undefinedCount = undefinedMatches ? undefinedMatches.length : 0;
 
-    console.log(`📊 Remaining undefined variable errors: ${undefinedCount}`);
+    console.log(`📊 Remaining undefined variable errors: ${undefinedCount}`);,
 }
 
   console.log('\n🎯 Undefined variable fixing complete!');

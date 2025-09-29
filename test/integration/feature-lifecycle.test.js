@@ -79,7 +79,7 @@ const categories = [
 const suggestResults = [];
       for (const featureData of features) {
         // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup;
-const result = await execAPI(
+const _result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)], {
     projectRoot: testDir,
@@ -117,7 +117,7 @@ const categoryResult = await execAPI(
 
         expect(categoryResult.success).toBe(true);
         expect(categoryResult.features).toHaveLength(1);
-        expect(categoryResult.features[0].category).toBe(category);
+        expect(categoryResult.features[0].category).toBe(_category);
       }
 
       // 5. Verify statistics;
@@ -156,11 +156,11 @@ const incompleteFeatures = [ {,
     title: 'Missing task.category',
           description: 'Test',
           business_value: 'Test',
-        }
+        },
   ];
 
       for (const incompleteFeature of incompleteFeatures) {
-        const result = await execAPI(
+        const _result = await execAPI(
           'suggest-feature',
           [JSON.stringify(incompleteFeature)], {
     projectRoot: testDir,
@@ -244,8 +244,8 @@ const featureCount = 20;
       const commands = features.map((featureData) => ({,
     command: 'suggest-feature',
         args: [JSON.stringify(featureData)],
-        options: { projectRoot: testDir }
-  }));
+        options: { projectRoot: testDir },
+}));
 
       // 2. Execute all suggestions concurrently;
 const results = await execAPIConcurrently(commands);
@@ -295,7 +295,7 @@ const testFeatures = [
 
       const featureIds = [];
       for (const featureData of testFeatures) {
-        const result = await execAPI(
+        const _result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)], {
     projectRoot: testDir,
@@ -315,7 +315,7 @@ const approvalData = [ {
         }, {
     approved_by: 'security-team',
           notes: 'Essential security improvement',
-        }
+        },
   ];
 
       for (let i = 0; i < featureIds.length; i++) {
@@ -380,7 +380,7 @@ const featureCount = 15;
 
       const featureIds = [];
       for (const featureData of features) {
-        const result = await execAPI(
+        const _result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)], {
     projectRoot: testDir,
@@ -521,7 +521,7 @@ const testFeatures = [
 
       const featureIds = [];
       for (const featureData of testFeatures) {
-        const result = await execAPI(
+        const _result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)], {
     projectRoot: testDir,
@@ -539,7 +539,7 @@ const rejectionReasons = [ {,
         { rejected_by: 'architect', reason: 'Out of current project scope' }, {
     rejected_by: 'team-lead',
           reason: 'Duplicate of existing feature #123',
-        }
+        },
   ];
 
       for (let i = 0; i < featureIds.length; i++) {
@@ -666,7 +666,7 @@ const testFeatures = [ {
     title: 'New Dashboard',
           category: 'new-feature',
           status: 'suggested',
-        }
+        },
   ];
 
       for (const feature of testFeatures) {
@@ -759,7 +759,7 @@ const rejectedResult = await execAPI(
 
         expect(categoryResult.success).toBe(true);
         expect(categoryResult.features).toHaveLength(1);
-        expect(categoryResult.features[0].category).toBe(category);
+        expect(categoryResult.features[0].category).toBe(_category);
       }
     });
 
@@ -830,7 +830,7 @@ const sprintFeatures = [
 
       const featureIds = [];
       for (const featureData of sprintFeatures) {
-        const result = await execAPI(
+        const _result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)], {
     projectRoot: testDir,
@@ -935,7 +935,7 @@ const featureCount = 50;
       // 2. Suggest all features;
 const featureIds = [];
       for (const featureData of features) {
-        const result = await execAPI(
+        const _result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)], {
     projectRoot: testDir,

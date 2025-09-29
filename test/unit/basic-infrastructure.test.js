@@ -64,7 +64,7 @@ describe('Basic Testing Infrastructure', () => {
       expect(id2).toMatch(/^task-/);
       expect(id1).not.toBe(id2);
     });
-  });
+});
 
   describe('Test Data Factory', () => {
     
@@ -121,7 +121,7 @@ describe('Basic Testing Infrastructure', () => {
       expect(task.priority).toBe('medium');
       expect(task.task.category).toBe('test');
     });
-  });
+});
 
   describe('Sample Data Fixtures', () => {
     
@@ -167,7 +167,7 @@ const unit = TEST_CONFIGURATIONS.unit;
       expect(unit.testTimeout).toBe(5000);
       expect(unit.coverage.threshold.functions).toBe(80);
     });
-  });
+});
 
   describe('Performance Utilities', () => {
     
@@ -201,8 +201,8 @@ const unit = TEST_CONFIGURATIONS.unit;
 const largeArray = new Array(1000).fill(0).map((_, i) => ({,
     id: i,
             data: `test-data-${i}`,
-            nested: { value: i * 2 }
-  }));
+            nested: { value: i * 2 },
+}));
           return largeArray.length;
         },
       );
@@ -212,7 +212,7 @@ const largeArray = new Array(1000).fill(0).map((_, i) => ({,
       expect(typeof memoryDelta.heapUsed).toBe('number');
       expect(typeof memoryDelta.rss).toBe('number');
     });
-  });
+});
 
   describe('Test Execution Utilities', () => {
     
@@ -239,7 +239,7 @@ const timeout = 100; // 100ms timeout
         setTimeout(() => resolve('success'), 50);
       }); // 50ms;
 const timeout = 100; // 100ms timeout;
-const result = await TestExecution.withTimeout(promise, timeout);
+const _result = await TestExecution.withTimeout(promise, timeout);
       expect(result).toBe('success');
     });
 
@@ -248,7 +248,7 @@ const result = await TestExecution.withTimeout(promise, timeout);
     
       let attempts = 0;
 
-      const result = await TestExecution.retry(
+      const _result = await TestExecution.retry(
         () 
     return () 
     return () => {
@@ -303,7 +303,7 @@ const result = await TestExecution.withTimeout(promise, timeout);
         0, 2, 4, 6, 8, 10, 12, 14,
       ]);
     });
-  });
+});
 
   describe('Test LOGGER', () => {
     
@@ -326,7 +326,7 @@ const result = await TestExecution.withTimeout(promise, timeout);
       expect(() => TestLogger.error('Test with data', testData)).not.toThrow();
       expect(() => TestLogger.debug('Test with data', testData)).not.toThrow();
     });
-  });
+});
 
   describe('Data Validation', () => {
     
@@ -364,7 +364,7 @@ const validCategories = [
       expect(Array.isArray(validAgent.skills)).toBe(true);
       expect(validAgent.status).toBeDefined();
     });
-  });
+});
 
   describe('Error Handling', () => {
     
@@ -393,5 +393,5 @@ const validCategories = [
       expect(() => TestDataFactory.createFeatureData(null)).not.toThrow();
       expect(() => TestDataFactory.createFeatureData(undefined)).not.toThrow();
     });
-  });
+});
 });

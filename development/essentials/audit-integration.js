@@ -31,14 +31,14 @@ class SecurityUtils {
    * @returns {string} Safe resolved path
    * @throws {Error} If path is invalid or outside base directory
    */
-  static validatePath(basePath, filePath) {
+  static validatePath(basePath, _filePath) {
     if (!filePath || typeof filePath !== 'string') {
       throw new Error('Invalid file path provided');
     }
 
     // Resolve paths to prevent directory traversal;
     const resolvedBase = path.resolve(basePath);
-    const resolvedPath = path.resolve(basePath, path.basename(filePath));
+    const resolvedPath = path.resolve(basePath, path.basename(_filePath));
 
     // Ensure the resolved path is within the base directory
     if (
@@ -51,7 +51,7 @@ class SecurityUtils {
     }
 
     return resolvedPath;
-  }
+}
 
   /**
    * Safely read file with path validation
@@ -61,10 +61,10 @@ class SecurityUtils {
    * @returns {Promise<string>} File contents
    */
   static safeReadFile(basePath, filePath, encoding = 'utf-8') {
-    const safePath = this.validatePath(basePath, filePath);
+    const safePath = this.validatePath(basePath, _filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
     return FS.readFile(safePath, encoding);
-  }
+}
 
   /**
    * Safely write file with path validation
@@ -74,12 +74,12 @@ class SecurityUtils {
    * @returns {Promise<void>}
    */
   static async safeWriteFile(basePath, filePath, content) {
-    const safePath = this.validatePath(basePath, filePath);
+    const safePath = this.validatePath(basePath, _filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
     await FS.mkdir(path.dirname(safePath), { recursive: true });
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
     return FS.writeFile(safePath, content, 'utf-8');
-  }
+}
 
   /**
    * Safely append to file with path validation
@@ -89,12 +89,12 @@ class SecurityUtils {
    * @returns {Promise<void>}
    */
   static async safeAppendFile(basePath, filePath, content) {
-    const safePath = this.validatePath(basePath, filePath);
+    const safePath = this.validatePath(basePath, _filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
     await FS.mkdir(path.dirname(safePath), { recursive: true });
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
     return FS.appendFile(safePath, content);
-  }
+}
 }
 
 /**
@@ -103,7 +103,7 @@ class SecurityUtils {
 class AuditLogger {
   constructor(__agentId) {
     this.logs = [];
-  }
+}
 
   log(message) {
     const logEntry = {
@@ -114,7 +114,7 @@ class AuditLogger {
     this.logs.push(logEntry);
     // for audit system, we'll use process.stdout to maintain output
     process.stdout.write(`[AUDIT] ${message}\n`);
-  }
+}
 
   error(message) {
     const logEntry = {
@@ -124,11 +124,11 @@ class AuditLogger {
     };
     this.logs.push(logEntry);
     process.stderr.write(`[AUDIT ERROR] ${message}\n`);
-  }
+}
 
   getLogs() {
     return this.logs;
-  }
+}
 }
 
 class AUDIT_INTEGRATION {
@@ -154,7 +154,7 @@ class AUDIT_INTEGRATION {
       audit: ['audit', 'quality', 'review'],
       research: ['research', 'analysis', 'investigation'],
     };
-  }
+}
 
   /**
    * Create comprehensive audit task for completed feature implementation
@@ -187,7 +187,7 @@ class AUDIT_INTEGRATION {
 
     this.logger.log(`✅ Audit task created: ${auditTask.taskId}`);
     return auditTask;
-  }
+}
 
   /**
    * Generate comprehensive audit task definition with 25-point criteria
@@ -244,7 +244,7 @@ class AUDIT_INTEGRATION {
     };
 
     return auditTaskData;
-  }
+}
 
   /**
    * Generate detailed audit task description with context
@@ -284,7 +284,7 @@ class AUDIT_INTEGRATION {
 5. Remediation task generation for any failures
 
 Refer to development/essentials/audit-criteria.md for complete criteria definitions And validation procedures.`;
-  }
+}
 
   /**
    * Generate 25-point success criteria integrated with project requirements
@@ -332,7 +332,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
       'PROJECT INTEGRATION: Agent coordination capabilities preserved',
       'PROJECT INTEGRATION: Multi-agent development standards met',
     ];
-  }
+}
 
   /**
    * Load project-specific success criteria from task-requirements.md
@@ -375,11 +375,11 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
       };
 
       return criteria;
-    } catch (error) {
+    } catch (_) {
       this.logger.log(`⚠️ Could not load task requirements: ${error.message}`);
       return {};
     }
-  }
+}
 
   /**
    * Extract criteria items from markdown section
@@ -403,7 +403,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
     // Extract checklist items;
     const items = section.match(/- \[ \] \*\*([^*]+)\*\*/g) || [];
     return items.map((item) => item.replace(/- \[ \] \*\*([^*]+)\*\*.*/, '$1'));
-  }
+}
 
   /**
    * Generate validation commands for the current project
@@ -419,48 +419,42 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
       );
       await FS.access(packageJsonPath);
       hasPackageJson = true;
-    } catch (_1) {
+    } catch (_) {
       // Package.json not found or access denied
     }
 
     if (hasPackageJson) {
-      return [
-        {
+      return [ {
           command: 'npm run lint',
           description: 'Execute linting validation',
           timeout: 30000,
-        },
-        {
+        }, {
           command: 'npm run build',
           description: 'Execute build validation',
           timeout: 60000,
-        },
-        {
+        }, {
           command: 'npm test',
           description: 'Execute test suite validation',
           timeout: 120000,
-        },
-        {
+        }, {
           command: 'timeout 10s npm start',
           description: 'Execute runtime validation',
           timeout: 15000,
-        },
-        {
+        }, {
           command: 'npm audit',
           description: 'Execute security audit',
           timeout: 30000,
         },
       ];
     } else {
-      return [
-        {
+      return [ {
           command: 'echo "Manual validation required - no package.json found"',
           description: 'Manual validation',
           timeout: 1000,
         },
       ];
     }
-  }
+}
 
   /**
    * Create audit task via TaskManager API
@@ -471,22 +465,22 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
     const command = `timeout ${this.config.auditTimeoutMs / 1000}s node "${this.taskManagerApiPath}" create '${JSON.stringify(auditTaskData)}'`;
 
     try {
-      const output = execSync(command, {
+      const _output = execSync(command, {
         encoding: 'utf-8',
         cwd: this.projectRoot,
       });
-      const result = JSON.parse(output);
+      const _result = JSON.parse(output);
 
       if (result.success) {
         return result;
       } else {
-        throw new Error(`TaskManager API error: ${JSON.stringify(result)}`);
+        throw new Error(`TaskManager API error: ${JSON.stringify(result)}`);,
       }
-    } catch (error) {
+    } catch (_) {
       this.logger.error(`❌ Failed to create audit task: ${error.message}`);
       throw error;
     }
-  }
+}
 
   /**
    * Validate agent objectivity for audit assignment
@@ -521,14 +515,14 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
       `✅ Objectivity validated: ${implementerAgentId} ≠ ${auditAgentId}`
     );
     return true;
-  }
+}
 
   /**
    * Detect agent role from agent ID pattern
    * @param {string} agentId - Agent ID to analyze
    * @returns {string|null} Detected role or null
    */
-  detectAgentRole(agentId) {
+  detectAgentRole(_agentId) {
     const lowerAgentId = agentId.toLowerCase();
 
     for (const [role, patterns] of Object.entries(this.agentRolePatterns)) {
@@ -538,7 +532,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
     }
 
     return null;
-  }
+}
 
   /**
    * Log audit task creation for tracking And debugging
@@ -564,10 +558,10 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
         'development/logs/audit_integration.log',
         JSON.stringify(logEntry) + '\n'
       );
-    } catch (error) {
-      this.logger.log(`⚠️ Failed to log audit task creation: ${error.message}`);
+    } catch (_) {
+      this.logger.log(`⚠️ Failed to log audit task creation: ${error.message}`);,
     }
-  }
+}
 
   /**
    * Check if task requires audit based on configuration
@@ -582,7 +576,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
     return this.config.mandatoryAuditCategories.includes(
       taskDetails.task.category
     );
-  }
+}
 
   /**
    * Get audit system configuration
@@ -590,7 +584,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
    */
   getConfiguration() {
     return { ...this.config };
-  }
+}
 
   /**
    * Update audit system configuration
@@ -599,7 +593,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
   updateConfiguration(newConfig) {
     this.config = { ...this.config, ...newConfig };
     this.logger.log(`🔧 Audit integration configuration updated`);
-  }
+}
 }
 
 // CLI Interface
@@ -711,7 +705,7 @@ PROJECT INTEGRATION:
   And integrates with the infinite-continue-stop-hook project standards.
 `);
       break;
-  }
+}
 }
 
 module.exports = AUDIT_INTEGRATION;

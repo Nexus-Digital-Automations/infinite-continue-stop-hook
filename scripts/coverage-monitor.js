@@ -21,13 +21,13 @@ const CONFIG = {
     branches: 75,
     functions: 70,
     lines: 70,
-  },
+},
   critical_thresholds: {
     statements: 60,
     branches: 65,
     functions: 60,
     lines: 60,
-  },
+},
   paths: {
     coverage: path.join(process.cwd(), 'coverage'),
     reports: path.join(process.cwd(), 'coverage', 'reports'),
@@ -44,7 +44,7 @@ const CONFIG = {
       'reports',
       'coverage-validation.json'
     ),
-  },
+},
 };
 
 /**
@@ -53,25 +53,25 @@ const CONFIG = {
 class LOGGER {
   static info(message) {
     loggers.stopHook.log(`ℹ️  ${message}`);
-  }
+}
 
   static success(message) {
     loggers.stopHook.log(`✅ ${message}`);
-  }
+}
 
   static warning(message) {
     loggers.stopHook.log(`⚠️  ${message}`);
-  }
+}
 
   static error(message) {
     loggers.stopHook.log(`❌ ${message}`);
-  }
+}
 
   static debug(message) {
     if (process.env.DEBUG) {
-      loggers.stopHook.log(`🐛 DEBUG: ${message}`);
+      loggers.stopHook.log(`🐛 DEBUG: ${message}`);,
     }
-  }
+}
 }
 
 /**
@@ -86,7 +86,7 @@ class CoverageMonitor {
       warnings: [],
       summary: null,
     };
-  }
+}
 
   /**
    * Main execution method
@@ -115,7 +115,7 @@ class CoverageMonitor {
       LOGGER.debug(_error.stack);
       throw _error;
     }
-  }
+}
 
   /**
    * Setup required directories
@@ -127,10 +127,10 @@ class CoverageMonitor {
     for (const dir of dirs) {
       if (!FS.existsSync(dir)) {
         FS.mkdirSync(dir, { recursive: true });
-        LOGGER.debug(`Created directory: ${dir}`);
+        LOGGER.debug(`Created directory: ${dir}`);,
       }
     }
-  }
+}
 
   /**
    * Run Jest coverage analysis
@@ -154,10 +154,10 @@ class CoverageMonitor {
           'Some tests failed during coverage analysis'
         );
       } else {
-        throw new Error(`Coverage analysis failed: ${_error.message}`);
+        throw new Error(`Coverage analysis failed: ${_error.message}`);,
       }
     }
-  }
+}
 
   /**
    * Load coverage data from Jest output
@@ -181,9 +181,9 @@ class CoverageMonitor {
         `Total coverage: ${JSON.stringify(coverageData.total, null, 2)}`
       );
     } catch (_) {
-      throw new Error(`Failed to parse coverage data: ${_error.message}`);
+      throw new Error(`Failed to parse coverage data: ${_error.message}`);,
     }
-  }
+}
 
   /**
    * Validate coverage against thresholds
@@ -231,7 +231,7 @@ class CoverageMonitor {
     if (failures.length === 0 && warnings.length === 0) {
       LOGGER.success('All coverage thresholds met!');
     }
-  }
+}
 
   /**
    * Generate detailed coverage reports
@@ -264,7 +264,7 @@ class CoverageMonitor {
     );
 
     LOGGER.success('Coverage reports generated');
-  }
+}
 
   /**
    * Update coverage trends
@@ -302,7 +302,7 @@ class CoverageMonitor {
     FS.writeFileSync(CONFIG.paths.trends, JSON.stringify(trends, null, 2));
 
     LOGGER.success('Coverage trends updated');
-  }
+}
 
   /**
    * Generate final summary
@@ -346,8 +346,8 @@ class CoverageMonitor {
       );
     }
 
-    loggers.stopHook.log(`\n📁 Reports available in: ${CONFIG.paths.reports}`);
-  }
+    loggers.stopHook.log(`\n📁 Reports available in: ${CONFIG.paths.reports}`);,
+}
 
   /**
    * Get Git information
@@ -375,7 +375,7 @@ class CoverageMonitor {
         message: 'unknown',
       };
     }
-  }
+}
 }
 
 // Run coverage monitoring if called directly
@@ -383,10 +383,10 @@ if (require.main === module) {
   const monitor = new CoverageMonitor();
   try {
     monitor.run();
-  } catch (_) {
+} catch (_) {
     LOGGER.error(`Fatal error: ${_error.message}`);
     throw _error;
-  }
+}
 }
 
 module.exports = CoverageMonitor;

@@ -19,7 +19,7 @@ class FinalResultFixer {
   constructor(_agentId) {
     this.fixedFiles = [];
     this.totalChanges = 0;
-  }
+}
 
   run() {
     console.log('🔧 Starting final result/result variable consistency fix...');
@@ -35,11 +35,11 @@ class FinalResultFixer {
       this.generateReport();
 
       console.log('✅ Final result/result variable fix completed successfully');
-    } catch (error) {
+    } catch (_) {
       console.error('❌ Failed to complete final fix:', _error.message);
-      throw new Error(`Final fix failed: ${_error.message}`);
+      throw new Error(`Final fix failed: ${_error.message}`);,
     }
-  }
+}
 
   fixTestPerformanceFile(_filePath) {
     const targetPath =
@@ -56,8 +56,7 @@ class FinalResultFixer {
     let changes = 0;
 
     // Fix name to name consistently;
-const nameFixes = [
-      {
+const nameFixes = [ {
     from: "static metric(name, value, unit = '')",
         to: "static metric(name, value, unit = '')",
       },
@@ -69,7 +68,7 @@ const nameFixes = [
       { from: 'suite: name', to: 'suite: name' },
       { from: 'name: r.name', to: 'name: r.name' },
       { from: 'suiteResult.name', to: 'suiteResult.name' },
-      { from: 'test.name', to: 'test.name' }
+      { from: 'test.name', to: 'test.name' },
   ];
 
     for (const fix of nameFixes) {
@@ -90,7 +89,7 @@ const nameFixes = [
         `✅ Fixed ${changes} name/name issues in test-performance.js`
       );
     }
-  }
+}
 
   fixRemainingTestFiles() {
     const testFiles = [
@@ -101,14 +100,14 @@ const nameFixes = [
     ];
 
     for (const filePath of testFiles) {
-      if (FS.existsSync(filePath)) {
-        this.fixTestFile(filePath);
+      if (FS.existsSync(_filePath)) {
+        this.fixTestFile(_filePath);
       }
     }
-  }
+}
 
-  fixTestFile(filePath) {
-    console.log(`🔧 Fixing ${path.relative(process.cwd(), filePath)}...`);
+  fixTestFile(_filePath) {
+    console.log(`🔧 Fixing ${path.relative(process.cwd(), _filePath)}...`);
 
     let content = FS.readFileSync(filePath, 'utf8');
     let changes = 0;
@@ -124,11 +123,11 @@ const fixes = [
             following.includes('return result')
           ) {
             changes++;
-            return `const result = ${assignment};\n${following.replace(/\bresult\b/g, 'result')}`;
+            return `const _result = ${assignment};\n${following.replace(/\bresult\b/g, 'result')}`;
           }
           return match;
         }
-  },
+},
       // Fix agentId/agentId consistency - change to AGENT_ID: {
     pattern: /const\s+agentId\s*=\s*([^;]+);([^]*?)(\w*agentId)/g,
         replacement: (match, assignment, middle, usage) => {
@@ -138,7 +137,7 @@ const fixes = [
           }
           return match;
         }
-  },
+},
     ];
 
     for (const fix of fixes) {
@@ -154,7 +153,7 @@ const fixes = [
 
     // Simple pattern-based fixes;
 const simpleFixes = [
-      // Fix unused result variables - convert to result: { from: /const result = ([^;]+);\s*$/gm, to: 'const result = $1;' },
+      // Fix unused result variables - convert to result: { from: /const _result = ([^;]+);\s*$/gm, to: 'const _result = $1;' },
       // Fix inconsistent variable usage in same scope: {
     from: /result\.(\w+)/g,
         to: (match, prop) => {
@@ -175,7 +174,7 @@ const lines = content.split('\n');
           }
           return match;
         }
-  },
+},
     ];
 
     for (const fix of simpleFixes) {
@@ -194,14 +193,14 @@ const lines = content.split('\n');
       this.fixedFiles.push({ path: filePath, changes });
       this.totalChanges += changes;
       console.log(
-        `✅ Fixed ${changes} issues in ${path.relative(process.cwd(), filePath)}`
+        `✅ Fixed ${changes} issues in ${path.relative(process.cwd(), _filePath)}`
       );
     } else {
       console.log(
-        `✅ No issues found in ${path.relative(process.cwd(), filePath)}`
+        `✅ No issues found in ${path.relative(process.cwd(), _filePath)}`
       );
     }
-  }
+}
 
   generateReport() {
     console.log('\n📊 Final Fix Report:');
@@ -224,7 +223,7 @@ const lines = content.split('\n');
         );
       }
     }
-  }
+}
 }
 
 // CLI interface

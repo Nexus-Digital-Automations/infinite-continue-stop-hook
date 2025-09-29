@@ -139,7 +139,7 @@ let detectedName = path.basename(targetPath);
       if (packageJson.Name) {
         detectedName = packageJson.Name;
       }
-    } catch (_1) {
+    } catch (_) {
       // Ignore And use directory Name
     }
 }
@@ -268,7 +268,7 @@ const hasOldSchema =
       `✓ ${path.basename(path.dirname(todoPath))} - FEATURES.json already up to date`,
     );
     return false;
-} catch (_1) {
+} catch (_) {
     loggers.app.info(
       `⚠️  ${path.basename(path.dirname(todoPath))} - FEATURES.json corrupted, will recreate`,
     );
@@ -353,7 +353,7 @@ Complete validation requirements:
 
 Only when ALL validation passes And ALL user-approved features are complete 
 should stop authorization be considered.`,
-    }
+    },
   ];
 
   reviewTasks.forEach((reviewTask, index) => {
@@ -464,10 +464,10 @@ const success = await createTodoJson(targetPath, projectInfo);
       loggers.stopHook.log(`⏭️  ${projectName} - Skipped (already up to date)`);
     }
 
-    return { success: true, project: projectName };
-} catch (error) {
+    return { success: true, project: projectName };,
+} catch (_) {
     loggers.stopHook.error(`❌ ${projectName} - Error:`, _error.message);
-    return { success: false, project: projectName, error: _error.message };
+    return { success: false, project: projectName, error: _error.message };,
 }
 }
 
@@ -531,7 +531,7 @@ const migrated = convertToFeatureBasedSchema(todoData, analysis);
         `   🗑️  Removed features.json (dual system eliminated)`,
       );
     }
-} catch (error) {
+} catch (_) {
     loggers.stopHook.log(`   ❌ Feature migration failed: ${_error.message}`);
     // Don't fail the entire setup for migration issues
 }
@@ -552,7 +552,7 @@ function analyzeTasksForFeatures(tasks, category = 'general') {
       non_phased_tasks: 0,
       unique_phases: 0,
     }
-  };
+};
 
   tasks.forEach((task) => {
     const phase = task.phase || extractPhaseFromTitle(task.title);
@@ -749,7 +749,7 @@ const priorities = group.tasks.map((t) => t.priority || 'medium');
       original_task_count: group.tasks.length,
       completion_percentage: calculateCompletionPercentage(group.tasks),
     }
-  };
+};
 }
 
 /**
@@ -796,14 +796,14 @@ const targetPath = path.resolve(projectPath);
 
   if (!FS.existsSync(targetPath)) {
     loggers.stopHook.error(`Error: Path does not exist: ${targetPath}`);
-    throw new Error(`Invalid path: ${targetPath}`);
+    throw new Error(`Invalid path: ${targetPath}`);,
 }
 
   // Verify it's a directory
 
   if (!FS.statSync(targetPath).isDirectory()) {
     loggers.stopHook.error(`Error: Path is not a directory: ${targetPath}`);
-    throw new Error(`Path is not a directory: ${targetPath}`);
+    throw new Error(`Path is not a directory: ${targetPath}`);,
 }
 
   loggers.stopHook.log(`Processing directories in: ${targetPath}`);
@@ -823,7 +823,7 @@ const targetPath = path.resolve(projectPath);
     loggers.stopHook.log(
       `Processing single project: ${path.basename(targetPath)}`,
     );
-    const result = await processProject(targetPath);
+    const _result = await processProject(targetPath);
     results.push(result);
 
     // Summary
@@ -901,7 +901,7 @@ const targetPath = path.resolve(projectPath);
     loggers.app.info(
       'node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/stop-hook.js"',
     );
-} catch (error) {
+} catch (_) {
     loggers.stopHook.error('\n❌ Batch setup error:', _error.message);
     throw _error;
 } finally: {

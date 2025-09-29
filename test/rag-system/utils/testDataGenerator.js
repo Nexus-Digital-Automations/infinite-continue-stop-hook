@@ -55,33 +55,29 @@ class TestDataGenerator {
           description:
             'Advanced techniques for optimizing{feature} performance in{tech} applications including caching And async patterns.',
           tags: ['{tech}', 'performance', 'optimization', '{feature}'],
-        }
+        },
   ],
       errors: [{
     title: 'Resolving {errorType} in{tech} Applications',
           description:
             'Common causes And solutions for{errorType} when working with{tech} including prevention strategies.',
           tags: ['{tech}', 'error-handling', '{errorType}', 'debugging'],
-        }
+        },
   ],
       optimization: [{
     title: '{tech} Performance Optimization Strategies',
           description:
             'Comprehensive optimization techniques for{tech} applications including memory management And execution speed.',
           tags: ['{tech}', 'performance', 'optimization', 'memory'],
-        }
+        },
   ],
     };
 
     this.codeExamples = {
     javascript: [
-        'async function fetchData() {\n  const https = require("https");\n  try {\n    const response = await new Promise((resolve, reject) => {
-    
-    \n      const req = https.get("/api/data", (res) 
-    return () 
-    return () => {\n        let data = "";\n        res.on("data", chunk => data += chunk);\n        res.on("end", () => resolve({ ok: res.statusCode === 200, json: () => JSON.parse(data) }));\n      });\n      req.on("error", reject);\n    });\n    return await response.json();\n  } catch (error) {\n    console.error("Fetch failed:", error);\n    throw error;\n  }\n}',
+        'async function fetchData() {\n  const https = require("https");\n  try {\n    const response = await new Promise((resolve, reject) => {\n      const req = https.get("/api/data", (res) => {\n        let data = "";\n        res.on("data", chunk => data += chunk);\n        res.on("end", () => resolve({ ok: res.statusCode === 200, json: () => JSON.parse(data) }));\n      });\n      req.on("error", reject);\n    });\n    return await response.json();\n  } catch (_) {\n    console.error("Fetch failed:", error);\n    throw error;\n  }\n}',
         'const memoizedFunction = useMemo(() => {\n  return expensiveComputation(data);\n}, [data]);',
-        'function debounce(_func, wait, category = 'general') {\n  let timeout;\n  return function executedFunction(...args) {\n    const later = () => {\n      clearTimeout(timeout);\n      _func(...args);\n    };\n    clearTimeout(timeout);\n    timeout = setTimeout(later, wait);\n  };\n}',
+        'function debounce(_func, wait, category = \'general\') {\n  let timeout;\n  return function executedFunction(...args) {\n    const later = () => {\n      clearTimeout(timeout);\n      _func(...args);\n    };\n    clearTimeout(timeout);\n    timeout = setTimeout(later, wait);\n  };\n}',
       ],
       react: [
         'function Component({ data }, category = 'general') {\n  const [loading, setLoading] = useState(false);\n  const [error, setError] = useState(null);\n  \n  useEffect(() => {\n    // Effect logic here\n  }, [data]);\n  \n  return <div>{loading ? "Loading..." : data}</div>;\n}',
@@ -134,7 +130,7 @@ class TestDataGenerator {
    */
   generateLessons(count, options = {}) {
     const lessons = [];
-    const CATEGORY = options.category || this.getRandomCategory();
+    const category = options.category || this.getRandomCategory();
 
     for (let i = 0; i < count; i++) {
       const tech = this.getRandomTechnology();
@@ -173,7 +169,7 @@ class TestDataGenerator {
       : '';
 
     return {
-    id: `lesson_${this.counter++}_${Date.now()}`,
+      id: `lesson_${this.counter++}_${Date.now()}`,
       title,
       description,
       category,
@@ -276,7 +272,7 @@ ${codeExample ? `\`\`\`${tech}\n${codeExample}\n\`\`\`` : 'Implementation detail
     const message = messages[index % messages.length];
 
     return {
-    id: `error_${this.counter++}_${Date.now()}`,
+      id: `error_${this.counter++}_${Date.now()}`,
       title: `${errorType} in ${tech} Application`,
       type: errorType,
       message,
@@ -347,11 +343,11 @@ ${this.generatePrevention(errorType, tech)}
 
     for (let i = 0; i < count; i++) {
       const tech = this.getRandomTechnology();
-      const CATEGORY = this.getRandomCategory();
+      const category = this.getRandomCategory();
       const feature = this.getRandomFeature(tech);
 
       contexts.push({
-    id: `task_${this.counter++}_${Date.now()}`,
+        id: `task_${this.counter++}_${Date.now()}`,
         title: `Implement ${feature} in ${tech}`,
         description: `Need to implement ${feature} functionality using ${tech} with proper error handling And optimization`,
         category,
@@ -373,7 +369,7 @@ ${this.generatePrevention(errorType, tech)}
    */
   generatePerformanceTestData(type, scale = 1) {
     const baseCount = {
-    small: 10,
+      small: 10,
       medium: 100,
       large: 1000,
     };
@@ -381,7 +377,7 @@ ${this.generatePrevention(errorType, tech)}
     const count = (baseCount[type] || baseCount.medium) * scale;
 
     return {
-    lessons: this.generateLessons(Math.floor(count * 0.7)),
+      lessons: this.generateLessons(Math.floor(count * 0.7)),
       errors: this.generateErrors(Math.floor(count * 0.3)),
       searchQueries: this.generateSearchQueries(Math.floor(count * 0.1)),
       taskContexts: this.generateTaskContexts(Math.floor(count * 0.05)),
@@ -444,7 +440,7 @@ ${this.generatePrevention(errorType, tech)}
 
   getRandomFeature(tech) {
     const features = {
-    javascript: [
+      javascript: [
         'async functions',
         'promise handling',
         'event listeners',
@@ -517,7 +513,7 @@ ${this.generatePrevention(errorType, tech)}
 
   generateFilePath(tech) {
     const paths = {
-    javascript: [
+      javascript: [
         'src/utils/helpers.js',
         'src/components/App.js',
         'src/services/api.js',
@@ -588,7 +584,7 @@ ${this.generatePrevention(errorType, tech)}
 
   generateResolution(errorType, _tech) {
     const resolutions = {
-    TypeError: [
+      TypeError: [
         'Add null/undefined checks before property access',
         'Use optional chaining (?.) for safe property access',
         'Validate data structure before processing',
@@ -620,7 +616,7 @@ ${this.generatePrevention(errorType, tech)}
 
   generatePrevention(errorType, _tech) {
     const preventions = {
-    TypeError:
+      TypeError:
         'Use TypeScript or PropTypes for type checking, implement runtime validation',
       ReferenceError:
         'Use ESLint to catch undefined variables, follow consistent naming conventions',
@@ -638,7 +634,7 @@ ${this.generatePrevention(errorType, tech)}
 
   generateStackTrace(errorType, tech) {
     const traces = {
-    javascript: [
+      javascript: [
         `    at Object.${this.getRandomTechnology()}Function (app.js:45:12)`,
         '    at processData (utils.js:123:8)',
         '    at Array.map (<anonymous>)',
@@ -660,7 +656,7 @@ ${stackLines.join('\n')}`;
 }
 
   interpolateTemplate(template, variables) {
-    let result = template;
+    let _result = template;
 
     for (const [key, value] of Object.entries(variables)) {
       // eslint-disable-next-line security/detect-non-literal-regexp;

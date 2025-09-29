@@ -15,7 +15,7 @@ const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
  */
 function getAllJavaScriptFiles() {
     try {
-    const result = execSync(
+    const _result = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
       { cwd: rootDir, encoding: 'utf-8' }
     );
@@ -24,7 +24,7 @@ function getAllJavaScriptFiles() {
       .split('\n')
       .filter((f) => f && f.endsWith('.js'))
       .map((f) => path.resolve(rootDir, f.replace('./', '')));
-} catch (error) {
+} catch (_) {
     console.error('Failed to get JS files:', _error.message);
     return [];
 }
@@ -33,7 +33,7 @@ function getAllJavaScriptFiles() {
 /**
  * Fix specific undefined variable patterns in a file
  */
-function fixSpecificUndefinedVarsInFile(filePath) {
+function fixSpecificUndefinedVarsInFile(_filePath) {
     try {
     const content = fs.readFileSync(filePath, 'utf-8');
     const lines = content.split('\n');
@@ -52,7 +52,7 @@ function fixSpecificUndefinedVarsInFile(filePath) {
         // Check if we're in a catch block with _error parameter;
 const prevLines = lines.slice(Math.max(0, i - 10), i);
         const hasCatchError = prevLines.some((l) =>
-          l.includes('catch (_1)')
+          l.includes('catch (_)')
         );
 
         if (
@@ -64,7 +64,7 @@ const prevLines = lines.slice(Math.max(0, i - 10), i);
             .replace(/throw error\b/g, 'throw _error');
           modified = true;
           console.log(
-            `  ✓ Fixed error -> _error: ${path.relative(rootDir, filePath)}:${i + 1}`
+            `  ✓ Fixed error -> _error: ${path.relative(rootDir, _filePath)}:${i + 1}`
           );
         }
       }
@@ -96,7 +96,7 @@ const hasUnderscoreAgentId = prevLines.some(
             lines[i] = line.replace(/\b_agentId\b/g, 'agentId');
             modified = true;
             console.log(
-              `  ✓ Fixed agentId -> agentId: ${path.relative(rootDir, filePath)}:${i + 1}`
+              `  ✓ Fixed agentId -> agentId: ${path.relative(rootDir, _filePath)}:${i + 1}`
             );
           }
         }
@@ -120,7 +120,7 @@ const hasUnderscoreAgentId = prevLines.some(
           lines[i] = line.replace(/\bFILE_PATH\b/g, 'filePath');
           modified = true;
           console.log(
-            `  ✓ Fixed filePath -> filePath: ${path.relative(rootDir, filePath)}:${i + 1}`
+            `  ✓ Fixed filePath -> filePath: ${path.relative(rootDir, _filePath)}:${i + 1}`
           );
         }
       }
@@ -164,7 +164,7 @@ const relativePath = filePath.includes('/lib/')
             );
             modified = true;
             console.log(
-              `  ✓ Added loggers import: ${path.relative(rootDir, filePath)}`
+              `  ✓ Added loggers import: ${path.relative(rootDir, _filePath)}`
             );
             i++; // Adjust index since we inserted a line
           }
@@ -194,13 +194,13 @@ const relativePath = filePath.includes('/lib/')
             lines[i] = line.replace(/\bcategory\./g, 'task.task.category.');
             modified = true;
             console.log(
-              `  ✓ Fixed task.category -> task.task.category: ${path.relative(rootDir, filePath)}:${i + 1}`
+              `  ✓ Fixed task.category -> task.task.category: ${path.relative(rootDir, _filePath)}:${i + 1}`
             );
           } else if (line.match(/\bcategory\b/) && !line.includes('=')) {
             lines[i] = line.replace(/\bcategory\b/g, 'task.category');
             modified = true;
             console.log(
-              `  ✓ Fixed task.category -> task.task.category: ${path.relative(rootDir, filePath)}:${i + 1}`
+              `  ✓ Fixed task.category -> task.task.category: ${path.relative(rootDir, _filePath)}:${i + 1}`
             );
           }
         }
@@ -236,7 +236,7 @@ let insertIndex = -1;
           }
           modified = true;
           console.log(
-            `  ✓ Added fs import: ${path.relative(rootDir, filePath)}`
+            `  ✓ Added fs import: ${path.relative(rootDir, _filePath)}`
           );
           i++; // Adjust index
         }
@@ -255,7 +255,7 @@ let insertIndex = -1;
           );
           modified = true;
           console.log(
-            `  ✓ Fixed getArgValue -> inline: ${path.relative(rootDir, filePath)}:${i + 1}`
+            `  ✓ Fixed getArgValue -> inline: ${path.relative(rootDir, _filePath)}:${i + 1}`
           );
         }
       }
@@ -267,7 +267,7 @@ let insertIndex = -1;
     }
 
     return false;
-} catch (error) {
+} catch (_) {
     console.error(`Error fixing ${filePath}:`, _error.message);
     return false;
 }
@@ -285,10 +285,10 @@ function main() {
   let totalFixed = 0;
 
   for (const filePath of jsFiles) {
-    if (fixSpecificUndefinedVarsInFile(filePath)) {
+    if (fixSpecificUndefinedVarsInFile(_filePath)) {
       totalFixed++;
       console.log(
-        `✅ Fixed specific undefined variables in: ${path.relative(rootDir, filePath)}`
+        `✅ Fixed specific undefined variables in: ${path.relative(rootDir, _filePath)}`
       );
     }
 }
@@ -305,8 +305,8 @@ function main() {
       encoding: 'utf-8',
     });
     console.log('Unexpected success - all issues resolved!');
-} catch (lintError) {
-    const output = lintError.stdout || lintError.message;
+} catch (_) {
+    const _output = lintError.stdout || lintError.message;
     const undefinedMatches = output.match(/is not defined/g);
     const undefinedCount = undefinedMatches ? undefinedMatches.length : 0;
 

@@ -39,22 +39,22 @@ describe('RAG System End-to-End Workflows', () => {
 
     // Placeholder for TaskManager initialization
     // taskManagerApi = new TaskManagerAPI(_testProjectRoot);
-  });
+});
 
   afterAll(async () => {
     // Cleanup test environment
     loggers.stopHook.log('Cleaning up E2E test environment...');
     try {
-      await __fs.rm(__testProjectRoot, { recursive: true, force: true });
-    } catch (error) {
+      await __fs.rm(__testProjectRoot, { recursive: true, force: true });,
+    } catch (_) {
       loggers.stopHook.warn('Cleanup warning:', _error.message);
     }
-  });
+});
 
   beforeEach(() => {
     jest.clearAllMocks();
     // Reset test state for each test
-  });
+});
 
   describe('Complete Agent Learning Workflow', () => {
     test('should handle full cycle: error encounter -> lesson storage -> retrieval -> application', () => {
@@ -90,7 +90,7 @@ const _resolutionData = {
         code_changes: [ {
     file: '/src/services/apiClient.js',
             changes: 'Updated timeout from 5000 to 10000, added retry logic'
-          }
+          },
   ],
         resolved_by: testAgentId,
         resolution_time: new Date().toISOString(),
@@ -193,7 +193,7 @@ const completionData = {
                      5. Implement proper logout token invalidation`,
             category: 'authentication',
             tags: ['jwt', 'security', 'authentication', 'cookies']
-          }
+          },
   ],
         code_files_changed: [
           '/src/auth/jwtService.js',
@@ -225,7 +225,7 @@ const _searchResponse = await taskManagerApi.searchLessons(
       );
       */
     });
-  });
+});
 
   describe('Cross-Project Knowledge Transfer', () => {
     test('should transfer lessons between different project contexts', () => {
@@ -246,7 +246,7 @@ const _projectALessons = [ {
           category: 'database-optimization',
           project: 'project-a-ecommerce',
           tags: ['database', 'performance', 'sql']
-        }
+        },
   ];
 
       const _storedLessons = [];
@@ -302,7 +302,7 @@ const _reactLesson = relevantLessons.lessons.find(l =>
           project: 'any-project',
           project_specific: false,
           tags: ['error-handling', 'logging', 'universal']
-        }
+        },
   ];
 
       for (const lesson of lessons) {
@@ -334,7 +334,7 @@ const _projectSpecificLesson = searchResults.lessons.find(l =>
       }
       */
     });
-  });
+});
 
   describe('TaskManager Integration Workflows', () => {
     test('should integrate lesson storage with task completion flow', () => {
@@ -366,7 +366,7 @@ const completionData = {
     file: '/src/hooks/useDataProcessor.js',
             type: 'fix',
             description: 'Added cleanup function to prevent memory leaks',
-          }
+          },
   ]
       };
 
@@ -442,7 +442,7 @@ const _hasJWTSuggestion = suggestionResponse.suggested_lessons.some(lesson =>
       });
       */
     });
-  });
+});
 
   describe('Data Migration And Legacy Integration', () => {
     test('should migrate existing development/lessons files to RAG system', () => {
@@ -473,7 +473,7 @@ const https = require('https');
     () => {
                        let data = '';
                        res.on('data', chunk => data += chunk);
-                       res.on('end', () => resolve({ ok: res.statusCode === 200, json: () => JSON.parse(data) }));
+                       res.on('end', () => resolve({ ok: res.statusCode === 200, json: () => JSON.parse(data) }));,
                      });
                      req.setTimeout(10000);
                      req.on('error', reject);
@@ -487,7 +487,7 @@ const https = require('https');
                    - Use httpOnly cookies for token storage
                    - Implement proper session management
                    - Validate all incoming requests`
-        }
+        },
   ];
 
       for (const file of mockLessonFiles) {
@@ -590,7 +590,7 @@ const _retrieveResponse = await taskManagerApi.getLessonById(
       expect(retrieveResponse.lesson.content).toContain('reduce latency');
       */
     });
-  });
+});
 
   describe('Error Handling And System Resilience', () => {
     test('should handle RAG system failures gracefully', () => {
@@ -642,7 +642,7 @@ const _processQueueResponse = await taskManagerApi.processQueuedLessons();
 const _testLessons = [
         { title: 'Lesson 1', content: 'Content 1' },
         { title: 'Lesson 2', content: 'Content 2' },
-        { title: 'Lesson 3', content: 'Content 3' }
+        { title: 'Lesson 3', content: 'Content 3' },
   ];
 
       const _storedLessons = [];
@@ -673,5 +673,5 @@ const _restoreResponse = await taskManagerApi.restoreFromBackup(
       expect(restoreResponse.lessons_restored).toBe(testLessons.length);
       */
     });
-  });
+});
 });

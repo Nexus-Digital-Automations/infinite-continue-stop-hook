@@ -15,7 +15,7 @@ class StructuredLoggingValidator {
     this.passedCriteria = 0;
     this.totalCriteria = 25;
     this.projectRoot = process.cwd();
-  }
+}
 
   /**
    * Run complete validation suite
@@ -42,7 +42,7 @@ class StructuredLoggingValidator {
     this.generateFinalReport();
 
     return this.passedCriteria === this.totalCriteria;
-  }
+}
 
   /**
    * Validate core structured logging implementation (Criteria 1-10)
@@ -208,7 +208,7 @@ class StructuredLoggingValidator {
         );
       }
     );
-  }
+}
 
   /**
    * Validate production readiness (Criteria 11-15)
@@ -314,7 +314,7 @@ class StructuredLoggingValidator {
         );
       }
     );
-  }
+}
 
   /**
    * Validate observability and monitoring features (Criteria 16-20)
@@ -405,7 +405,7 @@ class StructuredLoggingValidator {
         );
       }
     );
-  }
+}
 
   /**
    * Validate security and compliance (Criteria 21-25)
@@ -532,7 +532,7 @@ class StructuredLoggingValidator {
         );
       }
     );
-  }
+}
 
   /**
    * Validate a single criterion
@@ -555,7 +555,7 @@ class StructuredLoggingValidator {
       if (passed) {
         this.passedCriteria++;
       }
-    } catch (error) {
+    } catch (_) {
       console.log(
         `${number.toString().padStart(2, '0')}. ❌ ERROR - ${description}`
       );
@@ -569,7 +569,7 @@ class StructuredLoggingValidator {
         error: error.message,
       });
     }
-  }
+}
 
   /**
    * Generate final validation report
@@ -600,7 +600,7 @@ class StructuredLoggingValidator {
             `   ${result.number.toString().padStart(2, '0')}. ${result.description}`
           );
           if (result.error) {
-            console.log(`       Error: ${result.error}`);
+            console.log(`       Error: ${result.error}`);,
           }
         });
     }
@@ -632,7 +632,7 @@ class StructuredLoggingValidator {
       '\n📝 Detailed report saved to: structured-logging-validation-report.json'
     );
     console.log('='.repeat(60));
-  }
+}
 
   /**
    * Generate detailed JSON report
@@ -689,7 +689,7 @@ class StructuredLoggingValidator {
       path.join(this.projectRoot, 'structured-logging-validation-report.json'),
       JSON.stringify(report, null, 2)
     );
-  }
+}
 }
 
 // Run validation if called directly
@@ -704,7 +704,7 @@ if (require.main === module) {
   main().catch((error) => {
     console.error('Validation failed:', error);
     process.exit(1);
-  });
+});
 }
 
 module.exports = {

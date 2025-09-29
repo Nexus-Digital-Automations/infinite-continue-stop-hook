@@ -39,7 +39,7 @@ function getScriptFiles() {
 
   for (const pattern of SCRIPT_PATTERNS) {
     try {
-      const result = execSync(
+      const _result = execSync(
         `find . -name "${pattern}" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"`,
         { cwd: rootDir, encoding: 'utf-8' }
       );
@@ -50,7 +50,7 @@ function getScriptFiles() {
         .forEach((f) =>
           scriptFiles.add(path.resolve(rootDir, f.replace('./', '')))
         );
-    } catch (_1) {
+    } catch (_) {
       // Pattern not found - continue
     }
   }
@@ -61,7 +61,7 @@ function getScriptFiles() {
 /**
  * Add eslint-disable comment to a file if it doesn't already have it
  */
-function addEslintDisableToFile(filePath) {
+function addEslintDisableToFile(_filePath) {
   try {
     const content = fs.readFileSync(filePath, 'utf-8');
 
@@ -74,7 +74,7 @@ function addEslintDisableToFile(filePath) {
     const updatedContent = `/* eslint-disable no-console */\n${content}`;
     fs.writeFileSync(filePath, updatedContent);
     return true;
-  } catch (error) {
+  } catch (_) {
     console.error(`Error processing ${filePath}:`, error.message);
     return false;
   }
@@ -94,14 +94,14 @@ function main() {
   let totalProcessed = 0;
 
   for (const filePath of scriptFiles) {
-    if (addEslintDisableToFile(filePath)) {
+    if (addEslintDisableToFile(_filePath)) {
       totalProcessed++;
       console.log(
-        `✅ Added eslint-disable to: ${path.relative(rootDir, filePath)}`
+        `✅ Added eslint-disable to: ${path.relative(rootDir, _filePath)}`
       );
     } else {
       console.log(
-        `⏭️ Already has eslint-disable: ${path.relative(rootDir, filePath)}`
+        `⏭️ Already has eslint-disable: ${path.relative(rootDir, _filePath)}`
       );
     }
   }
@@ -114,7 +114,7 @@ function main() {
 if (require.main === module) {
   try {
     main();
-  } catch (error) {
+  } catch (_) {
     console.error('Fatal error:', error.message);
     process.exit(1);
   }

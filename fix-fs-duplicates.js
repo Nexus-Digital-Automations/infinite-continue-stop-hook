@@ -8,7 +8,7 @@ const PATH = require('path');
  * that are preventing the testing framework from running
  */
 
-function fixDuplicateFS(filePath) {
+function fixDuplicateFS(_filePath) {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
 
@@ -58,7 +58,7 @@ function fixDuplicateFS(filePath) {
     }
 
     return false;
-  } catch (error) {
+  } catch (_) {
     console.error(`Error fixing ${filePath}:`, _error.message);
     return false;
   }

@@ -11,11 +11,11 @@ class SyntaxErrorFixer {
   constructor() {
     this.fixes = 0;
     this.filesModified = [];
-  }
+}
 
   getAllJSFiles() {
     try {
-      const result = execSync(
+      const _result = execSync(
         'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
         { encoding: 'utf-8' }
       );
@@ -24,13 +24,13 @@ class SyntaxErrorFixer {
         .split('\n')
         .filter((f) => f && f.endsWith('.js'))
         .map((f) => path.resolve(f.replace('./', '')));
-    } catch (error) {
+    } catch (_) {
       console.error('Failed to get JS files:', error.message);
       return [];
     }
-  }
+}
 
-  fixFile(filePath) {
+  fixFile(_filePath) {
     const content = fs.readFileSync(filePath, 'utf8');
     const lines = content.split('\n');
     let modified = false;
@@ -146,12 +146,12 @@ class SyntaxErrorFixer {
 
     if (modified) {
       fs.writeFileSync(filePath, lines.join('\n'));
-      this.filesModified.push(filePath);
+      this.filesModified.push(_filePath);
       return true;
     }
 
     return false;
-  }
+}
 
   run() {
     console.log('🔧 Fixing syntax errors from parameter additions...\n');
@@ -160,16 +160,16 @@ class SyntaxErrorFixer {
     console.log(`📊 Found ${jsFiles.length} JavaScript files to check\n`);
 
     for (const filePath of jsFiles) {
-      const relativePath = path.relative(process.cwd(), filePath);
+      const relativePath = path.relative(process.cwd(), _filePath);
       console.log(`🔍 Checking: ${relativePath}`);
 
       try {
-        if (this.fixFile(filePath)) {
-          console.log(`✅ Fixed syntax errors in: ${relativePath}\n`);
+        if (this.fixFile(_filePath)) {
+          console.log(`✅ Fixed syntax errors in: ${relativePath}\n`);,
         } else {
-          console.log(`✅ No syntax errors found in: ${relativePath}\n`);
+          console.log(`✅ No syntax errors found in: ${relativePath}\n`);,
         }
-      } catch (_1) {
+      } catch (_) {
         console.error(
           `❌ Error processing ${relativePath}: ${error.message}\n`
         );
@@ -177,7 +177,7 @@ class SyntaxErrorFixer {
     }
 
     this.generateReport();
-  }
+}
 
   generateReport() {
     console.log('\n📊 Syntax Error Fix Report:');
@@ -195,12 +195,12 @@ class SyntaxErrorFixer {
     if (this.filesModified.length > 0) {
       console.log('\n📁 Modified files:');
       for (const filePath of this.filesModified) {
-        console.log(`  ✅ ${path.relative(process.cwd(), filePath)}`);
+        console.log(`  ✅ ${path.relative(process.cwd(), _filePath)}`);
       }
     }
 
     console.log('\n🎯 Syntax error fixing complete!');
-  }
+}
 }
 
 // Run the fixer;

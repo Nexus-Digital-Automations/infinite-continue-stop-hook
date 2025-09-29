@@ -23,18 +23,16 @@ describe('Feature Management System E2E', () => {
     
   let environment;
 
-  beforeEach(async () 
-    return () 
-    return () => {
+  beforeEach(async () => {
     environment = new E2EEnvironment('feature-management');
     await environment.setup();
-  });
+});
 
   afterEach(async () => {
     if (environment) {
       await environment.cleanup();
     }
-  });
+});
 
   describe('Feature Suggestion Workflows', () => {
     
@@ -84,7 +82,7 @@ const features = await environment.getFeatures();
         E2EAssertions.assertFeatureCount(features, categories.length);
 
         // Verify each category is represented
-        categories.forEach((category) => {
+        categories.forEach((_category) => {
           const categoryFeatures = features.features.filter(
             (f) => f.category === category
           );
@@ -177,7 +175,7 @@ const missingFieldResults = await Promise.allSettled([
               const response = JSON.parse(result.value.stdout);
               expect(response.success).toBe(false);
               expect(response.error).toContain('missing');
-            } catch (_1) {
+            } catch (_) {
               // If we can't parse JSON, the command itself may have failed which is also valid
               expect(result.value.success).toBe(false);
             }
@@ -210,7 +208,7 @@ const features = await environment.getFeatures();
       },
       E2E_TIMEOUT
     );
-  });
+});
 
   describe('Feature Approval Workflows', () => {
     
@@ -245,7 +243,7 @@ const featureSpecs = [
             business_value:
               'Improves developer experience And reduces support tickets',
             category: 'documentation',
-          }
+          },
   ];
 
         const suggestionResults = await Promise.all(
@@ -262,7 +260,7 @@ const featureSpecs = [
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature?.id;
-          } catch (_1) {
+          } catch (_) {
             throw new Error(
               `Failed to extract feature ID from: ${result.result.stdout}`
             );
@@ -374,7 +372,7 @@ const batchSize = 5;
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature?.id;
-          } catch (_1) {
+          } catch (_) {
             throw new Error(
               `Failed to extract feature ID from: ${result.result.stdout}`
             );
@@ -429,7 +427,7 @@ const features = await environment.getFeatures();
       },
       E2E_TIMEOUT
     );
-  });
+});
 
   describe('Feature Status Management', () => {
     
@@ -460,7 +458,7 @@ const features = await environment.getFeatures();
           try {
             const response = JSON.parse(result.stdout);
             return response.feature?.id;
-          } catch (_1) {
+          } catch (_) {
             throw new Error(
               `Failed to extract feature ID from: ${result.stdout}`
             );
@@ -552,7 +550,7 @@ const testFeatures = [
     title: 'Rejected Feature',
             category: 'new-feature',
             shouldReject: true,
-          }
+          },
   ];
 
         const featurePromises = testFeatures.map((spec) =>
@@ -572,7 +570,7 @@ const testFeatures = [
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature?.id;
-          } catch (_1) {
+          } catch (_) {
             throw new Error(
               `Failed to extract feature ID from: ${result.result.stdout}`
             );
@@ -672,7 +670,7 @@ const securityResult = await FeatureTestHelpers.listFeatures(
       },
       E2E_TIMEOUT
     );
-  });
+});
 
   describe('Advanced Feature Management', () => {
     
@@ -706,7 +704,7 @@ const searchableFeatures = [
             description: 'Optimize database indices for faster search queries',
             business_value: 'Reduces search response time from 2s to 200ms',
             category: 'performance',
-          }
+          },
   ];
 
         const searchResults = await Promise.all(
@@ -722,7 +720,7 @@ const searchableFeatures = [
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature?.id;
-          } catch (_1) {
+          } catch (_) {
             throw new Error(
               `Failed to extract feature ID from: ${result.result.stdout}`
             );
@@ -817,7 +815,7 @@ const exportFeatures = [
             description: 'Second feature for export testing',
             business_value: 'Validates export completeness',
             category: 'bug-fix',
-          }
+          },
   ];
 
         const exportResults = await Promise.all(
@@ -833,7 +831,7 @@ const exportFeatures = [
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature?.id;
-          } catch (_1) {
+          } catch (_) {
             throw new Error(
               `Failed to extract feature ID from: ${result.result.stdout}`
             );
@@ -881,5 +879,5 @@ const exportFeatures = [
       },
       E2E_TIMEOUT
     );
-  });
+});
 });

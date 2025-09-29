@@ -9,7 +9,7 @@
 class ValidationTestLogger {
   static log(message) {
     process.stdout.write(message + '\n');
-  }
+}
 }
 
 const __UNUSED = ['error', 'feature', 'subtask', 'test'];
@@ -31,7 +31,7 @@ class TaskManagerValidator {
   constructor(_agentId) {
     this.errors = [];
     this.warnings = [];
-  }
+}
 
   /**
    * Validate task creation data
@@ -89,7 +89,7 @@ class TaskManagerValidator {
     }
 
     return this.getResult();
-  }
+}
 
   /**
    * Validate command existence And parameters
@@ -137,14 +137,14 @@ class TaskManagerValidator {
           this.errors.push(
             'Claim command requires taskId And agentId parameters'
           );
-          this.warnings.push('Format: claim <taskId> <agentId>');
+          this.warnings.push('Format: claim <taskId> <agentId>');,
         }
         break;
 
       case 'complete':
         if (args.length < 1) {
           this.errors.push('Complete command requires taskId parameter');
-          this.warnings.push('Format: complete <taskId> [completionData]');
+          this.warnings.push('Format: complete <taskId> [completionData]');,
         }
         break;
 
@@ -158,7 +158,7 @@ class TaskManagerValidator {
     }
 
     return this.getResult();
-  }
+}
 
   /**
    * Validate full command string format
@@ -180,7 +180,7 @@ class TaskManagerValidator {
     const expectedPath =
       '/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js';
     if (!commandString.includes(expectedPath)) {
-      this.warnings.push(`Ensure using correct path: ${expectedPath}`);
+      this.warnings.push(`Ensure using correct path: ${expectedPath}`);,
     }
 
     // Check for JSON formatting in create commands
@@ -194,14 +194,14 @@ class TaskManagerValidator {
           const validation = this.validateTaskCreation(parsed);
           this.errors.push(...validation.errors);
           this.warnings.push(...validation.warnings);
-        } catch (_1) {
+        } catch (_) {
           this.errors.push('Invalid JSON format in create command');
         }
       }
     }
 
     return this.getResult();
-  }
+}
 
   /**
    * Get validation result
@@ -214,7 +214,7 @@ class TaskManagerValidator {
       warnings: [...this.warnings],
       hasWarnings: this.warnings.length > 0,
     };
-  }
+}
 
   /**
    * Format validation result for display
@@ -222,7 +222,7 @@ class TaskManagerValidator {
    * @returns {string} Formatted output
    */
   formatResult(result) {
-    let output = '';
+    let _output = '';
 
     if (result.errors.length > 0) {
       output += '❌ ERRORS:\n';
@@ -247,7 +247,7 @@ class TaskManagerValidator {
     }
 
     return output;
-  }
+}
 }
 
 // Example usage And tests
@@ -257,24 +257,20 @@ if (require.main === module) {
   ValidationTestLogger.log('=== TaskManager API Validation Tool ===\n');
 
   // Test cases;
-  const testCases = [
-    {
+  const testCases = [ {
       name: 'Valid task creation',
       data: {
         title: 'Fix authentication bug',
         description: 'Resolve login timeout issue',
         category: 'error',
       },
-    },
-    {
+    }, {
       name: 'Missing category field',
       data: { title: 'Add feature', description: 'New functionality' },
-    },
-    {
+    }, {
       name: 'Invalid category',
       data: { title: 'Task', description: 'Details', category: 'bug' },
-    },
-    {
+    }, {
       name: 'Legacy task_type field',
       data: { title: 'Task', description: 'Details', task_type: 'feature' },
     },
@@ -282,13 +278,12 @@ if (require.main === module) {
 
   testCases.forEach((testCase) => {
     ValidationTestLogger.log(`Testing: ${testCase.name}`);
-    const result = validator.validateTaskCreation(testCase.data);
+    const _result = validator.validateTaskCreation(testCase.data);
     ValidationTestLogger.log(validator.formatResult(result));
-  });
+});
 
   // Command validation tests;
-  const commandTests = [
-    {
+  const commandTests = [ {
       name: 'Valid create command',
       command: 'create',
       args: ['{"title":"test","description":"test","category":"error"}'],
@@ -299,9 +294,9 @@ if (require.main === module) {
 
   commandTests.forEach((test) => {
     ValidationTestLogger.log(`Testing command: ${test.name}`);
-    const result = validator.validateCommand(test.command, test.args);
+    const _result = validator.validateCommand(test.command, test.args);
     ValidationTestLogger.log(validator.formatResult(result));
-  });
+});
 }
 
 module.exports = TaskManagerValidator;

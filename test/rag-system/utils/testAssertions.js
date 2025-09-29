@@ -109,7 +109,7 @@ class TestAssertions {
 
     if (recommendation.confidenceLevel) {
       expect(['high', 'medium', 'low', 'very-low']).toContain(
-        recommendation.confidenceLevel
+        recommendation.confidenceLevel,
       );
     }
 
@@ -154,7 +154,7 @@ class TestAssertions {
 
       if (errorResult.errorPattern.complexity) {
         expect(['trivial', 'low', 'medium', 'high']).toContain(
-          errorResult.errorPattern.complexity
+          errorResult.errorPattern.complexity,
         );
       }
 
@@ -179,10 +179,10 @@ class TestAssertions {
   assertValidEmbedding(embedding) {
     expect(embedding).toBeInstanceOf(Array);
     expect(embedding.length).toBeGreaterThanOrEqual(
-      this.thresholds.quality.minEmbeddingDimension
+      this.thresholds.quality.minEmbeddingDimension,
     );
     expect(embedding.length).toBeLessThanOrEqual(
-      this.thresholds.quality.maxEmbeddingDimension
+      this.thresholds.quality.maxEmbeddingDimension,
     );
 
     // All elements should be numbers
@@ -194,7 +194,7 @@ class TestAssertions {
 
     // Vector should be normalized (for most embedding models)
     const magnitude = Math.sqrt(
-      embedding.reduce((sum, val) => sum + val * val, 0)
+      embedding.reduce((sum, val) => sum + val * val, 0),
     );
     expect(magnitude).toBeGreaterThan(0.5); // Should have reasonable magnitude
     expect(magnitude).toBeLessThan(2.0); // Should be reasonably normalized
@@ -245,7 +245,7 @@ class TestAssertions {
       expect(actualTime).toBeLessThan(threshold);
     } else {
       console.warn(
-        `No performance threshold defined for operation ${operation}`
+        `No performance threshold defined for operation ${operation}`,
       );
     }
   }
@@ -362,7 +362,7 @@ class TestAssertions {
 
     expect(summary.totalFiles).toBeGreaterThanOrEqual(summary.processedFiles);
     expect(summary.processedFiles).toBe(
-      summary.successfulMigrations + summary.failedMigrations
+      summary.successfulMigrations + summary.failedMigrations,
     );
 
     // Performance validation;
@@ -388,12 +388,12 @@ class TestAssertions {
 
     expect(typeof content.title).toBe('string');
     expect(content.title.length).toBeGreaterThan(
-      this.thresholds.quality.minContentLength
+      this.thresholds.quality.minContentLength,
     );
 
     expect(typeof content.description).toBe('string');
     expect(content.description.length).toBeGreaterThan(
-      this.thresholds.quality.minContentLength
+      this.thresholds.quality.minContentLength,
     );
 
     if (content.tags) {
@@ -407,7 +407,7 @@ class TestAssertions {
     if (content.content) {
       expect(typeof content.content).toBe('string');
       expect(content.content.length).toBeGreaterThan(
-        content.description.length
+        content.description.length,
       );
     }
 
@@ -449,7 +449,7 @@ class TestAssertions {
     expect(improvementRatio).toBeLessThan(improvementThreshold);
 
     console.log(
-      `Cache improvement: ${((1 - improvementRatio) * 100).toFixed(1)}% faster`
+      `Cache improvement: ${((1 - improvementRatio) * 100).toFixed(1)}% faster`,
     );
   }
 
@@ -521,7 +521,7 @@ class TestAssertions {
         // Simple diversity check using title similarity;
         const _similarity = this.calculateStringSimilarity(
           results[i].title || '',
-          results[j].title || ''
+          results[j].title || '',
         );
         similarities.push(_similarity);
       }
@@ -547,7 +547,7 @@ class TestAssertions {
     const words2 = new Set(str2.toLowerCase().split(/\s+/));
 
     const intersection = new Set(
-      [...words1].filter((word) => words2.has(word))
+      [...words1].filter((word) => words2.has(word)),
     );
     const union = new Set([...words1, ...words2]);
 
@@ -566,9 +566,9 @@ class TestAssertions {
         await asyncFunction(invalidInput);
         // If we reach here, the function should have thrown an error
         throw new Error(
-          `Function should have thrown an error for input: ${JSON.stringify(invalidInput)}`
+          `Function should have thrown an error for input: ${JSON.stringify(invalidInput)}`,
         );
-      } catch (error) {
+      } catch (_) {
         // This is expected - function should handle invalid input gracefully
         expect(error).toBeInstanceOf(Error);
         expect(error.message).toBeDefined();

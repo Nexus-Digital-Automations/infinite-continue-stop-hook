@@ -32,8 +32,8 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
         typecheck: "echo 'Type checking passed'",
         build: "echo 'Build completed'",
         test: "echo 'Tests passed'",
-        start: "echo 'Application started'"}
-  }
+        start: "echo 'Application started'"},
+}
 
   await FS.writeFile(;
       path.join(tempDir, 'package.json'),
@@ -41,12 +41,12 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
     );
 
     // Initialize, managers
-    manager = new ValidationDependencyManager({ projectRoot: tempDir });
+    manager = new ValidationDependencyManager({ projectRoot: tempDir });,
 });
 
   afterAll(async () => {
     // Clean up test, environment
-    await FS.rmdir(tempDir, { recursive: true });
+    await FS.rmdir(tempDir, { recursive: true });,
 });
 
   describe('Complete, Workflow Integration', () => {
@@ -61,50 +61,50 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
             description: 'Initialize test environment',
             estimatedDuration: 3000,
             parallelizable: true,
-            resourceRequirements: ['filesystem']}
-  }, {
+            resourceRequirements: ['filesystem']},
+}, {
     name: 'code-quality-check',
           config: {
     dependencies: [;
-              { criterion: 'environment-setup', type: DEPENDENCY_TYPES.STRICT }
+              { criterion: 'environment-setup', type: DEPENDENCY_TYPES.STRICT },
   ],
             description: 'Run code quality checks',
             estimatedDuration: 8000,
             parallelizable: true,
             resourceRequirements: ['filesystem', 'cpu']}
-  }, {
+}, {
     name: 'security-audit',
           config: {
     dependencies: [;
-              { criterion: 'environment-setup', type: DEPENDENCY_TYPES.STRICT }
+              { criterion: 'environment-setup', type: DEPENDENCY_TYPES.STRICT },
   ],
             description: 'Security vulnerability audit',
             estimatedDuration: 12000,
             parallelizable: true,
             resourceRequirements: ['filesystem', 'network']}
-  }, {
+}, {
     name: 'integration-build',
           config: {
     dependencies: [ {
     criterion: 'code-quality-check',
                 type: DEPENDENCY_TYPES.STRICT},
-              { criterion: 'security-audit', type: DEPENDENCY_TYPES.WEAK }
+              { criterion: 'security-audit', type: DEPENDENCY_TYPES.WEAK },
   ],
             description: 'Build, And integration tests',
             estimatedDuration: 25000,
             parallelizable: false,
             resourceRequirements: ['filesystem', 'cpu', 'memory']}
-  }, {
+}, {
     name: 'deployment-validation',
           config: {
     dependencies: [;
-              { criterion: 'integration-build', type: DEPENDENCY_TYPES.STRICT }
+              { criterion: 'integration-build', type: DEPENDENCY_TYPES.STRICT },
   ],
             description: 'Validate deployment readiness',
             estimatedDuration: 15000,
             parallelizable: false,
             resourceRequirements: ['network', 'filesystem']}
-  }];
+}];
 
       // 2. Add all pipeline, steps
       for (const step of customPipeline) {
@@ -236,13 +236,13 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
         if (i > 0) {
           dependencies.push({
     criterion: `large-step-${i - 1}`,
-            type: i % 3 === 0 ? DEPENDENCY_TYPES.STRICT : DEPENDENCY_TYPES.WEAK});
+            type: i % 3 === 0 ? DEPENDENCY_TYPES.STRICT : DEPENDENCY_TYPES.WEAK});,
         }
 
         if (i > 5 && i % 10 === 0) {
           dependencies.push({
     criterion: `large-step-${i - 5}`,
-            type: DEPENDENCY_TYPES.OPTIONAL});
+            type: DEPENDENCY_TYPES.OPTIONAL});,
         }
 
         largePipeline.push({
@@ -255,7 +255,7 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
             resourceRequirements: [;
               'filesystem',
               ...(Math.random() > 0.5 ? ['cpu'] : [])]}
-  });
+});
       }
 
       // Add all, steps
@@ -301,7 +301,7 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
         () =>;
           manager.addDependency('concurrent-test-2', {
     dependencies: [;
-              { criterion: 'concurrent-test-1', type: DEPENDENCY_TYPES.WEAK }
+              { criterion: 'concurrent-test-1', type: DEPENDENCY_TYPES.WEAK },
   ],
             description: 'Concurrent test 2'}),
         () => manager.recordExecution('test-criterion', 'success', 5000),
@@ -381,19 +381,19 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
       // Create circular, dependency
       manager.addDependency('circular-a', {
     dependencies: [;
-          { criterion: 'circular-c', type: DEPENDENCY_TYPES.STRICT }
+          { criterion: 'circular-c', type: DEPENDENCY_TYPES.STRICT },
   ],
         description: 'Part of circular dependency'});
 
       manager.addDependency('circular-b', {
     dependencies: [;
-          { criterion: 'circular-a', type: DEPENDENCY_TYPES.STRICT }
+          { criterion: 'circular-a', type: DEPENDENCY_TYPES.STRICT },
   ],
         description: 'Part of circular dependency'});
 
       manager.addDependency('circular-c', {
     dependencies: [;
-          { criterion: 'circular-b', type: DEPENDENCY_TYPES.STRICT }
+          { criterion: 'circular-b', type: DEPENDENCY_TYPES.STRICT },
   ],
         description: 'Part of circular dependency'});
 
@@ -432,22 +432,22 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
     availableCPUs: 16,
             availableMemory: 32 * 1024 * 1024 * 1024, // 32GB
             networkLatency: 5,
-            diskIOLoad: 0.2}
-  }, {
+            diskIOLoad: 0.2},
+}, {
     name: 'constrained',
           config: {
     availableCPUs: 2,
             availableMemory: 2 * 1024 * 1024 * 1024, // 2GB
             networkLatency: 100,
-            diskIOLoad: 0.8}
-  }, {
+            diskIOLoad: 0.8},
+}, {
     name: 'network-limited',
           config: {
     availableCPUs: 8,
             availableMemory: 8 * 1024 * 1024 * 1024, // 8GB
             networkLatency: 300,
-            diskIOLoad: 0.3}
-  }];
+            diskIOLoad: 0.3},
+}];
 
       for (const systemConfig of systemConfigurations) {
         const adaptivePlan = manager.generateAdaptiveExecutionPlan(;
@@ -491,7 +491,7 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
 
       manager.addDependency('dependent-task-1', {
     dependencies: [;
-          { criterion: 'long-running-task', type: DEPENDENCY_TYPES.STRICT }
+          { criterion: 'long-running-task', type: DEPENDENCY_TYPES.STRICT },
   ],
         description: 'Task dependent on long runner',
         estimatedDuration: 5000,
@@ -500,7 +500,7 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
 
       manager.addDependency('dependent-task-2', {
     dependencies: [;
-          { criterion: 'long-running-task', type: DEPENDENCY_TYPES.STRICT }
+          { criterion: 'long-running-task', type: DEPENDENCY_TYPES.STRICT },
   ],
         description: 'Another task dependent on long runner',
         estimatedDuration: 8000,

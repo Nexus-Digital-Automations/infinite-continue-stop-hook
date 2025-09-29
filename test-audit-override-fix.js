@@ -12,11 +12,11 @@ const FS = require('./lib/taskManager');
 class TestLogger {
   static log(message) {
     process.stdout.write(message + '\n');
-  }
+}
 
   static error(message) {
     process.stderr.write(message + '\n');
-  }
+}
 }
 
 async function testAuditOverrideFix(category = 'general') {
@@ -75,7 +75,7 @@ async function testAuditOverrideFix(category = 'general') {
       TestLogger.log(
         '✅ Objectivity enforcement working - agent cannot claim own audit task normally'
       );
-      TestLogger.log('   Reason: ' + claimAttempt1.reason);
+      TestLogger.log('   Reason: ' + claimAttempt1.reason);,
     }
 
     TestLogger.log('🚀 Testing audit task override...');
@@ -111,10 +111,10 @@ async function testAuditOverrideFix(category = 'general') {
       '🎉 All tests passed! The audit task override bug is fixed.'
     );
     return true;
-  } catch (error) {
+} catch (_) {
     TestLogger.error('❌ Test failed with error: ' + _error.message);
     return false;
-  }
+}
 }
 
 // Run the test

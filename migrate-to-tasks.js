@@ -61,7 +61,7 @@ const tasksData = await this.transformToTasksSchema(featuresData);
         newFile: this.tasksPath,
         stats: await this.getMigrationStats(tasksData),
       };
-    } catch (error) {
+    } catch (_) {
       loggers.stopHook.error('❌ Migration failed:', _error.message);
       throw _error;
     }
@@ -74,7 +74,7 @@ const tasksData = await this.transformToTasksSchema(featuresData);
       try {
       await FS.access(this.featuresPath);
       loggers.stopHook.log('✓ Source FEATURES.json found');
-    } catch (_1) {
+    } catch (_) {
       throw new Error(`FEATURES.json not found at ${this.featuresPath}`);
     }
 }
@@ -85,9 +85,9 @@ const tasksData = await this.transformToTasksSchema(featuresData);
   createBackup() {
       try {
       await FS.copyFile(this.featuresPath, this.backupPath);
-      loggers.stopHook.log(`✓ Backup created: ${this.backupPath}`);
-    } catch (error) {
-      throw new Error(`Failed to create backup: ${_error.message}`);
+      loggers.stopHook.log(`✓ Backup created: ${this.backupPath}`);,
+    } catch (_) {
+      throw new Error(`Failed to create backup: ${_error.message}`);,
     }
 }
 
@@ -100,8 +100,8 @@ const tasksData = await this.transformToTasksSchema(featuresData);
       const parsedData = JSON.parse(data);
       loggers.stopHook.log('✓ Features data loaded And parsed');
       return parsedData;
-    } catch (error) {
-      throw new Error(`Failed to load features data: ${_error.message}`);
+    } catch (_) {
+      throw new Error(`Failed to load features data: ${_error.message}`);,
     }
 }
 
@@ -163,7 +163,7 @@ const tasksData = {
     test_coverage: true,
             linter_pass: true,
           }
-  },
+},
         audit_task_template: {
     title_pattern: 'Security And quality audit for: {feature_title}',
           description_pattern:
@@ -175,8 +175,8 @@ const tasksData = {
             linter_pass: true,
             type_check: true,
           }
-  }
-  },
+}
+},
 
       priority_system: {
     order: ['USER_REQUESTS', 'ERROR', 'AUDIT', 'FEATURE', 'TEST'],
@@ -190,7 +190,7 @@ const tasksData = {
           normal: ['warnings', 'optimization-opportunities'],
           low: ['documentation-improvements', 'code-style'],
         }
-  },
+},
 
       metadata: {
     version: '2.0.0',
@@ -389,7 +389,7 @@ const testTask = {
     auto_generated_for: task.id,
             generation_rule: 'mandatory_test_gate',
           }
-  };
+};
 
         // Generate audit task;
 const auditTask = {
@@ -429,7 +429,7 @@ const auditTask = {
     auto_generated_for: task.id,
             generation_rule: 'mandatory_security_audit',
           }
-  };
+};
 
         // Add to tasks array
         tasksData.tasks.push(testTask, auditTask);
@@ -503,7 +503,7 @@ const auditTask = {
         throw new Error(`Task ${task.id} missing description`);
       }
       if (!['error', 'feature', 'test', 'audit'].includes(task.type)) {
-        throw new Error(`Task ${task.id} has invalid type: ${task.type}`);
+        throw new Error(`Task ${task.id} has invalid type: ${task.type}`);,
       }
     }
 
@@ -517,8 +517,8 @@ const auditTask = {
       try {
       await FS.writeFile(this.tasksPath, JSON.stringify(tasksData, null, 2));
       loggers.stopHook.log(`✓ TASKS.json written to ${this.tasksPath}`);
-    } catch (error) {
-      throw new Error(`Failed to write TASKS.json: ${_error.message}`);
+    } catch (_) {
+      throw new Error(`Failed to write TASKS.json: ${_error.message}`);,
     }
 }
 
@@ -540,7 +540,7 @@ const auditTask = {
     return Math.random().toString(36).substring(2, 10);
 }
 
-  mapPriorityFromCategory(category) {
+  mapPriorityFromCategory(_category) {
     const priorityMap = {
     security: 'high',
       'bug-fix': 'high',
@@ -552,7 +552,7 @@ const auditTask = {
     return priorityMap[category] || 'normal';
 }
 
-  inferCapabilitiesFromCategory(category) {
+  inferCapabilitiesFromCategory(_category) {
     const capabilityMap = {
     security: ['security', 'backend'],
       'bug-fix': ['general'],

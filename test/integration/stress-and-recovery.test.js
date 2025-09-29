@@ -41,19 +41,19 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
 
   beforeAll(async () => {
     await setupGlobalCleanup();
-  });
+});
 
   afterAll(async () => {
     await teardownGlobalCleanup();
-  });
+});
 
   beforeEach(async () => {
     testDir = await createTestEnvironment('stress-recovery');
-  });
+});
 
   afterEach(async () => {
     await cleanupTestEnvironment(testDir);
-  });
+});
 
   // ========================================
   // CONCURRENT OPERATIONS TESTING
@@ -83,8 +83,8 @@ const concurrentCount = 50;
       const commands = features.map((featureData) => ({
     command: 'suggest-feature',
         args: [JSON.stringify(featureData)],
-        options: { projectRoot: testDir }
-  }));
+        options: { projectRoot: testDir },
+}));
 
       // 2. Execute all commands concurrently;
 const startTime = Date.now();
@@ -123,7 +123,7 @@ const initialFeatures = Array.from({ length: 20 }, (_, i) =>
 
       const featureIds = [];
       for (const featureData of initialFeatures) {
-        const result = await execAPI(
+        const _result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)], {
     projectRoot: testDir,
@@ -146,15 +146,15 @@ const mixedCommands = [
               }),
             ),
           ],
-          options: { projectRoot: testDir }
-  })),
+          options: { projectRoot: testDir },
+})),
 
         // Feature approvals
         ...featureIds.slice(0, 5).map((featureId) => ({
     command: 'approve-feature',
           args: [featureId, JSON.stringify({ approved_by: 'concurrent-test' })],
-          options: { projectRoot: testDir }
-  })),
+          options: { projectRoot: testDir },
+})),
 
         // Feature rejections
         ...featureIds.slice(5, 10).map((featureId) => ({
@@ -166,34 +166,33 @@ const mixedCommands = [
               reason: 'Testing concurrent rejection',
             }),
           ],
-          options: { projectRoot: testDir }
-  })),
+          options: { projectRoot: testDir },
+})),
 
         // Agent operations
         ...Array.from({ length: 5 }, (_, i) => ({
     command: 'initialize',
           args: [`concurrent-agent-${i + 1}`],
-          options: { projectRoot: testDir }
-  })),
+          options: { projectRoot: testDir },
+})),
 
-        // Statistics queries
-        {
+        // Statistics queries {
     command: 'feature-stats',
           args: [],
-          options: { projectRoot: testDir }
-  }, {
+          options: { projectRoot: testDir },
+}, {
     command: 'get-initialization-stats',
           args: [],
-          options: { projectRoot: testDir }
-  }, {
+          options: { projectRoot: testDir },
+}, {
     command: 'list-features',
           args: [],
-          options: { projectRoot: testDir }
-  }, {
+          options: { projectRoot: testDir },
+}, {
     command: 'list-features',
           args: [JSON.stringify({ status: 'suggested' })],
-          options: { projectRoot: testDir }
-  }
+          options: { projectRoot: testDir },
+},
   ];
 
       // 3. Execute all mixed operations concurrently;
@@ -231,7 +230,7 @@ const bulkFeatures = Array.from({ length: 20 }, (_, i) =>
 
       const featureIds = [];
       for (const featureData of bulkFeatures) {
-        const result = await execAPI(
+        const _result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)], {
     projectRoot: testDir,
@@ -248,22 +247,22 @@ const bulkCommands = [ {
             JSON.stringify(featureIds.slice(0, 10)),
             JSON.stringify({ approved_by: 'bulk-test-1' }),
           ],
-          options: { projectRoot: testDir }
-  }, {
+          options: { projectRoot: testDir },
+}, {
     command: 'bulk-approve-features',
           args: [
             JSON.stringify(featureIds.slice(5, 15)),
             JSON.stringify({ approved_by: 'bulk-test-2' }),
           ],
-          options: { projectRoot: testDir }
-  }, {
+          options: { projectRoot: testDir },
+}, {
     command: 'bulk-approve-features',
           args: [
             JSON.stringify(featureIds.slice(10, 20)),
             JSON.stringify({ approved_by: 'bulk-test-3' }),
           ],
-          options: { projectRoot: testDir }
-  }
+          options: { projectRoot: testDir },
+},
   ];
 
       const bulkResults = await execAPIConcurrently(bulkCommands);
@@ -304,32 +303,32 @@ const AGENT_IDS = Array.from(
         ...AGENT_IDS.map((AGENT_ID) => ({
     command: 'initialize',
           args: [AGENT_ID],
-          options: { projectRoot: testDir }
-  })),
+          options: { projectRoot: testDir },
+})),
 
         // Reinitialize some agents
         ...AGENT_IDS.slice(0, 5).map((AGENT_ID) => ({
     command: 'reinitialize',
           args: [AGENT_ID],
-          options: { projectRoot: testDir }
-  })),
+          options: { projectRoot: testDir },
+})),
 
         // More initializations (duplicates)
         ...AGENT_IDS.slice(5, 10).map((AGENT_ID) => ({
     command: 'initialize',
           args: [AGENT_ID],
-          options: { projectRoot: testDir }
-  })),
+          options: { projectRoot: testDir },
+})),
 
         // Statistics queries during operations: {
     command: 'get-initialization-stats',
           args: [],
-          options: { projectRoot: testDir }
-  }, {
+          options: { projectRoot: testDir },
+}, {
     command: 'get-initialization-stats',
           args: [],
-          options: { projectRoot: testDir }
-  }
+          options: { projectRoot: testDir },
+},
   ];
 
       // 2. Execute all agent operations concurrently;
@@ -376,7 +375,7 @@ const validFeatures = Array.from({ length: 5 }, (_, i) =>
       );
 
       for (const featureData of validFeatures) {
-        const result = await execAPI(
+        const _result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)], {
     projectRoot: testDir,
@@ -462,7 +461,7 @@ const invalidStructures = [
         { project: null, features: [] }, // Missing required fields
         { features: [{ invalid: 'feature' }] }, // Invalid feature structure
         null, // Completely invalid
-        [], // Wrong root type
+        [], // Wrong root type,
       ];
 
       for (const invalidData of invalidStructures) {
@@ -475,7 +474,7 @@ const testFeature = generateTestFeature({
           category: 'enhancement',
         });
 
-        const result = await execAPI(
+        const _result = await execAPI(
           'suggest-feature',
           [JSON.stringify(testFeature)], {
     projectRoot: testDir,
@@ -502,7 +501,7 @@ const features = Array.from({ length: 10 }, (_, i) =>
       );
 
       for (const featureData of features) {
-        const result = await execAPI(
+        const _result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)], {
     projectRoot: testDir,
@@ -526,7 +525,7 @@ const recoveryFeature = generateTestFeature({
         category: 'bug-fix',
       });
 
-      const result = await execAPI(
+      const _result = await execAPI(
         'suggest-feature',
         [JSON.stringify(recoveryFeature)], {
     projectRoot: testDir,
@@ -559,7 +558,7 @@ const operationCount = 20;
           await corruptFeaturesFile(testDir);
         }
 
-        const result = await execAPI(
+        const _result = await execAPI(
           'suggest-feature',
           [JSON.stringify(feature)], {
     projectRoot: testDir,
@@ -618,8 +617,8 @@ const batchSize = 20;
         const batchCommands = batch.map((featureData) => ({
     command: 'suggest-feature',
           args: [JSON.stringify(featureData)],
-          options: { projectRoot: testDir }
-  }));
+          options: { projectRoot: testDir },
+}));
 
         const startTime = Date.now();
         const results = await execAPIConcurrently(batchCommands);
@@ -677,7 +676,7 @@ const rapidOperationCount = 100;
         });
 
         const startTime = Date.now();
-        const result = await execAPI(
+        const _result = await execAPI(
           'suggest-feature',
           [JSON.stringify(feature)], {
     projectRoot: testDir,
@@ -736,7 +735,7 @@ const mixedOperations = [];
 
       // Statistics queries
       for (let i = 0; i < 5; i++) {
-        mixedOperations.push({ type: 'stats' });
+        mixedOperations.push({ type: 'stats' });,
       }
 
       // Shuffle operations for mixed pattern
@@ -835,8 +834,8 @@ const intensiveOperations = Array.from({ length: 50 }, (_, i) => ({
             }),
           ),
         ],
-        options: { projectRoot: testDir }
-  }));
+        options: { projectRoot: testDir },
+}));
 
       // 2. Execute operations;
 const results = await execAPIConcurrently(intensiveOperations);

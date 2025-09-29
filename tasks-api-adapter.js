@@ -164,7 +164,7 @@ const testTask = {
     auto_generated_for: featureTask.id,
         generation_rule: 'mandatory_test_gate',
       }
-  };
+};
 
     // Generate audit task;
 const auditTask = {
@@ -204,7 +204,7 @@ const auditTask = {
     auto_generated_for: featureTask.id,
         generation_rule: 'mandatory_security_audit',
       }
-  };
+};
 
     autoTasks.push(testTask, auditTask);
 
@@ -284,7 +284,7 @@ const priorityA = priorityWeight[a.priority] || 999;
     return Math.random().toString(36).substring(2, 10);
 }
 
-  mapPriorityFromCategory(category) {
+  mapPriorityFromCategory(_category) {
     const priorityMap = {
     security: 'high',
       'bug-fix': 'high',
@@ -296,7 +296,7 @@ const priorityA = priorityWeight[a.priority] || 999;
     return priorityMap[category] || 'normal';
 }
 
-  inferCapabilitiesFromCategory(category) {
+  inferCapabilitiesFromCategory(_category) {
     const capabilityMap = {
     security: ['security', 'backend'],
       'bug-fix': ['general'],

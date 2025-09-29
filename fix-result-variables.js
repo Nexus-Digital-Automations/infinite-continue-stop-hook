@@ -48,7 +48,7 @@ class ResultVariableFixer {
       declarationsFixed: 0,
       scopeIssuesFixed: 0,
     };
-  }
+}
 
   /**
    * Main execution method
@@ -64,17 +64,17 @@ const allFiles = this.findAllFilesWithResultIssues();
 
       // Process each file
       for (const filePath of allFiles) {
-        this.processFile(filePath);
+        this.processFile(_filePath);
       }
 
       this.generateReport();
 
       console.log('✅ result/result variable fix completed successfully');
-    } catch (error) {
+    } catch (_) {
       console.error('❌ Failed to fix result/result variables:', error.message);
-      throw new Error(`Failed to fix result variables: ${error.message}`);
+      throw new Error(`Failed to fix result variables: ${error.message}`);,
     }
-  }
+}
 
   /**
    * Find all files with result variable issues
@@ -91,7 +91,7 @@ const allFiles = this.findAllFilesWithResultIssues();
 
     // Filter to only existing files
     return Array.from(files).filter((file) => FS.existsSync(file));
-  }
+}
 
   /**
    * Recursively find files in directory
@@ -114,19 +114,19 @@ const content = FS.readFileSync(fullPath, 'utf8');
           }
         }
       }
-    } catch (error) {
+    } catch (_) {
       console.warn(
         `⚠️ Warning: Could not read directory ${dir}: ${error.message}`
       );
     }
-  }
+}
 
   /**
    * Process individual file to fix result issues
    */
-  processFile(filePath) {
+  processFile(_filePath) {
     try {
-      console.log(`🔧 Processing: ${PATH.relative(process.cwd(), filePath)}`);
+      console.log(`🔧 Processing: ${PATH.relative(process.cwd(), _filePath)}`);
 
       let content = FS.readFileSync(filePath, 'utf8');
       let modified = false;
@@ -141,7 +141,7 @@ const content = FS.readFileSync(fullPath, 'utf8');
       ];
 
       for (const fix of fixes) {
-        const result = fix(content);
+        const _result = fix(content);
         if (result.modified) {
           content = result.content;
           modified = true;
@@ -156,19 +156,19 @@ const content = FS.readFileSync(fullPath, 'utf8');
           changes,
         });
         console.log(
-          `✅ Fixed ${changes} issues in ${PATH.relative(process.cwd(), filePath)}`
+          `✅ Fixed ${changes} issues in ${PATH.relative(process.cwd(), _filePath)}`
         );
       }
 
       this.stats.filesProcessed++;
-    } catch (error) {
+    } catch (_) {
       console.error(`❌ Error processing ${filePath}: ${_error.message}`);
       this.errors.push({
     file: filePath,
         error: _error.message,
       });
     }
-  }
+}
 
   /**
    * Fix result variable names to lowercase result
@@ -199,7 +199,7 @@ const patterns = [
     pattern: /const\s+result\s*=\s*[^;]+;\s*([^;]*result\.)/g,
         replacement: (match, _p1) => match.replace(/result\./g, 'result.'),
         description: 'result variable consistency in scope',
-      }
+      },
   ];
 
     for (const { pattern, replacement, description } of patterns) {
@@ -223,7 +223,7 @@ const patterns = [
     this.stats.resultVariablesFixed += changes;
 
     return { content, modified, changes };
-  }
+}
 
   /**
    * Fix variable declaration issues
@@ -238,8 +238,7 @@ const patterns = [
     pattern: /(\s+)(result\.testCases\s*=)/g,
         replacement: '$1RESULT.testCases =',
         description: 'missing result reference',
-      },
-      {
+      }, {
     pattern: /(\s+)(result\.failureDetails\s*=)/g,
         replacement: '$1RESULT.failureDetails =',
         description: 'missing result reference',
@@ -255,11 +254,11 @@ const patterns = [
             .split('\n');
           const lastLines = lines.slice(-10).join('\n');
           return (
-            lastLines.includes('const result = {') ||
+            lastLines.includes('const _result = {') ||
             lastLines.includes('result.')
           );
         }
-  },
+},
     ];
 
     for (const { pattern, replacement, description, condition } of patterns) {
@@ -293,7 +292,7 @@ const patterns = [
     this.stats.declarationsFixed += changes;
 
     return { content, modified, changes };
-  }
+}
 
   /**
    * Fix scope issues
@@ -309,7 +308,7 @@ const lines = content.split('\n');
       const line = lines[i];
 
       // If we see a result declaration, check following lines for inconsistent usage
-      if (line.includes('const result = ')) {
+      if (line.includes('const _result = ')) {
         // Look ahead for inconsistent usage in the same scope
         for (let j = i + 1; j < Math.min(i + 20, lines.length); j++) {
           const followingLine = lines[j];
@@ -345,17 +344,17 @@ const lines = content.split('\n');
     this.stats.scopeIssuesFixed += changes;
 
     return { content, modified, changes };
-  }
+}
 
   /**
    * Fix specific patterns identified in the codebase
    */
-  fixSpecificPatterns(content, filePath) {
+  fixSpecificPatterns(content, _filePath) {
     let modified = false;
     let changes = 0;
 
     // File-specific fixes;
-const fileName = PATH.basename(filePath);
+const fileName = PATH.basename(_filePath);
 
     if (fileName === 'jest-json-reporter.js') {
       // Fix the specific issue where result should be result in return statement;
@@ -386,7 +385,7 @@ const beforeContent = content;
     }
 
     return { content, modified, changes };
-  }
+}
 
   /**
    * Generate fix report
@@ -456,7 +455,7 @@ const report = {
     console.log(
       '\n📄 Detailed report saved to: result-variable-fix-report.json'
     );
-  }
+}
 }
 
 // CLI interface

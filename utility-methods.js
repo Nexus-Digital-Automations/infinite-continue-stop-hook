@@ -11,7 +11,7 @@ class UtilityMethods {
     const timestamp = Date.now();
     const randomString = crypto.randomBytes(6).toString('hex');
     return `task_${timestamp}_${randomString}`;
-  }
+}
 
   /**
    * Infer task type from feature characteristics
@@ -30,7 +30,7 @@ class UtilityMethods {
       return 'documentation';
     }
     return 'implementation';
-  }
+}
 
   /**
    * Infer task priority from feature characteristics
@@ -58,7 +58,7 @@ class UtilityMethods {
       return 'high';
     }
     return 'normal';
-  }
+}
 
   /**
    * Estimate effort required for feature implementation
@@ -82,7 +82,7 @@ class UtilityMethods {
     baseEffort *= 1 + complexityMultiplier;
 
     return Math.ceil(baseEffort);
-  }
+}
 
   /**
    * Infer required capabilities from feature characteristics
@@ -124,7 +124,7 @@ const description = feature.description.toLowerCase();
     }
 
     return capabilities.length > 0 ? capabilities : ['general'];
-  }
+}
 
   /**
    * Determine if feature is complex enough to warrant supporting tasks
@@ -135,7 +135,7 @@ const description = feature.description.toLowerCase();
       feature.description.length > 800 ||
       feature.business_value.toLowerCase().includes('comprehensive')
     );
-  }
+}
 
   /**
    * Generate supporting tasks for complex features
@@ -163,7 +163,7 @@ const description = feature.description.toLowerCase();
         supporting_task: true,
         main_task_id: mainTaskId,
       }
-  });
+});
 
     // Add documentation task for new features
     if (feature.category === 'new-feature') {
@@ -186,11 +186,11 @@ const description = feature.description.toLowerCase();
           supporting_task: true,
           main_task_id: mainTaskId,
         }
-  });
+});
     }
 
     return supportingTasks;
-  }
+}
 }
 
 module.exports = UtilityMethods;

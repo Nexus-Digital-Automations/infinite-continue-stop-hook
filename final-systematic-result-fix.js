@@ -19,7 +19,7 @@ class FinalSystematicResultFix {
     this.fixedFiles = 0;
     this.totalReplacements = 0;
     this.projectRoot = process.cwd();
-  }
+}
 
   /**
    * Apply systematic result variable fixes
@@ -34,15 +34,15 @@ class FinalSystematicResultFix {
       const sourceFiles = await this.getAllSourceFiles();
 
       for (const filePath of sourceFiles) {
-        await this.processFile(filePath);
+        await this.processFile(_filePath);
       }
 
       this.reportResults();
-    } catch (_1) {
+    } catch (_) {
       console.error('❌ Error during systematic fixes:', _1.message);
-      throw new Error(`Systematic fixes failed: ${_1.message}`);
+      throw new Error(`Systematic fixes failed: ${_1.message}`);,
     }
-  }
+}
 
   /**
    * Get all source files that need processing
@@ -64,7 +64,7 @@ class FinalSystematicResultFix {
     const findCommand = `find "${this.projectRoot}" -type f \\( ${extensions.map((ext) => `-name "*${ext}"`).join(' -o ')} \\) ${excludePatterns.map((pattern) => `! -path "*/${pattern}/*"`).join(' ')}`;
 
     try {
-      const output = execSync(findCommand, { encoding: 'utf8' });
+      const _output = execSync(findCommand, { encoding: 'utf8' });
       const foundFiles = output
         .trim()
         .split('\n')
@@ -75,46 +75,46 @@ class FinalSystematicResultFix {
           files.push(file);
         }
       }
-    } catch (_error) {
+    } catch (_) {
       console.error('Error finding files:', _error.message);
     }
 
     return files;
-  }
+}
 
   /**
    * Check if file should be processed
    */
-  shouldProcessFile(filePath) {
+  shouldProcessFile(_filePath) {
     // Skip if file doesn't exist or is not readable
     try {
       fs.accessSync(filePath, fs.constants.R_OK | fs.constants.W_OK);
-    } catch (_1) {
+    } catch (_) {
       return false;
     }
 
     return true;
-  }
+}
 
   /**
    * Process individual file
    */
-  async processFile(filePath) {
+  async processFile(_filePath) {
     this.processedFiles++;
 
     try {
       const originalContent = fs.readFileSync(filePath, 'utf8');
-      const fixedContent = this.applyResultFixes(originalContent, filePath);
+      const fixedContent = this.applyResultFixes(originalContent, _filePath);
 
       if (fixedContent !== originalContent) {
         fs.writeFileSync(filePath, fixedContent);
         this.fixedFiles++;
-        console.log(`✅ Fixed: ${path.relative(this.projectRoot, filePath)}`);
+        console.log(`✅ Fixed: ${path.relative(this.projectRoot, _filePath)}`);
       }
-    } catch (_error) {
+    } catch (_) {
       console.error(`❌ Error processing ${filePath}:`, _error.message);
     }
-  }
+}
 
   /**
    * Apply all result variable fixes
@@ -142,102 +142,86 @@ class FinalSystematicResultFix {
     fixed = this.validateAndCleanup(fixed);
 
     return fixed;
-  }
+}
 
   /**
    * Get systematic fix patterns
    */
   getSystematicFixes() {
     return [
-      // Primary fix: result -> result (declarations)
-      {
+      // Primary fix: result -> result (declarations) {
         pattern: /const result =/g,
         replacement: 'const result =',
       },
 
-      // Fix: let result =
-      {
+      // Fix: let _result = {
         pattern: /let result =/g,
         replacement: 'let result =',
       },
 
-      // Fix: var result =
-      {
+      // Fix: var result = {
         pattern: /var result =/g,
         replacement: 'var result =',
       },
 
-      // Fix: result usage in assignments
-      {
+      // Fix: result usage in assignments {
         pattern: /(\s+)result(\s*=\s*)/g,
         replacement: '$1result$2',
       },
 
-      // Fix: result in return statements
-      {
+      // Fix: result in return statements {
         pattern: /return result;/g,
         replacement: 'return result;',
       },
 
-      // Fix: result in object/array access
-      {
+      // Fix: result in object/array access {
         pattern: /result\./g,
         replacement: 'result.',
-      },
-      {
+      }, {
         pattern: /result\[/g,
         replacement: 'result[',
       },
 
-      // Fix: result in function calls
-      {
+      // Fix: result in function calls {
         pattern: /result\(/g,
         replacement: 'result(',
       },
 
-      // Fix: result in conditionals
-      {
+      // Fix: result in conditionals {
         pattern: /if\s*\(\s*result\s*\)/g,
         replacement: 'if (result)',
-      },
-      {
+      }, {
         pattern: /if\s*\(\s*!result\s*\)/g,
         replacement: 'if (!result)',
       },
 
-      // Fix: result in logical operations
-      {
+      // Fix: result in logical operations {
         pattern: /(\s+)result(\s*&&\s*)/g,
         replacement: '$1result$2',
-      },
-      {
+      }, {
         pattern: /(\s+)result(\s*\|\|\s*)/g,
         replacement: '$1result$2',
       },
 
-      // Fix: result in template literals
-      {
+      // Fix: result in template literals {
         pattern: /\$\{result\}/g,
         replacement: '${result}',
       },
 
-      // Fix: result in console/logging
-      {
+      // Fix: result in console/logging {
         pattern: /console\.(log|error|warn|info)\(.*result.*\)/g,
         replacement: (match) => match.replace(/result/g, 'result'),
       },
 
-      // Fix: result in expect/assert statements
-      {
+      // Fix: result in expect/assert statements {
         pattern: /expect\(result\)/g,
         replacement: 'expect(result)',
-      },
-      {
+      }, {
         pattern: /assert\(result\)/g,
         replacement: 'assert(result)',
       },
     ];
-  }
+}
 
   /**
    * Apply context-specific fixes
@@ -263,7 +247,7 @@ class FinalSystematicResultFix {
     fixed = this.fixComplexDeclarations(fixed);
 
     return fixed;
-  }
+}
 
   /**
    * Apply test file specific fixes
@@ -273,21 +257,18 @@ class FinalSystematicResultFix {
 
     // Fix test assertion patterns
     const testPatterns = [
-      // expect(result).toBe -> expect(result).toBe
-      {
+      // expect(result).toBe -> expect(result).toBe {
         pattern:
           /expect\(result\)\.(toBe|toEqual|toMatch|toContain|toHaveProperty)/g,
         replacement: 'expect(result).$1',
       },
 
-      // result.should.* -> result.should.*
-      {
+      // result.should.* -> result.should.* {
         pattern: /result\.should\./g,
         replacement: 'result.should.',
       },
 
-      // assert.equal(result, -> assert.equal(result,
-      {
+      // assert.equal(result, -> assert.equal(result, {
         pattern: /assert\.(equal|deepEqual|strictEqual)\(result,/g,
         replacement: 'assert.$1(result,',
       },
@@ -298,7 +279,7 @@ class FinalSystematicResultFix {
     }
 
     return fixed;
-  }
+}
 
   /**
    * Apply API-specific fixes
@@ -308,16 +289,13 @@ class FinalSystematicResultFix {
 
     // API response patterns
     const apiPatterns = [
-      // API response handling
-      {
+      // API response handling {
         pattern: /result\.data/g,
         replacement: 'result.data',
-      },
-      {
+      }, {
         pattern: /result\.status/g,
         replacement: 'result.status',
-      },
-      {
+      }, {
         pattern: /result\.error/g,
         replacement: 'result.error',
       },
@@ -328,7 +306,7 @@ class FinalSystematicResultFix {
     }
 
     return fixed;
-  }
+}
 
   /**
    * Fix complex declaration patterns
@@ -338,8 +316,8 @@ class FinalSystematicResultFix {
 
     // Handle multiline declarations
     fixed = fixed.replace(
-      /const result = ([^;]+);\s*([^=\n]+)\s*=\s*result/gm,
-      'const result = $1;\n$2 = result'
+      /const _result = ([^;]+);\s*([^=\n]+)\s*=\s*result/gm,
+      'const _result = $1;\n$2 = result'
     );
 
     // Handle destructuring
@@ -352,7 +330,7 @@ class FinalSystematicResultFix {
     );
 
     return fixed;
-  }
+}
 
   /**
    * Validate and cleanup final content
@@ -362,7 +340,7 @@ class FinalSystematicResultFix {
 
     // Remove any duplicate result declarations
     cleaned = cleaned.replace(
-      /const result = [^;]+;\s*const result = [^;]+;/g,
+      /const _result = [^;]+;\s*const _result = [^;]+;/g,
       (match) => {
         const lines = match.split('\n');
         return lines[lines.length - 1] || match;
@@ -375,12 +353,12 @@ class FinalSystematicResultFix {
 
     // Ensure consistent semicolons
     cleaned = cleaned.replace(
-      /const result = ([^;]+)(?!;)/gm,
-      'const result = $1;'
+      /const _result = ([^;]+)(?!;)/gm,
+      'const _result = $1;'
     );
 
     return cleaned;
-  }
+}
 
   /**
    * Report results
@@ -403,7 +381,7 @@ class FinalSystematicResultFix {
         '\n✅ No result/result inconsistencies found - codebase is already consistent!'
       );
     }
-  }
+}
 }
 
 // Execute if run directly
@@ -411,8 +389,8 @@ if (require.main === module) {
   const fixer = new FinalSystematicResultFix();
   fixer.applySystematicFixes().catch((error) => {
     console.error('❌ Failed to apply systematic fixes:', error);
-    throw new Error(`Script execution failed: ${error.message}`);
-  });
+    throw new Error(`Script execution failed: ${error.message}`);,
+});
 }
 
 module.exports = FinalSystematicResultFix;

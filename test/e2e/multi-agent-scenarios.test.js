@@ -31,13 +31,13 @@ describe('Multi-Agent Scenarios E2E', () => {
     return () => {
     environment = new E2EEnvironment('multi-agent-scenarios');
     await environment.setup();
-  });
+});
 
   afterEach(async () => {
     if (environment) {
       await environment.cleanup();
     }
-  });
+});
 
   describe('Concurrent Feature Operations', () => {
     
@@ -218,7 +218,7 @@ const features = await environment.getFeatures();
       },
       E2E_TIMEOUT
     );
-  });
+});
 
   describe('Multi-Agent Coordination', () => {
     
@@ -381,7 +381,7 @@ const rejectionAttempts = await Promise.allSettled([
       },
       E2E_TIMEOUT
     );
-  });
+});
 
   describe('Stop Hook Multi-Agent Integration', () => {
     
@@ -500,7 +500,7 @@ const features = await environment.getFeatures();
       },
       E2E_TIMEOUT
     );
-  });
+});
 
   describe('Resource Contention Scenarios', () => {
     
@@ -539,7 +539,7 @@ let successfulOperations = 0;
                 `Contention OPERATION${index}`
               );
               successfulOperations++;
-            } catch (_1) {
+            } catch (_) {
               console.warn(
                 `Operation ${index} failed validation: ${_error.message}`
               );
@@ -571,5 +571,5 @@ const features = await environment.getFeatures();
       },
       E2E_TIMEOUT * 2
     ); // Extended timeout for contention testing
-  });
+});
 });

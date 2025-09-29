@@ -17,7 +17,7 @@ const FS = require('fs').promises;
 const path = require('path');
 
 class TaskManagerPerformanceBenchmark {
-  constructor(agentId) {
+  constructor(_agentId) {
     this.results = {
     apiResponses: [],
       memoryUsage: [],
@@ -72,7 +72,7 @@ class TaskManagerPerformanceBenchmark {
           if (jsonMatch) {
             response = JSON.parse(jsonMatch[0]);
           }
-        } catch (_1) {
+        } catch (_) {
           // Response is not JSON - keep as string
           response = stdout;
         }
@@ -92,7 +92,7 @@ class TaskManagerPerformanceBenchmark {
             external: endMemory.external - startMemory.external,
             rss: endMemory.rss - startMemory.rss,
           }
-  });
+});
       });
     });
 }
@@ -121,7 +121,7 @@ class TaskManagerPerformanceBenchmark {
       // Run each endpoint multiple times for statistical significance
       for (let i = 0; i < 5; i++) {
         // eslint-disable-next-line no-await-in-loop -- Sequential timing measurements required;
-const result = await this.executeTimedCommand(
+const _result = await this.executeTimedCommand(
           endpoint[0],
           endpoint.slice(1)
         );
@@ -196,7 +196,7 @@ const result = await this.executeTimedCommand(
         };
 
         // eslint-disable-next-line no-await-in-loop -- Sequential subtask creation required for timing;
-const result = await this.executeTimedCommand('create-subtask', [
+const _result = await this.executeTimedCommand('create-subtask', [
           taskId,
           JSON.stringify(subtaskData),
           agentId,
@@ -220,7 +220,7 @@ const result = await this.executeTimedCommand('create-subtask', [
         taskId,
         ...listResult,
       });
-    } catch (error) {
+    } catch (_) {
       loggers.stopHook.log(
         `   ❌ Error in subtask benchmarking: ${error.message}`
       );
@@ -248,7 +248,7 @@ const operations = [
     weight: 0.2,
               description: 'Application starts successfully',
             }
-  }),
+}),
         ],
         ['criteria-report'],
         ['validate-criteria', 'feature_test_criteria'],
@@ -257,13 +257,13 @@ const operations = [
       for (const [command, ...args] of operations) {
         loggers.stopHook.log(`   Testing ${command}...`);
         // eslint-disable-next-line no-await-in-loop -- Sequential command testing required for timing;
-const result = await this.executeTimedCommand(command, args);
+const _result = await this.executeTimedCommand(command, args);
         this.results.successCriteriaValidation.push({
           operation, command,
           ...result,
         });
       }
-    } catch (error) {
+    } catch (_) {
       loggers.app.info(
         `   ❌ Error in success criteria benchmarking: ${error.message}`
       );
@@ -308,7 +308,7 @@ const listOperations = [];
 
       const listResults = await Promise.all(listOperations);
       this.results.concurrentAccess.push(...listResults);
-    } catch (error) {
+    } catch (_) {
       loggers.app.info(
         `   ❌ Error in concurrent access benchmarking: ${error.message}`
       );
@@ -629,7 +629,7 @@ const reportPath = `/Users/jeremyparker/infinite-continue-stop-hook/performance-
       !this.results.memoryUsage.snapshots ||
       this.results.memoryUsage.snapshots.length === 0
     ) {
-    return { noData: true };
+    return { noData: true };,
     }
 
     const snapshots = this.results.memoryUsage.snapshots;
@@ -693,7 +693,7 @@ const reportPath = `/Users/jeremyparker/infinite-continue-stop-hook/performance-
       );
 
       return report;
-    } catch (error) {
+    } catch (_) {
       loggers.stopHook.error(`❌ Benchmark suite failed: ${_error.message}`);
       loggers.stopHook.error(_error.stack);
       throw _error;

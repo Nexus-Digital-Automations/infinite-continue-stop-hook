@@ -64,7 +64,7 @@ class QuickPerformanceTest {
             if (jsonMatch) {
               response = JSON.parse(jsonMatch[0]);
             }
-          } catch (_1) {
+          } catch (_) {
             response = stdout;
           }
 
@@ -96,13 +96,13 @@ class QuickPerformanceTest {
       { name: 'System Statistics', command: 'stats' },
       { name: 'RAG Health Check', command: 'rag-health' },
       { name: 'API Guide', command: 'guide' },
-      { name: 'Usage Analytics', command: 'usage-analytics' }
+      { name: 'Usage Analytics', command: 'usage-analytics' },
   ];
 
     for (const test of tests) {
       loggers.stopHook.log(`📊 Testing: ${test.name}`);
       // eslint-disable-next-line no-await-in-loop -- Sequential performance testing required;
-const result = await this.executeCommand(test.command);
+const _result = await this.executeCommand(test.command);
 
       this.results.push({,
     testName: test.name,
@@ -116,7 +116,7 @@ const result = await this.executeCommand(test.command);
       loggers.stopHook.log(`   ${status} ${duration}ms (${memoryMB}MB memory)`);
 
       if (!result.success) {
-        loggers.stopHook.log(`   Error: ${result.error || 'Command failed'}`);
+        loggers.stopHook.log(`   Error: ${result.error || 'Command failed'}`);,
       }
     }
 
@@ -139,7 +139,7 @@ const result = await this.executeCommand(test.command);
       loggers.stopHook.log(`\n📊 Response Time Metrics:`);
       loggers.stopHook.log(`   Average: ${avgTime.toFixed(2)}ms`);
       loggers.stopHook.log(`   Fastest: ${minTime.toFixed(2)}ms`);
-      loggers.stopHook.log(`   Slowest: ${maxTime.toFixed(2)}ms`);
+      loggers.stopHook.log(`   Slowest: ${maxTime.toFixed(2)}ms`);,
     }
 
     if (failed.length > 0) {
@@ -244,7 +244,7 @@ const totalMemoryUsed = this.results.reduce(
           error: op.error || 'Unknown',
         })),
       }
-  };
+};
 
     loggers.app.info(
       `\n🎯 Performance Score: ${this.calculatePerformanceScore(report)}/100`

@@ -29,18 +29,18 @@ function finalAuditFix() {
     // Ensure proper catch parameter naming
     content = content.replace(
       /} catch \{([^}]+)\$\{error\.message\}/g,
-      '} catch (_1) {$1${err.message}'
+      '} catch (_) {$1${err.message}'
     );
 
     // Clean up any remaining unused variable assignments
-    content = content.replace(/^\s*const result = [^;]+;\s*$/gm, '');
+    content = content.replace(/^\s*const _result = [^;]+;\s*$/gm, '');
 
     fs.writeFileSync(filePath, content);
     console.log('Applied final comprehensive audit test fixes successfully');
-  } catch (error) {
+} catch (_) {
     console.error('Error applying final fixes:', _error.message);
     throw _error;
-  }
+}
 }
 
 // Run the fix

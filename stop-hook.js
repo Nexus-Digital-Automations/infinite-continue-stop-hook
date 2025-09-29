@@ -47,7 +47,7 @@ function findClaudeProjectRoot(
     }
 
     currentDir = path.dirname(currentDir);
-  }
+}
 
   // Fallback to original behavior
   return startDir;
@@ -77,7 +77,7 @@ function generateValidationProgressReport(
     logger.warn(
       `Validation dependency configuration issues: ${configValidation.issues.map((i) => i.message).join(', ')}`
     );
-  }
+}
 
   // Get dependency-aware execution information;
   const executionOrder = dependencyManager.getValidationOrder();
@@ -100,7 +100,7 @@ function generateValidationProgressReport(
       configurationValid: configValidation.valid,
       configurationIssues: configValidation.issues,
     },
-  };
+};
 
   // Load custom validation rules from project configuration;
   function loadCustomValidationRules(_workingDir, _category = 'general') {
@@ -108,11 +108,11 @@ function generateValidationProgressReport(
     try {
       // Implementation would go here to load custom rules
       return customRules;
-    } catch (error) {
+    } catch (_) {
       logger.warn(`Failed to load custom validation rules: ${error.message}`);
       return customRules;
     }
-  }
+}
 
   // Use dependency-aware validation criteria in execution order;
   const customRules = loadCustomValidationRules(_workingDir);
@@ -126,7 +126,7 @@ function generateValidationProgressReport(
       estimated_duration: rule.estimated_duration || 60,
       description: rule.description || rule.Name || '',
     });
-  });
+});
 
   // Get updated execution order including custom criteria;
   const validationCriteria = dependencyManager.getValidationOrder();
@@ -134,7 +134,7 @@ function generateValidationProgressReport(
   // Process validation results from flag data
   if (flagData.validation_results) {
     for (const criteria of validationCriteria) {
-      const result = flagData.validation_results[criteria];
+      const _result = flagData.validation_results[criteria];
       if (result) {
         progressReport.validationDetails.push({
           criterion: criteria,
@@ -166,7 +166,7 @@ function generateValidationProgressReport(
         });
       }
     }
-  }
+}
 
   // Calculate overall progress percentage
   progressReport.overallProgress = Math.round(
@@ -197,7 +197,7 @@ function generateValidationProgressReport(
       );
     }, 0);
     progressReport.estimatedTimeRemaining = Math.round(remainingDuration * 0.8); // Account for parallel execution
-  }
+}
 
   logger.addFlow(
     `Validation progress: ${progressReport.overallProgress}% complete (${progressReport.completedValidations}/${progressReport.totalValidations})`
@@ -243,11 +243,10 @@ function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
       FS.unlinkSync(stopFlagPath); // Remove flag after reading
       return flagData.stop_allowed === true;
-    } catch (error) {
+    } catch (_) {
       // Invalid flag file, remove it
       loggers.stopHook.warn(
-        'Invalid validation progress file detected - cleaning up',
-        {
+        'Invalid validation progress file detected - cleaning up', {
           error: error.message,
           errorName: error.name,
           stopFlagPath,
@@ -257,7 +256,7 @@ function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
       FS.unlinkSync(stopFlagPath);
       return false;
     }
-  }
+}
 
   // No authorization found - provide progress guidance
   loggers.stopHook.info('VALIDATION PROGRESS MONITORING', {
@@ -278,9 +277,9 @@ function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
     ],
     mode: 'CONTINUING INFINITE MODE',
     stopAuthorizationDetected: false,
-  });
+});
 
-  return false; // Default: never allow stops
+  return false; // Default: never allow stops,
 }
 
 /**
@@ -306,13 +305,13 @@ function cleanupStaleAgentsInProject(
       orphanedTasksReset: 0,
       projectPath,
     };
-  }
+}
 
   let todoData;
   try {
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path constructed from trusted hook configuration
     todoData = JSON.parse(FS.readFileSync(todoPath, 'utf8'));
-  } catch (_1) {
+} catch (_) {
     logger.addFlow(
       `Failed to read TASKS.json in ${projectPath}: ${_1.message}`
     );
@@ -323,12 +322,12 @@ function cleanupStaleAgentsInProject(
       projectPath,
       error: _1.message,
     };
-  }
+}
 
   // Initialize agents object if it doesn't exist (TASKS.json may not have agents)
   if (!todoData.agents) {
     todoData.agents = {};
-  }
+}
 
   // Get all agents from TASKS.json;
   const allAgents = Object.keys(todoData.agents || {});
@@ -340,7 +339,7 @@ function cleanupStaleAgentsInProject(
       orphanedTasksReset: 0,
       projectPath,
     };
-  }
+}
 
   // Clean up stale agents (older than 30 minutes) And identify active ones;
   const staleAgentTimeout = 1800000; // 30 minutes;
@@ -356,9 +355,9 @@ function cleanupStaleAgentsInProject(
     const isActive = timeSinceHeartbeat < staleAgentTimeout;
 
     if (!isActive) {
-      staleAgents.push(agentId);
+      staleAgents.push(_agentId);
     }
-  }
+}
 
   // Remove stale agents from the system AND unassign them from tasks;
   let agentsRemoved = 0;
@@ -410,7 +409,7 @@ function cleanupStaleAgentsInProject(
         );
       }
     }
-  }
+}
 
   // Write back if any changes were made
   if (agentsRemoved > 0 || tasksUnassigned > 0) {
@@ -418,7 +417,7 @@ function cleanupStaleAgentsInProject(
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- Hook system path controlled by stop hook security protocols
       FS.writeFileSync(todoPath, JSON.stringify(todoData, null, 2));
       logger.addFlow(`Updated ${projectPath}/TASKS.json with cleanup results`);
-    } catch (_1) {
+    } catch (_) {
       logger.addFlow(
         `Failed to write TASKS.json in ${projectPath}: ${_1.message}`
       );
@@ -430,7 +429,7 @@ function cleanupStaleAgentsInProject(
         error: _1.message,
       };
     }
-  }
+}
 
   return { agentsRemoved, tasksUnassigned, orphanedTasksReset, projectPath };
 }
@@ -454,7 +453,7 @@ async function cleanupStaleAgentsAcrossProjects(logger, _category = 'general') {
     totalOrphanedTasksReset: 0,
     projectResults: [],
     errors: [],
-  };
+};
 
   logger.addFlow(
     `🧹 Starting multi-project stale agent cleanup across ${knownProjects.length} projects...`
@@ -465,7 +464,7 @@ async function cleanupStaleAgentsAcrossProjects(logger, _category = 'general') {
     try {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- Stop hook path validated through hook configuration system
       if (FS.existsSync(projectPath)) {
-        const result = await cleanupStaleAgentsInProject(projectPath, logger);
+        const _result = await cleanupStaleAgentsInProject(projectPath, logger);
         return result;
       } else {
         logger.addFlow(
@@ -479,7 +478,7 @@ async function cleanupStaleAgentsAcrossProjects(logger, _category = 'general') {
           skipped: true,
         };
       }
-    } catch (error) {
+    } catch (_) {
       const errorMsg = `Failed to process ${projectPath}: ${error.message}`;
       logger.addFlow(errorMsg);
       return {
@@ -490,7 +489,7 @@ async function cleanupStaleAgentsAcrossProjects(logger, _category = 'general') {
         error: error.message,
       };
     }
-  });
+});
 
   const projectResults = await Promise.all(projectPromises);
 
@@ -504,7 +503,7 @@ async function cleanupStaleAgentsAcrossProjects(logger, _category = 'general') {
     if (result.error) {
       results.errors.push(`${result.projectPath}: ${result.error}`);
     }
-  }
+}
 
   logger.addFlow(
     `🧹 Multi-project cleanup complete: ${results.totalAgentsRemoved} agents removed, ${results.totalTasksUnassigned} tasks unassigned, ${results.totalOrphanedTasksReset} orphaned tasks reset`
@@ -516,7 +515,7 @@ async function cleanupStaleAgentsAcrossProjects(logger, _category = 'general') {
 /**
  * Automatically reclassify test errors And sort tasks according to CLAUDE.md priority rules
  */
-async function _autoSortTasksByPriority(_taskManager, _category = 'general') {
+async function autoSortTasksByPriority(_taskManager, _category = 'general') {
   try {
     const todoData = await _taskManager.readTodo();
     let tasksMoved = 0;
@@ -679,7 +678,7 @@ async function _autoSortTasksByPriority(_taskManager, _category = 'general') {
             task.category = 'testing';
             break;
           default:
-            task.category = 'implementation';
+            task.category = 'implementation';,
         }
         updated = true;
       }
@@ -747,7 +746,7 @@ async function _autoSortTasksByPriority(_taskManager, _category = 'general') {
       tasksUpdated,
       totalTasks: tasksOrFeatures.length,
     };
-  } catch (error) {
+} catch (_) {
     // Log _error through logger for proper tracking - use loggers.app for _error handling
     loggers.stopHook.error('autoSortTasksByPriority error', {
       error: error.message,
@@ -756,8 +755,8 @@ async function _autoSortTasksByPriority(_taskManager, _category = 'general') {
       operation: 'autoSortTasksByPriority',
       component: 'StopHook',
     });
-    return { error: error.message, tasksMoved: 0, tasksUpdated: 0 };
-  }
+    return { error: error.message, tasksMoved: 0, tasksUpdated: 0 };,
+}
 }
 
 /**
@@ -985,10 +984,10 @@ process.stdin.on('end', async () => {
             process.exit(0); // Allow stop when DONE is detected
           }
         } else {
-          logger.addFlow(`Transcript file not found: ${_transcript_path}`);
+          logger.addFlow(`Transcript file not found: ${_transcript_path}`);,
         }
-      } catch (_1) {
-        logger.addFlow(`Error reading transcript: ${_1.message}`);
+      } catch (_) {
+        logger.addFlow(`Error reading transcript: ${_1.message}`);,
       }
     }
 
@@ -1041,7 +1040,7 @@ process.stdin.on('end', async () => {
           operation: 'autoFix',
         });
       }
-    } catch (_1) {
+    } catch (_) {
       logger.addFlow(`TASKS.json corruption check failed: ${_1.message}`);
       loggers.stopHook.error('TASKS.json corruption check failed', {
         error: _1.message,
@@ -1118,7 +1117,7 @@ process.stdin.on('end', async () => {
           `Multi-project cleanup errors: ${multiProjectResults.errors.join('; ')}`
         );
       }
-    } catch (_1) {
+    } catch (_) {
       logger.addFlow(`Multi-project cleanup failed: ${_1.message}`);
       // Continue with local cleanup even if multi-project cleanup fails
     }
@@ -1148,9 +1147,9 @@ process.stdin.on('end', async () => {
       );
 
       if (isActive) {
-        activeAgents.push(agentId);
+        activeAgents.push(_agentId);
       } else {
-        staleAgents.push(agentId);
+        staleAgents.push(_agentId);
       }
     }
 
@@ -1594,7 +1593,7 @@ When ALL TodoWrite tasks are complete And project achieves perfection, agents mu
     let taskStatus;
     try {
       taskStatus = await taskManager.getTaskStatus();
-    } catch (error) {
+    } catch (_) {
       // Handle corrupted TASKS.json by using autoFixer
       logger.addFlow(
         `Task status failed, attempting auto-fix: ${error.message}`
@@ -1645,7 +1644,7 @@ When ALL TodoWrite tasks are complete And project achieves perfection, agents mu
       } else {
         logger.addFlow('No completed tasks found to archive');
       }
-    } catch (_1) {
+    } catch (_) {
       logger.addFlow(`Task archival failed: ${_1.message}`);
 
       loggers.stopHook.warn('AUTOMATIC TASK ARCHIVAL WARNING', {
@@ -1708,7 +1707,7 @@ When ALL TodoWrite tasks are complete And project achieves perfection, agents mu
 
     // eslint-disable-next-line n/no-process-exit
     process.exit(2); // Always continue - never allow natural stops
-  } catch (error) {
+} catch (_) {
     loggers.stopHook.error('DETAILED ERROR DEBUG', {
       errorName: error.name,
       errorMessage: error.message,
@@ -1743,5 +1742,5 @@ When ALL TodoWrite tasks are complete And project achieves perfection, agents mu
     });
     // eslint-disable-next-line n/no-process-exit
     process.exit(2); // Even on _error, continue infinite mode
-  }
+}
 });

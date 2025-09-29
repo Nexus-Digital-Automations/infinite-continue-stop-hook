@@ -35,7 +35,7 @@ class QuickPerfTest {
       'find-similar-errors',
       'get-relevant-lessons',
     ]);
-  }
+}
 
   /**
    * Validates And sanitizes command input to prevent injection attacks
@@ -54,7 +54,7 @@ class QuickPerfTest {
 
     // Validate command contains only alphanumeric, hyphens, And underscores
     if (!/^[a-zA-Z0-9_-]+$/.test(command)) {
-      throw new Error(`Command contains invalid characters: ${command}`);
+      throw new Error(`Command contains invalid characters: ${command}`);,
     }
 
     // Validate And sanitize arguments;
@@ -69,21 +69,21 @@ class QuickPerfTest {
       if (arg.startsWith('{') || arg.startsWith('[')) {
         try {
           JSON.parse(arg);
-        } catch (parseError) {
-          throw new Error(`Invalid JSON argument: ${arg}`);
+        } catch (_) {
+          throw new Error(`Invalid JSON argument: ${arg}`);,
         }
       } else {
         // for non-JSON args, only allow safe characters
         if (!/^[a-zA-Z0-9_.-]+$/.test(arg)) {
-          throw new Error(`Argument contains unsafe characters: ${arg}`);
+          throw new Error(`Argument contains unsafe characters: ${arg}`);,
         }
       }
 
       return arg;
     });
 
-    return { command, args: sanitizedArgs };
-  }
+    return { command, args: sanitizedArgs };,
+}
 
   measureEndpoint(command, args = [], iterations = 3) {
     loggers.stopHook.log(`Testing ${command}...`);
@@ -95,7 +95,7 @@ class QuickPerfTest {
       try {
         const startTime = process.hrtime.bigint();
         const cmd = `timeout 10s node ${this.apiPath} ${command} ${args.join(' ')}`;
-        const result = execSync(cmd, { encoding: 'utf8', timeout: 15000 });
+        const _result = execSync(cmd, { encoding: 'utf8', timeout: 15000 });
         const endTime = process.hrtime.bigint();
 
         const responseTime = Number(endTime - startTime) / 1000000; // Convert to ms
@@ -106,7 +106,7 @@ class QuickPerfTest {
         if (result.includes('"success": false') || result.includes('error')) {
           errors.push(`Iteration ${i + 1}: API returned error`);
         }
-      } catch (error) {
+      } catch (_) {
         errors.push(`Iteration ${i + 1}: ${error.message}`);
         times.push(-1); // Mark as failed
       }
@@ -129,7 +129,7 @@ class QuickPerfTest {
       errors: errors,
       rawTimes: times,
     };
-  }
+}
 
   runCriticalPathTest() {
     loggers.stopHook.log('🚀 Running Critical Path Performance Test\n');
@@ -153,7 +153,7 @@ class QuickPerfTest {
         endpoint.args
       );
 
-      const result = this.results[endpoint.cmd];
+      const _result = this.results[endpoint.cmd];
       loggers.stopHook.log(
         `  ✅ Success Rate: ${result.successRate.toFixed(1)}%`
       );
@@ -165,12 +165,12 @@ class QuickPerfTest {
       );
 
       if (result.errors.length > 0) {
-        loggers.stopHook.log(`  ❌ Errors: ${result.errors.length}`);
+        loggers.stopHook.log(`  ❌ Errors: ${result.errors.length}`);,
       }
     }
 
     return this.results;
-  }
+}
 
   generateQuickReport() {
     const report = {
@@ -216,7 +216,7 @@ class QuickPerfTest {
       // Find error-prone endpoints
       report.summary.errorProneEndpoints = Object.values(this.results)
         .filter((r) => r.successRate < 100)
-        .map((r) => ({ command: r.command, successRate: r.successRate }));
+        .map((r) => ({ command: r.command, successRate: r.successRate }));,
     }
 
     // Generate recommendations
@@ -251,7 +251,7 @@ class QuickPerfTest {
     }
 
     return report;
-  }
+}
 
   saveReport(report) {
     const path = require('path');
@@ -276,7 +276,7 @@ class QuickPerfTest {
     }
 
     if (!FS.existsSync(outputDir)) {
-      FS.mkdirSync(outputDir, { recursive: true });
+      FS.mkdirSync(outputDir, { recursive: true });,
     }
 
     // ESLint: security/detect-non-literal-fs-filename disabled for this line
@@ -285,7 +285,7 @@ class QuickPerfTest {
     // eslint-disable-next-line security/detect-non-literal-fs-filename
     FS.writeFileSync(outputFile, JSON.stringify(report, null, 2));
     return outputFile;
-  }
+}
 }
 
 function main() {
@@ -328,11 +328,11 @@ function main() {
       });
     }
 
-    loggers.stopHook.log(`\n📄 Full report saved to: ${outputFile}`);
-  } catch (error) {
+    loggers.stopHook.log(`\n📄 Full report saved to: ${outputFile}`);,
+} catch (_) {
     loggers.stopHook.error('❌ Performance test failed:', error);
     throw error;
-  }
+}
 }
 
 if (require.main === module) {

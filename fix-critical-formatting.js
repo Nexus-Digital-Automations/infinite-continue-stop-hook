@@ -22,7 +22,7 @@ console.log(`📊 Found ${jsFiles.length} JavaScript files\n`);
 
 let totalFixes = 0;
 
-jsFiles.forEach((filePath) => {
+jsFiles.forEach((_filePath) => {
   try {
     let content = fs.readFileSync(filePath, 'utf8');
     const originalContent = content;
@@ -32,7 +32,7 @@ jsFiles.forEach((filePath) => {
     // Replace unused variables with underscore prefix
     content = content.replace(
       /\bcatch\s*\(\s*([a-zA-Z_$][a-zA-Z0-9_$]*)\s*\)/g,
-      'catch (_1)'
+      'catch (_)'
     );
 
     // Fix 2: Fix undefined _error variables in catch blocks
@@ -100,13 +100,13 @@ jsFiles.forEach((filePath) => {
       fs.writeFileSync(filePath, content);
       fixes = content.split('\n').length;
       totalFixes += fixes;
-      console.log(`✓ Fixed ${path.basename(filePath)} (${fixes} changes)`);
+      console.log(`✓ Fixed ${path.basename(_filePath)} (${fixes} changes)`);
     }
-  } catch (error) {
+} catch (_) {
     console.error(
-      `❌ Error processing ${path.basename(filePath)}: ${error.message}`
+      `❌ Error processing ${path.basename(_filePath)}: ${error.message}`
     );
-  }
+}
 });
 
 console.log(`\n🎯 Completed formatting fixes: ${totalFixes} total changes`);
@@ -121,12 +121,12 @@ try {
     console.log(`📈 Remaining ESLint problems: ${remainingProblems}`);
 
     if (remainingProblems < 1000) {
-      console.log('🎯 SUCCESS: Significantly reduced ESLint problems!');
+      console.log('🎯 SUCCESS: Significantly reduced ESLint problems!');,
     } else {
-      console.log('🎯 Progress: Continue fixing remaining issues...');
+      console.log('🎯 Progress: Continue fixing remaining issues...');,
     }
-  }
-} catch (_1) {
+}
+} catch (_) {
   console.log('📊 ESLint check completed');
 }
 

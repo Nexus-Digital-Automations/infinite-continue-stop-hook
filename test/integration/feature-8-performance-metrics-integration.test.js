@@ -15,14 +15,14 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
   beforeEach(() => {
     // Create mock directory if it doesn't exist
     if (!FS.existsSync(mockProjectRoot)) {
-      FS.mkdirSync(mockProjectRoot, { recursive: true });
+      FS.mkdirSync(mockProjectRoot, { recursive: true });,
     }
 
     // Clean up previous test data
     if (FS.existsSync(mockMetricsFile)) {
       FS.unlinkSync(mockMetricsFile);
     }
-  });
+});
 
   afterEach(() => {
     // Clean up test directory
@@ -30,14 +30,13 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       FS.unlinkSync(mockMetricsFile);
     }
     if (FS.existsSync(mockProjectRoot)) {
-      FS.rmSync(mockProjectRoot, { recursive: true, force: true });
+      FS.rmSync(mockProjectRoot, { recursive: true, force: true });,
     }
-  });
+});
 
   function createMockMetricsData() {
     const mockMetrics = {
-      metrics: [
-        {
+      metrics: [ {
           criterion: 'linter-validation',
           startTime: new Date(Date.now() - 1000 * 60 * 60).toISOString(), // 1 hour ago
           endTime: new Date(Date.now() - 1000 * 60 * 59).toISOString(),
@@ -45,8 +44,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
           success: true,
           memoryUsageBefore: { rss: 50000000, heapUsed: 30000000 },
           memoryUsageAfter: { rss: 52000000, heapUsed: 31000000 },
-        },
-        {
+        }, {
           criterion: 'build-validation',
           startTime: new Date(Date.now() - 1000 * 60 * 50).toISOString(), // 50 minutes ago
           endTime: new Date(Date.now() - 1000 * 60 * 49).toISOString(),
@@ -54,8 +52,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
           success: false,
           memoryUsageBefore: { rss: 52000000, heapUsed: 31000000 },
           memoryUsageAfter: { rss: 65000000, heapUsed: 40000000 },
-        },
-        {
+        }, {
           criterion: 'test-validation',
           startTime: new Date(Date.now() - 1000 * 60 * 40).toISOString(), // 40 minutes ago
           endTime: new Date(Date.now() - 1000 * 60 * 38).toISOString(),
@@ -63,8 +60,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
           success: true,
           memoryUsageBefore: { rss: 65000000, heapUsed: 40000000 },
           memoryUsageAfter: { rss: 67000000, heapUsed: 42000000 },
-        },
-        {
+        }, {
           criterion: 'type-validation',
           startTime: new Date(Date.now() - 1000 * 60 * 30).toISOString(), // 30 minutes ago
           endTime: new Date(Date.now() - 1000 * 60 * 29).toISOString(),
@@ -72,8 +68,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
           success: true,
           memoryUsageBefore: { rss: 67000000, heapUsed: 42000000 },
           memoryUsageAfter: { rss: 68000000, heapUsed: 43000000 },
-        },
-        {
+        }, {
           criterion: 'security-validation',
           startTime: new Date(Date.now() - 1000 * 60 * 20).toISOString(), // 20 minutes ago
           endTime: new Date(Date.now() - 1000 * 60 * 19).toISOString(),
@@ -94,35 +89,35 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
     FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
     return mockMetrics;
-  }
+}
 
   function executeTaskManagerCommand(command, args = '', options = {}) {
     try {
       // Use --project-root command line argument to set the project root;
       const fullCommand = `timeout 10s node "${taskManagerPath}" --project-root "${mockProjectRoot}" ${command} ${args}`;
 
-      const result = execSync(fullCommand, {
+      const _result = execSync(fullCommand, {
         encoding: 'utf8',
         timeout: 10000,
         ...options,
       });
 
       return JSON.parse(result.trim());
-    } catch (error) {
+    } catch (_) {
       if (error.stdout) {
         try {
           return JSON.parse(error.stdout.trim());
-        } catch (parseError) {
-          return { success: false, error: error.message, stdout: error.stdout };
+        } catch (_) {
+          return { success: false, error: error.message, stdout: error.stdout };,
         }
       }
-      return { success: false, error: error.message };
+      return { success: false, error: error.message };,
     }
-  }
+}
 
   describe('get-validation-performance-metrics endpoint', () => {
     test('should return empty metrics when no data available', () => {
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'get-validation-performance-metrics'
       );
 
@@ -135,7 +130,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
     test('should return all metrics without filtering', () => {
       createMockMetricsData();
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'get-validation-performance-metrics'
       );
 
@@ -150,7 +145,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
     test('should filter metrics by criterion', () => {
       createMockMetricsData();
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'get-validation-performance-metrics',
         '\'{"criterion":"linter-validation"}\''
       );
@@ -165,7 +160,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
     test('should filter metrics by success status', () => {
       createMockMetricsData();
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'get-validation-performance-metrics',
         '\'{"successOnly":false}\''
       );
@@ -179,7 +174,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
     test('should limit returned metrics', () => {
       createMockMetricsData();
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'get-validation-performance-metrics',
         '\'{"limit":2}\''
       );
@@ -192,7 +187,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
     test('should calculate percentiles correctly', () => {
       createMockMetricsData();
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'get-validation-performance-metrics'
       );
 
@@ -204,11 +199,11 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       expect(result.statistics.timing.percentiles.p95).toBeDefined();
       expect(result.statistics.timing.percentiles.p99).toBeDefined();
     });
-  });
+});
 
   describe('identify-performance-bottlenecks endpoint', () => {
     test('should return empty bottlenecks when no data available', () => {
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'identify-performance-bottlenecks'
       );
 
@@ -222,7 +217,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
     test('should identify bottlenecks with default thresholds', () => {
       createMockMetricsData();
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'identify-performance-bottlenecks'
       );
 
@@ -244,7 +239,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
     test('should respect custom thresholds', () => {
       createMockMetricsData();
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'identify-performance-bottlenecks',
         '\'{"slowThreshold":2000,"criticalThreshold":6000}\''
       );
@@ -263,7 +258,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
     test('should generate appropriate recommendations', () => {
       createMockMetricsData();
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'identify-performance-bottlenecks'
       );
 
@@ -280,11 +275,11 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       );
       expect(testRecommendation).toBeDefined();
     });
-  });
+});
 
   describe('get-performance-trends endpoint', () => {
     test('should return empty trends when no data available', () => {
-      const result = executeTaskManagerCommand('get-performance-trends');
+      const _result = executeTaskManagerCommand('get-performance-trends');
 
       expect(result.success).toBe(true);
       expect(result.trends).toEqual([]);
@@ -296,7 +291,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
     test('should analyze daily trends by default', () => {
       createMockMetricsData();
 
-      const result = executeTaskManagerCommand('get-performance-trends');
+      const _result = executeTaskManagerCommand('get-performance-trends');
 
       expect(result.success).toBe(true);
       expect(result.trends).toBeDefined();
@@ -308,7 +303,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
     test('should support different time groupings', () => {
       createMockMetricsData();
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'get-performance-trends',
         '\'{"groupBy":"hourly"}\''
       );
@@ -321,17 +316,17 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
     test('should generate insights for trends', () => {
       createMockMetricsData();
 
-      const result = executeTaskManagerCommand('get-performance-trends');
+      const _result = executeTaskManagerCommand('get-performance-trends');
 
       expect(result.success).toBe(true);
       expect(result.insights).toBeDefined();
       expect(Array.isArray(result.insights)).toBe(true);
     });
-  });
+});
 
   describe('get-detailed-timing-report endpoint', () => {
     test('should return null report when no data available', () => {
-      const result = executeTaskManagerCommand('get-detailed-timing-report');
+      const _result = executeTaskManagerCommand('get-detailed-timing-report');
 
       expect(result.success).toBe(true);
       expect(result.report).toBe(null);
@@ -343,7 +338,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
     test('should generate comprehensive timing report', () => {
       createMockMetricsData();
 
-      const result = executeTaskManagerCommand('get-detailed-timing-report');
+      const _result = executeTaskManagerCommand('get-detailed-timing-report');
 
       expect(result.success).toBe(true);
       expect(result.report).toBeDefined();
@@ -368,7 +363,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
     test('should respect recent activity limit', () => {
       createMockMetricsData();
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'get-detailed-timing-report',
         '\'{"recent":3}\''
       );
@@ -380,7 +375,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
     test('should calculate performance distribution correctly', () => {
       createMockMetricsData();
 
-      const result = executeTaskManagerCommand('get-detailed-timing-report');
+      const _result = executeTaskManagerCommand('get-detailed-timing-report');
 
       expect(result.success).toBe(true);
       expect(result.report.performanceDistribution).toBeDefined();
@@ -393,11 +388,11 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       );
       expect(totalCount).toBe(5); // All metrics categorized
     });
-  });
+});
 
   describe('analyze-resource-usage endpoint', () => {
     test('should return null analysis when no data available', () => {
-      const result = executeTaskManagerCommand('analyze-resource-usage');
+      const _result = executeTaskManagerCommand('analyze-resource-usage');
 
       expect(result.success).toBe(true);
       expect(result.resourceAnalysis).toBe(null);
@@ -407,7 +402,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
     test('should analyze memory usage patterns', () => {
       createMockMetricsData();
 
-      const result = executeTaskManagerCommand('analyze-resource-usage');
+      const _result = executeTaskManagerCommand('analyze-resource-usage');
 
       expect(result.success).toBe(true);
       expect(result.resourceAnalysis).toBeDefined();
@@ -426,7 +421,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
     test('should generate resource recommendations', () => {
       createMockMetricsData();
 
-      const result = executeTaskManagerCommand('analyze-resource-usage');
+      const _result = executeTaskManagerCommand('analyze-resource-usage');
 
       expect(result.success).toBe(true);
       expect(result.resourceAnalysis.recommendations).toBeDefined();
@@ -436,7 +431,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
     test('should support different analysis types', () => {
       createMockMetricsData();
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'analyze-resource-usage',
         '\'{"analysisType":"memory_focused"}\''
       );
@@ -444,11 +439,11 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       expect(result.success).toBe(true);
       expect(result.analysisType).toBe('memory_focused');
     });
-  });
+});
 
   describe('get-performance-benchmarks endpoint', () => {
     test('should return null benchmarks when no data available', () => {
-      const result = executeTaskManagerCommand('get-performance-benchmarks');
+      const _result = executeTaskManagerCommand('get-performance-benchmarks');
 
       expect(result.success).toBe(true);
       expect(result.benchmarks).toBe(null);
@@ -460,7 +455,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
     test('should calculate comprehensive benchmarks', () => {
       createMockMetricsData();
 
-      const result = executeTaskManagerCommand('get-performance-benchmarks');
+      const _result = executeTaskManagerCommand('get-performance-benchmarks');
 
       expect(result.success).toBe(true);
       expect(result.benchmarks).toBeDefined();
@@ -477,7 +472,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
     test('should identify targets that are not met', () => {
       createMockMetricsData();
 
-      const result = executeTaskManagerCommand('get-performance-benchmarks');
+      const _result = executeTaskManagerCommand('get-performance-benchmarks');
 
       expect(result.success).toBe(true);
 
@@ -496,7 +491,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
     test('should generate optimization recommendations', () => {
       createMockMetricsData();
 
-      const result = executeTaskManagerCommand('get-performance-benchmarks');
+      const _result = executeTaskManagerCommand('get-performance-benchmarks');
 
       expect(result.success).toBe(true);
       expect(result.recommendations).toBeDefined();
@@ -515,7 +510,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
     test('should support custom time ranges', () => {
       createMockMetricsData();
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'get-performance-benchmarks',
         '\'{"timeRange":7}\''
       );
@@ -523,13 +518,13 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       expect(result.success).toBe(true);
       expect(result.benchmarks.comparison_period).toBe('7 days');
     });
-  });
+});
 
   describe('API Error Handling', () => {
     test('should handle invalid JSON options gracefully', () => {
       createMockMetricsData();
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'get-validation-performance-metrics',
         'invalid-json',
         { stdio: 'pipe' }
@@ -543,7 +538,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       // Create corrupted metrics file
       FS.writeFileSync(mockMetricsFile, 'invalid json content');
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'get-validation-performance-metrics'
       );
 
@@ -556,7 +551,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       // for now, we'll trust that the error handling works based on unit tests
       expect(true).toBe(true);
     });
-  });
+});
 
   describe('Feature ID Validation', () => {
     test('all endpoints should return correct Feature 8 ID', () => {
@@ -572,10 +567,10 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       ];
 
       endpoints.forEach((endpoint) => {
-        const result = executeTaskManagerCommand(endpoint);
+        const _result = executeTaskManagerCommand(endpoint);
         expect(result.success).toBe(true);
         expect(result.featureId).toBe('feature_1758946499841_cd5eba625370');
       });
     });
-  });
+});
 });

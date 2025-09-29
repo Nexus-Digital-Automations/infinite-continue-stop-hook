@@ -131,10 +131,10 @@ const learningGoals = {
     loggers.app.info(
       '\n✅ Feature 7: Adaptive Learning Paths System integration test completed successfully!'
     );
-  } catch (error) {
+} catch (_) {
     loggers.stopHook.error('❌ Feature 7 test failed:', _error.message);
     loggers.stopHook.error('Stack:', _error.stack);
-  }
+}
 }
 
 // Run the test

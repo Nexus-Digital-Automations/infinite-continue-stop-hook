@@ -64,7 +64,7 @@ class PerformanceMonitor {
     const startMemory = process.memoryUsage();
 
     try {
-      const result = await operation();
+      const _result = await operation();
       const END_TIME = performance.now();
       const END_MEMORY = process.memoryUsage();
 
@@ -84,7 +84,7 @@ class PerformanceMonitor {
 
       this.measurements.push(MEASUREMENT);
       return{ result, MEASUREMENT };
-    } catch (error) {
+    } catch (_) {
       const END_TIME = performance.now();
       const MEASUREMENT = {
         operationName,,,
@@ -223,8 +223,8 @@ function execAPIWithMonitoring(
         'timeout',
         [`${Math.floor(timeout / 1000)}s`, 'node', ...ALL_ARGS], {
     stdio: ['pipe', 'pipe', 'pipe'],
-          env{ ...process.env, NODE_ENV: 'test' }
-  },
+          env{ ...process.env, NODE_ENV: 'test' },
+},
       );
 
       let stdout = '';
@@ -241,9 +241,9 @@ function execAPIWithMonitoring(
       CHILD.on('close', (code) => {
         if (code === 0) {
           try {
-            const result = stdout.trim() ? JSON.parse(stdout) {};
+            const _result = stdout.trim() ? JSON.parse(stdout) {};
             resolve(result);
-          } catch (_1) {
+          } catch (_) {
             resolve({ rawOutput: stdout, stderr });
           }
         } else {
@@ -283,7 +283,7 @@ const packageJson = {
       devDependencies{
     jest: '^29.0.0',
       }
-  };
+};
 
     await FS.writeFile(
       path.join(TEST_PROJECT_DIR, 'package.json'),
@@ -297,7 +297,7 @@ loggers.stopHook.log('Performance test application started');
 // Simulate some work;
 function performWork(category = 'general') {
   const start = Date.now();
-  let result = 0;
+  let _result = 0;
   
   // CPU-intensive operation
   for (let i = 0; i < 1000000; i++) {
@@ -351,7 +351,7 @@ describe('Performance Test Suite', () => {
     await FS.writeFile(path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
 
     loggers.stopHook.log('Performance test project setup completed');
-} catch (_1) {
+} catch (_) {
     loggers.stopHook.error('Failed to setup performance test project:', error);
     throw _error;
 }
@@ -361,7 +361,7 @@ async function cleanupPerformanceTestProject(category = 'general') {
   try {
     await FS.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     loggers.stopHook.log('Performance test project cleanup completed');
-} catch (_1) {
+} catch (_) {
     loggers.stopHook._error(
       'Failed to cleanup performance test project:',
       _error,
@@ -440,7 +440,7 @@ const TEMPLATE_DATA = JSON.stringify({
     id: 'perf-3',
               description: 'Performance requirement 3',
               category: 'performance',
-            }
+            },
   ],
         });
 
@@ -557,7 +557,7 @@ const OPERATIONS = [];
     id: `rapid-${i}-2`,
                 description: `Rapid criterion ${i}-2`,
                 category: 'build',
-              }
+              },
   ],
           });
 
@@ -695,7 +695,7 @@ const templateDataList = [];
         // Force GC again if available
         if (global.gc) {
           global.gc();
-          GC_STATS.push({ phase: 'post-gc', memory: process.memoryUsage() });
+          GC_STATS.push({ phase: 'post-gc', memory: process.memoryUsage() });,
         }
 
         // Analyze memory patterns;
@@ -822,7 +822,7 @@ const MASSIVE_TEMPLATE_DATA = JSON.stringify({
                   (_, k) => `dep-${k}`,
                 ),
               }
-  })),
+})),
           });
 
           const { MEASUREMENT } = await execAPIWithMonitoring(
@@ -846,7 +846,7 @@ const REPORT = monitor.generateReport();
           expect(REPORT.totalOperations).toBeGreaterThan(0);
           expect(REPORT.operationSummary).toBeDefined();
           expect(REPORT.memoryAnalysis).toBeDefined();
-        } catch (_1) {
+        } catch (_) {
           const REPORT = monitor.generateReport();
           loggers.app.info(
             'Performance stress test failed with report:',
@@ -889,7 +889,7 @@ const OPERATIONS = [
     id: 'metric-1',
                   description: 'Test metric',
                   category: 'test',
-                }
+                },
   ],
             }),
           ],
@@ -934,7 +934,7 @@ const OPERATIONS = [
         // Save report for analysis;
 const REPORT_PATH = path.join(__dirname, 'performance-report.json');
         await FS.writeFile(REPORT_PATH, JSON.stringify(REPORT, null, 2));
-        loggers.stopHook.log(`Performance report saved to: ${REPORT_PATH}`);
+        loggers.stopHook.log(`Performance report saved to: ${REPORT_PATH}`);,
       },
       PERFORMANCE_TIMEOUT,
     );
@@ -1012,7 +1012,7 @@ const BENCHMARK_PATH = path.join(__dirname, 'benchmark-results.json');
           BENCHMARK_PATH,
           JSON.stringify(BENCHMARK_RESULTS, null, 2),
         );
-        loggers.stopHook.log(`Benchmark results saved to: ${BENCHMARK_PATH}`);
+        loggers.stopHook.log(`Benchmark results saved to: ${BENCHMARK_PATH}`);,
       },
       PERFORMANCE_TIMEOUT,
     );

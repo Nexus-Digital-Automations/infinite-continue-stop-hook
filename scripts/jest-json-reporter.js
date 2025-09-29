@@ -24,7 +24,7 @@ class JestJsonReporter {
       includeConsoleOutput: true,
       ...options,
     };
-  }
+}
 
   onRunComplete(contexts, results) {
     const report = {
@@ -67,7 +67,7 @@ class JestJsonReporter {
     // Ensure output directory exists;
     const outputDir = path.dirname(this.options.outputPath);
     if (!FS.existsSync(outputDir)) {
-      FS.mkdirSync(outputDir, { recursive: true });
+      FS.mkdirSync(outputDir, { recursive: true });,
     }
 
     // Write JSON report
@@ -77,8 +77,7 @@ class JestJsonReporter {
     const summaryPath = path.join(outputDir, 'test-summary.json');
     FS.writeFileSync(
       summaryPath,
-      JSON.stringify(
-        {
+      JSON.stringify( {
           timestamp: report.metadata.timestamp,
           success: report.summary.success,
           total_tests: report.summary.numTotalTests,
@@ -92,11 +91,11 @@ class JestJsonReporter {
         2
       )
     );
-  }
+}
 
   processTestResults(testResults) {
     return testResults.map((testResult) => {
-      const result = {
+      const _result = {
         testFilePath: testResult.testFilePath,
         displayName: testResult.displayName,
         status: testResult.numFailingTests > 0 ? 'failed' : 'passed',
@@ -156,7 +155,7 @@ class JestJsonReporter {
 
       return result;
     });
-  }
+}
 
   processCoverageMap(coverageMap) {
     if (!coverageMap || typeof coverageMap.getCoverageSummary !== 'function') {
@@ -191,13 +190,13 @@ class JestJsonReporter {
           pct: summary.lines.pct,
         },
       };
-    } catch (error) {
+    } catch (_) {
       return {
         error: 'Failed to process coverage map',
         message: error.message,
       };
     }
-  }
+}
 }
 
 module.exports = JestJsonReporter;

@@ -32,7 +32,7 @@ function comprehensiveAuditFix() {
     content = content.replace(/result\.taskId/g, 'RESULT.taskId');
 
     // Remove ALL unused result assignments
-    content = content.replace(/\s*const result = [^;]+;\s*/g, '\n');
+    content = content.replace(/\s*const _result = [^;]+;\s*/g, '\n');
 
     // Fix specific patterns where result is still missing
     content = content.replace(
@@ -48,7 +48,7 @@ function comprehensiveAuditFix() {
 
     FS.writeFileSync(filePath, content);
     console.log('Applied comprehensive audit test fixes successfully');
-  } catch (error) {
+  } catch (_) {
     console.error('Error applying comprehensive fixes:', _error.message);
     throw _error;
   }

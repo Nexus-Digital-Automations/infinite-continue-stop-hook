@@ -86,7 +86,7 @@ describe('Initialization Statistics', () => {
     return () => {
           timeUtils.mockCurrentTimeISO(timeStr);
           const bucket = api._getCurrentTimeBucket();
-          expect(bucket).toBe('07:00-11:59');
+          expect(bucket).toBe('07:00-11:59');,
         });
       });
 
@@ -104,7 +104,7 @@ describe('Initialization Statistics', () => {
     return () => {
           timeUtils.mockCurrentTimeISO(timeStr);
           const bucket = api._getCurrentTimeBucket();
-          expect(bucket).toBe('12:00-16:59');
+          expect(bucket).toBe('12:00-16:59');,
         });
       });
 
@@ -122,7 +122,7 @@ describe('Initialization Statistics', () => {
     return () => {
           timeUtils.mockCurrentTimeISO(timeStr);
           const bucket = api._getCurrentTimeBucket();
-          expect(bucket).toBe('17:00-21:59');
+          expect(bucket).toBe('17:00-21:59');,
         });
       });
 
@@ -141,7 +141,7 @@ describe('Initialization Statistics', () => {
     return () => {
           timeUtils.mockCurrentTimeISO(timeStr);
           const bucket = api._getCurrentTimeBucket();
-          expect(bucket).toBe('22:00-02:59');
+          expect(bucket).toBe('22:00-02:59');,
         });
       });
 
@@ -159,7 +159,7 @@ describe('Initialization Statistics', () => {
     return () => {
           timeUtils.mockCurrentTimeISO(timeStr);
           const bucket = api._getCurrentTimeBucket();
-          expect(bucket).toBe('03:00-06:59');
+          expect(bucket).toBe('03:00-06:59');,
         });
       });
 
@@ -170,7 +170,7 @@ describe('Initialization Statistics', () => {
           { time: '2025-09-23T16:59:59.999Z', expected: '12:00-16:59' },
           { time: '2025-09-23T17:00:00.000Z', expected: '17:00-21:59' },
           { time: '2025-09-23T21:59:59.999Z', expected: '17:00-21:59' },
-          { time: '2025-09-23T22:00:00.000Z', expected: '22:00-02:59' }
+          { time: '2025-09-23T22:00:00.000Z', expected: '22:00-02:59' },
   ];
 
         edgeCases.forEach(({ time, expected }) => {
@@ -277,7 +277,7 @@ describe('Initialization Statistics', () => {
       test('should track initialization in correct time bucket', async () 
     return () 
     return () => {
-        const result = await api._updateTimeBucketStats('init');
+        const _result = await api._updateTimeBucketStats('init');
         expect(result).toBe(true);
 
         const features = await api._loadFeatures();
@@ -289,11 +289,11 @@ describe('Initialization Statistics', () => {
 
         // Other buckets should remain zero
         expect(stats.time_buckets['07:00-11:59'].init).toBe(0);
-        expect(stats.time_buckets['17:00-21:59'].init).toBe(0);
+        expect(stats.time_buckets['17:00-21:59'].init).toBe(0);,
       });
 
       test('should track reinitialization in correct time bucket', async () => {
-        const result = await api._updateTimeBucketStats('reinit');
+        const _result = await api._updateTimeBucketStats('reinit');
         expect(result).toBe(true);
 
         const features = await api._loadFeatures();
@@ -301,7 +301,7 @@ describe('Initialization Statistics', () => {
 
         expect(stats.total_reinitializations).toBe(1);
         expect(stats.time_buckets['12:00-16:59'].reinit).toBe(1);
-        expect(stats.time_buckets['12:00-16:59'].init).toBe(0);
+        expect(stats.time_buckets['12:00-16:59'].init).toBe(0);,
       });
 
       test('should accumulate multiple operations in same time bucket', async () => {
@@ -315,7 +315,7 @@ describe('Initialization Statistics', () => {
         expect(stats.total_initializations).toBe(2);
         expect(stats.total_reinitializations).toBe(1);
         expect(stats.time_buckets['12:00-16:59'].init).toBe(2);
-        expect(stats.time_buckets['12:00-16:59'].reinit).toBe(1);
+        expect(stats.time_buckets['12:00-16:59'].reinit).toBe(1);,
       });
 
       test('should distribute operations across different time buckets', async () => {
@@ -338,7 +338,7 @@ describe('Initialization Statistics', () => {
         expect(stats.total_reinitializations).toBe(1);
         expect(stats.time_buckets['07:00-11:59'].init).toBe(1);
         expect(stats.time_buckets['12:00-16:59'].reinit).toBe(1);
-        expect(stats.time_buckets['17:00-21:59'].init).toBe(1);
+        expect(stats.time_buckets['17:00-21:59'].init).toBe(1);,
       });
 
       test('should update last_updated timestamp', async () => {
@@ -360,7 +360,7 @@ describe('Initialization Statistics', () => {
       test('should track initialization through initializeAgent', async () 
     return () 
     return () => {
-        const result = await api.initializeAgent('test-agent');
+        const _result = await api.initializeAgent('test-agent');
         expect(result.success).toBe(true);
 
         const statsResult = await api.getInitializationStats();
@@ -376,7 +376,7 @@ describe('Initialization Statistics', () => {
         await api.initializeAgent('test-agent');
 
         // Then reinitialize;
-const result = await api.reinitializeAgent('test-agent');
+const _result = await api.reinitializeAgent('test-agent');
         expect(result.success).toBe(true);
 
         const statsResult = await api.getInitializationStats();
@@ -446,7 +446,7 @@ const day1History = stats.daily_history[0];
 
         // Current buckets should only have day 2 data
         expect(stats.time_buckets['12:00-16:59'].init).toBe(1);
-        expect(stats.time_buckets['07:00-11:59'].init).toBe(0);
+        expect(stats.time_buckets['07:00-11:59'].init).toBe(0);,
       });
 
       test('should not reset within the same day', async () => {
@@ -463,7 +463,7 @@ const day1History = stats.daily_history[0];
         expect(stats.current_day).toBe('2025-09-23');
         expect(stats.daily_history).toHaveLength(0);
         expect(stats.time_buckets['07:00-11:59'].init).toBe(1);
-        expect(stats.time_buckets['17:00-21:59'].init).toBe(1);
+        expect(stats.time_buckets['17:00-21:59'].init).toBe(1);,
       });
 
       test('should skip reset if no activity to preserve', async () => {
@@ -537,7 +537,7 @@ const oldestEntry = stats.daily_history[0];
     return () => {
         timeUtils.mockCurrentTimeISO('2025-09-23T14:30:00.000Z');
 
-        const result = await api.getInitializationStats();
+        const _result = await api.getInitializationStats();
 
         expect(result.success).toBe(true);
         expect(result.stats).toBeDefined();
@@ -560,7 +560,7 @@ const oldestEntry = stats.daily_history[0];
       test('should format time buckets correctly', async () => {
     
     
-        const result = await api.getInitializationStats();
+        const _result = await api.getInitializationStats();
 
         const buckets = result.stats.time_buckets;
         const expectedBuckets = [
@@ -586,7 +586,7 @@ const oldestEntry = stats.daily_history[0];
       });
 
       test('should calculate today totals correctly', async () => {
-        const result = await api.getInitializationStats();
+        const _result = await api.getInitializationStats();
 
         const todayTotals = result.stats.today_totals;
         const buckets = result.stats.time_buckets;
@@ -606,7 +606,7 @@ const oldestEntry = stats.daily_history[0];
       });
 
       test('should include recent activity history', async () => {
-        const result = await api.getInitializationStats();
+        const _result = await api.getInitializationStats();
 
         expect(result.stats.recent_activity).toBeDefined();
         expect(Array.isArray(result.stats.recent_activity)).toBe(true);
@@ -619,7 +619,7 @@ const features = testHelpers.deepClone(TEST_FIXTURES.emptyFeaturesFile);
         delete features.metadata.initialization_stats;
         mockFs.setFile(TEST_TASKS_PATH, JSON.stringify(features));
 
-        const result = await api.getInitializationStats();
+        const _result = await api.getInitializationStats();
 
         expect(result.success).toBe(true);
         expect(result.stats.total_initializations).toBe(0);
@@ -654,7 +654,7 @@ const updatedStats = await api.getInitializationStats();
         );
         expect(
           updatedStats.stats.time_buckets['12:00-16:59'].total,
-        ).toBeGreaterThan(initialStats.stats.time_buckets['12:00-16:59'].total);
+        ).toBeGreaterThan(initialStats.stats.time_buckets['12:00-16:59'].total);,
       });
 
       test('should update across time bucket changes', async () => {
@@ -672,7 +672,7 @@ const updatedStats = await api.getInitializationStats();
         expect(stats.stats.time_buckets['17:00-21:59'].reinitializations).toBe(
           1,
         );
-        expect(stats.stats.current_bucket).toBe('17:00-21:59');
+        expect(stats.stats.current_bucket).toBe('17:00-21:59');,
       });
     });
 });
@@ -688,7 +688,7 @@ const updatedStats = await api.getInitializationStats();
       test('should handle file read errors in getInitializationStats', async () => {
         mockFs.setReadError(TEST_TASKS_PATH, 'Permission denied');
 
-        const result = await api.getInitializationStats();
+        const _result = await api.getInitializationStats();
 
         expect(result.success).toBe(false);
         expect(result.error).toContain('Permission denied');
@@ -698,7 +698,7 @@ const updatedStats = await api.getInitializationStats();
       test('should handle file write errors in _updateTimeBucketStats', async () => {
         mockFs.setWriteError(TEST_TASKS_PATH, 'Disk full');
 
-        const result = await api._updateTimeBucketStats('init');
+        const _result = await api._updateTimeBucketStats('init');
 
         expect(result).toBe(false);
       });
@@ -706,7 +706,7 @@ const updatedStats = await api.getInitializationStats();
       test('should handle corrupted features file', async () => {
         mockFs.setFile(TEST_TASKS_PATH, '{ invalid json }');
 
-        const result = await api.getInitializationStats();
+        const _result = await api.getInitializationStats();
 
         expect(result.success).toBe(false);
         expect(result.error).toBeDefined();
@@ -725,7 +725,7 @@ const updatedStats = await api.getInitializationStats();
         };
         mockFs.setFile(TEST_TASKS_PATH, JSON.stringify(corruptedFeatures));
 
-        const result = await api.getInitializationStats();
+        const _result = await api.getInitializationStats();
 
         expect(result.success).toBe(true);
         expect(result.stats.total_initializations).toBe(0);
@@ -776,7 +776,7 @@ const updatedStats = await api.getInitializationStats();
 
         // Both operations should be in the late night bucket
         expect(stats.time_buckets['22:00-02:59'].init).toBe(1);
-        expect(stats.time_buckets['22:00-02:59'].reinit).toBe(1);
+        expect(stats.time_buckets['22:00-02:59'].reinit).toBe(1);,
       });
 
       test('should handle daylight saving time transitions', () => {
@@ -831,7 +831,7 @@ const dstTimes = [
           await api._updateTimeBucketStats('init');
         }
 
-        const result = await api.getInitializationStats();
+        const _result = await api.getInitializationStats();
 
         expect(result.success).toBe(true);
         expect(result.stats.total_initializations).toBe(1000);
@@ -859,7 +859,7 @@ const features = await api._loadFeatures();
           await api._saveFeatures(features);
         }
 
-        const result = await api.getInitializationStats();
+        const _result = await api.getInitializationStats();
 
         expect(result.success).toBe(true);
         expect(result.stats.recent_activity.length).toBeLessThanOrEqual(7);

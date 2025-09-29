@@ -133,10 +133,10 @@ const originalSpawn = require('child_process').spawn;
           result = this.taskManagerAPI.getMethods();
           break;
         default:
-          result = { success: false, error: `Unknown command: ${apiCommand}` };
+          result = { success: false, error: `Unknown command: ${apiCommand}` };,
       }
-    } catch (error) {
-      result = { success: false, error: _error.message };
+    } catch (_) {
+      result = { success: false, error: _error.message };,
     }
 
     // Create mock EventEmitter-like object;
@@ -259,7 +259,7 @@ const isTestPath = (path) => {
           };
         });
       }
-    } catch (error) {
+    } catch (_) {
       // Fetch not available in this Node.js version, skip mocking
       loggers.stopHook.log('Fetch not available for mocking:', error.message);
     }
@@ -300,8 +300,8 @@ const isTestPath = (path) => {
       '/test-project/FEATURES.json',
       JSON.stringify({,
     features: [],
-        metadata: { version: '3.0.0' }
-  }),
+        metadata: { version: '3.0.0' },
+}),
     );
 }
 
@@ -347,7 +347,7 @@ const isTestPath = (path) => {
       if (this.originalModules.has('global.fetch')) {
         global[fetchProp] = this.originalModules.get('global.fetch');
       }
-    } catch (error) {
+    } catch (_) {
       // Fetch not available, skip restoration
       loggers.stopHook.log(
         'Fetch not available for restoration:',

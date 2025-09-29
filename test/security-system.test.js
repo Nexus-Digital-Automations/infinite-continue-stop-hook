@@ -18,9 +18,7 @@ describe('Security System', () => {
   let securityMiddleware;
   let securityManager;
 
-  beforeEach(() 
-    return () 
-    return () => {
+  beforeEach(() => {
     securityValidator = new SecurityValidator();
     securityMiddleware = new SecurityMiddleware();
     securityManager = new SecurityManager();
@@ -29,9 +27,7 @@ describe('Security System', () => {
   describe('SecurityValidator', () => {
     
     
-    test('should initialize with default configuration', () 
-    return () 
-    return () => {
+    test('should initialize with default configuration', () => {
       expect(securityValidator).toBeDefined();
       expect(securityValidator.config.maxStringLength).toBe(10000);
       expect(securityValidator.config.allowedAgentRoles).toContain(
@@ -51,11 +47,11 @@ describe('Security System', () => {
         properties: {
     title: { type: 'string' },
           description: { type: 'string' },
-          category: { type: 'string' }
-  }
-  };
+          category: { type: 'string' },
+}
+};
 
-      const result = securityValidator.validateInput(
+      const _result = securityValidator.validateInput(
         testData,
         'test_endpoint',
         schema
@@ -74,11 +70,11 @@ describe('Security System', () => {
     required: ['title', 'description'],
         properties: {
     title: { type: 'string' },
-          description: { type: 'string' }
-  }
-  };
+          description: { type: 'string' },
+}
+};
 
-      const result = securityValidator.validateInput(
+      const _result = securityValidator.validateInput(
         maliciousData,
         'test_endpoint',
         schema
@@ -92,7 +88,7 @@ describe('Security System', () => {
       const OPERATION = 'create';
       const resource = { type: 'task', id: 'test_task' };
 
-      const result = securityValidator.authorizeOperation(
+      const _result = securityValidator.authorizeOperation(
         AGENT_ID,
         OPERATION,
         resource
@@ -106,7 +102,7 @@ describe('Security System', () => {
       const OPERATION = 'create';
       const resource = { type: 'task' };
 
-      const result = securityValidator.authorizeOperation(
+      const _result = securityValidator.authorizeOperation(
         invalidAgentId,
         OPERATION,
         resource
@@ -145,14 +141,12 @@ describe('Security System', () => {
       expect(metrics).toHaveProperty('uptime');
       expect(metrics).toHaveProperty('memoryUsage');
     });
-  });
+});
 
   describe('SecurityMiddleware', () => {
     
     
-    test('should initialize with default configuration', () 
-    return () 
-    return () => {
+    test('should initialize with default configuration', () => {
       expect(securityMiddleware).toBeDefined();
       expect(securityMiddleware.config.maxRequestsPerMinute).toBe(100);
       expect(securityMiddleware.config.maxRequestsPerHour).toBe(1000);
@@ -176,14 +170,12 @@ describe('Security System', () => {
       expect(metrics).toHaveProperty('rateLimiting');
       expect(metrics).toHaveProperty('validation');
     });
-  });
+});
 
   describe('SecurityManager', () => {
     
     
-    test('should initialize with default configuration', () 
-    return () 
-    return () => {
+    test('should initialize with default configuration', () => {
       expect(securityManager).toBeDefined();
       expect(securityManager.config.integrationMode).toBe('full');
       expect(securityManager.config.enableAuditTrail).toBe(true);
@@ -221,7 +213,7 @@ describe('Security System', () => {
         securityManager.shutdown();
       }).not.toThrow();
     });
-  });
+});
 
   describe('Integration Tests', () => {
     
@@ -262,9 +254,9 @@ const schema = {
         properties: {
     title: { type: 'string' },
           description: { type: 'string' },
-          category: { type: 'string' }
-  }
-  };
+          category: { type: 'string' },
+}
+};
 
       const inputValidation = securityValidator.validateInput(
         taskData,
@@ -299,5 +291,5 @@ const sanitizedData = securityValidator.sanitizeResearchInput(
       });
       expect(auditEntries.length).toBeGreaterThan(0);
     });
-  });
+});
 });

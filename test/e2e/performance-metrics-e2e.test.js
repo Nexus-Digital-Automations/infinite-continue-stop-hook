@@ -14,8 +14,7 @@ describe('Performance Metrics System E2E Tests', () => {
   );
   const mockTrendsFile = path.join(mockProjectRoot, '.validation-trends.json');
 
-  beforeEach(async () 
-    return () => {
+  beforeEach(async () => {
     // Create mock directory
     if (!FS.existsSync(mockProjectRoot)) {
       FS.mkdirSync(mockProjectRoot, { recursive: true });
@@ -27,31 +26,31 @@ describe('Performance Metrics System E2E Tests', () => {
         FS.unlinkSync(file);
       }
     });
-  });
+});
 
   afterEach(() => {
     // Clean up test directory
     if (FS.existsSync(mockProjectRoot)) {
-      FS.rmSync(mockProjectRoot, { recursive: true, force: true });
+      FS.rmSync(mockProjectRoot, { recursive: true, force: true });,
     }
-  });
+});
 
   function executeTaskManagerCommand(command, args = '', options = {}) {
     try {
       const fullCommand = `timeout 10s node "${taskManagerPath}" --project-root "${mockProjectRoot}" ${command} ${args}`;
 
-      const result = execSync(fullCommand, {
+      const _result = execSync(fullCommand, {
     encoding: 'utf8',
         timeout: 10000,
         ...options,
       });
 
       return JSON.parse(result.trim());
-    } catch (error) {
+    } catch (_) {
       if (_error.stdout) {
         try {
           return JSON.parse(_error.stdout.trim());
-        } catch (error) {
+        } catch (_) {
           return {
     success: false,
             error: _error.message,
@@ -59,9 +58,9 @@ describe('Performance Metrics System E2E Tests', () => {
           };
         }
       }
-      return { success: false, error: _error.message };
+      return { success: false, error: _error.message };,
     }
-  }
+}
 
   function simulateValidationExecutions() {
     const metricsData = {
@@ -137,7 +136,7 @@ const isAnomaly = Math.random() < 0.05;
     user: Math.round(anomalyDuration * 800),
                   system: Math.round(anomalyDuration * 200),
                 }
-  },
+},
               environment: {
     nodeVersion: '18.17.0',
                 platform: 'darwin',
@@ -153,7 +152,7 @@ const isAnomaly = Math.random() < 0.05;
     }
 
     return metricsData;
-  }
+}
 
   describe('Metrics Collection And Storage', () => {
     
@@ -162,7 +161,7 @@ const isAnomaly = Math.random() < 0.05;
       const metricsData = simulateValidationExecutions();
       FS.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
 
-      const result = executeTaskManagerCommand('analyze-performance-metrics');
+      const _result = executeTaskManagerCommand('analyze-performance-metrics');
 
       expect(result.success).toBe(true);
       expect(result.metrics).toBeDefined();
@@ -171,7 +170,7 @@ const isAnomaly = Math.random() < 0.05;
     });
 
     test('should handle missing metrics file gracefully', async () => {
-      const result = executeTaskManagerCommand('analyze-performance-metrics');
+      const _result = executeTaskManagerCommand('analyze-performance-metrics');
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('metrics file not found');
@@ -180,11 +179,10 @@ const isAnomaly = Math.random() < 0.05;
     test('should validate metrics data format', async () => {
       const invalidMetrics = {
     version: '1.0.0',
-        metrics: [
-          {
+        metrics: [ {
     criterion: 'invalid-criterion',
             startTime: 'invalid-timestamp',
-          }
+          },
   ],
       };
 
@@ -193,13 +191,13 @@ const isAnomaly = Math.random() < 0.05;
         JSON.stringify(invalidMetrics, null, 2)
       );
 
-      const result = executeTaskManagerCommand('analyze-performance-metrics');
+      const _result = executeTaskManagerCommand('analyze-performance-metrics');
 
       expect(result.success).toBe(true);
       expect(result.validMetrics).toBeDefined();
       expect(result.invalidMetrics).toBeDefined();
     });
-  });
+});
 
   describe('Performance Analysis', () => {
     
@@ -208,7 +206,7 @@ const isAnomaly = Math.random() < 0.05;
       const metricsData = simulateValidationExecutions();
       FS.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
 
-      const result = executeTaskManagerCommand('analyze-performance-trends');
+      const _result = executeTaskManagerCommand('analyze-performance-trends');
 
       expect(result.success).toBe(true);
       expect(result.trends).toBeDefined();
@@ -220,7 +218,7 @@ const isAnomaly = Math.random() < 0.05;
       const metricsData = simulateValidationExecutions();
       FS.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'calculate-performance-baseline'
       );
 
@@ -235,7 +233,7 @@ const isAnomaly = Math.random() < 0.05;
       const metricsData = simulateValidationExecutions();
       FS.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'generate-performance-recommendations'
       );
 
@@ -243,7 +241,7 @@ const isAnomaly = Math.random() < 0.05;
       expect(result.recommendations).toBeDefined();
       expect(Array.isArray(result.recommendations)).toBe(true);
     });
-  });
+});
 
   describe('Trend Analysis', () => {
     
@@ -252,7 +250,7 @@ const isAnomaly = Math.random() < 0.05;
       const metricsData = simulateValidationExecutions();
       FS.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
 
-      const result = executeTaskManagerCommand('track-performance-trends');
+      const _result = executeTaskManagerCommand('track-performance-trends');
 
       expect(result.success).toBe(true);
       expect(result.trends).toBeDefined();
@@ -264,7 +262,7 @@ const isAnomaly = Math.random() < 0.05;
       const metricsData = simulateValidationExecutions();
       FS.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
 
-      const result = executeTaskManagerCommand('predict-performance-patterns');
+      const _result = executeTaskManagerCommand('predict-performance-patterns');
 
       expect(result.success).toBe(true);
       expect(result.predictions).toBeDefined();
@@ -282,7 +280,7 @@ const isAnomaly = Math.random() < 0.05;
       expect(trendsData.version).toBeDefined();
       expect(trendsData.trends).toBeDefined();
     });
-  });
+});
 
   describe('Performance Under Load', () => {
     
@@ -321,8 +319,8 @@ const isAnomaly = Math.random() < 0.05;
               execution: { success: Math.random() > 0.1 },
               resources: {
     memoryUsageBefore: { rss: 50000000, heapUsed: 30000000 },
-                memoryUsageAfter: { rss: 52000000, heapUsed: 31000000 }
-  },
+                memoryUsageAfter: { rss: 52000000, heapUsed: 31000000 },
+},
             });
           });
         }
@@ -334,7 +332,7 @@ const isAnomaly = Math.random() < 0.05;
       );
 
       const startTime = Date.now();
-      const result = executeTaskManagerCommand('analyze-performance-metrics');
+      const _result = executeTaskManagerCommand('analyze-performance-metrics');
       const duration = Date.now() - startTime;
 
       expect(result.success).toBe(true);
@@ -346,13 +344,13 @@ const isAnomaly = Math.random() < 0.05;
       const highFreqData = simulateValidationExecutions();
       FS.writeFileSync(mockMetricsFile, JSON.stringify(highFreqData, null, 2));
 
-      const result = executeTaskManagerCommand('validate-analysis-accuracy');
+      const _result = executeTaskManagerCommand('validate-analysis-accuracy');
 
       expect(result.success).toBe(true);
       expect(result.accuracyScore).toBeGreaterThan(0.9);
       expect(result.dataQualityScore).toBeGreaterThan(0.8);
     });
-  });
+});
 
   describe('Data Quality And Validation', () => {
     
@@ -373,8 +371,8 @@ const mixedQualityData = {
             execution: { success: true },
             resources: {
     memoryUsageBefore: { rss: 50000000, heapUsed: 30000000 },
-              memoryUsageAfter: { rss: 52000000, heapUsed: 31000000 }
-  },
+              memoryUsageAfter: { rss: 52000000, heapUsed: 31000000 },
+},
           },
           // Missing end time: {
     criterion: 'type-validation',
@@ -382,32 +380,31 @@ const mixedQualityData = {
     startTime: '2025-09-27T10:05:00.000Z',
               durationMs: 2000,
             },
-            execution: { success: true }
-  },
+            execution: { success: true },
+},
           // Invalid timestamp: {
     criterion: 'build-validation',
             timing: {
     startTime: 'invalid-timestamp',
               durationMs: 15000,
             },
-            execution: { success: false }
-  },
+            execution: { success: false },
+},
           // Missing execution data: {
     criterion: 'test-validation',
             timing: {
     startTime: '2025-09-27T10:15:00.000Z',
               durationMs: 8000,
             }
-  },
-          // Negative duration (impossible)
-          {
+},
+          // Negative duration (impossible) {
     criterion: 'security-validation',
             timing: {
     startTime: '2025-09-27T10:20:00.000Z',
               durationMs: -1000, // Invalid
             },
-            execution: { success: true }
-  },
+            execution: { success: true },
+},
         ],
       };
 
@@ -416,7 +413,7 @@ const mixedQualityData = {
         JSON.stringify(mixedQualityData, null, 2)
       );
 
-      const result = executeTaskManagerCommand('analyze-performance-metrics');
+      const _result = executeTaskManagerCommand('analyze-performance-metrics');
 
       expect(result.success).toBe(true);
       expect(result.validMetrics).toBeDefined();
@@ -437,14 +434,14 @@ const mixedQualityData = {
         JSON.stringify(mixedQualityData, null, 2)
       );
 
-      const result = executeTaskManagerCommand('assess-data-quality');
+      const _result = executeTaskManagerCommand('assess-data-quality');
 
       expect(result.success).toBe(true);
       expect(result.qualityScore).toBeDefined();
       expect(result.suggestions).toBeDefined();
       expect(Array.isArray(result.suggestions)).toBe(true);
     });
-  });
+});
 
   describe('Progressive Enhancement', () => {
     
@@ -453,12 +450,11 @@ const mixedQualityData = {
       // Start with minimal data;
 const minimalData = {
     version: '2.0.0',
-        metrics: [
-          {
+        metrics: [ {
     criterion: 'linter-validation',
             timing: { startTime: '2025-09-27T10:00:00.000Z', durationMs: 1500 },
-            execution: { success: true }
-  },
+            execution: { success: true },
+},
         ],
       };
 
@@ -496,8 +492,8 @@ const weekData = { version: '2.0.0', metrics: [] };
     startTime: new Date(now - day * 24 * 60 * 60 * 1000).toISOString(),
             durationMs: 15000 + day * 1000, // Linear increase
           },
-          execution: { success: true }
-  });
+          execution: { success: true },
+});
       }
 
       FS.writeFileSync(mockMetricsFile, JSON.stringify(weekData, null, 2));
@@ -520,7 +516,7 @@ const monthData = simulateValidationExecutions();
       expect(monthResult.anomalyDetection).toBeDefined();
       expect(monthResult.seasonalPatterns).toBeDefined();
     });
-  });
+});
 
   describe('Integration with External Systems', () => {
     
@@ -528,16 +524,15 @@ const monthData = simulateValidationExecutions();
     return () => {
       // Create legacy format metrics;
 const legacyData = {
-    metrics: [
-          {
+    metrics: [ {
     criterion: 'linter-validation',
             startTime: '2025-09-27T10:00:00.000Z',
             endTime: '2025-09-27T10:00:01.500Z',
             durationMs: 1500,
             success: true,
             memoryUsageBefore: { rss: 50000000, heapUsed: 30000000 },
-            memoryUsageAfter: { rss: 52000000, heapUsed: 31000000 }
-  },
+            memoryUsageAfter: { rss: 52000000, heapUsed: 31000000 },
+},
         ],
       };
 
@@ -547,7 +542,7 @@ const legacyData = {
       );
       FS.writeFileSync(legacyFile, JSON.stringify(legacyData, null, 2));
 
-      const result = executeTaskManagerCommand('analyze-performance-metrics');
+      const _result = executeTaskManagerCommand('analyze-performance-metrics');
       expect(result.success).toBe(true);
       expect(result.metrics.length).toBe(1);
       expect(result.metrics[0].criterion).toBe('linter-validation');
@@ -557,23 +552,21 @@ const legacyData = {
       // Test mixing enhanced and legacy formats;
 const enhancedData = {
     version: '2.0.0',
-        metrics: [
-          {
+        metrics: [ {
     criterion: 'type-validation',
             timing: { startTime: '2025-09-27T11:00:00.000Z', durationMs: 2000 },
-            execution: { success: true }
-  },
+            execution: { success: true },
+},
         ],
       };
 
       const legacyData = {
-    metrics: [
-          {
+    metrics: [ {
     criterion: 'build-validation',
             startTime: '2025-09-27T12:00:00.000Z',
             durationMs: 15000,
             success: false,
-          }
+          },
   ],
       };
 
@@ -583,10 +576,10 @@ const enhancedData = {
         JSON.stringify(legacyData, null, 2)
       );
 
-      const result = executeTaskManagerCommand('analyze-performance-metrics');
+      const _result = executeTaskManagerCommand('analyze-performance-metrics');
       expect(result.success).toBe(true);
       expect(result.metrics.length).toBe(2);
       expect(result.formatMigration).toBeDefined();
     });
-  });
+});
 });

@@ -20,7 +20,7 @@ const rootDir = process.cwd();
  */
 function getAllJavaScriptFiles() {
   try {
-    const result = execSync(
+    const _result = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
       { cwd: rootDir, encoding: 'utf-8' }
     );
@@ -29,7 +29,7 @@ function getAllJavaScriptFiles() {
       .split('\n')
       .filter((f) => f && f.endsWith('.js'))
       .map((f) => path.resolve(rootDir, f.replace('./', '')));
-  } catch (error) {
+  } catch (_) {
     console.error('Failed to get JS files:', error.message);
     return [];
   }
@@ -40,12 +40,12 @@ function getAllJavaScriptFiles() {
  */
 function getUnusedVariableViolations() {
   try {
-    const output = execSync('npx eslint . --format=compact', {
+    const _output = execSync('npx eslint . --format=compact', {
       cwd: rootDir,
       encoding: 'utf-8',
     });
     return output;
-  } catch (error) {
+  } catch (_) {
     // ESLint returns non-zero exit code when there are errors
     return error.stdout || '';
   }
@@ -207,7 +207,7 @@ function fixUnusedVariablesInFile(filePath, violations) {
     }
 
     return false;
-  } catch (error) {
+  } catch (_) {
     console.error(`Error fixing file ${filePath}:`, error.message);
     return false;
   }
@@ -234,7 +234,7 @@ function shouldAddUnderscorePrefix(variable, line) {
     'agentId', // common unused parameter
     'params', // common unused parameter
     'category', // common unused parameter
-    'filePath', // common unused parameter
+    'filePath', // common unused parameter,
   ];
 
   return prefixPatterns.some(
@@ -249,7 +249,7 @@ function canSafelyRemove(variable, line) {
   // Only remove simple variable declarations that are clearly unused;
   const safeToRemovePatterns = [
     /^\s*(const|let|var)\s+_\w+\s*=.*;\s*$/, // Simple assignment
-    /^\s*(const|let|var)\s+_\w+;\s*$/, // Simple declaration
+    /^\s*(const|let|var)\s+_\w+;\s*$/, // Simple declaration,
   ];
 
   return safeToRemovePatterns.some((pattern) => pattern.test(line.trim()));
@@ -289,17 +289,17 @@ function main() {
 
   for (const [filePath, fileViolations] of Object.entries(violationsByFile)) {
     console.log(
-      `🔍 Processing: ${path.relative(rootDir, filePath)} (${fileViolations.length} violations)`
+      `🔍 Processing: ${path.relative(rootDir, _filePath)} (${fileViolations.length} violations)`
     );
 
     if (fixUnusedVariablesInFile(filePath, fileViolations)) {
       totalFixed++;
       console.log(
-        `✅ Fixed unused variables in: ${path.relative(rootDir, filePath)}\n`
+        `✅ Fixed unused variables in: ${path.relative(rootDir, _filePath)}\n`
       );
     } else {
       console.log(
-        `⚠️  No changes made to: ${path.relative(rootDir, filePath)}\n`
+        `⚠️  No changes made to: ${path.relative(rootDir, _filePath)}\n`
       );
     }
   }
@@ -316,7 +316,7 @@ function main() {
       stdio: 'inherit',
     });
     console.log('✅ Autofix completed successfully');
-  } catch (_1) {
+  } catch (_) {
     console.log('⚠️  Autofix completed with some remaining issues');
   }
 
@@ -345,7 +345,7 @@ function main() {
         console.log(`  ... and ${finalViolations.length - 10} more`);
       }
     }
-  } catch (_1) {
+  } catch (_) {
     console.log('⚠️  Could not run final verification');
   }
 

@@ -6,7 +6,7 @@ const PATH = require('path');
  * Final fix for Name vs Name property inconsistencies
  */
 
-function fixFinalNameIssues(filePath) {
+function fixFinalNameIssues(_filePath) {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
     let fixed = content;
@@ -18,7 +18,7 @@ function fixFinalNameIssues(filePath) {
     if (beforeNameProp !== fixed) {
       changes++;
       console.log(
-        `Fixed Name: property declarations in ${PATH.basename(filePath)}`
+        `Fixed Name: property declarations in ${PATH.basename(_filePath)}`
       );
     }
 
@@ -28,7 +28,7 @@ function fixFinalNameIssues(filePath) {
     if (beforeNameDestructure !== fixed) {
       changes++;
       console.log(
-        `Fixed { Name, config } destructuring in ${PATH.basename(filePath)}`
+        `Fixed { Name, config } destructuring in ${PATH.basename(_filePath)}`
       );
     }
 
@@ -37,7 +37,7 @@ function fixFinalNameIssues(filePath) {
     fixed = fixed.replace(/\$\{Name\}/g, '${Name}');
     if (beforeNameTemplate !== fixed) {
       changes++;
-      console.log(`Fixed template literals in ${PATH.basename(filePath)}`);
+      console.log(`Fixed template literals in ${PATH.basename(_filePath)}`);
     }
 
     // Fix testDependencies.push(Name) to testDependencies.push(Name)
@@ -49,7 +49,7 @@ function fixFinalNameIssues(filePath) {
     if (beforeNamePush !== fixed) {
       changes++;
       console.log(
-        `Fixed testDependencies.push(Name) in ${PATH.basename(filePath)}`
+        `Fixed testDependencies.push(Name) in ${PATH.basename(_filePath)}`
       );
     }
 
@@ -58,7 +58,7 @@ function fixFinalNameIssues(filePath) {
     fixed = fixed.replace(/step\.Name/g, 'step.Name');
     if (beforeStepName !== fixed) {
       changes++;
-      console.log(`Fixed step.Name references in ${PATH.basename(filePath)}`);
+      console.log(`Fixed step.Name references in ${PATH.basename(_filePath)}`);
     }
 
     // Fix systemConfig.Name to systemConfig.Name;
@@ -67,7 +67,7 @@ function fixFinalNameIssues(filePath) {
     if (beforeSystemConfigName !== fixed) {
       changes++;
       console.log(
-        `Fixed systemConfig.Name references in ${PATH.basename(filePath)}`
+        `Fixed systemConfig.Name references in ${PATH.basename(_filePath)}`
       );
     }
 
@@ -77,7 +77,7 @@ function fixFinalNameIssues(filePath) {
     if (beforeBaselineTestName !== fixed) {
       changes++;
       console.log(
-        `Fixed baselineTest.Name references in ${PATH.basename(filePath)}`
+        `Fixed baselineTest.Name references in ${PATH.basename(_filePath)}`
       );
     }
 
@@ -88,7 +88,7 @@ function fixFinalNameIssues(filePath) {
     }
 
     return false;
-  } catch (error) {
+  } catch (_) {
     console.error(`Error fixing ${filePath}:`, _error.message);
     return false;
   }

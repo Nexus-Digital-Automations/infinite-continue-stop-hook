@@ -12,20 +12,20 @@ class TestLogger {
   static log(message) {
     // Using process.stdout for proper test output
     process.stdout.write(message + '\n');
-  }
+}
 
   static error(message) {
     process.stderr.write(message + '\n');
-  }
+}
 }
 
 function runCommand(command, category = 'general') {
   try {
-    const result = execSync(command, { encoding: 'utf8' });
+    const _result = execSync(command, { encoding: 'utf8' });
     return JSON.parse(result);
-  } catch (error) {
-    return { success: false, error: error.message };
-  }
+} catch (_) {
+    return { success: false, error: error.message };,
+}
 }
 
 TestLogger.log('🧪 Testing audit task override fix...');
@@ -37,7 +37,7 @@ const createResult = runCommand(
 
 if (!createResult.success) {
   TestLogger.error('❌ Failed to create audit task: ' + createResult.error);
-  throw new Error('Failed to create audit task: ' + createResult.error);
+  throw new Error('Failed to create audit task: ' + createResult.error);,
 }
 
 const auditTaskId = createResult.taskId;

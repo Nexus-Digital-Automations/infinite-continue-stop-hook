@@ -30,7 +30,7 @@ class JestCiCdReporter {
     this.startTime = Date.now();
     this.gitInfo = null;
     this.environmentInfo = null;
-  }
+}
 
   onRunStart() {
     this.startTime = Date.now();
@@ -42,7 +42,7 @@ class JestCiCdReporter {
     if (this.options.includeEnvironmentInfo) {
       this.environmentInfo = this.getEnvironmentInformation();
     }
-  }
+}
 
   onRunComplete(contexts, results) {
     const endTime = Date.now();
@@ -126,7 +126,7 @@ class JestCiCdReporter {
 
     // Write additional CI/CD specific files
     this.writeStatusFiles(report);
-  }
+}
 
   shouldBlockDeployment(results) {
     // Define deployment blocking criteria
@@ -135,7 +135,7 @@ class JestCiCdReporter {
       results.numFailedTests > 0 ||
       (results.coverageMap && this.isCoverageBelowCritical(results.coverageMap))
     );
-  }
+}
 
   evaluateQualityGate(results) {
     const criteria = {
@@ -152,7 +152,7 @@ class JestCiCdReporter {
       criteria,
       blocking_issues: this.identifyBlockingIssues(criteria, results),
     };
-  }
+}
 
   calculateTestHealthScore(results) {
     // Calculate a health score (0-100) based on multiple factors;
@@ -180,7 +180,7 @@ const avgDuration = (Date.now() - this.startTime) / results.numTotalTests;
     }
 
     return Math.max(0, Math.min(100, Math.round(score)));
-  }
+}
 
   findSlowestSuite(testResults) {
     let slowest = null;
@@ -199,7 +199,7 @@ const avgDuration = (Date.now() - this.startTime) / results.numTotalTests;
     });
 
     return slowest;
-  }
+}
 
   analyzeFailures(results) {
     const failures = [];
@@ -208,8 +208,7 @@ const avgDuration = (Date.now() - this.startTime) / results.numTotalTests;
     results.testResults.forEach((testResult) => {
     
       if (testResult.numFailingTests > 0) {
-        testResult.testResults.forEach((test) 
-    return () => {
+        testResult.testResults.forEach((test) => {
           if (test.status === 'failed') {
             failures.push({
     suite: testResult.testFilePath,
@@ -242,7 +241,7 @@ const errorType = this.categorizeError(
           ? [...failurePatterns.entries()].sort((a, b) => b[1] - a[1])[0][0]
           : 'none',
     };
-  }
+}
 
   categorizeError(errorMessage) {
     if (!errorMessage) {
@@ -265,7 +264,7 @@ const errorType = this.categorizeError(
     }
 
     return 'other';
-  }
+}
 
   detectFlakyTests(_RESULTS) {
     // Placeholder for flaky test detection
@@ -275,7 +274,7 @@ const errorType = this.categorizeError(
       confidence: 'low',
       note: 'Flaky test detection requires historical data analysis',
     };
-  }
+}
 
   getGitInformation() {
     try {
@@ -312,13 +311,13 @@ const errorType = this.categorizeError(
       }
 
       return info;
-    } catch (error) {
+    } catch (_) {
       return {
     error: 'Failed to get Git information',
         message: error.message,
       };
     }
-  }
+}
 
   getEnvironmentInformation() {
     return {
@@ -351,8 +350,8 @@ const errorType = this.categorizeError(
         build_url: process.env.BUILD_URL || this.constructBuildUrl(),
         job_name: process.env.JOB_NAME || process.env.GITHUB_JOB || 'unknown',
       }
-  };
-  }
+};
+}
 
   getMemoryUsage() {
     const usage = process.memoryUsage();
@@ -363,7 +362,7 @@ const errorType = this.categorizeError(
       external: usage.external,
       heap_usage_percent: ((usage.heapUsed / usage.heapTotal) * 100).toFixed(2),
     };
-  }
+}
 
   calculateParallelEfficiency(results) {
     // Simplified parallel efficiency calculation;
@@ -382,7 +381,7 @@ const totalTime = Date.now() - this.startTime;
       serial_time_ms: serialTime,
       time_saved_ms: Math.max(0, serialTime - totalTime),
     };
-  }
+}
 
   extractCoverageSummary(coverageMap) {
     if (!coverageMap || typeof coverageMap.getCoverageSummary !== 'function') {
@@ -412,11 +411,11 @@ const totalTime = Date.now() - this.startTime;
           covered: summary.lines.covered,
           pct: summary.lines.pct,
         }
-  };
+};
     } catch (_) {
-      return { error: 'Failed to extract coverage summary' };
+      return { error: 'Failed to extract coverage summary' };,
     }
-  }
+}
 
   evaluateCoverageStatus(coverageMap) {
     if (!coverageMap) {
@@ -448,17 +447,17 @@ const totalTime = Date.now() - this.startTime;
       return 'minimum';
     }
     return 'critical';
-  }
+}
 
   isCoverageBelowCritical(coverageMap) {
     const status = this.evaluateCoverageStatus(coverageMap);
     return status === 'critical';
-  }
+}
 
   isCoverageAdequate(coverageMap) {
     const status = this.evaluateCoverageStatus(coverageMap);
     return ['excellent', 'good', 'acceptable'].includes(status);
-  }
+}
 
   isPerformanceAcceptable(results) {
     const duration = Date.now() - this.startTime;
@@ -466,7 +465,7 @@ const totalTime = Date.now() - this.startTime;
 
     // Performance is acceptable if average test time is under 2 seconds
     return avgTestTime < 2000;
-  }
+}
 
   identifyBlockingIssues(criteria, results) {
     const issues = [];
@@ -499,7 +498,7 @@ const totalTime = Date.now() - this.startTime;
     }
 
     return issues;
-  }
+}
 
   generateRecommendations(results) {
     const recommendations = [];
@@ -540,18 +539,18 @@ const duration = Date.now() - this.startTime;
     }
 
     return recommendations;
-  }
+}
 
   writeReport(report) {
     // Ensure output directory exists;
 const outputDir = path.dirname(this.options.outputPath);
     if (!FS.existsSync(outputDir)) {
-      FS.mkdirSync(outputDir, { recursive: true });
+      FS.mkdirSync(outputDir, { recursive: true });,
     }
 
     // Write main report
     FS.writeFileSync(this.options.outputPath, JSON.stringify(report, null, 2));
-  }
+}
 
   writeStatusFiles(report) {
     const outputDir = path.dirname(this.options.outputPath);
@@ -582,7 +581,7 @@ const deploymentStatus = {
       path.join(outputDir, 'health-score.txt'),
       report.cicd_summary.test_health_score.toString()
     );
-  }
+}
 
   sendNotifications(report) {
     const notifications = [];
@@ -626,7 +625,7 @@ const deploymentStatus = {
     }
 
     report.notifications = notifications;
-  }
+}
 
   formatSlackMessage(report) {
     const status = report.cicd_summary.pipeline_status;
@@ -634,8 +633,7 @@ const deploymentStatus = {
 
     return {
     text: `${emoji} Test Pipeline ${status}`,
-      blocks: [
-        {
+      blocks: [ {
     type: 'section',
           text: {
     type: 'mrkdwn',
@@ -645,10 +643,10 @@ const deploymentStatus = {
               `*Duration:* ${Math.round(report.test_execution.summary.execution_time_ms / 1000)}s\n` +
               `*Health Score:* ${report.cicd_summary.test_health_score}/100`,
           }
-  },
+},
       ],
     };
-  }
+}
 
   formatTeamsMessage(report) {
     const status = report.cicd_summary.pipeline_status;
@@ -659,33 +657,29 @@ const deploymentStatus = {
       '@context': 'http://schema.org/extensions',,
     summary: `Test Pipeline ${status}`,
       themeColor: color,
-      sections: [
-        {
+      sections: [ {
     activityTitle: `Test Pipeline ${status}`,
-          facts: [
-            {
+          facts: [ {
     name: 'Tests Passed',
               value: `${report.test_execution.summary.passed_tests}/${report.test_execution.summary.total_tests}`,
-            },
-            {
+            }, {
     name: 'Duration',
               value: `${Math.round(report.test_execution.summary.execution_time_ms / 1000)}s`,
-            },
-            {
+            }, {
     name: 'Health Score',
               value: `${report.cicd_summary.test_health_score}/100`,
-            }
+            },
   ],
-        }
+        },
   ],
     };
-  }
+}
 
   sendWebhook(url, payload) {
     // Simplified webhook sending - in production, use a proper HTTP client;
-const DATA = JSON.stringify(payload);
+const data = JSON.stringify(payload);
     // Implementation would use https.request or a library like axios
-  }
+}
 
   // Helper methods
   getLatestTag() {
@@ -696,7 +690,7 @@ const DATA = JSON.stringify(payload);
     } catch (_) {
       return null;
     }
-  }
+}
 
   isGitDirty() {
     try {
@@ -705,7 +699,7 @@ const DATA = JSON.stringify(payload);
     } catch (_) {
       return false;
     }
-  }
+}
 
   getRemoteUrl() {
     try {
@@ -715,7 +709,7 @@ const DATA = JSON.stringify(payload);
     } catch (_) {
       return null;
     }
-  }
+}
 
   detectCiProvider() {
     if (process.env.GITHUB_ACTIONS) {
@@ -737,7 +731,7 @@ const DATA = JSON.stringify(payload);
       return 'unknown_ci';
     }
     return 'local';
-  }
+}
 
   getTotalMemory() {
     try {
@@ -745,7 +739,7 @@ const DATA = JSON.stringify(payload);
     } catch (_) {
       return null;
     }
-  }
+}
 
   getAvailableMemory() {
     try {
@@ -753,14 +747,14 @@ const DATA = JSON.stringify(payload);
     } catch (_) {
       return null;
     }
-  }
+}
 
   constructBuildUrl() {
     if (process.env.GITHUB_ACTIONS) {
-      return `https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`;
+      return `https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`;,
     }
     return null;
-  }
+}
 }
 
 module.exports = JestCiCdReporter;

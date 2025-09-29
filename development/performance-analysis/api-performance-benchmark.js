@@ -35,7 +35,7 @@ class APIPerformanceBenchmark {
       errorRates: [],
       memoryUsage: [],
     };
-  }
+}
 
   /**
    * Execute API command and measure performance
@@ -48,7 +48,7 @@ class APIPerformanceBenchmark {
       const startMemory = process.memoryUsage();
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential execution required for accurate performance measurement;
-        const result = await this.runCommand(command, args);
+        const _result = await this.runCommand(command, args);
         const endTime = process.hrtime.bigint();
         const endMemory = process.memoryUsage();
 
@@ -67,7 +67,7 @@ class APIPerformanceBenchmark {
         // Small delay between iterations
         // eslint-disable-next-line no-await-in-loop -- Sequential delay required for benchmark accuracy
         await this.sleep(100);
-      } catch (error) {
+      } catch (_) {
         results.push({
           iteration: i + 1,
           responseTime: -1,
@@ -80,7 +80,7 @@ class APIPerformanceBenchmark {
     }
 
     return this.calculateMetrics(results);
-  }
+}
 
   /**
    * Run TaskManager API command
@@ -107,7 +107,7 @@ class APIPerformanceBenchmark {
         try {
           // Extract JSON from stdout (handle mixed output)
           const jsonMatch = stdout.match(/\{[\s\S]*\}/);
-          const result = jsonMatch
+          const _result = jsonMatch
             ? JSON.parse(jsonMatch[0])
             : { success: false, error: 'No JSON output' };
           resolve({
@@ -115,7 +115,7 @@ class APIPerformanceBenchmark {
             exitCode: code,
             stderr: stderr,
           });
-        } catch (error) {
+        } catch (_) {
           resolve({
             success: false,
             error: `Parse error: ${error.message}`,
@@ -130,7 +130,7 @@ class APIPerformanceBenchmark {
         reject(error);
       });
     });
-  }
+}
 
   /**
    * Calculate performance metrics from results
@@ -169,7 +169,7 @@ class APIPerformanceBenchmark {
       iterations: results.length,
       rawResults: results,
     };
-  }
+}
 
   /**
    * Benchmark all critical API endpoints
@@ -191,7 +191,7 @@ class APIPerformanceBenchmark {
       );
       if (agentMatch && agentMatch[1]) {
         this.testData.agentId = agentMatch[1];
-        loggers.stopHook.log(`✅ Agent initialized: ${this.testData.agentId}`);
+        loggers.stopHook.log(`✅ Agent initialized: ${this.testData.agentId}`);,
       }
     }
 
@@ -281,7 +281,7 @@ class APIPerformanceBenchmark {
     this.results.endpoints.methods = await this.executeCommand('methods');
 
     loggers.stopHook.log('\n✅ Benchmark completed! Analyzing results...\n');
-  }
+}
 
   /**
    * Analyze performance bottlenecks And generate recommendations
@@ -338,7 +338,7 @@ class APIPerformanceBenchmark {
 
     this.results.analysis = analysis;
     return analysis;
-  }
+}
 
   /**
    * Generate specific optimization recommendations
@@ -409,7 +409,7 @@ class APIPerformanceBenchmark {
     });
 
     return recommendations;
-  }
+}
 
   /**
    * Load testing simulation
@@ -451,7 +451,7 @@ class APIPerformanceBenchmark {
       errorRate:
         (allResults.filter((r) => !r.success).length / allResults.length) * 100,
     };
-  }
+}
 
   /**
    * Load test worker
@@ -464,7 +464,7 @@ class APIPerformanceBenchmark {
       const startTime = process.hrtime.bigint();
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential load testing requires controlled timing;
-        const result = await this.runCommand(endpoint);
+        const _result = await this.runCommand(endpoint);
         const responseTime =
           Number(process.hrtime.bigint() - startTime) / 1000000;
 
@@ -475,7 +475,7 @@ class APIPerformanceBenchmark {
           success: result.success,
           timestamp: Date.now(),
         });
-      } catch (error) {
+      } catch (_) {
         results.push({
           workerId,
           requestCount: ++requestCount,
@@ -492,7 +492,7 @@ class APIPerformanceBenchmark {
     }
 
     return results;
-  }
+}
 
   /**
    * Generate comprehensive performance report
@@ -515,7 +515,7 @@ class APIPerformanceBenchmark {
     };
 
     return report;
-  }
+}
 
   /**
    * Generate executive summary
@@ -544,7 +544,7 @@ class APIPerformanceBenchmark {
           (r) => r.priority === 'High'
         ).length || 0,
     };
-  }
+}
 
   /**
    * Analyze critical path performance
@@ -580,7 +580,7 @@ class APIPerformanceBenchmark {
         (op) => op.averageResponseTime > 500
       ),
     };
-  }
+}
 
   /**
    * Analyze caching opportunities
@@ -613,7 +613,7 @@ class APIPerformanceBenchmark {
         'Implement request deduplication for concurrent operations',
       ],
     };
-  }
+}
 
   /**
    * Assess system scalability
@@ -638,7 +638,7 @@ class APIPerformanceBenchmark {
         'Implement horizontal scaling capabilities',
       ],
     };
-  }
+}
 
   // Utility methods
   median(arr) {
@@ -650,19 +650,19 @@ class APIPerformanceBenchmark {
         sorted[mid]
       : // eslint-disable-next-line security/detect-object-injection -- Safe array access with calculated indices for median calculation
         (sorted[mid - 1] + sorted[mid]) / 2;
-  }
+}
 
   percentile(arr, p) {
     const sorted = [...arr].sort((a, b) => a - b);
     const index = Math.ceil((p / 100) * sorted.length) - 1;
     return sorted[Math.max(0, index)];
-  }
+}
 
   sleep(ms) {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
     });
-  }
+}
 
   /**
    * Save results to file
@@ -690,7 +690,7 @@ class APIPerformanceBenchmark {
 
     // Ensure output directory exists
     if (!FS.existsSync(outputDir)) {
-      FS.mkdirSync(outputDir, { recursive: true });
+      FS.mkdirSync(outputDir, { recursive: true });,
     }
 
     // ESLint: security/detect-non-literal-fs-filename disabled for this line
@@ -701,7 +701,7 @@ class APIPerformanceBenchmark {
     loggers.stopHook.log(`📊 Performance report saved to: ${outputFile}`);
 
     return outputFile;
-  }
+}
 }
 
 // Main execution
@@ -747,11 +747,11 @@ async function main() {
         });
     }
 
-    loggers.stopHook.log(`\n📄 Full report: ${outputFile}`);
-  } catch (error) {
+    loggers.stopHook.log(`\n📄 Full report: ${outputFile}`);,
+} catch (_) {
     loggers.stopHook.error('❌ Benchmark failed:', error);
     throw error;
-  }
+}
 }
 
 // Run if called directly

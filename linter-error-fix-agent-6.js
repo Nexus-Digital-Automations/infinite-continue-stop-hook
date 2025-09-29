@@ -22,23 +22,21 @@ class LinterErrorFixAgent6 {
     this.fixesApplied = 0;
 }
 
-  fixFile(filePath) {
-    console.log(`🔧 Fixing linter errors in: ${path.basename(filePath)}`);
+  fixFile(_filePath) {
+    console.log(`🔧 Fixing linter errors in: ${path.basename(_filePath)}`);
 
     let content = fs.readFileSync(filePath, 'utf8');
     let modified = false;
     let fileFixCount = 0;
 
     // Pattern 1: Fix unused parameters in constructors and functions
-    content = content.replace(/constructor\(([^)]*)\)/g, (match, params) => {
+    content = content.replace(/constructor\(([^)]*)\)/g, (match, _params) => {
     
     
       if (params.trim()) {
         const fixedParams = params
           .split(',')
-          .map((param) 
-    return () 
-    return () => {
+          .map((param) => {
             const trimmed = param.trim();
             if (!trimmed.startsWith('_') && !trimmed.includes('=')) {
               return '_' + trimmed;
@@ -62,13 +60,13 @@ class LinterErrorFixAgent6 {
       fileFixCount++;
     }
 
-    // Pattern 3: Fix catch (_1) => catch (_1) and _error references
+    // Pattern 3: Fix catch (_) => catch (_) and _error references
     content = content.replace(
       /catch\s*\(\s*_\s*\)\s*{([^}]*?)(_error[^}]*?)}/g,
       (match, beforeError, afterError) => {
         modified = true;
         fileFixCount++;
-        return match.replace('catch (_1)', 'catch (_1)');
+        return match.replace('catch (_)', 'catch (_)');
       },
     );
 
@@ -77,21 +75,21 @@ const lines = content.split('\n');
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
-      // Look for catch (_1) patterns
-      if (line.includes('catch (_1)')) {
-        lines[i] = line.replace('catch (_1)', 'catch (_1)');
+      // Look for catch (_) patterns
+      if (line.includes('catch (_)')) {
+        lines[i] = line.replace('catch (_)', 'catch (_)');
         modified = true;
         fileFixCount++;
       }
 
-      // Look for _error references after catch (error) blocks
+      // Look for _error references after catch (_) blocks
       if (line.includes('_error') && !line.includes('catch')) {
-        // Check if we're in a catch block that uses catch (error)
+        // Check if we're in a catch block that uses catch (_)
         for (let j = i - 1; j >= Math.max(0, i - 20); j--) {
-          if (lines[j].includes('catch (error)')) {
-            // We found a catch (_1) block, this _error should exist
+          if (lines[j].includes('catch (_)')) {
+            // We found a catch (_) block, this _error should exist
             break;
-          } else if (lines[j].includes('catch (error)')) {
+          } else if (lines[j].includes('catch (_)')) {
             // This is fine, _error is defined
             break;
           }
@@ -177,12 +175,12 @@ const firstParam = match.match(/fixTestFile\(([^,]+)/)[1];
     let filesFixed = 0;
 
     for (const filePath of this.targetFiles) {
-      if (fs.existsSync(filePath)) {
-        if (this.fixFile(filePath)) {
+      if (fs.existsSync(_filePath)) {
+        if (this.fixFile(_filePath)) {
           filesFixed++;
         }
       } else {
-        console.log(`⚠️ File not found: ${path.basename(filePath)}`);
+        console.log(`⚠️ File not found: ${path.basename(_filePath)}`);,
       }
     }
 

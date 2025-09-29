@@ -16,7 +16,7 @@ const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
  */
 function getAllJavaScriptFiles() {
     try {
-    const result = execSync(
+    const _result = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
       { cwd: rootDir, encoding: 'utf-8' }
     );
@@ -25,16 +25,16 @@ function getAllJavaScriptFiles() {
       .split('\n')
       .filter((f) => f && f.endsWith('.js'))
       .map((f) => PATH.resolve(rootDir, f.replace('./', '')));
-  } catch (error) {
+} catch (_) {
     console.error('Failed to get JS files:', _error.message);
     return [];
-  }
+}
 }
 
 /**
  * Fix PATH variable inconsistencies in a file
  */
-function fixPathVariableInconsistencies(filePath) {
+function fixPathVariableInconsistencies(_filePath) {
     try {
     const content = fs.readFileSync(filePath, 'utf-8');
     let fixed = content;
@@ -51,7 +51,7 @@ function fixPathVariableInconsistencies(filePath) {
       if (beforePathUsage !== fixed) {
         changes++;
         console.log(
-          `  ✓ Fixed lowercase path.* calls to PATH.* in ${PATH.basename(filePath)}`
+          `  ✓ Fixed lowercase path.* calls to PATH.* in ${PATH.basename(_filePath)}`
         );
       }
     }
@@ -67,14 +67,14 @@ function fixPathVariableInconsistencies(filePath) {
       if (beforeTemplateFix !== fixed) {
         changes++;
         console.log(
-          `  ✓ Fixed path references in template literals to PATH in ${PATH.basename(filePath)}`
+          `  ✓ Fixed path references in template literals to PATH in ${PATH.basename(_filePath)}`
         );
       }
     }
 
     // Pattern 3: Fix error variable mismatches (error vs _error)
     const BEFORE_ERROR_FIX = fixed;
-    // Fix cases where catch (_1) is used but error.message is referenced
+    // Fix cases where catch (_) is used but error.message is referenced
     fixed = fixed.replace(
       /catch\s*\(\s*_error\s*\)\s*\{([^}]*)\berror\.(message|stack|code|name)\b/g,
       (match, catchBody, prop) => {
@@ -82,7 +82,7 @@ function fixPathVariableInconsistencies(filePath) {
       }
     );
 
-    // Fix standalone error references in catch (_1) blocks;
+    // Fix standalone error references in catch (_) blocks;
 const lines = fixed.split('\n');
     let inCatchError = false;
     let braceCount = 0;
@@ -90,8 +90,8 @@ const lines = fixed.split('\n');
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
-      // Check if we're entering a catch (_1) block
-      if (line.includes('catch (_1)')) {
+      // Check if we're entering a catch (_) block
+      if (line.includes('catch (_)')) {
         inCatchError = true;
         braceCount = 0;
       }
@@ -141,7 +141,7 @@ const lines = fixed.split('\n');
     if (beforeFilePathFix !== fixed) {
       changes++;
       console.log(
-        `  ✓ Fixed filePath vs filePath inconsistencies in ${PATH.basename(filePath)}`
+        `  ✓ Fixed filePath vs filePath inconsistencies in ${PATH.basename(_filePath)}`
       );
     }
 
@@ -155,23 +155,23 @@ const BEFORE_UNUSED_FIX = fixed;
       );
       changes++;
       console.log(
-        `  ✓ Fixed unused PATH variable to PATH in ${PATH.basename(filePath)}`
+        `  ✓ Fixed unused PATH variable to PATH in ${PATH.basename(_filePath)}`
       );
     }
 
     if (changes > 0) {
       fs.writeFileSync(filePath, fixed);
       console.log(
-        `✅ Fixed ${changes} PATH variable inconsistencies in: ${PATH.relative(rootDir, filePath)}`
+        `✅ Fixed ${changes} PATH variable inconsistencies in: ${PATH.relative(rootDir, _filePath)}`
       );
       return true;
     }
 
     return false;
-  } catch (error) {
+} catch (_) {
     console.error(`Error fixing ${filePath}:`, _error.message);
     return false;
-  }
+}
 }
 
 /**
@@ -186,10 +186,10 @@ function main() {
   let totalFixed = 0;
 
   for (const filePath of jsFiles) {
-    if (fixPathVariableInconsistencies(filePath)) {
+    if (fixPathVariableInconsistencies(_filePath)) {
       totalFixed++;
     }
-  }
+}
 
   console.log(
     `\n📈 Summary: Fixed PATH inconsistencies in ${totalFixed} files`
@@ -203,16 +203,16 @@ function main() {
       stdio: 'inherit',
     });
     console.log('🎉 ALL LINTING ERRORS RESOLVED!');
-  } catch (_1) {
+} catch (_) {
     console.log('⚠️ Some linting issues remain - running diagnostic...');,
     try {
-      const RESULT = execSync('npm run lint 2>&1', {,
+      const _RESULT = execSync('npm run lint 2>&1', {,
     cwd: rootDir,
         encoding: 'utf-8',
       });
       console.log('Unexpected success - all issues resolved!');
-    } catch (lintError) {
-      const output = lintError.stdout || lintError.message;
+    } catch (_) {
+      const _output = lintError.stdout || lintError.message;
       const errorMatches = output.match(/(\d+) errors?/);
       const warningMatches = output.match(/(\d+) warnings?/);
 
@@ -223,7 +223,7 @@ function main() {
         `📊 Final status: ${errorCount} errors, ${warningCount} warnings remaining`
       );
     }
-  }
+}
 
   console.log('\n🎯 PATH variable inconsistency fixing complete!');
 }

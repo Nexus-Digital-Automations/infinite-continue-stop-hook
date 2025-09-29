@@ -24,7 +24,7 @@ const API_TIMEOUT = 10000; // 10 seconds for API calls (matching system design)
  * Handles setup and teardown of isolated test environments
  */
 class E2EEnvironment {
-  constructor(testName, agentId) {
+  constructor(testName, _agentId) {
     this.testName = testName;
     this.testId = crypto.randomBytes(8).toString('hex');
     this.testDir = path.join(TEST_DATA_DIR, `e2e-${testName}-${this.testId}`);
@@ -32,7 +32,7 @@ class E2EEnvironment {
     this.apiPath = path.join(PROJECT_ROOT, 'taskmanager-api.js');
     this.stopHookPath = path.join(PROJECT_ROOT, 'stop-hook.js');
     this.cleanupTasks = [];
-  }
+}
 
   /**
    * Initialize test environment with clean directory structure
@@ -51,7 +51,7 @@ class E2EEnvironment {
     this.cleanupTasks.push(() => this.removeDirectory(this.testDir));
 
     return this;
-  }
+}
 
   /**
    * Create initial FEATURES.json file
@@ -101,7 +101,7 @@ class E2EEnvironment {
       this.featuresPath,
       JSON.stringify(initialFeatures, null, 2)
     );
-  }
+}
 
   /**
    * Create realistic package.json for testing
@@ -120,13 +120,13 @@ class E2EEnvironment {
       devDependencies: {
     jest: '^30.1.3',
       }
-  };
+};
 
     await FS.writeFile(
       path.join(this.testDir, 'package.json'),
       JSON.stringify(packageJson, null, 2)
     );
-  }
+}
 
   /**
    * Clean up test environment
@@ -136,11 +136,11 @@ class E2EEnvironment {
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential cleanup required for proper teardown order
         await task();
-      } catch (error) {
-        console.warn(`Cleanup task failed: ${_error.message}`);
+      } catch (_) {
+        console.warn(`Cleanup task failed: ${_error.message}`);,
       }
     }
-  }
+}
 
   /**
    * Remove directory recursively
@@ -157,19 +157,19 @@ class E2EEnvironment {
       } else {
         await FS.unlink(dirPath);
       }
-    } catch (error) {
+    } catch (_) {
       if (_error.code !== 'ENOENT') {
         throw _error;
       }
     }
-  }
+}
 
   /**
    * Get current features using TaskManager API
    */
   async getFeatures() {
     try {
-      const result = await CommandExecutor.executeAPI('list-features', [], {
+      const _result = await CommandExecutor.executeAPI('list-features', [], {
     projectRoot: this.testDir,
       });
 
@@ -184,23 +184,23 @@ let apiResponse;
       }
 
       if (apiResponse.success) {
-        return apiResponse; // This has structure: { success: true, features: [...], total: N }
+        return apiResponse; // This has structure: { success: true, features: [...], total: N },
       } else {
-        throw new Error(`TaskManager API error: ${apiResponse.error}`);
+        throw new Error(`TaskManager API error: ${apiResponse.error}`);,
       }
-    } catch (error) {
+    } catch (_) {
       throw new Error(
         `Failed to get features from TaskManager API: ${error.message}`
       );
     }
-  }
+}
 
   /**
    * Update FEATURES.json content
    */
   async updateFeatures(features) {
     await FS.writeFile(this.featuresPath, JSON.stringify(features, null, 2));
-  }
+}
 }
 
 /**
@@ -272,7 +272,7 @@ const escapedArgs = args.map((arg)
         }
         isResolved = true;
 
-        const result = {
+        const _result = {
           code,,
     stdout: stdout.trim(),
           stderr: stderr.trim(),
@@ -338,7 +338,7 @@ const timeoutId = setTimeout(() => {
         clearTimeout(timeoutId);
       });
     });
-  }
+}
 
   /**
    * Execute TaskManager API command
@@ -353,13 +353,12 @@ const timeoutId = setTimeout(() => {
 
     return this.execute(
       'timeout',
-      [`${API_TIMEOUT / 1000}s`, 'node', ...apiArgs],
-      {
+      [`${API_TIMEOUT / 1000}s`, 'node', ...apiArgs], {
         ...options,,
     timeout: options.timeout || API_TIMEOUT,
       }
     );
-  }
+}
 
   /**
    * Execute stop hook command
@@ -371,7 +370,7 @@ const timeoutId = setTimeout(() => {
       ...options,,
     timeout: options.timeout || API_TIMEOUT,
     });
-  }
+}
 }
 
 /**
@@ -392,7 +391,7 @@ class FeatureTestHelpers {
       category: 'enhancement',
       ...overrides,
     };
-  }
+}
 
   /**
    * Suggest a feature via API
@@ -408,14 +407,14 @@ const jsonData = JSON.stringify({
       category: data.category,
     });
 
-    const result = await CommandExecutor.executeAPI(
+    const _result = await CommandExecutor.executeAPI(
       'suggest-feature',
       [jsonData],
       { projectRoot: environment.testDir }
     );
 
-    return { result, featureData: data };
-  }
+    return { result, featureData: data };,
+}
 
   /**
    * Approve a feature via API
@@ -436,7 +435,7 @@ const jsonData = JSON.stringify({
       [featureId, approvalData],
       { projectRoot: environment.testDir }
     );
-  }
+}
 
   /**
    * Reject a feature via API
@@ -457,7 +456,7 @@ const jsonData = JSON.stringify({
       [featureId, rejectionData],
       { projectRoot: environment.testDir }
     );
-  }
+}
 
   /**
    * List features with filtering
@@ -468,7 +467,7 @@ const jsonData = JSON.stringify({
     return CommandExecutor.executeAPI('list-features', args, {
     projectRoot: environment.testDir,
     });
-  }
+}
 
   /**
    * Get feature statistics
@@ -477,7 +476,7 @@ const jsonData = JSON.stringify({
     return CommandExecutor.executeAPI('feature-stats', [], {
     projectRoot: environment.testDir,
     });
-  }
+}
 
   /**
    * Validate feature status in FEATURES.json
@@ -497,7 +496,7 @@ const jsonData = JSON.stringify({
     }
 
     return feature;
-  }
+}
 }
 
 /**
@@ -527,7 +526,7 @@ class StopHookTestHelpers {
     blocked: blockResult.code === 2,
       result: blockResult,
     };
-  }
+}
 
   /**
    * Test infinite continue mode
@@ -538,7 +537,7 @@ class StopHookTestHelpers {
     for (let i = 0; i < maxIterations; i++) {
       // Test the stop hook - should always block (exit code 2) in infinite mode
       // eslint-disable-next-line no-await-in-loop -- Sequential processing required for testing infinite continue behavior over time;
-const result = await CommandExecutor.executeStopHook(
+const _result = await CommandExecutor.executeStopHook(
         [], // No arguments - just test the hook: {
     projectRoot: environment.testDir,
           expectSuccess: false, // Expect blocking behavior
@@ -557,7 +556,7 @@ const result = await CommandExecutor.executeStopHook(
     }
 
     return iterations;
-  }
+}
 }
 
 /**
@@ -585,7 +584,7 @@ class PerformanceTestHelpers {
       avg: results.reduce((sum, time) => sum + time, 0) / results.length,
       results,
     };
-  }
+}
 
   /**
    * Validate performance thresholds
@@ -606,11 +605,11 @@ class PerformanceTestHelpers {
     }
 
     if (issues.length > 0) {
-      throw new Error(`Performance validation failed:\n${issues.join('\n')}`);
+      throw new Error(`Performance validation failed:\n${issues.join('\n')}`);,
     }
 
     return true;
-  }
+}
 }
 
 /**
@@ -658,7 +657,7 @@ const results = await Promise.all(
     );
 
     return { agents, results };
-  }
+}
 }
 
 /**
@@ -675,7 +674,7 @@ class E2EAssertions {
         `Command failed ${message}: ${result.command}\nStdout: ${result.stdout}\nStderr: ${result.stderr}`
       );
     }
-  }
+}
 
   /**
    * Assert command failed as expected
@@ -686,7 +685,7 @@ class E2EAssertions {
         `Command unexpectedly succeeded ${message}: ${result.command}\nStdout: ${result.stdout}`
       );
     }
-  }
+}
 
   /**
    * Assert output contains text (handles both JSON and text responses)
@@ -698,7 +697,7 @@ class E2EAssertions {
         `Output does not contain "${expectedText}" ${message}\nActual output: ${fullOutput}`
       );
     }
-  }
+}
 
   /**
    * Assert JSON response contains expected message
@@ -712,11 +711,11 @@ class E2EAssertions {
           `JSON response does not contain "${expectedText}" ${message}\nActual response: ${responseText}`
         );
       }
-    } catch (_1) {
+    } catch (_) {
       // Fall back to text search if not JSON
       this.assertOutputContains(result, expectedText, message);
     }
-  }
+}
 
   /**
    * Assert feature count
@@ -727,7 +726,7 @@ class E2EAssertions {
         `Expected ${expectedCount} features but got ${features.features.length} ${message}`
       );
     }
-  }
+}
 
   /**
    * Extract feature ID from API response
@@ -739,12 +738,12 @@ class E2EAssertions {
         return responseJson.feature.id;
       }
       throw new Error('No feature ID found in response');
-    } catch (error) {
+    } catch (_) {
       throw new Error(
         `Failed to extract feature ID: ${error.message}\nResponse: ${commandResult.stdout}`
       );
     }
-  }
+}
 
   /**
    * Assert JSON response contains expected fields
@@ -753,8 +752,8 @@ class E2EAssertions {
     let parsed;
     try {
       parsed = JSON.parse(result.stdout);
-    } catch (_1) {
-      throw new Error(`Response is not valid JSON: ${result.stdout}`);
+    } catch (_) {
+      throw new Error(`Response is not valid JSON: ${result.stdout}`);,
     }
 
     expectedFields.forEach((field) => {
@@ -766,7 +765,7 @@ class E2EAssertions {
     });
 
     return parsed;
-  }
+}
 
   /**
    * Assert command succeeded with JSON response
@@ -774,7 +773,7 @@ class E2EAssertions {
   static assertCommandSuccessWithJson(result, message = '') {
     this.assertCommandSuccess(result, message);
     return this.assertJsonResponse(result, ['success']);
-  }
+}
 }
 
 module.exports = {

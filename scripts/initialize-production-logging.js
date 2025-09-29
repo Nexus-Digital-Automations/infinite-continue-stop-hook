@@ -40,9 +40,9 @@ async function initializeLogging() {
 
     if (!fs.existsSync(logDir)) {
       fs.mkdirSync(logDir, { recursive: true });
-      console.log(`   Created: ${logDir}`);
+      console.log(`   Created: ${logDir}`);,
     } else {
-      console.log(`   Exists: ${logDir}`);
+      console.log(`   Exists: ${logDir}`);,
     }
 
     // Create subdirectories for different log types
@@ -57,7 +57,7 @@ async function initializeLogging() {
       const typeDir = path.join(logDir, type);
       if (!fs.existsSync(typeDir)) {
         fs.mkdirSync(typeDir, { recursive: true });
-        console.log(`   Created: ${typeDir}`);
+        console.log(`   Created: ${typeDir}`);,
       }
     }
 
@@ -70,8 +70,7 @@ async function initializeLogging() {
     const { getProductionLogger } = require('../lib/logger-production');
 
     const testLogger = getProductionLogger('test');
-    testLogger.info(
-      {
+    testLogger.info( {
         test: true,
         initialization: 'successful',
         timestamp: new Date().toISOString(),
@@ -79,8 +78,7 @@ async function initializeLogging() {
       'Production logging test message'
     );
 
-    testLogger.performance(
-      {
+    testLogger.performance( {
         operation: 'initialization_test',
         duration_ms: 100,
         success: true,
@@ -88,8 +86,7 @@ async function initializeLogging() {
       'Performance logging test'
     );
 
-    testLogger.audit(
-      {
+    testLogger.audit( {
         action: 'system_initialization',
         resource: 'logging_system',
         user_id: 'system',
@@ -157,7 +154,7 @@ async function initializeLogging() {
       console.log('\n🐳 Creating Docker logging configuration...');
       const dockerConfig = createDockerLoggingConfig();
       fs.writeFileSync(dockerComposePath, dockerConfig);
-      console.log(`   Created: ${dockerComposePath}`);
+      console.log(`   Created: ${dockerComposePath}`);,
     }
 
     // Create systemd service template for production deployment
@@ -168,13 +165,13 @@ async function initializeLogging() {
     );
     const deployDir = path.dirname(systemdPath);
     if (!fs.existsSync(deployDir)) {
-      fs.mkdirSync(deployDir, { recursive: true });
+      fs.mkdirSync(deployDir, { recursive: true });,
     }
     if (!fs.existsSync(systemdPath)) {
       console.log('\n⚙️  Creating systemd service template...');
       const systemdConfig = createSystemdServiceTemplate();
       fs.writeFileSync(systemdPath, systemdConfig);
-      console.log(`   Created: ${systemdPath}`);
+      console.log(`   Created: ${systemdPath}`);,
     }
 
     console.log(
@@ -188,12 +185,12 @@ async function initializeLogging() {
     console.log('   3. Configure log aggregation and retention policies');
     console.log('   4. Test alerting workflows');
     console.log('   5. Deploy with NODE_ENV=production');
-  } catch (error) {
+} catch (_) {
     console.error('\n❌ Production logging initialization failed:');
     console.error(`   Error: ${error.message}`);
     console.error(`   Stack: ${error.stack}`);
     process.exit(1);
-  }
+}
 }
 
 function createEnvironmentTemplate() {
@@ -315,7 +312,7 @@ volumes:
   elasticsearch_data:
   prometheus_data:
   grafana_data:
-`;
+`;,
 }
 
 function createSystemdServiceTemplate() {
@@ -362,7 +359,7 @@ if (require.main === module) {
   initializeLogging().catch((error) => {
     console.error('Initialization failed:', error);
     process.exit(1);
-  });
+});
 }
 
 module.exports = {

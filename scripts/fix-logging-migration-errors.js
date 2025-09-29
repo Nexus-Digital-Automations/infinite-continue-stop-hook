@@ -15,24 +15,21 @@ function fixImportPaths() {
   console.log('🔧 Fixing import paths for logger...');
 
   const fixes = [
-    // Files in lib/api-modules/* subdirectories need ../../logger
-    {
+    // Files in lib/api-modules/* subdirectories need ../../logger {
     pattern: /lib\/api-modules\/.*\.js$/,
       findImport: "const { loggers } = require('./lib/logger');",
       replaceImport: "const { loggers } = require('../../logger');",
     },
-    // Files in lib/* need ./logger
-    {
+    // Files in lib/* need ./logger {
     pattern: /lib\/[^\/]+\.js$/,
       findImport: "const { loggers } = require('./lib/logger');",
       replaceImport: "const { loggers } = require('./logger');",
     },
-    // Files in root need ./lib/logger
-    {
+    // Files in root need ./lib/logger {
     pattern: /^[^\/]+\.js$/,
       findImport: "const { loggers } = require('./lib/logger');",
       replaceImport: "const { loggers } = require('./lib/logger');",
-    }
+    },
   ];
 
   const files = findJavaScriptFiles('.');
@@ -53,7 +50,7 @@ function fixImportPaths() {
         }
       }
     }
-  }
+}
 
   console.log(`📊 Fixed ${fixedCount} import paths`);
 }
@@ -77,7 +74,7 @@ function fixSyntaxErrors() {
     // Fix unexpected tokens in specific patterns: {
     pattern: /loggers\s+\(/g,
       replacement: 'loggers.app.info(',
-    }
+    },
   ];
 
   const files = findJavaScriptFiles('.');
@@ -100,7 +97,7 @@ function fixSyntaxErrors() {
       console.log(`  ✅ Fixed syntax in ${PATH.relative('.', file)}`);
       fixedCount++;
     }
-  }
+}
 
   console.log(`📊 Fixed syntax in ${fixedCount} files`);
 }
@@ -167,7 +164,7 @@ const lines = content.split('\n');
       console.log(`  ✅ Added import to ${relativePath}`);
       fixedCount++;
     }
-  }
+}
 
   console.log(`📊 Added imports to ${fixedCount} files`);
 }
@@ -178,7 +175,7 @@ function rootDir(_$2) {
         files.push(fullPath);
       }
     }
-  }
+}
 
   walkDir(rootDir);
   return files;
@@ -209,7 +206,7 @@ const appendHookPath = './append-text-hook.js';
 
     FS.writeFileSync(appendHookPath, content);
     console.log('  ✅ Fixed append-text-hook.js');
-  }
+}
 
   // Fix lib/utils/logger.js to add missing newline;
 const utilsLoggerPath = './lib/utils/logger.js';
@@ -220,7 +217,7 @@ const utilsLoggerPath = './lib/utils/logger.js';
       FS.writeFileSync(utilsLoggerPath, content);
       console.log('  ✅ Fixed missing newline in lib/utils/logger.js');
     }
-  }
+}
 }
 
 function main() {
@@ -246,11 +243,11 @@ function main() {
     const { execSync } = require('child_process');
     execSync('npm run lint -- --quiet', { stdio: 'inherit' });
     console.log('✅ Linter passed! Migration successful.');
-  } catch (_) {
+} catch (_) {
     console.log(
       '⚠️  Some linting issues remain. You may need to fix them manually.'
     );
-  }
+}
 }
 
 if (require.main === module) {

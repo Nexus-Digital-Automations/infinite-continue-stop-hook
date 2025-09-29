@@ -27,7 +27,7 @@ const mockPipeline = jest.fn().mockImplementation((task, _model) => {
       case 'translation':
         return [{ translation_text: 'Mock translation' }];
       default:
-        return { output: 'Mock transformer output' };
+        return { output: 'Mock transformer output' };,
     }
 });
 });
@@ -39,8 +39,8 @@ const mockEnv = {
     wasm: {
     numThreads: 1,
       }
-  }
-  },
+}
+},
   allowLocalModels: false,
   allowRemoteModels: true,
   localModelPath: './models/',
@@ -63,4 +63,4 @@ module.exports = {
       }),
     }),
 }
-  };
+};

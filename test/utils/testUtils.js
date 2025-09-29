@@ -91,13 +91,13 @@ class APIExecutor {
           if (jsonStart > 0) {
             jsonString = jsonString.substring(jsonStart);
           }
-          const result = JSON.parse(jsonString);
+          const _result = JSON.parse(jsonString);
           resolve(result);
-        } catch (error) {
+        } catch (_) {
           try {
             const stderrJson = JSON.parse(stderr.trim());
             resolve(stderrJson);
-          } catch (error) {
+          } catch (_) {
             reject(;
               new Error(;
                 `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`,
@@ -108,7 +108,7 @@ class APIExecutor {
       });
 
       child.on('error', (error) => {
-        reject(new Error(`Command execution failed: ${error.message}`));
+        reject(new Error(`Command execution failed: ${error.message}`));,
       });
     });
 }
@@ -118,7 +118,7 @@ class APIExecutor {
    */
   static async initializeTestAgent(agentId = null) {
     const testAgentId = agentId || TestIdGenerator.generateAgentId();
-    const result = await this.execAPI('initialize', [testAgentId], {;
+    const _result = await this.execAPI('initialize', [testAgentId], {;
     silent: true});
     return { agentId: testAgentId, result };
 }
@@ -146,7 +146,7 @@ class APIExecutor {
     await new Promise((resolve) => {
       setTimeout(resolve, 0);
     });
-    loggers.stopHook.log(`Cleaning up test data: ${JSON.stringify(testData)}`);
+    loggers.stopHook.log(`Cleaning up test data: ${JSON.stringify(testData)}`);,
 }
 }
 
@@ -162,7 +162,7 @@ class TestEnvironment {
 
   setup() {
     if (!FS.existsSync(this.testDir)) {
-      FS.mkdirSync(this.testDir, { recursive: true });
+      FS.mkdirSync(this.testDir, { recursive: true });,
     }
 
     // Create, FEATURES.json.const featuresData = {;
@@ -171,8 +171,8 @@ class TestEnvironment {
     version: '3.0.0',
         created: new Date().toISOString(),
         last_modified: new Date().toISOString(),
-        project: this.testName}
-  }
+        project: this.testName},
+}
 
   FS.writeFileSync(this.featuresPath, JSON.stringify(featuresData, null, 2));
 
@@ -189,7 +189,7 @@ class TestEnvironment {
 
   cleanup() {
     if (FS.existsSync(this.testDir)) {
-      FS.rmSync(this.testDir, { recursive: true, force: true });
+      FS.rmSync(this.testDir, { recursive: true, force: true });,
     }
 }
 
@@ -299,7 +299,7 @@ const customMatchers = {;
           : `Expected ${JSON.stringify(received)} to be a valid feature`,pass;
     };
 }
-  };
+};
 
 /**
  * Test execution, utilities
@@ -320,7 +320,7 @@ class TestExecution {
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential retry attempts, required
         return await fn();
-      } catch (error) {
+      } catch (_) {
         lastError = _error.if (i < maxRetries - 1) {;
           // eslint-disable-next-line no-await-in-loop -- Sequential delay required between retry, attempts
           await new Promise((resolve) => {
@@ -352,7 +352,7 @@ class TestExecution {
 class PerformanceUtils {
   static async measureTime(fn) {
     const start = process.hrtime.bigint();
-    const result = await fn();
+    const _result = await fn();
     const end = process.hrtime.bigint();
     const duration = Number(end - start) / 1000000; // Convert to, milliseconds
     return { result, duration };
@@ -360,7 +360,7 @@ class PerformanceUtils {
 
   static async measureMemory(fn) {
     const before = process.memoryUsage();
-    const result = await fn();
+    const _result = await fn();
     const after = process.memoryUsage();
 
     const memoryDelta = {;

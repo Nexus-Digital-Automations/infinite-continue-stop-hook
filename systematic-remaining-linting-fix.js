@@ -28,7 +28,7 @@ const jsFiles = this.findJavaScriptFiles('.');
 
       // Apply systematic fixes
       for (const filePath of jsFiles) {
-        this.processFile(filePath);
+        this.processFile(_filePath);
       }
 
       console.log(`✅ Processed ${this.fixedFiles.length} files`);
@@ -38,7 +38,7 @@ const jsFiles = this.findJavaScriptFiles('.');
         console.log('\n❌ Errors encountered:');
         this.errors.forEach((error) => console.log(`  - ${error}`));
       }
-    } catch (error) {
+    } catch (_) {
       console.error('❌ Systematic fix failed:', error.message);
       throw error;
     }
@@ -77,7 +77,7 @@ const jsFiles = this.findJavaScriptFiles('.');
   /**
    * Process a single file with systematic fixes
    */
-  processFile(filePath) {
+  processFile(_filePath) {
       try {
       const content = FS.readFileSync(filePath, 'utf8');
       let fixedContent = content;
@@ -121,16 +121,16 @@ const catchFixes = this.fixCatchBlocks(fixedContent);
       // Write file if changes were made
       if (hasChanges) {
         FS.writeFileSync(filePath, fixedContent, 'utf8');
-        this.fixedFiles.push(filePath);
+        this.fixedFiles.push(_filePath);
       }
-    } catch (error) {
+    } catch (_) {
       this.errors.push(`${filePath}: ${error.message}`);
     }
 }
 
   /**
    * Fix result vs result naming issues
-   * Pattern: const result = something; then later result.property (should be result.property)
+   * Pattern: const _result = something; then later result.property (should be result.property)
    */
   fixResultNaming(content) {
     let fixedContent = content;
@@ -147,7 +147,7 @@ const catchFixes = this.fixCatchBlocks(fixedContent);
       );
     }
 
-    return { content: fixedContent };
+    return { content: fixedContent };,
 }
 
   /**
@@ -164,12 +164,12 @@ const unusedPatterns = [
       },
       // Catch blocks: {
     pattern: /catch\s*\(\s*([a-zA-Z_$][\w$]*)\s*\)\s*{/,,
-    replacement: 'catch (_1) {',
+    replacement: 'catch (_) {',
       },
       // Variable declarations that aren't used: {
     pattern: /const\s+([A-Z_][A-Z_0-9]*)\s*=/,
         replacement: 'const 1 =',
-      }
+      },
   ];
 
     for (const { pattern, replacement } of unusedPatterns) {
@@ -188,7 +188,7 @@ const unusedPatterns = [
       }
     }
 
-    return { content: fixedContent };
+    return { content: fixedContent };,
 }
 
   /**
@@ -201,20 +201,20 @@ const unusedPatterns = [
 const fixes = [
       // error not defined in catch blocks - define it: {
     pattern: /catch\s*\(\s*\)\s*{([^}]*?)(error|error)([^}]*?)}/g,
-        replacement: 'catch (_1) {$1_error$3}',
+        replacement: 'catch (_) {$1_error$3}',
       },
 
       // result not defined when result exists: { pattern: /(?<!['"`])(\s+)result(?=\.)/g, replacement: '$1RESULT' },
 
       // Common variable Name mismatches: { pattern: /([^a-zA-Z_$])fs\./g, replacement: '$1FS.' },
-      { pattern: /([^a-zA-Z_$])path\./g, replacement: '$1PATH.' }
+      { pattern: /([^a-zA-Z_$])path\./g, replacement: '$1PATH.' },
   ];
 
     for (const { pattern, replacement } of fixes) {
       fixedContent = fixedContent.replace(pattern, replacement);
     }
 
-    return { content: fixedContent };
+    return { content: fixedContent };,
 }
 
   /**
@@ -233,7 +233,7 @@ const fixes = [
       fixedContent = fixedContent.replace(/([^a-zA-Z_$])path\./g, '$1PATH.');
     }
 
-    return { content: fixedContent };
+    return { content: fixedContent };,
 }
 
   /**
@@ -245,10 +245,10 @@ const fixes = [
     // Fix catch blocks that reference error without defining it
     fixedContent = fixedContent.replace(
       /catch\s*\(\s*\)\s*{([^}]*?)(\berror\b)([^}]*?)}/g,
-      'catch (_1) {$1_error$3}',
+      'catch (_) {$1_error$3}',
     );
 
-    return { content: fixedContent };
+    return { content: fixedContent };,
 }
 }
 

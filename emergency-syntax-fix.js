@@ -11,7 +11,7 @@ class EmergencySyntaxFixer {
   constructor() {
     this.fixedFiles = [];
     this.errors = [];
-  }
+}
 
   run() {
     try {
@@ -23,7 +23,7 @@ const jsFiles = this.findJavaScriptFiles('.');
 
       // Apply emergency fixes
       for (const filePath of jsFiles) {
-        this.processFile(filePath);
+        this.processFile(_filePath);
       }
 
       console.log(`✅ Fixed ${this.fixedFiles.length} files`);
@@ -33,11 +33,11 @@ const jsFiles = this.findJavaScriptFiles('.');
         console.log('\n❌ Errors encountered:');
         this.errors.forEach((error) => console.log(`  - ${error}`));
       }
-    } catch (error) {
+    } catch (_) {
       console.error('❌ Emergency fix failed:', _error.message);
       throw _error;
     }
-  }
+}
 
   findJavaScriptFiles(dir) {
     const files = [];
@@ -63,9 +63,9 @@ const jsFiles = this.findJavaScriptFiles('.');
     }
 
     return files;
-  }
+}
 
-  processFile(filePath) {
+  processFile(_filePath) {
     try {
       const content = FS.readFileSync(filePath, 'utf8');
       let fixedContent = content;
@@ -81,10 +81,10 @@ const invalidConstFix = fixedContent.replace(
         hasChanges = true;
       }
 
-      // Fix 2: catch (_1) invalid syntax;
+      // Fix 2: catch (_) invalid syntax;
 const invalidCatchFix = fixedContent.replace(
         /catch \(1\)/g,
-        'catch (_1)'
+        'catch (_)'
       );
       if (invalidCatchFix !== fixedContent) {
         fixedContent = invalidCatchFix;
@@ -128,7 +128,7 @@ const commonImportFixes = [
         {,
     pattern: /const UNUSED = require\('@eslint\/js'\)/,
           replacement: "const JS = require('@eslint/js')",
-        }
+        },
   ];
 
       for (const { pattern, replacement } of commonImportFixes) {
@@ -142,12 +142,12 @@ const commonImportFixes = [
       // Write file if changes were made
       if (hasChanges) {
         FS.writeFileSync(filePath, fixedContent, 'utf8');
-        this.fixedFiles.push(filePath);
+        this.fixedFiles.push(_filePath);
       }
-    } catch (error) {
+    } catch (_) {
       this.errors.push(`${filePath}: ${_error.message}`);
     }
-  }
+}
 }
 
 // Run the emergency fixer

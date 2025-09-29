@@ -15,7 +15,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
     return () => {
     // Create mock project directory
     if (!FS.existsSync(mockProjectRoot)) {
-      FS.mkdirSync(mockProjectRoot, { recursive: true });
+      FS.mkdirSync(mockProjectRoot, { recursive: true });,
     }
 });
 
@@ -44,7 +44,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
     exitCode: 0,
               outputContains: 'test passed',
             }
-  }
+},
   ],
       };
 
@@ -92,7 +92,7 @@ const loadCustomValidationRules = (projectRoot) => {
     id: 'invalid-rule-3',
             name: 'Invalid Rule 3',
             // Missing command
-          }
+          },
   ],
       };
 
@@ -129,7 +129,7 @@ const loadCustomValidationRules = (projectRoot) => {
             name: 'Disabled Rule',
             command: 'echo "disabled"',
             enabled: false,
-          }
+          },
   ],
       };
 
@@ -195,7 +195,7 @@ const loadCustomValidationRules = (projectRoot) => {
             );
           }
           return [];
-        } catch (_1) {
+        } catch (_) {
           return [];
         }
       };
@@ -220,12 +220,12 @@ const loadCustomValidationRules = (projectRoot) => {
     exitCode: 0,
           outputContains: 'validation successful',
         }
-  };
+};
 
       // Mock validation execution;
 const executeCustomValidation = (rule) => {
     try {
-          const result = execSync(rule.command, {,
+          const _result = execSync(rule.command, {,
     timeout: rule.timeout || 60000,
             encoding: 'utf8',
           });
@@ -235,11 +235,11 @@ const executeCustomValidation = (rule) => {
               rule.successCriteria;
 
             if (outputContains && !result.includes(outputContains)) {
-    return { success: false, error: 'Expected output not found' };
+    return { success: false, error: 'Expected output not found' };,
             }
 
             if (outputNotContains && result.includes(outputNotContains)) {
-    return { success: false, error: 'Forbidden output detected' };
+    return { success: false, error: 'Forbidden output detected' };,
             }
           }
 
@@ -247,7 +247,7 @@ const executeCustomValidation = (rule) => {
     success: true,
             details: `Custom validation '${rule.name}' passed`,
           };
-        } catch (error) {
+        } catch (_) {
     return {
     success: false,
             error: `Custom validation '${rule.name}' failed: ${_error.message}`,
@@ -255,7 +255,7 @@ const executeCustomValidation = (rule) => {
         }
       };
 
-      const result = executeCustomValidation(mockRule);
+      const _result = executeCustomValidation(mockRule);
 
       expect(result.success).toBe(true);
       expect(result.details).toContain('Success Test');
@@ -271,11 +271,11 @@ const executeCustomValidation = (rule) => {
     exitCode: 0,
           outputContains: 'expected text',
         }
-  };
+};
 
       const executeCustomValidation = (rule) => {
     try {
-          const result = execSync(rule.command, {,
+          const _result = execSync(rule.command, {,
     timeout: rule.timeout || 60000,
             encoding: 'utf8',
           });
@@ -285,11 +285,11 @@ const executeCustomValidation = (rule) => {
               rule.successCriteria;
 
             if (outputContains && !result.includes(outputContains)) {
-    return { success: false, error: 'Expected output not found' };
+    return { success: false, error: 'Expected output not found' };,
             }
 
             if (outputNotContains && result.includes(outputNotContains)) {
-    return { success: false, error: 'Forbidden output detected' };
+    return { success: false, error: 'Forbidden output detected' };,
             }
           }
 
@@ -297,7 +297,7 @@ const executeCustomValidation = (rule) => {
     success: true,
             details: `Custom validation '${rule.name}' passed`,
           };
-        } catch (error) {
+        } catch (_) {
     return {
     success: false,
             error: `Custom validation '${rule.name}' failed: ${_error.message}`,
@@ -305,7 +305,7 @@ const executeCustomValidation = (rule) => {
         }
       };
 
-      const result = executeCustomValidation(mockRule);
+      const _result = executeCustomValidation(mockRule);
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Expected output not found');
@@ -321,11 +321,11 @@ const executeCustomValidation = (rule) => {
     exitCode: 0,
           outputNotContains: 'failed',
         }
-  };
+};
 
       const executeCustomValidation = (rule) => {
     try {
-          const result = execSync(rule.command, {,
+          const _result = execSync(rule.command, {,
     timeout: rule.timeout || 60000,
             encoding: 'utf8',
           });
@@ -335,11 +335,11 @@ const executeCustomValidation = (rule) => {
               rule.successCriteria;
 
             if (outputContains && !result.includes(outputContains)) {
-    return { success: false, error: 'Expected output not found' };
+    return { success: false, error: 'Expected output not found' };,
             }
 
             if (outputNotContains && result.includes(outputNotContains)) {
-    return { success: false, error: 'Forbidden output detected' };
+    return { success: false, error: 'Forbidden output detected' };,
             }
           }
 
@@ -347,7 +347,7 @@ const executeCustomValidation = (rule) => {
     success: true,
             details: `Custom validation '${rule.name}' passed`,
           };
-        } catch (error) {
+        } catch (_) {
     return {
     success: false,
             error: `Custom validation '${rule.name}' failed: ${_error.message}`,
@@ -355,7 +355,7 @@ const executeCustomValidation = (rule) => {
         }
       };
 
-      const result = executeCustomValidation(mockRule);
+      const _result = executeCustomValidation(mockRule);
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Forbidden output detected');
@@ -380,7 +380,7 @@ const executeCustomValidation = (rule) => {
     success: true,
             details: `Custom validation '${rule.name}' passed`,
           };
-        } catch (error) {
+        } catch (_) {
     return {
     success: false,
             error: `Custom validation '${rule.name}' failed: ${_error.message}`,
@@ -388,7 +388,7 @@ const executeCustomValidation = (rule) => {
         }
       };
 
-      const result = executeCustomValidation(mockRule);
+      const _result = executeCustomValidation(mockRule);
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Command Fail Test');
@@ -411,7 +411,7 @@ const executeCustomValidation = (rule) => {
         successCriteria: {
     outputContains: 'environment_value',
         }
-  };
+};
 
       const executeCustomValidationWithEnv = (rule) => {
     try {
@@ -424,15 +424,15 @@ const executeCustomValidation = (rule) => {
             });
           }
 
-          const result = execSync(rule.command, {,
+          const _result = execSync(rule.command, {,
     timeout: rule.timeout || 60000,
             encoding: 'utf8',
             env: { ...process.env, ...rule.environment }
-  });
+});
 
           if (rule.successCriteria && rule.successCriteria.outputContains) {
             if (!result.includes(rule.successCriteria.outputContains)) {
-    return { success: false, error: 'Expected output not found' };
+    return { success: false, error: 'Expected output not found' };,
             }
           }
 
@@ -440,7 +440,7 @@ const executeCustomValidation = (rule) => {
     success: true,
             details: `Custom validation '${rule.name}' passed`,
           };
-        } catch (error) {
+        } catch (_) {
     return {
     success: false,
             error: `Custom validation '${rule.name}' failed: ${_error.message}`,
@@ -448,7 +448,7 @@ const executeCustomValidation = (rule) => {
         }
       };
 
-      const result = executeCustomValidationWithEnv(mockRule);
+      const _result = executeCustomValidationWithEnv(mockRule);
 
       expect(result.success).toBe(true);
     });
@@ -472,7 +472,7 @@ const executeCustomValidation = (rule) => {
 
       const customRules = [
         { id: 'custom-rule-1', name: 'Custom Rule 1', command: 'echo test' },
-        { id: 'custom-rule-2', name: 'Custom Rule 2', command: 'echo test' }
+        { id: 'custom-rule-2', name: 'Custom Rule 2', command: 'echo test' },
   ];
 
       const customCriteriaIds = customRules.map((rule) => rule.id);
@@ -544,7 +544,7 @@ const executeCustomValidation = (rule) => {
     NODE_ENV: 'test',
               CUSTOM_FLAG: 'true',
             }
-  }
+},
   ],
       };
 
@@ -597,7 +597,7 @@ const isValidRule = (rule) => {
     success: true,
             details: `Custom validation '${rule.name}' passed`,
           };
-        } catch (error) {
+        } catch (_) {
     return {
     success: false,
             error: `Custom validation '${rule.name}' failed: ${_error.message}`,
@@ -605,7 +605,7 @@ const isValidRule = (rule) => {
         }
       };
 
-      const result = executeCustomValidation(mockRule);
+      const _result = executeCustomValidation(mockRule);
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Timeout Test');
@@ -633,7 +633,7 @@ const isValidRule = (rule) => {
             }
           }
           return [];
-        } catch (_1) {
+        } catch (_) {
           return [];
         }
       };

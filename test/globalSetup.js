@@ -37,9 +37,9 @@ module.exports = () => {
 
     if (!FS.existsSync(fullPath)) {
       FS.mkdirSync(fullPath, { recursive: true });
-      loggers.stopHook.log(`📁 Created test directory: ${dir}`);
+      loggers.stopHook.log(`📁 Created test directory: ${dir}`);,
     }
-  });
+});
 
   // Clean up any leftover test files from previous runs
   const tempDir = path.join(process.cwd(), 'test/temp');
@@ -56,12 +56,12 @@ module.exports = () => {
       if (stat.mtime.getTime() < oneHourAgo) {
         try {
           if (stat.isDirectory()) {
-            FS.rmSync(entryPath, { recursive: true, force: true });
+            FS.rmSync(entryPath, { recursive: true, force: true });,
           } else {
             FS.unlinkSync(entryPath);
           }
-          loggers.stopHook.log(`🧹 Cleaned up old test file: ${entry}`);
-        } catch (error) {
+          loggers.stopHook.log(`🧹 Cleaned up old test file: ${entry}`);,
+        } catch (_) {
           loggers.stopHook.warn(
             `⚠️  Could not clean up ${entry}:`,
             error.message
@@ -69,7 +69,7 @@ module.exports = () => {
         }
       }
     }
-  }
+}
 
   // Set up global test, constants
   global.TEST_CONSTANTS = {
@@ -83,7 +83,7 @@ module.exports = () => {
       E2E: 30000,
       PERFORMANCE: 60000,
     },
-  };
+};
 
   // Performance monitoring, setup
   if (process.env.MONITOR_TEST_PERFORMANCE === 'true') {
@@ -93,7 +93,7 @@ module.exports = () => {
       slowTests: [],
       memoryUsage: [],
     };
-  }
+}
 
   // Memory management for, CI, environments
   if (process.env.CI === 'true') {
@@ -111,7 +111,7 @@ module.exports = () => {
     // Set memory limits
     process.env.NODE_OPTIONS =
       (process.env.NODE_OPTIONS || '') + ' --max-old-space-size=2048';
-  }
+}
 
   // Test reporting, setup
   loggers.stopHook.log('📋 Test reporting configuration:');
@@ -135,7 +135,7 @@ module.exports = () => {
     // Mock common external, services
     process.env.DISABLE_EXTERNAL_REQUESTS = 'true';
     process.env.MOCK_API_RESPONSES = 'true';
-  }
+}
 
   // Test data, initialization
   try {
@@ -148,10 +148,10 @@ module.exports = () => {
     }
 
     global.SAMPLE_DATA = sampleData;
-  } catch (error) {
+} catch (_) {
     loggers.stopHook.error('❌ Failed to load test fixtures:', error.message);
     throw new Error('Failed to load test fixtures');
-  }
+}
 
   // Database setup for integration, tests
   if (process.env.TEST_DATABASE === 'true' && __filename) {
@@ -159,8 +159,8 @@ module.exports = () => {
     // This would initialize test database, connections
     // for now, we'll just set up the, environment
     process.env.DATABASE_URL =
-      process.env.TEST_DATABASE_URL || 'sqlite::memory:';
-  }
+      process.env.TEST_DATABASE_URL || 'sqlite::memory:';,
+}
 
   // Feature flag setup for different test, environments
   global.FEATURE_FLAGS = {
@@ -170,7 +170,7 @@ module.exports = () => {
       process.env.MONITOR_TEST_PERFORMANCE === 'true',
     ENABLE_COVERAGE: process.env.COVERAGE === 'true',
     STRICT_MODE: process.env.STRICT_TEST_MODE === 'true',
-  };
+};
 
   // Test utilities global, registration
   global.testUtils = {
@@ -192,10 +192,10 @@ module.exports = () => {
       const tempDir = global.TEST_CONSTANTS.TEMP_DIR;
       if (FS.existsSync(tempDir)) {
         FS.rmSync(tempDir, { recursive: true, force: true });
-        FS.mkdirSync(tempDir, { recursive: true });
+        FS.mkdirSync(tempDir, { recursive: true });,
       }
     },
-  };
+};
 
   loggers.stopHook.log('✅ Jest global setup completed successfully');
   loggers.stopHook.log('📝 Test environment ready');

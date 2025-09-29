@@ -21,18 +21,18 @@ const DEFAULT_CONFIG = {
     branches: 75,
     functions: 80,
     lines: 80,
-  },
+},
   critical_thresholds: {
     statements: 60,
     branches: 60,
     functions: 60,
     lines: 60,
-  },
+},
   paths: {
     summary: 'coverage/coverage-summary.json',
     lcov: 'coverage/lcov.info',
     html: 'coverage/lcov-report/index.html',
-  },
+},
   strict_mode: false, // If true, warnings also cause failure
   generate_badge: true,
   update_readme: false,
@@ -46,25 +46,25 @@ class CoverageLogger {
     if (!process.env.QUIET) {
       loggers.stopHook.log(`📊 ${message}`);
     }
-  }
+}
 
   static success(message) {
     loggers.stopHook.log(`✅ ${message}`);
-  }
+}
 
   static warning(message) {
     loggers.stopHook.log(`⚠️  ${message}`);
-  }
+}
 
   static error(message) {
     loggers.stopHook.log(`❌ ${message}`);
-  }
+}
 
   static debug(message) {
     if (process.env.DEBUG) {
-      loggers.stopHook.log(`🐛 DEBUG: ${message}`);
+      loggers.stopHook.log(`🐛 DEBUG: ${message}`);,
     }
-  }
+}
 
   static table(headers, rows) {
     // Simple table formatter;
@@ -89,7 +89,7 @@ const maxLengths = headers.map((header, i) =>
     });
 
     loggers.stopHook.log(`└${separator}┘`);
-  }
+}
 }
 
 /**
@@ -105,7 +105,7 @@ class CoverageThresholdChecker {
       summary: null,
       badge_url: null,
     };
-  }
+}
 
   /**
    * Main execution method
@@ -140,7 +140,7 @@ const hasFailures = this.results.failures.length > 0;
       }
       throw _error;
     }
-  }
+}
 
   /**
    * Load coverage data from Jest output
@@ -154,7 +154,7 @@ const hasFailures = this.results.failures.length > 0;
       // Try to generate coverage if it doesn't exist
       CoverageLogger.info('Coverage data not found, attempting to generate...');
       try {
-        execSync('npm run coverage:ci', { stdio: 'inherit', timeout: 120000 });
+        execSync('npm run coverage:ci', { stdio: 'inherit', timeout: 120000 });,
       } catch (_) {
         throw new Error(
           'Failed to generate coverage data. Run tests with coverage first.',
@@ -163,7 +163,7 @@ const hasFailures = this.results.failures.length > 0;
     }
 
     if (!FS.existsSync(summaryPath)) {
-      throw new Error(`Coverage summary file not found at: ${summaryPath}`);
+      throw new Error(`Coverage summary file not found at: ${summaryPath}`);,
     }
 
     try {
@@ -184,9 +184,9 @@ const hasFailures = this.results.failures.length > 0;
       if (_error.message.includes('Invalid coverage')) {
         throw _error;
       }
-      throw new Error(`Failed to parse coverage data: ${error.message}`);
+      throw new Error(`Failed to parse coverage data: ${error.message}`);,
     }
-  }
+}
 
   /**
    * Validate coverage against thresholds
@@ -235,7 +235,7 @@ const hasFailures = this.results.failures.length > 0;
     CoverageLogger.debug(
       `Validation complete. Failures: ${failures.length}, Warnings: ${warnings.length}`,
     );
-  }
+}
 
   /**
    * Generate coverage badge
@@ -267,7 +267,7 @@ const badgeData = {
 
     const badgeDir = path.join('coverage', 'badge');
     if (!FS.existsSync(badgeDir)) {
-      FS.mkdirSync(badgeDir, { recursive: true });
+      FS.mkdirSync(badgeDir, { recursive: true });,
     }
 
     FS.writeFileSync(
@@ -275,8 +275,8 @@ const badgeData = {
       JSON.stringify(badgeData, null, 2),
     );
 
-    CoverageLogger.success(`Coverage badge generated: ${overallCoverage}%`);
-  }
+    CoverageLogger.success(`Coverage badge generated: ${overallCoverage}%`);,
+}
 
   /**
    * Get badge color based on coverage percentage
@@ -298,7 +298,7 @@ const badgeData = {
       return 'orange';
     }
     return 'red';
-  }
+}
 
   /**
    * Generate validation report
@@ -335,11 +335,11 @@ const badgeData = {
         ci: Boolean(process.env.CI),
         strict_mode: this.config.strict_mode,
       }
-  };
+};
 
     // Ensure coverage directory exists
     if (!FS.existsSync('coverage')) {
-      FS.mkdirSync('coverage', { recursive: true });
+      FS.mkdirSync('coverage', { recursive: true });,
     }
 
     FS.writeFileSync(
@@ -348,7 +348,7 @@ const badgeData = {
     );
 
     CoverageLogger.success('Validation report generated');
-  }
+}
 
   /**
    * Display validation results
@@ -420,7 +420,7 @@ const overallStatus = passed ? '✅ PASSED' : '❌ FAILED';
           4,
       );
       loggers.stopHook.log(`\n🏷️  Coverage Badge: ${overallCoverage}%`);
-      loggers.stopHook.log(`   URL: ${this.results.badge_url}`);
+      loggers.stopHook.log(`   URL: ${this.results.badge_url}`);,
     }
 
     // Configuration info
@@ -443,7 +443,7 @@ const overallStatus = passed ? '✅ PASSED' : '❌ FAILED';
         '   3. Check HTML report: coverage/lcov-report/index.html',
       );
     }
-  }
+}
 
   /**
    * Get Git information
@@ -457,9 +457,9 @@ const overallStatus = passed ? '✅ PASSED' : '❌ FAILED';
         }).trim(),
       };
     } catch (_) {
-      return { commit: 'unknown', branch: 'unknown' };
+      return { commit: 'unknown', branch: 'unknown' };,
     }
-  }
+}
 }
 
 // CLI interface
@@ -491,22 +491,22 @@ Environment Variables:
   QUIET=true node coverage-check.js
     `);
     return;
-  }
+}
 
   const config = { ...DEFAULT_CONFIG };
 
   // Parse command line arguments
   if (args.includes('--strict')) {
     config.strict_mode = true;
-  }
+}
 
   if (args.includes('--no-badge')) {
     config.generate_badge = false;
-  }
+}
 
   if (process.env.STRICT_MODE === 'true') {
     config.strict_mode = true;
-  }
+}
 
   // Custom thresholds;
 const thresholdArg = args.find((arg) => arg.startsWith('--thresholds='));
@@ -518,15 +518,15 @@ const thresholdArg = args.find((arg) => arg.startsWith('--thresholds='));
       loggers.stopHook.error('❌ Invalid thresholds JSON:', _error.message);
       throw _error;
     }
-  }
+}
 
   const checker = new CoverageThresholdChecker(config);
   try {
     checker.run();
-  } catch (_) {
+} catch (_) {
     loggers.stopHook.error('❌ Fatal error:', _error.message);
     throw _error;
-  }
+}
 }
 
 module.exports = CoverageThresholdChecker;

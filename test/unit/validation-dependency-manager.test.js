@@ -21,7 +21,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
     return () 
     return () => {
     dependencyManager = new ValidationDependencyManager();
-  });
+});
 
   describe('Initialization And Default Dependencies', () => {
     
@@ -83,7 +83,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
         expect(Array.isArray(config.metadata.resourceRequirements)).toBe(true);
       }
     });
-  });
+});
 
   describe('Dependency Management Operations', () => {
     
@@ -94,7 +94,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       const newCriterion = 'custom-validation';
       const config = {
     dependencies: [
-          { criterion: 'linter-validation', type: DEPENDENCY_TYPES.STRICT }
+          { criterion: 'linter-validation', type: DEPENDENCY_TYPES.STRICT },
   ],
         description: 'Custom validation check',
         estimatedDuration: 25000,
@@ -140,7 +140,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
     return () => {
         dependencyManager.addDependency('invalid-test', {,
     dependencies: [
-            { criterion: 'linter-validation', type: 'invalid-type' }
+            { criterion: 'linter-validation', type: 'invalid-type' },
   ],
         });
       }).toThrow('Invalid dependency type');
@@ -155,7 +155,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
         dependencyManager.addDependency('', {});
       }).toThrow('Criterion must be a non-empty string');
     });
-  });
+});
 
   describe('Dependency Graph Validation', () => {
     
@@ -173,17 +173,17 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       // Create circular dependency: A -> B -> C -> A
       dependencyManager.addDependency('criterion-a', {,
     dependencies: [
-          { criterion: 'criterion-b', type: DEPENDENCY_TYPES.STRICT }
+          { criterion: 'criterion-b', type: DEPENDENCY_TYPES.STRICT },
   ],
       });
       dependencyManager.addDependency('criterion-b', {,
     dependencies: [
-          { criterion: 'criterion-c', type: DEPENDENCY_TYPES.STRICT }
+          { criterion: 'criterion-c', type: DEPENDENCY_TYPES.STRICT },
   ],
       });
       dependencyManager.addDependency('criterion-c', {,
     dependencies: [
-          { criterion: 'criterion-a', type: DEPENDENCY_TYPES.STRICT }
+          { criterion: 'criterion-a', type: DEPENDENCY_TYPES.STRICT },
   ],
       });
 
@@ -201,7 +201,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
           {,
     criterion: 'non-existent-criterion',
             type: DEPENDENCY_TYPES.STRICT,
-          }
+          },
   ],
       });
 
@@ -215,7 +215,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
         'non-existent-criterion',
       );
     });
-  });
+});
 
   describe('Execution Order Optimization', () => {
     
@@ -253,14 +253,14 @@ const linterIndex = criteriaOrder.indexOf('linter-validation');
       // Create a scenario where strict dependencies block execution
       dependencyManager.addDependency('blocked-test-1', {,
     dependencies: [
-          { criterion: 'missing-dependency', type: DEPENDENCY_TYPES.STRICT }
+          { criterion: 'missing-dependency', type: DEPENDENCY_TYPES.STRICT },
   ],
         estimatedDuration: 10000,
         parallelizable: true,
       });
       dependencyManager.addDependency('blocked-test-2', {,
     dependencies: [
-          { criterion: 'another-missing', type: DEPENDENCY_TYPES.STRICT }
+          { criterion: 'another-missing', type: DEPENDENCY_TYPES.STRICT },
   ],
         estimatedDuration: 15000,
         parallelizable: true,
@@ -280,7 +280,7 @@ const executionOrder = dependencyManager.getExecutionOrder([
       // execution, we test the completion instead
       expect(executionOrder.every((item) => item.criterion)).toBe(true);
     });
-  });
+});
 
   describe('Parallel Execution Planning', () => {
     
@@ -365,7 +365,7 @@ let buildWave = null;
       // Should still produce valid execution plan
       expect(plan.plan.length).toBeGreaterThan(0);
     });
-  });
+});
 
   describe('Advanced Analytics And Optimization', () => {
     
@@ -461,7 +461,7 @@ const firstNode = visualization.nodes[0];
       const analytics = dependencyManager.getExecutionAnalytics();
       expect(analytics.noData).toBe(true);
     });
-  });
+});
 
   describe('Configuration Persistence', () => {
     
@@ -512,12 +512,12 @@ const originalDeps = dependencyManager.getAllDependencies();
     });
 
     test('should handle missing configuration file gracefully', async () => {
-      const result = await dependencyManager.loadDependencyConfig(
+      const _result = await dependencyManager.loadDependencyConfig(
         '/non/existent/path.json',
       );
       expect(result).toBeNull();
     });
-  });
+});
 
   describe('Adaptive Execution Planning', () => {
     
@@ -576,7 +576,7 @@ const recommendedConcurrency =
         adaptivePlan.adaptiveOptimizations.resourceScheduling.length,
       ).toBeGreaterThan(0);
     });
-  });
+});
 
   describe('Complex Workflow Scenarios', () => {
     
@@ -593,7 +593,7 @@ const recommendedConcurrency =
                 {,
     criterion: `custom-criterion-${i - 1}`,
                   type: DEPENDENCY_TYPES.WEAK,
-                }
+                },
   ]
               : [],
           description: `Custom validation criterion ${i}`,
@@ -630,7 +630,7 @@ const parallelPlan = dependencyManager.generateParallelExecutionPlan();
     dependencies: [
           { criterion: 'linter-validation', type: DEPENDENCY_TYPES.STRICT },
           { criterion: 'security-validation', type: DEPENDENCY_TYPES.WEAK },
-          { criterion: 'focused-codebase', type: DEPENDENCY_TYPES.OPTIONAL }
+          { criterion: 'focused-codebase', type: DEPENDENCY_TYPES.OPTIONAL },
   ],
         description: 'Test with mixed dependency types',
         estimatedDuration: 15000,
@@ -650,7 +650,7 @@ const parallelPlan = dependencyManager.generateParallelExecutionPlan();
       // Strict dependency must be satisfied
       expect(mixedTestIndex).toBeGreaterThan(linterIndex);
     });
-  });
+});
 
   describe('Error Handling And Edge Cases', () => {
     
@@ -699,5 +699,5 @@ const parallelPlan = dependencyManager.generateParallelExecutionPlan();
       const analytics = dependencyManager.getExecutionAnalytics();
       expect(analytics.totalExecutions).toBe(1000); // Should be capped at 1000
     });
-  });
+});
 });

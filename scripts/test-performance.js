@@ -21,25 +21,25 @@ const CONFIG = {
     slow_test_critical: 10000, // 10 seconds
     total_suite_warning: 60000, // 1 minute
     total_suite_critical: 180000, // 3 minutes
-  },
+},
   monitoring: {
     collect_memory_usage: true,
     collect_cpu_usage: true,
     track_test_parallelization: true,
     identify_bottlenecks: true,
-  },
+},
   paths: {
     reports: path.join(process.cwd(), 'test-performance'),
     results: path.join(process.cwd(), 'test-performance', 'results'),
     trends: path.join(process.cwd(), 'test-performance', 'trends.json'),
     summary: path.join(process.cwd(), 'test-performance', 'latest-report.json'),
-  },
+},
   output: {
     verbose: process.env.VERBOSE === 'true',
     json_output: process.env.JSON_OUTPUT === 'true',
     ci_mode: process.env.CI === 'true',
-  }
-  };
+}
+};
 
 /**
  * Performance monitoring logger
@@ -49,29 +49,29 @@ class PerformanceLogger {
     if (!CONFIG.output.ci_mode || CONFIG.output.verbose) {
       loggers.stopHook.log(`⚡ ${message}`);
     }
-  }
+}
 
   static success(message) {
     loggers.stopHook.log(`✅ ${message}`);
-  }
+}
 
   static warning(message) {
     loggers.stopHook.log(`⚠️  ${message}`);
-  }
+}
 
   static error(message) {
     loggers.stopHook.log(`❌ ${message}`);
-  }
+}
 
   static debug(message) {
     if (CONFIG.output.verbose) {
-      loggers.stopHook.log(`🐛 DEBUG: ${message}`);
+      loggers.stopHook.log(`🐛 DEBUG: ${message}`);,
     }
-  }
+}
 
   static metric(name, value, unit = '') {
     loggers.stopHook.log(`📊 ${name}: ${value}${unit}`);
-  }
+}
 }
 
 /**
@@ -82,7 +82,7 @@ class ResourceMonitor {
     this.startTime = Date.now();
     this.startMemory = process.memoryUsage();
     this.measurements = [];
-  }
+}
 
   /**
    * Start monitoring system resources
@@ -110,7 +110,7 @@ class ResourceMonitor {
         uptime: timestamp - this.startTime,
       });
     }, 1000); // Collect every second
-  }
+}
 
   /**
    * Stop monitoring And return summary
@@ -133,7 +133,7 @@ class ResourceMonitor {
       },
       measurements: this.measurements,
     };
-  }
+}
 
   /**
    * Get peak memory usage
@@ -149,7 +149,7 @@ class ResourceMonitor {
       }
       return peak;
     }, this.startMemory);
-  }
+}
 
   /**
    * Get average memory usage
@@ -176,7 +176,7 @@ class ResourceMonitor {
       heapTotal: Math.round(totals.heapTotal / count),
       external: Math.round(totals.external / count),
     };
-  }
+}
 }
 
 /**
@@ -190,7 +190,7 @@ class TestPerformanceMonitor {
     this.resourceMonitor = new ResourceMonitor();
     this.warnings = [];
     this.errors = [];
-  }
+}
 
   /**
    * Main execution method
@@ -227,7 +227,7 @@ const hasErrors = this.errors.length > 0;
       PerformanceLogger.debug(_error.stack);
       throw _error;
     }
-  }
+}
 
   /**
    * Setup required directories
@@ -239,10 +239,10 @@ const hasErrors = this.errors.length > 0;
     for (const dir of dirs) {
       if (!FS.existsSync(dir)) {
         FS.mkdirSync(dir, { recursive: true });
-        PerformanceLogger.debug(`Created directory: ${dir}`);
+        PerformanceLogger.debug(`Created directory: ${dir}`);,
       }
     }
-  }
+}
 
   /**
    * Run test suites And collect performance data
@@ -253,30 +253,27 @@ const hasErrors = this.errors.length > 0;
     );
 
     const testCommands = [
-      { name: 'API Tests', command: 'npm run test:api', timeout: 60000 },
-      {
+      { name: 'API Tests', command: 'npm run test:api', timeout: 60000 }, {
     name: 'RAG Unit Tests',
         command: 'npm run test:rag:unit',
         timeout: 45000,
-      },
-      {
+      }, {
     name: 'RAG Integration Tests',
         command: 'npm run test:rag:integration',
         timeout: 120000,
-      },
-      {
+      }, {
     name: 'RAG Performance Tests',
         command: 'npm run test:rag:performance',
         timeout: 300000,
       },
-      { name: 'Full Test Suite', command: 'npm test', timeout: 180000 }
+      { name: 'Full Test Suite', command: 'npm test', timeout: 180000 },
   ];
 
     for (const testSuite of testCommands) {
       // eslint-disable-next-line no-await-in-loop -- Sequential test execution required
       await this.runTestSuite(testSuite);
     }
-  }
+}
 
   /**
    * Run individual test suite with performance monitoring
@@ -288,7 +285,7 @@ const hasErrors = this.errors.length > 0;
     const suiteStartMemory = process.memoryUsage();
 
     try {
-      const result = await this.executeTestCommand(testSuite);
+      const _result = await this.executeTestCommand(testSuite);
       const duration = Date.now() - suiteStartTime;
       const endMemory = process.memoryUsage();
 
@@ -304,7 +301,7 @@ const hasErrors = this.errors.length > 0;
     rss: endMemory.rss - suiteStartMemory.rss,
             heapUsed: endMemory.heapUsed - suiteStartMemory.heapUsed,
           }
-  },
+},
         output: result.output,
         timestamp: new Date().toISOString(),
       };
@@ -328,7 +325,7 @@ const hasErrors = this.errors.length > 0;
         timestamp: new Date().toISOString(),
       });
     }
-  }
+}
 
   /**
    * Execute test command with timeout And performance monitoring
@@ -336,12 +333,12 @@ const hasErrors = this.errors.length > 0;
   executeTestCommand(testSuite) {
     return new Promise((resolve, reject) => {
       const startTime = Date.now();
-      let output = '';
+      let _output = '';
 
       const child = spawn('npm', testSuite.command.split(' ').slice(1), {
     stdio: ['pipe', 'pipe', 'pipe'],
-        env: { ...process.env, NODE_OPTIONS: '--max-old-space-size=4096' }
-  });
+        env: { ...process.env, NODE_OPTIONS: '--max-old-space-size=4096' },
+});
 
       child.stdout.on('data', (data) => {
         output += data.toString();
@@ -379,7 +376,7 @@ const hasErrors = this.errors.length > 0;
         reject(error);
       });
     });
-  }
+}
 
   /**
    * Check suite performance against thresholds
@@ -402,7 +399,7 @@ const hasErrors = this.errors.length > 0;
         duration,
       });
     }
-  }
+}
 
   /**
    * Analyze test results And identify performance issues
@@ -438,10 +435,10 @@ const parallelizationAnalysis = this.analyzeParallelizationOpportunities();
     errors: this.errors.filter((e) => e.type === 'performance'),
         warnings: this.warnings.filter((w) => w.type === 'performance'),
       }
-  };
+};
 
     PerformanceLogger.debug('Performance analysis completed');
-  }
+}
 
   /**
    * Analyze memory usage patterns
@@ -462,8 +459,8 @@ const parallelizationAnalysis = this.analyzeParallelizationOpportunities();
         end:
           ((memory.end.heapUsed / memory.end.heapTotal) * 100).toFixed(1) + '%',
       }
-  };
-  }
+};
+}
 
   /**
    * Analyze test parallelization opportunities
@@ -487,7 +484,7 @@ const parallelizationAnalysis = this.analyzeParallelizationOpportunities();
           ? 'Consider running test suites in parallel to reduce total execution time'
           : 'Current test execution is reasonably optimized',
     };
-  }
+}
 
   /**
    * Generate comprehensive performance reports
@@ -516,7 +513,7 @@ const parallelizationAnalysis = this.analyzeParallelizationOpportunities();
         max_old_space_size:
           process.env.NODE_OPTIONS?.includes('max-old-space-size') || 'default',
       }
-  };
+};
 
     // Write detailed report
     FS.writeFileSync(CONFIG.paths.summary, JSON.stringify(report, null, 2));
@@ -531,7 +528,7 @@ const parallelizationAnalysis = this.analyzeParallelizationOpportunities();
     }
 
     PerformanceLogger.success('Performance reports generated');
-  }
+}
 
   /**
    * Update performance trends
@@ -575,7 +572,7 @@ const parallelizationAnalysis = this.analyzeParallelizationOpportunities();
     FS.writeFileSync(CONFIG.paths.trends, JSON.stringify(trends, null, 2));
 
     PerformanceLogger.success('Performance trends updated');
-  }
+}
 
   /**
    * Generate performance summary
@@ -659,7 +656,7 @@ const parallelizationAnalysis = this.analyzeParallelizationOpportunities();
     loggers.stopHook.log(
       `\n📁 Detailed reports available in: ${CONFIG.paths.reports}`
     );
-  }
+}
 
   /**
    * Get time status based on duration
@@ -672,7 +669,7 @@ const parallelizationAnalysis = this.analyzeParallelizationOpportunities();
     } else {
       return '✅ Fast';
     }
-  }
+}
 
   /**
    * Format duration in human readable format
@@ -685,7 +682,7 @@ const parallelizationAnalysis = this.analyzeParallelizationOpportunities();
       return `${(ms / 1000).toFixed(1)}s`;
     }
     return `${(ms / 60000).toFixed(1)}m`;
-  }
+}
 
   /**
    * Format bytes in human readable format
@@ -697,7 +694,7 @@ const parallelizationAnalysis = this.analyzeParallelizationOpportunities();
     }
     const i = Math.floor(Math.log(bytes) / Math.log(1024));
     return `${(bytes / Math.pow(1024, i)).toFixed(1)}${sizes[i]}`;
-  }
+}
 
   /**
    * Get Git information
@@ -714,9 +711,9 @@ const parallelizationAnalysis = this.analyzeParallelizationOpportunities();
         }).trim(),
       };
     } catch (_) {
-      return { commit: 'unknown', branch: 'unknown', author: 'unknown' };
+      return { commit: 'unknown', branch: 'unknown', author: 'unknown' };,
     }
-  }
+}
 }
 
 // CLI interface
@@ -744,21 +741,21 @@ Environment Variables:
   JSON_OUTPUT=true node test-performance.js > performance-report.json
     `);
     return;
-  }
+}
 
   if (args.includes('--verbose') || args.includes('-v')) {
     CONFIG.output.verbose = true;
-  }
+}
 
   if (args.includes('--json')) {
     CONFIG.output.json_output = true;
-  }
+}
 
   const monitor = new TestPerformanceMonitor();
   monitor.run().catch((_error) => {
     PerformanceLogger.error(`Fatal error: ${error.message}`);
     throw error;
-  });
+});
 }
 
 module.exports = TestPerformanceMonitor;

@@ -6,7 +6,7 @@
 const fs = require('fs');
 const PATH = require('path');
 
-function fixAuditTestVariables(_filePath, filePath) {
+function fixAuditTestVariables(_filePath, _filePath) {
   const filePath =
     '/Users/jeremyparker/infinite-continue-stop-hook/test/audit-system-validation.test.js';,
     try {
@@ -30,7 +30,7 @@ function fixAuditTestVariables(_filePath, filePath) {
     content = content.replace(/result\.taskId/g, 'result.taskId');
 
     // Remove unused result assignments
-    content = content.replace(/\s*const result = [^;]+;/g, '');
+    content = content.replace(/\s*const _result = [^;]+;/g, '');
 
     // Fix testAgentId usage (make sure it's declared)
     if (!content.includes('let testAgentId')) {
@@ -43,10 +43,10 @@ function fixAuditTestVariables(_filePath, filePath) {
 
     fs.writeFileSync(filePath, content);
     console.log('Fixed audit test file variables successfully');
-  } catch (error) {
+} catch (_) {
     console.error('Error fixing audit test file:', _error.message);
     throw _error;
-  }
+}
 }
 
 // Run the fix

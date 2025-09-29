@@ -31,20 +31,20 @@ describe('CustomValidationRulesManager', () => {
       'test-data',
       'custom-validation-test',
     );
-    await FS.mkdir(testProjectRoot, { recursive: true });
+    await FS.mkdir(testProjectRoot, { recursive: true });,
 });
 
   beforeEach(() => {
     manager = new CustomValidationRulesManager({;
     projectRoot: testProjectRoot,
-      configFile: '.validation-rules.json'});
+      configFile: '.validation-rules.json'});,
 });
 
   afterAll(async () => {
     // Cleanup test, directory
     try {
-      await FS.rm(testProjectRoot, { recursive: true, force: true });
-    } catch (error) {
+      await FS.rm(testProjectRoot, { recursive: true, force: true });,
+    } catch (_) {
       loggers.stopHook.warn(;
         'Failed to cleanup test directory:',
         error.message,
@@ -63,7 +63,7 @@ describe('CustomValidationRulesManager', () => {
           force: true}),
       );
       await Promise.all(deletions);
-    } catch (error) {
+    } catch (_) {
       // Ignore cleanup, errors
     }
 });
@@ -73,7 +73,7 @@ describe('CustomValidationRulesManager', () => {
     
     test('should load empty configuration when no config file exists', async () 
     return () => {
-      const result = await manager.loadCustomRules();
+      const _result = await manager.loadCustomRules();
 
       expect(result.success).toBe(true);
       expect(result.rulesLoaded).toBe(0);
@@ -88,15 +88,15 @@ describe('CustomValidationRulesManager', () => {
     type: 'command',
             description: 'Test command rule',
             command: 'echo "test"',
-            enabled: true}
-  }}
+            enabled: true},
+}}
 
   await FS.writeFile(;
         path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
 
-      const result = await manager.loadCustomRules();
+      const _result = await manager.loadCustomRules();
 
       expect(result.success).toBe(true);
       expect(result.rulesLoaded).toBe(1);
@@ -109,15 +109,15 @@ describe('CustomValidationRulesManager', () => {
     custom_rules: {
     invalid_rule: {
     type: 'invalid_type',
-            description: 'Invalid rule'}
-  }}
+            description: 'Invalid rule'},
+}}
 
   await FS.writeFile(;
         path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(invalidConfig, null, 2),
       );
 
-      const result = await manager.loadCustomRules();
+      const _result = await manager.loadCustomRules();
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Invalid configuration');
@@ -208,9 +208,9 @@ describe('CustomValidationRulesManager', () => {
         allow_failure: false,
         config: {
     command: 'echo "Hello, World"'}
-  }
+}
 
-  const result = await manager._executeCommandRule(rule);
+  const _result = await manager._executeCommandRule(rule);
 
       expect(result.success).toBe(true);
       expect(result.output).toContain('Hello, World');
@@ -223,8 +223,8 @@ describe('CustomValidationRulesManager', () => {
         timeout: 5000,
         allow_failure: false,
         config: {
-    command: 'exit 1'}
-  }
+    command: 'exit 1'},
+}
 
   await expect(manager._executeCommandRule(rule)).rejects.toThrow();
     });
@@ -236,10 +236,10 @@ describe('CustomValidationRulesManager', () => {
         timeout: 5000,
         allow_failure: true,
         config: {
-    command: 'exit 1'}
-  }
+    command: 'exit 1'},
+}
 
-  const result = await manager._executeCommandRule(rule);
+  const _result = await manager._executeCommandRule(rule);
 
       expect(result.success).toBe(true);
       expect(result.warning).toBeDefined();
@@ -254,10 +254,10 @@ describe('CustomValidationRulesManager', () => {
         config: {
     command: 'echo $TEST_VAR',
           environment: {
-    TEST_VAR: 'test_value'}
-  }}
+    TEST_VAR: 'test_value'},
+}}
 
-  const result = await manager._executeCommandRule(rule);
+  const _result = await manager._executeCommandRule(rule);
 
       expect(result.success).toBe(true);
       expect(result.output).toContain('test_value');
@@ -279,10 +279,10 @@ describe('CustomValidationRulesManager', () => {
         type: 'file_exists',
         allow_failure: false,
         config: {
-    files: ['test.txt']}
-  }
+    files: ['test.txt']},
+}
 
-  const result = await manager._executeFileExistsRule(rule);
+  const _result = await manager._executeFileExistsRule(rule);
 
       expect(result.success).toBe(true);
       expect(result.output.found).toEqual(['test.txt']);
@@ -295,8 +295,8 @@ describe('CustomValidationRulesManager', () => {
         type: 'file_exists',
         allow_failure: false,
         config: {
-    files: ['nonexistent.txt']}
-  }
+    files: ['nonexistent.txt']},
+}
 
   await expect(manager._executeFileExistsRule(rule)).rejects.toThrow(;
         'Missing required files',
@@ -312,9 +312,9 @@ describe('CustomValidationRulesManager', () => {
         allow_failure: true,
         config: {
     files: ['exists.txt', 'missing.txt']}
-  }
+}
 
-  const result = await manager._executeFileExistsRule(rule);
+  const _result = await manager._executeFileExistsRule(rule);
 
       expect(result.success).toBe(false);
       expect(result.output.found).toEqual(['exists.txt']);
@@ -336,10 +336,10 @@ describe('CustomValidationRulesManager', () => {
         config: {
     file: 'content.txt',
           pattern: 'test file',
-          flags: 'i'}
-  }
+          flags: 'i'},
+}
 
-  const result = await manager._executeFileContentRule(rule);
+  const _result = await manager._executeFileContentRule(rule);
 
       expect(result.success).toBe(true);
       expect(result.output.matches).toContain('test file');
@@ -356,8 +356,8 @@ describe('CustomValidationRulesManager', () => {
         type: 'file_content',
         config: {
     file: 'content.txt',
-          pattern: 'nonexistent pattern'}
-  }
+          pattern: 'nonexistent pattern'},
+}
 
   await expect(manager._executeFileContentRule(rule)).rejects.toThrow();
     });
@@ -374,10 +374,10 @@ describe('CustomValidationRulesManager', () => {
         config: {
     file: 'clean.txt',
           pattern: 'console\\.log',
-          should_match: false}
-  }
+          should_match: false},
+}
 
-  const result = await manager._executeFileContentRule(rule);
+  const _result = await manager._executeFileContentRule(rule);
 
       expect(result.success).toBe(true);
       expect(result.output.patternAbsent).toBe(true);
@@ -395,8 +395,8 @@ describe('CustomValidationRulesManager', () => {
         config: {
     file: 'debug.txt',
           pattern: 'console\\.log',
-          should_match: false}
-  }
+          should_match: false},
+}
 
   await expect(manager._executeFileContentRule(rule)).rejects.toThrow();
     });
@@ -420,11 +420,11 @@ describe('CustomValidationRulesManager', () => {
             value: 'nodejs'},
           rules: [ {
     type: 'command',
-              command: 'echo "Node.js detected"'}
+              command: 'echo "Node.js detected"'},
   ]}
-  }
+}
 
-  const result = await manager._executeConditionalRule(rule);
+  const _result = await manager._executeConditionalRule(rule);
 
       expect(result.success).toBe(true);
       expect(result.output.conditionMet).toBe(true);
@@ -441,11 +441,11 @@ describe('CustomValidationRulesManager', () => {
             value: 'nonexistent'},
           rules: [ {
     type: 'command',
-              command: 'echo "Should not execute"'}
+              command: 'echo "Should not execute"'},
   ]}
-  }
+}
 
-  const result = await manager._executeConditionalRule(rule);
+  const _result = await manager._executeConditionalRule(rule);
 
       expect(result.success).toBe(true);
       expect(result.output.conditionMet).toBe(false);
@@ -491,11 +491,11 @@ describe('CustomValidationRulesManager', () => {
     type: 'command',
               command: 'echo "first"'}, {
     type: 'command',
-              command: 'echo "second"'}
+              command: 'echo "second"'},
   ]}
-  }
+}
 
-  const result = await manager._executeCompositeRule(rule);
+  const _result = await manager._executeCompositeRule(rule);
 
       expect(result.success).toBe(true);
       expect(result.output.results).toHaveLength(2);
@@ -513,11 +513,11 @@ describe('CustomValidationRulesManager', () => {
     type: 'command',
               command: 'exit 1'}, {
     type: 'command',
-              command: 'echo "success"'}
+              command: 'echo "success"'},
   ]}
-  }
+}
 
-  const result = await manager._executeCompositeRule(rule);
+  const _result = await manager._executeCompositeRule(rule);
 
       expect(result.success).toBe(true);
       expect(result.output.operator).toBe('or');
@@ -534,11 +534,11 @@ describe('CustomValidationRulesManager', () => {
     type: 'command',
               command: 'echo "success"'}, {
     type: 'command',
-              command: 'exit 1'}
+              command: 'exit 1'},
   ]}
-  }
+}
 
-  const result = await manager._executeCompositeRule(rule);
+  const _result = await manager._executeCompositeRule(rule);
 
       expect(result.success).toBe(false);
     });
@@ -620,8 +620,8 @@ describe('CustomValidationRulesManager', () => {
     type: 'file_exists',
             description: 'Check for package.json',
             files: ['package.json'],
-            requires_tech_stack: 'nodejs'}
-  }}
+            requires_tech_stack: 'nodejs'},
+}}
 
   await FS.writeFile(;
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -634,7 +634,7 @@ describe('CustomValidationRulesManager', () => {
     test('should execute individual rule successfully', async () => {
       await manager.loadCustomRules();
 
-      const result = await manager.executeRule('simple_command');
+      const _result = await manager.executeRule('simple_command');
 
       expect(result.success).toBe(true);
       expect(result.ruleId).toBe('simple_command');
@@ -646,7 +646,7 @@ describe('CustomValidationRulesManager', () => {
     test('should fail to execute non-existent rule', async () => {
       await manager.loadCustomRules();
 
-      const result = await manager.executeRule('nonexistent_rule');
+      const _result = await manager.executeRule('nonexistent_rule');
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('not found or not enabled');
@@ -705,7 +705,7 @@ describe('CustomValidationRulesManager', () => {
         'invalid json content',
       );
 
-      const result = await manager.loadCustomRules();
+      const _result = await manager.loadCustomRules();
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('JSON');
@@ -717,10 +717,10 @@ describe('CustomValidationRulesManager', () => {
         type: 'file_content',
         config: {
     file: '/root/nonexistent/file.txt',
-          pattern: 'test'}
-  }
+          pattern: 'test'},
+}
 
-  const result = await manager._executeFileContentRule(rule);
+  const _result = await manager._executeFileContentRule(rule);
       expect(result).rejects.toThrow();
     });
 
@@ -730,8 +730,8 @@ describe('CustomValidationRulesManager', () => {
         type: 'command',
         timeout: 100, // Very short, timeout
         config: {
-    command: 'sleep 1'}
-  }
+    command: 'sleep 1'},
+}
 
   await expect(manager._executeCommandRule(rule)).rejects.toThrow();
     });
@@ -745,7 +745,7 @@ describe('CustomValidationRulesManager', () => {
         JSON.stringify(config, null, 2),
       );
 
-      const result = await manager.loadCustomRules();
+      const _result = await manager.loadCustomRules();
 
       expect(result.success).toBe(true);
       expect(result.rulesLoaded).toBe(0);
@@ -773,8 +773,8 @@ describe('CustomValidationRulesManager', () => {
     test_rule: {
     type: 'command',
             description: 'Test rule',
-            command: 'echo test'}
-  }}
+            command: 'echo test'},
+}}
 
   await FS.writeFile(;
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -810,7 +810,7 @@ describe('CustomValidationRulesManager', () => {
         config.custom_rules[`rule_${i}`] = {
     type: 'command',
           description: `Test rule ${i}`,
-          command: `echo "Rule ${i}"`};
+          command: `echo "Rule ${i}"`};,
       }
 
       await FS.writeFile(;
@@ -837,8 +837,8 @@ describe('CustomValidationRulesManager', () => {
     test_rule: {
     type: 'command',
             description: 'Test rule',
-            command: 'echo test'}
-  }}
+            command: 'echo test'},
+}}
 
   await FS.writeFile(;
         path.join(testProjectRoot, '.validation-rules.json'),

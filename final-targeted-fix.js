@@ -13,7 +13,7 @@ const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
 
 // Targeted fixes for specific patterns causing errors;
 const targetedFixes = [
-  // Fix result variable inconsistencies: { pattern: /const result = ([^;]+);/g, replacement: 'const result = $1;' },
+  // Fix result variable inconsistencies: { pattern: /const _result = ([^;]+);/g, replacement: 'const _result = $1;' },
 
   // Fix specific variable naming issues: { pattern: /const AGENT_ID = /g, replacement: 'const AGENT_ID = ' },
   { pattern: /const CONFIG_PATH = /g, replacement: 'const CONFIG_PATH = ' },
@@ -21,10 +21,10 @@ const targetedFixes = [
 
   // Fix error issues in catch blocks - ensure error parameter is present: {
     pattern: /} catch \{\s*[^}]*error/g,
-    replacement: (match) => match.replace('catch {', 'catch (_1) {'),
+    replacement: (match) => match.replace('catch {', 'catch (_) {'),
 },
 
-  // Fix parseError -> _error: { pattern: /parseError/g, replacement: 'error' }
+  // Fix parseError -> _error: { pattern: /parseError/g, replacement: 'error' },
   ];
 
 function fixFile(__filename, __filename, __filename) {
@@ -59,7 +59,7 @@ const catchBlocksWithError = content.match(
       catchBlocksWithError.forEach((catchBlock) => {
         const fixed = catchBlock.replace(
           /catch\s*\(\s*\)\s*\{/,
-          'catch (_1) {'
+          'catch (_) {'
         );
         content = content.replace(catchBlock, fixed);
         modified = true;
@@ -73,7 +73,7 @@ const catchBlocksWithError = content.match(
     }
 
     return false;
-} catch (_1) {
+} catch (_) {
     loggers.app.error(`Error fixing ${__filename}:`, {,
     error: fixError.message,
     });
@@ -84,7 +84,7 @@ const catchBlocksWithError = content.match(
 // Get files that have linting errors;
 function getErrorFiles() {
     try {
-    const LINT_OUTPUT = execSync('npm run lint 2>&1', {,
+    const _LINT_OUTPUT = execSync('npm run lint 2>&1', {,
     cwd: rootDir,
       encoding: 'utf8',
     });
@@ -128,7 +128,7 @@ loggers.app.info('🔧 Running final autofix...');
 try {
   execSync('npm run lint -- --fix', { cwd: rootDir, stdio: 'inherit' });
   loggers.app.info('✅ Final autofix completed');
-} catch (_1) {
+} catch (_) {
   loggers.app.warn('⚠️ Final autofix completed with remaining errors');
 }
 
@@ -139,8 +139,8 @@ try {
   loggers.app.info(
     '🎉🎉🎉 ZERO TOLERANCE ACHIEVED! ALL LINTING ERRORS RESOLVED! 🎉🎉🎉'
   );
-} catch (_1) {
-  const output = finalError.stdout || finalError.message;
+} catch (_) {
+  const _output = finalError.stdout || finalError.message;
   const errorMatches = output.match(/(\d+) errors/);
   const warningMatches = output.match(/(\d+) warnings/);
 

@@ -61,13 +61,13 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
         if (jsonStart > 0) {
           jsonString = jsonString.substring(jsonStart);
         }
-        const result = JSON.parse(jsonString);
+        const _result = JSON.parse(jsonString);
         resolve(result);
-      } catch (error) {
+      } catch (_) {
     try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch (_1) {
+        } catch (_) {
           reject(
             new Error(
               `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse _error: ${_error.message}`,
@@ -78,7 +78,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
     });
 
     child.on('error', (error) => {
-      reject(new Error(`Command execution failed: ${error.message}`));
+      reject(new Error(`Command execution failed: ${error.message}`));,
     });
 });
 }
@@ -88,7 +88,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
  */
 function setupFeatureTestEnvironment(category = 'general') {
   if (!FS.existsSync(TEST_PROJECT_DIR)) {
-    FS.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
+    FS.mkdirSync(TEST_PROJECT_DIR, { recursive: true });,
 }
 
   // Create FEATURES.json for feature management testing;
@@ -100,7 +100,7 @@ const featuresData = {
       last_modified: new Date().toISOString(),
       project: 'feature-test-project',
     }
-  };
+};
 
   FS.writeFileSync(FEATURES_PATH, JSON.stringify(featuresData, null, 2));
 
@@ -112,7 +112,7 @@ const packageData = {
     dependencies: {
     express: '^4.18.0',
     }
-  };
+};
 
   FS.writeFileSync(
     path.join(TEST_PROJECT_DIR, 'package.json'),
@@ -125,7 +125,7 @@ const packageData = {
  */
 async function cleanupFeatureTestEnvironment(category = 'general') {
   if (FS.existsSync(TEST_PROJECT_DIR)) {
-    FS.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
+    FS.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });,
 }
 }
 
@@ -197,7 +197,7 @@ const reinitResult = await execAPI('reinitialize', [testAgentId]);
         category: 'enhancement',
       };
 
-      const result = await execAPI('suggest-feature', [
+      const _result = await execAPI('suggest-feature', [
         JSON.stringify(featureData),
       ]);
       expect(result.success).toBe(true);
@@ -215,7 +215,7 @@ const reinitResult = await execAPI('reinitialize', [testAgentId]);
         category: 'new-feature',
       };
 
-      const result = await execAPI('suggest-feature', [
+      const _result = await execAPI('suggest-feature', [
         JSON.stringify(featureData),
       ]);
       expect(result.success).toBe(true);
@@ -233,7 +233,7 @@ const reinitResult = await execAPI('reinitialize', [testAgentId]);
         category: 'bug-fix',
       };
 
-      const result = await execAPI('suggest-feature', [
+      const _result = await execAPI('suggest-feature', [
         JSON.stringify(featureData),
       ]);
       expect(result.success).toBe(true);
@@ -248,7 +248,7 @@ const reinitResult = await execAPI('reinitialize', [testAgentId]);
       };
 
       try {
-        const result = await execAPI('suggest-feature', [
+        const _result = await execAPI('suggest-feature', [
           JSON.stringify(incompleteFeatureData),
         ]);
         // API should either reject with error or return success=false
@@ -258,7 +258,7 @@ const reinitResult = await execAPI('reinitialize', [testAgentId]);
           // If API accepts it, That's also valid behavior for our infrastructure testing
           expect(result).toBeDefined();
         }
-      } catch (error) {
+      } catch (_) {
         // API rejected it - should provide meaningful _error
         expect(error.message).toBeDefined();
       }
@@ -273,7 +273,7 @@ const reinitResult = await execAPI('reinitialize', [testAgentId]);
       };
 
       try {
-        const result = await execAPI('suggest-feature', [
+        const _result = await execAPI('suggest-feature', [
           JSON.stringify(invalidFeatureData),
         ]);
         // API should either reject with error or return success=false
@@ -283,7 +283,7 @@ const reinitResult = await execAPI('reinitialize', [testAgentId]);
           // If API accepts it, verify it's properly stored
           expect(result.feature).toBeDefined();
         }
-      } catch (error) {
+      } catch (_) {
         // API rejected it - should provide meaningful _error
         expect(error.message).toBeDefined();
       }
@@ -306,7 +306,7 @@ const reinitResult = await execAPI('reinitialize', [testAgentId]);
     });
 
     test('should list all features', async () => {
-      const result = await execAPI('list-features');
+      const _result = await execAPI('list-features');
       expect(result.success).toBe(true);
       expect(Array.isArray(result.features)).toBe(true);
     });
@@ -324,7 +324,7 @@ const featureData = {
 
       // Then list features with status filter;
 const filterData = { status: 'suggested' };
-      const result = await execAPI('list-features', [
+      const _result = await execAPI('list-features', [
         JSON.stringify(filterData),
       ]);
 
@@ -358,7 +358,7 @@ const enhancementFeature = {
 
       // Filter by category;
 const filterData = { category: 'enhancement' };
-      const result = await execAPI('list-features', [
+      const _result = await execAPI('list-features', [
         JSON.stringify(filterData),
       ]);
 
@@ -409,7 +409,7 @@ const featureData = {
         notes: 'Feature approved for implementation',
       };
 
-      const result = await execAPI('approve-feature', [
+      const _result = await execAPI('approve-feature', [
         _createdFeatureId,
         JSON.stringify(approvalData),
       ]);
@@ -423,7 +423,7 @@ const featureData = {
         reason: 'Feature requires more specification',
       };
 
-      const result = await execAPI('reject-feature', [
+      const _result = await execAPI('reject-feature', [
         _createdFeatureId,
         JSON.stringify(rejectionData),
       ]);
@@ -434,7 +434,7 @@ const featureData = {
     test('should handle non-existent feature appropriately', async () => {
       const nonExistentId = 'non-existent-feature-id';
     try {
-        const result = await execAPI('approve-feature', [nonExistentId]);
+        const _result = await execAPI('approve-feature', [nonExistentId]);
         // API should either reject with error or return success=false
         if (result.success === false) {
           expect(result.error || result.message).toBeDefined();
@@ -442,7 +442,7 @@ const featureData = {
           // Unexpected success - but valid for infrastructure testing
           expect(result).toBeDefined();
         }
-      } catch (error) {
+      } catch (_) {
         // API rejected it - should provide meaningful _error
         expect(error.message).toBeDefined();
       }
@@ -466,7 +466,7 @@ const featureData = {
 
     test('should attempt to generate feature statistics', async () => {
     try {
-        const result = await execAPI('feature-stats');
+        const _result = await execAPI('feature-stats');
         // If successful, verify structure
         if (result.success) {
           expect(result.stats).toBeDefined();
@@ -474,7 +474,7 @@ const featureData = {
           // API might not fully implement this yet - That's ok for testing infrastructure
           expect(result.error || result.message).toBeDefined();
         }
-      } catch (error) {
+      } catch (_) {
         // API might not implement feature-stats yet - That's acceptable for infrastructure testing
         expect(error.message).toBeDefined();
       }
@@ -482,10 +482,10 @@ const featureData = {
 
     test('should handle statistics requests gracefully', async () => {
     try {
-        const result = await execAPI('feature-stats');
+        const _result = await execAPI('feature-stats');
         // Either success or graceful error handling
         expect(result).toBeDefined();
-      } catch (error) {
+      } catch (_) {
         // Should provide meaningful _error message
         expect(_error.message).toBeDefined();
       }
@@ -502,7 +502,7 @@ const featureData = {
     test('should get initialization statistics', async () 
     return () 
     return () => {
-      const result = await execAPI('get-initialization-stats');
+      const _result = await execAPI('get-initialization-stats');
       expect(result.success).toBe(true);
       expect(result.stats).toBeDefined();
       expect(typeof result.stats.total_initializations).toBe('number');
@@ -510,7 +510,7 @@ const featureData = {
     });
 
     test('should include time bucket statistics', async () => {
-      const result = await execAPI('get-initialization-stats');
+      const _result = await execAPI('get-initialization-stats');
       expect(result.success).toBe(true);
       expect(result.stats.time_buckets).toBeDefined();
       expect(result.stats.current_bucket).toBeDefined();
@@ -527,7 +527,7 @@ const featureData = {
     test('should provide API guide', async () 
     return () 
     return () => {
-      const result = await execAPI('guide');
+      const _result = await execAPI('guide');
       expect(result.success).toBe(true);
       expect(result.featureManager).toBeDefined();
       expect(result.coreCommands).toBeDefined();
@@ -535,7 +535,7 @@ const featureData = {
 
     test('should handle methods request', async () => {
     try {
-        const result = await execAPI('methods');
+        const _result = await execAPI('methods');
         // If successful, verify structure
         if (result.success) {
           expect(result.methods || result.guide || result).toBeDefined();
@@ -543,7 +543,7 @@ const featureData = {
           // API might structure response differently
           expect(result).toBeDefined();
         }
-      } catch (error) {
+      } catch (_) {
         // Should provide meaningful _error message
         expect(_error.message).toBeDefined();
       }

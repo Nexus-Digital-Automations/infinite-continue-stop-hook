@@ -18,7 +18,7 @@ describe('Semantic Search Accuracy Validation', () => {
 
   beforeAll(async () => {
     loggers.stopHook.log(
-      'Setting up semantic search accuracy test environment...'
+      'Setting up semantic search accuracy test environment...',
     );
 
     // Initialize test dataset with known technical content
@@ -100,7 +100,7 @@ const _testQueries = [ {
           expectedRelevant: ['js-error-2', 'js-error-1'],
           expectedIrrelevant: ['react-error-1'],
           minRelevanceScore: 0.65,
-        }
+        },
   ];
 
       for (const testQuery of testQueries) {
@@ -173,8 +173,7 @@ const _testQueries = [ {
       }
 
       // Language-specific queries should prioritize relevant language lessons
-      const _languageQueries = [
-        {
+      const _languageQueries = [ {
     query: 'Python error handling best practices',
           expectedLanguage: 'python',
           expectedTop: 'py-error-1',
@@ -186,7 +185,7 @@ const _testQueries = [ {
     query: 'Go error handling conventions',
           expectedLanguage: 'go',
           expectedTop: 'go-error-1',
-        }
+        },
   ];
 
       for (const query of languageQueries) {
@@ -225,7 +224,7 @@ const _languageResults = results.results.filter(r =>
                   const req = https.get(\`/api/users/\${userId}\`, (res) => {
                     let data = '';
                     res.on('data', chunk => data += chunk);
-                    res.on('end', () => resolve({ ok: res.statusCode === 200, json: () => JSON.parse(data) }));
+                    res.on('end', () => resolve({ ok: res.statusCode === 200, json: () => JSON.parse(data) }));,
                   });
                   req.on('error', reject);
                 });
@@ -233,7 +232,7 @@ const _languageResults = results.results.filter(r =>
                   throw new Error(\`HTTP \${response.status}: \${response.statusText}\`);
                 }
                 return await response.json();
-              } catch (_1) {
+              } catch (_) {
         loggers.stopHook.error('Failed to fetch user:', error);
                 throw _error;
               }
@@ -264,8 +263,7 @@ const _languageResults = results.results.filter(r =>
         await ragSystem.storeLesson(lesson);
       }
 
-      const _searchTests = [
-        {
+      const _searchTests = [ {
     query: 'show me code example for API fetch request',
           expectedTop: 'code-example-1',
           type: 'code-focused',
@@ -277,7 +275,7 @@ const _languageResults = results.results.filter(r =>
     query: 'how to implement user data fetching',
           expectedTop: 'code-example-1',
           type: 'implementation-focused',
-        }
+        },
   ];
 
       for (const test of searchTests) {
@@ -337,8 +335,7 @@ const _codeResult = results.results.find(r => r.id === 'code-example-1');
         await ragSystem.storeError(error);
       }
 
-      const _errorQueries = [
-        {
+      const _errorQueries = [ {
     query: 'Cannot read property "id" of null',
           expectedSimilar: ['error-pattern-1', 'error-pattern-2'],
           expectedDifferent: ['error-pattern-3'],
@@ -353,7 +350,7 @@ const _codeResult = results.results.find(r => r.id === 'code-example-1');
           expectedSimilar: ['error-pattern-3'],
           expectedDifferent: ['error-pattern-1', 'error-pattern-2'],
           minSimilarity: 0.6,
-        }
+        },
   ];
 
       for (const query of errorQueries) {
@@ -410,8 +407,7 @@ const _codeResult = results.results.find(r => r.id === 'code-example-1');
         await ragSystem.storeError(error);
       }
 
-      const _severityQueries = [
-        {
+      const _severityQueries = [ {
     query: 'application won\'t start database issue',
           expectedSeverity: 'critical',
           expectedTop: 'critical-error-1',
@@ -423,7 +419,7 @@ const _codeResult = results.results.find(r => r.id === 'code-example-1');
     query: 'deprecated method warning',
           expectedSeverity: 'warning',
           expectedTop: 'warning-error-1',
-        }
+        },
   ];
 
       for (const query of severityQueries) {
@@ -490,8 +486,7 @@ const _criticalErrors = results.errors.filter(e => e.severity === 'critical');
         await ragSystem.storeLesson(lesson);
       }
 
-      const _contextualQueries = [
-        {
+      const _contextualQueries = [ {
     query: 'state management best practices',
           context: { project_type: 'frontend', technology: 'react' },
           expectedTop: 'frontend-lesson-1',
@@ -503,7 +498,7 @@ const _criticalErrors = results.errors.filter(e => e.severity === 'critical');
     query: 'managing application state',
           context: { project_type: 'mobile', technology: 'react-native' },
           expectedTop: 'mobile-lesson-1',
-        }
+        },
   ];
 
       for (const query of contextualQueries) {
@@ -555,8 +550,7 @@ const _contextMatch = results.results[0];
         await ragSystem.storeLesson(lesson);
       }
 
-      const _temporalQueries = [
-        {
+      const _temporalQueries = [ {
     query: 'React component best practices',
           temporal_preference: 'recent',
           expectedTop: 'recent-lesson-1',
@@ -564,7 +558,7 @@ const _contextMatch = results.results[0];
     query: 'React component lifecycle methods',
           temporal_preference: 'comprehensive',
           expectedInclude: ['older-lesson-1'],
-        }
+        },
   ];
 
       for (const query of temporalQueries) {

@@ -19,7 +19,7 @@ const executeTaskManagerCommand = (command, args = '', options = {}) => {
     const fullCommand = `timeout ${timeout / 1000}s node "${PROJECT_ROOT}/taskmanager-api.js" ${command} ${args}`;
 
     try {
-      const output = execSync(fullCommand, {,
+      const _output = execSync(fullCommand, {,
     cwd: PROJECT_ROOT,
         encoding: 'utf8',
         timeout: timeout,
@@ -27,11 +27,11 @@ const executeTaskManagerCommand = (command, args = '', options = {}) => {
       });
 
       return JSON.parse(output.trim());
-    } catch (error) {
+    } catch (_) {
       if (_error.stdout) {
     try {
           return JSON.parse(_error.stdout.trim());
-        } catch (error) {
+        } catch (_) {
           throw new Error(
             `Command failed: ${error.message}, Output: ${_error.stdout || _error.stderr}`
           );
@@ -39,7 +39,7 @@ const executeTaskManagerCommand = (command, args = '', options = {}) => {
       }
       throw _error;
     }
-  };
+};
 
   describe('Dependency Graph API Endpoints', () => {
     
@@ -47,7 +47,7 @@ const executeTaskManagerCommand = (command, args = '', options = {}) => {
     test('get-dependency-graph should return complete dependency configuration', () 
     return () 
     return () => {
-      const result = executeTaskManagerCommand('get-dependency-graph');
+      const _result = executeTaskManagerCommand('get-dependency-graph');
 
       expect(result.success).toBe(true);
       expect(result).toHaveProperty('dependencyGraph');
@@ -73,7 +73,7 @@ const viz = result.visualization;
     });
 
     test('validate-dependency-graph should validate clean graph', () => {
-      const result = executeTaskManagerCommand('validate-dependency-graph');
+      const _result = executeTaskManagerCommand('validate-dependency-graph');
 
       expect(result.success).toBe(true);
       expect(result.validation.valid).toBe(true);
@@ -84,7 +84,7 @@ const viz = result.visualization;
     });
 
     test('get-dependency-visualization should return visualization data', () => {
-      const result = executeTaskManagerCommand('get-dependency-visualization');
+      const _result = executeTaskManagerCommand('get-dependency-visualization');
 
       expect(result.success).toBe(true);
       expect(result).toHaveProperty('visualization');
@@ -102,7 +102,7 @@ const viz = result.visualization;
       expect(viz.nodes[0]).toHaveProperty('parallelizable');
       expect(viz.nodes[0]).toHaveProperty('resourceRequirements');
     });
-  });
+});
 
   describe('Execution Planning API Endpoints', () => {
     
@@ -110,7 +110,7 @@ const viz = result.visualization;
     test('generate-validation-execution-plan should return optimal execution sequence', () 
     return () 
     return () => {
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'generate-validation-execution-plan'
       );
 
@@ -146,7 +146,7 @@ const criteriaOrder = order.map((item) => item.criterion);
         'build-validation',
         'test-validation',
       ];
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'generate-validation-execution-plan',
         `'${JSON.stringify(criteria)}'`
       );
@@ -166,7 +166,7 @@ const linterIndex = orderCriteria.indexOf('linter-validation');
     });
 
     test('generate-parallel-execution-plan should create optimized parallel plan', () => {
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'generate-parallel-execution-plan',
         'null 4'
       );
@@ -199,7 +199,7 @@ const linterIndex = orderCriteria.indexOf('linter-validation');
     test('generate-parallel-execution-plan with constrained concurrency should work', () => {
     
     
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'generate-parallel-execution-plan',
         'null 2'
       );
@@ -222,7 +222,7 @@ const linterIndex = orderCriteria.indexOf('linter-validation');
         diskIOLoad: 0.4,
       };
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'generate-adaptive-execution-plan',
         `'${JSON.stringify(systemInfo)}'`
       );
@@ -243,7 +243,7 @@ const linterIndex = orderCriteria.indexOf('linter-validation');
       expect(systemAware.networkOptimized).toBeGreaterThan(0);
       expect(systemAware.diskOptimized).toBeGreaterThan(0);
     });
-  });
+});
 
   describe('Dependency CRUD Operations API Endpoints', () => {
     
@@ -259,7 +259,7 @@ const linterIndex = orderCriteria.indexOf('linter-validation');
         resourceRequirements: ['filesystem'],
       };
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'add-dependency',
         `'integration-test-validation' '${JSON.stringify(dependencyConfig)}'`
       );
@@ -283,7 +283,7 @@ const getResult = executeTaskManagerCommand(
     });
 
     test('get-dependency should retrieve specific dependency configuration', () => {
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'get-dependency',
         'build-validation'
       );
@@ -302,7 +302,7 @@ const getResult = executeTaskManagerCommand(
     });
 
     test('get-dependency should handle non-existent criterion', () => {
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'get-dependency',
         'non-existent-criterion'
       );
@@ -326,7 +326,7 @@ const dependencyConfig = {
       );
 
       // Now remove it;
-const result = executeTaskManagerCommand(
+const _result = executeTaskManagerCommand(
         'remove-dependency',
         'temp-test-dependency'
       );
@@ -343,7 +343,7 @@ const getResult = executeTaskManagerCommand(
     });
 
     test('remove-dependency should handle non-existent criterion', () => {
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'remove-dependency',
         'definitely-non-existent'
       );
@@ -351,7 +351,7 @@ const getResult = executeTaskManagerCommand(
       expect(result.success).toBe(false);
       expect(result.error).toContain('not found');
     });
-  });
+});
 
   describe('Configuration Persistence API Endpoints', () => {
     
@@ -359,7 +359,7 @@ const getResult = executeTaskManagerCommand(
     test('save-dependency-config should persist configuration to file', async () 
     return () 
     return () => {
-      const result = executeTaskManagerCommand('save-dependency-config');
+      const _result = executeTaskManagerCommand('save-dependency-config');
 
       expect(result.success).toBe(true);
       expect(result).toHaveProperty('configPath');
@@ -387,7 +387,7 @@ const configExists = await fs
     test('save-dependency-config with custom path should work', async () => {
       const customPath = path.join(PROJECT_ROOT, 'test-dependency-config.json');
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'save-dependency-config',
         `'${customPath}'`
       );
@@ -434,7 +434,7 @@ const getResult = executeTaskManagerCommand(
     });
 
     test('load-dependency-config should handle missing file gracefully', () => {
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'load-dependency-config',
         "'/non/existent/path.json'"
       );
@@ -443,7 +443,7 @@ const getResult = executeTaskManagerCommand(
       expect(result.message).toContain('not found');
       expect(result.config).toBe(null);
     });
-  });
+});
 
   describe('Analytics And Monitoring API Endpoints', () => {
     
@@ -451,7 +451,7 @@ const getResult = executeTaskManagerCommand(
     test('get-execution-analytics should return analytics data', () 
     return () 
     return () => {
-      const result = executeTaskManagerCommand('get-execution-analytics');
+      const _result = executeTaskManagerCommand('get-execution-analytics');
 
       expect(result.success).toBe(true);
       expect(result).toHaveProperty('analytics');
@@ -466,7 +466,7 @@ const getResult = executeTaskManagerCommand(
         expect(result.analytics).toHaveProperty('criteriaStats');
       }
     });
-  });
+});
 
   describe('Error Handling And Edge Cases', () => {
     
@@ -474,7 +474,7 @@ const getResult = executeTaskManagerCommand(
     test('should handle invalid JSON in API parameters', () 
     return () 
     return () => {
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'add-dependency',
         'test-criterion invalid-json'
       );
@@ -484,7 +484,7 @@ const getResult = executeTaskManagerCommand(
     });
 
     test('should handle missing required parameters', () => {
-      const result = executeTaskManagerCommand('get-dependency');
+      const _result = executeTaskManagerCommand('get-dependency');
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('required');
@@ -493,12 +493,12 @@ const getResult = executeTaskManagerCommand(
     test('should handle invalid dependency types in add-dependency', () => {
       const invalidConfig = {
     dependencies: [
-          { criterion: 'linter-validation', type: 'invalid-type' }
+          { criterion: 'linter-validation', type: 'invalid-type' },
   ],
         description: 'Test with invalid dependency type',
       };
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'add-dependency',
         `'invalid-test' '${JSON.stringify(invalidConfig)}'`
       );
@@ -570,7 +570,7 @@ const validationResult = executeTaskManagerCommand(
     });
 
     test('should handle very high concurrency limits gracefully', () => {
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'generate-parallel-execution-plan',
         'null 100'
       );
@@ -585,7 +585,7 @@ const validationResult = executeTaskManagerCommand(
     test('should handle very low concurrency limits', () => {
     
     
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'generate-parallel-execution-plan',
         'null 1'
       );
@@ -599,7 +599,7 @@ const validationResult = executeTaskManagerCommand(
         expect(wave.criteria.length).toBeLessThanOrEqual(1);
       });
     });
-  });
+});
 
   describe('Performance And Scalability', () => {
     
@@ -608,7 +608,7 @@ const validationResult = executeTaskManagerCommand(
     return () 
     return () => {
       const startTime = Date.now();
-      const result = executeTaskManagerCommand('get-dependency-graph');
+      const _result = executeTaskManagerCommand('get-dependency-graph');
       const duration = Date.now() - startTime;
 
       expect(result.success).toBe(true);
@@ -621,7 +621,7 @@ const validationResult = executeTaskManagerCommand(
 
       // Execute multiple API calls concurrently
       for (let i = 0; i < 5; i++) {
-        const result = executeTaskManagerCommand('validate-dependency-graph');
+        const _result = executeTaskManagerCommand('validate-dependency-graph');
         expect(result.success).toBe(true);
       }
 
@@ -647,7 +647,7 @@ const validationResult = executeTaskManagerCommand(
       }
 
       const startTime = Date.now();
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'generate-parallel-execution-plan'
       );
       const duration = Date.now() - startTime;
@@ -660,7 +660,7 @@ const validationResult = executeTaskManagerCommand(
         executeTaskManagerCommand('remove-dependency', `scale-test-${i}`);
       }
     });
-  });
+});
 
   describe('Integration with Validation System', () => {
     
@@ -733,5 +733,5 @@ let buildWave = -1;
       expect(buildWave).toBeGreaterThan(typeWave);
       expect(startWave).toBeGreaterThan(buildWave);
     });
-  });
+});
 });

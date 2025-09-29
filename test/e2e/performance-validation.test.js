@@ -27,13 +27,13 @@ describe('Performance, Validation E2E', () => {
     return () => {
     environment = new E2EEnvironment('performance-validation');
     await environment.setup();
-  });
+});
 
   afterEach(async () => {
     if (environment) {
       await environment.cleanup();
     }
-  });
+});
 
   describe('API, Performance Benchmarks', () => {
     
@@ -60,7 +60,7 @@ describe('Performance, Validation E2E', () => {
             performanceMetrics,
             thresholds;
           );
-        } catch (error) {
+        } catch (_) {
           loggers.stopHook.warn(;
             `Performance validation warning: ${error.message}`;
           );
@@ -111,7 +111,7 @@ describe('Performance, Validation E2E', () => {
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature.id;
-          } catch (error) {
+          } catch (_) {
             console.error(;
               'Failed to parse feature suggestion response:',
               result.result.stdout;
@@ -123,7 +123,7 @@ describe('Performance, Validation E2E', () => {
         // Step 2: Measure approval performance.let approvalIndex = 0;
         const approvalTest = async () => {;
           const id = featureIds[approvalIndex % featureIds.length];
-          const result = await FeatureTestHelpers.approveFeature(;
+          const _result = await FeatureTestHelpers.approveFeature(;
             environment,id;
             `performance-tester-${approvalIndex}`,
             `Performance test approval ${approvalIndex}`;
@@ -146,7 +146,7 @@ describe('Performance, Validation E2E', () => {
             approvalMetrics,
             approvalThresholds;
           );
-        } catch (error) {
+        } catch (_) {
           loggers.stopHook.warn(;
             `Approval performance warning: ${error.message}`;
           );
@@ -181,7 +181,7 @@ describe('Performance, Validation E2E', () => {
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature.id;
-          } catch (error) {
+          } catch (_) {
             console.error(;
               'Failed to parse bulk feature suggestion response:',
               result.result.stdout;
@@ -228,7 +228,7 @@ describe('Performance, Validation E2E', () => {
       },
       E2E_TIMEOUT;
     );
-  });
+});
 
   describe('Concurrent, Load Performance', () => {
     
@@ -310,7 +310,7 @@ describe('Performance, Validation E2E', () => {
       },
       E2E_TIMEOUT * 2
     );
-  });
+});
 
   describe('TaskManager, API Performance', () => {
     
@@ -319,7 +319,7 @@ describe('Performance, Validation E2E', () => {
     return () => {
         // Test, TaskManager API performance, And response times.const apiTest = () => {;
           return CommandExecutor.executeAPI('feature-stats', [], {
-    projectRoot: environment.testDir});
+    projectRoot: environment.testDir});,
         }
 
   const apiMetrics = await PerformanceTestHelpers.measurePerformance(;
@@ -334,7 +334,7 @@ describe('Performance, Validation E2E', () => {
 
   try {
           PerformanceTestHelpers.validatePerformance(apiMetrics, apiThresholds);
-        } catch (error) {
+        } catch (_) {
           loggers.stopHook.warn(;
             `TaskManager, API performance warning: ${error.message}`;
           );
@@ -363,11 +363,11 @@ describe('Performance, Validation E2E', () => {
             if (startResult.result.success) {
               // for performance testing, we'll just test the start, command
               // The full 7-step validation would take too long for performance, tests
-              return { success: true, time: Date.now() };
+              return { success: true, time: Date.now() };,
             }
-            return { success: false, time: Date.now() };
-          } catch (error) {
-            return { success: false, time: Date.now(), _error: error.message };
+            return { success: false, time: Date.now() };,
+          } catch (_) {
+            return { success: false, time: Date.now(), _error: error.message };,
           }
         }
 
@@ -385,7 +385,7 @@ describe('Performance, Validation E2E', () => {
             authMetrics,
             authThresholds;
           );
-        } catch (error) {
+        } catch (_) {
           loggers.stopHook.warn(;
             `Authorization performance warning: ${error.message}`;
           );
@@ -397,7 +397,7 @@ describe('Performance, Validation E2E', () => {
       },
       E2E_TIMEOUT;
     );
-  });
+});
 
   describe('Scalability, Performance', () => {
     
@@ -407,7 +407,7 @@ describe('Performance, Validation E2E', () => {
         // Test performance with increasing numbers of features.const scalabilityTests = [;
           { featureCount: 10, expectedMaxTime: API_TIMEOUT * 0.5 },
           { featureCount: 25, expectedMaxTime: API_TIMEOUT * 0.7 },
-          { featureCount: 50, expectedMaxTime: API_TIMEOUT }
+          { featureCount: 50, expectedMaxTime: API_TIMEOUT },
   ];
 
         for (const test of scalabilityTests) {
@@ -485,7 +485,7 @@ describe('Performance, Validation E2E', () => {
           expect(;
             features.features && features.features.length;
           ).toBeGreaterThanOrEqual(38); // At least 38 out of 40, features
-        } catch (error) {
+        } catch (_) {
           // If, API response fails due to large payload, it's acceptable for memory stress, test
           console.warn(;
             `API response failed under memory stress (expected): ${error.message}`;
@@ -500,15 +500,14 @@ describe('Performance, Validation E2E', () => {
       },
       E2E_TIMEOUT * 3
     );
-  });
+});
 
   describe('Performance, Regression Detection', () => {
     
     
     test('Baseline performance regression checks', async () 
     return () => {
-        // Establish baseline performance metrics, And detect regressions.const baselineTests = [;
-          {
+        // Establish baseline performance metrics, And detect regressions.const baselineTests = [; {
     name: 'Feature, Suggestion',
             test: () =>;
               FeatureTestHelpers.suggestFeature(environment, {
@@ -516,13 +515,11 @@ describe('Performance, Validation E2E', () => {
                 description: 'Feature for baseline performance measurement',
                 business_value: 'Establishes performance baseline',
                 category: 'enhancement'}),
-            expectedMaxTime: API_TIMEOUT * 0.5},
-          {
+            expectedMaxTime: API_TIMEOUT * 0.5}, {
     name: 'Feature, Approval',
             test: async () => {
               const { result } = await FeatureTestHelpers.suggestFeature(;
-                environment,
-                {
+                environment, {
     title: 'Baseline, Approval Test',
                   description: 'Feature for baseline approval measurement',
                   business_value: 'Establishes approval performance baseline',
@@ -535,13 +532,12 @@ describe('Performance, Validation E2E', () => {
                 'Baseline test';
               );
             },
-            expectedMaxTime: API_TIMEOUT * 0.7},
-          {
+            expectedMaxTime: API_TIMEOUT * 0.7}, {
     name: 'Feature, Listing',
             test: () =>;
               CommandExecutor.executeAPI('list-features', [], {
     projectRoot: environment.testDir}),
-            expectedMaxTime: API_TIMEOUT * 0.3}
+            expectedMaxTime: API_TIMEOUT * 0.3},
   ];
 
         for (const baselineTest of baselineTests) {
@@ -577,8 +573,7 @@ describe('Performance, Validation E2E', () => {
           const startTime = Date.now();
 
           // Complete workflow: suggest → approve → list → details.const { result } = await FeatureTestHelpers.suggestFeature(;
-            environment,
-            {
+            environment, {
     title: 'E2E, Workflow Performance, Test',
               description: 'Complete workflow for performance validation',
               business_value: 'Validates end-to-end performance',
@@ -615,5 +610,5 @@ describe('Performance, Validation E2E', () => {
       },
       E2E_TIMEOUT * 2
     );
-  });
+});
 });

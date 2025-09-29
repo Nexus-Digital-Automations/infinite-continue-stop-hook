@@ -36,7 +36,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
       'timeout',
       [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs], {
         stdio: ['pipe', 'pipe', 'pipe'],
-        env: { ...process.env, NODE_ENV: 'test' }
+        env: { ...process.env, NODE_ENV: 'test' },
       },
     );
 
@@ -54,9 +54,9 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
     child.on('close', (code) => {
       if (code === 0) {
         try {
-          const result = stdout.trim() ? JSON.parse(stdout) : {};
+          const _result = stdout.trim() ? JSON.parse(stdout) : {};
           resolve(result);
-        } catch (_1) {
+        } catch (_) {
           resolve({ rawOutput: stdout, stderr });
         }
       } else {
@@ -93,7 +93,7 @@ function createLegacyTemplate(version = '1.0.0', category = 'general') {
         category: 'test',
         required: true,
         type: 'validation',
-      }
+      },
   ],
     // Legacy metadata structure
     metadata{
@@ -101,7 +101,7 @@ function createLegacyTemplate(version = '1.0.0', category = 'general') {
       author: 'legacy-system',
       format_version: '1.0',
     }
-  };
+};
 
   return execAPI('success-criteria:create-template', [
     JSON.stringify(legacyTemplate),
@@ -119,7 +119,7 @@ async function createLegacyProjectConfig(category = 'general') {
         // Old format with deprecated fields
         mandatory: true,
         validation_type: 'shell',
-      }
+      },
   ],
     // Legacy settings structure
     settings{
@@ -127,7 +127,7 @@ async function createLegacyProjectConfig(category = 'general') {
       auto_fix: false,
       report_format: 'json',
     }
-  };
+};
 
   // Write legacy config file;
 const configPath = path.join(TEST_PROJECT_DIR, '.success-criteria.json');
@@ -160,7 +160,7 @@ const packageJson = {
       devDependencies{
     jest: '^29.0.0',
       }
-  };
+};
 
     await FS.writeFile(
       path.join(TEST_PROJECT_DIR, 'package.json'),
@@ -224,7 +224,7 @@ describe('Regression Test Suite', () => {
     await FS.writeFile(path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
 
     loggers.stopHook.log('Regression test project setup completed');
-} catch (_1) {
+} catch (_) {
     loggers.stopHook.error('Failed to setup regression test project:', error);
     throw _error;
 }
@@ -234,7 +234,7 @@ async function cleanupRegressionTestProject(category = 'general') {
   try {
     await FS.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     loggers.stopHook.log('Regression test project cleanup completed');
-} catch (_1) {
+} catch (_) {
     loggers.stopHook.error('Failed to cleanup regression test project:', error);
 }
 }
@@ -256,7 +256,7 @@ describe('Success Criteria Regression Tests', () => {
 });
 
   beforeEach(async () => {
-    await execAPI('success-criteria:init');
+    await execAPI('success-criteria:init');,
 });
 
   describe('Legacy Template Compatibility', () => {
@@ -373,7 +373,7 @@ const VERSIONED_TEMPLATE = {
     id: `api-v${version.replace('.', '-')}`,
                 description: `API version ${version} requirement`,
                 category: 'compatibility',
-              }
+              },
   ],
           };
 
@@ -386,7 +386,7 @@ const VERSIONED_TEMPLATE = {
 
           const status = await execAPI('success-criteria:status');
           expect(status.projectCriteria.length).toBeGreaterThan(0);
-        } catch (_1) {
+        } catch (_) {
           // Log version compatibility issues but don't fail test
           loggers.app.info(
             `API version ${version} compatibility note:`,
@@ -456,7 +456,7 @@ const DEPRECATED_CONFIG = {
     type: 'shell-command', // Deprecated: should map to 'validationType',
     mandatory: true, // Deprecated: should map to 'priority',
     category: 'test',
-          }
+          },
   ],
       };
 
@@ -518,10 +518,10 @@ const EXTENDED_CONFIG = {
           teamConfiguration{
     notificationSettings{
     slack{ webhook: 'test-webhook' },
-              email{ recipients: ['team@example.com'] }
-  }
-  }
-  },
+              email{ recipients: ['team@example.com'] },
+}
+}
+},
         criteria: [{
     id: 'extended-criterion',
             description: 'Criterion with custom extensions',
@@ -531,7 +531,7 @@ const EXTENDED_CONFIG = {
     complianceMapping: 'SOX-404',
               riskLevel: 'high',
             }
-  }
+},
   ],
       };
 
@@ -592,9 +592,9 @@ const OLD_FORMAT_DATA = {
                 criterion_category: 'build',
                 validation_command: 'npm run build',
                 is_required: true,
-              }
+              },
   ],
-          }
+          },
   ],
       };
 
@@ -636,7 +636,7 @@ const SCHEMA_VERSIONS = [{
               { id: 'schema-1-0', desc: 'Schema 1.0 test', cat: 'test' }, // Old field names,
             ],
           }
-  }, {
+}, {
     version: '1.5',
           data{
     criteria: [{
@@ -644,10 +644,10 @@ const SCHEMA_VERSIONS = [{
                 description: 'Schema 1.5 test',
                 category: 'test',
                 metadata{ version: '1.5' }, // Added metadata
-              }
+              },
   ],
           }
-  }, {
+}, {
     version: '2.0',
           data{
     criteria: [{
@@ -661,10 +661,10 @@ const SCHEMA_VERSIONS = [{
     version: '2.0',
                   created: new Date().toISOString(),
                 }
-  }
+},
   ],
           }
-  }
+},
   ];
 
       // Use for-await-of to maintain sequential processing for schema evolution testing
@@ -689,7 +689,7 @@ const SCHEMA_VERSIONS = [{
           loggers.stopHook.log(
             `Schema ${schema.version} compatibility confirmed`,
           );
-        } catch (_1) {
+        } catch (_) {
           loggers.app.info(
             `Schema ${schema.version} evolution note:`,
             _error.message,
@@ -716,7 +716,7 @@ const TEST_DATA = {
     checksum: 'abc123',
                   created: '2023-01-01T00:00:00Z',
                 }
-  }, {
+}, {
     id: 'integrity-2',
                 description: 'Performance integrity test',
                 category: 'performance',
@@ -727,9 +727,9 @@ const TEST_DATA = {
     checksum: 'def456',
                   created: '2023-01-01T00:00:00Z',
                 }
-  }
+},
   ],
-          }
+          },
   ],
         customCriteria: [{
     id: 'custom-integrity',
@@ -739,7 +739,7 @@ const TEST_DATA = {
     hash: 'custom123',
               sensitive: true,
             }
-  }
+},
   ],
       };
 
@@ -795,7 +795,7 @@ const LEGACY_VALIDATION_TEMPLATE = {
               command: 'echo "Legacy validation passed"',
               expected_output: 'Legacy validation passed',
             }
-  }, {
+}, {
     id: 'legacy-file-validation',
             description: 'Legacy file validation',
             category: 'quality',
@@ -805,7 +805,7 @@ const LEGACY_VALIDATION_TEMPLATE = {
               path: 'package.json',
               required: true,
             }
-  }
+},
   ],
       };
 
@@ -854,7 +854,7 @@ const DEPRECATED_ENDPOINTS = [
       // Use for-await-of to maintain sequential processing for deprecated endpoint testing
       for await (const endpoint of DEPRECATED_ENDPOINTS) {
         try {
-          const result = await execAPI(endpoint);
+          const _result = await execAPI(endpoint);
 
           // Should work but may include deprecation warnings
           expect(result).toBeDefined();
@@ -865,7 +865,7 @@ const DEPRECATED_ENDPOINTS = [
               result.warning || 'Endpoint is deprecated',
             );
           }
-        } catch (_1) {
+        } catch (_) {
           // Some deprecated endpoints might be completely removed
           loggers.app.info(
             `Deprecated endpoint ${endpoint} is no longer available:`,
@@ -896,7 +896,7 @@ const MODERN_TEMPLATE = {
     environment: ['production', 'staging'],
               dependencies: ['database', 'cache'],
             }
-  }
+},
   ],
       };
 
@@ -961,7 +961,7 @@ const VERSIONS = ['1.0.0', '1.5.0', '2.0.0'];
     id: `version-${version.replace(/\./g, '-')}-criterion`,
               description: `Criterion for version ${version}`,
               category: 'compatibility',
-            }
+            },
   ],
         };
 
@@ -985,7 +985,7 @@ const VERSIONS = ['1.0.0', '1.5.0', '2.0.0'];
           loggers.app.info(
             `Template version ${template.version} compatibility confirmed`,
           );
-        } catch (_1) {
+        } catch (_) {
           loggers.app.info(
             `Template version ${template.version} compatibility issue:`,
             _error.message,
@@ -1008,7 +1008,7 @@ const TEMPLATE1 = {
             description: 'Version 1.0.0 description',
             category: 'build',
             priority: 'medium',
-          }
+          },
   ],
       };
 
@@ -1021,7 +1021,7 @@ const TEMPLATE1 = {
             category: 'build',
             priority: 'high',
             newField: 'This field was added in v2.0.0',
-          }
+          },
   ],
       };
 
@@ -1078,7 +1078,7 @@ const SYSTEM_TEMPLATE = {
     id: 'system-compat-test',
             description: 'System compatibility test',
             category: 'system',
-          }
+          },
   ],
       };
 
@@ -1142,20 +1142,20 @@ const CORE_APIS = [
           // Safe: Test comparison, not security-sensitive
           // eslint-disable-next-line security/detect-possible-timing-attacks
           if (api === 'success-criteria:init') {
-            const result = await execAPI(api);
+            const _result = await execAPI(api);
             expect(result).toBeDefined();
 
             // Safe: Test comparison, not security-sensitive
             // eslint-disable-next-line security/detect-possible-timing-attacks
           } else if (api === 'success-criteria:status') {
-            const result = await execAPI(api);
+            const _result = await execAPI(api);
             expect(result).toBeDefined();
             // Status should always have certain fields
             expect(result.projectCriteria !== undefined).toBe(true);
           }
 
           loggers.stopHook.log(`API contract for ${api} is stable`);
-        } catch (_1) {
+        } catch (_) {
           loggers.stopHook.log(
             `API contract issue for ${api}:`,
             _error.message,
@@ -1181,7 +1181,7 @@ const ESSENTIAL_FUNCTIONS = [{
     id: 'essential-1',
                   description: 'Essential test',
                   category: 'test',
-                }
+                },
   ],
             };
 
@@ -1195,13 +1195,13 @@ const ESSENTIAL_FUNCTIONS = [{
             const status = await execAPI('success-criteria:status');
             return status.projectCriteria.length > 0;
           }
-  }, {
+}, {
     name: 'Basic Validation',
           test: async () => {
-            const result = await execAPI('success-criteria:validate');
+            const _result = await execAPI('success-criteria:validate');
             return result.results !== undefined;
           }
-  }, {
+}, {
     name: 'Custom Criteria Addition',
           test: async () => {
             const CRITERION = {
@@ -1218,7 +1218,7 @@ const ESSENTIAL_FUNCTIONS = [{
               (c) => c.id === 'essential-custom',
             );
           }
-  }
+},
   ];
 
       // Use for-await-of to maintain sequential processing for essential function testing
@@ -1229,7 +1229,7 @@ const ESSENTIAL_FUNCTIONS = [{
           loggers.stopHook.log(
             `Essential function '${func.name}' is preserved`,
           );
-        } catch (_1) {
+        } catch (_) {
           loggers.app._error(
             `Essential function '${func.name}' failed:`,
             _error.message,
@@ -1273,7 +1273,7 @@ const PERFORMANCE_TESTS = [{
             const DURATION = Date.now() - START_TIME;
             return{ duration: DURATION, threshold: 5000 }; // 5 second threshold,
           }
-  }, {
+}, {
     name: 'Validation Performance',
           test: async () => {
             const START_TIME = Date.now();
@@ -1281,12 +1281,12 @@ const PERFORMANCE_TESTS = [{
             const DURATION = Date.now() - START_TIME;
             return{ duration: DURATION, threshold: 10000 }; // 10 second threshold,
           }
-  }
+},
   ];
 
       // Use for-await-of to maintain sequential processing for performance testing
       for await (const test of PERFORMANCE_TESTS) {
-        const result = await test.test();
+        const _result = await test.test();
         expect(result.duration).toBeLessThan(result.threshold);
 
         loggers.app.info(

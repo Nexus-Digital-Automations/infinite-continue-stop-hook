@@ -52,7 +52,7 @@ global.testUtils = {
         // eslint-disable-next-line no-await-in-loop -- Retry mechanism requires sequential attempts
         await fn();
         return;
-      } catch (_1) {
+      } catch (_) {
         // eslint-disable-next-line no-await-in-loop -- Retry mechanism requires sequential delays
         await new Promise((resolve) => {
           setTimeout(resolve, interval);
@@ -60,7 +60,7 @@ global.testUtils = {
       }
     }
     throw new Error(`Assertion failed within ${timeout}ms`);
-  },
+},
 
   // Test environment helpers
   isCI: () => process.env.CI === 'true',
@@ -79,8 +79,8 @@ global.testUtils = {
       }
     }
     return 'unknown';
-  }
-  };
+}
+};
 
 // Global error handling
 process.on('unhandledRejection', (reason, _promise) => {
@@ -95,7 +95,7 @@ process.on('uncaughtException', (_error) => {
 
 // Global test hooks
 beforeAll(() => {
-  TestLogger.info('Starting test suite', {,
+  TestLogger.info('Starting test suite', {
     nodeVersion: process.version,
     platform: process.platform,
     testTimeout: testTimeout,
@@ -111,7 +111,7 @@ beforeEach(() => {
   // Reset any global state before each test
   if (global.mockManager) {
     global.mockManager.resetAll();
-  }
+}
 });
 
 afterEach(() => {
@@ -137,7 +137,7 @@ const message = args[0];
     ) {
       return;
     }
-  }
+}
   originalConsoleError.apply(console, args);
 };
 
@@ -152,7 +152,7 @@ const message = args[0];
     ) {
       return;
     }
-  }
+}
   originalConsoleWarn.apply(console, args);
 };
 
@@ -160,7 +160,7 @@ const message = args[0];
 if (global.testUtils.isCI()) {
   beforeEach(() => {
     global.gc && global.gc();
-  });
+});
 }
 
 // Test performance monitoring
@@ -168,7 +168,7 @@ if (process.env.MONITOR_TEST_PERFORMANCE === 'true') {
   beforeEach(() => {
     global.testStartTime = Date.now();
     global.testStartMemory = process.memoryUsage();
-  });
+});
 
   afterEach(() => {
     const duration = Date.now() - global.testStartTime;
@@ -183,7 +183,7 @@ if (process.env.MONITOR_TEST_PERFORMANCE === 'true') {
         memoryDelta: `${Math.round(memoryDelta / 1024 / 1024)}MB`,
       });
     }
-  });
+});
 }
 
 // Export setup configuration for other modules

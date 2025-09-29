@@ -35,19 +35,19 @@ describe('API Workflow Integration Tests', () => {
     return () 
     return () => {
     await setupGlobalCleanup();
-  });
+});
 
   afterAll(async () => {
     await teardownGlobalCleanup();
-  });
+});
 
   beforeEach(async () => {
     testDir = await createTestEnvironment('api-workflow');
-  });
+});
 
   afterEach(async () => {
     await cleanupTestEnvironment(testDir);
-  });
+});
 
   // ========================================
   // COMPLETE FEATURE LIFECYCLE WORKFLOW
@@ -280,7 +280,7 @@ const featuresData = await readFeaturesFile(testDir);
         )
       ).toBe(true);
     });
-  });
+});
 
   // ========================================
   // COMPLETE AGENT LIFECYCLE WORKFLOW
@@ -375,7 +375,7 @@ const FS = require('fs').promises;
         .catch(() => false);
       expect(stopFlagExists).toBe(true);
 
-      if ((stopFlagExists, agentId)) {
+      if ((stopFlagExists, _agentId)) {
         const stopFlagData = JSON.parse(
           await FS.readFile(stopFlagPath, 'utf8')
         );
@@ -388,7 +388,7 @@ const FS = require('fs').promises;
     test('should handle multiple concurrent agent operations', async () => {
       // 1. Initialize multiple agents concurrently;
 const AGENT_IDS = ['agent-001', 'agent-002', 'agent-003'];
-      const initPromises = AGENT_IDS.map((agentId) =>
+      const initPromises = AGENT_IDS.map((_agentId) =>
         execAPI('initialize', [agentId], { projectRoot: testDir })
       );
 
@@ -403,13 +403,13 @@ const AGENT_IDS = ['agent-001', 'agent-002', 'agent-003'];
 
       // 2. Verify all agents are recorded;
 const featuresData = await readFeaturesFile(testDir);
-      AGENT_IDS.forEach((agentId) => {
+      AGENT_IDS.forEach((_agentId) => {
         expect(featuresData.agents[agentId]).toBeDefined();
         expect(featuresData.agents[agentId].status).toBe('active');
       });
 
       // 3. Reinitialize all agents concurrently;
-const reinitPromises = AGENT_IDS.map((agentId) =>
+const reinitPromises = AGENT_IDS.map((_agentId) =>
         execAPI('reinitialize', [agentId], { projectRoot: testDir })
       );
 
@@ -422,7 +422,7 @@ const reinitPromises = AGENT_IDS.map((agentId) =>
         expect(result.agent.status).toBe('reinitialized');
       });
     });
-  });
+});
 
   // ========================================
   // CROSS-COMPONENT INTEGRATION TESTS
@@ -573,7 +573,7 @@ const operations = [
           feature: generateTestFeature({ title: 'Consistency Feature 3' }),
         },
         { type: 'reject', index: 1, agentId: 'consistency-agent-2' },
-        { type: 'approve', index: 2, agentId: 'consistency-agent-1' }
+        { type: 'approve', index: 2, agentId: 'consistency-agent-1' },
   ];
 
       const suggestedFeatures = [];
@@ -645,7 +645,7 @@ const finalFeaturesData = await readFeaturesFile(testDir);
 
       // Verify agents
       expect(Object.keys(finalFeaturesData.agents)).toHaveLength(2);
-      agents.forEach((agentId) => {
+      agents.forEach((_agentId) => {
         expect(finalFeaturesData.agents[agentId]).toBeDefined();
       });
 
@@ -664,7 +664,7 @@ const statsResult = await execAPI('feature-stats', [], {,
       expect(statsResult.stats.by_status.approved).toBe(2);
       expect(statsResult.stats.by_status.rejected).toBe(1);
     });
-  });
+});
 
   // ========================================
   // API DISCOVERY AND METHODS TESTING
@@ -718,7 +718,7 @@ const commands = methodsResult.availableCommands;
       expect(commands).toContain('feature-stats');
       expect(commands).toContain('get-initialization-stats');
     });
-  });
+});
 
   // ========================================
   // ERROR HANDLING AND EDGE CASES
@@ -734,13 +734,13 @@ const commands = methodsResult.availableCommands;
         await execAPI('invalid-command', [], { projectRoot: testDir });
         // Should not reach here
         expect(true).toBe(false);
-      } catch (error) {
+      } catch (_) {
         expect(_error.message).toContain('Command failed');
       }
     });
 
     test('should handle malformed JSON in feature suggestion', async () => {
-      const result = await execAPI('suggest-feature', ['{ invalid json }'], {,
+      const _result = await execAPI('suggest-feature', ['{ invalid json }'], {,
     projectRoot: testDir,
       });
 
@@ -813,5 +813,5 @@ const rejectResult = await execAPI(
       expect(rejectResult.success).toBe(false);
       expect(rejectResult.error).toContain("must be in 'suggested' status");
     });
-  });
+});
 });

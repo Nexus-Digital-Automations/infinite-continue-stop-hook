@@ -17,16 +17,16 @@ class ComprehensiveLinterFixAgent6 {
     this.fixesApplied = 0;
   }
 
-  fixFile(filePath) {
-    console.log(`🔧 Comprehensively fixing: ${path.basename(filePath)}`);
+  fixFile(_filePath) {
+    console.log(`🔧 Comprehensively fixing: ${path.basename(_filePath)}`);
 
     let content = fs.readFileSync(filePath, 'utf8');
     let modified = false;
     let fileFixCount = 0;
 
     // Fix 1: All catch blocks should use _error
-    content = content.replace(/catch\s*\(\s*_\s*\)/g, 'catch (_1)');
-    content = content.replace(/catch\s*\(\s*error\s*\)/g, 'catch (_1)');
+    content = content.replace(/catch\s*\(\s*_\s*\)/g, 'catch (_)');
+    content = content.replace(/catch\s*\(\s*error\s*\)/g, 'catch (_)');
 
     // Fix 2: Fix all unused variable declarations with underscore
     content = content.replace(
@@ -37,7 +37,7 @@ class ComprehensiveLinterFixAgent6 {
     // Fix 3: Fix constructor parameters - add underscore to unused params
     content = content.replace(
       /constructor\s*\(\s*([^)]+)\s*\)/g,
-      (match, params) => {
+      (match, _params) => {
         const fixedParams = params
           .split(',')
           .map((param) => {
@@ -126,7 +126,7 @@ class ComprehensiveLinterFixAgent6 {
 
     // Fix 8: Fix any remaining unused underscore variables
     content = lines.join('\n');
-    content = content.replace(/catch\s*\(\s*_\s*\)\s*{/g, 'catch (_1) {');
+    content = content.replace(/catch\s*\(\s*_\s*\)\s*{/g, 'catch (_) {');
 
     // Fix 9: Fix specific parameter issues
     content = content.replace(
@@ -174,12 +174,12 @@ class ComprehensiveLinterFixAgent6 {
     let filesFixed = 0;
 
     for (const filePath of this.targetFiles) {
-      if (fs.existsSync(filePath)) {
-        if (this.fixFile(filePath)) {
+      if (fs.existsSync(_filePath)) {
+        if (this.fixFile(_filePath)) {
           filesFixed++;
         }
       } else {
-        console.log(`⚠️ File not found: ${path.basename(filePath)}`);
+        console.log(`⚠️ File not found: ${path.basename(_filePath)}`);
       }
     }
 

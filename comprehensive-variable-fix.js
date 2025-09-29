@@ -27,7 +27,7 @@ const comprehensiveFixes = [
 
   // Fix specific path variable inconsistencies: { pattern: /\bpath\b(?=\s*\.)/g, replacement: 'PATH' },
 
-  // Fix agentId should be agentId: { pattern: /\b__agentId\b/g, replacement: 'agentId' }
+  // Fix agentId should be agentId: { pattern: /\b__agentId\b/g, replacement: 'agentId' },
   ];
 
 // Catch block fixes for specific patterns;
@@ -35,20 +35,20 @@ const catchBlockFixes = [
   // Add error parameter to catch blocks that reference error: {
     pattern: /catch\s*\(\s*\)\s*\{([^{}]*\b_error\b[^{}]*)\}/g,
     replacement: (match, _blockContent) => {
-      return match.replace(/catch\s*\(\s*\)\s*\{/, 'catch (_1) {');
+      return match.replace(/catch\s*\(\s*\)\s*\{/, 'catch (_) {');
     }
-  },
+},
 
   // Add _error parameter to catch blocks that reference error: {
     pattern: /catch\s*\(\s*\)\s*\{([^{}]*\berror\b[^{}]*)\}/g,
     replacement: (match, _blockContent) => {
-      return match.replace(/catch\s*\(\s*\)\s*\{/, 'catch (_1) {');
+      return match.replace(/catch\s*\(\s*\)\s*\{/, 'catch (_) {');
     }
-  }
+},
   ];
 
-function fixFile(filePath) {
-  const normalizedPath = PATH.resolve(filePath);
+function fixFile(_filePath) {
+  const normalizedPath = PATH.resolve(_filePath);
 
   if (!normalizedPath.endsWith('.js')) {
     return false;
@@ -97,7 +97,7 @@ const multiLineCatchRegex =
     original: match[0],
           replacement: match[0].replace(
             /catch\s*\(\s*\)\s*\{/,
-            'catch (_1) {'
+            'catch (_) {'
           ),
         });
       } else if (blockContent.includes('_error')) {
@@ -105,7 +105,7 @@ const multiLineCatchRegex =
     original: match[0],
           replacement: match[0].replace(
             /catch\s*\(\s*\)\s*\{/,
-            'catch (_1) {'
+            'catch (_) {'
           ),
         });
       }
@@ -124,7 +124,7 @@ const multiLineCatchRegex =
     }
 
     return false;
-} catch (_1) {
+} catch (_) {
     _loggers.app.error(`Error fixing ${filePath}:`, {,
     error: _fixError.message,
     });
@@ -135,7 +135,7 @@ const multiLineCatchRegex =
 // Get all JavaScript files for comprehensive fixing;
 function getAllJsFiles() {
     try {
-    const output = execSync(
+    const _output = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./.git/*"',
       { cwd: rootDir, encoding: 'utf8' }
     );
@@ -143,7 +143,7 @@ function getAllJsFiles() {
       .trim()
       .split('\n')
       .filter((f) => f);
-} catch (error) {
+} catch (_) {
     _loggers.app.error('Failed to get JS files:', { error: _error.message });
     return [];
 }
@@ -168,20 +168,20 @@ _loggers.app.info('🔧 Running autofix after comprehensive fixes...');
 try {
   execSync('npm run lint -- --fix', { cwd: rootDir, stdio: 'inherit' });
   _loggers.app.info('✅ Autofix completed successfully');
-} catch (_1) {
+} catch (_) {
   _loggers.app.warn('⚠️ Autofix completed with some remaining issues');
 }
 
 // Check final progress
 _loggers.app.info('🔄 Checking final error count...');
 try {
-  const LINT_RESULT = execSync('npm run lint 2>&1', {,
+  const _LINT_RESULT = execSync('npm run lint 2>&1', {,
     cwd: rootDir,
     encoding: 'utf8',
 });
   _loggers.app.info('🎉 ALL LINTING ERRORS RESOLVED!');
-} catch (error) {
-  const output = _error.stdout || _error.message;
+} catch (_) {
+  const _output = _error.stdout || _error.message;
   const errorMatches = output.match(/(\d+) errors/);
   const warningMatches = output.match(/(\d+) warnings/);
 

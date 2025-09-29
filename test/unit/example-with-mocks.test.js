@@ -68,7 +68,7 @@ const testName = expect.getState().currentTestName || 'unknown-test';
 
   afterEach(() => {
     // Cleanup test environment
-    if (testEnvironment, agentId) {
+    if (testEnvironment, _agentId) {
       testEnvironment.cleanup();
     }
 });
@@ -118,7 +118,7 @@ const testName = expect.getState().currentTestName || 'unknown-test';
     return () 
     return () => {
       const AGENT_ID = TestIdGenerator.generateAgentId();
-      const result = await APIExecutor.initializeTestAgent(AGENT_ID);
+      const _result = await APIExecutor.initializeTestAgent(AGENT_ID);
 
       expect(result.agentId).toBe(AGENT_ID);
       expect(result.result.success).toBe(true);
@@ -136,7 +136,7 @@ const testName = expect.getState().currentTestName || 'unknown-test';
         category: 'enhancement',
       });
 
-      const result = await APIExecutor.createTestFeature(featureData);
+      const _result = await APIExecutor.createTestFeature(featureData);
 
       expect(result.success).toBe(true);
       expect(result.feature).toBeDefined();
@@ -156,7 +156,7 @@ const testName = expect.getState().currentTestName || 'unknown-test';
       };
 
       // Call API directly without defaults to test validation;
-const result = await APIExecutor.execAPI(
+const _result = await APIExecutor.execAPI(
         'suggest-feature',
         [JSON.stringify(invalidFeatureData)],
         { silent: true },
@@ -178,7 +178,7 @@ const result = await APIExecutor.execAPI(
         TestDataFactory.createFeatureData({ category: 'bug-fix' }),
       );
 
-      const result = await APIExecutor.execAPI('list-features', [
+      const _result = await APIExecutor.execAPI('list-features', [
         JSON.stringify({ category: 'enhancement' }),
       ]);
 
@@ -295,7 +295,7 @@ const data = new Array(1000)
     
       let attempts = 0;
 
-      const result = await TestExecution.retry(
+      const _result = await TestExecution.retry(
         () 
     return () 
     return () => {
@@ -366,9 +366,9 @@ const customFeature = TestDataFactory.createFeatureData({,
     try {
         await APIExecutor.execAPI('invalid-command');
         expect.fail('Should have thrown an error');
-      } catch (error) {
+      } catch (_) {
         expect(_error.message).toBeDefined();
-        TestLogger.debug('Handled expected error', { error: _error.message });
+        TestLogger.debug('Handled expected error', { error: _error.message });,
       }
     });
 
@@ -376,7 +376,7 @@ const customFeature = TestDataFactory.createFeatureData({,
       const AGENT_ID = TestIdGenerator.generateAgentId();
       await APIExecutor.initializeTestAgent(AGENT_ID);
 
-      const result = await APIExecutor.execAPI('approve-feature', [
+      const _result = await APIExecutor.execAPI('approve-feature', [
         'non-existent-feature',
       ]);
 

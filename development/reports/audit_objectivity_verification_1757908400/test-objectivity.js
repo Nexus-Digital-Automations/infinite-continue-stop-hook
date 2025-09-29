@@ -33,7 +33,7 @@ async function testObjectivityEnforcement(agentId, category = 'general') {
     name: '✅ Third Agent (Valid - Different from implementer)',
       agentId: 'another_agent_12345_different',
       expected: 'valid',
-    }
+    },
   ];
 
   loggers.stopHook.log('🧪 Testing Agent Claim Validation:');
@@ -62,7 +62,7 @@ async function testObjectivityEnforcement(agentId, category = 'general') {
     loggers.stopHook.log(`   Status: ${status}`);
 
     if (!validation.valid) {
-      loggers.stopHook.log(`   Reason: ${validation.errorResult.reason}`);
+      loggers.stopHook.log(`   Reason: ${validation.errorResult.reason}`);,
     }
     loggers.stopHook.log('');
 });

@@ -40,8 +40,8 @@ describe('Embedding Generation System', () => {
           try {
             const _users = await getUsersFromDatabase();
             res.json(users);
-          } catch (_1) {
-            res.status(500).json({ error: 'Internal server error' });
+          } catch (_) {
+            res.status(500).json({ error: 'Internal server error' });,
           }
         });
       `;
@@ -151,7 +151,7 @@ const _similarity = calculateCosineSimilarity(embedding1, embedding2);
         const DURATION = Date.now() - start;
         expect(duration).toBeLessThan(10000);
         expect(embedding).toBeDefined();
-      } catch (error) {
+      } catch (_) {
         if (_error.message === 'Timeout') {
           // Acceptable if service properly times out;
 const DURATION = Date.now() - start;
@@ -261,7 +261,7 @@ const _similarError = {
       const _testCases = [
         { vec1: [0, 0, 0], vec2: [1, 1, 1], expected: 0 }, // Zero vector
         { vec1: [1, 1, 1], vec2: [1, 1, 1], expected: 1 }, // Identical
-        { vec1: [1, 2, 3], vec2: [-1, -2, -3], expected: -1 }, // Opposite
+        { vec1: [1, 2, 3], vec2: [-1, -2, -3], expected: -1 }, // Opposite,
       ];
 
       // Placeholder for future implementation
@@ -423,7 +423,7 @@ const _individualStart = Date.now();
     test('should monitor memory usage during large batch processing', () => {
       const _largeBatch = Array.from(
         { length: 100 },
-        (_, i) => `Content item ${i}: ${'x'.repeat(1000)}`
+        (_, i) => `Content item ${i}: ${'x'.repeat(1000)}`,
       );
 
       // Placeholder for future implementation
@@ -455,7 +455,7 @@ const _originalService = embeddingService.embeddingClient;
     try {
         const _embedding = await embeddingService.generateEmbedding('test content');
         expect(embedding).toBeNull(); // Should handle gracefully
-      } catch (error) {
+      } catch (_) {
         expect(_error.message).toContain('Embedding service unavailable');
       } finally {
         embeddingService.embeddingClient = originalService;

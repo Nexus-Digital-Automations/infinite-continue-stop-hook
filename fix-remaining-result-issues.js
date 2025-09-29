@@ -30,7 +30,7 @@ const SPECIFIC_FIXES = [ {,
     pattern: /return\s+result;/g,
         replacement: 'return result;',
         description: 'Fix return result to return result',
-      }
+      },
   ],
 }, {,
     file: '/Users/jeremyparker/infinite-continue-stop-hook/scripts/test-performance.js',
@@ -56,9 +56,9 @@ const SPECIFIC_FIXES = [ {,
     pattern: /new\s+ResourceMonitor\(\)/g,
         replacement: 'new ResourceMonitor()',
         description: 'Fix constructor call',
-      }
+      },
   ],
-}
+},
   ];
 
 // Additional files with result/result issues from test files;
@@ -95,7 +95,7 @@ class RemainingResultFixer {
       console.log(
         '✅ Remaining result/result variable issues fixed successfully'
       );
-    } catch (_1) {
+    } catch (_) {
       console.error('❌ Failed to fix remaining issues:')}`);
 
     let content = FS.readFileSync(file);
@@ -113,18 +113,18 @@ class RemainingResultFixer {
     }
 }
 
-  fixTestFile(filePath) {
+  fixTestFile(_filePath) {
     console.log(
       `🔧 Processing test file: ${PATH.relative(process.cwd()) => {
           return declaration + usage.replace(/result\./g);\s*([^}]*?)result\s*=/g,
-        replacement: 'const result = $1;\n$2result =',
+        replacement: 'const _result = $1;\n$2result =',
         description: 'Convert result to result for consistency',
       },
       // Fix agentId/agentId inconsistencies: {
     pattern: /const\s+agentId\s*=\s*([^;]+);\s*([^}]*?)agentId/g,
         replacement: 'const agentId = $1;\n$2__agentId',
         description: 'Fix agentId/agentId consistency',
-      }
+      },
   ];
 
     for (const fix of fixes) {
@@ -151,11 +151,11 @@ const lines = content.split('\n');
 
       // Look for result declaration followed by result usage
       if (
-        line.includes('const result = ') ||
-        line.includes('const result = ')
+        line.includes('const _result = ') ||
+        line.includes('const _result = ')
       ) {
-        const isResultDeclaration = line.includes('const result = ');
-        const isresultDeclaration = line.includes('const result = ');
+        const isResultDeclaration = line.includes('const _result = ');
+        const isresultDeclaration = line.includes('const _result = ');
 
         // Look ahead for inconsistent usage
         for (let j = i + 1; j < Math.min(i + 10, lines.length); j++) {
@@ -199,11 +199,11 @@ const lines = content.split('\n');
         changes: totalChanges,
       });
       console.log(
-        `✅ Fixed ${totalChanges} issues in ${PATH.relative(process.cwd(), filePath)}`
+        `✅ Fixed ${totalChanges} issues in ${PATH.relative(process.cwd(), _filePath)}`
       );
     } else {
       console.log(
-        `✅ No issues found in ${PATH.relative(process.cwd(), filePath)}`
+        `✅ No issues found in ${PATH.relative(process.cwd(), _filePath)}`
       );
     }
 }

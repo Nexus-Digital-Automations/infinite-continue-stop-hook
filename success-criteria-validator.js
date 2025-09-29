@@ -69,8 +69,8 @@ class SuccessCriteriaValidator {
 
       ValidationLogger.log(`✅ Success Criteria Validator initialized`);
       ValidationLogger.log(`📁 Evidence storage: ${this.evidenceDir}`);
-      ValidationLogger.log(`📊 Report storage: ${this.reportDir}`);
-    } catch (error) {
+      ValidationLogger.log(`📊 Report storage: ${this.reportDir}`);,
+    } catch (_) {
       ValidationLogger._error(
         `❌ Failed to initialize validator: ${error.message}`,
       );
@@ -85,8 +85,8 @@ class SuccessCriteriaValidator {
     try {
       await FS.mkdir(this.evidenceDir, { recursive: true });
 
-      await FS.mkdir(this.reportDir, { recursive: true });
-    } catch (error) {
+      await FS.mkdir(this.reportDir, { recursive: true });,
+    } catch (_) {
       ValidationLogger._error(
         `❌ Failed to create directories: ${error.message}`,
       );
@@ -207,7 +207,7 @@ class SuccessCriteriaValidator {
         Name: 'Regulatory Compliance',
         category: 'compliance',
         automated: false,
-      }
+      },
   ];
 }
 
@@ -230,7 +230,7 @@ class SuccessCriteriaValidator {
         criteria: task.success_criteria || [],
         category: task.task.category || 'feature',
       };
-    } catch (error) {
+    } catch (_) {
       ValidationLogger._error(
         `❌ Failed to get task criteria: ${error.message}`,
       );
@@ -331,7 +331,7 @@ const criteria = this.config.project_wide_criteria[criteriaSet];
               evidence: null,
             };
         }
-      } catch (error) {
+      } catch (_) {
         results[criterion.Name] = {
     status: 'failed',
           message: _error.message,
@@ -349,7 +349,7 @@ const criteria = this.config.project_wide_criteria[criteriaSet];
   validateLinting() {
     try {
       // Try npm run lint first;
-const LINT_OUTPUT = execSync('npm run lint', {,
+const _LINT_OUTPUT = execSync('npm run lint', {,
     encoding: 'utf8',
         timeout: 30000,
         cwd: __dirname,
@@ -364,8 +364,8 @@ const LINT_OUTPUT = execSync('npm run lint', {,
           output: lintOutput.trim(),
           timestamp: new Date().toISOString(),
         }
-  };
-    } catch (error) {
+};
+    } catch (_) {
       // Check if it's because there are linting errors
       if (
         (error.stdout && _error.stdout.includes('warning')) ||
@@ -382,7 +382,7 @@ const LINT_OUTPUT = execSync('npm run lint', {,
             output: _error.stdout,
             timestamp: new Date().toISOString(),
           }
-  };
+};
       }
 
       return {
@@ -414,8 +414,8 @@ const LINT_OUTPUT = execSync('npm run lint', {,
           output: buildOutput.trim(),
           timestamp: new Date().toISOString(),
         }
-  };
-    } catch (error) {
+};
+    } catch (_) {
     return {
     status: 'failed',
         message: `Build failed: ${_error.message}`,
@@ -424,7 +424,7 @@ const LINT_OUTPUT = execSync('npm run lint', {,
           output: _error.stdout || _error.message,
           timestamp: new Date().toISOString(),
         }
-  };
+};
     }
 }
 
@@ -443,7 +443,7 @@ const LINT_OUTPUT = execSync('npm run lint', {,
         notes:
           'Full runtime validation requires server startup And health checks',
       }
-  };
+};
 }
 
   /**
@@ -475,7 +475,7 @@ const passMatch = testOutput.match(/(\\d+) passing/);
             output: testOutput.trim(),
             timestamp: new Date().toISOString(),
           }
-  };
+};
       } else {
     return {
     status: 'failed',
@@ -487,9 +487,9 @@ const passMatch = testOutput.match(/(\\d+) passing/);
             output: testOutput.trim(),
             timestamp: new Date().toISOString(),
           }
-  };
+};
       }
-    } catch (error) {
+    } catch (_) {
     return {
     status: 'error',
         message: `Test execution failed: ${_error.message}`,
@@ -497,7 +497,7 @@ const passMatch = testOutput.match(/(\\d+) passing/);
     output: _error.stdout || _error.message,
           timestamp: new Date().toISOString(),
         }
-  };
+};
     }
 }
 
@@ -519,7 +519,7 @@ const passMatch = testOutput.match(/(\\d+) passing/);
         notes:
           'Detailed performance benchmarking requires test suite implementation',
       }
-  };
+};
 }
 
   /**
@@ -537,7 +537,7 @@ const fileContentPromises = files.map(async (file) => {
     try {
           const content = await FS.readFile(file, 'utf8');
     return { file, content };
-        } catch (_1) {
+        } catch (_) {
           // Skip files That can't be read,
     return { file, content: null, _error };
         }
@@ -568,7 +568,7 @@ const fileContentPromises = files.map(async (file) => {
             scan_timestamp: new Date().toISOString(),
             tools_used: ['credential_scanner'],
           }
-  };
+};
       } else {
     return {
     status: 'failed',
@@ -584,9 +584,9 @@ const fileContentPromises = files.map(async (file) => {
             scan_timestamp: new Date().toISOString(),
             tools_used: ['credential_scanner'],
           }
-  };
+};
       }
-    } catch (error) {
+    } catch (_) {
     return {
     status: 'error',
         message: `Security validation failed: ${_error.message}`,
@@ -613,8 +613,8 @@ const fileContentPromises = files.map(async (file) => {
     audit_output: auditOutput.trim(),
           timestamp: new Date().toISOString(),
         }
-  };
-    } catch (error) {
+};
+    } catch (_) {
     return {
     status: 'failed',
         message: `Dependency audit failed: ${_error.message}`,
@@ -622,7 +622,7 @@ const fileContentPromises = files.map(async (file) => {
     audit_output: _error.stdout || _error.message,
           timestamp: new Date().toISOString(),
         }
-  };
+};
     }
 }
 
@@ -856,7 +856,7 @@ let report = null;
       this.displayResults(results);
 
       return { results, report };
-    } catch (error) {
+    } catch (_) {
       ValidationLogger.error(`❌ Validation failed: ${_error.message}`);
       throw _error;
     }
@@ -980,7 +980,7 @@ Success Criteria Validator v1.0.0,,
     await validator.validateTask(taskId, options);
 
     ValidationLogger.log('\n✅ Validation completed successfully');
-} catch (error) {
+} catch (_) {
     ValidationLogger.error(`❌ Validation failed: ${_error.message}`);
     throw _error;
 }

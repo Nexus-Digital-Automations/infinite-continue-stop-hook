@@ -61,13 +61,13 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
         if (jsonStart > 0) {
           jsonString = jsonString.substring(jsonStart);
         }
-        const result = JSON.parse(jsonString);
+        const _result = JSON.parse(jsonString);
         resolve(result);
-      } catch (error) {
+      } catch (_) {
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch (_1) {
+        } catch (_) {
           reject(
             new Error(
               `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${_error.message}`
@@ -78,7 +78,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
     });
 
     child.on('error', (_error) => {
-      reject(new Error(`Command execution failed: ${error.message}`));
+      reject(new Error(`Command execution failed: ${error.message}`));,
     });
 });
 }
@@ -91,26 +91,26 @@ function setupFeatureTestEnvironment(category = 'general') {
     FS.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
 }
 
-  // Create FEATURES.json for feature management testing;
+  // Create FEATURES.json for feature management testing
 const featuresData = {
     features: [],
-    metadata{
+    metadata: {
     version: '3.0.0',
       created: new Date().toISOString(),
       last_modified: new Date().toISOString(),
       project: 'feature-test-project',
     }
-  };
+};
 
   FS.writeFileSync(FEATURES_PATH, JSON.stringify(featuresData, null, 2));
 
-  // Create basic project structure for testing;
-const packageData = {
+  // Create basic project structure for testing
+  const packageData = {
     name: 'feature-test-project',
     version: '1.0.0',
     description: 'Test project for feature management system validation',
-    dependencies{
-    express: '^4.18.0',
+    dependencies: {
+      express: '^4.18.0',
     }
   };
 
@@ -123,10 +123,10 @@ const packageData = {
 /**
  * Cleanup test environment
  */
-async function cleanupFeatureTestEnvironment(category = 'general', agentId) {
+async function cleanupFeatureTestEnvironment(category = 'general', _agentId) {
   if (FS.existsSync(TEST_PROJECT_DIR)) {
     FS.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
-}
+  }
 }
 
 describe('Feature Management System Unit Tests', () => {
@@ -134,11 +134,9 @@ describe('Feature Management System Unit Tests', () => {
     
   let testAgentId = null;
 
-  beforeEach(() 
-    return () 
-    return () => {
+  beforeEach(() => {
     setupFeatureTestEnvironment();
-});
+  });
 
   afterEach(() => {
     cleanupFeatureTestEnvironment();
@@ -193,7 +191,7 @@ const reinitResult = await execAPI('reinitialize', [testAgentId]);
         category: 'enhancement',
       };
 
-      const result = await execAPI('suggest-feature', [
+      const _result = await execAPI('suggest-feature', [
         JSON.stringify(featureData),
       ]);
       expect(result.success).toBe(true);
@@ -211,7 +209,7 @@ const reinitResult = await execAPI('reinitialize', [testAgentId]);
         priority: 'high',
       };
 
-      const result = await execAPI('create', [JSON.stringify(apiTaskData)]);
+      const _result = await execAPI('create', [JSON.stringify(apiTaskData)]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
@@ -246,7 +244,7 @@ const internetLocation = researchSubtask.research_locations.find(
         priority: 'critical',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(securityTaskData),
       ]);
       expect(result.success).toBe(true);
@@ -278,7 +276,7 @@ const internetLocation = researchSubtask.research_locations.find(
         priority: 'high',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(performanceTaskData),
       ]);
       expect(result.success).toBe(true);
@@ -323,7 +321,7 @@ const internetLocation = researchSubtask.research_locations.find(
         priority: 'high',
       };
 
-      const result = await execAPI('create', [JSON.stringify(complexTaskData)]);
+      const _result = await execAPI('create', [JSON.stringify(complexTaskData)]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
@@ -362,7 +360,7 @@ const hasRelatedTerms = internetLocation.keywords.some((keyword) =>
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(taskWithGenericTerms),
       ]);
       expect(result.success).toBe(true);
@@ -400,7 +398,7 @@ const genericTerms = ['good', 'better', 'excellent', 'well', 'new'];
         priority: 'high',
       };
 
-      const result = await execAPI('create', [JSON.stringify(verboseTaskData)]);
+      const _result = await execAPI('create', [JSON.stringify(verboseTaskData)]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
@@ -446,7 +444,7 @@ const genericTerms = ['good', 'better', 'excellent', 'well', 'new'];
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(standardTaskData),
       ]);
       expect(result.success).toBe(true);
@@ -479,7 +477,7 @@ const genericTerms = ['good', 'better', 'excellent', 'well', 'new'];
         priority: 'high',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(researchTaskData),
       ]);
       expect(result.success).toBe(true);
@@ -505,7 +503,7 @@ const genericTerms = ['good', 'better', 'excellent', 'well', 'new'];
         priority: 'critical',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(implementationTaskData),
       ]);
       expect(result.success).toBe(true);
@@ -544,7 +542,7 @@ const genericTerms = ['good', 'better', 'excellent', 'well', 'new'];
         priority: 'high',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(architectureTaskData),
       ]);
       expect(result.success).toBe(true);
@@ -585,7 +583,7 @@ const docsLocation = researchSubtask.research_locations.find(
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(documentedTaskData),
       ]);
       expect(result.success).toBe(true);
@@ -638,7 +636,7 @@ const taskDataList = [];
       }
 
       for await (const taskData of taskDataList) {
-        const result = await execAPI('create', [JSON.stringify(taskData)]);
+        const _result = await execAPI('create', [JSON.stringify(taskData)]);
         expect(result.success).toBe(true);
 
         const listResult = await execAPI('list');
@@ -667,7 +665,7 @@ const taskDataList = [];
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [JSON.stringify(taskData)]);
+      const _result = await execAPI('create', [JSON.stringify(taskData)]);
       expect(result.success).toBe(true);
 
       const afterTime = Date.now();
@@ -678,7 +676,7 @@ const taskDataList = [];
         (st) => st.type === 'research'
       );
 
-      if (researchSubtask, agentId) {
+      if (researchSubtask, _agentId) {
         expect(researchSubtask.created_at).toBeDefined();
         const createdTime = new Date(researchSubtask.created_at).getTime();
         expect(createdTime).toBeGreaterThanOrEqual(beforeTime);
@@ -709,7 +707,7 @@ const taskDataList = [];
         priority: 'low',
       };
 
-      const result = await execAPI('create', [JSON.stringify(minimalTaskData)]);
+      const _result = await execAPI('create', [JSON.stringify(minimalTaskData)]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
@@ -737,7 +735,7 @@ const taskDataList = [];
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(specialCharsTaskData),
       ]);
       expect(result.success).toBe(true);
@@ -780,7 +778,7 @@ const internetLocation = researchSubtask.research_locations.find(
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [JSON.stringify(longTaskData)]);
+      const _result = await execAPI('create', [JSON.stringify(longTaskData)]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');

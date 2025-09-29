@@ -28,7 +28,7 @@ const config = {
   // Files to exclude
   excludeFiles: [
     'migrate-to-structured-logging.js', // This script itself
-    'prettify.js', // Coverage files
+    'prettify.js', // Coverage files,
   ],
 
   // Console method mappings to structured logging
@@ -39,7 +39,7 @@ const config = {
     'console.error': 'logger.error',
     'console.debug': 'logger.debug',
     'console.trace': 'logger.trace',
-  },
+},
 
   // LOGGER import patterns
   loggerImports: {
@@ -52,8 +52,8 @@ const config = {
 
     // Default import to add if no logger import exists
     default: "const { loggers } = require('./lib/logger');",
-  }
-  };
+}
+};
 
 /**
  * Find all JavaScript files to process
@@ -78,7 +78,7 @@ function findJavaScriptFiles(rootDir) {
         files.push(fullPath);
       }
     }
-  }
+}
 
   walkDir(rootDir);
   return files;
@@ -87,7 +87,7 @@ function findJavaScriptFiles(rootDir) {
 /**
  * Analyze console usage in a file
  */
-function analyzeConsoleUsage(filePath) {
+function analyzeConsoleUsage(_filePath) {
   const content = FS.readFileSync(filePath, 'utf8');
   const lines = content.split('\n');
 
@@ -96,7 +96,7 @@ function analyzeConsoleUsage(filePath) {
     consoleLines: [],
     hasLoggerImport: false,
     importType: null,
-  };
+};
 
   // Check for existing logger imports
   for (const line of lines) {
@@ -110,7 +110,7 @@ function analyzeConsoleUsage(filePath) {
         break;
       }
     }
-  }
+}
 
   // Find console usage
   lines.forEach((line, index) => {
@@ -129,7 +129,7 @@ const consoleMatch = trimmed.match(
         indentation: line.match(/^(\s*)/)[1],
       });
     }
-  });
+});
 
   return usage;
 }
@@ -147,28 +147,28 @@ let loggerInstance = 'loggers.app';
   // Smart logger selection based on file path And context
   if (fileContext.filePath.includes('taskmanager')) {
     loggerInstance = 'loggers.taskManager';
-  } else if (fileContext.filePath.includes('stop-hook')) {
+} else if (fileContext.filePath.includes('stop-hook')) {
     loggerInstance = 'loggers.stopHook';
-  } else if (fileContext.filePath.includes('agent')) {
+} else if (fileContext.filePath.includes('agent')) {
     loggerInstance = 'loggers.agent';
-  } else if (fileContext.filePath.includes('validation')) {
+} else if (fileContext.filePath.includes('validation')) {
     loggerInstance = 'loggers.validation';
-  } else if (fileContext.filePath.includes('performance')) {
+} else if (fileContext.filePath.includes('performance')) {
     loggerInstance = 'loggers.performance';
-  } else if (fileContext.filePath.includes('security')) {
+} else if (fileContext.filePath.includes('security')) {
     loggerInstance = 'loggers.security';
-  } else if (
+} else if (
     fileContext.filePath.includes('database') ||
     fileContext.filePath.includes('db')
   ) {
     loggerInstance = 'loggers.database';
-  } else if (fileContext.filePath.includes('api')) {
+} else if (fileContext.filePath.includes('api')) {
     loggerInstance = 'loggers.api';
-  } else if (fileContext.filePath.includes('test')) {
+} else if (fileContext.filePath.includes('test')) {
     // for test files, use a simpler approach
     loggerInstance = 'console'; // Keep console for tests initially
     return originalLine; // Don't convert test console calls yet
-  }
+}
 
   // Parse console call arguments
   try {
@@ -206,12 +206,12 @@ const match = originalLine.match(/console\.\w+\s*\((.+)\);?\s*$/);
 
     // Default case
     return `${indentation}${loggerInstance}.${consoleMethod.split('.')[1]}(${args});`;
-  } catch (_) {
+} catch (_) {
     console.warn(
       `Could not parse console call in ${fileContext.filePath}:${consoleLine.lineNumber} - keeping original`
     );
     return originalLine;
-  }
+}
 }
 
 /**
@@ -219,8 +219,8 @@ const match = originalLine.match(/console\.\w+\s*\((.+)\);?\s*$/);
  */
 function migrateFile(usage) {
   if (usage.consoleLines.length === 0) {
-    return { success: true, changes: 0, message: 'No console calls found' };
-  }
+    return { success: true, changes: 0, message: 'No console calls found' };,
+}
 
   const content = FS.readFileSync(usage.filePath, 'utf8');
   const lines = content.split('\n');
@@ -244,7 +244,7 @@ let importIndex = 0;
     }
 
     lines.splice(importIndex, 0, '', config.loggerImports.default);
-  }
+}
 
   // Convert console calls;
 let changeCount = 0;
@@ -257,7 +257,7 @@ const lineIndex = consoleLine.lineNumber - 1;
       lines[lineIndex] = newLine;
       changeCount++;
     }
-  }
+}
 
   // Write the updated file
   FS.writeFileSync(usage.filePath, lines.join('\n'));
@@ -266,7 +266,7 @@ const lineIndex = consoleLine.lineNumber - 1;
     success: true,
     changes: changeCount,
     message: `Migrated ${changeCount} console calls`,
-  };
+};
 }
 
 /**
@@ -293,10 +293,10 @@ const analysisResults = [];
         analysisResults.push(usage);
         totalConsoleLines += usage.consoleLines.length;
       }
-    } catch (error) {
+    } catch (_) {
       console.warn(`⚠️  Could not analyze ${file}: ${error.message}`);
     }
-  }
+}
 
   console.log(
     `🔍 Analysis complete: ${totalConsoleLines} console calls found in ${analysisResults.length} files`
@@ -308,12 +308,12 @@ const summary = {};
     for (const line of usage.consoleLines) {
       summary[line.consoleMethod] = (summary[line.consoleMethod] || 0) + 1;
     }
-  }
+}
 
   console.log('📊 Console usage summary:');
   for (const [method, count] of Object.entries(summary)) {
     console.log(`   ${method}: ${count} calls`);
-  }
+}
 
   // Confirm migration
   if (process.argv.includes('--dry-run')) {
@@ -329,14 +329,14 @@ const summary = {};
     }
 
     return;
-  }
+}
 
   if (!process.argv.includes('--force')) {
     console.log(
       '\n⚠️  This will modify source files. Use --force to proceed or --dry-run to preview.'
     );
     return;
-  }
+}
 
   // Perform migration
   console.log('\n🔄 Starting migration...');
@@ -346,7 +346,7 @@ const summary = {};
 
   for (const usage of analysisResults) {
     try {
-      const result = migrateFile(usage);
+      const _result = migrateFile(usage);
       if (result.success && result.changes > 0) {
         migratedFiles++;
         totalChanges += result.changes;
@@ -354,10 +354,10 @@ const summary = {};
           `✅ ${path.relative(rootDir, usage.filePath)}: ${result.message}`
         );
       }
-    } catch (error) {
+    } catch (_) {
       console.error(`❌ Failed to migrate ${usage.filePath}: ${error.message}`);
     }
-  }
+}
 
   console.log(`\n🎉 Migration complete!`);
   console.log(`📊 Summary:`);
@@ -372,9 +372,9 @@ const summary = {};
     console.log('\n🔍 Running linter to check for issues...');
     execSync('npm run lint', { stdio: 'inherit' });
     console.log('✅ Linter passed - migration successful!');
-  } catch (error) {
+} catch (_) {
     console.warn('⚠️  Linter found issues - you may need to fix them manually');
-  }
+}
 }
 
 // Handle command line arguments

@@ -39,13 +39,13 @@ function findUtilityFiles() {
   for (const pattern of utilityPatterns) {
     try {
       const command = `find . -name "${pattern}" -type f -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"`;
-      const output = execSync(command, { encoding: 'utf8' });
+      const _output = execSync(command, { encoding: 'utf8' });
       const foundFiles = output
         .trim()
         .split('\n')
         .filter((f) => f && f.endsWith('.js'));
       files.push(...foundFiles);
-    } catch (_1) {
+    } catch (_) {
       // Continue if pattern doesn't match anything
     }
   }
@@ -53,7 +53,7 @@ function findUtilityFiles() {
   return [...new Set(files)]; // Remove duplicates
 }
 
-function addSecurityExemption(filePath) {
+function addSecurityExemption(_filePath) {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
 
@@ -62,7 +62,7 @@ function addSecurityExemption(filePath) {
       content.includes('eslint-disable') &&
       securityRules.some((rule) => content.includes(rule))
     ) {
-      console.log(`  ✓ Already exempt: ${path.basename(filePath)}`);
+      console.log(`  ✓ Already exempt: ${path.basename(_filePath)}`);
       return false;
     }
 
@@ -79,9 +79,9 @@ function addSecurityExemption(filePath) {
     const newContent = lines.join('\n');
 
     fs.writeFileSync(filePath, newContent);
-    console.log(`  ✓ Added exemption: ${path.basename(filePath)}`);
+    console.log(`  ✓ Added exemption: ${path.basename(_filePath)}`);
     return true;
-  } catch (error) {
+  } catch (_) {
     console.error(`  ❌ Error processing ${filePath}: ${error.message}`);
     return false;
   }
@@ -99,7 +99,7 @@ function main() {
 
   for (const filePath of utilityFiles) {
     processed++;
-    if (addSecurityExemption(filePath)) {
+    if (addSecurityExemption(_filePath)) {
       exempted++;
     }
   }
@@ -133,7 +133,7 @@ function main() {
         console.log(sampleOutput);
       }
     }
-  } catch (_1) {
+  } catch (_) {
     console.log('⚠️  Unable to verify warning count');
   }
 

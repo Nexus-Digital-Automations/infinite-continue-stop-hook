@@ -31,7 +31,7 @@ module.exports = {
     '^@lib/(.*)$': '<rootDir>/lib/$1',
     '^@rag/(.*)$': '<rootDir>/lib/rag/$1',
     '^@test-utils/(.*)$': '<rootDir>/test/rag-system/utils/$1',
-  },
+},
 
   // Setup And teardown - removed to fix path resolution issues
 
@@ -63,7 +63,7 @@ module.exports = {
       lines: 85,
       statements: 85,
     }
-  },
+},
 
   // Test categorization
   projects: [
@@ -90,7 +90,7 @@ module.exports = {
       testMatch: ['<rootDir>/test/rag-system/data-integrity/**/*.test.js'],
       testEnvironment: 'node',
       testTimeout: 180000, // 3 minutes for data integrity tests
-    }
+    },
   ],
 
   // Reporters
@@ -104,7 +104,7 @@ module.exports = {
         expand: true,
         hideIcon: false,
         pageTitle: 'RAG System Test Report',
-      }
+      },
   ],
     [
       'jest-junit',
@@ -115,7 +115,7 @@ module.exports = {
         titleTemplate: '{title}',
         ancestorSeparator: ' › ',
         usePathForSuiteName: true,
-      }
+      },
   ],
   ],
 
@@ -141,5 +141,5 @@ module.exports = {
     RAG_TEST_MODE: 'true',
     RAG_EMBEDDING_CACHE_SIZE: '100',
     RAG_TEST_TIMEOUT: '60000',
-  }
-  };
+}
+};

@@ -20,11 +20,11 @@ class TargetedUndefinedFixer {
       others: 0,
     };
     this.filesModified = [];
-  }
+}
 
   getAllJSFiles() {
     try {
-      const result = execSync(
+      const _result = execSync(
         'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
         { encoding: 'utf-8' }
       );
@@ -33,13 +33,13 @@ class TargetedUndefinedFixer {
         .split('\n')
         .filter((f) => f && f.endsWith('.js'))
         .map((f) => path.resolve(f.replace('./', '')));
-    } catch (error) {
+    } catch (_) {
       console.error('Failed to get JS files:', error.message);
       return [];
     }
-  }
+}
 
-  fixFile(filePath) {
+  fixFile(_filePath) {
     const content = fs.readFileSync(filePath, 'utf8');
     const lines = content.split('\n');
     let modified = false;
@@ -97,7 +97,7 @@ class TargetedUndefinedFixer {
         );
         modified = true;
         this.fixes.loggers++;
-        console.log(`  ✓ Added loggers import in ${path.basename(filePath)}`);
+        console.log(`  ✓ Added loggers import in ${path.basename(_filePath)}`);
         break; // Exit to avoid index issues
       }
 
@@ -123,7 +123,7 @@ class TargetedUndefinedFixer {
         lines.splice(insertIndex, 0, "const fs = require('fs');");
         modified = true;
         this.fixes.fs++;
-        console.log(`  ✓ Added fs import in ${path.basename(filePath)}`);
+        console.log(`  ✓ Added fs import in ${path.basename(_filePath)}`);
         break;
       }
 
@@ -136,7 +136,7 @@ class TargetedUndefinedFixer {
           modified = true;
           this.fixes.__filename++;
           console.log(
-            `  ✓ Converted __filename to __filename in ${path.basename(filePath)}`
+            `  ✓ Converted __filename to __filename in ${path.basename(_filePath)}`
           );
         }
       }
@@ -162,7 +162,7 @@ class TargetedUndefinedFixer {
             modified = true;
             this.fixes.category++;
             console.log(
-              `  ✓ Added category parameter to function in ${path.basename(filePath)}`
+              `  ✓ Added category parameter to function in ${path.basename(_filePath)}`
             );
           }
         }
@@ -181,7 +181,7 @@ class TargetedUndefinedFixer {
             modified = true;
             this.fixes._error++;
             console.log(
-              `  ✓ Fixed error to _error in catch block in ${path.basename(filePath)}`
+              `  ✓ Fixed error to _error in catch block in ${path.basename(_filePath)}`
             );
           }
         }
@@ -195,11 +195,11 @@ class TargetedUndefinedFixer {
       ) {
         const updated = line.replace(
           /constructor\s*\(([^)]*)\)/,
-          (match, params) => {
+          (match, _params) => {
             const cleanParams = params.trim();
             return cleanParams
-              ? `constructor(${cleanParams}, agentId)`
-              : 'constructor(agentId)';
+              ? `constructor(${cleanParams}, _agentId)`
+              : 'constructor(_agentId)';
           }
         );
 
@@ -208,7 +208,7 @@ class TargetedUndefinedFixer {
           modified = true;
           this.fixes.agentId++;
           console.log(
-            `  ✓ Added agentId to constructor in ${path.basename(filePath)}`
+            `  ✓ Added agentId to constructor in ${path.basename(_filePath)}`
           );
         }
       }
@@ -216,12 +216,12 @@ class TargetedUndefinedFixer {
 
     if (modified) {
       fs.writeFileSync(filePath, lines.join('\n'));
-      this.filesModified.push(filePath);
+      this.filesModified.push(_filePath);
       return true;
     }
 
     return false;
-  }
+}
 
   run() {
     console.log('🎯 Targeted Undefined Variable Fixer Starting...\n');
@@ -232,10 +232,10 @@ class TargetedUndefinedFixer {
     let processedCount = 0;
 
     for (const filePath of jsFiles) {
-      const relativePath = path.relative(process.cwd(), filePath);
+      const relativePath = path.relative(process.cwd(), _filePath);
       try {
-        if (this.fixFile(filePath)) {
-          console.log(`✅ Fixed issues in: ${relativePath}`);
+        if (this.fixFile(_filePath)) {
+          console.log(`✅ Fixed issues in: ${relativePath}`);,
         }
         processedCount++;
 
@@ -244,14 +244,14 @@ class TargetedUndefinedFixer {
             `📊 Processed ${processedCount}/${jsFiles.length} files...`
           );
         }
-      } catch (error) {
+      } catch (_) {
         console.error(`❌ Error processing ${relativePath}: ${error.message}`);
       }
     }
 
     this.generateReport();
     this.checkProgress();
-  }
+}
 
   generateReport() {
     console.log('\n📊 Targeted Fix Report:');
@@ -270,16 +270,16 @@ class TargetedUndefinedFixer {
       0
     );
     console.log(`\n📈 Total fixes applied: ${totalFixes}`);
-    console.log(`📁 Files modified: ${this.filesModified.length}`);
-  }
+    console.log(`📁 Files modified: ${this.filesModified.length}`);,
+}
 
   checkProgress() {
     console.log('\n🔍 Checking progress...');
     try {
-      const output = execSync('npm run lint 2>&1', { encoding: 'utf-8' });
+      const _output = execSync('npm run lint 2>&1', { encoding: 'utf-8' });
       console.log('🎉 No linting errors found!');
-    } catch (lintError) {
-      const output = lintError.stdout || lintError.message;
+    } catch (_) {
+      const _output = lintError.stdout || lintError.message;
       const undefinedMatches = output.match(/is not defined/g);
       const undefinedCount = undefinedMatches ? undefinedMatches.length : 0;
 
@@ -306,7 +306,7 @@ class TargetedUndefinedFixer {
           });
       }
     }
-  }
+}
 }
 
 // Run the fixer;

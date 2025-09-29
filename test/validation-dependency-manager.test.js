@@ -32,12 +32,12 @@ describe('ValidationDependencyManager', () => {
     return () => {
     // Create temporary directory for test configuration files
     tempDir = await FS.mkdtemp(path.join(os.tmpdir(), 'validation-test-'));
-    manager = new ValidationDependencyManager({ projectRoot: tempDir });
+    manager = new ValidationDependencyManager({ projectRoot: tempDir });,
 });
 
   afterEach(async () => {
     // Clean up temporary directory
-    await FS.rmdir(tempDir, { recursive: true });
+    await FS.rmdir(tempDir, { recursive: true });,
 });
 
   describe('Core Dependency Management', () => {
@@ -61,7 +61,7 @@ describe('ValidationDependencyManager', () => {
     test('should add custom dependency correctly', () => {
       const customDep = {
     dependencies: [
-          { criterion: 'linter-validation', type: DEPENDENCY_TYPES.STRICT }
+          { criterion: 'linter-validation', type: DEPENDENCY_TYPES.STRICT },
   ],
         description: 'Custom validation step',
         estimatedDuration: 15000,
@@ -86,7 +86,7 @@ describe('ValidationDependencyManager', () => {
     return () => {
         manager.addDependency('invalid-dep', {,
     dependencies: [
-            { criterion: 'linter-validation', type: 'invalid-type' }
+            { criterion: 'linter-validation', type: 'invalid-type' },
   ],
         });
       }).toThrow('Invalid dependency type');
@@ -130,7 +130,7 @@ describe('ValidationDependencyManager', () => {
     test('should detect missing dependencies', () => {
       manager.addDependency('invalid-dep', {,
     dependencies: [
-          { criterion: 'non-existent-dep', type: DEPENDENCY_TYPES.STRICT }
+          { criterion: 'non-existent-dep', type: DEPENDENCY_TYPES.STRICT },
   ],
       });
 
@@ -179,7 +179,7 @@ const buildPos = criterionPositions.get('build-validation');
       // Create a scenario where weak dependencies might cause deadlock
       manager.addDependency('deadlock-test', {,
     dependencies: [
-          { criterion: 'non-ready-dep', type: DEPENDENCY_TYPES.WEAK }
+          { criterion: 'non-ready-dep', type: DEPENDENCY_TYPES.WEAK },
   ],
       });
 
@@ -290,12 +290,12 @@ const wave1Criteria =
       // Add dependencies to make high-priority more important
       manager.addDependency('dependent-1', {,
     dependencies: [
-          { criterion: 'high-priority', type: DEPENDENCY_TYPES.STRICT }
+          { criterion: 'high-priority', type: DEPENDENCY_TYPES.STRICT },
   ],
       });
       manager.addDependency('dependent-2', {,
     dependencies: [
-          { criterion: 'high-priority', type: DEPENDENCY_TYPES.STRICT }
+          { criterion: 'high-priority', type: DEPENDENCY_TYPES.STRICT },
   ],
       });
 
@@ -483,7 +483,7 @@ const highPriorityWave = plan.plan.findIndex((wave) =>
       manager.addDependency('frontend-build', {,
     dependencies: [
           { criterion: 'linter-validation', type: DEPENDENCY_TYPES.STRICT },
-          { criterion: 'type-validation', type: DEPENDENCY_TYPES.STRICT }
+          { criterion: 'type-validation', type: DEPENDENCY_TYPES.STRICT },
   ],
         estimatedDuration: 30000,
         parallelizable: false,
@@ -493,7 +493,7 @@ const highPriorityWave = plan.plan.findIndex((wave) =>
       manager.addDependency('backend-build', {,
     dependencies: [
           { criterion: 'linter-validation', type: DEPENDENCY_TYPES.STRICT },
-          { criterion: 'type-validation', type: DEPENDENCY_TYPES.STRICT }
+          { criterion: 'type-validation', type: DEPENDENCY_TYPES.STRICT },
   ],
         estimatedDuration: 45000,
         parallelizable: false,
@@ -503,7 +503,7 @@ const highPriorityWave = plan.plan.findIndex((wave) =>
       manager.addDependency('integration-tests', {,
     dependencies: [
           { criterion: 'frontend-build', type: DEPENDENCY_TYPES.STRICT },
-          { criterion: 'backend-build', type: DEPENDENCY_TYPES.STRICT }
+          { criterion: 'backend-build', type: DEPENDENCY_TYPES.STRICT },
   ],
         estimatedDuration: 60000,
         parallelizable: true,
@@ -637,7 +637,7 @@ const originalDeps = manager.getAllDependencies();
       const newManager = new ValidationDependencyManager({,
     projectRoot: tempDir,
       });
-      const result = await newManager.loadDependencyConfig();
+      const _result = await newManager.loadDependencyConfig();
 
       expect(result).toBeNull(); // File doesn't exist, should return null
 
@@ -787,7 +787,7 @@ const dependencies = newManager.getAllDependencies();
               ? [ {,
     criterion: `criterion-${i - 1}`,
                   type: DEPENDENCY_TYPES.WEAK,
-                }
+                },
   ]
               : [],
           estimatedDuration: Math.random() * 20000 + 5000,
