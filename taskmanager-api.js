@@ -41,6 +41,7 @@
 
 const path = require('path');
 const crypto = require('crypto');
+const FS = require('fs').promises;
 
 // Import RAG operations for self-learning capabilities
 const RAGOPERATIONS = require('./lib/api-modules/rag/ragOperations');

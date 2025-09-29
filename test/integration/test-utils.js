@@ -1,5 +1,3 @@
-/* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-object-injection */
-const { loggers } = require('../lib/logger');
 /**
  * Integration Test Utilities
  *

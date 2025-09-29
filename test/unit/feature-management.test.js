@@ -101,7 +101,7 @@ describe('Feature Management Lifecycle', () => {
             'Implement a comprehensive user authentication system with JWT tokens, OAuth integration, And role-based access control',
           business_value:
             'Enables secure user management, protects sensitive data, And provides foundation for user-specific features',
-          task.category: 'new-feature',
+          category: 'new-feature',
           suggested_by: 'development-team',
           metadata: {
             priority: 'high',

@@ -1,4 +1,3 @@
-const { loggers } = require('../lib/logger');
 /**
  * Test Utilities
  *

@@ -1,4 +1,3 @@
-/* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-object-injection */
 /**
  * Test Utilities for FeatureManagerAPI Unit Tests
  *
@@ -24,16 +23,16 @@ class MockFileSystem {
   }
 
   // Mock FS.access
-  async access(__filename, __filename, __filename, __filename) {
+  async access(filePath) {
     await new Promise((resolve) => {
       setTimeout(resolve, 0);
     });
-    if (this.accessErrors.has(__filename)) {
-      const error = new Error(this.accessErrors.get(__filename));
+    if (this.accessErrors.has(filePath)) {
+      const error = new Error(this.accessErrors.get(filePath));
       error.code = 'ENOENT';
       throw error;
     }
-    if (!this.files.has(__filename)) {
+    if (!this.files.has(filePath)) {
       const error = new Error('File not found');
       error.code = 'ENOENT';
       throw error;
@@ -75,8 +74,8 @@ class MockFileSystem {
     this.files.set(filePath, content);
   }
 
-  deleteFile(__filename, __filename) {
-    this.files.delete(__filename);
+  deleteFile(filePath) {
+    this.files.delete(filePath);
   }
 
   setAccessError(filePath, error) {
@@ -102,12 +101,12 @@ class MockFileSystem {
     this.clearErrors();
   }
 
-  hasFile(__filename, __filename) {
-    return this.files.has(__filename);
+  hasFile(filePath) {
+    return this.files.has(filePath);
   }
 
-  getFile(__filename, __filename, __filename) {
-    return this.files.get(__filename);
+  getFile(filePath) {
+    return this.files.get(filePath);
   }
 }
 
