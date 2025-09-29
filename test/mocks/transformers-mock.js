@@ -6,8 +6,8 @@
  */
 
 // Mock pipeline function
-const mockPipeline = jest.fn().mockImplementation(async (task, _model) => {
-  return jest.fn().mockImplementation(async (_input) => {
+const mockPipeline = jest.fn().mockImplementation((task, _model) => {
+  return jest.fn().mockImplementation((_input) => {
     // Return mock results based on task type
     switch (task) {
       case 'feature-extraction':

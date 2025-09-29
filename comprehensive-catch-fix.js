@@ -246,7 +246,7 @@ function fixCatchBlocksInFile(_filePath) {
 /**
  * Main execution
  */
-async function main() {
+function main() {
   console.log('🔧 Starting comprehensive catch block fixes...');
 
   const jsFiles = getAllJavaScriptFiles();

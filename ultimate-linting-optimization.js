@@ -39,28 +39,28 @@ class UltimateLintingOptimizer {
   /**
    * Apply comprehensive fixes for remaining patterns
    */
-  async applyComprehensiveFixes() {
+  applyComprehensiveFixes() {
     console.log('🔧 Starting ultimate linting optimization...\n');
 
     this.getInitialErrorCount();
 
     // 1. Fix unused _error parameters (587 instances)
-    await this.fixUnusedErrorParameters();
+    this.fixUnusedErrorParameters();
 
     // 2. Fix no-undef errors (1425 instances)
-    await this.fixUndefinedVariableErrors();
+    this.fixUndefinedVariableErrors();
 
     // 3. Fix require-await errors (6 instances)
-    await this.fixRequireAwaitErrors();
+    this.fixRequireAwaitErrors();
 
     // 4. Fix security warnings that are safe to fix
-    await this.fixSafeSecurityWarnings();
+    this.fixSafeSecurityWarnings();
 
     // 5. Fix remaining unused variables
-    await this.fixRemainingUnusedVariables();
+    this.fixRemainingUnusedVariables();
 
     // 6. Run final autofix
-    await this.runFinalAutofix();
+    this.runFinalAutofix();
 
     // 7. Generate final report
     this.generateFinalReport();
@@ -69,7 +69,7 @@ class UltimateLintingOptimizer {
   /**
    * Fix unused _error parameters - biggest issue (587 instances)
    */
-  async fixUnusedErrorParameters() {
+  fixUnusedErrorParameters() {
     console.log('🎯 Fixing unused _error parameters...');
     const jsFiles = this.getAllJavaScriptFiles();
     let fixed = 0;
@@ -113,7 +113,7 @@ class UltimateLintingOptimizer {
   /**
    * Fix undefined variable errors (1425 instances)
    */
-  async fixUndefinedVariableErrors() {
+  fixUndefinedVariableErrors() {
     console.log('🎯 Fixing undefined variable errors...');
     let fixed = 0;
 
@@ -180,7 +180,7 @@ class UltimateLintingOptimizer {
   /**
    * Fix require-await errors (6 instances)
    */
-  async fixRequireAwaitErrors() {
+  fixRequireAwaitErrors() {
     console.log('🎯 Fixing require-await errors...');
     const jsFiles = this.getAllJavaScriptFiles();
     let fixed = 0;
@@ -227,7 +227,7 @@ class UltimateLintingOptimizer {
   /**
    * Fix safe security warnings
    */
-  async fixSafeSecurityWarnings() {
+  fixSafeSecurityWarnings() {
     console.log('🎯 Fixing safe security warnings...');
     const jsFiles = this.getAllJavaScriptFiles();
     let fixed = 0;
@@ -287,7 +287,7 @@ class UltimateLintingOptimizer {
   /**
    * Fix remaining unused variables
    */
-  async fixRemainingUnusedVariables() {
+  fixRemainingUnusedVariables() {
     console.log('🎯 Fixing remaining unused variables...');
     const jsFiles = this.getAllJavaScriptFiles();
     let fixed = 0;
@@ -341,7 +341,7 @@ class UltimateLintingOptimizer {
   /**
    * Run final ESLint autofix
    */
-  async runFinalAutofix() {
+  runFinalAutofix() {
     console.log('🔧 Running final ESLint autofix...');
     try {
       execSync('npx eslint . --fix', { stdio: 'pipe' });
@@ -354,7 +354,7 @@ class UltimateLintingOptimizer {
   /**
    * Get all JavaScript files
    */
-  async getAllJavaScriptFiles() {
+  getAllJavaScriptFiles() {
     try {
       const result = execSync(
         'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
@@ -374,7 +374,7 @@ class UltimateLintingOptimizer {
   /**
    * Generate final optimization report
    */
-  async generateFinalReport() {
+  generateFinalReport() {
     console.log('📊 Generating final optimization report...');
 
     // Get final error count
@@ -432,7 +432,7 @@ class UltimateLintingOptimizer {
   /**
    * Analyze remaining issues for manual intervention
    */
-  async analyzeRemainingIssues() {
+  analyzeRemainingIssues() {
     console.log('\n🔍 Analyzing remaining issues...');
 
     try {
@@ -514,9 +514,9 @@ class UltimateLintingOptimizer {
 }
 
 // Execute optimization
-async function main() {
+function main() {
   const optimizer = new UltimateLintingOptimizer();
-  await optimizer.applyComprehensiveFixes();
+  optimizer.applyComprehensiveFixes();
 }
 
 if (require.main === module) {

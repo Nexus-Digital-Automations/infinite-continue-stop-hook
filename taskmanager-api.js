@@ -4422,7 +4422,7 @@ class AutonomousTaskManagerAPI {
 
   // Helper methods for Feature 9
 
-  async _captureGitState() {
+  _captureGitState() {
     const { execSync } = require('child_process');
 
     try {
@@ -5832,7 +5832,7 @@ class AutonomousTaskManagerAPI {
    * Execute command with robust timeout handling That actually works
    * Prevents infinite hangs from build systems like Turbo That don't respect Node.js timeouts
    */
-  async _executeCommandWithRobustTimeout(cmd, timeout, isStartCommand = false) {
+  _executeCommandWithRobustTimeout(cmd, timeout, isStartCommand = false) {
     const { spawn } = require('child_process');
 
     return new Promise((resolve, reject) => {
@@ -5915,7 +5915,7 @@ class AutonomousTaskManagerAPI {
   /**
    * Enhanced start command validation with better error handling
    */
-  async _validateStartCommand(cmd, timeout) {
+  _validateStartCommand(cmd, timeout) {
     const { spawn } = require('child_process');
 
     return new Promise((resolve) => {
@@ -8302,7 +8302,7 @@ class AutonomousTaskManagerAPI {
   /**
    * Start webSocket server for real-time updates
    */
-  async startWebSocketServer(port = 8080) {
+  startWebSocketServer(port = 8080) {
     try {
       if (this.wss) {
         return {
@@ -8897,9 +8897,9 @@ class AutonomousTaskManagerAPI {
     };
   }
 
-  async getComprehensiveGuide() {
+  getComprehensiveGuide() {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         (() => {
           return {
             success: true,
@@ -9353,7 +9353,7 @@ class AutonomousTaskManagerAPI {
   /**
    * Ensure initialization stats structure exists in features data
    */
-  async _ensureInitializationStatsStructure(features) {
+  _ensureInitializationStatsStructure(features) {
     if (!features.metadata) {
       features.metadata = {
         version: '1.0.0',
@@ -9474,7 +9474,7 @@ class AutonomousTaskManagerAPI {
   /**
    * Reset daily buckets if we've crossed 7am
    */
-  async _resetDailyBucketsIfNeeded(features) {
+  _resetDailyBucketsIfNeeded(features) {
     const now = new Date();
     const currentDay = now.toISOString().split('T')[0];
     const stats = features.metadata.initialization_stats;
@@ -9879,7 +9879,7 @@ class AutonomousTaskManagerAPI {
    */
   async storeLesson(lessonData) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.storeLesson(lessonData),
         this.timeout
       );
@@ -9897,7 +9897,7 @@ class AutonomousTaskManagerAPI {
    */
   async searchLessons(query, _options = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.searchLessons(query, _options),
         this.timeout
       );
@@ -9915,7 +9915,7 @@ class AutonomousTaskManagerAPI {
    */
   async storeError(errorData) {
     try {
-      return this.withTimeout(this.ragOps.storeError(errorData), this.timeout);
+      return await this.withTimeout(this.ragOps.storeError(errorData), this.timeout);
     } catch (error) {
       return {
         success: false,
@@ -9930,7 +9930,7 @@ class AutonomousTaskManagerAPI {
    */
   async findSimilarErrors(errorDescription, _options = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.findSimilarErrors(errorDescription, _options),
         this.timeout
       );
@@ -9948,7 +9948,7 @@ class AutonomousTaskManagerAPI {
    */
   async getRelevantLessons(taskId, _options = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.getRelevantLessons(taskId, _options),
         this.timeout
       );
@@ -9966,7 +9966,7 @@ class AutonomousTaskManagerAPI {
    */
   async getRagAnalytics() {
     try {
-      return this.withTimeout(this.ragOps.getAnalytics(), this.timeout);
+      return await this.withTimeout(this.ragOps.getAnalytics(), this.timeout);
     } catch (error) {
       return {
         success: false,
@@ -9983,7 +9983,7 @@ class AutonomousTaskManagerAPI {
    */
   async getLessonVersionHistory(lessonId) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.getLessonVersionHistory(lessonId),
         this.timeout
       );
@@ -10001,7 +10001,7 @@ class AutonomousTaskManagerAPI {
    */
   async compareLessonVersions(lessonId, versionA, versionB) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.compareLessonVersions(lessonId, versionA, versionB),
         this.timeout
       );
@@ -10019,7 +10019,7 @@ class AutonomousTaskManagerAPI {
    */
   async rollbackLessonVersion(lessonId, targetVersion) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.rollbackLessonVersion(lessonId, targetVersion),
         this.timeout
       );
@@ -10037,7 +10037,7 @@ class AutonomousTaskManagerAPI {
    */
   async getLessonVersionAnalytics(lessonId) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.getLessonVersionAnalytics(lessonId),
         this.timeout
       );
@@ -10055,7 +10055,7 @@ class AutonomousTaskManagerAPI {
    */
   async storeLessonWithVersioning(lessonData, versionOptions = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.storeLessonWithVersioning(lessonData, versionOptions),
         this.timeout
       );
@@ -10073,7 +10073,7 @@ class AutonomousTaskManagerAPI {
    */
   async searchLessonsWithVersioning(query, _options = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.searchLessonsWithVersioning(query, _options),
         this.timeout
       );
@@ -10093,7 +10093,7 @@ class AutonomousTaskManagerAPI {
    */
   async recordLessonUsage(lessonId, usageData = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.recordLessonUsage(lessonId, usageData),
         this.timeout
       );
@@ -10111,7 +10111,7 @@ class AutonomousTaskManagerAPI {
    */
   async recordLessonFeedback(lessonId, feedbackData = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.recordLessonFeedback(lessonId, feedbackData),
         this.timeout
       );
@@ -10129,7 +10129,7 @@ class AutonomousTaskManagerAPI {
    */
   async recordLessonOutcome(lessonId, outcomeData = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.recordLessonOutcome(lessonId, outcomeData),
         this.timeout
       );
@@ -10147,7 +10147,7 @@ class AutonomousTaskManagerAPI {
    */
   async getLessonQualityScore(lessonId) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.getLessonQualityScore(lessonId),
         this.timeout
       );
@@ -10165,7 +10165,7 @@ class AutonomousTaskManagerAPI {
    */
   async getLessonQualityAnalytics(_options = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.getLessonQualityAnalytics(_options),
         this.timeout
       );
@@ -10183,7 +10183,7 @@ class AutonomousTaskManagerAPI {
    */
   async getQualityBasedRecommendations(_options = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.getQualityBasedRecommendations(_options),
         this.timeout
       );
@@ -10201,7 +10201,7 @@ class AutonomousTaskManagerAPI {
    */
   async searchLessonsWithQuality(query, _options = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.searchLessonsWithQuality(query, _options),
         this.timeout
       );
@@ -10219,7 +10219,7 @@ class AutonomousTaskManagerAPI {
    */
   async updateLessonQualityScore(lessonId, scoreData = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.updateLessonQualityScore(lessonId, scoreData),
         this.timeout
       );
@@ -10239,7 +10239,7 @@ class AutonomousTaskManagerAPI {
    */
   async registerProject(projectData) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.registerProject(projectData),
         this.timeout
       );
@@ -10257,7 +10257,7 @@ class AutonomousTaskManagerAPI {
    */
   async shareLessonCrossProject(lessonId, projectId, sharingData = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.shareLessonCrossProject(lessonId, projectId, sharingData),
         this.timeout
       );
@@ -10275,7 +10275,7 @@ class AutonomousTaskManagerAPI {
    */
   async calculateProjectRelevance(sourceProjectId, targetProjectId) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.calculateProjectRelevance(sourceProjectId, targetProjectId),
         this.timeout
       );
@@ -10293,7 +10293,7 @@ class AutonomousTaskManagerAPI {
    */
   async getSharedLessonsForProject(projectId, _options = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.getSharedLessonsForProject(projectId, _options),
         this.timeout
       );
@@ -10311,7 +10311,7 @@ class AutonomousTaskManagerAPI {
    */
   async getProjectRecommendations(projectId, _options = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.getProjectRecommendations(projectId, _options),
         this.timeout
       );
@@ -10329,7 +10329,7 @@ class AutonomousTaskManagerAPI {
    */
   async recordLessonApplication(applicationData) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.recordLessonApplication(applicationData),
         this.timeout
       );
@@ -10347,7 +10347,7 @@ class AutonomousTaskManagerAPI {
    */
   async getCrossProjectAnalytics(projectId = null, _options = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.getCrossProjectAnalytics(projectId, _options),
         this.timeout
       );
@@ -10365,7 +10365,7 @@ class AutonomousTaskManagerAPI {
    */
   async updateProject(projectId, updates) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.updateProject(projectId, updates),
         this.timeout
       );
@@ -10383,7 +10383,7 @@ class AutonomousTaskManagerAPI {
    */
   async getProject(projectId) {
     try {
-      return this.withTimeout(this.ragOps.getProject(projectId), this.timeout);
+      return await this.withTimeout(this.ragOps.getProject(projectId), this.timeout);
     } catch (error) {
       return {
         success: false,
@@ -10398,7 +10398,7 @@ class AutonomousTaskManagerAPI {
    */
   async listProjects(_options = {}) {
     try {
-      return this.withTimeout(this.ragOps.listProjects(_options), this.timeout);
+      return await this.withTimeout(this.ragOps.listProjects(_options), this.timeout);
     } catch (error) {
       return {
         success: false,
@@ -10415,7 +10415,7 @@ class AutonomousTaskManagerAPI {
    */
   async deprecateLesson(lessonId, deprecationData = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.deprecateLesson(lessonId, deprecationData),
         this.timeout
       );
@@ -10433,7 +10433,7 @@ class AutonomousTaskManagerAPI {
    */
   async restoreLesson(lessonId, restorationData = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.restoreLesson(lessonId, restorationData),
         this.timeout
       );
@@ -10451,7 +10451,7 @@ class AutonomousTaskManagerAPI {
    */
   async getLessonDeprecationStatus(lessonId) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.getLessonDeprecationStatus(lessonId),
         this.timeout
       );
@@ -10469,7 +10469,7 @@ class AutonomousTaskManagerAPI {
    */
   async getDeprecatedLessons(_options = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.getDeprecatedLessons(_options),
         this.timeout
       );
@@ -10487,7 +10487,7 @@ class AutonomousTaskManagerAPI {
    */
   async cleanupObsoleteLessons(_options = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.cleanupObsoleteLessons(_options),
         this.timeout
       );
@@ -10505,7 +10505,7 @@ class AutonomousTaskManagerAPI {
    */
   async getDeprecationAnalytics(_options = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.getDeprecationAnalytics(_options),
         this.timeout
       );
@@ -10525,7 +10525,7 @@ class AutonomousTaskManagerAPI {
    */
   async detectLearningPatterns(_options = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.detectLearningPatterns(_options),
         this.timeout
       );
@@ -10543,7 +10543,7 @@ class AutonomousTaskManagerAPI {
    */
   async analyzePatternEvolution(category, _options = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.analyzePatternEvolution(category, _options),
         this.timeout
       );
@@ -10561,7 +10561,7 @@ class AutonomousTaskManagerAPI {
    */
   async getPatternBasedSuggestions(context, _options = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.getPatternBasedSuggestions(context, _options),
         this.timeout
       );
@@ -10579,7 +10579,7 @@ class AutonomousTaskManagerAPI {
    */
   async analyzeLessonPatterns(lessonId, _options = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.analyzeLessonPatterns(lessonId, _options),
         this.timeout
       );
@@ -10597,7 +10597,7 @@ class AutonomousTaskManagerAPI {
    */
   async getPatternAnalytics(_options = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.getPatternAnalytics(_options),
         this.timeout
       );
@@ -10615,7 +10615,7 @@ class AutonomousTaskManagerAPI {
    */
   async clusterPatterns(_options = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.clusterPatterns(_options),
         this.timeout
       );
@@ -10633,7 +10633,7 @@ class AutonomousTaskManagerAPI {
    */
   async searchSimilarPatterns(query, _options = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.searchSimilarPatterns(query, _options),
         this.timeout
       );
@@ -10651,7 +10651,7 @@ class AutonomousTaskManagerAPI {
    */
   async generatePatternInsights(_options = {}) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.generatePatternInsights(_options),
         this.timeout
       );
@@ -10669,7 +10669,7 @@ class AutonomousTaskManagerAPI {
    */
   async updatePatternDetectionConfig(configUpdates) {
     try {
-      return this.withTimeout(
+      return await this.withTimeout(
         this.ragOps.updatePatternDetectionConfig(configUpdates),
         this.timeout
       );

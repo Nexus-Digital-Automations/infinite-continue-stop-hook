@@ -46,7 +46,7 @@ class FinalSystematicResultFix {
   /**
    * Get all source files that need processing
    */
-  async getAllSourceFiles() {
+  getAllSourceFiles() {
     const extensions = ['.js', '.ts', '.jsx', '.tsx'];
     const excludePatterns = [
       'node_modules',

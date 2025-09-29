@@ -468,7 +468,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
    * @param {Object} auditTaskData - Complete audit task definition
    * @returns {Object} Created task information
    */
-  async createTaskViaApi(auditTaskData) {
+  createTaskViaApi(auditTaskData) {
     const command = `timeout ${this.config.auditTimeoutMs / 1000}s node "${this.taskManagerApiPath}" create '${JSON.stringify(auditTaskData)}'`;
 
     try {
