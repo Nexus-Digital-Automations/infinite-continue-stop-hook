@@ -395,8 +395,8 @@ const AGENT_IDS = ['agent-001', 'agent-002', 'agent-003'];
       // Verify all initializations succeeded
       expect(initResults.every((result) => result.success)).toBe(true);
       initResults.forEach((result, index) => {
-        expect(result.agent.id).toBe(AGENT_IDS[index]);
-        expect(result.agent.status).toBe('initialized');
+        expect(_result.agent.id).toBe(AGENT_IDS[index]);
+        expect(_result.agent.status).toBe('initialized');
       });
 
       // 2. Verify all agents are recorded;
@@ -416,8 +416,8 @@ const reinitPromises = AGENT_IDS.map((_agentId) =>
       // Verify all reinitializations succeeded
       expect(reinitResults.every((result) => result.success)).toBe(true);
       reinitResults.forEach((result, index) => {
-        expect(result.agent.id).toBe(AGENT_IDS[index]);
-        expect(result.agent.status).toBe('reinitialized');
+        expect(_result.agent.id).toBe(AGENT_IDS[index]);
+        expect(_result.agent.status).toBe('reinitialized');
       });
     });
 });
@@ -742,8 +742,8 @@ const commands = methodsResult.availableCommands;
     projectRoot: testDir,
       });
 
-      expect(result.success).toBe(false);
-      expect(result.error).toBeDefined();
+      expect(_result.success).toBe(false);
+      expect(_result.error).toBeDefined();
     });
 
     test('should handle operations on non-existent features', async () => {

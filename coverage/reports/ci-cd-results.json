@@ -1,28 +1,28 @@
 {
   "metadata": {
-    "timestamp": "2025-09-29T22:27:32.523Z",
+    "timestamp": "2025-09-29T23:34:25.392Z",
     "reporter": "jest-cicd-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System",
-    "duration_ms": 3736
+    "duration_ms": 2424
   },
   "cicd_summary": {
     "pipeline_status": "FAILURE",
-    "total_duration_ms": 3736,
+    "total_duration_ms": 2424,
     "should_block_deployment": true,
     "quality_gate_status": {
       "status": "FAILED",
       "criteria": {
         "tests_passing": false,
-        "no_failed_tests": true,
+        "no_failed_tests": false,
         "coverage_adequate": false,
-        "performance_acceptable": false
+        "performance_acceptable": true
       },
       "blocking_issues": [
         {
           "type": "test_failures",
           "severity": "critical",
-          "message": "0 test(s) failed",
+          "message": "1 test(s) failed",
           "action": "Fix failing tests before deployment"
         },
         {
@@ -30,52 +30,59 @@
           "severity": "warning",
           "message": "Code coverage below acceptable threshold",
           "action": "Add more tests to improve coverage"
-        },
-        {
-          "type": "performance",
-          "severity": "warning",
-          "message": "Test execution time is slow",
-          "action": "Optimize slow tests or improve test parallelization"
         }
       ]
     },
-    "test_health_score": null
+    "test_health_score": 95
   },
   "test_execution": {
     "summary": {
-      "total_suites": 33,
+      "total_suites": 1,
       "passed_suites": 0,
-      "failed_suites": 33,
-      "total_tests": 0,
+      "failed_suites": 1,
+      "total_tests": 10,
       "passed_tests": 0,
-      "failed_tests": 0,
-      "pending_tests": 0,
-      "success_rate": "NaN",
-      "execution_time_ms": 3736
+      "failed_tests": 1,
+      "pending_tests": 9,
+      "success_rate": "0.00",
+      "execution_time_ms": 2424
     },
     "performance_metrics": {
-      "average_test_duration": null,
-      "slowest_suite": null,
+      "average_test_duration": 242.4,
+      "slowest_suite": {
+        "path": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
+        "duration_ms": 1902,
+        "num_tests": 1
+      },
       "memory_usage": {
-        "rss": 187645952,
-        "heap_total": 119078912,
-        "heap_used": 91742224,
-        "external": 2282110,
-        "heap_usage_percent": "77.04"
+        "rss": 303611904,
+        "heap_total": 180043776,
+        "heap_used": 150406112,
+        "external": 4984329,
+        "heap_usage_percent": "83.54"
       },
       "parallel_efficiency": {
-        "parallel_efficiency_percent": 0,
-        "total_execution_time_ms": 3736,
-        "serial_time_ms": 0,
+        "parallel_efficiency_percent": "78.43",
+        "total_execution_time_ms": 2425,
+        "serial_time_ms": 1902,
         "time_saved_ms": 0
       }
     },
     "failure_analysis": {
-      "total_failures": 0,
-      "failed_suites": 33,
-      "failure_details": [],
-      "failure_patterns": {},
-      "common_failure_type": "none"
+      "total_failures": 1,
+      "failed_suites": 1,
+      "failure_details": [
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
+          "test": "Success Criteria End-to-End Tests Complete Validation Workflows should execute full feature validation workflow",
+          "duration": 1069,
+          "error": "Error: expect(received).toContain(expected) // indexOf\n\nExpected substring: \"suggested\"\nReceived string:    \"[dotenv@17.2.2] injecting env (0) from .env -- tip: 🔐 prevent committing .env to code: htt"
+        }
+      ],
+      "failure_patterns": {
+        "assertion": 1
+      },
+      "common_failure_type": "assertion"
     },
     "flaky_test_detection": {
       "potentially_flaky": [],
@@ -84,11 +91,11 @@
     }
   },
   "git": {
-    "commit_sha": "3119a2befdce1efbd8a82013dc01746af55a53ba",
+    "commit_sha": "7889ce306ae3c786ad2d1792b60dedaa274e65b9",
     "branch": "main",
     "author": "Claude <claude@anthropic.com>",
-    "commit_message": "fix: resolve JavaScript syntax errors in taskmanager-api.js and stop-hook.js",
-    "commit_date": "2025-09-29 17:22:35 -0500",
+    "commit_message": "fix: resolve JavaScript syntax errors in test files",
+    "commit_date": "2025-09-29 18:30:14 -0500",
     "tag": null,
     "is_dirty": true,
     "remote_url": "https://github.com/Nexus-Digital-Automations/infinite-continue-stop-hook.git"
@@ -104,7 +111,7 @@
     "locale": "en-US",
     "memory": {
       "total": 25769803776,
-      "available": 166723584
+      "available": 190005248
     },
     "cpu": {
       "cores": 8,
@@ -122,5 +129,12 @@
     "coverage_status": "not_available"
   },
   "notifications": [],
-  "recommendations": []
+  "recommendations": [
+    {
+      "category": "testing",
+      "priority": "high",
+      "recommendation": "Fix failing tests immediately",
+      "details": "1 tests are currently failing"
+    }
+  ]
 }

@@ -19,7 +19,7 @@ class FinalSystematicResultFix {
     this.fixedFiles = 0;
     this.totalReplacements = 0;
     this.projectRoot = process.cwd();
-}
+  }
 
   /**
    * Apply systematic result variable fixes
@@ -40,9 +40,9 @@ class FinalSystematicResultFix {
       this.reportResults();
     } catch (_error) {
       console.error('❌ Error during systematic fixes:', _1.message);
-      throw new Error(`Systematic fixes failed: ${_1.message}`);
+      throw new Error(`Systematic fixes failed: ${_error.message}`);
     }
-}
+  }
 
   /**
    * Get all source files that need processing

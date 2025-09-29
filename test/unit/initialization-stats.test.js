@@ -341,7 +341,7 @@ describe('Initialization Statistics', () => {
 
       test('should track initialization through initializeAgent', async () => {
         const _result = await api.initializeAgent('test-agent');
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
 
         const statsResult = await api.getInitializationStats();
         expect(statsResult.success).toBe(true);
@@ -357,7 +357,7 @@ describe('Initialization Statistics', () => {
 
         // Then reinitialize;
         const _result = await api.reinitializeAgent('test-agent');
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
 
         const statsResult = await api.getInitializationStats();
         expect(statsResult.success).toBe(true);
@@ -514,9 +514,9 @@ describe('Initialization Statistics', () => {
 
         const _result = await api.getInitializationStats();
 
-        expect(result.success).toBe(true);
-        expect(result.stats).toBeDefined();
-        expect(result.message).toBe(
+        expect(_result.success).toBe(true);
+        expect(_result.stats).toBeDefined();
+        expect(_result.message).toBe(
           'Initialization statistics retrieved successfully',
         );
 
@@ -581,9 +581,9 @@ describe('Initialization Statistics', () => {
       test('should include recent activity history', async () => {
         const _result = await api.getInitializationStats();
 
-        expect(result.stats.recent_activity).toBeDefined();
+        expect(_result.stats.recent_activity).toBeDefined();
         expect(Array.isArray(result.stats.recent_activity)).toBe(true);
-        expect(result.stats.recent_activity.length).toBeLessThanOrEqual(7); // Last 7 days
+        expect(_result.stats.recent_activity.length).toBeLessThanOrEqual(7); // Last 7 days
       });
 
       test('should handle missing initialization stats gracefully', async () => {
@@ -594,10 +594,10 @@ describe('Initialization Statistics', () => {
 
         const _result = await api.getInitializationStats();
 
-        expect(result.success).toBe(true);
-        expect(result.stats.total_initializations).toBe(0);
-        expect(result.stats.total_reinitializations).toBe(0);
-        expect(result.stats.today_totals.combined).toBe(0);
+        expect(_result.success).toBe(true);
+        expect(_result.stats.total_initializations).toBe(0);
+        expect(_result.stats.total_reinitializations).toBe(0);
+        expect(_result.stats.today_totals.combined).toBe(0);
       });
     });
 
@@ -659,9 +659,9 @@ describe('Initialization Statistics', () => {
 
         const _result = await api.getInitializationStats();
 
-        expect(result.success).toBe(false);
-        expect(result.error).toContain('Permission denied');
-        expect(result.timestamp).toBeDefined();
+        expect(_result.success).toBe(false);
+        expect(_result.error).toContain('Permission denied');
+        expect(_result.timestamp).toBeDefined();
       });
 
       test('should handle file write errors in _updateTimeBucketStats', async () => {
@@ -677,8 +677,8 @@ describe('Initialization Statistics', () => {
 
         const _result = await api.getInitializationStats();
 
-        expect(result.success).toBe(false);
-        expect(result.error).toBeDefined();
+        expect(_result.success).toBe(false);
+        expect(_result.error).toBeDefined();
       });
     });
 
@@ -695,9 +695,9 @@ describe('Initialization Statistics', () => {
 
         const _result = await api.getInitializationStats();
 
-        expect(result.success).toBe(true);
-        expect(result.stats.total_initializations).toBe(0);
-        expect(result.stats.time_buckets).toBeDefined();
+        expect(_result.success).toBe(true);
+        expect(_result.stats.total_initializations).toBe(0);
+        expect(_result.stats.time_buckets).toBeDefined();
       });
 
       test('should handle malformed time bucket data', async () => {
@@ -795,8 +795,8 @@ describe('Initialization Statistics', () => {
 
         const _result = await api.getInitializationStats();
 
-        expect(result.success).toBe(true);
-        expect(result.stats.total_initializations).toBe(1000);
+        expect(_result.success).toBe(true);
+        expect(_result.stats.total_initializations).toBe(1000);
       });
 
       test('should handle extensive daily history', async () => {
@@ -823,8 +823,8 @@ describe('Initialization Statistics', () => {
 
         const _result = await api.getInitializationStats();
 
-        expect(result.success).toBe(true);
-        expect(result.stats.recent_activity.length).toBeLessThanOrEqual(7);
+        expect(_result.success).toBe(true);
+        expect(_result.stats.recent_activity.length).toBeLessThanOrEqual(7);
       });
     });
   });

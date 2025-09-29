@@ -185,10 +185,10 @@ describe('Feature Management System Unit Tests', () => {
       const _result = await execAPI('suggest-feature', [
         JSON.stringify(featureData),
       ]);
-      expect(result.success).toBe(true);
-      expect(result.feature).toBeDefined();
-      expect(result.feature.title).toBe(featureData.title);
-      expect(result.feature.status).toBe('suggested');
+      expect(_result.success).toBe(true);
+      expect(_result.feature).toBeDefined();
+      expect(_result.feature.title).toBe(featureData.title);
+      expect(_result.feature.status).toBe('suggested');
     });
 
     test('should generate API-focused research locations for API tasks', async () => {
@@ -201,7 +201,7 @@ describe('Feature Management System Unit Tests', () => {
       };
 
       const _result = await execAPI('create', [JSON.stringify(apiTaskData)]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);
@@ -238,7 +238,7 @@ describe('Feature Management System Unit Tests', () => {
       const _result = await execAPI('create', [
         JSON.stringify(securityTaskData),
       ]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);
@@ -270,7 +270,7 @@ describe('Feature Management System Unit Tests', () => {
       const _result = await execAPI('create', [
         JSON.stringify(performanceTaskData),
       ]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);
@@ -311,7 +311,7 @@ describe('Feature Management System Unit Tests', () => {
       const _result = await execAPI('create', [
         JSON.stringify(complexTaskData),
       ]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);
@@ -352,7 +352,7 @@ describe('Feature Management System Unit Tests', () => {
       const _result = await execAPI('create', [
         JSON.stringify(taskWithGenericTerms),
       ]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);
@@ -390,7 +390,7 @@ describe('Feature Management System Unit Tests', () => {
       const _result = await execAPI('create', [
         JSON.stringify(verboseTaskData),
       ]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);
@@ -434,7 +434,7 @@ describe('Feature Management System Unit Tests', () => {
       const _result = await execAPI('create', [
         JSON.stringify(standardTaskData),
       ]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);
@@ -467,7 +467,7 @@ describe('Feature Management System Unit Tests', () => {
       const _result = await execAPI('create', [
         JSON.stringify(researchTaskData),
       ]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);
@@ -493,7 +493,7 @@ describe('Feature Management System Unit Tests', () => {
       const _result = await execAPI('create', [
         JSON.stringify(implementationTaskData),
       ]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);
@@ -528,7 +528,7 @@ describe('Feature Management System Unit Tests', () => {
       const _result = await execAPI('create', [
         JSON.stringify(architectureTaskData),
       ]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);
@@ -569,7 +569,7 @@ describe('Feature Management System Unit Tests', () => {
       const _result = await execAPI('create', [
         JSON.stringify(documentedTaskData),
       ]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);
@@ -616,7 +616,7 @@ describe('Feature Management System Unit Tests', () => {
 
       for await (const taskData of taskDataList) {
         const _result = await execAPI('create', [JSON.stringify(taskData)]);
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
 
         const listResult = await execAPI('list');
         const task = listResult.tasks.find((t) => t.id === result.taskId);
@@ -645,7 +645,7 @@ describe('Feature Management System Unit Tests', () => {
       };
 
       const _result = await execAPI('create', [JSON.stringify(taskData)]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const afterTime = Date.now();
 
@@ -685,7 +685,7 @@ describe('Feature Management System Unit Tests', () => {
       const _result = await execAPI('create', [
         JSON.stringify(minimalTaskData),
       ]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);
@@ -715,7 +715,7 @@ describe('Feature Management System Unit Tests', () => {
       const _result = await execAPI('create', [
         JSON.stringify(specialCharsTaskData),
       ]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);
@@ -756,7 +756,7 @@ describe('Feature Management System Unit Tests', () => {
       };
 
       const _result = await execAPI('create', [JSON.stringify(longTaskData)]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);

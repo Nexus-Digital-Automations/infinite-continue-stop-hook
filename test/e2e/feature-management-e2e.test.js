@@ -1,5 +1,4 @@
 /**
-const { loggers } = require('../lib/logger');
  * Feature Management E2E Tests
  *
  * Comprehensive end-to-end testing of the complete feature management system
@@ -9,6 +8,8 @@ const { loggers } = require('../lib/logger');
  * @author End-to-End Testing Agent
  * @version 1.0.0
  */
+
+const { loggers } = require('../../lib/logger');
 
 const {
   E2EEnvironment,

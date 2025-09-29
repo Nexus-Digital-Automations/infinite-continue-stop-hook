@@ -165,8 +165,8 @@ describe('Trend Analysis API Integration Tests', () => {
     => {
       const _result = executeTaskManagerCommand('analyze-performance-trends');
 
-      expect(result.success).toBe(true);
-      expect(result.analysis.summary).toContain('Insufficient historical data');
+      expect(_result.success).toBe(true);
+      expect(_result.analysis.summary).toContain('Insufficient historical data');
     });
 
     test('should analyze comprehensive performance trends', () => {
@@ -177,17 +177,17 @@ describe('Trend Analysis API Integration Tests', () => {
         '\'{"timeRange":30,"granularity":"daily"}\'',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.analysis).toBeDefined();
-      expect(result.analysis.metadata).toBeDefined();
-      expect(result.analysis.metadata.totalMetrics).toBeGreaterThan(100); // 30 days * 5 criteria = 150 metrics
-      expect(result.analysis.overall).toBeDefined();
-      expect(result.analysis.byCriterion).toBeDefined();
-      expect(result.analysis.decomposition).toBeDefined();
-      expect(result.analysis.patterns).toBeDefined();
-      expect(result.analysis.health).toBeDefined();
-      expect(result.analysis.volatility).toBeDefined();
-      expect(result.analysis.comparative).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.analysis).toBeDefined();
+      expect(_result.analysis.metadata).toBeDefined();
+      expect(_result.analysis.metadata.totalMetrics).toBeGreaterThan(100); // 30 days * 5 criteria = 150 metrics
+      expect(_result.analysis.overall).toBeDefined();
+      expect(_result.analysis.byCriterion).toBeDefined();
+      expect(_result.analysis.decomposition).toBeDefined();
+      expect(_result.analysis.patterns).toBeDefined();
+      expect(_result.analysis.health).toBeDefined();
+      expect(_result.analysis.volatility).toBeDefined();
+      expect(_result.analysis.comparative).toBeDefined();
     });
 
     test('should support different granularities', () => {
@@ -216,8 +216,8 @@ describe('Trend Analysis API Integration Tests', () => {
         '\'{"timeRange":20,"includeForecast":true}\'',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.analysis.forecasts).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.analysis.forecasts).toBeDefined();
     });
 
     test('should include baseline comparisons when requested', () => {
@@ -228,8 +228,8 @@ describe('Trend Analysis API Integration Tests', () => {
         '\'{"timeRange":20,"includeBaselines":true}\'',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.analysis.baselines).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.analysis.baselines).toBeDefined();
     });
 });
 
@@ -241,8 +241,8 @@ describe('Trend Analysis API Integration Tests', () => {
     => {
       const _result = executeTaskManagerCommand('analyze-criterion-trend');
 
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('Criterion required');
+      expect(_result.success).toBe(false);
+      expect(_result.error).toContain('Criterion required');
     });
 
     test('should return insufficient data for non-existent criterion', () => {
@@ -253,8 +253,8 @@ describe('Trend Analysis API Integration Tests', () => {
         'non-existent-criterion',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.analysis.summary).toContain('Insufficient data');
+      expect(_result.success).toBe(true);
+      expect(_result.analysis.summary).toContain('Insufficient data');
     });
 
     test('should analyze specific criterion trends', () => {
@@ -265,16 +265,16 @@ describe('Trend Analysis API Integration Tests', () => {
         'build-validation \'{"timeRange":15,"granularity":"daily"}\'',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.analysis.criterion).toBe('build-validation');
-      expect(result.analysis.metadata).toBeDefined();
-      expect(result.analysis.timeSeries).toBeDefined();
-      expect(result.analysis.trend).toBeDefined();
-      expect(result.analysis.statistics).toBeDefined();
-      expect(result.analysis.seasonality).toBeDefined();
-      expect(result.analysis.changePoints).toBeDefined();
-      expect(result.analysis.regressions).toBeDefined();
-      expect(result.analysis.anomalies).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.analysis.criterion).toBe('build-validation');
+      expect(_result.analysis.metadata).toBeDefined();
+      expect(_result.analysis.timeSeries).toBeDefined();
+      expect(_result.analysis.trend).toBeDefined();
+      expect(_result.analysis.statistics).toBeDefined();
+      expect(_result.analysis.seasonality).toBeDefined();
+      expect(_result.analysis.changePoints).toBeDefined();
+      expect(_result.analysis.regressions).toBeDefined();
+      expect(_result.analysis.anomalies).toBeDefined();
     });
 
     test('should detect performance regressions', () => {
@@ -284,8 +284,8 @@ const _result = executeTaskManagerCommand(
         'build-validation',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.analysis.regressions).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.analysis.regressions).toBeDefined();
       expect(Array.isArray(result.analysis.regressions)).toBe(true);
     });
 });
@@ -303,19 +303,19 @@ const _result = executeTaskManagerCommand(
         '\'{"timeRange":20,"granularity":"daily"}\'',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.healthTrends).toBeDefined();
-      expect(result.healthTrends.data).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.healthTrends).toBeDefined();
+      expect(_result.healthTrends.data).toBeDefined();
       expect(Array.isArray(result.healthTrends.data)).toBe(true);
-      expect(result.healthTrends.analysis).toBeDefined();
-      expect(result.healthTrends.summary).toBeDefined();
-      expect(result.healthTrends.summary.currentHealth).toBeGreaterThanOrEqual(
+      expect(_result.healthTrends.analysis).toBeDefined();
+      expect(_result.healthTrends.summary).toBeDefined();
+      expect(_result.healthTrends.summary.currentHealth).toBeGreaterThanOrEqual(
         0,
       );
-      expect(result.healthTrends.summary.currentHealth).toBeLessThanOrEqual(
+      expect(_result.healthTrends.summary.currentHealth).toBeLessThanOrEqual(
         100,
       );
-      expect(result.healthTrends.summary.healthTrend).toMatch(
+      expect(_result.healthTrends.summary.healthTrend).toMatch(
         /increasing|decreasing|stable/,
       );
     });
@@ -325,8 +325,8 @@ const _result = executeTaskManagerCommand(
 
       const _result = executeTaskManagerCommand('generate-health-score-trends');
 
-      expect(result.success).toBe(true);
-      expect(result.healthTrends.summary.recommendation).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.healthTrends.summary.recommendation).toBeDefined();
       expect(typeof result.healthTrends.summary.recommendation).toBe('string');
     });
 });
@@ -339,8 +339,8 @@ const _result = executeTaskManagerCommand(
     => {
       const _result = executeTaskManagerCommand('compare-performance-periods');
 
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('Two periods required');
+      expect(_result.success).toBe(false);
+      expect(_result.error).toContain('Two periods required');
     });
 
     test('should return insufficient data for small periods', () => {
@@ -363,8 +363,8 @@ const _result = executeTaskManagerCommand(
         `'${periodA}' '${periodB}'`,
       );
 
-      expect(result.success).toBe(true);
-      expect(result.comparison.summary).toContain('Insufficient data');
+      expect(_result.success).toBe(true);
+      expect(_result.comparison.summary).toContain('Insufficient data');
     });
 
     test('should compare two performance periods effectively', () => {
@@ -387,16 +387,16 @@ const _result = executeTaskManagerCommand(
         `'${periodA}' '${periodB}'`,
       );
 
-      expect(result.success).toBe(true);
-      expect(result.comparison).toBeDefined();
-      expect(result.comparison.periods).toBeDefined();
-      expect(result.comparison.periods.periodA.label).toBe('Two Weeks Ago');
-      expect(result.comparison.periods.periodB.label).toBe('Last Two Weeks');
-      expect(result.comparison.performance).toBeDefined();
-      expect(result.comparison.significance).toBeDefined();
-      expect(result.comparison.distributions).toBeDefined();
-      expect(result.comparison.byCriterion).toBeDefined();
-      expect(result.comparison.summary).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.comparison).toBeDefined();
+      expect(_result.comparison.periods).toBeDefined();
+      expect(_result.comparison.periods.periodA.label).toBe('Two Weeks Ago');
+      expect(_result.comparison.periods.periodB.label).toBe('Last Two Weeks');
+      expect(_result.comparison.performance).toBeDefined();
+      expect(_result.comparison.significance).toBeDefined();
+      expect(_result.comparison.distributions).toBeDefined();
+      expect(_result.comparison.byCriterion).toBeDefined();
+      expect(_result.comparison.summary).toBeDefined();
     });
 });
 
@@ -413,21 +413,21 @@ const _result = executeTaskManagerCommand(
         '\'{"timeRange":30,"granularity":"daily"}\'',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.forecasts).toBeDefined();
-      expect(result.timeRange).toBe(30);
-      expect(result.granularity).toBe('daily');
-      expect(result.metadata).toBeDefined();
-      expect(result.metadata.analysisScope).toBe('performance_forecasting');
+      expect(_result.success).toBe(true);
+      expect(_result.forecasts).toBeDefined();
+      expect(_result.timeRange).toBe(30);
+      expect(_result.granularity).toBe('daily');
+      expect(_result.metadata).toBeDefined();
+      expect(_result.metadata.analysisScope).toBe('performance_forecasting');
     });
 
     test('should handle insufficient data for forecasting', () => {
       createComprehensiveMockData(3); // Very limited data;
 const _result = executeTaskManagerCommand('get-performance-forecasts');
 
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
       // Should still return a result, but forecasts might be limited
-      expect(result.forecasts).toBeDefined();
+      expect(_result.forecasts).toBeDefined();
     });
 });
 
@@ -444,11 +444,11 @@ const _result = executeTaskManagerCommand('get-performance-forecasts');
         '\'{"timeRange":25,"granularity":"daily"}\'',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.volatility).toBeDefined();
-      expect(result.timeRange).toBe(25);
-      expect(result.metadata).toBeDefined();
-      expect(result.metadata.analysisScope).toBe('volatility_analysis');
+      expect(_result.success).toBe(true);
+      expect(_result.volatility).toBeDefined();
+      expect(_result.timeRange).toBe(25);
+      expect(_result.metadata).toBeDefined();
+      expect(_result.metadata.analysisScope).toBe('volatility_analysis');
     });
 
     test('should support different granularities for volatility analysis', () => {
@@ -459,8 +459,8 @@ const _result = executeTaskManagerCommand('get-performance-forecasts');
         '\'{"granularity":"hourly"}\'',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.volatility).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.volatility).toBeDefined();
     });
 });
 
@@ -473,11 +473,11 @@ const _result = executeTaskManagerCommand('get-performance-forecasts');
       createComprehensiveMockData(20); // Includes anomalies;
 const _result = executeTaskManagerCommand('detect-performance-anomalies');
 
-      expect(result.success).toBe(true);
-      expect(result.anomalies).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.anomalies).toBeDefined();
       expect(Array.isArray(result.anomalies)).toBe(true);
-      expect(result.metadata).toBeDefined();
-      expect(result.metadata.analysisScope).toBe(
+      expect(_result.metadata).toBeDefined();
+      expect(_result.metadata.analysisScope).toBe(
         'comprehensive_anomaly_detection',
       );
     });
@@ -490,10 +490,10 @@ const _result = executeTaskManagerCommand('detect-performance-anomalies');
         '\'{"criteria":"build-validation","timeRange":15}\'',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.anomalies).toBeDefined();
-      expect(result.criterion).toBe('build-validation');
-      expect(result.metadata.analysisScope).toBe('anomaly_detection');
+      expect(_result.success).toBe(true);
+      expect(_result.anomalies).toBeDefined();
+      expect(_result.criterion).toBe('build-validation');
+      expect(_result.metadata.analysisScope).toBe('anomaly_detection');
     });
 
     test('should support custom granularity for anomaly detection', () => {
@@ -504,8 +504,8 @@ const _result = executeTaskManagerCommand('detect-performance-anomalies');
         '\'{"granularity":"hourly"}\'',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.anomalies).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.anomalies).toBeDefined();
     });
 });
 
@@ -521,19 +521,19 @@ const _result = executeTaskManagerCommand(
         '\'{"timeRange":30,"granularity":"daily"}\'',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.seasonality).toBeDefined();
-      expect(result.patterns).toBeDefined();
-      expect(result.metadata).toBeDefined();
-      expect(result.metadata.analysisScope).toBe('seasonality_analysis');
+      expect(_result.success).toBe(true);
+      expect(_result.seasonality).toBeDefined();
+      expect(_result.patterns).toBeDefined();
+      expect(_result.metadata).toBeDefined();
+      expect(_result.metadata.analysisScope).toBe('seasonality_analysis');
     });
 
     test('should detect time-based patterns', () => {
       createComprehensiveMockData(21); // 3 weeks of data;
 const _result = executeTaskManagerCommand('analyze-seasonality-patterns');
 
-      expect(result.success).toBe(true);
-      expect(result.patterns).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.patterns).toBeDefined();
       // Should detect patterns based on mock data structure
     });
 });
@@ -551,10 +551,10 @@ const _result = executeTaskManagerCommand('analyze-seasonality-patterns');
         '\'{"timeRange":20,"granularity":"daily"}\'',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.baselines).toBeDefined();
-      expect(result.metadata).toBeDefined();
-      expect(result.metadata.analysisScope).toBe('baseline_comparison');
+      expect(_result.success).toBe(true);
+      expect(_result.baselines).toBeDefined();
+      expect(_result.metadata).toBeDefined();
+      expect(_result.metadata.analysisScope).toBe('baseline_comparison');
     });
 
     test('should use default timeRange when not specified', () => {
@@ -562,9 +562,9 @@ const _result = executeTaskManagerCommand('analyze-seasonality-patterns');
 
       const _result = executeTaskManagerCommand('compare-with-baselines');
 
-      expect(result.success).toBe(true);
-      expect(result.timeRange).toBe(30); // Default value
-      expect(result.baselines).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.timeRange).toBe(30); // Default value
+      expect(_result.baselines).toBeDefined();
     });
 });
 
@@ -582,8 +582,8 @@ const _result = executeTaskManagerCommand('analyze-seasonality-patterns');
         { stdio: 'pipe' },
       );
 
-      expect(result.success).toBe(false);
-      expect(result.error).toBeDefined();
+      expect(_result.success).toBe(false);
+      expect(_result.error).toBeDefined();
     });
 
     test('should handle corrupted metrics file', () => {
@@ -592,14 +592,14 @@ const _result = executeTaskManagerCommand('analyze-seasonality-patterns');
       const _result = executeTaskManagerCommand('analyze-performance-trends');
 
       // Should handle gracefully And return insufficient data
-      expect(result.success).toBe(true);
-      expect(result.analysis.summary).toContain('Insufficient historical data');
+      expect(_result.success).toBe(true);
+      expect(_result.analysis.summary).toContain('Insufficient historical data');
     });
 
     test('should handle missing metrics files', () => {
       const _result = executeTaskManagerCommand('generate-health-score-trends');
 
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
       // Should handle gracefully when no data available
     });
 
@@ -613,10 +613,10 @@ const _result = executeTaskManagerCommand('analyze-seasonality-patterns');
         const _result = executeTaskManagerCommand(command);
 
         if (shouldFail) {
-          expect(result.success).toBe(false);
-          expect(result.error).toBeDefined();
+          expect(_result.success).toBe(false);
+          expect(_result.error).toBeDefined();
         } else {
-          expect(result.success).toBe(true);
+          expect(_result.success).toBe(true);
         }
       });
     });
@@ -661,7 +661,7 @@ const legacyData = {
 
       const _result = executeTaskManagerCommand('analyze-performance-trends');
 
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
       // Should combine data from both sources
     });
 
@@ -695,7 +695,7 @@ const legacyData = {
       const _result = executeTaskManagerCommand('analyze-performance-trends');
 
       // Should handle gracefully, processing valid data And skipping invalid
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
     });
 });
 
@@ -713,9 +713,9 @@ const startTime = Date.now();
       );
       const endTime = Date.now();
 
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
       expect(endTime - startTime).toBeLessThan(10000); // Should complete within 10 seconds
-      expect(result.analysis.metadata.totalMetrics).toBeGreaterThan(400); // 90 days * 5 criteria
+      expect(_result.analysis.metadata.totalMetrics).toBeGreaterThan(400); // 90 days * 5 criteria
     });
 
     test('should respect timeRange limits for performance', () => {
@@ -726,9 +726,9 @@ const startTime = Date.now();
         '\'{"timeRange":30}\'', // Limit to 30 days
       );
 
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
       // Should only analyze the requested timeRange, not all available data
-      expect(result.analysis.metadata.timeRange.days).toBe(30);
+      expect(_result.analysis.metadata.timeRange.days).toBe(30);
     });
 });
 });

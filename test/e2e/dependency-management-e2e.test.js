@@ -123,21 +123,21 @@ let _result = executeTaskManagerCommand(
           'add-dependency',
           `'microservice-validation' '${JSON.stringify(microserviceConfig)}'`
         );
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
         testDependencies.push('microservice-validation');
 
         result = executeTaskManagerCommand(
           'add-dependency',
           `'database-validation' '${JSON.stringify(databaseConfig)}'`
         );
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
         testDependencies.push('database-validation');
 
         result = executeTaskManagerCommand(
           'add-dependency',
           `'integration-validation' '${JSON.stringify(integrationConfig)}'`
         );
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
         testDependencies.push('integration-validation');
 
         // Step 2: Validate the dependency graph;
@@ -345,7 +345,7 @@ const cpuIntensiveConfigs = [
             'add-dependency',
             `'${name}' '${JSON.stringify(config)}'`
           );
-          expect(result.success).toBe(true);
+          expect(_result.success).toBe(true);
           testDependencies.push(name);
         });
 
@@ -424,7 +424,7 @@ const networkConfigs = [
             'add-dependency',
             `'${name}' '${JSON.stringify(config)}'`
           );
-          expect(result.success).toBe(true);
+          expect(_result.success).toBe(true);
           testDependencies.push(name);
         });
 
@@ -504,7 +504,7 @@ const contentionConfigs = [
             'add-dependency',
             `'${name}' '${JSON.stringify(config)}'`
           );
-          expect(result.success).toBe(true);
+          expect(_result.success).toBe(true);
           testDependencies.push(name);
         });
 
@@ -618,7 +618,7 @@ const integrationConfigs = [
               'add-dependency',
               `'${name}' '${JSON.stringify(config)}'`
             );
-            expect(result.success).toBe(true);
+            expect(_result.success).toBe(true);
             testDependencies.push(name);
           }
         );
@@ -716,7 +716,7 @@ const complexConfigs = [
             'add-dependency',
             `'${name}' '${JSON.stringify(config)}'`
           );
-          expect(result.success).toBe(true);
+          expect(_result.success).toBe(true);
           testDependencies.push(name);
         });
 
@@ -777,7 +777,7 @@ const incompleteConfig = {
           'add-dependency',
           `'incomplete-dependency' '${JSON.stringify(incompleteConfig)}'`
         );
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
         testDependencies.push('incomplete-dependency');
 
         // Validation should detect missing dependency;
@@ -860,7 +860,7 @@ const planResult = executeTaskManagerCommand(
             'add-dependency',
             `'scale-test-${i}' '${JSON.stringify(config)}'`
           );
-          expect(result.success).toBe(true);
+          expect(_result.success).toBe(true);
           testDependencies.push(`scale-test-${i}`);
         }
 
@@ -984,7 +984,7 @@ const highConcurrencyConfigs = [];
             'add-dependency',
             `'${name}' '${JSON.stringify(config)}'`
           );
-          expect(result.success).toBe(true);
+          expect(_result.success).toBe(true);
           testDependencies.push(name);
         });
 
@@ -1031,7 +1031,7 @@ const highConcurrencySystem = {
     return () => {
       // Test integration with standard validation criteria;
 const _result = executeTaskManagerCommand('get-dependency-graph');
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const standardCriteria = [
         'focused-codebase',
@@ -1045,7 +1045,7 @@ const _result = executeTaskManagerCommand('get-dependency-graph');
 
       // Verify all standard criteria have proper configurations
       standardCriteria.forEach((criterion) => {
-        expect(result.dependencyGraph).toHaveProperty(criterion);
+        expect(_result.dependencyGraph).toHaveProperty(criterion);
         const config = result.dependencyGraph[criterion];
         expect(config.metadata.description).toBeTruthy();
         expect(config.metadata.estimatedDuration).toBeGreaterThan(0);
@@ -1117,7 +1117,7 @@ const optimizationConfigs = [
             'add-dependency',
             `'${name}' '${JSON.stringify(config)}'`
           );
-          expect(result.success).toBe(true);
+          expect(_result.success).toBe(true);
           testDependencies.push(name);
         });
 

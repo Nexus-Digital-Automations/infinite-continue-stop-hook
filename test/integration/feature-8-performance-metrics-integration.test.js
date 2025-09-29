@@ -126,10 +126,10 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
         'get-validation-performance-metrics',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.metrics).toEqual([]);
-      expect(result.statistics).toBe(null);
-      expect(result.message).toBe('No performance metrics available yet');
+      expect(_result.success).toBe(true);
+      expect(_result.metrics).toEqual([]);
+      expect(_result.statistics).toBe(null);
+      expect(_result.message).toBe('No performance metrics available yet');
     });
 
     test('should return all metrics without filtering', () => {
@@ -139,12 +139,12 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
         'get-validation-performance-metrics',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.metrics).toHaveLength(5);
-      expect(result.statistics).toBeDefined();
-      expect(result.statistics.totalMeasurements).toBe(5);
-      expect(result.statistics.successRate).toBe(80);
-      expect(result.featureId).toBe('feature_1758946499841_cd5eba625370');
+      expect(_result.success).toBe(true);
+      expect(_result.metrics).toHaveLength(5);
+      expect(_result.statistics).toBeDefined();
+      expect(_result.statistics.totalMeasurements).toBe(5);
+      expect(_result.statistics.successRate).toBe(80);
+      expect(_result.featureId).toBe('feature_1758946499841_cd5eba625370');
     });
 
     test('should filter metrics by criterion', () => {
@@ -155,11 +155,11 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
         '\'{"criterion":"linter-validation"}\'',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.metrics).toHaveLength(1);
-      expect(result.metrics[0].criterion).toBe('linter-validation');
-      expect(result.filtering.filteredRecords).toBe(1);
-      expect(result.filtering.totalRecords).toBe(5);
+      expect(_result.success).toBe(true);
+      expect(_result.metrics).toHaveLength(1);
+      expect(_result.metrics[0].criterion).toBe('linter-validation');
+      expect(_result.filtering.filteredRecords).toBe(1);
+      expect(_result.filtering.totalRecords).toBe(5);
     });
 
     test('should filter metrics by success status', () => {
@@ -170,10 +170,10 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
         '\'{"successOnly":false}\'',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.metrics).toHaveLength(1);
-      expect(result.metrics[0].criterion).toBe('build-validation');
-      expect(result.metrics[0].success).toBe(false);
+      expect(_result.success).toBe(true);
+      expect(_result.metrics).toHaveLength(1);
+      expect(_result.metrics[0].criterion).toBe('build-validation');
+      expect(_result.metrics[0].success).toBe(false);
     });
 
     test('should limit returned metrics', () => {
@@ -184,9 +184,9 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
         '\'{"limit":2}\'',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.metrics).toHaveLength(2);
-      expect(result.filtering.totalRecords).toBe(5);
+      expect(_result.success).toBe(true);
+      expect(_result.metrics).toHaveLength(2);
+      expect(_result.filtering.totalRecords).toBe(5);
     });
 
     test('should calculate percentiles correctly', () => {
@@ -196,13 +196,13 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
         'get-validation-performance-metrics',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.statistics.timing).toBeDefined();
-      expect(result.statistics.timing.percentiles).toBeDefined();
-      expect(result.statistics.timing.percentiles.p50).toBeDefined();
-      expect(result.statistics.timing.percentiles.p90).toBeDefined();
-      expect(result.statistics.timing.percentiles.p95).toBeDefined();
-      expect(result.statistics.timing.percentiles.p99).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.statistics.timing).toBeDefined();
+      expect(_result.statistics.timing.percentiles).toBeDefined();
+      expect(_result.statistics.timing.percentiles.p50).toBeDefined();
+      expect(_result.statistics.timing.percentiles.p90).toBeDefined();
+      expect(_result.statistics.timing.percentiles.p95).toBeDefined();
+      expect(_result.statistics.timing.percentiles.p99).toBeDefined();
     });
   });
 
@@ -212,9 +212,9 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
         'identify-performance-bottlenecks',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.bottlenecks).toEqual([]);
-      expect(result.message).toBe(
+      expect(_result.success).toBe(true);
+      expect(_result.bottlenecks).toEqual([]);
+      expect(_result.message).toBe(
         'No performance data available for bottleneck analysis',
       );
     });
@@ -226,19 +226,19 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
         'identify-performance-bottlenecks',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.bottlenecks).toHaveLength(2); // build (15000ms) and test (8000ms)
+      expect(_result.success).toBe(true);
+      expect(_result.bottlenecks).toHaveLength(2); // build (15000ms) and test (8000ms)
 
       // Should be sorted by severity and duration
-      expect(result.bottlenecks[0].criterion).toBe('build-validation');
-      expect(result.bottlenecks[0].severity).toBe('critical'); // > 10000ms
-      expect(result.bottlenecks[1].criterion).toBe('test-validation');
-      expect(result.bottlenecks[1].severity).toBe('moderate'); // > 5000ms but < 10000ms
+      expect(_result.bottlenecks[0].criterion).toBe('build-validation');
+      expect(_result.bottlenecks[0].severity).toBe('critical'); // > 10000ms
+      expect(_result.bottlenecks[1].criterion).toBe('test-validation');
+      expect(_result.bottlenecks[1].severity).toBe('moderate'); // > 5000ms but < 10000ms
 
-      expect(result.recommendations).toBeDefined();
-      expect(result.recommendations.length).toBeGreaterThan(0);
-      expect(result.analysis.totalCriteria).toBe(5);
-      expect(result.featureId).toBe('feature_1758946499841_cd5eba625370');
+      expect(_result.recommendations).toBeDefined();
+      expect(_result.recommendations.length).toBeGreaterThan(0);
+      expect(_result.analysis.totalCriteria).toBe(5);
+      expect(_result.featureId).toBe('feature_1758946499841_cd5eba625370');
     });
 
     test('should respect custom thresholds', () => {
@@ -249,10 +249,10 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
         '\'{"slowThreshold":2000,"criticalThreshold":6000}\'',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.bottlenecks).toHaveLength(4); // build (15000ms), test (8000ms), security (4500ms), type (2500ms)
-      expect(result.thresholds.slowThreshold).toBe(2000);
-      expect(result.thresholds.criticalThreshold).toBe(6000);
+      expect(_result.success).toBe(true);
+      expect(_result.bottlenecks).toHaveLength(4); // build (15000ms), test (8000ms), security (4500ms), type (2500ms)
+      expect(_result.thresholds.slowThreshold).toBe(2000);
+      expect(_result.thresholds.criticalThreshold).toBe(6000);
 
       const criticalBottlenecks = result.bottlenecks.filter(
         (b) => b.severity === 'critical',
@@ -267,8 +267,8 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
         'identify-performance-bottlenecks',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.recommendations).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.recommendations).toBeDefined();
 
       const buildRecommendation = result.recommendations.find(
         (r) => r.includes('build') && r.includes('incremental builds'),
@@ -286,9 +286,9 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
     test('should return empty trends when no data available', () => {
       const _result = executeTaskManagerCommand('get-performance-trends');
 
-      expect(result.success).toBe(true);
-      expect(result.trends).toEqual([]);
-      expect(result.message).toBe(
+      expect(_result.success).toBe(true);
+      expect(_result.trends).toEqual([]);
+      expect(_result.message).toBe(
         'No performance data available for trend analysis',
       );
     });
@@ -298,11 +298,11 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       const _result = executeTaskManagerCommand('get-performance-trends');
 
-      expect(result.success).toBe(true);
-      expect(result.trends).toBeDefined();
-      expect(result.timeGrouping).toBe('daily');
-      expect(result.totalDataPoints).toBe(5);
-      expect(result.featureId).toBe('feature_1758946499841_cd5eba625370');
+      expect(_result.success).toBe(true);
+      expect(_result.trends).toBeDefined();
+      expect(_result.timeGrouping).toBe('daily');
+      expect(_result.totalDataPoints).toBe(5);
+      expect(_result.featureId).toBe('feature_1758946499841_cd5eba625370');
     });
 
     test('should support different time groupings', () => {
@@ -313,9 +313,9 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
         '\'{"groupBy":"hourly"}\'',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.timeGrouping).toBe('hourly');
-      expect(result.trends).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.timeGrouping).toBe('hourly');
+      expect(_result.trends).toBeDefined();
     });
 
     test('should generate insights for trends', () => {
@@ -323,8 +323,8 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       const _result = executeTaskManagerCommand('get-performance-trends');
 
-      expect(result.success).toBe(true);
-      expect(result.insights).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.insights).toBeDefined();
       expect(Array.isArray(result.insights)).toBe(true);
     });
   });
@@ -333,9 +333,9 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
     test('should return null report when no data available', () => {
       const _result = executeTaskManagerCommand('get-detailed-timing-report');
 
-      expect(result.success).toBe(true);
-      expect(result.report).toBe(null);
-      expect(result.message).toBe(
+      expect(_result.success).toBe(true);
+      expect(_result.report).toBe(null);
+      expect(_result.message).toBe(
         'No timing data available for detailed report',
       );
     });
@@ -345,14 +345,14 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       const _result = executeTaskManagerCommand('get-detailed-timing-report');
 
-      expect(result.success).toBe(true);
-      expect(result.report).toBeDefined();
-      expect(result.report.summary).toBeDefined();
-      expect(result.report.summary.totalValidations).toBe(5);
-      expect(result.report.summary.overallSuccessRate).toBe(80);
+      expect(_result.success).toBe(true);
+      expect(_result.report).toBeDefined();
+      expect(_result.report.summary).toBeDefined();
+      expect(_result.report.summary.totalValidations).toBe(5);
+      expect(_result.report.summary.overallSuccessRate).toBe(80);
 
-      expect(result.report.criteriaBreakdown).toBeDefined();
-      expect(result.report.criteriaBreakdown).toHaveLength(5);
+      expect(_result.report.criteriaBreakdown).toBeDefined();
+      expect(_result.report.criteriaBreakdown).toHaveLength(5);
 
       const buildCriteria = result.report.criteriaBreakdown.find(
         (c) => c.criterion === 'build-validation',
@@ -360,9 +360,9 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       expect(buildCriteria).toBeDefined();
       expect(buildCriteria.performance_grade).toBe('F'); // 15000ms > 10000ms
 
-      expect(result.report.recentActivity).toBeDefined();
-      expect(result.report.performanceDistribution).toBeDefined();
-      expect(result.featureId).toBe('feature_1758946499841_cd5eba625370');
+      expect(_result.report.recentActivity).toBeDefined();
+      expect(_result.report.performanceDistribution).toBeDefined();
+      expect(_result.featureId).toBe('feature_1758946499841_cd5eba625370');
     });
 
     test('should respect recent activity limit', () => {
@@ -373,8 +373,8 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
         '\'{"recent":3}\'',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.report.recentActivity).toHaveLength(3);
+      expect(_result.success).toBe(true);
+      expect(_result.report.recentActivity).toHaveLength(3);
     });
 
     test('should calculate performance distribution correctly', () => {
@@ -382,8 +382,8 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       const _result = executeTaskManagerCommand('get-detailed-timing-report');
 
-      expect(result.success).toBe(true);
-      expect(result.report.performanceDistribution).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.report.performanceDistribution).toBeDefined();
       expect(Array.isArray(result.report.performanceDistribution)).toBe(true);
 
       const distribution = result.report.performanceDistribution;
@@ -399,9 +399,9 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
     test('should return null analysis when no data available', () => {
       const _result = executeTaskManagerCommand('analyze-resource-usage');
 
-      expect(result.success).toBe(true);
-      expect(result.resourceAnalysis).toBe(null);
-      expect(result.message).toBe('No resource usage data available');
+      expect(_result.success).toBe(true);
+      expect(_result.resourceAnalysis).toBe(null);
+      expect(_result.message).toBe('No resource usage data available');
     });
 
     test('should analyze memory usage patterns', () => {
@@ -409,18 +409,18 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       const _result = executeTaskManagerCommand('analyze-resource-usage');
 
-      expect(result.success).toBe(true);
-      expect(result.resourceAnalysis).toBeDefined();
-      expect(result.resourceAnalysis.memory).toBeDefined();
-      expect(result.resourceAnalysis.memory.available).toBe(true);
+      expect(_result.success).toBe(true);
+      expect(_result.resourceAnalysis).toBeDefined();
+      expect(_result.resourceAnalysis.memory).toBeDefined();
+      expect(_result.resourceAnalysis.memory.available).toBe(true);
 
-      expect(result.resourceAnalysis.memory.avgRssChange).toBeDefined();
-      expect(result.resourceAnalysis.memory.avgHeapChange).toBeDefined();
-      expect(result.resourceAnalysis.memory.byCriterion).toBeDefined();
+      expect(_result.resourceAnalysis.memory.avgRssChange).toBeDefined();
+      expect(_result.resourceAnalysis.memory.avgHeapChange).toBeDefined();
+      expect(_result.resourceAnalysis.memory.byCriterion).toBeDefined();
 
-      expect(result.currentSystemResources).toBeDefined();
-      expect(result.currentSystemResources.memory).toBeDefined();
-      expect(result.featureId).toBe('feature_1758946499841_cd5eba625370');
+      expect(_result.currentSystemResources).toBeDefined();
+      expect(_result.currentSystemResources.memory).toBeDefined();
+      expect(_result.featureId).toBe('feature_1758946499841_cd5eba625370');
     });
 
     test('should generate resource recommendations', () => {
@@ -428,8 +428,8 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       const _result = executeTaskManagerCommand('analyze-resource-usage');
 
-      expect(result.success).toBe(true);
-      expect(result.resourceAnalysis.recommendations).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.resourceAnalysis.recommendations).toBeDefined();
       expect(Array.isArray(result.resourceAnalysis.recommendations)).toBe(true);
     });
 
@@ -441,8 +441,8 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
         '\'{"analysisType":"memory_focused"}\'',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.analysisType).toBe('memory_focused');
+      expect(_result.success).toBe(true);
+      expect(_result.analysisType).toBe('memory_focused');
     });
   });
 
@@ -450,9 +450,9 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
     test('should return null benchmarks when no data available', () => {
       const _result = executeTaskManagerCommand('get-performance-benchmarks');
 
-      expect(result.success).toBe(true);
-      expect(result.benchmarks).toBe(null);
-      expect(result.message).toBe(
+      expect(_result.success).toBe(true);
+      expect(_result.benchmarks).toBe(null);
+      expect(_result.message).toBe(
         'No performance data available for benchmarking',
       );
     });
@@ -462,16 +462,16 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       const _result = executeTaskManagerCommand('get-performance-benchmarks');
 
-      expect(result.success).toBe(true);
-      expect(result.benchmarks).toBeDefined();
-      expect(result.benchmarks.overall).toBeDefined();
-      expect(result.benchmarks.by_criterion).toBeDefined();
-      expect(result.benchmarks.by_criterion).toHaveLength(5);
+      expect(_result.success).toBe(true);
+      expect(_result.benchmarks).toBeDefined();
+      expect(_result.benchmarks.overall).toBeDefined();
+      expect(_result.benchmarks.by_criterion).toBeDefined();
+      expect(_result.benchmarks.by_criterion).toHaveLength(5);
 
-      expect(result.industry_standards).toBeDefined();
-      expect(result.industry_standards.linter_validation).toBeDefined();
-      expect(result.industry_standards.build_validation).toBeDefined();
-      expect(result.featureId).toBe('feature_1758946499841_cd5eba625370');
+      expect(_result.industry_standards).toBeDefined();
+      expect(_result.industry_standards.linter_validation).toBeDefined();
+      expect(_result.industry_standards.build_validation).toBeDefined();
+      expect(_result.featureId).toBe('feature_1758946499841_cd5eba625370');
     });
 
     test('should identify targets that are not met', () => {
@@ -479,7 +479,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       const _result = executeTaskManagerCommand('get-performance-benchmarks');
 
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const buildBenchmark = result.benchmarks.by_criterion.find(
         (c) => c.criterion === 'build-validation',
@@ -498,8 +498,8 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       const _result = executeTaskManagerCommand('get-performance-benchmarks');
 
-      expect(result.success).toBe(true);
-      expect(result.recommendations).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.recommendations).toBeDefined();
       expect(Array.isArray(result.recommendations)).toBe(true);
 
       // Should have recommendations for criteria that don't meet targets
@@ -520,8 +520,8 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
         '\'{"timeRange":7}\'',
       );
 
-      expect(result.success).toBe(true);
-      expect(result.benchmarks.comparison_period).toBe('7 days');
+      expect(_result.success).toBe(true);
+      expect(_result.benchmarks.comparison_period).toBe('7 days');
     });
   });
 
@@ -535,8 +535,8 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
         { stdio: 'pipe' },
       );
 
-      expect(result.success).toBe(false);
-      expect(result.error).toBeDefined();
+      expect(_result.success).toBe(false);
+      expect(_result.error).toBeDefined();
     });
 
     test('should handle corrupted metrics file', () => {
@@ -547,8 +547,8 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
         'get-validation-performance-metrics',
       );
 
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('Unexpected token');
+      expect(_result.success).toBe(false);
+      expect(_result.error).toContain('Unexpected token');
     });
 
     test('should handle missing PROJECT_ROOT environment', () => {
@@ -573,8 +573,8 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       endpoints.forEach((endpoint) => {
         const _result = executeTaskManagerCommand(endpoint);
-        expect(result.success).toBe(true);
-        expect(result.featureId).toBe('feature_1758946499841_cd5eba625370');
+        expect(_result.success).toBe(true);
+        expect(_result.featureId).toBe('feature_1758946499841_cd5eba625370');
       });
     });
   });

@@ -488,10 +488,10 @@ const cutoffDate = new Date(Date.now() - timeRange * 24 * 60 * 60 * 1000);
     test('should return empty metrics when no data available', async () => {
       const _result = await taskManager.getValidationPerformanceMetrics();
 
-      expect(result.success).toBe(true);
-      expect(result.metrics).toEqual([]);
-      expect(result.statistics).toBe(null);
-      expect(result.message).toBe('No performance metrics available yet');
+      expect(_result.success).toBe(true);
+      expect(_result.metrics).toEqual([]);
+      expect(_result.statistics).toBe(null);
+      expect(_result.message).toBe('No performance metrics available yet');
     });
 
     test('should return metrics with proper filtering', async () => {
@@ -525,12 +525,12 @@ const mockMetrics = {
         limit: 10,
       });
 
-      expect(result.success).toBe(true);
-      expect(result.metrics).toHaveLength(1);
-      expect(result.metrics[0].criterion).toBe('linter-validation');
-      expect(result.filtering.filteredRecords).toBe(1);
-      expect(result.filtering.totalRecords).toBe(3);
-      expect(result.featureId).toBe('feature_1758946499841_cd5eba625370');
+      expect(_result.success).toBe(true);
+      expect(_result.metrics).toHaveLength(1);
+      expect(_result.metrics[0].criterion).toBe('linter-validation');
+      expect(_result.filtering.filteredRecords).toBe(1);
+      expect(_result.filtering.totalRecords).toBe(3);
+      expect(_result.featureId).toBe('feature_1758946499841_cd5eba625370');
     });
 
     test('should calculate enhanced performance statistics correctly', async () => {
@@ -570,15 +570,15 @@ const mockMetrics = {
 
       const _result = await taskManager.getValidationPerformanceMetrics();
 
-      expect(result.success).toBe(true);
-      expect(result.statistics).toBeDefined();
-      expect(result.statistics.totalMeasurements).toBe(5);
-      expect(result.statistics.successRate).toBe(80); // 4/5 = 80%
-      expect(result.statistics.timing.average).toBe(3000); // (1000+2000+3000+4000+5000)/5
-      expect(result.statistics.timing.median).toBe(3000);
-      expect(result.statistics.timing.min).toBe(1000);
-      expect(result.statistics.timing.max).toBe(5000);
-      expect(result.statistics.timing.percentiles).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.statistics).toBeDefined();
+      expect(_result.statistics.totalMeasurements).toBe(5);
+      expect(_result.statistics.successRate).toBe(80); // 4/5 = 80%
+      expect(_result.statistics.timing.average).toBe(3000); // (1000+2000+3000+4000+5000)/5
+      expect(_result.statistics.timing.median).toBe(3000);
+      expect(_result.statistics.timing.min).toBe(1000);
+      expect(_result.statistics.timing.max).toBe(5000);
+      expect(_result.statistics.timing.percentiles).toBeDefined();
     });
 });
 
@@ -588,9 +588,9 @@ const mockMetrics = {
     test('should return empty bottlenecks when no data available', async () => {
       const _result = await taskManager.identifyPerformanceBottlenecks();
 
-      expect(result.success).toBe(true);
-      expect(result.bottlenecks).toEqual([]);
-      expect(result.message).toBe(
+      expect(_result.success).toBe(true);
+      expect(_result.bottlenecks).toEqual([]);
+      expect(_result.message).toBe(
         'No performance data available for bottleneck analysis',
       );
     });
@@ -622,16 +622,16 @@ const mockMetrics = {
 
       const _result = await taskManager.identifyPerformanceBottlenecks();
 
-      expect(result.success).toBe(true);
-      expect(result.bottlenecks).toHaveLength(2);
-      expect(result.bottlenecks[0].criterion).toBe('build-validation');
-      expect(result.bottlenecks[0].severity).toBe('critical');
-      expect(result.bottlenecks[1].criterion).toBe('linter-validation');
-      expect(result.bottlenecks[1].severity).toBe('moderate');
-      expect(result.recommendations).toContain(
+      expect(_result.success).toBe(true);
+      expect(_result.bottlenecks).toHaveLength(2);
+      expect(_result.bottlenecks[0].criterion).toBe('build-validation');
+      expect(_result.bottlenecks[0].severity).toBe('critical');
+      expect(_result.bottlenecks[1].criterion).toBe('linter-validation');
+      expect(_result.bottlenecks[1].severity).toBe('moderate');
+      expect(_result.recommendations).toContain(
         'Consider implementing incremental builds for build-validation',
       );
-      expect(result.featureId).toBe('feature_1758946499841_cd5eba625370');
+      expect(_result.featureId).toBe('feature_1758946499841_cd5eba625370');
     });
 
     test('should respect custom thresholds', async () => {
@@ -652,11 +652,11 @@ const mockMetrics = {
         criticalThreshold: 4000,
       });
 
-      expect(result.success).toBe(true);
-      expect(result.bottlenecks).toHaveLength(1);
-      expect(result.bottlenecks[0].severity).toBe('moderate');
-      expect(result.thresholds.slowThreshold).toBe(2000);
-      expect(result.thresholds.criticalThreshold).toBe(4000);
+      expect(_result.success).toBe(true);
+      expect(_result.bottlenecks).toHaveLength(1);
+      expect(_result.bottlenecks[0].severity).toBe('moderate');
+      expect(_result.thresholds.slowThreshold).toBe(2000);
+      expect(_result.thresholds.criticalThreshold).toBe(4000);
     });
 });
 
@@ -666,9 +666,9 @@ const mockMetrics = {
     test('should return null benchmarks when no data available', async () => {
       const _result = await taskManager.getPerformanceBenchmarks();
 
-      expect(result.success).toBe(true);
-      expect(result.benchmarks).toBe(null);
-      expect(result.message).toBe(
+      expect(_result.success).toBe(true);
+      expect(_result.benchmarks).toBe(null);
+      expect(_result.message).toBe(
         'No performance data available for benchmarking',
       );
     });
@@ -699,9 +699,9 @@ const mockMetrics = {
 
       const result = await taskManager.getPerformanceBenchmarks();
 
-      expect(result.success).toBe(true);
-      expect(result.benchmarks).toBeDefined();
-      expect(result.benchmarks.by_criterion).toHaveLength(3);
+      expect(_result.success).toBe(true);
+      expect(_result.benchmarks).toBeDefined();
+      expect(_result.benchmarks.by_criterion).toHaveLength(3);
 
       const linterBenchmark = result.benchmarks.by_criterion.find(
         (c) => c.criterion === 'linter-validation',
@@ -716,11 +716,11 @@ const mockMetrics = {
       expect(buildBenchmark.grade).toBe('F'); // > 10000ms
       expect(buildBenchmark.meets_target).toBe(true); // < 30000ms target
 
-      expect(result.industry_standards).toBeDefined();
-      expect(result.industry_standards.linter_validation.target).toBe(
+      expect(_result.industry_standards).toBeDefined();
+      expect(_result.industry_standards.linter_validation.target).toBe(
         '< 2000ms',
       );
-      expect(result.featureId).toBe('feature_1758946499841_cd5eba625370');
+      expect(_result.featureId).toBe('feature_1758946499841_cd5eba625370');
     });
 
     test('should generate benchmark recommendations for slow criteria', async () => {
@@ -743,8 +743,8 @@ const mockMetrics = {
 
       const _result = await taskManager.getPerformanceBenchmarks();
 
-      expect(result.success).toBe(true);
-      expect(result.recommendations).toHaveLength(2);
+      expect(_result.success).toBe(true);
+      expect(_result.recommendations).toHaveLength(2);
 
       const linterRec = result.recommendations.find(
         (r) => r.criterion === 'linter-validation',
@@ -822,10 +822,10 @@ const mockMetrics = {
 
       const _result = await taskManager.getValidationPerformanceMetrics();
 
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('Unexpected token');
-      expect(result.metrics).toEqual([]);
-      expect(result.statistics).toBe(null);
+      expect(_result.success).toBe(false);
+      expect(_result.error).toContain('Unexpected token');
+      expect(_result.metrics).toEqual([]);
+      expect(_result.statistics).toBe(null);
     });
 
     test('should handle empty metrics array', async () => {
@@ -834,9 +834,9 @@ const mockMetrics = {
 
       const _result = await taskManager.getValidationPerformanceMetrics();
 
-      expect(result.success).toBe(true);
-      expect(result.metrics).toEqual([]);
-      expect(result.statistics).toBe(null);
+      expect(_result.success).toBe(true);
+      expect(_result.metrics).toEqual([]);
+      expect(_result.statistics).toBe(null);
     });
 
     test('should handle missing metrics property', async () => {
@@ -845,9 +845,9 @@ const mockMetrics = {
 
       const _result = await taskManager.getValidationPerformanceMetrics();
 
-      expect(result.success).toBe(true);
-      expect(result.metrics).toEqual([]);
-      expect(result.statistics).toBe(null);
+      expect(_result.success).toBe(true);
+      expect(_result.metrics).toEqual([]);
+      expect(_result.statistics).toBe(null);
     });
 });
 });

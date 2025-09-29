@@ -20,7 +20,7 @@ const rootDir = process.cwd();
  */
 function getAllJavaScriptFiles() {
   try {
-    const _result = execSync(
+    const result = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
       { cwd: rootDir, encoding: 'utf-8' },
     );
@@ -29,7 +29,7 @@ function getAllJavaScriptFiles() {
       .split('\n')
       .filter((f) => f && f.endsWith('.js'))
       .map((f) => path.resolve(rootDir, f.replace('./', '')));
-  } catch (_error) {
+  } catch (error) {
     console.error('Failed to get JS files:', error.message);
     return [];
   }
@@ -40,12 +40,12 @@ function getAllJavaScriptFiles() {
  */
 function getUnusedVariableViolations() {
   try {
-    const _output = execSync('npx eslint . --format=compact', {
+    const output = execSync('npx eslint . --format=compact', {
       cwd: rootDir,
       encoding: 'utf-8',
     });
     return output;
-  } catch (_error) {
+  } catch (error) {
     // ESLint returns non-zero exit code when there are errors
     return error.stdout || '';
   }

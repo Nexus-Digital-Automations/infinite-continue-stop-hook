@@ -254,8 +254,8 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
       const _result = executeCustomValidation(mockRule);
 
-      expect(result.success).toBe(true);
-      expect(result.details).toContain('Success Test');
+      expect(_result.success).toBe(true);
+      expect(_result.details).toContain('Success Test');
     });
 
     test('should fail when output does not contain required text', () => {
@@ -304,8 +304,8 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
       const _result = executeCustomValidation(mockRule);
 
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('Expected output not found');
+      expect(_result.success).toBe(false);
+      expect(_result.error).toContain('Expected output not found');
     });
 
     test('should fail when output contains forbidden text', () => {
@@ -354,8 +354,8 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
       const result = executeCustomValidation(mockRule);
 
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('Forbidden output detected');
+      expect(_result.success).toBe(false);
+      expect(_result.error).toContain('Forbidden output detected');
     });
 
     test('should handle command execution failures', () => {
@@ -387,8 +387,8 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
       const _result = executeCustomValidation(mockRule);
 
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('Command Fail Test');
+      expect(_result.success).toBe(false);
+      expect(_result.error).toContain('Command Fail Test');
     });
 });
 
@@ -443,7 +443,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
       const result = executeCustomValidationWithEnv(mockRule);
 
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
     });
 });
 
@@ -595,8 +595,8 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
       const _result = executeCustomValidation(mockRule);
 
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('Timeout Test');
+      expect(_result.success).toBe(false);
+      expect(_result.error).toContain('Timeout Test');
     });
 
     test('should handle missing config file without crashing', () => {

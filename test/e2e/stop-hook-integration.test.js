@@ -39,11 +39,9 @@ describe.skip('Stop Hook Integration E2E', () => {
     
     test(
       'Agent stop authorization workflow',
-      async () 
-    return () 
-    return () => {
+      async () => {
         // Test basic stop hook authorization for a single agent;
-const AGENT_ID = 'e2e-stop-test-agent';
+        const AGENT_ID = 'e2e-stop-test-agent';
 
         // Step 1: Initialize agent through proper API;
 const initResult = await CommandExecutor.executeAPI(

@@ -569,7 +569,7 @@ const OPERATIONS = [];
         expect(_RESULTS).toHaveLength(10);
 
         RESULTS.forEach((result) => {
-          expect(result.MEASUREMENT.duration).toBeLessThan(10000); // Individual ops should be fast
+          expect(_result.MEASUREMENT.duration).toBeLessThan(10000); // Individual ops should be fast
         });
 
         loggers.stopHook.log(

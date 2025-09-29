@@ -248,7 +248,7 @@ describe('Audit, System Validation, Tests', () => {
         priority: 'high'}
 
   const _result = await execAPI('create', [JSON.stringify(featureTaskData)]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const TASK = listResult.tasks.find((t) => t.id === result.taskId);
@@ -307,7 +307,7 @@ describe('Audit, System Validation, Tests', () => {
         priority: 'medium'}
 
   const _result = await execAPI('create', [JSON.stringify(featureTaskData)]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const TASK = listResult.tasks.find((t) => t.id === result.taskId);
@@ -338,7 +338,7 @@ describe('Audit, System Validation, Tests', () => {
         priority: 'medium'}
 
   const _result = await execAPI('create', [JSON.stringify(featureTaskData)]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const TASK = listResult.tasks.find((t) => t.id === result.taskId);
@@ -380,7 +380,7 @@ describe('Audit, System Validation, Tests', () => {
         priority: 'high'}
 
   const _result = await execAPI('create', [JSON.stringify(featureTaskData)]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const TASK = listResult.tasks.find((t) => t.id === result.taskId);
@@ -467,7 +467,7 @@ describe('Audit, System Validation, Tests', () => {
 
   const _result = await execAPI('create', [
         JSON.stringify(SECURITY_TASK_DATA)]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const TASK = listResult.tasks.find((t) => t.id === result.taskId);
@@ -494,7 +494,7 @@ describe('Audit, System Validation, Tests', () => {
 
   const _result = await execAPI('create', [
         JSON.stringify(TASK_MANAGER_TASK_DATA)]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const TASK = listResult.tasks.find((t) => t.id === result.taskId);
@@ -520,7 +520,7 @@ describe('Audit, System Validation, Tests', () => {
         priority: 'medium'}
 
   const _result = await execAPI('create', [JSON.stringify(featureTaskData)]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const TASK = listResult.tasks.find((t) => t.id === result.taskId);
@@ -553,7 +553,7 @@ describe('Audit, System Validation, Tests', () => {
         priority: 'medium'}
 
   const _result = await execAPI('create', [JSON.stringify(featureTaskData)]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const TASK = listResult.tasks.find((t) => t.id === result.taskId);
@@ -574,7 +574,7 @@ describe('Audit, System Validation, Tests', () => {
 
   const _result = await execAPI('create', [
         JSON.stringify(DETAILED_TASK_DATA)]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const TASK = listResult.tasks.find((t) => t.id === result.taskId);
@@ -609,7 +609,7 @@ describe('Audit, System Validation, Tests', () => {
 
       for await (const taskData of taskDataList) {
         const _result = await execAPI('create', [JSON.stringify(taskData)]);
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
 
         const listResult = await execAPI('list');
         const TASK = listResult.tasks.find((t) => t.id === result.taskId);
@@ -647,7 +647,7 @@ describe('Audit, System Validation, Tests', () => {
 
   const _result = await execAPI('create', [
         JSON.stringify(CRITICAL_TASK_DATA)]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const TASK = listResult.tasks.find((t) => t.id === result.taskId);
@@ -669,7 +669,7 @@ describe('Audit, System Validation, Tests', () => {
         priority: 'medium'}
 
   const _result = await execAPI('create', [JSON.stringify(featureTaskData)]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const AFTER_TIME = Date.now();
 
@@ -692,7 +692,7 @@ describe('Audit, System Validation, Tests', () => {
 
   const _result = await execAPI('create', [
         JSON.stringify(MINIMAL_TASK_DATA)]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const TASK = listResult.tasks.find((t) => t.id === result.taskId);
@@ -731,7 +731,7 @@ describe('Audit, System Validation, Tests', () => {
         JSON.stringify(PERFORMANCE_TASK_DATA)]);
 
       const END_TIME = Date.now();
-      const EXECUTION_TIME = END_TIME - START_TIME.expect(result.success).toBe(true);
+      const EXECUTION_TIME = END_TIME - START_TIME.expect(_result.success).toBe(true);
       expect(EXECUTION_TIME).toBeLessThan(5000); // Should complete within 5 seconds.const listResult = await execAPI('list');
       const TASK = listResult.tasks.find((t) => t.id === result.taskId);
       const AUDIT_SUBTASK = TASK.subtasks.find((st) => st.type === 'audit');
@@ -758,7 +758,7 @@ describe('Audit, System Validation, Tests', () => {
       const RESULTS = await Promise.all(TASK_PROMISES);
       const END_TIME = Date.now();
       const TOTAL_TIME = END_TIME - START_TIME.RESULTS.forEach((result) => {
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
       });
 
       expect(TOTAL_TIME).toBeLessThan(10000); // Should complete within 10, seconds
@@ -806,7 +806,7 @@ describe('Audit, System Validation, Tests', () => {
         priority: 'medium'}
 
   const _result = await execAPI('create', [JSON.stringify(featureTaskData)]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const TASK = listResult.tasks.find((t) => t.id === result.taskId);
@@ -839,7 +839,7 @@ describe('Audit, System Validation, Tests', () => {
         priority: 'medium'}
 
   const _result = await execAPI('create', [JSON.stringify(featureTaskData)]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const TASK = listResult.tasks.find((t) => t.id === result.taskId);
@@ -863,7 +863,7 @@ describe('Audit, System Validation, Tests', () => {
 
   const _result = await execAPI('create', [
         JSON.stringify(SPECIAL_CHARS_TASK_DATA)]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const TASK = listResult.tasks.find((t) => t.id === result.taskId);

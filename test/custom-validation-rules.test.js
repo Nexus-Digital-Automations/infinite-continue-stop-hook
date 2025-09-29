@@ -79,9 +79,9 @@ describe('CustomValidationRulesManager', () => {
     return () => {
       const _result = await manager.loadCustomRules();
 
-      expect(result.success).toBe(true);
-      expect(result.rulesLoaded).toBe(0);
-      expect(result.message).toContain('No custom rules configuration found');
+      expect(_result.success).toBe(true);
+      expect(_result.rulesLoaded).toBe(0);
+      expect(_result.message).toContain('No custom rules configuration found');
     });
 
     test('should validate, And load valid configuration', async () => {
@@ -102,10 +102,10 @@ describe('CustomValidationRulesManager', () => {
 
       const _result = await manager.loadCustomRules();
 
-      expect(result.success).toBe(true);
-      expect(result.rulesLoaded).toBe(1);
-      expect(result.enabledRules).toEqual(['test_rule']);
-      expect(result.projectType).toBe('backend');
+      expect(_result.success).toBe(true);
+      expect(_result.rulesLoaded).toBe(1);
+      expect(_result.enabledRules).toEqual(['test_rule']);
+      expect(_result.projectType).toBe('backend');
     });
 
     test('should reject invalid configuration', async () => {
@@ -123,8 +123,8 @@ describe('CustomValidationRulesManager', () => {
 
       const _result = await manager.loadCustomRules();
 
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('Invalid configuration');
+      expect(_result.success).toBe(false);
+      expect(_result.error).toContain('Invalid configuration');
     });
 
     test('should validate rule structure correctly', () => {
@@ -216,8 +216,8 @@ describe('CustomValidationRulesManager', () => {
 
   const _result = await manager._executeCommandRule(rule);
 
-      expect(result.success).toBe(true);
-      expect(result.output).toContain('Hello, World');
+      expect(_result.success).toBe(true);
+      expect(_result.output).toContain('Hello, World');
     });
 
     test('should handle command failure', async () => {
@@ -245,8 +245,8 @@ describe('CustomValidationRulesManager', () => {
 
   const _result = await manager._executeCommandRule(rule);
 
-      expect(result.success).toBe(true);
-      expect(result.warning).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.warning).toBeDefined();
     });
 
     test('should use custom environment variables', async () => {
@@ -263,8 +263,8 @@ describe('CustomValidationRulesManager', () => {
 
   const _result = await manager._executeCommandRule(rule);
 
-      expect(result.success).toBe(true);
-      expect(result.output).toContain('test_value');
+      expect(_result.success).toBe(true);
+      expect(_result.output).toContain('test_value');
     });
 });
 
@@ -288,9 +288,9 @@ describe('CustomValidationRulesManager', () => {
 
   const _result = await manager._executeFileExistsRule(rule);
 
-      expect(result.success).toBe(true);
-      expect(result.output.found).toEqual(['test.txt']);
-      expect(result.output.missing).toEqual([]);
+      expect(_result.success).toBe(true);
+      expect(_result.output.found).toEqual(['test.txt']);
+      expect(_result.output.missing).toEqual([]);
     });
 
     test('should detect missing files', async () => {
@@ -320,9 +320,9 @@ describe('CustomValidationRulesManager', () => {
 
   const _result = await manager._executeFileExistsRule(rule);
 
-      expect(result.success).toBe(false);
-      expect(result.output.found).toEqual(['exists.txt']);
-      expect(result.output.missing).toEqual(['missing.txt']);
+      expect(_result.success).toBe(false);
+      expect(_result.output.found).toEqual(['exists.txt']);
+      expect(_result.output.missing).toEqual(['missing.txt']);
     });
 });
 
@@ -345,8 +345,8 @@ describe('CustomValidationRulesManager', () => {
 
   const _result = await manager._executeFileContentRule(rule);
 
-      expect(result.success).toBe(true);
-      expect(result.output.matches).toContain('test file');
+      expect(_result.success).toBe(true);
+      expect(_result.output.matches).toContain('test file');
     });
 
     test('should fail when pattern not found', async () => {
@@ -383,8 +383,8 @@ describe('CustomValidationRulesManager', () => {
 
   const _result = await manager._executeFileContentRule(rule);
 
-      expect(result.success).toBe(true);
-      expect(result.output.patternAbsent).toBe(true);
+      expect(_result.success).toBe(true);
+      expect(_result.output.patternAbsent).toBe(true);
     });
 
     test('should fail when unwanted pattern is found', async () => {
@@ -430,9 +430,9 @@ describe('CustomValidationRulesManager', () => {
 
   const _result = await manager._executeConditionalRule(rule);
 
-      expect(result.success).toBe(true);
-      expect(result.output.conditionMet).toBe(true);
-      expect(result.output.results).toHaveLength(1);
+      expect(_result.success).toBe(true);
+      expect(_result.output.conditionMet).toBe(true);
+      expect(_result.output.results).toHaveLength(1);
     });
 
     test('should skip rules when condition is not met', async () => {
@@ -451,9 +451,9 @@ describe('CustomValidationRulesManager', () => {
 
   const _result = await manager._executeConditionalRule(rule);
 
-      expect(result.success).toBe(true);
-      expect(result.output.conditionMet).toBe(false);
-      expect(result.output.skipped).toBe(true);
+      expect(_result.success).toBe(true);
+      expect(_result.output.conditionMet).toBe(false);
+      expect(_result.output.skipped).toBe(true);
     });
 
     test('should evaluate different condition types', async () => {
@@ -501,9 +501,9 @@ describe('CustomValidationRulesManager', () => {
 
   const _result = await manager._executeCompositeRule(rule);
 
-      expect(result.success).toBe(true);
-      expect(result.output.results).toHaveLength(2);
-      expect(result.output.operator).toBe('And');
+      expect(_result.success).toBe(true);
+      expect(_result.output.results).toHaveLength(2);
+      expect(_result.output.operator).toBe('And');
     });
 
     test('should succeed with, OR operator when one rule passes', async () => {
@@ -523,8 +523,8 @@ describe('CustomValidationRulesManager', () => {
 
   const _result = await manager._executeCompositeRule(rule);
 
-      expect(result.success).toBe(true);
-      expect(result.output.operator).toBe('or');
+      expect(_result.success).toBe(true);
+      expect(_result.output.operator).toBe('or');
     });
 
     test('should fail with, AND operator when one rule fails', async () => {
@@ -544,7 +544,7 @@ describe('CustomValidationRulesManager', () => {
 
   const _result = await manager._executeCompositeRule(rule);
 
-      expect(result.success).toBe(false);
+      expect(_result.success).toBe(false);
     });
 });
 
@@ -640,11 +640,11 @@ describe('CustomValidationRulesManager', () => {
 
       const _result = await manager.executeRule('simple_command');
 
-      expect(result.success).toBe(true);
-      expect(result.ruleId).toBe('simple_command');
-      expect(result.details).toContain('executed successfully');
-      expect(result.output).toContain('test output');
-      expect(result.duration).toBeGreaterThan(0);
+      expect(_result.success).toBe(true);
+      expect(_result.ruleId).toBe('simple_command');
+      expect(_result.details).toContain('executed successfully');
+      expect(_result.output).toContain('test output');
+      expect(_result.duration).toBeGreaterThan(0);
     });
 
     test('should fail to execute non-existent rule', async () => {
@@ -652,8 +652,8 @@ describe('CustomValidationRulesManager', () => {
 
       const _result = await manager.executeRule('nonexistent_rule');
 
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('not found or not enabled');
+      expect(_result.success).toBe(false);
+      expect(_result.error).toContain('not found or not enabled');
     });
 
     test('should record execution analytics', async () => {
@@ -711,8 +711,8 @@ describe('CustomValidationRulesManager', () => {
 
       const _result = await manager.loadCustomRules();
 
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('JSON');
+      expect(_result.success).toBe(false);
+      expect(_result.error).toContain('JSON');
     });
 
     test('should handle file system errors gracefully', async () => {
@@ -751,8 +751,8 @@ describe('CustomValidationRulesManager', () => {
 
       const _result = await manager.loadCustomRules();
 
-      expect(result.success).toBe(true);
-      expect(result.rulesLoaded).toBe(0);
+      expect(_result.success).toBe(true);
+      expect(_result.rulesLoaded).toBe(0);
     });
 });
 

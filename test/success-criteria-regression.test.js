@@ -1142,7 +1142,7 @@ describe('Success Criteria Regression Tests', () => {
             const _result = await execAPI(api);
             expect(result).toBeDefined();
             // Status should always have certain fields
-            expect(result.projectCriteria !== undefined).toBe(true);
+            expect(_result.projectCriteria !== undefined).toBe(true);
           }
 
           loggers.stopHook.log(`API contract for ${api} is stable`);
@@ -1275,7 +1275,7 @@ describe('Success Criteria Regression Tests', () => {
       // Use for-await-of to maintain sequential processing for performance testing
       for await (const test of PERFORMANCE_TESTS) {
         const _result = await test.test();
-        expect(result.duration).toBeLessThan(result.threshold);
+        expect(_result.duration).toBeLessThan(result.threshold);
 
         loggers.app.info(
           `Performance test '${test.name}': ${result.duration}ms (threshold: ${result.threshold}ms)`,

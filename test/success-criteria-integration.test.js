@@ -195,9 +195,9 @@ const CRITERIA = ['Linter Perfection', 'Build Success', 'Test Integrity'];
 const _result = await execAPI('list', [
         JSON.stringify({ status: 'pending' }),
       ]);
-      expect(result.success).toBe(true);
-      expect(result.tasks).toHaveLength(1);
-      expect(result.tasks[0].id).toBe(taskId);
+      expect(_result.success).toBe(true);
+      expect(_result.tasks).toHaveLength(1);
+      expect(_result.tasks[0].id).toBe(taskId);
     });
 
     test('should retrieve success criteria for existing task', async () => {
@@ -214,7 +214,7 @@ const listResult = await execAPI('list');
       // Test template application
       // This would use POST /api/success-criteria/task/:taskId with template option;
 const _result = await execAPI('list', [JSON.stringify({ id: taskId })]);
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
     });
 
     test('should handle success criteria validation workflow', async () => {
@@ -237,8 +237,8 @@ const claimResult = await execAPI('claim', [taskId, agentId]);
       // Test project-wide template management
       // This would use GET /api/success-criteria/project-wide endpoint;
 const _result = await execAPI('status', [agentId]);
-      expect(result.success).toBe(true);
-      expect(result.agent).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.agent).toBeDefined();
     });
 });
 
@@ -348,8 +348,8 @@ const createPromises = Array.from({ length: 5 }, (_, i) =>
 
       // Verify all tasks were created successfully
       createResults.forEach((result) => {
-        expect(result.success).toBe(true);
-        expect(result.task.id).toBeDefined();
+        expect(_result.success).toBe(true);
+        expect(_result.task.id).toBeDefined();
       });
 
       // Verify tasks exist in the system;
@@ -432,7 +432,7 @@ const createResult = await execAPI('create', [
       // Test operations on non-existent task
       try {
         const _result = await execAPI('complete', ['non_existent_task_id']);
-        expect(result.success).toBe(false);
+        expect(_result.success).toBe(false);
       } catch (_error, category = 'general') {
         // Expected to fail
         expect(_error).toBeDefined();
@@ -549,7 +549,7 @@ const tasks = [
 
       // All should succeed
       RESULTS.forEach((result) => {
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
       });
     });
 

@@ -2,7 +2,7 @@
   "project": "e2e-test-feature-management",
   "schema_version": "2.0.0",
   "migrated_from": "test-initialization",
-  "migration_date": "2025-09-29T23:28:33.728Z",
+  "migration_date": "2025-09-29T23:29:03.757Z",
   "features": [],
   "completed_features": [],
   "feature_relationships": {},
@@ -34,8 +34,8 @@
   },
   "metadata": {
     "version": "2.0.0",
-    "created": "2025-09-29T23:28:33.728Z",
-    "updated": "2025-09-29T23:28:33.728Z",
+    "created": "2025-09-29T23:29:03.757Z",
+    "updated": "2025-09-29T23:29:03.757Z",
     "total_features": 0,
     "features_by_type": {
       "error": 0,

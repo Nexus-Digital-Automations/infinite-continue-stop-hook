@@ -118,13 +118,13 @@ describe('Feature Management Lifecycle', () => {
 
         const _result = await api.suggestFeature(featureData);
 
-        expect(result.success).toBe(true);
-        expect(result.feature).toBeDefined();
-        expect(result.feature.status).toBe('suggested');
-        expect(result.feature.title).toBe(featureData.title);
-        expect(result.feature.suggested_by).toBe('development-team');
-        expect(result.feature.metadata.priority).toBe('high');
-        expect(result.message).toBe('Feature suggestion created successfully');
+        expect(_result.success).toBe(true);
+        expect(_result.feature).toBeDefined();
+        expect(_result.feature.status).toBe('suggested');
+        expect(_result.feature.title).toBe(featureData.title);
+        expect(_result.feature.suggested_by).toBe('development-team');
+        expect(_result.feature.metadata.priority).toBe('high');
+        expect(_result.message).toBe('Feature suggestion created successfully');
 
         // Verify feature structure
         testHelpers.validateFeatureStructure(result.feature);
@@ -153,8 +153,8 @@ describe('Feature Management Lifecycle', () => {
 
             const _result = await api.suggestFeature(featureData);
 
-            expect(result.success).toBe(true);
-            expect(result.feature.category).toBe(_category);
+            expect(_result.success).toBe(true);
+            expect(_result.feature.category).toBe(_category);
 
             return result;
           }),
@@ -162,7 +162,7 @@ describe('Feature Management Lifecycle', () => {
 
         // Verify all features were created
         results.forEach((result) => {
-          expect(result.success).toBe(true);
+          expect(_result.success).toBe(true);
         });
 
         const features = await api._loadFeatures();
@@ -186,7 +186,7 @@ describe('Feature Management Lifecycle', () => {
 
         // Verify all features were created successfully
         results.forEach((result) => {
-          expect(result.success).toBe(true);
+          expect(_result.success).toBe(true);
         });
 
         // Extract feature IDs;
@@ -217,10 +217,10 @@ describe('Feature Management Lifecycle', () => {
 
         const _result = await api.suggestFeature(featureData);
 
-        expect(result.success).toBe(true);
-        expect(result.feature.metadata).toEqual(customMetadata);
-        expect(result.feature.metadata.stakeholders).toContain('product-owner');
-        expect(result.feature.metadata.tags).toContain('mvp');
+        expect(_result.success).toBe(true);
+        expect(_result.feature.metadata).toEqual(customMetadata);
+        expect(_result.feature.metadata.stakeholders).toContain('product-owner');
+        expect(_result.feature.metadata.tags).toContain('mvp');
       });
     });
 
@@ -235,8 +235,8 @@ describe('Feature Management Lifecycle', () => {
 
         const _result = await api.suggestFeature(invalidFeature);
 
-        expect(result.success).toBe(false);
-        expect(result.error).toContain(
+        expect(_result.success).toBe(false);
+        expect(_result.error).toContain(
           'Feature title must be between 10 And 200 characters',
         );
       });
@@ -249,8 +249,8 @@ describe('Feature Management Lifecycle', () => {
 
         const _result = await api.suggestFeature(invalidFeature);
 
-        expect(result.success).toBe(false);
-        expect(result.error).toContain(
+        expect(_result.success).toBe(false);
+        expect(_result.error).toContain(
           'Feature title must be between 10 And 200 characters',
         );
       });
@@ -263,8 +263,8 @@ describe('Feature Management Lifecycle', () => {
 
         const _result = await api.suggestFeature(invalidFeature);
 
-        expect(result.success).toBe(false);
-        expect(result.error).toContain(
+        expect(_result.success).toBe(false);
+        expect(_result.error).toContain(
           'Feature description must be between 20 And 2000 characters',
         );
       });
@@ -277,8 +277,8 @@ describe('Feature Management Lifecycle', () => {
 
         const _result = await api.suggestFeature(invalidFeature);
 
-        expect(result.success).toBe(false);
-        expect(result.error).toContain(
+        expect(_result.success).toBe(false);
+        expect(_result.error).toContain(
           'Feature description must be between 20 And 2000 characters',
         );
       });
@@ -291,8 +291,8 @@ describe('Feature Management Lifecycle', () => {
         for (const invalidFeature of invalidFeatures) {
           // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation;
           const _result = await api.suggestFeature(invalidFeature);
-          expect(result.success).toBe(false);
-          expect(result.error).toContain(
+          expect(_result.success).toBe(false);
+          expect(_result.error).toContain(
             'Business value must be between 10 And 1000 characters',
           );
         }
@@ -303,8 +303,8 @@ describe('Feature Management Lifecycle', () => {
           business_value: '',
         };
         const _result = await api.suggestFeature(emptyBusinessValueFeature);
-        expect(result.success).toBe(false);
-        expect(result.error).toContain(
+        expect(_result.success).toBe(false);
+        expect(_result.error).toContain(
           "Required field 'business_value' is missing or empty",
         );
       });
@@ -317,9 +317,9 @@ describe('Feature Management Lifecycle', () => {
 
         const _result = await api.suggestFeature(invalidFeature);
 
-        expect(result.success).toBe(false);
-        expect(result.error).toContain('Invalid category');
-        expect(result.error).toContain(
+        expect(_result.success).toBe(false);
+        expect(_result.error).toContain('Invalid category');
+        expect(_result.error).toContain(
           'Must be one of: enhancement, bug-fix, new-feature, performance, security, documentation',
         );
       });
@@ -339,8 +339,8 @@ describe('Feature Management Lifecycle', () => {
           // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation;
           const _result = await api.suggestFeature(invalidFeature);
 
-          expect(result.success).toBe(false);
-          expect(result.error).toContain(
+          expect(_result.success).toBe(false);
+          expect(_result.error).toContain(
             `Required field '${field}' is missing or empty`,
           );
         }
@@ -362,7 +362,7 @@ describe('Feature Management Lifecycle', () => {
 
       test('should update last modified timestamp', async () => {
         const _result = await api.suggestFeature(TEST_FIXTURES.validFeature);
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
 
         const features = await api._loadFeatures();
         expect(features.metadata.updated).toBe('2025-09-23T12:00:00.000Z');
@@ -426,44 +426,44 @@ describe('Feature Management Lifecycle', () => {
           suggestedFeatureId,
           approvalData,
         );
-        expect(result.success).toBe(true);
-        expect(result.feature.status).toBe('approved');
-        expect(result.feature.approved_by).toBe('product-manager');
-        expect(result.feature.approval_notes).toBe(approvalData.notes);
-        expect(result.feature.approval_date).toBe('2025-09-23T12:00:00.000Z');
-        expect(result.message).toBe('Feature approved successfully');
+        expect(_result.success).toBe(true);
+        expect(_result.feature.status).toBe('approved');
+        expect(_result.feature.approved_by).toBe('product-manager');
+        expect(_result.feature.approval_notes).toBe(approvalData.notes);
+        expect(_result.feature.approval_date).toBe('2025-09-23T12:00:00.000Z');
+        expect(_result.message).toBe('Feature approved successfully');
       });
 
       test('should approve feature with minimal approval data', async () => {
         const _result = await api.approveFeature(suggestedFeatureId);
-        expect(result.success).toBe(true);
-        expect(result.feature.status).toBe('approved');
-        expect(result.feature.approved_by).toBe('system');
-        expect(result.feature.approval_notes).toBe('');
-        expect(result.feature.approval_date).toBe('2025-09-23T12:00:00.000Z');
+        expect(_result.success).toBe(true);
+        expect(_result.feature.status).toBe('approved');
+        expect(_result.feature.approved_by).toBe('system');
+        expect(_result.feature.approval_notes).toBe('');
+        expect(_result.feature.approval_date).toBe('2025-09-23T12:00:00.000Z');
       });
 
       test('should update feature timestamps on approval', async () => {
         const _result = await api.approveFeature(suggestedFeatureId);
-        expect(result.success).toBe(true);
-        expect(result.feature.updated_at).toBe('2025-09-23T12:00:00.000Z');
-        expect(result.feature.approval_date).toBe('2025-09-23T12:00:00.000Z');
+        expect(_result.success).toBe(true);
+        expect(_result.feature.updated_at).toBe('2025-09-23T12:00:00.000Z');
+        expect(_result.feature.approval_date).toBe('2025-09-23T12:00:00.000Z');
       });
 
       test('should maintain original feature data during approval', async () => {
         const _result = await api.approveFeature(suggestedFeatureId);
-        expect(result.success).toBe(true);
-        expect(result.feature.title).toBe(TEST_FIXTURES.validFeature.title);
-        expect(result.feature.description).toBe(
+        expect(_result.success).toBe(true);
+        expect(_result.feature.title).toBe(TEST_FIXTURES.validFeature.title);
+        expect(_result.feature.description).toBe(
           TEST_FIXTURES.validFeature.description,
         );
-        expect(result.feature.business_value).toBe(
+        expect(_result.feature.business_value).toBe(
           TEST_FIXTURES.validFeature.business_value,
         );
-        expect(result.feature.category).toBe(
+        expect(_result.feature.category).toBe(
           TEST_FIXTURES.validFeature.category,
         );
-        expect(result.feature.suggested_by).toBe(
+        expect(_result.feature.suggested_by).toBe(
           TEST_FIXTURES.validFeature.suggested_by,
         );
       });
@@ -482,7 +482,7 @@ describe('Feature Management Lifecycle', () => {
           suggestedFeatureId,
           approvalData,
         );
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
 
         const features = await api._loadFeatures();
         const history = features.metadata.approval_history;
@@ -537,8 +537,8 @@ describe('Feature Management Lifecycle', () => {
         mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(invalidFeatures));
 
         const _result = await api.approveFeature(suggestedFeatureId);
-        expect(result.success).toBe(true);
-        expect(result.feature.status).toBe('approved');
+        expect(_result.success).toBe(true);
+        expect(_result.feature.status).toBe('approved');
 
         // Verify metadata was created;
         const features = await api._loadFeatures();
@@ -555,8 +555,8 @@ describe('Feature Management Lifecycle', () => {
         const nonExistentId = 'feature_nonexistent_123';
 
         const _result = await api.approveFeature(nonExistentId);
-        expect(result.success).toBe(false);
-        expect(result.error).toContain(
+        expect(_result.success).toBe(false);
+        expect(_result.error).toContain(
           `Feature with ID ${nonExistentId} not found`,
         );
       });
@@ -627,28 +627,28 @@ describe('Feature Management Lifecycle', () => {
           suggestedFeatureId,
           rejectionData,
         );
-        expect(result.success).toBe(true);
-        expect(result.feature.status).toBe('rejected');
-        expect(result.feature.rejected_by).toBe('technical-lead');
-        expect(result.feature.rejection_reason).toBe(rejectionData.reason);
-        expect(result.feature.rejection_date).toBe('2025-09-23T12:00:00.000Z');
-        expect(result.message).toBe('Feature rejected successfully');
+        expect(_result.success).toBe(true);
+        expect(_result.feature.status).toBe('rejected');
+        expect(_result.feature.rejected_by).toBe('technical-lead');
+        expect(_result.feature.rejection_reason).toBe(rejectionData.reason);
+        expect(_result.feature.rejection_date).toBe('2025-09-23T12:00:00.000Z');
+        expect(_result.message).toBe('Feature rejected successfully');
       });
 
       test('should reject feature with minimal rejection data', async () => {
         const _result = await api.rejectFeature(suggestedFeatureId);
-        expect(result.success).toBe(true);
-        expect(result.feature.status).toBe('rejected');
-        expect(result.feature.rejected_by).toBe('system');
-        expect(result.feature.rejection_reason).toBe('No reason provided');
-        expect(result.feature.rejection_date).toBe('2025-09-23T12:00:00.000Z');
+        expect(_result.success).toBe(true);
+        expect(_result.feature.status).toBe('rejected');
+        expect(_result.feature.rejected_by).toBe('system');
+        expect(_result.feature.rejection_reason).toBe('No reason provided');
+        expect(_result.feature.rejection_date).toBe('2025-09-23T12:00:00.000Z');
       });
 
       test('should update feature timestamps on rejection', async () => {
         const _result = await api.rejectFeature(suggestedFeatureId);
-        expect(result.success).toBe(true);
-        expect(result.feature.updated_at).toBe('2025-09-23T12:00:00.000Z');
-        expect(result.feature.rejection_date).toBe('2025-09-23T12:00:00.000Z');
+        expect(_result.success).toBe(true);
+        expect(_result.feature.updated_at).toBe('2025-09-23T12:00:00.000Z');
+        expect(_result.feature.rejection_date).toBe('2025-09-23T12:00:00.000Z');
       });
     });
 
@@ -666,7 +666,7 @@ describe('Feature Management Lifecycle', () => {
           suggestedFeatureId,
           rejectionData,
         );
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
 
         const features = await api._loadFeatures();
         const history = features.metadata.approval_history;
@@ -689,8 +689,8 @@ describe('Feature Management Lifecycle', () => {
         const nonExistentId = 'feature_nonexistent_456';
 
         const _result = await api.rejectFeature(nonExistentId);
-        expect(result.success).toBe(false);
-        expect(result.error).toContain(
+        expect(_result.success).toBe(false);
+        expect(_result.error).toContain(
           `Feature with ID ${nonExistentId} not found`,
         );
       });
@@ -773,11 +773,11 @@ describe('Feature Management Lifecycle', () => {
           suggestedFeatureIds,
           approvalData,
         );
-        expect(result.success).toBe(true);
-        expect(result.approved_count).toBe(5);
-        expect(result.error_count).toBe(0);
-        expect(result.approved_features).toHaveLength(5);
-        expect(result.errors).toHaveLength(0);
+        expect(_result.success).toBe(true);
+        expect(_result.approved_count).toBe(5);
+        expect(_result.error_count).toBe(0);
+        expect(_result.approved_features).toHaveLength(5);
+        expect(_result.errors).toHaveLength(0);
 
         // Verify all features are approved
         result.approved_features.forEach((approvedFeature) => {
@@ -792,27 +792,27 @@ describe('Feature Management Lifecycle', () => {
         await api.approveFeature(suggestedFeatureIds[2]);
 
         const _result = await api.bulkApproveFeatures(suggestedFeatureIds);
-        expect(result.success).toBe(true);
-        expect(result.approved_count).toBe(4);
-        expect(result.error_count).toBe(1);
-        expect(result.approved_features).toHaveLength(4);
-        expect(result.errors).toHaveLength(1);
+        expect(_result.success).toBe(true);
+        expect(_result.approved_count).toBe(4);
+        expect(_result.error_count).toBe(1);
+        expect(_result.approved_features).toHaveLength(4);
+        expect(_result.errors).toHaveLength(1);
 
         // Check error message
-        expect(result.errors[0]).toContain(
+        expect(_result.errors[0]).toContain(
           "must be in 'suggested' status to approve",
         );
-        expect(result.errors[0]).toContain('Current status: approved');
-        expect(result.errors[0]).toContain(suggestedFeatureIds[2]);
+        expect(_result.errors[0]).toContain('Current status: approved');
+        expect(_result.errors[0]).toContain(suggestedFeatureIds[2]);
       });
 
       test('should handle empty feature IDs array in bulk approval', async () => {
         const _result = await api.bulkApproveFeatures([]);
-        expect(result.success).toBe(true);
-        expect(result.approved_count).toBe(0);
-        expect(result.error_count).toBe(0);
-        expect(result.approved_features).toHaveLength(0);
-        expect(result.errors).toHaveLength(0);
+        expect(_result.success).toBe(true);
+        expect(_result.approved_count).toBe(0);
+        expect(_result.error_count).toBe(0);
+        expect(_result.approved_features).toHaveLength(0);
+        expect(_result.errors).toHaveLength(0);
       });
 
       test('should handle non-existent feature IDs in bulk approval', async () => {
@@ -821,10 +821,10 @@ describe('Feature Management Lifecycle', () => {
         const nonExistentIds = ['fake_id_1', 'fake_id_2', 'fake_id_3'];
 
         const _result = await api.bulkApproveFeatures(nonExistentIds);
-        expect(result.success).toBe(true);
-        expect(result.approved_count).toBe(0);
-        expect(result.error_count).toBe(3);
-        expect(result.errors).toHaveLength(3);
+        expect(_result.success).toBe(true);
+        expect(_result.approved_count).toBe(0);
+        expect(_result.error_count).toBe(3);
+        expect(_result.errors).toHaveLength(3);
 
         result.errors.forEach((error) => {
           expect(error).toContain('not found');
@@ -835,7 +835,7 @@ describe('Feature Management Lifecycle', () => {
 
 
         const _result = await api.bulkApproveFeatures(suggestedFeatureIds);
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
 
         const features = await api._loadFeatures();
         expect(features.metadata.approval_history).toHaveLength(5);
@@ -867,10 +867,10 @@ describe('Feature Management Lifecycle', () => {
 
       test('should list all features without filters', async () => {
         const _result = await api.listFeatures();
-        expect(result.success).toBe(true);
-        expect(result.features).toHaveLength(3);
-        expect(result.total).toBe(3);
-        expect(result.metadata).toBeDefined();
+        expect(_result.success).toBe(true);
+        expect(_result.features).toHaveLength(3);
+        expect(_result.total).toBe(3);
+        expect(_result.metadata).toBeDefined();
 
         // Verify feature data structure
         result.features.forEach((feature) => {
@@ -880,10 +880,10 @@ describe('Feature Management Lifecycle', () => {
 
       test('should include metadata in listing results', async () => {
         const _result = await api.listFeatures();
-        expect(result.success).toBe(true);
-        expect(result.metadata).toBeDefined();
-        expect(result.metadata.total_features).toBe(3);
-        expect(result.metadata.approval_history).toBeDefined();
+        expect(_result.success).toBe(true);
+        expect(_result.metadata).toBeDefined();
+        expect(_result.metadata.total_features).toBe(3);
+        expect(_result.metadata.approval_history).toBeDefined();
       });
     });
 
@@ -896,10 +896,10 @@ describe('Feature Management Lifecycle', () => {
         for (const status of statuses) {
           // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation;
           const _result = await api.listFeatures({ status });
-          expect(result.success).toBe(true);
-          expect(result.features).toHaveLength(1);
-          expect(result.features[0].status).toBe(status);
-          expect(result.total).toBe(1);
+          expect(_result.success).toBe(true);
+          expect(_result.features).toHaveLength(1);
+          expect(_result.features[0].status).toBe(status);
+          expect(_result.total).toBe(1);
         }
       });
 
@@ -909,18 +909,18 @@ describe('Feature Management Lifecycle', () => {
         for (const category of categories) {
           // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation;
           const _result = await api.listFeatures({ category });
-          expect(result.success).toBe(true);
-          expect(result.features).toHaveLength(1);
-          expect(result.features[0].category).toBe(_category);
-          expect(result.total).toBe(1);
+          expect(_result.success).toBe(true);
+          expect(_result.features).toHaveLength(1);
+          expect(_result.features[0].category).toBe(_category);
+          expect(_result.total).toBe(1);
         }
       });
 
       test('should return empty results for non-matching filters', async () => {
         const _result = await api.listFeatures({ status: 'implemented' });
-        expect(result.success).toBe(true);
-        expect(result.features).toHaveLength(0);
-        expect(result.total).toBe(0);
+        expect(_result.success).toBe(true);
+        expect(_result.features).toHaveLength(0);
+        expect(_result.total).toBe(0);
       });
 
       test('should handle combined filters', async () => {
@@ -929,10 +929,10 @@ describe('Feature Management Lifecycle', () => {
           status: 'approved',
           category: 'new-feature',
         });
-        expect(result.success).toBe(true);
-        expect(result.features).toHaveLength(1);
-        expect(result.features[0].status).toBe('approved');
-        expect(result.features[0].category).toBe('new-feature');
+        expect(_result.success).toBe(true);
+        expect(_result.features).toHaveLength(1);
+        expect(_result.features[0].status).toBe('approved');
+        expect(_result.features[0].category).toBe('new-feature');
       });
     });
   });
@@ -954,9 +954,9 @@ describe('Feature Management Lifecycle', () => {
 
       test('should calculate feature statistics correctly', async () => {
         const _result = await api.getFeatureStats();
-        expect(result.success).toBe(true);
-        expect(result.stats).toBeDefined();
-        expect(result.metadata).toBeDefined();
+        expect(_result.success).toBe(true);
+        expect(_result.stats).toBeDefined();
+        expect(_result.metadata).toBeDefined();
 
         const stats = result.stats;
         expect(stats.total).toBe(3);
@@ -976,10 +976,10 @@ describe('Feature Management Lifecycle', () => {
 
 
         const _result = await api.getFeatureStats();
-        expect(result.success).toBe(true);
-        expect(result.stats.recent_activity).toBeDefined();
+        expect(_result.success).toBe(true);
+        expect(_result.stats.recent_activity).toBeDefined();
         expect(Array.isArray(result.stats.recent_activity)).toBe(true);
-        expect(result.stats.recent_activity.length).toBe(2); // From test fixtures
+        expect(_result.stats.recent_activity.length).toBe(2); // From test fixtures
 
         // Verify recent activity structure
         result.stats.recent_activity.forEach((activity) => {
@@ -996,11 +996,11 @@ describe('Feature Management Lifecycle', () => {
         );
 
         const _result = await api.getFeatureStats();
-        expect(result.success).toBe(true);
-        expect(result.stats.total).toBe(0);
-        expect(result.stats.by_status).toEqual({});
-        expect(result.stats.by_category).toEqual({});
-        expect(result.stats.recent_activity).toEqual([]);
+        expect(_result.success).toBe(true);
+        expect(_result.stats.total).toBe(0);
+        expect(_result.stats.by_status).toEqual({});
+        expect(_result.stats.by_category).toEqual({});
+        expect(_result.stats.recent_activity).toEqual([]);
       });
     });
 
@@ -1027,16 +1027,16 @@ describe('Feature Management Lifecycle', () => {
         }
 
         const _result = await api.getFeatureStats();
-        expect(result.success).toBe(true);
-        expect(result.stats.total).toBe(5);
-        expect(result.stats.by_category.enhancement).toBe(3); // 1 existing + 2 new
+        expect(_result.success).toBe(true);
+        expect(_result.stats.total).toBe(5);
+        expect(_result.stats.by_category.enhancement).toBe(3); // 1 existing + 2 new
       });
 
       test('should limit recent activity to last 10 entries', async () => {
         // This tests the slice(-10) in the recent activity calculation;
         const _result = await api.getFeatureStats();
-        expect(result.success).toBe(true);
-        expect(result.stats.recent_activity.length).toBeLessThanOrEqual(10);
+        expect(_result.success).toBe(true);
+        expect(_result.stats.recent_activity.length).toBeLessThanOrEqual(10);
       });
     });
   });
@@ -1051,8 +1051,8 @@ describe('Feature Management Lifecycle', () => {
         mockFs.setReadError(TEST_FEATURES_PATH, 'Permission denied');
 
         const _result = await api.listFeatures();
-        expect(result.success).toBe(false);
-        expect(result.error).toContain('Failed to load features');
+        expect(_result.success).toBe(false);
+        expect(_result.error).toContain('Failed to load features');
       });
 
       test('should handle file write errors in feature suggestion', async () => {
@@ -1063,8 +1063,8 @@ describe('Feature Management Lifecycle', () => {
         mockFs.setWriteError(TEST_FEATURES_PATH, 'Disk full');
 
         const _result = await api.suggestFeature(TEST_FIXTURES.validFeature);
-        expect(result.success).toBe(false);
-        expect(result.error).toContain('Failed to save features');
+        expect(_result.success).toBe(false);
+        expect(_result.error).toContain('Failed to save features');
       });
     });
 
@@ -1075,14 +1075,14 @@ describe('Feature Management Lifecycle', () => {
         mockFs.setFile(TEST_FEATURES_PATH, '{ invalid json structure }');
 
         const _result = await api.suggestFeature(TEST_FIXTURES.validFeature);
-        expect(result.success).toBe(false);
-        expect(result.error).toContain('Failed to load features');
+        expect(_result.success).toBe(false);
+        expect(_result.error).toContain('Failed to load features');
       });
 
       test('should handle missing feature file during operations', async () => {
         // Don't create the file - it will be created automatically;
         const _result = await api.suggestFeature(TEST_FIXTURES.validFeature);
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
         expect(mockFs.hasFile(TEST_FEATURES_PATH)).toBe(true);
       });
     });

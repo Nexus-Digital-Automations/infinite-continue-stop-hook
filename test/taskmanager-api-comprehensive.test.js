@@ -174,12 +174,12 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
       const _result = await execAPI('guide');
 
-      expect(result.success).toBe(true);
-      expect(result.taskManager).toBeDefined();
-      expect(result.taskClassification).toBeDefined();
-      expect(result.coreCommands).toBeDefined();
-      expect(result.workflows).toBeDefined();
-      expect(result.examples).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.taskManager).toBeDefined();
+      expect(_result.taskClassification).toBeDefined();
+      expect(_result.coreCommands).toBeDefined();
+      expect(_result.workflows).toBeDefined();
+      expect(_result.examples).toBeDefined();
 
       // Verify task classification structure;
       const taskTypes = result.taskClassification.types;
@@ -192,27 +192,27 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       ]);
 
       // Verify priority order
-      expect(result.taskClassification.priorityRules['1_error']).toBeDefined();
-      expect(result.taskClassification.priorityRules['4_test']).toBeDefined();
+      expect(_result.taskClassification.priorityRules['1_error']).toBeDefined();
+      expect(_result.taskClassification.priorityRules['4_test']).toBeDefined();
     });
 
     test('should list all available methods', async () => {
       const _result = await execAPI('methods');
 
-      expect(result.success).toBe(true);
-      expect(result.taskManagerMethods).toBeDefined();
-      expect(result.apiMethods).toBeDefined();
-      expect(result.examples).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.taskManagerMethods).toBeDefined();
+      expect(_result.apiMethods).toBeDefined();
+      expect(_result.examples).toBeDefined();
 
       // Verify method counts are reasonable
-      expect(result.taskManagerMethods.count).toBeGreaterThan(50);
-      expect(result.apiMethods.count).toBeGreaterThan(10);
+      expect(_result.taskManagerMethods.count).toBeGreaterThan(50);
+      expect(_result.apiMethods.count).toBeGreaterThan(10);
 
       // Verify key methods are included
-      expect(result.taskManagerMethods.methods).toContain('createTask');
-      expect(result.taskManagerMethods.methods).toContain('claimTask');
-      expect(result.taskManagerMethods.methods).toContain('readTodo');
-      expect(result.taskManagerMethods.methods).toContain('writeTodo');
+      expect(_result.taskManagerMethods.methods).toContain('createTask');
+      expect(_result.taskManagerMethods.methods).toContain('claimTask');
+      expect(_result.taskManagerMethods.methods).toContain('readTodo');
+      expect(_result.taskManagerMethods.methods).toContain('writeTodo');
     });
   });
 
@@ -227,11 +227,11 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
       const _result = await execAPI('init');
 
-      expect(result.success).toBe(true);
-      expect(result.agentId).toBeDefined();
-      expect(result.config.role).toBe('development');
-      expect(result.config.sessionId).toMatch(/^session_\d+$/);
-      expect(result.config.specialization).toEqual([]);
+      expect(_result.success).toBe(true);
+      expect(_result.agentId).toBeDefined();
+      expect(_result.config.role).toBe('development');
+      expect(_result.config.sessionId).toMatch(/^session_\d+$/);
+      expect(_result.config.specialization).toEqual([]);
 
       testAgentId = result.agentId;
     });
@@ -245,14 +245,14 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
       const _result = await execAPI('init', [JSON.stringify(config)]);
 
-      expect(result.success).toBe(true);
-      expect(result.agentId).toBeDefined();
-      expect(result.config.role).toBe('testing');
-      expect(result.config.specialization).toEqual([
+      expect(_result.success).toBe(true);
+      expect(_result.agentId).toBeDefined();
+      expect(_result.config.role).toBe('testing');
+      expect(_result.config.specialization).toEqual([
         'unit-tests',
         'integration-tests',
       ]);
-      expect(result.config.metadata).toEqual({ environment: 'ci' });
+      expect(_result.config.metadata).toEqual({ environment: 'ci' });
 
       testAgentId = result.agentId;
     });
@@ -265,12 +265,12 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       // Get agent status;
       const _result = await execAPI('status', [testAgentId]);
 
-      expect(result.success).toBe(true);
-      expect(result.agent).toBeDefined();
-      expect(result.agent.role).toBe('development');
-      expect(result.agent.status).toBe('active');
-      expect(result.tasks).toEqual([]);
-      expect(result.taskCount).toBe(0);
+      expect(_result.success).toBe(true);
+      expect(_result.agent).toBeDefined();
+      expect(_result.agent.role).toBe('development');
+      expect(_result.agent.status).toBe('active');
+      expect(_result.tasks).toEqual([]);
+      expect(_result.taskCount).toBe(0);
     });
 
     test('should reinitialize agent with updated configuration', async () => {
@@ -288,17 +288,17 @@ describe('TaskManager API Comprehensive Test Suite', () => {
         JSON.stringify(updateConfig),
       ]);
 
-      expect(result.success).toBe(true);
-      expect(result.agentId).toBe(testAgentId);
-      expect(result.agent.metadata.updated).toBe(true);
-      expect(result.renewed).toBe(true);
+      expect(_result.success).toBe(true);
+      expect(_result.agentId).toBe(testAgentId);
+      expect(_result.agent.metadata.updated).toBe(true);
+      expect(_result.renewed).toBe(true);
     });
 
     test('should handle agent status request without agent initialization', async () => {
       const _result = await execAPI('status');
 
-      expect(result.success).toBe(false);
-      expect(result.error).toBe(
+      expect(_result.success).toBe(false);
+      expect(_result.error).toBe(
         'No agent ID provided And no agent initialized',
       );
     });
@@ -329,11 +329,11 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
       const _result = await execAPI('create', [JSON.stringify(taskData)]);
 
-      expect(result.success).toBe(true);
-      expect(result.taskId).toBeDefined();
-      expect(result.taskId).toMatch(/^error_\d+_\w+$/);
-      expect(result.task.title).toBe(taskData.title);
-      expect(result.task.task_type).toBe('error');
+      expect(_result.success).toBe(true);
+      expect(_result.taskId).toBeDefined();
+      expect(_result.taskId).toMatch(/^error_\d+_\w+$/);
+      expect(_result.task.title).toBe(taskData.title);
+      expect(_result.task.task_type).toBe('error');
 
       testTaskId = result.taskId;
     });
@@ -349,11 +349,11 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
       const _result = await execAPI('create', [JSON.stringify(taskData)]);
 
-      expect(result.success).toBe(true);
-      expect(result.taskId).toBeDefined();
-      expect(result.taskId).toMatch(/^feature_\d+_\w+$/);
-      expect(result.task.title).toBe(taskData.title);
-      expect(result.task.task_type).toBe('feature');
+      expect(_result.success).toBe(true);
+      expect(_result.taskId).toBeDefined();
+      expect(_result.taskId).toMatch(/^feature_\d+_\w+$/);
+      expect(_result.task.title).toBe(taskData.title);
+      expect(_result.task.task_type).toBe('feature');
     });
 
     test('should create subtask', async () => {
@@ -367,11 +367,11 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
       const _result = await execAPI('create', [JSON.stringify(taskData)]);
 
-      expect(result.success).toBe(true);
-      expect(result.taskId).toBeDefined();
-      expect(result.taskId).toMatch(/^subtask_\d+_\w+$/);
-      expect(result.task.title).toBe(taskData.title);
-      expect(result.task.task_type).toBe('subtask');
+      expect(_result.success).toBe(true);
+      expect(_result.taskId).toBeDefined();
+      expect(_result.taskId).toMatch(/^subtask_\d+_\w+$/);
+      expect(_result.task.title).toBe(taskData.title);
+      expect(_result.task.task_type).toBe('subtask');
     });
 
     test('should create test task', async () => {
@@ -385,11 +385,11 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
       const _result = await execAPI('create', [JSON.stringify(taskData)]);
 
-      expect(result.success).toBe(true);
-      expect(result.taskId).toBeDefined();
-      expect(result.taskId).toMatch(/^test_\d+_\w+$/);
-      expect(result.task.title).toBe(taskData.title);
-      expect(result.task.task_type).toBe('test');
+      expect(_result.success).toBe(true);
+      expect(_result.taskId).toBeDefined();
+      expect(_result.taskId).toMatch(/^test_\d+_\w+$/);
+      expect(_result.task.title).toBe(taskData.title);
+      expect(_result.task.task_type).toBe('test');
     });
 
     test('should reject task creation without required task_type', async () => {
@@ -401,8 +401,8 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
       const _result = await execAPI('create', [JSON.stringify(taskData)]);
 
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('task_type');
+      expect(_result.success).toBe(false);
+      expect(_result.error).toContain('task_type');
     });
 
     test('should create error task with absolute priority', async () => {
@@ -416,11 +416,11 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
       const _result = await execAPI('create-error', [JSON.stringify(taskData)]);
 
-      expect(result.success).toBe(true);
-      expect(result.taskId).toBeDefined();
-      expect(result.task.is_error_task).toBe(true);
-      expect(result.task.priority).toBe('critical');
-      expect(result.message).toContain('absolute priority');
+      expect(_result.success).toBe(true);
+      expect(_result.taskId).toBeDefined();
+      expect(_result.task.is_error_task).toBe(true);
+      expect(_result.task.priority).toBe('critical');
+      expect(_result.message).toContain('absolute priority');
     });
   });
 
@@ -451,11 +451,11 @@ describe('TaskManager API Comprehensive Test Suite', () => {
     test('should claim available task successfully', async () => {
       const _result = await execAPI('claim', [testTaskId, testAgentId]);
 
-      expect(result.success).toBe(true);
-      expect(result.task).toBeDefined();
-      expect(result.task.id).toBe(testTaskId);
-      expect(result.task.status).toBe('in_progress');
-      expect(result.task.assigned_agent).toBe(testAgentId);
+      expect(_result.success).toBe(true);
+      expect(_result.task).toBeDefined();
+      expect(_result.task.id).toBe(testTaskId);
+      expect(_result.task.status).toBe('in_progress');
+      expect(_result.task.assigned_agent).toBe(testAgentId);
     });
 
     test('should prevent claiming already claimed task', async () => {
@@ -469,8 +469,8 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       // Try to claim the same task;
       const _result = await execAPI('claim', [testTaskId, secondAgentId]);
 
-      expect(result.success).toBe(false);
-      expect(result.reason).toContain('not available for claiming');
+      expect(_result.success).toBe(false);
+      expect(_result.reason).toContain('not available for claiming');
     });
 
     test('should handle claiming with dependency validation', async () => {
@@ -497,10 +497,10 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       // Try to claim task with incomplete dependency;
       const _result = await execAPI('claim', [mainTaskId, testAgentId]);
 
-      expect(result.success).toBe(false);
-      expect(result.blockedByDependencies).toBe(true);
-      expect(result.dependencyInstructions).toBeDefined();
-      expect(result.nextDependency.id).toBe(depTaskId);
+      expect(_result.success).toBe(false);
+      expect(_result.blockedByDependencies).toBe(true);
+      expect(_result.dependencyInstructions).toBeDefined();
+      expect(_result.nextDependency.id).toBe(depTaskId);
     });
 
     test('should get current task for agent', async () => {
@@ -510,10 +510,10 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       // Get current task;
       const _result = await execAPI('current', [testAgentId]);
 
-      expect(result.success).toBe(true);
-      expect(result.task).toBeDefined();
-      expect(result.task.id).toBe(testTaskId);
-      expect(result.hasTask).toBe(true);
+      expect(_result.success).toBe(true);
+      expect(_result.task).toBeDefined();
+      expect(_result.task.id).toBe(testTaskId);
+      expect(_result.hasTask).toBe(true);
     });
   });
 
@@ -554,9 +554,9 @@ describe('TaskManager API Comprehensive Test Suite', () => {
         JSON.stringify(completionData),
       ]);
 
-      expect(result.success).toBe(true);
-      expect(result.taskId).toBe(testTaskId);
-      expect(result.completionData.notes).toBe(completionData.notes);
+      expect(_result.success).toBe(true);
+      expect(_result.taskId).toBe(testTaskId);
+      expect(_result.completionData.notes).toBe(completionData.notes);
     });
 
     test('should include documentation instructions for feature completion', async () => {
@@ -576,10 +576,10 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       await execAPI('claim', [featureTaskId, testAgentId]);
       const _result = await execAPI('complete', [featureTaskId]);
 
-      expect(result.success).toBe(true);
-      expect(result.documentationInstructions).toBeDefined();
-      expect(result.documentationInstructions.mandatory).toBe(true);
-      expect(result.documentationInstructions.files_to_update).toContain(
+      expect(_result.success).toBe(true);
+      expect(_result.documentationInstructions).toBeDefined();
+      expect(_result.documentationInstructions.mandatory).toBe(true);
+      expect(_result.documentationInstructions.files_to_update).toContain(
         'development/essentials/features.md',
       );
     });
@@ -587,9 +587,9 @@ describe('TaskManager API Comprehensive Test Suite', () => {
     test('should complete task without optional completion data', async () => {
       const _result = await execAPI('complete', [testTaskId]);
 
-      expect(result.success).toBe(true);
-      expect(result.taskId).toBe(testTaskId);
-      expect(result.message).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.taskId).toBe(testTaskId);
+      expect(_result.message).toBeDefined();
     });
   });
 
@@ -638,9 +638,9 @@ describe('TaskManager API Comprehensive Test Suite', () => {
     test('should list all tasks without filter', async () => {
       const _result = await execAPI('list');
 
-      expect(result.success).toBe(true);
-      expect(result.tasks).toHaveLength(4);
-      expect(result.count).toBe(4);
+      expect(_result.success).toBe(true);
+      expect(_result.tasks).toHaveLength(4);
+      expect(_result.count).toBe(4);
 
       // Verify tasks are sorted by priority (error first)
       const taskTypes = result.tasks.map((t) => t.id.split('_')[0]);
@@ -652,9 +652,9 @@ describe('TaskManager API Comprehensive Test Suite', () => {
         JSON.stringify({ status: 'pending' }),
       ]);
 
-      expect(result.success).toBe(true);
-      expect(result.tasks).toHaveLength(4);
-      expect(result.tasks.every((task) => task.status === 'pending')).toBe(
+      expect(_result.success).toBe(true);
+      expect(_result.tasks).toHaveLength(4);
+      expect(_result.tasks.every((task) => task.status === 'pending')).toBe(
         true,
       );
     });
@@ -664,9 +664,9 @@ describe('TaskManager API Comprehensive Test Suite', () => {
         JSON.stringify({ task_type: 'error' }),
       ]);
 
-      expect(result.success).toBe(true);
-      expect(result.tasks).toHaveLength(1);
-      expect(result.tasks[0].title).toBe('Error task');
+      expect(_result.success).toBe(true);
+      expect(_result.tasks).toHaveLength(1);
+      expect(_result.tasks[0].title).toBe('Error task');
     });
 
     test('should filter tasks by priority', async () => {
@@ -674,9 +674,9 @@ describe('TaskManager API Comprehensive Test Suite', () => {
         JSON.stringify({ priority: 'high' }),
       ]);
 
-      expect(result.success).toBe(true);
-      expect(result.tasks).toHaveLength(1);
-      expect(result.tasks[0].title).toBe('Feature task');
+      expect(_result.success).toBe(true);
+      expect(_result.tasks).toHaveLength(1);
+      expect(_result.tasks[0].title).toBe('Feature task');
     });
 
     test('should filter tasks by category', async () => {
@@ -684,9 +684,9 @@ describe('TaskManager API Comprehensive Test Suite', () => {
         JSON.stringify({ category: 'authentication' }),
       ]);
 
-      expect(result.success).toBe(true);
-      expect(result.tasks).toHaveLength(1);
-      expect(result.tasks[0].title).toBe('Feature task');
+      expect(_result.success).toBe(true);
+      expect(_result.tasks).toHaveLength(1);
+      expect(_result.tasks[0].title).toBe('Feature task');
     });
   });
 
@@ -724,9 +724,9 @@ describe('TaskManager API Comprehensive Test Suite', () => {
     test('should move task to top', async () => {
       const _result = await execAPI('move-top', [testTaskId]);
 
-      expect(result.success).toBe(true);
-      expect(result.moved).toBe(true);
-      expect(result.taskId).toBe(testTaskId);
+      expect(_result.success).toBe(true);
+      expect(_result.moved).toBe(true);
+      expect(_result.taskId).toBe(testTaskId);
 
       // Verify task is now at top;
       const listResult = await execAPI('list');
@@ -736,25 +736,25 @@ describe('TaskManager API Comprehensive Test Suite', () => {
     test('should move task up one position', async () => {
       const _result = await execAPI('move-up', [testTaskId]);
 
-      expect(result.success).toBe(true);
-      expect(result.moved).toBe(true);
-      expect(result.taskId).toBe(testTaskId);
+      expect(_result.success).toBe(true);
+      expect(_result.moved).toBe(true);
+      expect(_result.taskId).toBe(testTaskId);
     });
 
     test('should move task down one position', async () => {
       const _result = await execAPI('move-down', [testTaskId]);
 
-      expect(result.success).toBe(true);
-      expect(result.moved).toBe(true);
-      expect(result.taskId).toBe(testTaskId);
+      expect(_result.success).toBe(true);
+      expect(_result.moved).toBe(true);
+      expect(_result.taskId).toBe(testTaskId);
     });
 
     test('should move task to bottom', async () => {
       const _result = await execAPI('move-bottom', [testTaskId]);
 
-      expect(result.success).toBe(true);
-      expect(result.moved).toBe(true);
-      expect(result.taskId).toBe(testTaskId);
+      expect(_result.success).toBe(true);
+      expect(_result.moved).toBe(true);
+      expect(_result.taskId).toBe(testTaskId);
 
       // Verify task is now at bottom;
       const listResult = await execAPI('list');
@@ -792,10 +792,10 @@ describe('TaskManager API Comprehensive Test Suite', () => {
         testAgentId,
       ]);
 
-      expect(result.success).toBe(true);
-      expect(result.featureId).toBeDefined();
-      expect(result.status).toBe('suggested');
-      expect(result.awaiting_approval).toBe(true);
+      expect(_result.success).toBe(true);
+      expect(_result.featureId).toBeDefined();
+      expect(_result.status).toBe('suggested');
+      expect(_result.awaiting_approval).toBe(true);
 
       testFeatureId = result.featureId;
     });
@@ -816,10 +816,10 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       // List suggested features;
       const _result = await execAPI('list-suggested-features');
 
-      expect(result.success).toBe(true);
-      expect(result.suggested_features).toHaveLength(1);
-      expect(result.count).toBe(1);
-      expect(result.suggested_features[0].title).toBe('Test suggested feature');
+      expect(_result.success).toBe(true);
+      expect(_result.suggested_features).toHaveLength(1);
+      expect(_result.count).toBe(1);
+      expect(_result.suggested_features[0].title).toBe('Test suggested feature');
     });
 
     test('should approve suggested feature', async () => {
@@ -842,10 +842,10 @@ describe('TaskManager API Comprehensive Test Suite', () => {
         'test-user',
       ]);
 
-      expect(result.success).toBe(true);
-      expect(result.featureId).toBe(testFeatureId);
-      expect(result.status).toBe('approved');
-      expect(result.ready_for_implementation).toBe(true);
+      expect(_result.success).toBe(true);
+      expect(_result.featureId).toBe(testFeatureId);
+      expect(_result.status).toBe('approved');
+      expect(_result.ready_for_implementation).toBe(true);
     });
 
     test('should reject suggested feature', async () => {
@@ -870,10 +870,10 @@ describe('TaskManager API Comprehensive Test Suite', () => {
         reason,
       ]);
 
-      expect(result.success).toBe(true);
-      expect(result.featureId).toBe(testFeatureId);
-      expect(result.reason).toBe(reason);
-      expect(result.removed).toBe(true);
+      expect(_result.success).toBe(true);
+      expect(_result.featureId).toBe(testFeatureId);
+      expect(_result.reason).toBe(reason);
+      expect(_result.removed).toBe(true);
     });
 
     test('should list all features with filters', async () => {
@@ -894,9 +894,9 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       // List all features;
       const _result = await execAPI('list-features');
 
-      expect(result.success).toBe(true);
-      expect(result.features.length).toBeGreaterThan(0);
-      expect(result.count).toBeGreaterThan(0);
+      expect(_result.success).toBe(true);
+      expect(_result.features.length).toBeGreaterThan(0);
+      expect(_result.count).toBeGreaterThan(0);
 
       // Filter by status;
       const approvedResult = await execAPI('list-features', [
@@ -923,11 +923,11 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
       const _result = await execAPI('feature-stats');
 
-      expect(result.success).toBe(true);
-      expect(result.feature_statistics).toBeDefined();
-      expect(result.feature_statistics.total).toBeGreaterThan(0);
-      expect(result.feature_statistics.by_status).toBeDefined();
-      expect(result.feature_statistics.awaiting_approval).toBeGreaterThan(0);
+      expect(_result.success).toBe(true);
+      expect(_result.feature_statistics).toBeDefined();
+      expect(_result.feature_statistics.total).toBeGreaterThan(0);
+      expect(_result.feature_statistics.by_status).toBeDefined();
+      expect(_result.feature_statistics.awaiting_approval).toBeGreaterThan(0);
     });
   });
 
@@ -957,9 +957,9 @@ describe('TaskManager API Comprehensive Test Suite', () => {
     test('should delete existing task', async () => {
       const _result = await execAPI('delete', [testTaskId]);
 
-      expect(result.success).toBe(true);
-      expect(result.taskId).toBe(testTaskId);
-      expect(result.deletedTask.id).toBe(testTaskId);
+      expect(_result.success).toBe(true);
+      expect(_result.taskId).toBe(testTaskId);
+      expect(_result.deletedTask.id).toBe(testTaskId);
 
       // Verify task is no longer in the list;
       const listResult = await execAPI('list');
@@ -971,8 +971,8 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       const fakeTaskId = 'fake_task_12345_abc';
       const _result = await execAPI('delete', [fakeTaskId]);
 
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('Task not found');
+      expect(_result.success).toBe(false);
+      expect(_result.error).toContain('Task not found');
     });
   });
 
@@ -1009,8 +1009,8 @@ describe('TaskManager API Comprehensive Test Suite', () => {
     test('should get orchestration statistics', async () => {
       const _result = await execAPI('stats');
 
-      expect(result.success).toBe(true);
-      expect(result.statistics).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.statistics).toBeDefined();
 
       // Verify statistics structure;
       const stats = result.statistics;
@@ -1042,8 +1042,8 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
       const _result = await execAPI('create', ['{ invalid json }']);
 
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('Invalid JSON');
+      expect(_result.success).toBe(false);
+      expect(_result.error).toContain('Invalid JSON');
     });
 
     test('should handle operations without agent initialization', async () => {
@@ -1057,8 +1057,8 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
       const _result = await execAPI('claim', [createResult.taskId]);
 
-      expect(result.success).toBe(false);
-      expect(result.error).toBe(
+      expect(_result.success).toBe(false);
+      expect(_result.error).toBe(
         'No agent ID provided And no agent initialized',
       );
     });
@@ -1067,8 +1067,8 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       // Try to claim task without task ID;
       const _result = await execAPI('claim');
 
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('Task ID required');
+      expect(_result.success).toBe(false);
+      expect(_result.error).toContain('Task ID required');
     });
 
     test('should handle timeout gracefully', async () => {

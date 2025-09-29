@@ -133,14 +133,14 @@ describe('Verification Endpoints', () => {
       const _result = await api.getVerificationRequirements('task_123');
 
       // Verify results
-      expect(result.success).toBe(true);
-      expect(result.taskId).toBe('task_123');
-      expect(result.title).toBe('Test Task');
-      expect(result.verificationGate.status).toBe('pending');
-      expect(result.verificationGate.requirements).toHaveLength(2);
-      expect(result.verificationGate.requirements[0].type).toBe('file');
-      expect(result.verificationGate.requirements[1].type).toBe('function');
-      expect(result.message).toBe(
+      expect(_result.success).toBe(true);
+      expect(_result.taskId).toBe('task_123');
+      expect(_result.title).toBe('Test Task');
+      expect(_result.verificationGate.status).toBe('pending');
+      expect(_result.verificationGate.requirements).toHaveLength(2);
+      expect(_result.verificationGate.requirements[0].type).toBe('file');
+      expect(_result.verificationGate.requirements[1].type).toBe('function');
+      expect(_result.message).toBe(
         'Verification requirements retrieved successfully',
       );
     });
@@ -260,13 +260,13 @@ describe('Verification Endpoints', () => {
       );
 
       // Verify results
-      expect(result.success).toBe(true);
-      expect(result.taskId).toBe('task_123');
-      expect(result.verificationGate.status).toBe('passed');
-      expect(result.verificationGate.evidence).toEqual(validEvidence);
-      expect(result.verificationGate.verifiedBy).toBe('test_agent_001');
-      expect(result.verificationGate.verifiedAt).toBeTruthy();
-      expect(result.message).toBe(
+      expect(_result.success).toBe(true);
+      expect(_result.taskId).toBe('task_123');
+      expect(_result.verificationGate.status).toBe('passed');
+      expect(_result.verificationGate.evidence).toEqual(validEvidence);
+      expect(_result.verificationGate.verifiedBy).toBe('test_agent_001');
+      expect(_result.verificationGate.verifiedAt).toBeTruthy();
+      expect(_result.message).toBe(
         'Verification evidence submitted successfully',
       );
 
@@ -571,9 +571,9 @@ describe('Verification Endpoints', () => {
       );
 
       // Verify comprehensive evidence is accepted
-      expect(result.success).toBe(true);
-      expect(result.verificationGate.status).toBe('passed');
-      expect(result.verificationGate.evidence.reviewedItems).toHaveLength(3);
+      expect(_result.success).toBe(true);
+      expect(_result.verificationGate.status).toBe('passed');
+      expect(_result.verificationGate.evidence.reviewedItems).toHaveLength(3);
     });
   });
 

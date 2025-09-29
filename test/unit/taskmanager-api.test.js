@@ -376,12 +376,12 @@ describe('FeatureManagerAPI', () => {
 
       test('should create new feature suggestion successfully', async () => {
         const _result = await api.suggestFeature(TEST_FIXTURES.validFeature);
-        expect(result.success).toBe(true);
-        expect(result.feature).toBeDefined();
-        expect(result.feature.id).toMatch(/^feature_\d+_[a-f0-9]+$/);
-        expect(result.feature.status).toBe('suggested');
-        expect(result.feature.title).toBe(TEST_FIXTURES.validFeature.title);
-        expect(result.message).toBe('Feature suggestion created successfully');
+        expect(_result.success).toBe(true);
+        expect(_result.feature).toBeDefined();
+        expect(_result.feature.id).toMatch(/^feature_\d+_[a-f0-9]+$/);
+        expect(_result.feature.status).toBe('suggested');
+        expect(_result.feature.title).toBe(TEST_FIXTURES.validFeature.title);
+        expect(_result.message).toBe('Feature suggestion created successfully');
 
         testHelpers.validateFeatureStructure(result.feature);
       });
@@ -390,22 +390,22 @@ describe('FeatureManagerAPI', () => {
         const _result = await api.suggestFeature(
           TEST_FIXTURES.invalidFeatures.missingTitle,
         );
-        expect(result.success).toBe(false);
-        expect(result.error).toContain('Required field');
-        expect(result.feature).toBeUndefined();
+        expect(_result.success).toBe(false);
+        expect(_result.error).toContain('Required field');
+        expect(_result.feature).toBeUndefined();
       });
 
       test('should handle file system errors during feature creation', async () => {
         mockFs.setWriteError(TEST_FEATURES_PATH, 'Disk full');
 
         const _result = await api.suggestFeature(TEST_FIXTURES.validFeature);
-        expect(result.success).toBe(false);
-        expect(result.error).toContain('Failed to save features');
+        expect(_result.success).toBe(false);
+        expect(_result.error).toContain('Failed to save features');
       });
 
       test('should update metadata correctly', async () => {
         const _result = await api.suggestFeature(TEST_FIXTURES.validFeature);
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
 
         const features = await api._loadFeatures();
         expect(features.metadata.total_features).toBe(1);
@@ -431,29 +431,29 @@ describe('FeatureManagerAPI', () => {
           testFeatureId,
           TEST_FIXTURES.validApprovalData,
         );
-        expect(result.success).toBe(true);
-        expect(result.feature.id).toBe(testFeatureId);
-        expect(result.feature.status).toBe('approved');
-        expect(result.feature.approved_by).toBe(
+        expect(_result.success).toBe(true);
+        expect(_result.feature.id).toBe(testFeatureId);
+        expect(_result.feature.status).toBe('approved');
+        expect(_result.feature.approved_by).toBe(
           TEST_FIXTURES.validApprovalData.approved_by,
         );
-        expect(result.feature.approval_notes).toBe(
+        expect(_result.feature.approval_notes).toBe(
           TEST_FIXTURES.validApprovalData.notes,
         );
-        expect(result.message).toBe('Feature approved successfully');
+        expect(_result.message).toBe('Feature approved successfully');
       });
 
       test('should approve feature with default approval data', async () => {
         const _result = await api.approveFeature(testFeatureId);
-        expect(result.success).toBe(true);
-        expect(result.feature.approved_by).toBe('system');
-        expect(result.feature.approval_notes).toBe('');
+        expect(_result.success).toBe(true);
+        expect(_result.feature.approved_by).toBe('system');
+        expect(_result.feature.approval_notes).toBe('');
       });
 
       test('should reject approval of non-existent feature', async () => {
         const _result = await api.approveFeature('non-existent-id');
-        expect(result.success).toBe(false);
-        expect(result.error).toContain(
+        expect(_result.success).toBe(false);
+        expect(_result.error).toContain(
           'Feature with ID non-existent-id not found',
         );
       });
@@ -464,8 +464,8 @@ describe('FeatureManagerAPI', () => {
 
         // Try to approve again;
         const _result = await api.approveFeature(testFeatureId);
-        expect(result.success).toBe(false);
-        expect(result.error).toContain(
+        expect(_result.success).toBe(false);
+        expect(_result.error).toContain(
           "Feature must be in 'suggested' status to approve",
         );
       });
@@ -475,7 +475,7 @@ describe('FeatureManagerAPI', () => {
           testFeatureId,
           TEST_FIXTURES.validApprovalData,
         );
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
 
         const features = await api._loadFeatures();
         expect(features.metadata.approval_history).toHaveLength(1);
@@ -502,8 +502,8 @@ describe('FeatureManagerAPI', () => {
         mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(invalidFeatures));
 
         const _result = await api.approveFeature(testFeatureId);
-        expect(result.success).toBe(true);
-        expect(result.feature.status).toBe('approved');
+        expect(_result.success).toBe(true);
+        expect(_result.feature.status).toBe('approved');
       });
     });
 
@@ -525,29 +525,29 @@ describe('FeatureManagerAPI', () => {
           testFeatureId,
           TEST_FIXTURES.validRejectionData,
         );
-        expect(result.success).toBe(true);
-        expect(result.feature.id).toBe(testFeatureId);
-        expect(result.feature.status).toBe('rejected');
-        expect(result.feature.rejected_by).toBe(
+        expect(_result.success).toBe(true);
+        expect(_result.feature.id).toBe(testFeatureId);
+        expect(_result.feature.status).toBe('rejected');
+        expect(_result.feature.rejected_by).toBe(
           TEST_FIXTURES.validRejectionData.rejected_by,
         );
-        expect(result.feature.rejection_reason).toBe(
+        expect(_result.feature.rejection_reason).toBe(
           TEST_FIXTURES.validRejectionData.reason,
         );
-        expect(result.message).toBe('Feature rejected successfully');
+        expect(_result.message).toBe('Feature rejected successfully');
       });
 
       test('should reject feature with default rejection data', async () => {
         const _result = await api.rejectFeature(testFeatureId);
-        expect(result.success).toBe(true);
-        expect(result.feature.rejected_by).toBe('system');
-        expect(result.feature.rejection_reason).toBe('No reason provided');
+        expect(_result.success).toBe(true);
+        expect(_result.feature.rejected_by).toBe('system');
+        expect(_result.feature.rejection_reason).toBe('No reason provided');
       });
 
       test('should reject rejection of non-existent feature', async () => {
         const _result = await api.rejectFeature('non-existent-id');
-        expect(result.success).toBe(false);
-        expect(result.error).toContain(
+        expect(_result.success).toBe(false);
+        expect(_result.error).toContain(
           'Feature with ID non-existent-id not found',
         );
       });
@@ -558,8 +558,8 @@ describe('FeatureManagerAPI', () => {
 
         // Try to reject the approved feature;
         const _result = await api.rejectFeature(testFeatureId);
-        expect(result.success).toBe(false);
-        expect(result.error).toContain(
+        expect(_result.success).toBe(false);
+        expect(_result.error).toContain(
           "Feature must be in 'suggested' status to reject",
         );
       });
@@ -569,7 +569,7 @@ describe('FeatureManagerAPI', () => {
           testFeatureId,
           TEST_FIXTURES.validRejectionData,
         );
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
 
         const features = await api._loadFeatures();
         expect(features.metadata.approval_history).toHaveLength(1);
@@ -620,11 +620,11 @@ describe('FeatureManagerAPI', () => {
           suggestedFeatureIds,
           TEST_FIXTURES.validApprovalData,
         );
-        expect(result.success).toBe(true);
-        expect(result.approved_count).toBe(3);
-        expect(result.error_count).toBe(0);
-        expect(result.approved_features).toHaveLength(3);
-        expect(result.errors).toHaveLength(0);
+        expect(_result.success).toBe(true);
+        expect(_result.approved_count).toBe(3);
+        expect(_result.error_count).toBe(0);
+        expect(_result.approved_features).toHaveLength(3);
+        expect(_result.errors).toHaveLength(0);
 
         // Verify all features are approved
         result.approved_features.forEach((approvedFeature) => {
@@ -638,15 +638,15 @@ describe('FeatureManagerAPI', () => {
         await api.approveFeature(suggestedFeatureIds[1]);
 
         const _result = await api.bulkApproveFeatures(suggestedFeatureIds);
-        expect(result.success).toBe(true);
-        expect(result.approved_count).toBe(2);
-        expect(result.error_count).toBe(1);
-        expect(result.approved_features).toHaveLength(2);
-        expect(result.errors).toHaveLength(1);
-        expect(result.errors[0]).toContain(
+        expect(_result.success).toBe(true);
+        expect(_result.approved_count).toBe(2);
+        expect(_result.error_count).toBe(1);
+        expect(_result.approved_features).toHaveLength(2);
+        expect(_result.errors).toHaveLength(1);
+        expect(_result.errors[0]).toContain(
           "must be in 'suggested' status to approve",
         );
-        expect(result.errors[0]).toContain('Current status: approved');
+        expect(_result.errors[0]).toContain('Current status: approved');
       });
 
       test('should handle non-existent feature IDs', async () => {
@@ -655,10 +655,10 @@ describe('FeatureManagerAPI', () => {
         const invalidIds = ['non-existent-1', 'non-existent-2'];
 
         const _result = await api.bulkApproveFeatures(invalidIds);
-        expect(result.success).toBe(true);
-        expect(result.approved_count).toBe(0);
-        expect(result.error_count).toBe(2);
-        expect(result.errors).toHaveLength(2);
+        expect(_result.success).toBe(true);
+        expect(_result.approved_count).toBe(0);
+        expect(_result.error_count).toBe(2);
+        expect(_result.errors).toHaveLength(2);
         result.errors.forEach((error) => {
           expect(error).toContain('not found');
         });
@@ -666,11 +666,11 @@ describe('FeatureManagerAPI', () => {
 
       test('should handle empty feature IDs array', async () => {
         const _result = await api.bulkApproveFeatures([]);
-        expect(result.success).toBe(true);
-        expect(result.approved_count).toBe(0);
-        expect(result.error_count).toBe(0);
-        expect(result.approved_features).toHaveLength(0);
-        expect(result.errors).toHaveLength(0);
+        expect(_result.success).toBe(true);
+        expect(_result.approved_count).toBe(0);
+        expect(_result.error_count).toBe(0);
+        expect(_result.approved_features).toHaveLength(0);
+        expect(_result.errors).toHaveLength(0);
       });
     });
 
@@ -687,10 +687,10 @@ describe('FeatureManagerAPI', () => {
 
       test('should list all features without filter', async () => {
         const _result = await api.listFeatures();
-        expect(result.success).toBe(true);
-        expect(result.features).toHaveLength(3);
-        expect(result.total).toBe(3);
-        expect(result.metadata).toBeDefined();
+        expect(_result.success).toBe(true);
+        expect(_result.features).toHaveLength(3);
+        expect(_result.total).toBe(3);
+        expect(_result.metadata).toBeDefined();
 
         // Verify features are correctly returned;
         const statuses = result.features.map((f) => f.status);
@@ -701,32 +701,32 @@ describe('FeatureManagerAPI', () => {
 
       test('should filter features by status', async () => {
         const _result = await api.listFeatures({ status: 'approved' });
-        expect(result.success).toBe(true);
-        expect(result.features).toHaveLength(1);
-        expect(result.features[0].status).toBe('approved');
-        expect(result.total).toBe(1);
+        expect(_result.success).toBe(true);
+        expect(_result.features).toHaveLength(1);
+        expect(_result.features[0].status).toBe('approved');
+        expect(_result.total).toBe(1);
       });
 
       test('should filter features by category', async () => {
         const _result = await api.listFeatures({ category: 'enhancement' });
-        expect(result.success).toBe(true);
-        expect(result.features).toHaveLength(1);
-        expect(result.features[0].category).toBe('enhancement');
+        expect(_result.success).toBe(true);
+        expect(_result.features).toHaveLength(1);
+        expect(_result.features[0].category).toBe('enhancement');
       });
 
       test('should return empty array for non-matching filters', async () => {
         const _result = await api.listFeatures({ status: 'implemented' });
-        expect(result.success).toBe(true);
-        expect(result.features).toHaveLength(0);
-        expect(result.total).toBe(0);
+        expect(_result.success).toBe(true);
+        expect(_result.features).toHaveLength(0);
+        expect(_result.total).toBe(0);
       });
 
       test('should handle file system errors', async () => {
         mockFs.setReadError(TEST_FEATURES_PATH, 'Permission denied');
 
         const _result = await api.listFeatures();
-        expect(result.success).toBe(false);
-        expect(result.error).toContain('Failed to load features');
+        expect(_result.success).toBe(false);
+        expect(_result.error).toContain('Failed to load features');
       });
     });
 
@@ -742,9 +742,9 @@ describe('FeatureManagerAPI', () => {
 
       test('should calculate feature statistics correctly', async () => {
         const _result = await api.getFeatureStats();
-        expect(result.success).toBe(true);
-        expect(result.stats).toBeDefined();
-        expect(result.metadata).toBeDefined();
+        expect(_result.success).toBe(true);
+        expect(_result.stats).toBeDefined();
+        expect(_result.metadata).toBeDefined();
 
         const stats = result.stats;
         expect(stats.total).toBe(3);
@@ -758,10 +758,10 @@ describe('FeatureManagerAPI', () => {
 
       test('should include recent activity from approval history', async () => {
         const _result = await api.getFeatureStats();
-        expect(result.success).toBe(true);
-        expect(result.stats.recent_activity).toBeDefined();
+        expect(_result.success).toBe(true);
+        expect(_result.stats.recent_activity).toBeDefined();
         expect(Array.isArray(result.stats.recent_activity)).toBe(true);
-        expect(result.stats.recent_activity.length).toBeGreaterThan(0);
+        expect(_result.stats.recent_activity.length).toBeGreaterThan(0);
       });
 
       test('should handle empty features file', async () => {
@@ -771,10 +771,10 @@ describe('FeatureManagerAPI', () => {
         );
 
         const _result = await api.getFeatureStats();
-        expect(result.success).toBe(true);
-        expect(result.stats.total).toBe(0);
-        expect(result.stats.by_status).toEqual({});
-        expect(result.stats.by_category).toEqual({});
+        expect(_result.success).toBe(true);
+        expect(_result.stats.total).toBe(0);
+        expect(_result.stats.by_status).toEqual({});
+        expect(_result.stats.by_category).toEqual({});
       });
     });
   });
@@ -835,8 +835,8 @@ describe('FeatureManagerAPI', () => {
       mockFs.setFile(TEST_FEATURES_PATH, '{ invalid json }');
 
       const _result = await api.suggestFeature(TEST_FIXTURES.validFeature);
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('Failed to load features');
+      expect(_result.success).toBe(false);
+      expect(_result.error).toContain('Failed to load features');
     });
 
     test('should handle file permission errors', async () => {
@@ -844,8 +844,8 @@ describe('FeatureManagerAPI', () => {
       mockFs.setWriteError(TEST_FEATURES_PATH, 'Permission denied');
 
       const _result = await api.suggestFeature(TEST_FIXTURES.validFeature);
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('Permission denied');
+      expect(_result.success).toBe(false);
+      expect(_result.error).toContain('Permission denied');
     });
 
     test('should handle unexpected errors in operations', async () => {
@@ -857,8 +857,8 @@ describe('FeatureManagerAPI', () => {
       });
 
       const _result = await api.suggestFeature(TEST_FIXTURES.validFeature);
-      expect(result.success).toBe(false);
-      expect(result.error).toBe('Unexpected error');
+      expect(_result.success).toBe(false);
+      expect(_result.error).toBe('Unexpected error');
     });
   });
 
@@ -870,27 +870,27 @@ describe('FeatureManagerAPI', () => {
     describe('getApiMethods', () => {
       test('should return API methods information', () => {
         const _result = api.getApiMethods();
-        expect(result.success).toBe(true);
-        expect(result.message).toContain('Feature Management API');
-        expect(result.cliMapping).toBeDefined();
-        expect(result.availableCommands).toBeDefined();
-        expect(result.guide).toBeDefined();
+        expect(_result.success).toBe(true);
+        expect(_result.message).toContain('Feature Management API');
+        expect(_result.cliMapping).toBeDefined();
+        expect(_result.availableCommands).toBeDefined();
+        expect(_result.guide).toBeDefined();
 
         // Verify core commands are included
-        expect(result.availableCommands).toContain('suggest-feature');
-        expect(result.availableCommands).toContain('approve-feature');
-        expect(result.availableCommands).toContain('reject-feature');
-        expect(result.availableCommands).toContain('list-features');
-        expect(result.availableCommands).toContain('feature-stats');
+        expect(_result.availableCommands).toContain('suggest-feature');
+        expect(_result.availableCommands).toContain('approve-feature');
+        expect(_result.availableCommands).toContain('reject-feature');
+        expect(_result.availableCommands).toContain('list-features');
+        expect(_result.availableCommands).toContain('feature-stats');
       });
 
       test('should include CLI mapping for all commands', () => {
         const _result = api.getApiMethods();
-        expect(result.cliMapping['suggest-feature']).toBe('suggestFeature');
-        expect(result.cliMapping['approve-feature']).toBe('approveFeature');
-        expect(result.cliMapping['reject-feature']).toBe('rejectFeature');
-        expect(result.cliMapping['list-features']).toBe('listFeatures');
-        expect(result.cliMapping['feature-stats']).toBe('getFeatureStats');
+        expect(_result.cliMapping['suggest-feature']).toBe('suggestFeature');
+        expect(_result.cliMapping['approve-feature']).toBe('approveFeature');
+        expect(_result.cliMapping['reject-feature']).toBe('rejectFeature');
+        expect(_result.cliMapping['list-features']).toBe('listFeatures');
+        expect(_result.cliMapping['feature-stats']).toBe('getFeatureStats');
       });
     });
 
@@ -899,33 +899,33 @@ describe('FeatureManagerAPI', () => {
 
       test('should return comprehensive guide with timeout', async () => {
         const _result = await api.getComprehensiveGuide();
-        expect(result.success).toBe(true);
-        expect(result.featureManager).toBeDefined();
-        expect(result.featureWorkflow).toBeDefined();
-        expect(result.coreCommands).toBeDefined();
-        expect(result.workflows).toBeDefined();
-        expect(result.examples).toBeDefined();
-        expect(result.requirements).toBeDefined();
+        expect(_result.success).toBe(true);
+        expect(_result.featureManager).toBeDefined();
+        expect(_result.featureWorkflow).toBeDefined();
+        expect(_result.coreCommands).toBeDefined();
+        expect(_result.workflows).toBeDefined();
+        expect(_result.examples).toBeDefined();
+        expect(_result.requirements).toBeDefined();
       });
 
       test('should include feature workflow information', async () => {
         const _result = await api.getComprehensiveGuide();
-        expect(result.featureWorkflow.statuses).toBeDefined();
-        expect(result.featureWorkflow.transitions).toBeDefined();
-        expect(result.featureWorkflow.statuses.suggested).toBe(
+        expect(_result.featureWorkflow.statuses).toBeDefined();
+        expect(_result.featureWorkflow.transitions).toBeDefined();
+        expect(_result.featureWorkflow.statuses.suggested).toBe(
           'Initial feature suggestion - requires approval',
         );
-        expect(result.featureWorkflow.statuses.approved).toBe(
+        expect(_result.featureWorkflow.statuses.approved).toBe(
           'Feature approved for implementation',
         );
       });
 
       test('should include usage examples', async () => {
         const _result = await api.getComprehensiveGuide();
-        expect(result.success).toBe(true);
-        expect(result.examples.featureCreation).toBeDefined();
-        expect(result.examples.approvalWorkflow).toBeDefined();
-        expect(result.examples.initializationTracking).toBeDefined();
+        expect(_result.success).toBe(true);
+        expect(_result.examples.featureCreation).toBeDefined();
+        expect(_result.examples.approvalWorkflow).toBeDefined();
+        expect(_result.examples.initializationTracking).toBeDefined();
       });
 
       test('should handle timeout errors gracefully', async () => {
@@ -935,9 +935,9 @@ describe('FeatureManagerAPI', () => {
           .mockRejectedValue(new Error('Operation timed out'));
 
         const _result = await api.getComprehensiveGuide();
-        expect(result.success).toBe(false);
-        expect(result.error).toBe('Operation timed out');
-        expect(result.guide).toBeDefined();
+        expect(_result.success).toBe(false);
+        expect(_result.error).toBe('Operation timed out');
+        expect(_result.guide).toBeDefined();
       });
     });
 
@@ -986,18 +986,18 @@ describe('FeatureManagerAPI', () => {
       test('should initialize new agent successfully', async () => {
         const AGENT_ID = 'test-agent-001';
         const _result = await api.initializeAgent(AGENT_ID);
-        expect(result.success).toBe(true);
-        expect(result.agent).toBeDefined();
-        expect(result.agent.id).toBe(AGENT_ID);
-        expect(result.agent.status).toBe('initialized');
-        expect(result.agent.sessionId).toBeDefined();
+        expect(_result.success).toBe(true);
+        expect(_result.agent).toBeDefined();
+        expect(_result.agent.id).toBe(AGENT_ID);
+        expect(_result.agent.status).toBe('initialized');
+        expect(_result.agent.sessionId).toBeDefined();
       });
 
       test('should handle agent initialization errors', async () => {
         mockFs.setWriteError(api.featuresPath, 'Write failed');
         const _result = await api.initializeAgent('error-agent');
-        expect(result.success).toBe(false);
-        expect(result.error).toContain('Failed to initialize agent');
+        expect(_result.success).toBe(false);
+        expect(_result.error).toContain('Failed to initialize agent');
       });
     });
 
@@ -1011,17 +1011,17 @@ describe('FeatureManagerAPI', () => {
 
         // Then reinitialize;
         const _result = await api.reinitializeAgent(AGENT_ID);
-        expect(result.success).toBe(true);
-        expect(result.agent).toBeDefined();
-        expect(result.agent.id).toBe(AGENT_ID);
-        expect(result.agent.previousSessions).toBeDefined();
+        expect(_result.success).toBe(true);
+        expect(_result.agent).toBeDefined();
+        expect(_result.agent.id).toBe(AGENT_ID);
+        expect(_result.agent.previousSessions).toBeDefined();
       });
 
       test('should handle reinitialization errors', async () => {
         mockFs.setWriteError(api.featuresPath, 'Write failed');
         const _result = await api.reinitializeAgent('error-agent');
-        expect(result.success).toBe(false);
-        expect(result.error).toContain('Failed to reinitialize agent');
+        expect(_result.success).toBe(false);
+        expect(_result.error).toContain('Failed to reinitialize agent');
       });
     });
 
@@ -1033,18 +1033,18 @@ describe('FeatureManagerAPI', () => {
         const reason = 'Task completed successfully';
 
         const _result = await api.authorizeStop(AGENT_ID, reason);
-        expect(result.success).toBe(true);
-        expect(result.authorization).toBeDefined();
-        expect(result.authorization.authorized_by).toBe(AGENT_ID);
-        expect(result.authorization.reason).toBe(reason);
-        expect(result.authorization.timestamp).toBeDefined();
+        expect(_result.success).toBe(true);
+        expect(_result.authorization).toBeDefined();
+        expect(_result.authorization.authorized_by).toBe(AGENT_ID);
+        expect(_result.authorization.reason).toBe(reason);
+        expect(_result.authorization.timestamp).toBeDefined();
       });
 
       test('should authorize stop with default reason', async () => {
         const AGENT_ID = 'test-agent-004';
         const _result = await api.authorizeStop(AGENT_ID);
-        expect(result.success).toBe(true);
-        expect(result.authorization.reason).toBe(
+        expect(_result.success).toBe(true);
+        expect(_result.authorization.reason).toBe(
           'Agent authorized stop after completing all tasks And achieving project perfection',
         );
       });
@@ -1053,8 +1053,8 @@ describe('FeatureManagerAPI', () => {
         // The authorizeStop method uses the actual fs module, not our mock
         // So we'll test a different error scenario - empty agent ID;
         const _result = await api.authorizeStop('');
-        expect(result.success).toBe(true); // This should actually succeed
-        expect(result.authorization).toBeDefined();
+        expect(_result.success).toBe(true); // This should actually succeed
+        expect(_result.authorization).toBeDefined();
       });
     });
   });
@@ -1076,25 +1076,25 @@ describe('FeatureManagerAPI', () => {
 
       test('should return initialization statistics', async () => {
         const _result = await api.getInitializationStats();
-        expect(result.success).toBe(true);
-        expect(result.stats).toBeDefined();
-        expect(result.stats.current_bucket).toBeDefined();
-        expect(result.stats.today_totals).toBeDefined();
-        expect(result.stats.time_buckets).toBeDefined();
-        expect(result.stats.recent_activity).toBeDefined();
+        expect(_result.success).toBe(true);
+        expect(_result.stats).toBeDefined();
+        expect(_result.stats.current_bucket).toBeDefined();
+        expect(_result.stats.today_totals).toBeDefined();
+        expect(_result.stats.time_buckets).toBeDefined();
+        expect(_result.stats.recent_activity).toBeDefined();
       });
 
       test('should handle stats retrieval errors', async () => {
         mockFs.setReadError(api.featuresPath, 'Read failed');
         const _result = await api.getInitializationStats();
-        expect(result.success).toBe(false);
-        expect(result.error).toContain('Failed to load features');
+        expect(_result.success).toBe(false);
+        expect(_result.error).toContain('Failed to load features');
       });
 
       test('should include current time bucket', async () => {
         const _result = await api.getInitializationStats();
-        expect(result.success).toBe(true);
-        expect(result.stats.current_bucket).toMatch(
+        expect(_result.success).toBe(true);
+        expect(_result.stats.current_bucket).toMatch(
           /^\d{2}:\d{2}-\d{2}:\d{2}$/,
         );
       });
@@ -1104,8 +1104,8 @@ describe('FeatureManagerAPI', () => {
         await api.initializeAgent('stats-test-agent');
 
         const _result = await api.getInitializationStats();
-        expect(result.success).toBe(true);
-        expect(result.stats.today_totals).toBeDefined();
+        expect(_result.success).toBe(true);
+        expect(_result.stats.today_totals).toBeDefined();
         expect(typeof result.stats.today_totals.initializations).toBe('number');
         expect(typeof result.stats.today_totals.reinitializations).toBe(
           'number',

@@ -128,7 +128,7 @@ const AGENT_IDS = [
 const _result = await execAPI('initialize', [agentId], {,
     projectRoot: testDir,
         });
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
         initResults.push(result);
       }
 
@@ -815,7 +815,7 @@ const agentTeam = [
         const _result = await execAPI('initialize', [agentId], {,
     projectRoot: testDir,
         });
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
         initResults.push(result);
       }
 

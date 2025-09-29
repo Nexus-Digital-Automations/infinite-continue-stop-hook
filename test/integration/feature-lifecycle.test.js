@@ -86,12 +86,12 @@ const _result = await execAPI(
           },
         );
 
-        expect(result.success).toBe(true);
-        expect(result.feature.status).toBe('suggested');
-        expect(result.feature.category).toBe(featureData.category);
-        expect(result.feature.id).toMatch(/^feature_\d+_\w+$/);
-        expect(result.feature.created_at).toBeDefined();
-        expect(result.feature.updated_at).toBeDefined();
+        expect(_result.success).toBe(true);
+        expect(_result.feature.status).toBe('suggested');
+        expect(_result.feature.category).toBe(featureData.category);
+        expect(_result.feature.id).toMatch(/^feature_\d+_\w+$/);
+        expect(_result.feature.created_at).toBeDefined();
+        expect(_result.feature.updated_at).toBeDefined();
 
         suggestResults.push(result);
       }
@@ -167,10 +167,10 @@ const incompleteFeatures = [ {,
           },
         );
 
-        expect(result.success).toBe(false);
-        expect(result.error).toBeDefined();
-        expect(result.error).toContain('Required field') ||
-          expect(result.error).toContain('missing');
+        expect(_result.success).toBe(false);
+        expect(_result.error).toBeDefined();
+        expect(_result.error).toContain('Required field') ||
+          expect(_result.error).toContain('missing');
       }
 
       // 2. Test invalid category;
@@ -301,7 +301,7 @@ const testFeatures = [
     projectRoot: testDir,
           },
         );
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
         featureIds.push(result.feature.id);
       }
 
@@ -386,7 +386,7 @@ const featureCount = 15;
     projectRoot: testDir,
           },
         );
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
         featureIds.push(result.feature.id);
       }
 
@@ -527,7 +527,7 @@ const testFeatures = [
     projectRoot: testDir,
           },
         );
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
         featureIds.push(result.feature.id);
       }
 
@@ -836,7 +836,7 @@ const sprintFeatures = [
     projectRoot: testDir,
           },
         );
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
         featureIds.push(result.feature.id);
       }
 
@@ -941,7 +941,7 @@ const featureIds = [];
     projectRoot: testDir,
           },
         );
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
         featureIds.push(result.feature.id);
       }
 

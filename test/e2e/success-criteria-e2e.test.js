@@ -16,12 +16,12 @@
 const FS = require('fs').promises;
 const path = require('path');
 const { spawn } = require('child_process');
-const { loggers } = require('../lib/logger');
+const { loggers } = require('../../lib/logger');
 
 // Test configuration;
 const E2E_PROJECT_DIR = path.join(__dirname, 'success-criteria-e2e-project');
 const TASKS_PATH = path.join(E2E_PROJECT_DIR, 'TASKS.json');
-const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
+const API_PATH = path.join(__dirname, '..', '..', 'taskmanager-api.js');
 const TIMEOUT = 60000; // 60 seconds for E2E operations
 
 /**
@@ -75,7 +75,7 @@ function execCommand(command, args = [], options = {}, category = 'general') {
 async function execAPI(command, args = [], category = 'general') {
   const allArgs = [API_PATH, command, ...args];
 
-  const RESULT = await execCommand('timeout', [`60s`, 'node', ...allArgs]);
+  const result = await execCommand('timeout', [`60s`, 'node', ...allArgs]);
 
   if (!result.success) {
     loggers.stopHook.error(`API command failed for ${command}:`, result.stderr);
@@ -84,12 +84,12 @@ async function execAPI(command, args = [], category = 'general') {
 
   try {
     return JSON.parse(result.stdout);
-  } catch (_) {
+  } catch (_error) {
     loggers.app.error(
       'Failed to parse API response:',
       result.stdout,
       'Error:',
-      error.message,
+      _error.message,
     );
     // Some commands return plain text, not JSON
     return { success: true, output: result.stdout, raw: true };
@@ -302,8 +302,8 @@ describe('Success Criteria End-to-End Tests', () => {
       } else {
         expect(initResult.success).toBe(true);
       }
-    } catch (_) {
-      loggers.stopHook.warn(`Agent initialization warning: ${error.message}`);
+    } catch (_error) {
+      loggers.stopHook.warn(`Agent initialization warning: ${_error.message}`);
       // Continue with test - some initialization issues may be recoverable
     }
   }, 60000);

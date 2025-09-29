@@ -129,7 +129,7 @@ const initialFeatures = Array.from({ length: 20 }, (_, i) =>
     projectRoot: testDir,
           },
         );
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
         featureIds.push(result.feature.id);
       }
 
@@ -236,7 +236,7 @@ const bulkFeatures = Array.from({ length: 20 }, (_, i) =>
     projectRoot: testDir,
           },
         );
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
         featureIds.push(result.feature.id);
       }
 
@@ -381,7 +381,7 @@ const validFeatures = Array.from({ length: 5 }, (_, i) =>
     projectRoot: testDir,
           },
         );
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
       }
 
       // 2. Create backup
@@ -486,7 +486,7 @@ const testFeature = generateTestFeature({
           const featuresData = await readFeaturesFile(testDir);
           validateFeaturesStructure(featuresData);
         } else {
-          expect(result.error).toBeDefined();
+          expect(_result.error).toBeDefined();
         }
       }
     });
@@ -507,7 +507,7 @@ const features = Array.from({ length: 10 }, (_, i) =>
     projectRoot: testDir,
           },
         );
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
       }
 
       // 2. Simulate partial write by creating truncated file;
@@ -537,7 +537,7 @@ const recoveryFeature = generateTestFeature({
         const featuresData = await readFeaturesFile(testDir);
         validateFeaturesStructure(featuresData);
       } else {
-        expect(result.error).toBeDefined();
+        expect(_result.error).toBeDefined();
       }
     });
 
@@ -684,7 +684,7 @@ const rapidOperationCount = 100;
         );
         const endTime = Date.now();
 
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
         operationTimes.push(endTime - startTime);
       }
 
@@ -780,7 +780,7 @@ const startTime = Date.now();
             break;
         }
 
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
       }
 
       const endTime = Date.now();

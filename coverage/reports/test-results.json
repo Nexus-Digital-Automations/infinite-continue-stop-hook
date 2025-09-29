@@ -1,636 +1,40 @@
 {
   "metadata": {
-    "timestamp": "2025-09-29T22:27:32.522Z",
+    "timestamp": "2025-09-29T23:34:25.391Z",
     "reporter": "jest-json-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System"
   },
   "summary": {
-    "numTotalTestSuites": 33,
+    "numTotalTestSuites": 1,
     "numPassedTestSuites": 0,
-    "numFailedTestSuites": 33,
+    "numFailedTestSuites": 1,
     "numPendingTestSuites": 0,
-    "numTotalTests": 0,
+    "numTotalTests": 10,
     "numPassedTests": 0,
-    "numFailedTests": 0,
-    "numPendingTests": 0,
+    "numFailedTests": 1,
+    "numPendingTests": 9,
     "numTodoTests": 0,
-    "startTime": 1759184848787,
-    "endTime": 1759184852522,
-    "duration": 3735,
+    "startTime": 1759188862968,
+    "endTime": 1759188865391,
+    "duration": 2423,
     "success": false
   },
   "testResults": [
     {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/dependency-management-e2e.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/agent-lifecycle.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/taskmanager-api.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/feature-management-e2e.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/feature-lifecycle.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-8-performance-metrics.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/stress-and-recovery.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/feature-7-taskmanager-integration.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/api-workflow.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/validation-dependency-manager.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/dependency-management-api-integration.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/custom-validation-integration.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-validation.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/trend-analysis-api-integration.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/file-operations.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/cli-commands.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/feature-8-performance-metrics-integration.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/taskmanager-validation-dependency.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/validation-dependency-e2e.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/trend-analyzer.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-7-custom-validation-rules.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-metrics-e2e.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/multi-agent-scenarios.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management-system.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/stop-hook-integration.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/basic-infrastructure.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
       "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
+      "displayName": {
+        "color": "white",
+        "name": "e2e"
+      },
+      "status": "failed",
+      "startTime": 1759188863454,
+      "endTime": 1759188865356,
+      "duration": 1902,
+      "numTests": 10,
       "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
+      "numFailingTests": 1,
+      "numPendingTests": 9,
       "snapshot": {
         "added": 0,
         "matched": 0,
@@ -638,48 +42,145 @@
         "updated": 0,
         "unchecked": 0
       },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/example-with-mocks.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/complete-workflows.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [],
-      "failureDetails": []
+      "testCases": [
+        {
+          "ancestorTitles": [
+            "Success Criteria End-to-End Tests",
+            "Complete Validation Workflows"
+          ],
+          "title": "should execute full feature validation workflow",
+          "fullName": "Success Criteria End-to-End Tests Complete Validation Workflows should execute full feature validation workflow",
+          "status": "failed",
+          "duration": 1069,
+          "numPassingAsserts": 1,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Success Criteria End-to-End Tests",
+            "Complete Validation Workflows"
+          ],
+          "title": "should handle validation failures gracefully",
+          "fullName": "Success Criteria End-to-End Tests Complete Validation Workflows should handle validation failures gracefully",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Success Criteria End-to-End Tests",
+            "Complete Validation Workflows"
+          ],
+          "title": "should validate feature categorization workflow",
+          "fullName": "Success Criteria End-to-End Tests Complete Validation Workflows should validate feature categorization workflow",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Success Criteria End-to-End Tests",
+            "Real-World Usage Scenarios"
+          ],
+          "title": "should handle typical development workflow",
+          "fullName": "Success Criteria End-to-End Tests Real-World Usage Scenarios should handle typical development workflow",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Success Criteria End-to-End Tests",
+            "Real-World Usage Scenarios"
+          ],
+          "title": "should handle bug fix workflow with criteria",
+          "fullName": "Success Criteria End-to-End Tests Real-World Usage Scenarios should handle bug fix workflow with criteria",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Success Criteria End-to-End Tests",
+            "Real-World Usage Scenarios"
+          ],
+          "title": "should handle refactoring workflow with quality gates",
+          "fullName": "Success Criteria End-to-End Tests Real-World Usage Scenarios should handle refactoring workflow with quality gates",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Success Criteria End-to-End Tests",
+            "Multi-Agent Coordination"
+          ],
+          "title": "should coordinate feature validation across multiple agents",
+          "fullName": "Success Criteria End-to-End Tests Multi-Agent Coordination should coordinate feature validation across multiple agents",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Success Criteria End-to-End Tests",
+            "Performance Validation And Benchmarking"
+          ],
+          "title": "should validate performance criteria with actual benchmarks",
+          "fullName": "Success Criteria End-to-End Tests Performance Validation And Benchmarking should validate performance criteria with actual benchmarks",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Success Criteria End-to-End Tests",
+            "Performance Validation And Benchmarking"
+          ],
+          "title": "should handle performance regression detection",
+          "fullName": "Success Criteria End-to-End Tests Performance Validation And Benchmarking should handle performance regression detection",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Success Criteria End-to-End Tests",
+            "Evidence Collection And Reporting"
+          ],
+          "title": "should collect And store validation evidence",
+          "fullName": "Success Criteria End-to-End Tests Evidence Collection And Reporting should collect And store validation evidence",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        }
+      ],
+      "failureDetails": [
+        {
+          "title": "should execute full feature validation workflow",
+          "fullName": "Success Criteria End-to-End Tests Complete Validation Workflows should execute full feature validation workflow",
+          "failureMessages": [
+            "Error: expect(received).toContain(expected) // indexOf\n\nExpected substring: \"suggested\"\nReceived string:    \"[dotenv@17.2.2] injecting env (0) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit\n[23:34:25] \u001b[33mWARN\u001b[39m: \u001b[36mAttempted to access non-existent secret\u001b[39m\n    \u001b[35magentId\u001b[39m: \\\"unknown\\\"\n    \u001b[35mtaskId\u001b[39m: null\n    \u001b[35moperationId\u001b[39m: null\n    \u001b[35mmodule\u001b[39m: \\\"secretManager\\\"\n    \u001b[35mkey\u001b[39m: \\\"NODE_ENV\\\"\n    \u001b[35mcontext\u001b[39m: {}\n[23:34:25] \u001b[33mWARN\u001b[39m: \u001b[36mAttempted to access non-existent secret\u001b[39m\n    \u001b[35magentId\u001b[39m: \\\"unknown\\\"\n    \u001b[35mtaskId\u001b[39m: null\n    \u001b[35moperationId\u001b[39m: null\n    \u001b[35mmodule\u001b[39m: \\\"secretManager\\\"\n    \u001b[35mkey\u001b[39m: \\\"NODE_ENV\\\"\n    \u001b[35mcontext\u001b[39m: {}\n[23:34:25] \u001b[32mINFO\u001b[39m: \u001b[36mStarting TaskManager API\u001b[39m\n    \u001b[35magentId\u001b[39m: \\\"unknown\\\"\n    \u001b[35mtaskId\u001b[39m: null\n    \u001b[35moperationId\u001b[39m: null\n    \u001b[35mmodule\u001b[39m: \\\"taskManagerAPI\\\"\n    \u001b[35mcommand\u001b[39m: \\\"suggest-feature\\\"\n    \u001b[35menvironment\u001b[39m: \\\"test\\\"\n    \u001b[35misSecure\u001b[39m: false\n[23:34:25] \u001b[32mINFO\u001b[39m: \u001b[36mInitializing Secret Manager\u001b[39m\n    \u001b[35magentId\u001b[39m: \\\"unknown\\\"\n    \u001b[35mtaskId\u001b[39m: null\n    \u001b[35moperationId\u001b[39m: null\n    \u001b[35mmodule\u001b[39m: \\\"secretManager\\\"\n    \u001b[35moptions\u001b[39m: {\n      \\\"strict\\\": false,\n      \\\"additionalRequired\\\": []\n    }\n[23:34:25] \u001b[32mINFO\u001b[39m: \u001b[36mSecret updated\u001b[39m\n    \u001b[35magentId\u001b[39m: \\\"unknown\\\"\n    \u001b[35mtaskId\u001b[39m: null\n    \u001b[35moperationId\u001b[39m: null\n    \u001b[35mmodule\u001b[39m: \\\"secretManager\\\"\n    \u001b[35mkey\u001b[39m: \\\"NODE_ENV\\\"\n    \u001b[35msource\u001b[39m: \\\"env\\\"\n[23:34:25] \u001b[32mINFO\u001b[39m: \u001b[36mSecret updated\u001b[39m\n    \u001b[35magentId\u001b[39m: \\\"unknown\\\"\n    \u001b[35mtaskId\u001b[39m: null\n    \u001b[35moperationId\u001b[39m: null\n    \u001b[35mmodule\u001b[39m: \\\"secretManager\\\"\n    \u001b[35mkey\u001b[39m: \\\"LOG_LEVEL\\\"\n    \u001b[35msource\u001b[39m: \\\"env\\\"\n[23:34:25] \u001b[32mINFO\u001b[39m: \u001b[36mSecret Manager initialized successfully\u001b[39m\n    \u001b[35magentId\u001b[39m: \\\"unknown\\\"\n    \u001b[35mtaskId\u001b[39m: null\n    \u001b[35moperationId\u001b[39m: null\n    \u001b[35mmodule\u001b[39m: \\\"secretManager\\\"\n    \u001b[35mtotalSecrets\u001b[39m: 2\n    \u001b[35mrequiredSecrets\u001b[39m: 1\n    \u001b[35mvalidSecrets\u001b[39m: 2\n    \u001b[35minvalidSecrets\u001b[39m: 0\n    \u001b[35mmissingRequired\u001b[39m: 0\n[23:34:25] \u001b[32mINFO\u001b[39m: \u001b[36mSecret validation completed successfully\u001b[39m\n    \u001b[35magentId\u001b[39m: \\\"unknown\\\"\n    \u001b[35mtaskId\u001b[39m: null\n    \u001b[35moperationId\u001b[39m: null\n    \u001b[35mmodule\u001b[39m: \\\"taskManagerAPI\\\"\n[23:34:25] \u001b[32mINFO\u001b[39m: \u001b[36mTaskManager operation completed successfully\u001b[39m\n    \u001b[35magentId\u001b[39m: \\\"unknown\\\"\n    \u001b[35mtaskId\u001b[39m: null\n    \u001b[35moperationId\u001b[39m: null\n    \u001b[35mmodule\u001b[39m: \\\"app\\\"\n\"\n    at Object.toContain (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:328:37)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+          ],
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "message": "expect(received).toContain(expected) // indexOf\n\nExpected substring: \"suggested\"\nReceived string:    \"[dotenv@17.2.2] injecting env (0) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit\n[23:34:25] \u001b[33mWARN\u001b[39m: \u001b[36mAttempted to access non-existent secret\u001b[39m\n    \u001b[35magentId\u001b[39m: \\\"unknown\\\"\n    \u001b[35mtaskId\u001b[39m: null\n    \u001b[35moperationId\u001b[39m: null\n    \u001b[35mmodule\u001b[39m: \\\"secretManager\\\"\n    \u001b[35mkey\u001b[39m: \\\"NODE_ENV\\\"\n    \u001b[35mcontext\u001b[39m: {}\n[23:34:25] \u001b[33mWARN\u001b[39m: \u001b[36mAttempted to access non-existent secret\u001b[39m\n    \u001b[35magentId\u001b[39m: \\\"unknown\\\"\n    \u001b[35mtaskId\u001b[39m: null\n    \u001b[35moperationId\u001b[39m: null\n    \u001b[35mmodule\u001b[39m: \\\"secretManager\\\"\n    \u001b[35mkey\u001b[39m: \\\"NODE_ENV\\\"\n    \u001b[35mcontext\u001b[39m: {}\n[23:34:25] \u001b[32mINFO\u001b[39m: \u001b[36mStarting TaskManager API\u001b[39m\n    \u001b[35magentId\u001b[39m: \\\"unknown\\\"\n    \u001b[35mtaskId\u001b[39m: null\n    \u001b[35moperationId\u001b[39m: null\n    \u001b[35mmodule\u001b[39m: \\\"taskManagerAPI\\\"\n    \u001b[35mcommand\u001b[39m: \\\"suggest-feature\\\"\n    \u001b[35menvironment\u001b[39m: \\\"test\\\"\n    \u001b[35misSecure\u001b[39m: false\n[23:34:25] \u001b[32mINFO\u001b[39m: \u001b[36mInitializing Secret Manager\u001b[39m\n    \u001b[35magentId\u001b[39m: \\\"unknown\\\"\n    \u001b[35mtaskId\u001b[39m: null\n    \u001b[35moperationId\u001b[39m: null\n    \u001b[35mmodule\u001b[39m: \\\"secretManager\\\"\n    \u001b[35moptions\u001b[39m: {\n      \\\"strict\\\": false,\n      \\\"additionalRequired\\\": []\n    }\n[23:34:25] \u001b[32mINFO\u001b[39m: \u001b[36mSecret updated\u001b[39m\n    \u001b[35magentId\u001b[39m: \\\"unknown\\\"\n    \u001b[35mtaskId\u001b[39m: null\n    \u001b[35moperationId\u001b[39m: null\n    \u001b[35mmodule\u001b[39m: \\\"secretManager\\\"\n    \u001b[35mkey\u001b[39m: \\\"NODE_ENV\\\"\n    \u001b[35msource\u001b[39m: \\\"env\\\"\n[23:34:25] \u001b[32mINFO\u001b[39m: \u001b[36mSecret updated\u001b[39m\n    \u001b[35magentId\u001b[39m: \\\"unknown\\\"\n    \u001b[35mtaskId\u001b[39m: null\n    \u001b[35moperationId\u001b[39m: null\n    \u001b[35mmodule\u001b[39m: \\\"secretManager\\\"\n    \u001b[35mkey\u001b[39m: \\\"LOG_LEVEL\\\"\n    \u001b[35msource\u001b[39m: \\\"env\\\"\n[23:34:25] \u001b[32mINFO\u001b[39m: \u001b[36mSecret Manager initialized successfully\u001b[39m\n    \u001b[35magentId\u001b[39m: \\\"unknown\\\"\n    \u001b[35mtaskId\u001b[39m: null\n    \u001b[35moperationId\u001b[39m: null\n    \u001b[35mmodule\u001b[39m: \\\"secretManager\\\"\n    \u001b[35mtotalSecrets\u001b[39m: 2\n    \u001b[35mrequiredSecrets\u001b[39m: 1\n    \u001b[35mvalidSecrets\u001b[39m: 2\n    \u001b[35minvalidSecrets\u001b[39m: 0\n    \u001b[35mmissingRequired\u001b[39m: 0\n[23:34:25] \u001b[32mINFO\u001b[39m: \u001b[36mSecret validation completed successfully\u001b[39m\n    \u001b[35magentId\u001b[39m: \\\"unknown\\\"\n    \u001b[35mtaskId\u001b[39m: null\n    \u001b[35moperationId\u001b[39m: null\n    \u001b[35mmodule\u001b[39m: \\\"taskManagerAPI\\\"\n[23:34:25] \u001b[32mINFO\u001b[39m: \u001b[36mTaskManager operation completed successfully\u001b[39m\n    \u001b[35magentId\u001b[39m: \\\"unknown\\\"\n    \u001b[35mtaskId\u001b[39m: null\n    \u001b[35moperationId\u001b[39m: null\n    \u001b[35mmodule\u001b[39m: \\\"app\\\"\n\"",
+                "pass": false
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "coverageMap": null,

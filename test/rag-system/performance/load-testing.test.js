@@ -639,7 +639,7 @@ const _queryTests = [ {
           const QUERY_TIME = queryEndTime - queryStartTime;
           loggers.stopHook.log(`${queryTest.name}: ${queryTime}ms`);
 
-          expect(result.success).toBe(true);
+          expect(_result.success).toBe(true);
           expect(queryTime).toBeLessThan(2000); // Under 2 seconds
         }
 
@@ -679,7 +679,7 @@ const _queryTests = [ {
             const QUERY_TIME = queryEndTime - queryStartTime;
 
             connectionResults.queryTimes.push(queryTime);
-            expect(result.success).toBe(true);
+            expect(_result.success).toBe(true);
 
           } catch (_) {
             connectionResults.errors.push(_error);

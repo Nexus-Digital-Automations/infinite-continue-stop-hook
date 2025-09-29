@@ -194,9 +194,9 @@ const result2 = await execCLIDirect([
         testDir,
       ]);
 
-      expect(result.code).not.toBe(0);
-      expect(result.stderr).toContain('Unknown command') ||
-        expect(result.stderr).toContain('unknown-command');
+      expect(_result.code).not.toBe(0);
+      expect(_result.stderr).toContain('Unknown command') ||
+        expect(_result.stderr).toContain('unknown-command');
     });
 });
 
@@ -212,8 +212,8 @@ const result2 = await execCLIDirect([
     return () => {
       const _result = await execCLIDirect(['guide', '--project-root', testDir]);
 
-      expect(result.code).toBe(0);
-      expect(result.stdout).not.toBe('');
+      expect(_result.code).toBe(0);
+      expect(_result.stdout).not.toBe('');
 
       // Parse JSON output;
 const _output = JSON.parse(result.stdout);
@@ -231,8 +231,8 @@ const _output = JSON.parse(result.stdout);
         testDir,
       ]);
 
-      expect(result.code).toBe(0);
-      expect(result.stdout).not.toBe('');
+      expect(_result.code).toBe(0);
+      expect(_result.stdout).not.toBe('');
 
       // Parse JSON output;
 const _output = JSON.parse(result.stdout);
@@ -376,7 +376,7 @@ const features = Array.from({ length: 3 }, (_, i) =>
           testDir,
         ]);
 
-        expect(result.code).toBe(0);
+        expect(_result.code).toBe(0);
         const _output = JSON.parse(result.stdout);
         featureIds.push(output.feature.id);
       }
@@ -426,8 +426,8 @@ const bulkApproveResult = await execCLIDirect([
           testDir,
         ]);
 
-        expect(result.code).toBe(0);
-        expect(result.stdout).not.toBe('');
+        expect(_result.code).toBe(0);
+        expect(_result.stdout).not.toBe('');
 
         // Should be valid JSON
         expect(() => JSON.parse(result.stdout)).not.toThrow();
@@ -489,7 +489,7 @@ const specialFeatureData = generateTestFeature({,
         testDir,
       ]);
 
-      expect(result.code).toBe(0);
+      expect(_result.code).toBe(0);
       const _output = JSON.parse(result.stdout);
       expect(output.success).toBe(true);
       expect(output.feature.title).toBe(specialFeatureData.title);
@@ -518,7 +518,7 @@ const specialFeatureData = generateTestFeature({,
 const endTime = Date.now();
       const duration = endTime - startTime;
 
-      expect(result.code).toBe(0);
+      expect(_result.code).toBe(0);
       expect(duration).toBeLessThan(5000); // Should complete in under 5 seconds
     });
 
@@ -742,7 +742,7 @@ const _result = await execCLIDirect([
         const _output = JSON.parse(result.stdout);
         expect(output.success).toBe(true);
       } else {
-        expect(result.stderr).not.toBe('');
+        expect(_result.stderr).not.toBe('');
       }
 
       await cleanupTestEnvironment(emptyDir);
@@ -756,8 +756,8 @@ const _result = await execCLIDirect([
       ]);
 
       // Should fail gracefully with meaningful error
-      expect(result.code).not.toBe(0);
-      expect(result.stderr).not.toBe('');
+      expect(_result.code).not.toBe(0);
+      expect(_result.stderr).not.toBe('');
     });
 
     test('should handle concurrent CLI executions safely', async () => {

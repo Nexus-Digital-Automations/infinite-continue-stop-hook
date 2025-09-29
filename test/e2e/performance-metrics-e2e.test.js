@@ -163,17 +163,17 @@ const isAnomaly = Math.random() < 0.05;
 
       const _result = executeTaskManagerCommand('analyze-performance-metrics');
 
-      expect(result.success).toBe(true);
-      expect(result.metrics).toBeDefined();
-      expect(result.metrics.length).toBeGreaterThan(0);
-      expect(result.totalExecutions).toBeGreaterThan(0);
+      expect(_result.success).toBe(true);
+      expect(_result.metrics).toBeDefined();
+      expect(_result.metrics.length).toBeGreaterThan(0);
+      expect(_result.totalExecutions).toBeGreaterThan(0);
     });
 
     test('should handle missing metrics file gracefully', async () => {
       const _result = executeTaskManagerCommand('analyze-performance-metrics');
 
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('metrics file not found');
+      expect(_result.success).toBe(false);
+      expect(_result.error).toContain('metrics file not found');
     });
 
     test('should validate metrics data format', async () => {
@@ -193,9 +193,9 @@ const isAnomaly = Math.random() < 0.05;
 
       const _result = executeTaskManagerCommand('analyze-performance-metrics');
 
-      expect(result.success).toBe(true);
-      expect(result.validMetrics).toBeDefined();
-      expect(result.invalidMetrics).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.validMetrics).toBeDefined();
+      expect(_result.invalidMetrics).toBeDefined();
     });
 });
 
@@ -208,10 +208,10 @@ const isAnomaly = Math.random() < 0.05;
 
       const _result = executeTaskManagerCommand('analyze-performance-trends');
 
-      expect(result.success).toBe(true);
-      expect(result.trends).toBeDefined();
-      expect(result.anomalies).toBeDefined();
-      expect(result.summary).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.trends).toBeDefined();
+      expect(_result.anomalies).toBeDefined();
+      expect(_result.summary).toBeDefined();
     });
 
     test('should calculate accurate baseline performance', async () => {
@@ -222,11 +222,11 @@ const isAnomaly = Math.random() < 0.05;
         'calculate-performance-baseline'
       );
 
-      expect(result.success).toBe(true);
-      expect(result.baseline).toBeDefined();
-      expect(result.baseline.linterValidation).toBeDefined();
-      expect(result.baseline.typeValidation).toBeDefined();
-      expect(result.baseline.buildValidation).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.baseline).toBeDefined();
+      expect(_result.baseline.linterValidation).toBeDefined();
+      expect(_result.baseline.typeValidation).toBeDefined();
+      expect(_result.baseline.buildValidation).toBeDefined();
     });
 
     test('should generate performance recommendations', async () => {
@@ -237,8 +237,8 @@ const isAnomaly = Math.random() < 0.05;
         'generate-performance-recommendations'
       );
 
-      expect(result.success).toBe(true);
-      expect(result.recommendations).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.recommendations).toBeDefined();
       expect(Array.isArray(result.recommendations)).toBe(true);
     });
 });
@@ -252,10 +252,10 @@ const isAnomaly = Math.random() < 0.05;
 
       const _result = executeTaskManagerCommand('track-performance-trends');
 
-      expect(result.success).toBe(true);
-      expect(result.trends).toBeDefined();
-      expect(result.trends.weeklyTrends).toBeDefined();
-      expect(result.trends.dailyTrends).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.trends).toBeDefined();
+      expect(_result.trends.weeklyTrends).toBeDefined();
+      expect(_result.trends.dailyTrends).toBeDefined();
     });
 
     test('should predict future performance patterns', async () => {
@@ -264,9 +264,9 @@ const isAnomaly = Math.random() < 0.05;
 
       const _result = executeTaskManagerCommand('predict-performance-patterns');
 
-      expect(result.success).toBe(true);
-      expect(result.predictions).toBeDefined();
-      expect(result.confidenceLevel).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.predictions).toBeDefined();
+      expect(_result.confidenceLevel).toBeDefined();
     });
 
     test('should save trend analysis for historical tracking', async () => {
@@ -335,8 +335,8 @@ const isAnomaly = Math.random() < 0.05;
       const _result = executeTaskManagerCommand('analyze-performance-metrics');
       const duration = Date.now() - startTime;
 
-      expect(result.success).toBe(true);
-      expect(result.metrics.length).toBe(1500);
+      expect(_result.success).toBe(true);
+      expect(_result.metrics.length).toBe(1500);
       expect(duration).toBeLessThan(5000); // Should complete within 5 seconds
     });
 
@@ -346,9 +346,9 @@ const isAnomaly = Math.random() < 0.05;
 
       const _result = executeTaskManagerCommand('validate-analysis-accuracy');
 
-      expect(result.success).toBe(true);
-      expect(result.accuracyScore).toBeGreaterThan(0.9);
-      expect(result.dataQualityScore).toBeGreaterThan(0.8);
+      expect(_result.success).toBe(true);
+      expect(_result.accuracyScore).toBeGreaterThan(0.9);
+      expect(_result.dataQualityScore).toBeGreaterThan(0.8);
     });
 });
 
@@ -419,12 +419,12 @@ const mixedQualityData = {
 
       const _result = executeTaskManagerCommand('analyze-performance-metrics');
 
-      expect(result.success).toBe(true);
-      expect(result.validMetrics).toBeDefined();
-      expect(result.invalidMetrics).toBeDefined();
-      expect(result.dataQualityReport).toBeDefined();
-      expect(result.validMetrics.length).toBeGreaterThan(0);
-      expect(result.invalidMetrics.length).toBeGreaterThan(0);
+      expect(_result.success).toBe(true);
+      expect(_result.validMetrics).toBeDefined();
+      expect(_result.invalidMetrics).toBeDefined();
+      expect(_result.dataQualityReport).toBeDefined();
+      expect(_result.validMetrics.length).toBeGreaterThan(0);
+      expect(_result.invalidMetrics.length).toBeGreaterThan(0);
     });
 
     test('should provide data quality insights and suggestions', async () => {
@@ -440,9 +440,9 @@ const mixedQualityData = {
 
       const _result = executeTaskManagerCommand('assess-data-quality');
 
-      expect(result.success).toBe(true);
-      expect(result.qualityScore).toBeDefined();
-      expect(result.suggestions).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.qualityScore).toBeDefined();
+      expect(_result.suggestions).toBeDefined();
       expect(Array.isArray(result.suggestions)).toBe(true);
     });
 });
@@ -547,9 +547,9 @@ const legacyData = {
       FS.writeFileSync(legacyFile, JSON.stringify(legacyData, null, 2));
 
       const _result = executeTaskManagerCommand('analyze-performance-metrics');
-      expect(result.success).toBe(true);
-      expect(result.metrics.length).toBe(1);
-      expect(result.metrics[0].criterion).toBe('linter-validation');
+      expect(_result.success).toBe(true);
+      expect(_result.metrics.length).toBe(1);
+      expect(_result.metrics[0].criterion).toBe('linter-validation');
     });
 
     test('should handle version migration scenarios', async () => {
@@ -581,9 +581,9 @@ const enhancedData = {
       );
 
       const _result = executeTaskManagerCommand('analyze-performance-metrics');
-      expect(result.success).toBe(true);
-      expect(result.metrics.length).toBe(2);
-      expect(result.formatMigration).toBeDefined();
+      expect(_result.success).toBe(true);
+      expect(_result.metrics.length).toBe(2);
+      expect(_result.formatMigration).toBeDefined();
     });
 });
 });

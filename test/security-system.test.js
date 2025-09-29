@@ -56,8 +56,8 @@ describe('Security System', () => {
         'test_endpoint',
         schema
       );
-      expect(result.valid).toBe(true);
-      expect(result.data).toEqual(testData);
+      expect(_result.valid).toBe(true);
+      expect(_result.data).toEqual(testData);
     });
 
     test('should detect security threats in input', () => {
@@ -79,8 +79,8 @@ describe('Security System', () => {
         'test_endpoint',
         schema
       );
-      expect(result.valid).toBe(false);
-      expect(result.error).toContain('Security threats detected');
+      expect(_result.valid).toBe(false);
+      expect(_result.error).toContain('Security threats detected');
     });
 
     test('should authorize valid agent operations', () => {
@@ -93,8 +93,8 @@ describe('Security System', () => {
         OPERATION,
         resource
       );
-      expect(result.authorized).toBe(true);
-      expect(result.agentRole).toBe('development');
+      expect(_result.authorized).toBe(true);
+      expect(_result.agentRole).toBe('development');
     });
 
     test('should reject invalid agent IDs', () => {
@@ -107,8 +107,8 @@ describe('Security System', () => {
         OPERATION,
         resource
       );
-      expect(result.authorized).toBe(false);
-      expect(result.error).toContain('Invalid agent ID format');
+      expect(_result.authorized).toBe(false);
+      expect(_result.error).toContain('Invalid agent ID format');
     });
 
     test('should sanitize research input data', () => {

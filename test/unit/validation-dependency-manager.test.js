@@ -473,7 +473,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       const _result = await dependencyManager.loadDependencyConfig(
         '/non/existent/path.json',
       );
-      expect(result).toBeNull();
+      expect(_result).toBeNull();
     });
   });
 

@@ -1,4 +1,3 @@
-const { loggers } = require('../lib/logger');
 /**
  * Multi-Agent Scenarios E2E Tests
  *

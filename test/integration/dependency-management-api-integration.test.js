@@ -49,7 +49,7 @@ const executeTaskManagerCommand = (command, args = '', options = {}) => {
     return () => {
       const _result = executeTaskManagerCommand('get-dependency-graph');
 
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
       expect(result).toHaveProperty('dependencyGraph');
       expect(result).toHaveProperty('visualization');
 
@@ -75,18 +75,18 @@ const viz = result.visualization;
     test('validate-dependency-graph should validate clean graph', () => {
       const _result = executeTaskManagerCommand('validate-dependency-graph');
 
-      expect(result.success).toBe(true);
-      expect(result.validation.valid).toBe(true);
-      expect(result.validation.issues).toHaveLength(0);
-      expect(result.totalCriteria).toBe(7);
-      expect(result.totalDependencies).toBeGreaterThanOrEqual(0);
-      expect(result.message).toContain('validation passed');
+      expect(_result.success).toBe(true);
+      expect(_result.validation.valid).toBe(true);
+      expect(_result.validation.issues).toHaveLength(0);
+      expect(_result.totalCriteria).toBe(7);
+      expect(_result.totalDependencies).toBeGreaterThanOrEqual(0);
+      expect(_result.message).toContain('validation passed');
     });
 
     test('get-dependency-visualization should return visualization data', () => {
       const _result = executeTaskManagerCommand('get-dependency-visualization');
 
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
       expect(result).toHaveProperty('visualization');
 
       const viz = result.visualization;
@@ -114,7 +114,7 @@ const viz = result.visualization;
         'generate-validation-execution-plan'
       );
 
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
       expect(result).toHaveProperty('executionOrder');
       expect(result).toHaveProperty('totalCriteria');
 
@@ -151,8 +151,8 @@ const criteriaOrder = order.map((item) => item.criterion);
         `'${JSON.stringify(criteria)}'`
       );
 
-      expect(result.success).toBe(true);
-      expect(result.executionOrder.length).toBe(3);
+      expect(_result.success).toBe(true);
+      expect(_result.executionOrder.length).toBe(3);
 
       const orderCriteria = result.executionOrder.map((item) => item.criterion);
       expect(orderCriteria).toContain('linter-validation');
@@ -171,7 +171,7 @@ const linterIndex = orderCriteria.indexOf('linter-validation');
         'null 4'
       );
 
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
       expect(result).toHaveProperty('plan');
       expect(result).toHaveProperty('totalWaves');
       expect(result).toHaveProperty('estimatedTotalDuration');
@@ -181,9 +181,9 @@ const linterIndex = orderCriteria.indexOf('linter-validation');
       expect(result).toHaveProperty('recommendations');
 
       // Verify parallel plan structure
-      expect(result.plan).toBeInstanceOf(Array);
-      expect(result.totalWaves).toBeGreaterThan(0);
-      expect(result.parallelizationGain).toBeGreaterThan(0);
+      expect(_result.plan).toBeInstanceOf(Array);
+      expect(_result.totalWaves).toBeGreaterThan(0);
+      expect(_result.parallelizationGain).toBeGreaterThan(0);
 
       // Verify wave structure
       if (result.plan.length > 0) {
@@ -204,8 +204,8 @@ const linterIndex = orderCriteria.indexOf('linter-validation');
         'null 2'
       );
 
-      expect(result.success).toBe(true);
-      expect(result.plan).toBeInstanceOf(Array);
+      expect(_result.success).toBe(true);
+      expect(_result.plan).toBeInstanceOf(Array);
 
       // With concurrency limit of 2, no wave should exceed 2 criteria
       result.plan.forEach((wave) => {
@@ -227,7 +227,7 @@ const linterIndex = orderCriteria.indexOf('linter-validation');
         `'${JSON.stringify(systemInfo)}'`
       );
 
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
       expect(result).toHaveProperty('plan');
       expect(result).toHaveProperty('adaptiveOptimizations');
 
@@ -264,9 +264,9 @@ const linterIndex = orderCriteria.indexOf('linter-validation');
         `'integration-test-validation' '${JSON.stringify(dependencyConfig)}'`
       );
 
-      expect(result.success).toBe(true);
-      expect(result.message).toContain('successfully added');
-      expect(result.criterion).toBe('integration-test-validation');
+      expect(_result.success).toBe(true);
+      expect(_result.message).toContain('successfully added');
+      expect(_result.criterion).toBe('integration-test-validation');
 
       // Verify the dependency was added by retrieving it;
 const getResult = executeTaskManagerCommand(
@@ -288,7 +288,7 @@ const getResult = executeTaskManagerCommand(
         'build-validation'
       );
 
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
       expect(result).toHaveProperty('dependency');
 
       const dependency = result.dependency;
@@ -307,8 +307,8 @@ const getResult = executeTaskManagerCommand(
         'non-existent-criterion'
       );
 
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('not found');
+      expect(_result.success).toBe(false);
+      expect(_result.error).toContain('not found');
     });
 
     test('remove-dependency should delete dependency configuration', () => {
@@ -331,8 +331,8 @@ const _result = executeTaskManagerCommand(
         'temp-test-dependency'
       );
 
-      expect(result.success).toBe(true);
-      expect(result.message).toContain('successfully removed');
+      expect(_result.success).toBe(true);
+      expect(_result.message).toContain('successfully removed');
 
       // Verify it was removed;
 const getResult = executeTaskManagerCommand(
@@ -348,8 +348,8 @@ const getResult = executeTaskManagerCommand(
         'definitely-non-existent'
       );
 
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('not found');
+      expect(_result.success).toBe(false);
+      expect(_result.error).toContain('not found');
     });
 });
 
@@ -361,9 +361,9 @@ const getResult = executeTaskManagerCommand(
     return () => {
       const _result = executeTaskManagerCommand('save-dependency-config');
 
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
       expect(result).toHaveProperty('configPath');
-      expect(result.configPath).toContain('.validation-dependencies.json');
+      expect(_result.configPath).toContain('.validation-dependencies.json');
 
       // Verify file exists And contains valid data;
 const configExists = await fs
@@ -392,8 +392,8 @@ const configExists = await fs
         `'${customPath}'`
       );
 
-      expect(result.success).toBe(true);
-      expect(result.configPath).toBe(customPath);
+      expect(_result.success).toBe(true);
+      expect(_result.configPath).toBe(customPath);
 
       // Verify file was created at custom path;
 const configExists = await fs
@@ -439,9 +439,9 @@ const getResult = executeTaskManagerCommand(
         "'/non/existent/path.json'"
       );
 
-      expect(result.success).toBe(true);
-      expect(result.message).toContain('not found');
-      expect(result.config).toBe(null);
+      expect(_result.success).toBe(true);
+      expect(_result.message).toContain('not found');
+      expect(_result.config).toBe(null);
     });
 });
 
@@ -453,17 +453,17 @@ const getResult = executeTaskManagerCommand(
     return () => {
       const _result = executeTaskManagerCommand('get-execution-analytics');
 
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
       expect(result).toHaveProperty('analytics');
 
       // for fresh system, might have no data
       if (result.analytics.noData) {
-        expect(result.analytics.noData).toBe(true);
+        expect(_result.analytics.noData).toBe(true);
       } else {
-        expect(result.analytics).toHaveProperty('totalExecutions');
-        expect(result.analytics).toHaveProperty('successRate');
-        expect(result.analytics).toHaveProperty('averageDuration');
-        expect(result.analytics).toHaveProperty('criteriaStats');
+        expect(_result.analytics).toHaveProperty('totalExecutions');
+        expect(_result.analytics).toHaveProperty('successRate');
+        expect(_result.analytics).toHaveProperty('averageDuration');
+        expect(_result.analytics).toHaveProperty('criteriaStats');
       }
     });
 });
@@ -479,15 +479,15 @@ const getResult = executeTaskManagerCommand(
         'test-criterion invalid-json'
       );
 
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('Invalid JSON');
+      expect(_result.success).toBe(false);
+      expect(_result.error).toContain('Invalid JSON');
     });
 
     test('should handle missing required parameters', () => {
       const _result = executeTaskManagerCommand('get-dependency');
 
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('required');
+      expect(_result.success).toBe(false);
+      expect(_result.error).toContain('required');
     });
 
     test('should handle invalid dependency types in add-dependency', () => {
@@ -503,8 +503,8 @@ const getResult = executeTaskManagerCommand(
         `'invalid-test' '${JSON.stringify(invalidConfig)}'`
       );
 
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('Invalid dependency type');
+      expect(_result.success).toBe(false);
+      expect(_result.error).toContain('Invalid dependency type');
     });
 
     test('should handle circular dependency detection', () => {
@@ -575,11 +575,11 @@ const validationResult = executeTaskManagerCommand(
         'null 100'
       );
 
-      expect(result.success).toBe(true);
-      expect(result.plan).toBeInstanceOf(Array);
+      expect(_result.success).toBe(true);
+      expect(_result.plan).toBeInstanceOf(Array);
 
       // Should still create a valid plan even with unrealistically high concurrency
-      expect(result.totalWaves).toBeGreaterThan(0);
+      expect(_result.totalWaves).toBeGreaterThan(0);
     });
 
     test('should handle very low concurrency limits', () => {
@@ -590,8 +590,8 @@ const validationResult = executeTaskManagerCommand(
         'null 1'
       );
 
-      expect(result.success).toBe(true);
-      expect(result.plan).toBeInstanceOf(Array);
+      expect(_result.success).toBe(true);
+      expect(_result.plan).toBeInstanceOf(Array);
 
       // With concurrency 1, should be essentially sequential
       result.plan.forEach((wave) => {
@@ -611,7 +611,7 @@ const validationResult = executeTaskManagerCommand(
       const _result = executeTaskManagerCommand('get-dependency-graph');
       const duration = Date.now() - startTime;
 
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
       expect(duration).toBeLessThan(5000); // Should complete within 5 seconds
     });
 
@@ -622,7 +622,7 @@ const validationResult = executeTaskManagerCommand(
       // Execute multiple API calls concurrently
       for (let i = 0; i < 5; i++) {
         const _result = executeTaskManagerCommand('validate-dependency-graph');
-        expect(result.success).toBe(true);
+        expect(_result.success).toBe(true);
       }
 
       const duration = Date.now() - startTime;
@@ -652,7 +652,7 @@ const validationResult = executeTaskManagerCommand(
       );
       const duration = Date.now() - startTime;
 
-      expect(result.success).toBe(true);
+      expect(_result.success).toBe(true);
       expect(duration).toBeLessThan(8000); // Should handle larger graphs efficiently
 
       // Cleanup scale test criteria

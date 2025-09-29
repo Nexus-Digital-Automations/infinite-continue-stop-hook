@@ -331,6 +331,7 @@ class AutonomousTaskManagerAPI {
       const initialStructure = {
         project: path.basename(PROJECT_ROOT),
         features: [],
+        agents: {},
         metadata: {
           version: '1.0.0',
           created: new Date().toISOString(),
@@ -879,16 +880,16 @@ class AutonomousTaskManagerAPI {
 
   async initializeAgent(agentId) {
     try {
-      const result = await this._atomicFeatureOperation((features) => {
+      const result = await this._atomicTaskOperation((tasks) => {
         // Initialize agents section if it doesn't exist
-        if (!features.agents) {
-          features.agents = {};
+        if (!tasks.agents) {
+          tasks.agents = {};
         }
 
         const timestamp = new Date().toISOString();
 
         // Create or update agent entry
-        features.agents[agentId] = {
+        tasks.agents[agentId] = {
           lastHeartbeat: timestamp,
           status: 'active',
           initialized: timestamp,
@@ -900,7 +901,7 @@ class AutonomousTaskManagerAPI {
           agent: {
             id: agentId,
             status: 'initialized',
-            sessionId: features.agents[agentId].sessionId,
+            sessionId: tasks.agents[agentId].sessionId,
             timestamp,
           },
           message: `Agent ${agentId} successfully initialized`,
@@ -926,17 +927,17 @@ class AutonomousTaskManagerAPI {
 
   async reinitializeAgent(agentId) {
     try {
-      const result = await this._atomicFeatureOperation((features) => {
+      const result = await this._atomicTaskOperation((tasks) => {
         // Initialize agents section if it doesn't exist
-        if (!features.agents) {
-          features.agents = {};
+        if (!tasks.agents) {
+          tasks.agents = {};
         }
 
         const timestamp = new Date().toISOString();
-        const existingAgent = features.agents[agentId];
+        const existingAgent = tasks.agents[agentId];
 
         // Update or create agent entry (reinitialize preserves some data)
-        features.agents[agentId] = {
+        tasks.agents[agentId] = {
           ...existingAgent,
           lastHeartbeat: timestamp,
           status: 'active',
@@ -955,10 +956,10 @@ class AutonomousTaskManagerAPI {
           agent: {
             id: agentId,
             status: 'reinitialized',
-            sessionId: features.agents[agentId].sessionId,
+            sessionId: tasks.agents[agentId].sessionId,
             timestamp,
             previousSessions:
-              features.agents[agentId].previousSessions?.length || 0,
+              tasks.agents[agentId].previousSessions?.length || 0,
           },
           message: `Agent ${agentId} successfully reinitialized`,
         };
@@ -8485,7 +8486,7 @@ class AutonomousTaskManagerAPI {
     try {
       await this._ensureTasksFile();
       const tasks = await this._loadTasks();
-      const _result = await modifier(tasks);
+      const result = await modifier(tasks);
       await this._saveTasks(tasks);
       return result;
     } finally {

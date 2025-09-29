@@ -281,9 +281,9 @@ describe('FEATURES.json System Validation Tests', () => {
       for (const feature of features) {
         // eslint-disable-next-line no-await-in-loop -- Sequential feature creation required for validation;
         const _result = await createFeature(feature);
-        expect(result.success).toBe(true);
-        expect(result.feature).toBeDefined();
-        expect(result.feature.status).toBe('suggested');
+        expect(_result.success).toBe(true);
+        expect(_result.feature).toBeDefined();
+        expect(_result.feature.status).toBe('suggested');
         createdFeatures.push(result.feature);
       }
 

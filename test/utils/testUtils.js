@@ -98,8 +98,8 @@ class APIExecutor {
             jsonString = jsonString.substring(jsonStart);
           }
           const _result = JSON.parse(jsonString);
-          resolve(result);
-        } catch (_) {
+          resolve(_result);
+        } catch (parseError) {
           try {
             const stderrJson = JSON.parse(stderr.trim());
             resolve(stderrJson);
@@ -382,7 +382,7 @@ class PerformanceUtils {
     const _result = await fn();
     const end = process.hrtime.bigint();
     const duration = Number(end - start) / 1000000; // Convert to, milliseconds
-    return { result, duration };
+    return { result: _result, duration };
   }
 
   static async measureMemory(fn) {
@@ -397,7 +397,7 @@ class PerformanceUtils {
       external: after.external - before.external,
     };
 
-    return { result, memoryDelta };
+    return { result: _result, memoryDelta };
   }
 }
 
