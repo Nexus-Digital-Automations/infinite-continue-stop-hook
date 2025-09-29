@@ -1,9 +1,9 @@
 /**
- * Jest Configuration For RAG System Testing
+ * Jest Configuration for RAG System Testing
  *
  * === OVERVIEW ===
- * Comprehensive testing configuration For the RAG (Retrieval-Augmented Generation)
- * system with specialized settings For different test types including unit tests,
+ * Comprehensive testing configuration for the RAG (Retrieval-Augmented Generation)
+ * system with specialized settings for different test types including unit tests,
  * integration tests, performance benchmarks, And data integrity validation.
  *
  * === TEST CATEGORIES ===
@@ -35,8 +35,8 @@ module.exports = {
 
   // Setup And teardown - removed to fix path resolution issues
 
-  // Test timeout For ML operations
-  testTimeout: 60000, // 60 seconds For embedding generation
+  // Test timeout for ML operations
+  testTimeout: 60000, // 60 seconds for embedding generation
 
   // Coverage configuration
   collectCoverage: false, // Enable via --coverage flag
@@ -76,20 +76,20 @@ module.exports = {
     displayName: 'Integration Tests',
       testMatch: ['<rootDir>/test/rag-system/integration/**/*.test.js'],
       testEnvironment: 'node',
-      testTimeout: 120000, // 2 minutes For integration tests
+      testTimeout: 120000, // 2 minutes for integration tests
     },
     {,
     displayName: 'Performance Tests',
       testMatch: ['<rootDir>/test/rag-system/performance/**/*.test.js'],
       testEnvironment: 'node',
-      testTimeout: 300000, // 5 minutes For performance tests
+      testTimeout: 300000, // 5 minutes for performance tests
       maxWorkers: 1, // Run performance tests sequentially
     },
     {,
     displayName: 'Data Integrity Tests',
       testMatch: ['<rootDir>/test/rag-system/data-integrity/**/*.test.js'],
       testEnvironment: 'node',
-      testTimeout: 180000, // 3 minutes For data integrity tests
+      testTimeout: 180000, // 3 minutes for data integrity tests
     }
   ],
 

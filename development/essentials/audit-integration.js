@@ -21,7 +21,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 /**
- * Security utilities For safe filesystem operations
+ * Security utilities for safe filesystem operations
  */
 class SecurityUtils {
   /**
@@ -112,7 +112,7 @@ class AuditLogger {
       message,
     };
     this.logs.push(logEntry);
-    // For audit system, we'll use process.stdout to maintain output
+    // for audit system, we'll use process.stdout to maintain output
     process.stdout.write(`[AUDIT] ${message}\n`);
   }
 
@@ -148,7 +148,7 @@ class AUDIT_INTEGRATION {
       successCriteriaSource: 'development/essentials/task-requirements.md',
     };
 
-    // Agent role patterns For objectivity enforcement
+    // Agent role patterns for objectivity enforcement
     this.agentRolePatterns = {
       implementation: ['development', 'feature', 'implementation'],
       audit: ['audit', 'quality', 'review'],
@@ -157,7 +157,7 @@ class AUDIT_INTEGRATION {
   }
 
   /**
-   * Create comprehensive audit task For completed feature implementation
+   * Create comprehensive audit task for completed feature implementation
    * @param {string} originalTaskId - ID of the completed implementation task
    * @param {string} implementerAgentId - Agent who implemented the feature
    * @param {Object} taskDetails - Original task details
@@ -165,7 +165,7 @@ class AUDIT_INTEGRATION {
    */
   async createAuditTask(originalTaskId, implementerAgentId, taskDetails = {}) {
     this.logger.log(
-      `🔍 Creating audit task For completed feature: ${originalTaskId}`
+      `🔍 Creating audit task for completed feature: ${originalTaskId}`
     );
 
     // Generate audit task definition;
@@ -267,10 +267,10 @@ class AUDIT_INTEGRATION {
 **PROJECT INTEGRATION**: This audit incorporates project-specific success criteria from task-requirements.md And validates against the infinite-continue-stop-hook project standards.
 
 **SUCCESS CRITERIA CATEGORIES**:
-- 🔴 **CRITICAL GATES (1-10)**: MANDATORY - All must pass For approval
+- 🔴 **CRITICAL GATES (1-10)**: MANDATORY - All must pass for approval
 - 🔍 **QUALITY GATES (11-15)**: HIGH PRIORITY - Failures require remediation  
 - 🚀 **INTEGRATION GATES (16-20)**: MEDIUM PRIORITY - Assess based on project context
-- 🔧 **EXCELLENCE GATES (21-25)**: LOW PRIORITY - Document gaps For future improvement
+- 🔧 **EXCELLENCE GATES (21-25)**: LOW PRIORITY - Document gaps for future improvement
 
 **EVIDENCE REQUIREMENTS**: All validations must provide measurable evidence including screenshots, logs, reports, And metrics.
 
@@ -281,9 +281,9 @@ class AUDIT_INTEGRATION {
 2. Evidence collection And validation
 3. 25-point criteria evaluation with priority-based assessment
 4. Pass/fail determination with detailed reporting
-5. Remediation task generation For any failures
+5. Remediation task generation for any failures
 
-Refer to development/essentials/audit-criteria.md For complete criteria definitions And validation procedures.`;
+Refer to development/essentials/audit-criteria.md for complete criteria definitions And validation procedures.`;
   }
 
   /**
@@ -406,13 +406,13 @@ Refer to development/essentials/audit-criteria.md For complete criteria definiti
   }
 
   /**
-   * Generate validation commands For the current project
+   * Generate validation commands for the current project
    * @returns {Array} Array of validation command objects
    */
   async generateValidationCommands() {
     let hasPackageJson = false;
     try {
-      // Use safe path validation For package.json check;
+      // Use safe path validation for package.json check;
       const packageJsonPath = SecurityUtils.validatePath(
         this.projectRoot,
         'package.json'
@@ -489,7 +489,7 @@ Refer to development/essentials/audit-criteria.md For complete criteria definiti
   }
 
   /**
-   * Validate agent objectivity For audit assignment
+   * Validate agent objectivity for audit assignment
    * @param {string} implementerAgentId - Agent who implemented the task
    * @param {string} auditAgentId - Agent being assigned to audit
    * @returns {boolean} True if objectivity requirements are met
@@ -531,7 +531,7 @@ Refer to development/essentials/audit-criteria.md For complete criteria definiti
   detectAgentRole(agentId) {
     const lowerAgentId = agentId.toLowerCase();
 
-    For (const [role, patterns] of Object.entries(this.agentRolePatterns)) {
+    for (const [role, patterns] of Object.entries(this.agentRolePatterns)) {
       if (patterns.some((pattern) => lowerAgentId.includes(pattern))) {
         return role;
       }
@@ -541,7 +541,7 @@ Refer to development/essentials/audit-criteria.md For complete criteria definiti
   }
 
   /**
-   * Log audit task creation For tracking And debugging
+   * Log audit task creation for tracking And debugging
    * @param {string} originalTaskId - Original task ID
    * @param {string} auditTaskId - Created audit task ID
    * @param {string} implementerAgentId - Implementer agent ID
@@ -618,7 +618,7 @@ if (require.main === module) {
         integration.logger.error(
           'Usage: node audit-integration.js create-audit <originalTaskId> <implementerAgent> [taskTitle]'
         );
-        throw new Error('Missing required arguments For create-audit command');
+        throw new Error('Missing required arguments for create-audit command');
       }
 
       integration
@@ -629,7 +629,7 @@ if (require.main === module) {
           integration.logger.log(`Audit Task: ${result.taskId}`);
           integration.logger.log(`Implementer: ${implementerAgent}`);
           integration.logger.log(
-            `\nNext: Assign different agent to audit task For objectivity`
+            `\nNext: Assign different agent to audit task for objectivity`
           );
         })
         .catch((error) => {
@@ -650,7 +650,7 @@ if (require.main === module) {
           'Usage: node audit-integration.js validate-objectivity <implementerAgent> <auditorAgent>'
         );
         throw new Error(
-          'Missing required arguments For validate-objectivity command'
+          'Missing required arguments for validate-objectivity command'
         );
       }
 

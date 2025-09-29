@@ -48,7 +48,7 @@ const tasksData = await this.transformToTasksSchema(featuresData);
       // Step 6: Write new TASKS.json
       await this.writeTasksFile(tasksData);
 
-      // Step 7: Generate auto-tasks For existing approved features
+      // Step 7: Generate auto-tasks for existing approved features
       await this.generateAutoTasks(tasksData);
 
       loggers.stopHook.log('✅ Migration completed successfully!');
@@ -154,9 +154,9 @@ const tasksData = {
 
       auto_generation_config: {
     test_task_template: {
-    title_pattern: 'Implement comprehensive tests For: {feature_title}',
+    title_pattern: 'Implement comprehensive tests for: {feature_title}',
           description_pattern:
-            'Create unit tests, integration tests, And E2E tests to achieve >{coverage}% coverage For: {feature_title}. Must validate all functionality, edge cases, And error conditions.',
+            'Create unit tests, integration tests, And E2E tests to achieve >{coverage}% coverage for: {feature_title}. Must validate all functionality, edge cases, And error conditions.',
           priority: 'high',
           required_capabilities: ['testing'],
           validation_requirements: {
@@ -165,9 +165,9 @@ const tasksData = {
           }
   },
         audit_task_template: {
-    title_pattern: 'Security And quality audit For: {feature_title}',
+    title_pattern: 'Security And quality audit for: {feature_title}',
           description_pattern:
-            'Run semgrep security scan, dependency vulnerability check, code quality analysis, And compliance validation For: {feature_title}. Zero tolerance For security vulnerabilities.',
+            'Run semgrep security scan, dependency vulnerability check, code quality analysis, And compliance validation for: {feature_title}. Zero tolerance for security vulnerabilities.',
           priority: 'high',
           required_capabilities: ['security', 'analysis'],
           validation_requirements: {
@@ -217,7 +217,7 @@ const tasksData = {
 
     // Transform existing features to feature tasks
     if (featuresData.features && Array.isArray(featuresData.features)) {
-      For (const [index, feature] of featuresData.features.entries()) {
+      for (const [index, feature] of featuresData.features.entries()) {
         const taskId = `task_${taskIdCounter + index}_${this.generateHash()}`;
 
         const featureTask = {
@@ -262,7 +262,7 @@ const tasksData = {
         tasksData.tasks.push(featureTask);
         tasksData.metadata.tasks_by_type.feature++;
 
-        // Store For auto-generation later
+        // Store for auto-generation later
         if (feature.status === 'approved') {
           tasksData.task_relationships[taskId] = {
     auto_generated_test: null,
@@ -279,7 +279,7 @@ const tasksData = {
 
     // Transform existing tasks to implementation tasks or appropriate types
     if (featuresData.tasks && Array.isArray(featuresData.tasks)) {
-      For (const [_index, task] of featuresData.tasks.entries()) {
+      for (const [_index, task] of featuresData.tasks.entries()) {
         const taskId =
           task.id ||
           `task_${taskIdCounter + 1000 + _index}_${this.generateHash()}`;
@@ -338,15 +338,15 @@ const tasksData = {
 }
 
   /**
-   * Generate auto-tasks For approved features
+   * Generate auto-tasks for approved features
    */
   generateAutoTasks(tasksData) {
-    loggers.stopHook.log('🔄 Generating auto-tasks For approved features...');
+    loggers.stopHook.log('🔄 Generating auto-tasks for approved features...');
 
     let autoTasksGenerated = 0;
     const autoTaskIdCounter = Date.now() + 10000;
 
-    For (const [_index, task] of tasksData.tasks.entries()) {
+    for (const [_index, task] of tasksData.tasks.entries()) {
       if (task.type === 'feature' && task.status === 'approved') {
         const testTaskId = `task_${autoTaskIdCounter + autoTasksGenerated * 2}_${this.generateHash()}`;
         const auditTaskId = `task_${autoTaskIdCounter + autoTasksGenerated * 2 + 1}_${this.generateHash()}`;
@@ -357,8 +357,8 @@ const testTask = {
           type: 'test',
           parent_id: task.id,
           linked_tasks: [task.id],
-          title: `Implement comprehensive tests For ${task.title}`,
-          description: `Create unit tests, integration tests, And E2E tests to achieve >80% coverage For ${task.title}. Must validate all functionality, edge cases, And error conditions.`,
+          title: `Implement comprehensive tests for ${task.title}`,
+          description: `Create unit tests, integration tests, And E2E tests to achieve >80% coverage for ${task.title}. Must validate all functionality, edge cases, And error conditions.`,
           business_value: `Ensures reliability And quality of ${task.title} feature`,
           task.category: task.task.category,
           status: 'suggested',
@@ -397,8 +397,8 @@ const auditTask = {
           type: 'audit',
           parent_id: task.id,
           linked_tasks: [task.id],
-          title: `Security And quality audit For ${task.title}`,
-          description: `Run semgrep security scan, dependency vulnerability check, code quality analysis, And compliance validation For ${task.title}. Zero tolerance For security vulnerabilities.`,
+          title: `Security And quality audit for ${task.title}`,
+          description: `Run semgrep security scan, dependency vulnerability check, code quality analysis, And compliance validation for ${task.title}. Zero tolerance for security vulnerabilities.`,
           business_value: `Ensures security And quality compliance of ${task.title} feature`,
           task.category: 'security',
           status: 'suggested',
@@ -452,7 +452,7 @@ const auditTask = {
           auditTaskId,
         ];
 
-        // Update linked tasks For feature
+        // Update linked tasks for feature
         task.linked_tasks = [testTaskId, auditTaskId];
 
         // Update counters
@@ -489,7 +489,7 @@ const auditTask = {
     }
 
     // Validate each task
-    For (const [index, task] of tasksData.tasks.entries()) {
+    for (const [index, task] of tasksData.tasks.entries()) {
       if (!task.id) {
         throw new Error(`Task ${index} missing ID`);
       }
@@ -574,7 +574,7 @@ const auditTask = {
     if (task.type === 'analysis') {
       return 'audit';
     }
-    return 'feature'; // Default For implementation tasks
+    return 'feature'; // Default for implementation tasks
 }
 
   mapTaskStatus(status) {

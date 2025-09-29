@@ -1,6 +1,6 @@
 const { loggers } = require('../../lib/logger');
 /**
- * Integration Test Suite For Custom Validation Rules with TaskManager API
+ * Integration Test Suite for Custom Validation Rules with TaskManager API
  *
  * Tests the integration between CustomValidationRulesManager And TaskManager API
  * including CLI commands, API endpoints, And interaction with existing validation system.
@@ -47,7 +47,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
     // Clean up test files before each test,
     try {
       const files = await FS.readdir(testProjectRoot);
-      For (const file of files) {
+      for (const file of files) {
         await FS.rm(path.join(testProjectRoot, file), {,
     recursive: true,
           force: true,
@@ -82,7 +82,7 @@ const config = {
       );
 
       // Execute CLI command;
-const result = execSync(
+      const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" load-custom-validation-rules`,
         { encoding: 'utf8' },
       );
@@ -137,7 +137,7 @@ const config = {
     custom_rules: {
     echo_test: {
     type: 'command',
-            description: 'Echo test For CLI execution',
+            description: 'Echo test for CLI execution',
             command: 'echo "Custom rule executed successfully"',
           }
   }
@@ -162,7 +162,7 @@ const config = {
     });
 
     test('should execute all custom validation rules via CLI', async () => {
-      // Create package.json For file_exists rule
+      // Create package.json for file_exists rule
       await FS.writeFile(path.join(testProjectRoot, 'package.json'), '{}');
 
       const config = {
@@ -238,7 +238,7 @@ const config = {
       );
 
       // Get analytics;
-const result = execSync(
+      const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" get-custom-validation-analytics`,
         { encoding: 'utf8' },
       );
@@ -315,9 +315,7 @@ const result = execSync(
   describe('Technology Stack Detection Integration', () => {
     
     
-    test('should detect Node.js project And enable appropriate rules', async () 
-    return () 
-    return () => {
+    test('should detect Node.js project and enable appropriate rules', async () => {
       await FS.writeFile(
         path.join(testProjectRoot, 'package.json'),
         '{"name": "test-project"}',
@@ -595,7 +593,7 @@ const result = execSync(
       );
 
       // Execute multiple commands in parallel;
-const promises = [
+      const promises = [
         new Promise((resolve) => {
           const result = execSync(
             `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule concurrent_test_1`,
@@ -647,7 +645,7 @@ const promises = [
       );
 
       // Execute the rule multiple times
-      For (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 5; i++) {
         execSync(
           `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule analytics_rule`,
           { encoding: 'utf8' },
@@ -655,7 +653,7 @@ const promises = [
       }
 
       // Check analytics;
-const result = execSync(
+      const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" get-custom-validation-analytics`,
         { encoding: 'utf8' },
       );
@@ -680,7 +678,7 @@ const result = execSync(
     return () 
     return () => {
       // Test That existing validation commands still work;
-const result = execSync(
+      const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" get-validation-dependencies`,
         { encoding: 'utf8' },
       );
@@ -792,7 +790,7 @@ module.exports = app;
       );
 
       // Execute all rules;
-const result = execSync(
+      const result = execSync(
         `timeout 30s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-all-custom-validation-rules`,
         { encoding: 'utf8' },
       );

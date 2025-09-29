@@ -1,14 +1,14 @@
 /**
  * Success Criteria Manager Unit Tests
  *
- * Comprehensive unit test suite For SUCCESS_CRITERIA_MANAGER class Covering:
- * - CRUD operations For success criteria
+ * Comprehensive unit test suite for SUCCESS_CRITERIA_MANAGER class Covering:
+ * - CRUD operations for success criteria
  * - Template application And inheritance
  * - Validation logic And error handling
  * - Integration with TaskManager system
  * - Performance And reliability testing
  *
- * Target: >90% code coverage For all SUCCESS_CRITERIA_MANAGER functionality
+ * Target: >90% code coverage for all SUCCESS_CRITERIA_MANAGER functionality
  *
  * @author Testing Agent #6
  * @version 1.0.0
@@ -32,7 +32,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
   beforeEach(() 
     return () 
     return () => {
-    // Create comprehensive mocks For all dependencies
+    // Create comprehensive mocks for all dependencies
     mockTaskManager = {
     getTask: jest.fn(),
       updateTaskSuccessCriteria: jest.fn(),
@@ -378,7 +378,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
       });
     });
 
-    test('should successfully retrieve criteria For existing task', async () => {
+    test('should successfully retrieve criteria for existing task', async () => {
       const result = await successCriteriaManager.getCriteria(testTaskId);
 
       expect(result.success).toBe(true);
@@ -388,7 +388,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
       expect(mockValidateTaskExists).toHaveBeenCalledWith(testTaskId);
     });
 
-    test('should return empty array For task with no criteria', async () => {
+    test('should return empty array for task with no criteria', async () => {
       mockTaskManager.getTask.mockResolvedValue({
     id: testTaskId,
         success_criteria: undefined,
@@ -413,7 +413,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
       expect(result.hasTemplate).toBe('basic');
     });
 
-    test('should return null For hasTemplate when no template detected', async () => {
+    test('should return null for hasTemplate when no template detected', async () => {
       const result = await successCriteriaManager.getCriteria(testTaskId);
 
       expect(result.success).toBe(true);
@@ -658,7 +658,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
       );
     });
 
-    test('should return error For unknown template', async () => {
+    test('should return error for unknown template', async () => {
       const result = await successCriteriaManager.applyProjectTemplate(
         testTaskId,
         'unknown',
@@ -696,14 +696,14 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
         expect(detected).toBe('enterprise');
       });
 
-      test('should return null For custom criteria', () => {
+      test('should return null for custom criteria', () => {
         const CUSTOM_CRITERIA = ['Custom Criterion 1', 'Custom Criterion 2'];
         const detected =
           successCriteriaManager._detectAppliedTemplate(CUSTOM_CRITERIA);
         expect(detected).toBeNull();
       });
 
-      test('should return null For partial template match', () => {
+      test('should return null for partial template match', () => {
         const PARTIAL_CRITERIA = ['Linter Perfection', 'Build Success'];
         const detected =
           successCriteriaManager._detectAppliedTemplate(PARTIAL_CRITERIA);
@@ -714,7 +714,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
     describe('_getTemplateDescription', () => {
     
     
-      test('should return correct descriptions For known templates', () 
+      test('should return correct descriptions for known templates', () 
     return () 
     return () => {
         expect(
@@ -728,7 +728,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
         ).toContain('Full enterprise');
       });
 
-      test('should return default description For unknown template', () => {
+      test('should return default description for unknown template', () => {
         expect(successCriteriaManager._getTemplateDescription('unknown')).toBe(
           'Custom template',
         );
@@ -865,7 +865,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
       });
 
       // Simulate concurrent operations
-      For (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 10; i++) {
         OPERATIONS.push(
           successCriteriaManager.addCriteria(TEST_TASK_ID, [`Criterion ${i}`]),
         );
@@ -905,7 +905,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
       // All operations should succeed
       expect(RESULTS.every((r) => r.success)).toBe(true);
 
-      // TaskManager should be called For each operation
+      // TaskManager should be called for each operation
       expect(mockTaskManager.getTask).toHaveBeenCalledTimes(50);
       expect(mockTaskManager.updateTaskSuccessCriteria).toHaveBeenCalledTimes(
         50,

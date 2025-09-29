@@ -12,7 +12,7 @@ const { execSync } = require('child_process');
  * Apply common unused variable fixes
  */
 function quickFixUnusedVars() {
-  console.log('🚀 Quick fix For common unused variable patterns...\n');
+  console.log('🚀 Quick fix for common unused variable patterns...\n');
 
   // Pattern 1: Replace unused catch block parameters with _
   console.log('📋 Fixing catch blocks with unused parameters...');

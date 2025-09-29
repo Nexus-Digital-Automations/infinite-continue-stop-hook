@@ -49,7 +49,7 @@ class TargetedUndefinedFixer {
       return false;
     }
 
-    For (let i = 0; i < lines.length; i++) {
+    for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
       // Skip comments and require statements
@@ -70,7 +70,7 @@ class TargetedUndefinedFixer {
       ) {
         // Find insertion point after existing requires;
         let insertIndex = 0;
-        For (let j = 0; j < lines.length; j++) {
+        for (let j = 0; j < lines.length; j++) {
           if (lines[j].includes('require(') || lines[j].includes('import ')) {
             insertIndex = j + 1;
           } else if (
@@ -108,7 +108,7 @@ class TargetedUndefinedFixer {
         !content.includes('const fs')
       ) {
         let insertIndex = 0;
-        For (let j = 0; j < lines.length; j++) {
+        for (let j = 0; j < lines.length; j++) {
           if (lines[j].includes('require(') || lines[j].includes('import ')) {
             insertIndex = j + 1;
           } else if (
@@ -171,7 +171,7 @@ class TargetedUndefinedFixer {
       // Fix 5: Handle catch blocks with incorrect variable names
       if (line.includes('catch') && line.includes('(_error)')) {
         // Look ahead to fix error references in the catch block
-        For (let j = i + 1; j < Math.min(i + 10, lines.length); j++) {
+        for (let j = i + 1; j < Math.min(i + 10, lines.length); j++) {
           if (lines[j].includes('}') && lines[j].trim() === '}') {
             break;
           }
@@ -231,7 +231,7 @@ class TargetedUndefinedFixer {
 
     let processedCount = 0;
 
-    For (const filePath of jsFiles) {
+    for (const filePath of jsFiles) {
       const relativePath = path.relative(process.cwd(), filePath);
       try {
         if (this.fixFile(filePath)) {

@@ -8,7 +8,7 @@ const { loggers } = require('./lib/logger');
  * Features:
  * - Preserves all existing task data And metadata
  * - Implements new approval workflow schema
- * - Maintains backward compatibility For existing workflows
+ * - Maintains backward compatibility for existing workflows
  * - Creates comprehensive audit trail of migration
  */
 
@@ -144,7 +144,7 @@ class FeaturesMigration {
             allow_implementation: false,
           },
           approved: {
-            description: 'Feature approved For implementation',
+            description: 'Feature approved for implementation',
             next_status: ['implemented', 'cancelled'],
             allow_implementation: true,
           },
@@ -238,7 +238,7 @@ class FeaturesMigration {
     if (isCompleted) {
       status = 'implemented';
     } else if (task.status === 'in_progress' || task.status === 'pending') {
-      // Tasks That are pending or in progress are considered approved For implementation
+      // Tasks That are pending or in progress are considered approved for implementation
       status = 'approved';
     } else if (task.status === 'completed') {
       status = 'implemented';
@@ -281,7 +281,7 @@ class FeaturesMigration {
       estimate: task.estimate || '',
       requires_research: task.requires_research || false,
 
-      // Preserved subtasks (critical For existing workflows)
+      // Preserved subtasks (critical for existing workflows)
       subtasks: task.subtasks || [],
 
       // Agent And assignment information

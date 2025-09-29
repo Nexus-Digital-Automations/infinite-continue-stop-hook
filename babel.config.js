@@ -1,8 +1,8 @@
 /**
- * Babel Configuration For Jest Testing
+ * Babel Configuration for Jest Testing
  *
  * Configures Babel to transform ES modules and modern JavaScript features
- * For compatibility with Jest testing environment.
+ * for compatibility with Jest testing environment.
  */
 
 module.exports = {

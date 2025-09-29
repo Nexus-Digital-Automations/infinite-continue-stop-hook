@@ -3,7 +3,7 @@
  * Fix Structured Logging Migration Errors
  *
  * Fixes common issues from the console.log to structured logging migration:
- * - Corrects import paths For logger based on file location
+ * - Corrects import paths for logger based on file location
  * - Fixes syntax errors
  * - Adds missing imports
  */
@@ -12,7 +12,7 @@ const FS = require('fs');
 const PATH = require('path');
 
 function fixImportPaths() {
-  console.log('🔧 Fixing import paths For logger...');
+  console.log('🔧 Fixing import paths for logger...');
 
   const fixes = [
     // Files in lib/api-modules/* subdirectories need ../../logger
@@ -38,10 +38,10 @@ function fixImportPaths() {
   const files = findJavaScriptFiles('.');
   let fixedCount = 0;
 
-  For (const file of files) {
+  for (const file of files) {
     const relativePath = PATH.relative('.', file);
 
-    For (const fix of fixes) {
+    for (const fix of fixes) {
       if (fix.pattern.test(relativePath)) {
         const content = FS.readFileSync(file, 'utf8');
         if (content.includes(fix.findImport)) {
@@ -83,11 +83,11 @@ function fixSyntaxErrors() {
   const files = findJavaScriptFiles('.');
   let fixedCount = 0;
 
-  For (const file of files) {
+  for (const file of files) {
     let content = FS.readFileSync(file, 'utf8');
     let hasChanges = false;
 
-    For (const fix of syntaxFixes) {
+    for (const fix of syntaxFixes) {
       const newContent = content.replace(fix.pattern, fix.replacement);
       if (newContent !== content) {
         content = newContent;
@@ -111,7 +111,7 @@ function addMissingImports() {
   const files = findJavaScriptFiles('.');
   let fixedCount = 0;
 
-  For (const file of files) {
+  for (const file of files) {
     const content = FS.readFileSync(file, 'utf8');
     const relativePath = PATH.relative('.', file);
 
@@ -143,7 +143,7 @@ const lines = content.split('\n');
       let insertIndex = 0;
 
       // Find where to insert (after existing requires)
-      For (let i = 0; i < lines.length; i++) {
+      for (let i = 0; i < lines.length; i++) {
         if (lines[i].includes('require(') || lines[i].includes('const ')) {
           insertIndex = i + 1;
         } else if (
@@ -241,7 +241,7 @@ function main() {
   console.log('✅ Migration error fixes complete!\n');
 
   // Run linter to check results
-  console.log('🔍 Running linter to check For remaining issues...');
+  console.log('🔍 Running linter to check for remaining issues...');
   try {
     const { execSync } = require('child_process');
     execSync('npm run lint -- --quiet', { stdio: 'inherit' });

@@ -1,10 +1,10 @@
 /**
- * Test Assertions For RAG System
+ * Test Assertions for RAG System
  *
  * === OVERVIEW ===
- * Comprehensive assertion utilities For validating RAG system functionality
+ * Comprehensive assertion utilities for validating RAG system functionality
  * including search results, embeddings, vector operations, And system behavior.
- * Provides standardized validation methods For all RAG test suites.
+ * Provides standardized validation methods for all RAG test suites.
  *
  * === FEATURES ===
  * • Search result validation
@@ -21,24 +21,24 @@
 class TestAssertions {
   constructor() {
     this.thresholds = {
-    similarity: {
-    high: 0.8,
+      similarity: {
+        high: 0.8,
         medium: 0.6,
         low: 0.4,
       },
       performance: {
-    embeddingGeneration: 5000, // 5 seconds
+        embeddingGeneration: 5000, // 5 seconds
         search: 2000, // 2 seconds
         storage: 3000, // 3 seconds
       },
       quality: {
-    minEmbeddingDimension: 300,
+        minEmbeddingDimension: 300,
         maxEmbeddingDimension: 1024,
         minContentLength: 10,
         maxResults: 100,
-      }
-  };
-}
+      },
+    };
+  }
 
   /**
    * Assert valid search result structure And content
@@ -85,7 +85,7 @@ class TestAssertions {
       expect(new Date(result.created_at)).toBeInstanceOf(Date);
       expect(new Date(result.created_at).getTime()).not.toBeNaN();
     }
-}
+  }
 
   /**
    * Assert valid recommendation structure
@@ -109,7 +109,7 @@ class TestAssertions {
 
     if (recommendation.confidenceLevel) {
       expect(['high', 'medium', 'low', 'very-low']).toContain(
-        recommendation.confidenceLevel,
+        recommendation.confidenceLevel
       );
     }
 
@@ -118,7 +118,7 @@ class TestAssertions {
       expect(recommendation.contextRelevance).toBeGreaterThanOrEqual(0);
       expect(recommendation.contextRelevance).toBeLessThanOrEqual(1);
     }
-}
+  }
 
   /**
    * Assert valid error search result
@@ -154,7 +154,7 @@ class TestAssertions {
 
       if (errorResult.errorPattern.complexity) {
         expect(['trivial', 'low', 'medium', 'high']).toContain(
-          errorResult.errorPattern.complexity,
+          errorResult.errorPattern.complexity
         );
       }
 
@@ -170,7 +170,7 @@ class TestAssertions {
         ]).toContain(errorResult.errorPattern.category);
       }
     }
-}
+  }
 
   /**
    * Assert valid embedding structure And properties
@@ -179,10 +179,10 @@ class TestAssertions {
   assertValidEmbedding(embedding) {
     expect(embedding).toBeInstanceOf(Array);
     expect(embedding.length).toBeGreaterThanOrEqual(
-      this.thresholds.quality.minEmbeddingDimension,
+      this.thresholds.quality.minEmbeddingDimension
     );
     expect(embedding.length).toBeLessThanOrEqual(
-      this.thresholds.quality.maxEmbeddingDimension,
+      this.thresholds.quality.maxEmbeddingDimension
     );
 
     // All elements should be numbers
@@ -192,16 +192,16 @@ class TestAssertions {
       expect(value).toBeFinite();
     });
 
-    // Vector should be normalized (For most embedding models)
+    // Vector should be normalized (for most embedding models)
     const magnitude = Math.sqrt(
-      embedding.reduce((sum, val) => sum + val * val, 0),
+      embedding.reduce((sum, val) => sum + val * val, 0)
     );
     expect(magnitude).toBeGreaterThan(0.5); // Should have reasonable magnitude
     expect(magnitude).toBeLessThan(2.0); // Should be reasonably normalized
-}
+  }
 
   /**
-   * Assert embeddings are similar (For identical content)
+   * Assert embeddings are similar (for identical content)
    * @param {Array<number>} embedding1 - First embedding
    * @param {Array<number>} embedding2 - Second embedding
    * @param {number} threshold - Similarity threshold (default: 0.95)
@@ -214,10 +214,10 @@ class TestAssertions {
 
     const similarity = this.calculateCosineSimilarity(embedding1, embedding2);
     expect(similarity).toBeGreaterThan(threshold);
-}
+  }
 
   /**
-   * Assert embeddings are different (For different content)
+   * Assert embeddings are different (for different content)
    * @param {Array<number>} embedding1 - First embedding
    * @param {Array<number>} embedding2 - Second embedding
    * @param {number} threshold - Difference threshold (default: 0.9)
@@ -230,7 +230,7 @@ class TestAssertions {
 
     const similarity = this.calculateCosineSimilarity(embedding1, embedding2);
     expect(similarity).toBeLessThan(threshold);
-}
+  }
 
   /**
    * Assert performance meets threshold requirements
@@ -245,15 +245,15 @@ class TestAssertions {
       expect(actualTime).toBeLessThan(threshold);
     } else {
       console.warn(
-        `No performance threshold defined For operation ${operation}`,
+        `No performance threshold defined for operation ${operation}`
       );
     }
-}
+  }
 
   /**
    * Assert search results are properly ranked by relevance
    * @param {Array<Object>} results - Search results
-   * @param {string} scoreProperty - Property to check For ranking (default: 'similarity')
+   * @param {string} scoreProperty - Property to check for ranking (default: 'similarity')
    */
   assertProperRanking(results, scoreProperty = 'similarity') {
     expect(results).toBeInstanceOf(Array);
@@ -262,7 +262,7 @@ class TestAssertions {
       return;
     } // Nothing to rank
 
-    For (let i = 1; i < results.length; i++) {
+    for (let i = 1; i < results.length; i++) {
       const _prevScore = results[i - 1][scoreProperty];
       const _currentScore = results[i][scoreProperty];
 
@@ -270,7 +270,7 @@ class TestAssertions {
       expect(typeof _currentScore).toBe('number');
       expect(_prevScore).toBeGreaterThanOrEqual(_currentScore);
     }
-}
+  }
 
   /**
    * Assert vector database integrity
@@ -301,7 +301,7 @@ class TestAssertions {
       expect(typeof vectorStats.averageSearchTime).toBe('number');
       expect(vectorStats.averageSearchTime).toBeGreaterThanOrEqual(0);
     }
-}
+  }
 
   /**
    * Assert system analytics structure And validity
@@ -336,7 +336,7 @@ class TestAssertions {
     expect(analytics).toHaveProperty('optimization');
     expect(analytics.optimization).toHaveProperty('recommendedActions');
     expect(analytics.optimization.recommendedActions).toBeInstanceOf(Array);
-}
+  }
 
   /**
    * Assert migration result validity
@@ -349,7 +349,7 @@ class TestAssertions {
     expect(migrationResult).toHaveProperty('performance');
 
     // Summary validation;
-const summary = migrationResult.summary;
+    const summary = migrationResult.summary;
     expect(summary).toHaveProperty('totalFiles');
     expect(summary).toHaveProperty('processedFiles');
     expect(summary).toHaveProperty('successfulMigrations');
@@ -362,11 +362,11 @@ const summary = migrationResult.summary;
 
     expect(summary.totalFiles).toBeGreaterThanOrEqual(summary.processedFiles);
     expect(summary.processedFiles).toBe(
-      summary.successfulMigrations + summary.failedMigrations,
+      summary.successfulMigrations + summary.failedMigrations
     );
 
     // Performance validation;
-const performance = migrationResult.performance;
+    const performance = migrationResult.performance;
     expect(performance).toHaveProperty('totalTime');
     expect(performance).toHaveProperty('processingRate');
 
@@ -374,7 +374,7 @@ const performance = migrationResult.performance;
     expect(typeof performance.processingRate).toBe('number');
     expect(performance.totalTime).toBeGreaterThan(0);
     expect(performance.processingRate).toBeGreaterThanOrEqual(0);
-}
+  }
 
   /**
    * Assert content quality meets standards
@@ -388,12 +388,12 @@ const performance = migrationResult.performance;
 
     expect(typeof content.title).toBe('string');
     expect(content.title.length).toBeGreaterThan(
-      this.thresholds.quality.minContentLength,
+      this.thresholds.quality.minContentLength
     );
 
     expect(typeof content.description).toBe('string');
     expect(content.description.length).toBeGreaterThan(
-      this.thresholds.quality.minContentLength,
+      this.thresholds.quality.minContentLength
     );
 
     if (content.tags) {
@@ -407,7 +407,7 @@ const performance = migrationResult.performance;
     if (content.content) {
       expect(typeof content.content).toBe('string');
       expect(content.content.length).toBeGreaterThan(
-        content.description.length,
+        content.description.length
       );
     }
 
@@ -431,7 +431,7 @@ const performance = migrationResult.performance;
         'general',
       ]).toContain(content.category);
     }
-}
+  }
 
   /**
    * Assert cache performance improvements
@@ -449,9 +449,9 @@ const performance = migrationResult.performance;
     expect(improvementRatio).toBeLessThan(improvementThreshold);
 
     console.log(
-      `Cache improvement: ${((1 - improvementRatio) * 100).toFixed(1)}% faster`,
+      `Cache improvement: ${((1 - improvementRatio) * 100).toFixed(1)}% faster`
     );
-}
+  }
 
   /**
    * Calculate cosine similarity between two vectors
@@ -468,7 +468,7 @@ const performance = migrationResult.performance;
     let magnitude1 = 0;
     let magnitude2 = 0;
 
-    For (let i = 0; i < vector1.length; i++) {
+    for (let i = 0; i < vector1.length; i++) {
       dotProduct += vector1[i] * vector2[i];
       magnitude1 += vector1[i] * vector1[i];
       magnitude2 += vector2[i] * vector2[i];
@@ -482,7 +482,7 @@ const performance = migrationResult.performance;
     }
 
     return dotProduct / (magnitude1 * magnitude2);
-}
+  }
 
   /**
    * Calculate Euclidean distance between two vectors
@@ -497,13 +497,13 @@ const performance = migrationResult.performance;
 
     let sumSquaredDifferences = 0;
 
-    For (let i = 0; i < vector1.length; i++) {
+    for (let i = 0; i < vector1.length; i++) {
       const _difference = vector1[i] - vector2[i];
       sumSquaredDifferences += _difference * _difference;
     }
 
     return Math.sqrt(sumSquaredDifferences);
-}
+  }
 
   /**
    * Assert search diversity (results are not too similar)
@@ -514,14 +514,14 @@ const performance = migrationResult.performance;
     if (results.length <= 1) {
       return;
     } // Can't measure diversity with one result;
-const similarities = [];
+    const similarities = [];
 
-    For (let i = 0; i < results.length - 1; i++) {
-      For (let j = i + 1; j < results.length; j++) {
+    for (let i = 0; i < results.length - 1; i++) {
+      for (let j = i + 1; j < results.length; j++) {
         // Simple diversity check using title similarity;
-const _similarity = this.calculateStringSimilarity(
+        const _similarity = this.calculateStringSimilarity(
           results[i].title || '',
-          results[j].title || '',
+          results[j].title || ''
         );
         similarities.push(_similarity);
       }
@@ -530,7 +530,7 @@ const _similarity = this.calculateStringSimilarity(
     const avgSimilarity =
       similarities.reduce((sum, sim) => sum + sim, 0) / similarities.length;
     expect(avgSimilarity).toBeLessThan(minDiversityThreshold);
-}
+  }
 
   /**
    * Calculate string similarity using Jaccard index
@@ -547,26 +547,26 @@ const _similarity = this.calculateStringSimilarity(
     const words2 = new Set(str2.toLowerCase().split(/\s+/));
 
     const intersection = new Set(
-      [...words1].filter((word) => words2.has(word)),
+      [...words1].filter((word) => words2.has(word))
     );
     const union = new Set([...words1, ...words2]);
 
     return intersection.size / union.size;
-}
+  }
 
   /**
    * Assert error handling robustness
    * @param {Function} asyncFunction - Function to test
    * @param {Array} invalidInputs - Array of invalid inputs to test
    */
-  assertErrorHandling(asyncFunction, invalidInputs) {
-    // Use For-await-of pattern For sequential error testing
-    For await (const invalidInput of invalidInputs) {
+  async assertErrorHandling(asyncFunction, invalidInputs) {
+    // Use for-await-of pattern for sequential error testing
+    for await (const invalidInput of invalidInputs) {
       try {
         await asyncFunction(invalidInput);
         // If we reach here, the function should have thrown an error
         throw new Error(
-          `Function should have thrown an error For input: ${JSON.stringify(invalidInput)}`,
+          `Function should have thrown an error for input: ${JSON.stringify(invalidInput)}`
         );
       } catch (error) {
         // This is expected - function should handle invalid input gracefully
@@ -575,10 +575,10 @@ const _similarity = this.calculateStringSimilarity(
         expect(typeof error.message).toBe('string');
       }
     }
-}
+  }
 
   /**
-   * Set custom performance thresholds For testing
+   * Set custom performance thresholds for testing
    * @param {Object} customThresholds - Custom threshold values
    */
   setPerformanceThresholds(customThresholds) {
@@ -586,10 +586,10 @@ const _similarity = this.calculateStringSimilarity(
       ...this.thresholds.performance,
       ...customThresholds,
     };
-}
+  }
 
   /**
-   * Set custom quality thresholds For testing
+   * Set custom quality thresholds for testing
    * @param {Object} customThresholds - Custom quality threshold values
    */
   setQualityThresholds(customThresholds) {
@@ -597,7 +597,7 @@ const _similarity = this.calculateStringSimilarity(
       ...this.thresholds.quality,
       ...customThresholds,
     };
-}
+  }
 }
 
 module.exports = TestAssertions;

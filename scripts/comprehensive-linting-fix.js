@@ -56,7 +56,7 @@ const lines = newContent.split('\n');
       let inCatchBlock = false;
       let catchErrorVar = null;
 
-      For (let i = 0; i < lines.length; i++) {
+      for (let i = 0; i < lines.length; i++) {
         let line = lines[i];
 
         // Detect catch block start;
@@ -140,14 +140,14 @@ const catchBlockPattern = /}\s*catch\s*\(\s*_error\s*\)\s*\{([^}]*)\}/g;
 
       let hasChanges = false;
 
-      // Parse lint errors For unused parameters;
+      // Parse lint errors for unused parameters;
 const unusedParamErrors = lintOutput.filter(
         (error) =>
           error.includes('is defined but never used') &&
           error.includes('Allowed unused args must match')
       );
 
-      For (const errorLine of unusedParamErrors) {
+      for (const errorLine of unusedParamErrors) {
         // Extract parameter name and line number;
 const lineMatch = errorLine.match(/(\d+):/);
         const paramMatch = errorLine.match(/'(\w+)' is defined but never used/);
@@ -178,7 +178,7 @@ const paramName = paramMatch[1];
   }
 
   /**
-   * Get lint errors For a specific file
+   * Get lint errors for a specific file
    */
   getLintErrorsForFile(__filename) {
     try {
@@ -209,7 +209,7 @@ const fixes = [
       () => this.fixUnusedParameters(__filename),
     ];
 
-    For (const fix of fixes) {
+    for (const fix of fixes) {
       const result = fix();
       if (result.hasChanges && result.content) {
         FS.writeFileSync(filePath, result.content);
@@ -258,10 +258,10 @@ const files = this.findJavaScriptFiles();
 
     // Process files in batches to avoid overwhelming the system;
 const batchSize = 10;
-    For (let i = 0; i < files.length; i += batchSize) {
+    for (let i = 0; i < files.length; i += batchSize) {
       const batch = files.slice(i, i + batchSize);
 
-      For (const file of batch) {
+      for (const file of batch) {
         this.processFile(file);
       }
 

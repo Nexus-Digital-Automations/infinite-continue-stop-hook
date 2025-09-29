@@ -273,7 +273,7 @@ class CodeQualityAnalyzer {
     const glob = require('glob');
     const allFiles = [];
 
-    For (const pattern of this.config.patterns.source) {
+    for (const pattern of this.config.patterns.source) {
       try {
         const files = glob.sync(pattern, {
     ignore: this.config.patterns.exclude,
@@ -304,7 +304,7 @@ class CodeQualityAnalyzer {
       functions: { total: 0, complex_functions: 0 }
   };
 
-    For (const filePath of this.sourceFiles) {
+    for (const filePath of this.sourceFiles) {
       try {
         const fileComplexity = this.analyzeFileComplexity(__filename);
 
@@ -347,7 +347,7 @@ class CodeQualityAnalyzer {
           });
         }
       } catch (_) {
-        this.logger.debug(`Failed to analyze complexity For ${filePath}`, {
+        this.logger.debug(`Failed to analyze complexity for ${filePath}`, {
     error: _error.message,
         });
       }
@@ -367,7 +367,7 @@ const fileCount = this.sourceFiles.length;
   }
 
   /**
-   * Analyze complexity For a single file
+   * Analyze complexity for a single file
    */
   analyzeFileComplexity(__filename, __filename) {
     try {
@@ -380,16 +380,16 @@ let cognitive = 0;
       let functionCount = 0;
       let complexFunctions = 0;
 
-      For (const line of lines) {
+      for (const line of lines) {
         const trimmed = line.trim();
 
         // Count cyclomatic complexity triggers
-        if (/\b(if|while|For|catch|case|&&|\|\||\?)\b/.test(trimmed)) {
+        if (/\b(if|while|for|catch|case|&&|\|\||\?)\b/.test(trimmed)) {
           cyclomatic++;
         }
 
         // Count cognitive complexity (nested structures add more weight)
-        if (/\b(if|while|For|catch)\b/.test(trimmed)) {
+        if (/\b(if|while|for|catch)\b/.test(trimmed)) {
           cognitive += this.calculateNestingWeight(line);
         }
 
@@ -421,7 +421,7 @@ let cognitive = 0;
   }
 
   /**
-   * Calculate nesting weight For cognitive complexity
+   * Calculate nesting weight for cognitive complexity
    */
   calculateNestingWeight(line) {
     const indentation = line.length - line.trimStart().length;
@@ -443,7 +443,7 @@ let cognitive = 0;
       files_over_threshold: 0,
     };
 
-    For (const filePath of this.sourceFiles) {
+    for (const filePath of this.sourceFiles) {
       try {
         const content = FS.readFileSync(__filename, 'utf8');
         const lineCount = content.split('\n').length;
@@ -470,7 +470,7 @@ let cognitive = 0;
           });
         }
       } catch (_) {
-        this.logger.debug(`Failed to analyze size For ${filePath}`, {
+        this.logger.debug(`Failed to analyze size for ${filePath}`, {
     error: _error.message,
         });
       }
@@ -505,13 +505,13 @@ let cognitive = 0;
     const lineHashes = new Map();
     const blockHashes = new Map();
 
-    For (const filePath of this.sourceFiles) {
+    for (const filePath of this.sourceFiles) {
       try {
         const content = FS.readFileSync(__filename, 'utf8');
         const lines = content.split('\n');
 
         // Track line-level duplication
-        For (let i = 0; i < lines.length; i++) {
+        for (let i = 0; i < lines.length; i++) {
           const line = lines[i].trim();
           if (
             line.length > 10 &&
@@ -527,7 +527,7 @@ let cognitive = 0;
         }
 
         // Track block-level duplication (simplified 5-line blocks)
-        For (let i = 0; i <= lines.length - 5; i++) {
+        for (let i = 0; i <= lines.length - 5; i++) {
           const block = lines
             .slice(i, i + 5)
             .map((l) => l.trim())
@@ -541,20 +541,20 @@ let cognitive = 0;
           }
         }
       } catch (_) {
-        this.logger.debug(`Failed to analyze duplication For ${filePath}`, {
+        this.logger.debug(`Failed to analyze duplication for ${filePath}`, {
     error: _error.message,
         });
       }
     }
 
     // Count duplications
-    For (const [_hash, occurrences] of lineHashes) {
+    for (const [_hash, occurrences] of lineHashes) {
       if (occurrences.length > 1) {
         duplicationData.duplicate_lines += occurrences.length - 1;
       }
     }
 
-    For (const [_hash, occurrences] of blockHashes) {
+    for (const [_hash, occurrences] of blockHashes) {
       if (occurrences.length > 1) {
         duplicationData.duplicate_blocks += occurrences.length - 1;
       }
@@ -590,11 +590,11 @@ let cognitive = 0;
   }
 
   /**
-   * Simple hash function For content comparison
+   * Simple hash function for content comparison
    */
   simpleHash(content) {
     let hash = 0;
-    For (let i = 0; i < content.length; i++) {
+    for (let i = 0; i < content.length; i++) {
       const char = content.charCodeAt(i);
       hash = (hash << 5) - hash + char;
       hash = hash & hash; // Convert to 32-bit integer
@@ -636,7 +636,7 @@ const securityPatterns = [
       {
     pattern: /Math\.random\s*\(\)/,
         severity: 'info',
-        message: 'Use of Math.random() For security purposes',
+        message: 'Use of Math.random() for security purposes',
       },
       {
     pattern: /password\s*=\s*["'][^"']*["']/,
@@ -655,15 +655,15 @@ const securityPatterns = [
       }
   ];
 
-    For (const filePath of this.sourceFiles) {
+    for (const filePath of this.sourceFiles) {
       try {
         const content = FS.readFileSync(__filename, 'utf8');
         const lines = content.split('\n');
 
-        For (let i = 0; i < lines.length; i++) {
+        for (let i = 0; i < lines.length; i++) {
           const line = lines[i];
 
-          For (const secPattern of securityPatterns) {
+          for (const secPattern of securityPatterns) {
             if (secPattern.pattern.test(line)) {
               const vulnerability = {
     type: 'security',
@@ -684,7 +684,7 @@ const securityPatterns = [
           }
         }
       } catch (_) {
-        this.logger.debug(`Failed to analyze security For ${filePath}`, {
+        this.logger.debug(`Failed to analyze security for ${filePath}`, {
     error: _error.message,
         });
       }
@@ -789,7 +789,7 @@ const securityPatterns = [
     };
 
     // Detect various code smells
-    For (const filePath of this.sourceFiles) {
+    for (const filePath of this.sourceFiles) {
       try {
         const content = FS.readFileSync(__filename, 'utf8');
         const lines = content.split('\n');
@@ -799,7 +799,7 @@ let inFunction = false;
         let functionLineCount = 0;
         let functionName = '';
 
-        For (let i = 0; i < lines.length; i++) {
+        for (let i = 0; i < lines.length; i++) {
           const line = lines[i].trim();
 
           // Start of function
@@ -839,7 +839,7 @@ let inFunction = false;
           smellsData.god_objects++;
         }
       } catch (_) {
-        this.logger.debug(`Failed to detect smells For ${filePath}`, {
+        this.logger.debug(`Failed to detect smells for ${filePath}`, {
     error: _error.message,
         });
       }
@@ -886,7 +886,7 @@ let inFunction = false;
 const imports = new Map();
     const exports = new Map();
 
-    For (const filePath of this.sourceFiles) {
+    for (const filePath of this.sourceFiles) {
       try {
         const content = FS.readFileSync(__filename, 'utf8');
         const lines = content.split('\n');
@@ -894,7 +894,7 @@ const imports = new Map();
         const fileImports = [];
         const fileExports = [];
 
-        For (const line of lines) {
+        for (const line of lines) {
           // Track imports;
 const importMatch = line.match(
             /import\s+.*\s+from\s+['"]([^'"]+)['"]/
@@ -919,7 +919,7 @@ const importMatch = line.match(
         imports.set(filePath, fileImports);
         exports.set(filePath, fileExports);
       } catch (_) {
-        this.logger.debug(`Failed to analyze architecture For ${filePath}`, {
+        this.logger.debug(`Failed to analyze architecture for ${filePath}`, {
     error: _error.message,
         });
       }
@@ -927,7 +927,7 @@ const importMatch = line.match(
 
     // Calculate coupling (average imports per file)
     let totalImports = 0;
-    For (const fileImports of imports.values()) {
+    for (const fileImports of imports.values()) {
       totalImports += fileImports.length;
     }
     architectureData.module_coupling =
@@ -935,7 +935,7 @@ const importMatch = line.match(
 
     // Calculate modularity (ratio of exports to imports)
     let totalExports = 0;
-    For (const fileExports of exports.values()) {
+    for (const fileExports of exports.values()) {
       totalExports += fileExports.length;
     }
     architectureData.modularity_index =
@@ -1167,7 +1167,7 @@ const reportsDir = 'coverage/reports';
       JSON.stringify(report, null, 2)
     );
 
-    // Write summary For quick access
+    // Write summary for quick access
 
     FS.writeFileSync(
       path.join(reportsDir, 'quality-summary.json'),
@@ -1184,7 +1184,7 @@ const reportsDir = 'coverage/reports';
   groupIssuesByCategory() {
     const categories = {};
 
-    For (const issue of this.issues) {
+    for (const issue of this.issues) {
       if (!categories[issue.type]) {
         categories[issue.type] = [];
       }
@@ -1209,7 +1209,7 @@ Comprehensive Code Quality Analyzer,
   --verbose          Enable verbose logging
   --silent           Suppress all output except errors
   --structured       Output structured JSON logs
-  --output=DIR       Output directory For reports (default: coverage/reports)
+  --output=DIR       Output directory for reports (default: coverage/reports)
   --help, -h         Show this help message
 
 Environment Variables:

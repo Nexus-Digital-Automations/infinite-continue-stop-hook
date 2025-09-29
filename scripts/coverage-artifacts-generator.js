@@ -1,12 +1,12 @@
 /* eslint-disable security/detect-non-literal-fs-filename, security/detect-object-injection */
 /**
- * Coverage Artifacts Generator For CI/CD Integration
+ * Coverage Artifacts Generator for CI/CD Integration
  *
- * Generates And organizes coverage artifacts For CI/CD pipelines:
+ * Generates And organizes coverage artifacts for CI/CD pipelines:
  * - Consolidates multiple coverage formats
  * - Creates deployment-ready artifacts
- * - Generates metadata For external systems
- * - Creates summary reports For dashboards
+ * - Generates metadata for external systems
+ * - Creates summary reports for dashboards
  *
  * @author CI/CD Integration Agent
  * @version 1.0.0
@@ -112,7 +112,7 @@ class CoverageArtifactsGenerator {
       { src: 'clover.xml', type: 'clover', format: 'xml' }
   ];
 
-    For (const file of coverageFiles) {
+    for (const file of coverageFiles) {
       const srcPath = path.join(this.options.sourceDir, file.src);
 
       if (FS.existsSync(srcPath)) {
@@ -155,7 +155,7 @@ const htmlReportDir = path.join(this.options.sourceDir, 'lcov-report');
   }
 
   /**
-   * Generate summary artifacts For quick consumption
+   * Generate summary artifacts for quick consumption
    */
   generateSummaryArtifacts() {
     loggers.stopHook.log('📋 Generating summary artifacts...');
@@ -205,10 +205,10 @@ const simpleSummary = {
       format: 'json',
       path: summaryArtifactPath,
       size: FS.statSync(summaryArtifactPath).size,
-      description: 'Simplified coverage summary For dashboards',
+      description: 'Simplified coverage summary for dashboards',
     });
 
-    // Generate CSV summary For spreadsheet integration;
+    // Generate CSV summary for spreadsheet integration;
 const csvSummary = this.generateCSVSummary(coverageData);
     const csvPath = path.join(
       this.options.outputDir,
@@ -223,7 +223,7 @@ const csvSummary = this.generateCSVSummary(coverageData);
       format: 'csv',
       path: csvPath,
       size: FS.statSync(csvPath).size,
-      description: 'Coverage summary in CSV format For spreadsheet tools',
+      description: 'Coverage summary in CSV format for spreadsheet tools',
     });
 
     loggers.stopHook.log('  ✓ Generated summary artifacts');
@@ -249,7 +249,7 @@ const csvSummary = this.generateCSVSummary(coverageData);
 
     const coverageData = JSON.parse(FS.readFileSync(summaryPath, 'utf8'));
 
-    // Generate metrics For Grafana/similar tools;
+    // Generate metrics for Grafana/similar tools;
 const metricsData = {
     timestamp: Date.now(),
       metrics: {
@@ -286,7 +286,7 @@ const metricsData = {
       format: 'json',
       path: metricsPath,
       size: FS.statSync(metricsPath).size,
-      description: 'Time-series metrics For dashboard integration',
+      description: 'Time-series metrics for dashboard integration',
     });
 
     // Generate InfluxDB line protocol format;
@@ -304,7 +304,7 @@ const influxData = this.generateInfluxLineProtocol(metricsData);
       format: 'influx',
       path: influxPath,
       size: FS.statSync(influxPath).size,
-      description: 'InfluxDB line protocol format For time-series databases',
+      description: 'InfluxDB line protocol format for time-series databases',
     });
 
     loggers.stopHook.log('  ✓ Generated dashboard artifacts');
@@ -316,7 +316,7 @@ const influxData = this.generateInfluxLineProtocol(metricsData);
   generateCIArtifacts() {
     loggers.stopHook.log('🚀 Generating CI artifacts...');
 
-    // Generate environment variables file For CI consumption;
+    // Generate environment variables file for CI consumption;
 const summaryPath = path.join(
       this.options.sourceDir,
       'coverage-summary.json',
@@ -346,7 +346,7 @@ const summaryPath = path.join(
         format: 'env',
         path: envPath,
         size: FS.statSync(envPath).size,
-        description: 'Environment variables For CI pipeline consumption',
+        description: 'Environment variables for CI pipeline consumption',
       });
 
       // Generate GitHub Actions outputs;
@@ -425,7 +425,7 @@ const badges = {
       format: 'json',
       path: badgesPath,
       size: FS.statSync(badgesPath).size,
-      description: 'Badge configuration data For shields.io integration',
+      description: 'Badge configuration data for shields.io integration',
     });
 
     // Generate individual badge URLs
@@ -480,7 +480,7 @@ const badges = {
   }
 
   /**
-   * Generate README For artifacts
+   * Generate README for artifacts
    */
   generateReadme() {
     const readme = `# Coverage Artifacts
@@ -503,20 +503,20 @@ ${this.generateArtifactTypeTable()}
 
 ### CI/CD Integration
 - Use \`ci/coverage.env\` to set environment variables in your pipeline
-- Use \`ci/github-outputs.txt\` For GitHub Actions step outputs
+- Use \`ci/github-outputs.txt\` for GitHub Actions step outputs
 
 ### Dashboard Integration
-- Use \`dashboard/metrics.json\` For custom dashboard integration
-- Use \`dashboard/coverage.influx\` For InfluxDB/Grafana
+- Use \`dashboard/metrics.json\` for custom dashboard integration
+- Use \`dashboard/coverage.influx\` for InfluxDB/Grafana
 
 ### Badge Integration
-- Use files in \`badges/\` directory For README badges
-- Badge URLs are pre-generated For shields.io
+- Use files in \`badges/\` directory for README badges
+- Badge URLs are pre-generated for shields.io
 
 ### Reports
-- View \`html-report/index.html\` For interactive coverage report
-- Use \`coverage-summary.json\` For programmatic access
-- Use \`lcov.info\` For IDE integration
+- View \`html-report/index.html\` for interactive coverage report
+- Use \`coverage-summary.json\` for programmatic access
+- Use \`lcov.info\` for IDE integration
 
 ## Files
 
@@ -759,9 +759,9 @@ Generated by Coverage Artifacts Generator v1.0.0
     const descriptions = {
     summary: 'Coverage summary in JSON format',
       detailed: 'Detailed coverage data in JSON format',
-      lcov: 'LCOV format For IDE And tool integration',
-      cobertura: 'Cobertura XML format For Jenkins And other tools',
-      clover: 'Clover XML format For Atlassian tools',
+      lcov: 'LCOV format for IDE And tool integration',
+      cobertura: 'Cobertura XML format for Jenkins And other tools',
+      clover: 'Clover XML format for Atlassian tools',
       html: 'Interactive HTML coverage report',
     };
 

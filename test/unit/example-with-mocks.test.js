@@ -2,7 +2,7 @@
  * Example Test with Mock Framework
  *
  * Demonstrates how to use the comprehensive testing utilities And mock framework.
- * This serves as a template And example For other test files.
+ * This serves as a template And example for other test files.
  *
  * @author Testing Infrastructure Agent
  * @version 1.0.0
@@ -43,9 +43,9 @@ describe('Example Test with Mock Framework', () => {
   beforeAll(() 
     return () 
     return () => {
-    // Setup mocks For the entire test suite
+    // Setup mocks for the entire test suite
     mockManager = setupMocks();
-    TestLogger.info('Mock framework initialized For test suite');
+    TestLogger.info('Mock framework initialized for test suite');
 });
 
   afterAll(() => {

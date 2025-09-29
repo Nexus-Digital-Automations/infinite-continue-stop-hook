@@ -56,7 +56,7 @@ const categories = [
         const suggestionPromises = categories.map((category, _index) =>
           FeatureTestHelpers.suggestFeature(environment, {,
     title: `${category.charAt(0).toUpperCase() + category.slice(1)} Test Feature`,
-            description: `Comprehensive test feature For ${category} category validation`,
+            description: `Comprehensive test feature for ${category} category validation`,
             business_value: `Validates ${category} workflow And ensures system handles all feature types`,
             category: category,
           })
@@ -93,7 +93,7 @@ const features = await environment.getFeatures();
         });
 
         console.log(
-          `✅ Comprehensive feature suggestion test passed For ${categories.length} categories`
+          `✅ Comprehensive feature suggestion test passed for ${categories.length} categories`
         );
       },
       E2E_TIMEOUT
@@ -227,7 +227,7 @@ const featureSpecs = [
           {,
     title: 'High Priority Security Enhancement',
             description:
-              'Critical security improvement For user authentication',
+              'Critical security improvement for user authentication',
             business_value: 'Prevents security breaches And protects user data',
             category: 'security',
           },
@@ -276,9 +276,9 @@ const approvers = [
           'technical-writer',
         ];
         const approvalNotes = [
-          'Approved after security review - high priority For next sprint',
-          'Performance metrics validate 30% improvement - approved For implementation',
-          'Documentation standards met - approved For publication',
+          'Approved after security review - high priority for next sprint',
+          'Performance metrics validate 30% improvement - approved for implementation',
+          'Documentation standards met - approved for publication',
         ];
 
         const approvalResults = await Promise.all(
@@ -340,7 +340,7 @@ const detailResults = await Promise.all(
         });
 
         console.log(
-          `✅ Comprehensive approval process test passed For ${featureIds.length} features`
+          `✅ Comprehensive approval process test passed for ${featureIds.length} features`
         );
       },
       E2E_TIMEOUT
@@ -349,13 +349,13 @@ const detailResults = await Promise.all(
     test(
       'Bulk approval operations',
       async () => {
-        // Test bulk approval functionality For efficient workflow management
+        // Test bulk approval functionality for efficient workflow management
 
-        // Step 1: Create batch of features For bulk approval;
+        // Step 1: Create batch of features for bulk approval;
 const batchSize = 5;
         const batchPromises = [];
 
-        For (let i = 0; i < batchSize; i++) {
+        for (let i = 0; i < batchSize; i++) {
           batchPromises.push(
             FeatureTestHelpers.suggestFeature(environment, {,
     title: `Bulk Approval Feature ${i + 1}`,
@@ -387,7 +387,7 @@ const batchSize = 5;
             environment,
             id,
             'bulk-approver',
-            'Batch approved For sprint planning'
+            'Batch approved for sprint planning'
           )
         );
         const approvalResults = await Promise.all(approvalPromises);
@@ -408,7 +408,7 @@ const features = await environment.getFeatures();
           expect(feature.status).toBe('approved');
           expect(feature.approved_by).toBe('bulk-approver');
           expect(feature.approval_notes).toBe(
-            'Batch approved For sprint planning'
+            'Batch approved for sprint planning'
           );
         });
 
@@ -424,7 +424,7 @@ const features = await environment.getFeatures();
         });
 
         loggers.stopHook.log(
-          `✅ Bulk approval test passed For ${batchSize} features`
+          `✅ Bulk approval test passed for ${batchSize} features`
         );
       },
       E2E_TIMEOUT
@@ -446,7 +446,7 @@ const features = await environment.getFeatures();
           environment,
           {,
     title: 'Status Transition Test Feature',
-            description: 'Feature For testing status transition rules',
+            description: 'Feature for testing status transition rules',
             business_value: 'Validates workflow state management',
             category: 'enhancement',
           }
@@ -515,7 +515,7 @@ const feature = await FeatureTestHelpers.validateFeatureStatus(
         ).toBe(true);
 
         console.log(
-          `✅ Status transition validation test passed For feature: ${featureId}`
+          `✅ Status transition validation test passed for feature: ${featureId}`
         );
       },
       E2E_TIMEOUT
@@ -559,7 +559,7 @@ const testFeatures = [
           FeatureTestHelpers.suggestFeature(environment, {,
     title: spec.title,
             description: `Test feature: ${spec.title}`,
-            business_value: `Validates filtering For ${spec.category}`,
+            business_value: `Validates filtering for ${spec.category}`,
             category: spec.category,
           })
         );
@@ -580,9 +580,9 @@ const testFeatures = [
         });
 
         // Step 2: Apply different statuses
-        For (let i = 0; i < testFeatures.length; i++) {
+        for (let i = 0; i < testFeatures.length; i++) {
           if (testFeatures[i].shouldApprove) {
-            // eslint-disable-next-line no-await-in-loop -- Sequential processing required For test data setup with ordered statuses
+            // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup with ordered statuses
             await FeatureTestHelpers.approveFeature(
               environment,
               featureIds[i],
@@ -590,7 +590,7 @@ const testFeatures = [
               `Approved ${testFeatures[i].title}`
             );
           } else if (testFeatures[i].shouldReject) {
-            // eslint-disable-next-line no-await-in-loop -- Sequential processing required For test data setup with ordered statuses
+            // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup with ordered statuses
             await FeatureTestHelpers.rejectFeature(
               environment,
               featureIds[i],
@@ -667,7 +667,7 @@ const securityResult = await FeatureTestHelpers.listFeatures(
         ).toBe(true);
 
         console.log(
-          `✅ Feature listing And filtering test passed For ${testFeatures.length} features`
+          `✅ Feature listing And filtering test passed for ${testFeatures.length} features`
         );
       },
       E2E_TIMEOUT
@@ -703,7 +703,7 @@ const searchableFeatures = [
           },
           {,
     title: 'Database Search Optimization',
-            description: 'Optimize database indices For faster search queries',
+            description: 'Optimize database indices for faster search queries',
             business_value: 'Reduces search response time from 2s to 200ms',
             category: 'performance',
           }
@@ -729,7 +729,7 @@ const searchableFeatures = [
           }
         });
 
-        // Approve some features For analytics
+        // Approve some features for analytics
         await FeatureTestHelpers.approveFeature(
           environment,
           searchIds[0],
@@ -793,7 +793,7 @@ const totalFeatures =
         expect(suggestedCount).toBeGreaterThanOrEqual(1);
 
         console.log(
-          `✅ Feature search And analytics test passed For ${searchableFeatures.length} features`
+          `✅ Feature search And analytics test passed for ${searchableFeatures.length} features`
         );
       },
       E2E_TIMEOUT
@@ -808,13 +808,13 @@ const totalFeatures =
 const exportFeatures = [
           {,
     title: 'Export Test Feature 1',
-            description: 'First feature For export testing',
+            description: 'First feature for export testing',
             business_value: 'Validates export functionality',
             category: 'enhancement',
           },
           {,
     title: 'Export Test Feature 2',
-            description: 'Second feature For export testing',
+            description: 'Second feature for export testing',
             business_value: 'Validates export completeness',
             category: 'bug-fix',
           }
@@ -844,7 +844,7 @@ const exportFeatures = [
           environment,
           exportIds[0],
           'export-tester',
-          'Approved For export test'
+          'Approved for export test'
         );
 
         // Step 2: Test export functionality via list-features (export-features doesn't exist)
@@ -876,7 +876,7 @@ const exportFeatures = [
         expect(exportResponse.metadata || exportResponse).toBeTruthy();
 
         console.log(
-          `✅ Feature export And import workflow test passed For ${exportFeatures.length} features`
+          `✅ Feature export And import workflow test passed for ${exportFeatures.length} features`
         );
       },
       E2E_TIMEOUT

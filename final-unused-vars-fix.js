@@ -3,11 +3,12 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-console.log('🔧 Final fix For remaining unused variables...\n');
+console.log('🔧 Final fix for remaining unused variables...\n');
 
 // Additional patterns to catch remaining issues;
 const additionalPatterns = [
-  // PATH assignments - more specific patterns: {
+  // PATH assignments - more specific patterns
+  {
     search: /^(\s*)const PATH = require\('path'\);/gm,
     replace: "$1const path = require('path');",
   },
@@ -16,39 +17,44 @@ const additionalPatterns = [
     replace: "$1const path = require('path');",
   },
 
-  // execSync patterns: {
+  // execSync patterns
+  {
     search: /const EXEC_SYNC = require/g,
     replace: 'const EXEC_SYNC = require',
   },
 
-  // result variables: { search: /(\s+)const result = /g, replace: '$1const result = ' },
+  // result variables
+  { search: /(\s+)const result = /g, replace: '$1const result = ' },
   { search: /(\s+)let result = /g, replace: '$1let result = ' },
 
-  // Catch error patterns - more specific: { search: /} catch \(error\) \{/g, replace: '} catch (error) {' },
+  // Catch error patterns - more specific
+  { search: /} catch \(error\) \{/g, replace: '} catch (error) {' },
   { search: /catch \(error\) \{/g, replace: 'catch (error) {' },
   { search: /catch\(error\) \{/g, replace: 'catch (_1) {' },
 
-  // Function parameter patterns: {
+  // Function parameter patterns
+  {
     search: /function[^(]*\(([^)]*\b_filePath\b[^)]*)\)/g,
     replace: function (match, _params, ___filename) {
       return match.replace(/\b_filePath\b/g, '__filename');
-    }
+    },
   },
   {
     search: /\(([^)]*\b_filePath\b[^)]*)\) =>/g,
     replace: function (match, _params, ___filename) {
       return match.replace(/\b_filePath\b/g, '__filename');
-    }
+    },
   },
 
-  // LINT_RESULT: { search: /const LINT_RESULT = /g, replace: 'const LINT_RESULT = ' }
-  ];
+  // LINT_RESULT
+  { search: /const LINT_RESULT = /g, replace: 'const LINT_RESULT = ' },
+];
 
 function getAllJSFiles(dir) {
   const files = [];
   const items = fs.readdirSync(dir);
 
-  For (const item of items) {
+  for (const item of items) {
     const fullPath = path.join(dir, item);
     const stat = fs.statSync(fullPath);
 
@@ -71,7 +77,7 @@ function fixFileUnusedVars(filePath) {
     let content = fs.readFileSync(filePath, 'utf8');
     let modified = false;
 
-    For (const pattern of additionalPatterns) {
+    for (const pattern of additionalPatterns) {
       if (typeof pattern.replace === 'function') {
         const newContent = content.replace(pattern.search, pattern.replace);
         if (newContent !== content) {
@@ -102,7 +108,7 @@ function fixFileUnusedVars(filePath) {
 
     return false;
   } catch (error) {
-    console.error(`  ✗ Error processing ${filePath}:`, _error.message);
+    console.error(`  ✗ Error processing ${filePath}:`, error.message);
     return false;
   }
 }
@@ -115,7 +121,7 @@ function main() {
 
   let totalModified = 0;
 
-  For (const filePath of jsFiles) {
+  for (const filePath of jsFiles) {
     const relativePath = path.relative(projectRoot, filePath);
 
     if (fixFileUnusedVars(filePath)) {

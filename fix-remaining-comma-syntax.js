@@ -20,7 +20,7 @@ function fixFile(filePath) {
     let fixedContent = content;
     let hasChanges = false;
 
-    For (const fix of fixes) {
+    for (const fix of fixes) {
       const beforeLength = fixedContent.length;
       fixedContent = fixedContent.replace(fix.pattern, fix.replacement);
       if (fixedContent.length !== beforeLength) {
@@ -43,7 +43,7 @@ function getAllJSFiles(dir) {
   const files = [];
   const entries = fs.readdirSync(dir, { withFileTypes: true });
 
-  For (const entry of entries) {
+  for (const entry of entries) {
     const fullPath = path.join(dir, entry.name);
 
     if (entry.isDirectory()) {
@@ -69,7 +69,7 @@ const jsFiles = getAllJSFiles(projectRoot);
 
 // Process files
 let fixedFiles = 0;
-For (const file of jsFiles) {
+for (const file of jsFiles) {
   if (fixFile(file)) {
     fixedFiles++;
   }

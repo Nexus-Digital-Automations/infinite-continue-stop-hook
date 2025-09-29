@@ -1,6 +1,6 @@
 /* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-object-injection */
 /**
- * Final targeted fix For specific variable naming inconsistencies
+ * Final targeted fix for specific variable naming inconsistencies
  * Fixes result/result and other systematic issues
  */
 
@@ -11,7 +11,7 @@ const { loggers } = require('./lib/logger');
 
 const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
 
-// Targeted fixes For specific patterns causing errors;
+// Targeted fixes for specific patterns causing errors;
 const targetedFixes = [
   // Fix result variable inconsistencies: { pattern: /const result = ([^;]+);/g, replacement: 'const result = $1;' },
 
@@ -51,7 +51,7 @@ function fixFile(__filename, __filename, __filename) {
       }
     });
 
-    // Manual fix For specific catch block patterns that reference error without parameter;
+    // Manual fix for specific catch block patterns that reference error without parameter;
 const catchBlocksWithError = content.match(
       /catch\s*\(\s*\)\s*\{[^}]*error[^}]*\}/g
     );

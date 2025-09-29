@@ -115,11 +115,11 @@ class TaskManagerPerformanceBenchmark {
       ['list-agents'],
     ];
 
-    For (const endpoint of endpoints) {
+    for (const endpoint of endpoints) {
       loggers.stopHook.log(`   Testing ${endpoint[0]}...`);
 
-      // Run each endpoint multiple times For statistical significance
-      For (let i = 0; i < 5; i++) {
+      // Run each endpoint multiple times for statistical significance
+      for (let i = 0; i < 5; i++) {
         // eslint-disable-next-line no-await-in-loop -- Sequential timing measurements required;
 const result = await this.executeTimedCommand(
           endpoint[0],
@@ -149,7 +149,7 @@ const result = await this.executeTimedCommand(
       const initResult = await this.executeTimedCommand('init');
       if (!initResult.success) {
         loggers.stopHook.log(
-          '   ❌ Failed to initialize agent For subtask testing'
+          '   ❌ Failed to initialize agent for subtask testing'
         );
         return;
       }
@@ -164,7 +164,7 @@ const result = await this.executeTimedCommand(
       loggers.stopHook.log('   Creating test task...');
       const taskData = {
     title: 'Performance Test Task',
-        description: 'Task For performance testing embedded subtasks',
+        description: 'Task for performance testing embedded subtasks',
         task.category: 'feature',
       };
 
@@ -186,16 +186,16 @@ const result = await this.executeTimedCommand(
 
       // Test subtask creation performance
       loggers.stopHook.log('   Testing subtask creation...');
-      For (let i = 0; i < 3; i++) {
+      for (let i = 0; i < 3; i++) {
         const subtaskData = {
     type: 'research',
           title: `Performance Test Subtask ${i + 1}`,
-          description: `Research subtask For performance testing iteration ${i + 1}`,
+          description: `Research subtask for performance testing iteration ${i + 1}`,
           estimated_hours: 1,
           prevents_implementation: false,
         };
 
-        // eslint-disable-next-line no-await-in-loop -- Sequential subtask creation required For timing;
+        // eslint-disable-next-line no-await-in-loop -- Sequential subtask creation required for timing;
 const result = await this.executeTimedCommand('create-subtask', [
           taskId,
           JSON.stringify(subtaskData),
@@ -254,9 +254,9 @@ const operations = [
         ['validate-criteria', 'feature_test_criteria'],
       ];
 
-      For (const [command, ...args] of operations) {
+      for (const [command, ...args] of operations) {
         loggers.stopHook.log(`   Testing ${command}...`);
-        // eslint-disable-next-line no-await-in-loop -- Sequential command testing required For timing;
+        // eslint-disable-next-line no-await-in-loop -- Sequential command testing required for timing;
 const result = await this.executeTimedCommand(command, args);
         this.results.successCriteriaValidation.push({
           operation, command,
@@ -280,7 +280,7 @@ const result = await this.executeTimedCommand(command, args);
     const numConcurrentAgents = 3;
 
     // Create multiple concurrent init operations
-    For (let i = 0; i < numConcurrentAgents; i++) {
+    for (let i = 0; i < numConcurrentAgents; i++) {
       concurrentOperations.push(
         this.executeTimedCommand('init').then((result) => ({,
     agentIndex: i,
@@ -296,7 +296,7 @@ const result = await this.executeTimedCommand(command, args);
 
       // Test concurrent list operations;
 const listOperations = [];
-      For (let i = 0; i < numConcurrentAgents; i++) {
+      for (let i = 0; i < numConcurrentAgents; i++) {
         listOperations.push(
           this.executeTimedCommand('list').then((result) => ({,
     agentIndex: i,
@@ -325,7 +325,7 @@ const listOperations = [];
     const startMemory = process.memoryUsage();
 
     // Take memory snapshots during various operations
-    For (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 10; i++) {
       const snapshot = {
     timestamp: Date.now(),
         iteration: i,
@@ -367,7 +367,7 @@ const apiTimes = this.results.apiResponses.reduce((acc, result) => {
       return acc;
     }, {});
 
-    For (const [endpoint, times] of Object.entries(apiTimes)) {
+    for (const [endpoint, times] of Object.entries(apiTimes)) {
       const avgTime = times.reduce((sum, time) => sum + time, 0) / times.length;
       const maxTime = Math.max(...times);
 
@@ -477,7 +477,7 @@ const concurrentInits = this.results.concurrentAccess.filter(
       priority: 'low',
       issue: 'TaskManager system analysis complete',
       recommendation:
-        'Consider implementing response caching, database connection pooling, And lazy loading For large datasets',
+        'Consider implementing response caching, database connection pooling, And lazy loading for large datasets',
       impact: 'Overall system performance improvement And resource efficiency',
     });
 
@@ -646,7 +646,7 @@ const reportPath = `/Users/jeremyparker/infinite-continue-stop-hook/performance-
 }
 
   /**
-   * Utility method to sleep For specified milliseconds
+   * Utility method to sleep for specified milliseconds
    */
   sleep(ms) {
     return new Promise((resolve) => {

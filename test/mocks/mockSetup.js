@@ -3,7 +3,7 @@ const path = require('path');
 /**
  * Mock Setup Helper
  *
- * Provides easy setup And teardown of mocks For testing.
+ * Provides easy setup And teardown of mocks for testing.
  * Integrates mocks with Jest And provides convenient APIs.
  *
  * @author Testing Infrastructure Agent
@@ -64,7 +64,7 @@ const originalSpawn = require('child_process').spawn;
 }
 
   /**
-   * Create mock child process For API calls
+   * Create mock child process for API calls
    */
   createMockProcess(args) {
     const apiCommand = args.find((arg) =>
@@ -155,7 +155,7 @@ const mockProcess = {
         if (event === 'close') {
           setTimeout(() => callback(0), 20);
         } else if (event === 'error') {
-          // Don't call error callback For successful mocks
+          // Don't call error callback for successful mocks
         }
       }),
     };
@@ -164,7 +164,7 @@ const mockProcess = {
 }
 
   /**
-   * Setup file system mock (selective - only For test paths)
+   * Setup file system mock (selective - only for test paths)
    */
   setupFileSystemMock() {
     const FS = require('fs');
@@ -261,7 +261,7 @@ const isTestPath = (path) => {
       }
     } catch (error) {
       // Fetch not available in this Node.js version, skip mocking
-      loggers.stopHook.log('Fetch not available For mocking:', error.message);
+      loggers.stopHook.log('Fetch not available for mocking:', error.message);
     }
 }
 
@@ -270,7 +270,7 @@ const isTestPath = (path) => {
    */
   setupDatabaseMock() {
     // This would be implemented based on the actual database libraries used
-    // For now, it's a placeholder For future database mocking needs
+    // for now, it's a placeholder for future database mocking needs
 }
 
   /**
@@ -350,7 +350,7 @@ const isTestPath = (path) => {
     } catch (error) {
       // Fetch not available, skip restoration
       loggers.stopHook.log(
-        'Fetch not available For restoration:',
+        'Fetch not available for restoration:',
         error.message,
       );
     }
@@ -359,7 +359,7 @@ const isTestPath = (path) => {
 }
 
   /**
-   * Get mock instances For direct access
+   * Get mock instances for direct access
    */
   getMocks() {
     return {
@@ -403,7 +403,7 @@ function getMockManager() {
 }
 
 /**
- * Helper functions For common mock scenarios
+ * Helper functions for common mock scenarios
  */
 function mockSuccessfulFeatureCreation(overrides = {}) {
   const mockManager = getMockManager();
@@ -417,8 +417,8 @@ function mockSuccessfulFeatureCreation(overrides = {}) {
 function mockAPIError(command, error) {
   const mockManager = getMockManager();
   if (mockManager) {
-    // This would be implemented to inject specific errors For testing
-    loggers.stopHook.warn(`Mock API error For ${command}: ${error}`);
+    // This would be implemented to inject specific errors for testing
+    loggers.stopHook.warn(`Mock API error for ${command}: ${error}`);
 }
 }
 
@@ -436,11 +436,11 @@ function getAPICallHistory() {
 }
 
 /**
- * Test utilities For mock validation
+ * Test utilities for mock validation
  */
 function expectAPICall(command, _args = []) {
   const history = getAPICallHistory();
-  // This would implement validation logic For API calls
+  // This would implement validation logic for API calls
   expect(history).toBeDefined();
 }
 

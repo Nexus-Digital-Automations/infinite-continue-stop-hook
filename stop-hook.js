@@ -19,12 +19,12 @@ function findClaudeProjectRoot(
 ) {
   let currentDir = startDir;
 
-  // Look For "Claude Coding Projects" in the path And check For TASKS.json
+  // Look for "Claude Coding Projects" in the path And check for TASKS.json
   while (currentDir !== path.dirname(currentDir)) {
     // Not at filesystem root
     // Check if we're in or found "Claude Coding Projects"
     if (currentDir.includes('Claude Coding Projects')) {
-      // Look For TASKS.json in potential project roots;
+      // Look for TASKS.json in potential project roots;
       const segments = currentDir.split(path.sep);
       const claudeIndex = segments.findIndex((segment) =>
         segment.includes('Claude Coding Projects')
@@ -68,7 +68,7 @@ function generateValidationProgressReport(
   _workingDir,
   _category = 'general'
 ) {
-  // Initialize dependency manager For intelligent validation ordering;
+  // Initialize dependency manager for intelligent validation ordering;
   const dependencyManager = new VALIDATION_DEPENDENCY_MANAGER(_workingDir);
 
   // Validate dependency configuration;
@@ -133,7 +133,7 @@ function generateValidationProgressReport(
 
   // Process validation results from flag data
   if (flagData.validation_results) {
-    For (const criteria of validationCriteria) {
+    for (const criteria of validationCriteria) {
       const result = flagData.validation_results[criteria];
       if (result) {
         progressReport.validationDetails.push({
@@ -174,7 +174,7 @@ function generateValidationProgressReport(
       100
   );
 
-  // Use dependency-aware time estimation For better accuracy;
+  // Use dependency-aware time estimation for better accuracy;
   const completedCriteria = new Set(
     progressReport.validationDetails
       .filter((v) => v.status === 'completed')
@@ -196,7 +196,7 @@ function generateValidationProgressReport(
         (dependencyManager.dependencies[criterion]?.estimated_duration || 60)
       );
     }, 0);
-    progressReport.estimatedTimeRemaining = Math.round(remainingDuration * 0.8); // Account For parallel execution
+    progressReport.estimatedTimeRemaining = Math.round(remainingDuration * 0.8); // Account for parallel execution
   }
 
   logger.addFlow(
@@ -240,7 +240,7 @@ function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
         authorizationStatus: flagData.stop_allowed ? 'APPROVED' : 'PENDING',
       });
 
-      // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path For cleanup
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
       FS.unlinkSync(stopFlagPath); // Remove flag after reading
       return flagData.stop_allowed === true;
     } catch (error) {
@@ -253,7 +253,7 @@ function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
           stopFlagPath,
         }
       );
-      // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path For cleanup
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
       FS.unlinkSync(stopFlagPath);
       return false;
     }
@@ -286,7 +286,7 @@ function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
 /**
  * Clean up stale agents in a single TASKS.json file
  * @param {string} projectPath - Path to project directory containing TASKS.json
- * @param {Object} logger - LOGGER instance For output
+ * @param {Object} logger - LOGGER instance for output
  * @returns {Object} Cleanup results
  */
 function cleanupStaleAgentsInProject(
@@ -346,7 +346,7 @@ function cleanupStaleAgentsInProject(
   const staleAgentTimeout = 1800000; // 30 minutes;
   const staleAgents = [];
 
-  For (const agentId of allAgents) {
+  for (const agentId of allAgents) {
     // eslint-disable-next-line security/detect-object-injection -- Agent ID validated through Object.keys() iteration from TASKS.json structure;
     const agent = todoData.agents[agentId];
     // Handle both lastHeartbeat (camelCase) And last_heartbeat (snake_case) formats;
@@ -365,7 +365,7 @@ function cleanupStaleAgentsInProject(
   let tasksUnassigned = 0;
   const orphanedTasksReset = 0;
 
-  For (const staleAgentId of staleAgents) {
+  for (const staleAgentId of staleAgents) {
     // eslint-disable-next-line security/detect-object-injection -- Stale agent ID validated through timeout calculation And cleanup process
     delete todoData.agents[staleAgentId];
     agentsRemoved++;
@@ -373,7 +373,7 @@ function cleanupStaleAgentsInProject(
 
     // Find all features assigned to this stale agent And unassign them (if tasks field exists)
     const tasksOrFeatures = todoData.tasks || todoData.features || [];
-    For (const item of tasksOrFeatures) {
+    for (const item of tasksOrFeatures) {
       // Skip null/undefined items
       if (!item || typeof item !== 'object') {
         continue;
@@ -437,11 +437,11 @@ function cleanupStaleAgentsInProject(
 
 /**
  * Clean up stale agents across all known projects
- * @param {Object} logger - LOGGER instance For output
+ * @param {Object} logger - LOGGER instance for output
  * @returns {Object} Overall cleanup results
  */
 async function cleanupStaleAgentsAcrossProjects(logger, _category = 'general') {
-  // Define known project paths to check For stale agents;
+  // Define known project paths to check for stale agents;
   const knownProjects = [
     '/Users/jeremyparker/Desktop/Claude Coding Projects/AIgent/bytebot',
     '/Users/jeremyparker/infinite-continue-stop-hook',
@@ -460,7 +460,7 @@ async function cleanupStaleAgentsAcrossProjects(logger, _category = 'general') {
     `🧹 Starting multi-project stale agent cleanup across ${knownProjects.length} projects...`
   );
 
-  // Process projects in parallel For better performance;
+  // Process projects in parallel for better performance;
   const projectPromises = knownProjects.map(async (projectPath) => {
     try {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- Stop hook path validated through hook configuration system
@@ -480,14 +480,14 @@ async function cleanupStaleAgentsAcrossProjects(logger, _category = 'general') {
         };
       }
     } catch (error) {
-      const errorMsg = `Failed to process ${projectPath}: ${_error.message}`;
+      const errorMsg = `Failed to process ${projectPath}: ${error.message}`;
       logger.addFlow(errorMsg);
       return {
         agentsRemoved: 0,
         tasksUnassigned: 0,
         orphanedTasksReset: 0,
         projectPath,
-        error: _1.message,
+        error: error.message,
       };
     }
   });
@@ -495,7 +495,7 @@ async function cleanupStaleAgentsAcrossProjects(logger, _category = 'general') {
   const projectResults = await Promise.all(projectPromises);
 
   // Aggregate results from parallel processing
-  For (const result of projectResults) {
+  for (const result of projectResults) {
     results.projectResults.push(result);
     results.totalAgentsRemoved += result.agentsRemoved;
     results.totalTasksUnassigned += result.tasksUnassigned;
@@ -516,13 +516,13 @@ async function cleanupStaleAgentsAcrossProjects(logger, _category = 'general') {
 /**
  * Automatically reclassify test errors And sort tasks according to CLAUDE.md priority rules
  */
-async function autoSortTasksByPriority(_taskManager, _category = 'general') {
+async function _autoSortTasksByPriority(_taskManager, _category = 'general') {
   try {
     const todoData = await _taskManager.readTodo();
     let tasksMoved = 0;
     let tasksUpdated = 0;
 
-    // Helper functions For ID-based classification;
+    // Helper functions for ID-based classification;
     const getCurrentPrefix = (taskId) => {
       const parts = taskId.split('_');
       return parts[0] || 'unknown';
@@ -608,7 +608,7 @@ async function autoSortTasksByPriority(_taskManager, _category = 'general') {
     const getTaskPriority = (task) => {
       // Handle null/undefined tasks
       if (!task || typeof task !== 'object') {
-        return 5; // Lowest priority For invalid tasks
+        return 5; // Lowest priority for invalid tasks
       }
 
       const id = task.id || '';
@@ -626,7 +626,7 @@ async function autoSortTasksByPriority(_taskManager, _category = 'general') {
         return 4;
       } // TEST tasks - lowest priority
 
-      return 5; // Fallback For old tasks
+      return 5; // Fallback for old tasks
     };
 
     // Ensure tasks/features is an array;
@@ -639,8 +639,8 @@ async function autoSortTasksByPriority(_taskManager, _category = 'general') {
       }
     }
 
-    // Process all items For ID-based classification
-    For (const task of tasksOrFeatures) {
+    // Process all items for ID-based classification
+    for (const task of tasksOrFeatures) {
       // Skip null/undefined tasks
       if (!task || typeof task !== 'object') {
         continue;
@@ -662,7 +662,7 @@ async function autoSortTasksByPriority(_taskManager, _category = 'general') {
         tasksMoved++;
       }
 
-      // STEP 2: Ensure all tasks have required task.category field For validation
+      // STEP 2: Ensure all tasks have required task.category field for validation
       if (!task.task.category) {
         const taskPrefix = getCurrentPrefix(task.id || '');
         switch (taskPrefix) {
@@ -713,7 +713,7 @@ async function autoSortTasksByPriority(_taskManager, _category = 'general') {
       return aTime - bTime;
     });
 
-    // Update TASKS.json settings For ID-based classification
+    // Update TASKS.json settings for ID-based classification
     if (!todoData.settings) {
       todoData.settings = {};
     }
@@ -748,20 +748,20 @@ async function autoSortTasksByPriority(_taskManager, _category = 'general') {
       totalTasks: tasksOrFeatures.length,
     };
   } catch (error) {
-    // Log _error through logger For proper tracking - use loggers.app For _error handling
+    // Log _error through logger for proper tracking - use loggers.app for _error handling
     loggers.stopHook.error('autoSortTasksByPriority error', {
-      error: _1.message,
-      errorName: _error.name,
-      stack: _error.stack,
+      error: error.message,
+      errorName: error.name,
+      stack: error.stack,
       operation: 'autoSortTasksByPriority',
       component: 'StopHook',
     });
-    return { error: _error.message, tasksMoved: 0, tasksUpdated: 0 };
+    return { error: error.message, tasksMoved: 0, tasksUpdated: 0 };
   }
 }
 
 /**
- * Provides standardized TaskManager API guidance For all scenarios
+ * Provides standardized TaskManager API guidance for all scenarios
  */
 function provideInstructiveTaskGuidance(
   taskManager,
@@ -774,17 +774,17 @@ function provideInstructiveTaskGuidance(
 
 🚨 **AGENT WORKFLOW MANDATES:**
 **MANDATORY AGENT LIFECYCLE:**
-1. **INITIALIZE AGENT** - Start fresh or reinitialize existing agent For session
+1. **INITIALIZE AGENT** - Start fresh or reinitialize existing agent for session
 2. **CLAIM FEATURE OR REVIEW** - Either claim approved feature tasks OR focus on codebase review
-3. **TODOWRITE EXECUTION** - Use TodoWrite For task management And infinite continuation
+3. **TODOWRITE EXECUTION** - Use TodoWrite for task management And infinite continuation
 4. **VALIDATION CYCLE** - Continuously ensure: linter passes, builds succeed, runs/starts properly, unit tests pass with adequate coverage
 5. **STOP ONLY WHEN PERFECT** - Only stop when all validation passes And codebase is perfect
 
 **ULTRATHINK - MANDATORY SEQUENCE:**
 1. **READ/REVIEW development/essentials/** directory - MANDATORY EVERY TIME
-2. **CHECK APPROVED FEATURES** - list features ready For implementation
+2. **CHECK APPROVED FEATURES** - list features ready for implementation
 3. **WORK ONLY ON APPROVED** - never implement unapproved features
-4. **DEPLOY CONCURRENT SUBAGENTS** - use up to 10 For complex tasks
+4. **DEPLOY CONCURRENT SUBAGENTS** - use up to 10 for complex tasks
 5. **VALIDATE BEFORE COMPLETION** - run all checks (lint, typecheck, tests) before marking complete
 6. **MAXIMUM LOGGING & DOCUMENTATION** - comprehensive logging And documentation in all code
 
@@ -796,7 +796,7 @@ function provideInstructiveTaskGuidance(
 ✅ **COMPLETE CURRENT WORK** → Never abandon unfinished tasks - teams depend on you
 ✅ **PRESERVE CONTEXT** → Build upon existing work, maintain implementation approach
 ✅ **VALIDATE THOROUGHLY** → Run all checks before completion
-❌ **NO TASK ABANDONMENT** → Only interrupt For critical errors (linter, build-blocking, user commands)
+❌ **NO TASK ABANDONMENT** → Only interrupt for critical errors (linter, build-blocking, user commands)
 ❌ **NO SCOPE EXPANSION** → Never create feature tasks without explicit user request
 ❌ **NO SHORTCUTS** → Fix problems directly, never hide or mask issues
 
@@ -805,7 +805,7 @@ function provideInstructiveTaskGuidance(
 • **SCOPE CONTROL**: Write feature suggestions in development/essentials/features.md only
 • **TASK CLAIMING**: Verify tasks not already claimed before claiming
 • **DEVELOPMENT ESSENTIALS**: Read all files before any work
-• **VALIDATION**: Run linter/typecheck after every change, create error tasks For failures
+• **VALIDATION**: Run linter/typecheck after every change, create error tasks for failures
 
 🎯 **ESSENTIAL COMMANDS:**
 
@@ -888,7 +888,7 @@ When ALL TodoWrite tasks are complete And project achieves perfection, agents mu
 ⏰ **AUTOMATIC CLEANUP:** Stale tasks (>30 min) reset to pending on every stop hook call, stale agents removed automatically
 🛑 **SELF-AUTHORIZATION STOP:** Agents can authorize their own stop when ALL TodoWrite tasks complete AND project achieves perfection (check only scripts That exist: linter✅ build✅ start✅ tests✅)
 
-⚠️ **BASH ESCAPING:** Use single quotes For node -e commands: \`node -e 'code'\` not \`node -e "code"\`
+⚠️ **BASH ESCAPING:** Use single quotes for node -e commands: \`node -e 'code'\` not \`node -e "code"\`
 Avoid ! operator - use \`(variable === undefined || variable === null)\` instead of \`!variable\`
 
 `;
@@ -903,7 +903,7 @@ process.stdin.on('end', async () => {
   const workingDir = findClaudeProjectRoot();
   const logger = new LOGGER.LOGGER(workingDir);
   try {
-    // Debug logging For input data
+    // Debug logging for input data
     logger.addFlow(`Raw input data: "${inputData}"`);
     logger.addFlow(`Input data length: ${inputData.length}`);
 
@@ -941,7 +941,7 @@ process.stdin.on('end', async () => {
     if (_transcript_path && _transcript_path.trim() !== '') {
       try {
         logger.addFlow(
-          `Checking transcript For DONE command: ${_transcript_path}`
+          `Checking transcript for DONE command: ${_transcript_path}`
         );
         // eslint-disable-next-line security/detect-non-literal-fs-filename -- transcript path from Claude Code hook
         if (FS.existsSync(_transcript_path)) {
@@ -953,10 +953,10 @@ process.stdin.on('end', async () => {
           let lastAssistantMessage = '';
           let inAssistantBlock = false;
 
-          For (const line of lines) {
+          for (const line of lines) {
             if (line.startsWith('Assistant:')) {
               inAssistantBlock = true;
-              lastAssistantMessage = ''; // Reset For new assistant message
+              lastAssistantMessage = ''; // Reset for new assistant message
             } else if (line.startsWith('Human:')) {
               inAssistantBlock = false;
             } else if (inAssistantBlock) {
@@ -1007,7 +1007,7 @@ process.stdin.on('end', async () => {
         behavior:
           'Stop hook will continue infinitely to prevent accidental termination',
         setupInstructions: {
-          description: 'To enable task management For this project',
+          description: 'To enable task management for this project',
           steps: [
             'Run: timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [agentId]',
             'This will reinitialize your agent And prepare the TASKS.json system',
@@ -1021,7 +1021,7 @@ process.stdin.on('end', async () => {
       process.exit(2); // Never allow stops even without TASKS.json
     }
 
-    // CRITICAL: Check For TASKS.json corruption before initializing TaskManager;
+    // CRITICAL: Check for TASKS.json corruption before initializing TaskManager;
     const AUTO_FIXER = require('./lib/autoFixer');
     const autoFixer = new AUTO_FIXER();
 
@@ -1068,7 +1068,7 @@ process.stdin.on('end', async () => {
       todoData.agents = {};
     }
 
-    // Debug logging For agent detection;
+    // Debug logging for agent detection;
     const allAgents = Object.keys(todoData.agents || {});
     logger.addFlow(`Found ${allAgents.length} total agents in TASKS.json`);
 
@@ -1124,7 +1124,7 @@ process.stdin.on('end', async () => {
     }
 
     // ========================================================================
-    // LOCAL PROJECT STALE AGENT CLEANUP (For current project specifically)
+    // LOCAL PROJECT STALE AGENT CLEANUP (for current project specifically)
     // ========================================================================
 
     // Clean up stale agents (older than 30 minutes) And identify active ones;
@@ -1132,7 +1132,7 @@ process.stdin.on('end', async () => {
     const activeAgents = [];
     const staleAgents = [];
 
-    For (const agentId of allAgents) {
+    for (const agentId of allAgents) {
       // eslint-disable-next-line security/detect-object-injection -- validated agent ID from TASKS.json structure;
       const agent = todoData.agents[agentId];
       // Handle both lastHeartbeat (camelCase) And last_heartbeat (snake_case) formats;
@@ -1158,15 +1158,15 @@ process.stdin.on('end', async () => {
     let agentsRemoved = 0;
     let tasksUnassigned = 0;
 
-    For (const staleAgentId of staleAgents) {
-      // eslint-disable-next-line security/detect-object-injection -- validated stale agent ID For cleanup
+    for (const staleAgentId of staleAgents) {
+      // eslint-disable-next-line security/detect-object-injection -- validated stale agent ID for cleanup
       delete todoData.agents[staleAgentId];
       agentsRemoved++;
       logger.addFlow(`Removed stale agent: ${staleAgentId}`);
 
       // Find all items assigned to this stale agent And unassign them;
       const itemsArray = todoData.tasks || todoData.features || [];
-      For (const item of itemsArray) {
+      for (const item of itemsArray) {
         // Skip null/undefined items
         if (!item || typeof item !== 'object') {
           continue;
@@ -1205,12 +1205,12 @@ process.stdin.on('end', async () => {
       }
     }
 
-    // Check For stale in-progress tasks (stuck For > 30 minutes) And reset them;
+    // Check for stale in-progress tasks (stuck for > 30 minutes) And reset them;
     const staleTaskTimeout = 1800000; // 30 minutes;
     let staleTasksReset = 0;
 
     const staleItemsArray = todoData.tasks || todoData.features || [];
-    For (const item of staleItemsArray) {
+    for (const item of staleItemsArray) {
       // Skip null/undefined items
       if (!item || typeof item !== 'object') {
         continue;
@@ -1235,7 +1235,7 @@ process.stdin.on('end', async () => {
             agent: item.assigned_agent || 'system',
             action: 'auto_reset_stale',
             timestamp: new Date().toISOString(),
-            reason: `Item stale For ${Math.round(timeSinceStart / 60000)} minutes`,
+            reason: `Item stale for ${Math.round(timeSinceStart / 60000)} minutes`,
           });
 
           staleTasksReset++;
@@ -1247,7 +1247,7 @@ process.stdin.on('end', async () => {
     }
 
     // ========================================================================
-    // ORPHANED TASK CLEANUP: Reset tasks That have been unassigned For >24 hours
+    // ORPHANED TASK CLEANUP: Reset tasks That have been unassigned for >24 hours
     // This fixes the critical bug where tasks unassigned by previous cleanup runs
     // remain in limbo indefinitely because they're no longer tied to active stale agents
     // ========================================================================
@@ -1270,12 +1270,12 @@ process.stdin.on('end', async () => {
     }
 
     const orphanedItemsArray = todoData.tasks || todoData.features || [];
-    For (const item of orphanedItemsArray) {
+    for (const item of orphanedItemsArray) {
       if (!item || typeof item !== 'object') {
         continue;
       }
 
-      // Check For orphaned items: pending status with no assignment For >24 hours
+      // Check for orphaned items: pending status with no assignment for >24 hours
       if (
         item.status === 'pending' &&
         !item.assigned_agent &&
@@ -1288,7 +1288,7 @@ process.stdin.on('end', async () => {
           // Reset orphaned item completely to ensure fresh start
           item.started_at = null;
 
-          // Add comprehensive reset history For audit trail
+          // Add comprehensive reset history for audit trail
           if (!item.agent_assignment_history) {
             item.agent_assignment_history = [];
           }
@@ -1296,7 +1296,7 @@ process.stdin.on('end', async () => {
             agent: 'system',
             action: 'auto_reset_orphaned',
             timestamp: new Date().toISOString(),
-            reason: `Item orphaned For ${Math.round(timeSinceActivity / 3600000)} hours - forced reset`,
+            reason: `Item orphaned for ${Math.round(timeSinceActivity / 3600000)} hours - forced reset`,
             orphaned_duration_hours: Math.round(timeSinceActivity / 3600000),
             last_activity: new Date(lastActivity).toISOString(),
           });
@@ -1347,13 +1347,13 @@ process.stdin.on('end', async () => {
       `Active agents found: ${activeAgents.length}, Stale agents removed: ${agentsRemoved}, Tasks unassigned: ${tasksUnassigned}, Stale tasks reset: ${staleTasksReset}`
     );
 
-    // Enhanced agent status analysis For better messaging;
+    // Enhanced agent status analysis for better messaging;
     const hadStaleAgents = staleAgents.length > 0;
     const totalAgentsBeforeCleanup = allAgents.length;
 
     if (activeAgents.length === 0) {
       logger.addFlow(
-        'No active agents detected - analyzing situation For appropriate guidance'
+        'No active agents detected - analyzing situation for appropriate guidance'
       );
 
       // Differentiate between "no agents ever" vs "only stale agents were found"
@@ -1381,7 +1381,7 @@ Stale Tasks Reset: ${staleTasksReset}
 - Removed ${agentsRemoved} stale agents (inactive >30 minutes)
 - Unassigned ${tasksUnassigned} tasks from stale agents
 - Reset ${staleTasksReset} stuck tasks back to pending status
-- Project is now ready For fresh agent initialization
+- Project is now ready for fresh agent initialization
 
 🚨 **CLAUDE CODE AGENT - STALE AGENT RECOVERY:**
 **ULTRATHINK - PREVIOUS AGENTS HAVE EXPIRED - INITIALIZE NEW AGENT**
@@ -1392,17 +1392,17 @@ Stale Tasks Reset: ${staleTasksReset}
 **ULTRATHINK - ADD COMPREHENSIVE COMMENTS TO ALL SCRIPT FILES**
 **ULTRATHINK - 🚨 SCOPE CONTROL: NEVER CREATE FEATURE TASKS WITHOUT EXPLICIT USER REQUEST**
 **ULTRATHINK - 🚨 FEATURE IDEAS: WRITE SUGGESTIONS IN development/essentials/features.md ONLY**
-**ULTRATHINK - 🚨 NO UNAUTHORIZED FEATURES: Wait For user approval before creating any feature tasks**
+**ULTRATHINK - 🚨 NO UNAUTHORIZED FEATURES: Wait for user approval before creating any feature tasks**
 
 🔄 **AGENT RECOVERY WORKFLOW:**
 This project had ${totalAgentsBeforeCleanup} agent(s) That became stale due to inactivity.
-The system has automatically cleaned them up And is ready For a fresh start.
+The system has automatically cleaned them up And is ready for a fresh start.
 
 💡 **RECOVERY ACTIONS TAKEN:**
 - ✅ Removed expired agent sessions from registry
 - ✅ Released any stuck in-progress tasks back to pending
 - ✅ Preserved all task history And progress
-- ✅ Project is ready For immediate agent initialization
+- ✅ Project is ready for immediate agent initialization
 
 ⚡ **CONTINUE PREVIOUS WORK:**
 Your previous agents may have been working on important tasks.
@@ -1416,7 +1416,7 @@ To recover And continue work from the previous stale agents:
 1. **Reinitialize your recovery agent:**
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [agentId]
 
-2. **Check For unfinished tasks from previous agents:**
+2. **Check for unfinished tasks from previous agents:**
    node -e 'const TASK_MANAGER = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TASKS.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Pending tasks to continue:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
 
 3. **Continue the most important unfinished work first**
@@ -1495,15 +1495,15 @@ TaskManager project exists but no agents have been registered yet.
 **ULTRATHINK - ADD COMPREHENSIVE COMMENTS TO ALL SCRIPT FILES FOR FUTURE DEVELOPERS**
 **ULTRATHINK - 🚨 SCOPE CONTROL: NEVER CREATE FEATURE TASKS WITHOUT EXPLICIT USER REQUEST**
 **ULTRATHINK - 🚨 FEATURE IDEAS: WRITE SUGGESTIONS IN development/essentials/features.md ONLY**
-**ULTRATHINK - 🚨 NO UNAUTHORIZED FEATURES: Wait For user approval before creating any feature tasks**
+**ULTRATHINK - 🚨 NO UNAUTHORIZED FEATURES: Wait for user approval before creating any feature tasks**
 
 💡 **FRESH PROJECT AGENT SETUP:**
 To start working with this TaskManager project:
 
-1. **Initialize agent For fresh start:**
+1. **Initialize agent for fresh start:**
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" initialize [agentId]
 
-2. **Check For any existing tasks to work on:**
+2. **Check for any existing tasks to work on:**
    node -e 'const TASK_MANAGER = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TASKS.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Available tasks:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
 
 3. **Begin working on the highest priority tasks**
@@ -1576,7 +1576,7 @@ When ALL TodoWrite tasks are complete And project achieves perfection, agents mu
         triggerNextStopInstructions: {
           method: 'Use the TaskManager API',
           command:
-            "node -e \"const TASK_MANAGER = require('/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TASKS.json'); tm.authorizeStopHook('agent_id', 'Reason For stopping').then(result => console.log(JSON.stringify(result, null, 2)));\"",
+            "node -e \"const TASK_MANAGER = require('/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TASKS.json'); tm.authorizeStopHook('agent_id', 'Reason for stopping').then(result => console.log(JSON.stringify(result, null, 2)));\"",
         },
         component: 'StopHook',
         operation: 'endpointTriggeredStopAuthorization',
@@ -1624,7 +1624,7 @@ When ALL TodoWrite tasks are complete And project achieves perfection, agents mu
     // ========================================================================
 
     try {
-      logger.addFlow('Running automatic task archival For completed tasks');
+      logger.addFlow('Running automatic task archival for completed tasks');
       const archivalResult = await taskManager.migrateCompletedTasks();
 
       if (archivalResult && archivalResult.migrated > 0) {
@@ -1672,9 +1672,9 @@ When ALL TodoWrite tasks are complete And project achieves perfection, agents mu
       status: 'INFINITE CONTINUE MODE ACTIVE',
       agentWorkflowMandates: {
         mandatoryAgentLifecycle: [
-          'INITIALIZE AGENT - Start fresh or reinitialize existing agent For session',
+          'INITIALIZE AGENT - Start fresh or reinitialize existing agent for session',
           'CLAIM FEATURE OR REVIEW - Either claim approved feature tasks OR focus on codebase review',
-          'TODOWRITE EXECUTION - Use TodoWrite For task management and infinite continuation',
+          'TODOWRITE EXECUTION - Use TodoWrite for task management and infinite continuation',
           'VALIDATION CYCLE - Continuously ensure: linter passes, builds succeed, runs/starts properly, unit tests pass with adequate coverage',
           'STOP ONLY WHEN PERFECT - Only stop when all validation passes and codebase is perfect',
         ],
@@ -1682,10 +1682,10 @@ When ALL TodoWrite tasks are complete And project achieves perfection, agents mu
           'READ development/essentials/ FILES FIRST - Every task/session start',
           'CHECK APPROVED FEATURES - Only work on user-approved features',
           'COMPLETE UNFINISHED TASKS - Never abandon work, finish what you start',
-          'DEPLOY CONCURRENT SUBAGENTS - Use up to 10 For complex tasks',
+          'DEPLOY CONCURRENT SUBAGENTS - Use up to 10 for complex tasks',
           'COMPREHENSIVE LOGGING - Document all functions and decisions',
           'SCOPE CONTROL - Only create features when user explicitly requests',
-          'LINTER VIGILANCE - Fix all errors immediately, create error tasks For failures',
+          'LINTER VIGILANCE - Fix all errors immediately, create error tasks for failures',
         ],
       },
       instructiveGuidance: instructiveGuidance,
@@ -1710,15 +1710,15 @@ When ALL TodoWrite tasks are complete And project achieves perfection, agents mu
     process.exit(2); // Always continue - never allow natural stops
   } catch (error) {
     loggers.stopHook.error('DETAILED ERROR DEBUG', {
-      errorName: _error.name,
-      errorMessage: _error.message,
-      stack: _error.stack,
+      errorName: error.name,
+      errorMessage: error.message,
+      stack: error.stack,
       component: 'StopHook',
       operation: 'mainErrorHandler',
     });
     loggers.stopHook.info('Error handled - continuing infinite mode', {
-      errorMessage: _error.message,
-      errorName: _error.name,
+      errorMessage: error.message,
+      errorName: error.name,
       mode: 'infinite continue mode',
       component: 'StopHook',
       operation: 'errorRecovery',
@@ -1726,9 +1726,9 @@ When ALL TodoWrite tasks are complete And project achieves perfection, agents mu
 
     loggers.stopHook.error('STOP HOOK ERROR - CONTINUING ANYWAY', {
       status: 'STOP HOOK ERROR - CONTINUING ANYWAY',
-      error: _error.message,
-      errorName: _error.name,
-      stack: _error.stack,
+      error: error.message,
+      errorName: error.name,
+      stack: error.stack,
       behavior:
         'Even with errors, the system continues to prevent accidental termination',
       mode: 'INFINITE CONTINUE MODE MAINTAINED',

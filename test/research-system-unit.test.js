@@ -1,7 +1,7 @@
 /**
  * Feature Management System Unit Tests
  *
- * Comprehensive unit tests For the feature management API system.
+ * Comprehensive unit tests for the feature management API system.
  * Tests feature suggestion, approval, rejection, And listing functionality.
  *
  * @author Testing Infrastructure Agent
@@ -20,10 +20,10 @@ const TEST_PROJECT_DIR = path.join(
 );
 const FEATURES_PATH = path.join(TEST_PROJECT_DIR, 'FEATURES.json');
 const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
-const TIMEOUT = 10000; // 10 seconds For feature management operations
+const TIMEOUT = 10000; // 10 seconds for feature management operations
 
 /**
- * Execute TaskManager API command For feature management testing
+ * Execute TaskManager API command for feature management testing
  */
 function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
   return new Promise((resolve, reject) => {
@@ -84,14 +84,14 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
 }
 
 /**
- * Create test environment For feature management testing
+ * Create test environment for feature management testing
  */
 function setupFeatureTestEnvironment(category = 'general') {
   if (!FS.existsSync(TEST_PROJECT_DIR)) {
     FS.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
 }
 
-  // Create FEATURES.json For feature management testing;
+  // Create FEATURES.json for feature management testing;
 const featuresData = {
     features: [],
     metadata{
@@ -104,11 +104,11 @@ const featuresData = {
 
   FS.writeFileSync(FEATURES_PATH, JSON.stringify(featuresData, null, 2));
 
-  // Create basic project structure For testing;
+  // Create basic project structure for testing;
 const packageData = {
     name: 'feature-test-project',
     version: '1.0.0',
-    description: 'Test project For feature management system validation',
+    description: 'Test project for feature management system validation',
     dependencies{
     express: '^4.18.0',
     }
@@ -189,7 +189,7 @@ const reinitResult = await execAPI('reinitialize', [testAgentId]);
         description:
           'Implement theme switching functionality with persistent user preference storage',
         business_value:
-          'Improves user experience And accessibility For users in low-light environments',
+          'Improves user experience And accessibility for users in low-light environments',
         category: 'enhancement',
       };
 
@@ -202,7 +202,7 @@ const reinitResult = await execAPI('reinitialize', [testAgentId]);
       expect(result.feature.status).toBe('suggested');
     });
 
-    test('should generate API-focused research locations For API tasks', async () => {
+    test('should generate API-focused research locations for API tasks', async () => {
       const apiTaskData = {
     title: 'Implement REST API authentication endpoints',
         description:
@@ -237,7 +237,7 @@ const internetLocation = researchSubtask.research_locations.find(
       expect(internetLocation.keywords).toContain('authentication');
     });
 
-    test('should generate security-focused research locations For security tasks', async () => {
+    test('should generate security-focused research locations for security tasks', async () => {
       const securityTaskData = {
     title: 'Implement OAuth 2.0 security framework',
         description:
@@ -269,11 +269,11 @@ const internetLocation = researchSubtask.research_locations.find(
       expect(internetLocation.focus).toContain('security');
     });
 
-    test('should generate performance-focused research locations For optimization tasks', async () => {
+    test('should generate performance-focused research locations for optimization tasks', async () => {
       const performanceTaskData = {
     title: 'Optimize database query performance',
         description:
-          'Implement caching, indexing, And query optimization strategies For better performance',
+          'Implement caching, indexing, And query optimization strategies for better performance',
         category: 'feature',
         priority: 'high',
       };
@@ -318,7 +318,7 @@ const internetLocation = researchSubtask.research_locations.find(
     title:
           'Implement microservices architecture with Docker containerization',
         description:
-          'Refactor monolithic application into distributed microservices using Docker, Kubernetes, And service mesh technology For scalability And maintainability',
+          'Refactor monolithic application into distributed microservices using Docker, Kubernetes, And service mesh technology for scalability And maintainability',
         category: 'feature',
         priority: 'high',
       };
@@ -357,7 +357,7 @@ const hasRelatedTerms = internetLocation.keywords.some((keyword) =>
       const taskWithGenericTerms = {
     title: 'Create a new system to implement better user experience',
         description:
-          'Build a good solution That works well And provides excellent functionality For users',
+          'Build a good solution That works well And provides excellent functionality for users',
         category: 'feature',
         priority: 'medium',
       };
@@ -438,7 +438,7 @@ const genericTerms = ['good', 'better', 'excellent', 'well', 'new'];
       testAgentId = initResult.agentId;
     });
 
-    test('should generate standard deliverables For all research tasks', async () => {
+    test('should generate standard deliverables for all research tasks', async () => {
       const standardTaskData = {
     title: 'Standard feature implementation',
         description: 'Regular feature implementation requiring research',
@@ -470,7 +470,7 @@ const genericTerms = ['good', 'better', 'excellent', 'well', 'new'];
       );
     });
 
-    test('should set appropriate estimated hours For research tasks', async () => {
+    test('should set appropriate estimated hours for research tasks', async () => {
       const researchTaskData = {
     title: 'Complex research requiring extensive investigation',
         description:
@@ -535,7 +535,7 @@ const genericTerms = ['good', 'better', 'excellent', 'well', 'new'];
       testAgentId = initResult.agentId;
     });
 
-    test('should generate appropriate focus areas For different research types', async () => {
+    test('should generate appropriate focus areas for different research types', async () => {
       const architectureTaskData = {
     title: 'Design system architecture',
         description:
@@ -626,18 +626,18 @@ const docsLocation = researchSubtask.research_locations.find(
       const taskIds = new Set();
 
       // Create multiple tasks to test ID uniqueness
-      // Use For-await-of to maintain sequential processing For research ID validation;
+      // Use for-await-of to maintain sequential processing for research ID validation;
 const taskDataList = [];
-      For (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 5; i++) {
         taskDataList.push({
     title: `Research task ${i + 1}`,
-          description: `Description For research task ${i + 1}`,
+          description: `Description for research task ${i + 1}`,
           category: 'feature',
           priority: 'medium',
         });
       }
 
-      For await (const taskData of taskDataList) {
+      for await (const taskData of taskDataList) {
         const result = await execAPI('create', [JSON.stringify(taskData)]);
         expect(result.success).toBe(true);
 

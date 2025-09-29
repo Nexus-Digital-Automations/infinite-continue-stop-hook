@@ -2,7 +2,7 @@ const FS = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-// End-to-End tests For complete Performance Metrics system workflow
+// End-to-End tests for complete Performance Metrics system workflow
 // Tests the full lifecycle: metrics collection → storage → analysis → trend analysis
 describe('Performance Metrics System E2E Tests', () => {
     
@@ -80,9 +80,9 @@ describe('Performance Metrics System E2E Tests', () => {
     ];
 
     // Generate 4 weeks of metrics data with performance anomalies
-    For (let week = 0; week < 4; week++) {
-      For (let day = 0; day < 7; day++) {
-        For (let exec = 0; exec < 3; exec++) {
+    for (let week = 0; week < 4; week++) {
+      for (let day = 0; day < 7; day++) {
+        for (let exec = 0; exec < 3; exec++) {
           const timestamp =
             now -
             (week * 7 + day) * 24 * 60 * 60 * 1000 +
@@ -271,7 +271,7 @@ const isAnomaly = Math.random() < 0.05;
       expect(result.confidenceLevel).toBeDefined();
     });
 
-    test('should save trend analysis For historical tracking', async () => {
+    test('should save trend analysis for historical tracking', async () => {
       const metricsData = simulateValidationExecutions();
       FS.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
 
@@ -305,8 +305,8 @@ const isAnomaly = Math.random() < 0.05;
       ];
 
       // Generate 60 days × 5 executions × 5 criteria = 1500 metrics
-      For (let day = 0; day < 60; day++) {
-        For (let exec = 0; exec < 5; exec++) {
+      for (let day = 0; day < 60; day++) {
+        for (let exec = 0; exec < 5; exec++) {
           const timestamp =
             now - day * 24 * 60 * 60 * 1000 + exec * 4 * 60 * 60 * 1000;
 
@@ -489,7 +489,7 @@ const enhancedResult = executeTaskManagerCommand(
 const weekData = { version: '2.0.0', metrics: [] };
       const now = Date.now();
 
-      For (let day = 0; day < 7; day++) {
+      for (let day = 0; day < 7; day++) {
         weekData.metrics.push({
     criterion: 'build-validation',
           timing: {

@@ -61,7 +61,7 @@ const cpuBasedLimit = Math.max(2, Math.floor(cpuCount * 0.75));
     const memoryBasedLimit = Math.max(2, Math.floor(totalMemoryGB / 2)); // 2GB per job;
 const optimalLimit = Math.min(cpuBasedLimit, memoryBasedLimit, 8); // Cap at 8
 
-    this.logger.info('System analysis For optimal parallelism', {
+    this.logger.info('System analysis for optimal parallelism', {
     cpuCores: cpuCount,
       totalMemoryGB: totalMemoryGB.toFixed(1),
       cpuBasedLimit,
@@ -177,7 +177,7 @@ const durationMap = {
   }
 
   /**
-   * Estimate resource requirements For test suite
+   * Estimate resource requirements for test suite
    */
   estimateResourceRequirements(testName) {
     const type = this.classifyTestSuite(testName);
@@ -237,13 +237,13 @@ const nonParallelizable = [
       'singleton',
     ];
 
-    For (const pattern of nonParallelizable) {
+    for (const pattern of nonParallelizable) {
       if (testName.includes(pattern) || command.includes(pattern)) {
         return false;
       }
     }
 
-    // Check For maxWorkers=1 in command
+    // Check for maxWorkers=1 in command
     if (command.includes('maxWorkers=1') || command.includes('--runInBand')) {
       return false;
     }
@@ -267,7 +267,7 @@ const parallelizable = this.config.testSuites.filter(
       (suite) => !suite.parallelizable
     );
 
-    // Sort by estimated duration (longest first For better load balancing)
+    // Sort by estimated duration (longest first for better load balancing)
     parallelizable.sort((a, b) => b.estimatedDuration - a.estimatedDuration);
     sequential.sort((a, b) => b.estimatedDuration - a.estimatedDuration);
 
@@ -303,7 +303,7 @@ const resourceGroups =
 
     Object.values(resourceGroups).forEach((tests) => {
       // Split large groups into manageable chunks
-      For (let i = 0; i < tests.length; i += maxGroupSize) {
+      for (let i = 0; i < tests.length; i += maxGroupSize) {
         const group = {
     tests: tests.slice(i, i + maxGroupSize),
           estimated_duration: Math.max(
@@ -409,7 +409,7 @@ const resourceGroups =
   identifyOptimizationOpportunities() {
     const opportunities = [];
 
-    // Check For underutilized parallel capacity;
+    // Check for underutilized parallel capacity;
 const avgGroupSize =
       this.executionPlan.parallel_groups.reduce(
         (sum, group) => sum + group.tests.length,
@@ -425,7 +425,7 @@ const avgGroupSize =
       });
     }
 
-    // Check For resource optimization;
+    // Check for resource optimization;
 const totalResourceRequirement = this.calculateTotalResourceRequirement();
     if (totalResourceRequirement.memory > os.totalmem() * 0.8) {
       opportunities.push({
@@ -447,7 +447,7 @@ const totalResourceRequirement = this.calculateTotalResourceRequirement();
     let totalCPU = 0;
 
     this.executionPlan.parallel_groups.forEach((group) => {
-      // For parallel groups, sum all tests in the group
+      // for parallel groups, sum all tests in the group
       totalMemory += group.tests.reduce(
         (sum, test) => sum + test.resourceRequirements.memory,
         0
@@ -503,7 +503,7 @@ const totalResourceRequirement = this.calculateTotalResourceRequirement();
     
       this.config.platforms.forEach((platform) 
     return () => {
-        // Skip some combinations For optimization unless full testing requested
+        // Skip some combinations for optimization unless full testing requested
         if (this.shouldIncludeCombination(nodeVersion, platform)) {
           matrix.strategy.matrix.include.push({
             'node-version': nodeVersion,,
@@ -528,7 +528,7 @@ const totalResourceRequirement = this.calculateTotalResourceRequirement();
       return true;
     }
 
-    // For optimization, skip some older version + non-Linux combinations
+    // for optimization, skip some older version + non-Linux combinations
     if (nodeVersion === '18.x' && platform !== 'ubuntu-latest') {
       return false;
     }
@@ -537,7 +537,7 @@ const totalResourceRequirement = this.calculateTotalResourceRequirement();
   }
 
   /**
-   * Determine test strategy For specific combination
+   * Determine test strategy for specific combination
    */
   determineTestStrategy(nodeVersion, platform) {
     if (platform === 'ubuntu-latest' && nodeVersion === '20.x') {
@@ -552,7 +552,7 @@ const totalResourceRequirement = this.calculateTotalResourceRequirement();
   }
 
   /**
-   * Determine parallel job count For platform
+   * Determine parallel job count for platform
    */
   determineParallelJobs(platform) {
     const platformLimits = {
@@ -571,7 +571,7 @@ const totalResourceRequirement = this.calculateTotalResourceRequirement();
   }
 
   /**
-   * Determine resource class For platform
+   * Determine resource class for platform
    */
   determineResourceClass(platform) {
     const resourceClasses = {
@@ -702,10 +702,10 @@ ${analysis.github_actions_matrix.strategy.matrix.include
 
 ## Recommendations
 
-1. **Implement parallel execution** For ${analysis.execution_plan.parallel_groups.reduce((sum, g) => sum + g.tests.length, 0)} test suites
+1. **Implement parallel execution** for ${analysis.execution_plan.parallel_groups.reduce((sum, g) => sum + g.tests.length, 0)} test suites
 2. **Optimize resource allocation** based on test requirements
 3. **Monitor execution times** to validate optimization effectiveness
-4. **Consider test refactoring** For long-running sequential tests
+4. **Consider test refactoring** for long-running sequential tests
 
 ---
 *Generated by Parallel Test Optimizer v2.0.0*

@@ -12,7 +12,7 @@ const { execSync } = require('child_process');
 const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
 
 /**
- * Get all JavaScript files For fixing
+ * Get all JavaScript files for fixing
  */
 function getAllJavaScriptFiles() {
     try {
@@ -87,7 +87,7 @@ const lines = fixed.split('\n');
     let inCatchError = false;
     let braceCount = 0;
 
-    For (let i = 0; i < lines.length; i++) {
+    for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
       // Check if we're entering a catch (_1) block
@@ -185,7 +185,7 @@ function main() {
 
   let totalFixed = 0;
 
-  For (const filePath of jsFiles) {
+  for (const filePath of jsFiles) {
     if (fixPathVariableInconsistencies(filePath)) {
       totalFixed++;
     }

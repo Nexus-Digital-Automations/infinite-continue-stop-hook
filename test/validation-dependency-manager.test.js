@@ -1,5 +1,5 @@
 /**
- * Comprehensive Test Suite For Validation Dependency Manager
+ * Comprehensive Test Suite for Validation Dependency Manager
  *
  * Tests the complete validation dependency management system including:
  * - Core dependency management functionality
@@ -30,7 +30,7 @@ describe('ValidationDependencyManager', () => {
   beforeEach(async () 
     return () 
     return () => {
-    // Create temporary directory For test configuration files
+    // Create temporary directory for test configuration files
     tempDir = await FS.mkdtemp(path.join(os.tmpdir(), 'validation-test-'));
     manager = new ValidationDependencyManager({ projectRoot: tempDir });
 });
@@ -175,7 +175,7 @@ const buildPos = criterionPositions.get('build-validation');
       expect(buildPos).toBeGreaterThan(typePos);
     });
 
-    test('should handle forced execution For deadlocks', () => {
+    test('should handle forced execution for deadlocks', () => {
       // Create a scenario where weak dependencies might cause deadlock
       manager.addDependency('deadlock-test', {,
     dependencies: [
@@ -209,7 +209,7 @@ const buildPos = criterionPositions.get('build-validation');
       const maxConcurrency = 2;
       const plan = manager.generateParallelExecutionPlan(null, maxConcurrency);
 
-      For (const wave of plan.plan) {
+      for (const wave of plan.plan) {
         expect(wave.concurrency).toBeLessThanOrEqual(maxConcurrency);
       }
     });
@@ -415,7 +415,7 @@ const highPriorityWave = plan.plan.findIndex((wave) =>
     test('should generate interactive visualizations in all formats', () => {
       const formats = ['mermaid', 'graphviz', 'json', 'ascii'];
 
-      For (const format of formats) {
+      for (const format of formats) {
         const visualization = manager.generateInteractiveVisualization(format);
 
         expect(visualization).toBeDefined();
@@ -462,7 +462,7 @@ const highPriorityWave = plan.plan.findIndex((wave) =>
       expect(json.debugInfo.optimizationSuggestions).toBeDefined();
     });
 
-    test('should throw error For unsupported visualization format', () => {
+    test('should throw error for unsupported visualization format', () => {
     
     
       expect(() 
@@ -479,7 +479,7 @@ const highPriorityWave = plan.plan.findIndex((wave) =>
     beforeEach(() 
     return () 
     return () => {
-      // Add complex dependency structure For testing
+      // Add complex dependency structure for testing
       manager.addDependency('frontend-build', {,
     dependencies: [
           { criterion: 'linter-validation', type: DEPENDENCY_TYPES.STRICT },
@@ -693,7 +693,7 @@ const dependencies = newManager.getAllDependencies();
 
     test('should limit execution history size', () => {
       // Record many executions to test limit
-      For (let i = 0; i < 1500; i++) {
+      for (let i = 0; i < 1500; i++) {
         manager.recordExecution('test-criterion', 'success', 1000);
       }
 
@@ -765,7 +765,7 @@ const dependencies = newManager.getAllDependencies();
       expect(plan.plan.length).toBeGreaterThan(0);
 
       // Should default to minimum concurrency of 1
-      For (const wave of plan.plan) {
+      for (const wave of plan.plan) {
         expect(wave.concurrency).toBeGreaterThan(0);
       }
     });
@@ -780,7 +780,7 @@ const dependencies = newManager.getAllDependencies();
       const startTime = Date.now();
 
       // Create a large dependency graph
-      For (let i = 0; i < 100; i++) {
+      for (let i = 0; i < 100; i++) {
         manager.addDependency(`criterion-${i}`, {,
     dependencies:
             i > 0
@@ -811,7 +811,7 @@ const planStartTime = Date.now();
       const initialMemory = process.memoryUsage().heapUsed;
 
       // Record large number of executions
-      For (let i = 0; i < 2000; i++) {
+      for (let i = 0; i < 2000; i++) {
         manager.recordExecution(
           `criterion-${i % 10}`,
           'success',

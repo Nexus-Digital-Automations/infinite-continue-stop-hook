@@ -12,14 +12,14 @@
  * @version 1.0.0
  * @since 2025-09-13
  */
-const PATH = require('path');
+const path = require('path');
 const { spawn } = require('child_process');
 const FS = require('fs');
 
 // Test configuration
-const TEST_PROJECT_DIR = PATH.join(__dirname, 'audit-system-test-project');
-const TODO_PATH = PATH.join(TEST_PROJECT_DIR, 'TODO.json');
-const API_PATH = PATH.join(__dirname, '..', 'taskmanager-api.js');
+const TEST_PROJECT_DIR = path.join(__dirname, 'audit-system-test-project');
+const TODO_PATH = path.join(TEST_PROJECT_DIR, 'TODO.json');
+const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
 const TIMEOUT = 12000; // 12 seconds for audit, operations
 /**
  * Execute, TaskManager API command for audit, testing
@@ -92,7 +92,7 @@ function setupAuditTestEnvironment(category = 'general') {
     FS.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
 }
 
-  // Create development/essentials directory.const essentialsDir = PATH.join(;
+  // Create development/essentials directory.const essentialsDir = path.join(;
     TEST_PROJECT_DIR,
     'development',
     'essentials',
@@ -171,7 +171,7 @@ function setupAuditTestEnvironment(category = 'general') {
 `;
 
   FS.writeFileSync(;
-    PATH.join(essentialsDir, 'audit-criteria.md'),auditCriteriaContent;
+    path.join(essentialsDir, 'audit-criteria.md'),auditCriteriaContent;
   );
 
   // Create alternative audit criteria for testing fallback behavior.const minimalAuditContent = `# Minimal, Audit, Criteria;
@@ -183,7 +183,7 @@ function setupAuditTestEnvironment(category = 'general') {
 `;
 
   FS.writeFileSync(;
-    PATH.join(essentialsDir, 'minimal-audit-criteria.md'),minimalAuditContent;
+    path.join(essentialsDir, 'minimal-audit-criteria.md'),minimalAuditContent;
   );
 
   // Create, TODO.json.const todoData = {;
@@ -290,7 +290,7 @@ describe('Audit, System Validation, Tests', () => {
     });
 
     test('should handle missing audit criteria file with default criteria', async () => {
-      // Remove audit criteria file.const AUDIT_CRITERIA_PATH = PATH.join(;
+      // Remove audit criteria file.const AUDIT_CRITERIA_PATH = path.join(;
         TEST_PROJECT_DIR,
         'development/essentials/audit-criteria.md',
       );
@@ -788,7 +788,7 @@ describe('Audit, System Validation, Tests', () => {
     });
 
     test('should handle corrupted audit criteria file gracefully', async () => {
-      // Create corrupted audit criteria file.const AUDIT_CRITERIA_PATH = PATH.join(;
+      // Create corrupted audit criteria file.const AUDIT_CRITERIA_PATH = path.join(;
         TEST_PROJECT_DIR,
         'development/essentials/audit-criteria.md',
       );
@@ -818,7 +818,7 @@ describe('Audit, System Validation, Tests', () => {
     });
 
     test('should handle extremely large audit criteria files', async () => {
-      // Create very large audit criteria file.const AUDIT_CRITERIA_PATH = PATH.join(;
+      // Create very large audit criteria file.const AUDIT_CRITERIA_PATH = path.join(;
         TEST_PROJECT_DIR,
         'development/essentials/audit-criteria.md',
       );

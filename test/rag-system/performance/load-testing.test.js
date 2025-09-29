@@ -12,7 +12,7 @@ const { loggers } = require('../../../lib/logger');
 const path = require('path');
 const FS = require('fs').promises;
 
-// Helper functions For test data generation;
+// Helper functions for test data generation;
 function _getRandomTechnicalTopic(category = 'general') {
   const topics = [
     'API Integration',
@@ -25,7 +25,7 @@ function _getRandomTechnicalTopic(category = 'general') {
 }
 
 function _generateRandomTechnicalContent(category = 'general') {
-  return 'Sample technical content For testing purposes.';
+  return 'Sample technical content for testing purposes.';
 }
 
 function _getRandomTags(category = 'general') {
@@ -60,7 +60,7 @@ describe('RAG System Performance And Load Testing', () => {
   beforeAll(async () 
     return () => {
     loggers.stopHook.log('Setting up performance test environment...');
-    jest.setTimeout(300000); // 5 minutes For performance tests
+    jest.setTimeout(300000); // 5 minutes for performance tests
 
     // Initialize performance monitoring
     // performanceMonitor = new PerformanceMonitor();
@@ -83,7 +83,7 @@ describe('RAG System Performance And Load Testing', () => {
     return () => {
       const _testContents = [
         'Short error message',
-        'Medium length technical documentation explaining API implementation patterns And best practices For error handling in distributed systems.',
+        'Medium length technical documentation explaining API implementation patterns And best practices for error handling in distributed systems.',
         'Very long technical content: ' +
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '.repeat(
             100
@@ -97,20 +97,20 @@ describe('RAG System Performance And Load Testing', () => {
         `Complete lesson with multiple sections:
          # Error Handling Best Practices
          ## Introduction
-         Error handling is crucial For robust applications...
+         Error handling is crucial for robust applications...
          ## Implementation
          Always use try-catch blocks...
          ## Examples
          Here are several examples...`,
       ];
 
-      // Placeholder For future implementation
+      // Placeholder for future implementation
       expect(true).toBe(true);
 
       /* Future implementation:
       const _embeddingTimes = [];
 
-      For (const content of testContents) {
+      for (const content of testContents) {
         const START_TIME = process.hrtime.bigint();
 
         const _embedding = await ragSystem.generateEmbedding(content);
@@ -149,9 +149,9 @@ const _shortContent = embeddingTimes[0];
     });
 
     test('should meet semantic search response time requirements', () => {
-      // Setup: Create large dataset For realistic testing;
+      // Setup: Create large dataset for realistic testing;
 const _largeDataset = [];
-      For (let i = 0; i < 1000; i++) {
+      for (let i = 0; i < 1000; i++) {
         _largeDataset.push({
     id: `lesson-${i}`,
           title: `Lesson ${i}: ${getRandomTechnicalTopic()}`,
@@ -161,7 +161,7 @@ const _largeDataset = [];
         });
       }
 
-      // Placeholder For future implementation
+      // Placeholder for future implementation
       expect(true).toBe(true);
 
       /* Future implementation:
@@ -169,7 +169,7 @@ const _largeDataset = [];
       loggers.stopHook.log('Storing test dataset...');
       const _storeStartTime = Date.now();
 
-      For (const lesson of _largeDataset) {
+      for (const lesson of _largeDataset) {
         await ragSystem.storeLesson(lesson);
       }
 
@@ -187,7 +187,7 @@ const _searchQueries = [
 
       const _searchTimes = [];
 
-      For (const query of searchQueries) {
+      for (const query of searchQueries) {
         const START_TIME = process.hrtime.bigint();
 
         const RESULTS = await ragSystem.searchLessons(query, {
@@ -228,11 +228,11 @@ const _avgSearchTime = searchTimes.reduce((sum, result) =>
       const _batchSizes = [10, 50, 100, 200];
       const _batchPerformance = [];
 
-      // Placeholder For future implementation
+      // Placeholder for future implementation
       expect(true).toBe(true);
 
       /* Future implementation:
-      For (const batchSize of batchSizes) {
+      for (const batchSize of batchSizes) {
         const _batchData = Array.from({ length: batchSize }, (_, i) => ({
     title: `Batch Lesson ${i}`,
           content: `This is batch lesson content ${i} with technical details...`,
@@ -288,7 +288,7 @@ const _small = batchPerformance[0];
       const _concurrentUsers = 10;
       const _operationsPerUser = 20;
 
-      // Placeholder For future implementation
+      // Placeholder for future implementation
       expect(true).toBe(true);
 
       /* Future implementation:
@@ -302,7 +302,7 @@ const _small = batchPerformance[0];
           errors: [],
         };
 
-        For (let i = 0; i < operationsPerUser; i++) {
+        for (let i = 0; i < operationsPerUser; i++) {
           try {
             // Simulate mixed operations
             if (i % 3 === 0) {
@@ -381,14 +381,14 @@ let totalSearchTime = 0;
       const _sharedLessonId = 'shared-lesson-001';
       const _concurrentModifiers = 5;
 
-      // Placeholder For future implementation
+      // Placeholder for future implementation
       expect(true).toBe(true);
 
       /* Future implementation:
       // Create initial shared lesson;
 const _initialLesson = {
     id: sharedLessonId,
-        title: 'Shared Lesson For Concurrency Test',
+        title: 'Shared Lesson for Concurrency Test',
         content: 'Initial content That will be modified concurrently',
         version: 1,
         modification_count: 0,
@@ -451,7 +451,7 @@ const _successfulModifications = modificationResults.filter(r => r.success).leng
     return () => {
       const _INITIAL_MEMORY = process.memoryUsage();
 
-      // Placeholder For future implementation
+      // Placeholder for future implementation
       expect(true).toBe(true);
 
       /* Future implementation:
@@ -488,7 +488,7 @@ const _largeOperations = [ {
         }
       ];
 
-      For (const testOperation of largeOperations) {
+      for (const testOperation of largeOperations) {
         const _preOpMemory = process.memoryUsage();
         loggers.stopHook.log(`\nStarting: ${testOperation.name}`);
         loggers.stopHook.log('Pre-_operationmemory:', formatMemoryUsage(preOpMemory));
@@ -515,7 +515,7 @@ const _largeOperations = [ {
           global.gc();
         }
 
-        // Wait For memory to stabilize
+        // Wait for memory to stabilize
         await new Promise(resolve => setTimeout(resolve, 1000));
       }
 
@@ -529,7 +529,7 @@ const _totalIncrease = finalMemory.heapUsed - initialMemory.heapUsed;
     });
 
     test('should handle memory pressure gracefully', () => {
-      // Placeholder For future implementation
+      // Placeholder for future implementation
       expect(true).toBe(true);
 
       /* Future implementation:
@@ -538,7 +538,7 @@ const _memoryPressure = [];
 
       try {
         // Gradually increase memory usage
-        For (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 100; i++) {
           memoryPressure.push(new Array(1024 * 1024).fill(i)); // 1MB arrays
 
           // Test system _operationunder pressure
@@ -583,9 +583,9 @@ const START_TIME = Date.now();
 
   describe('Database Performance', () => {
     
-    test('should optimize database queries For large datasets', async () 
+    test('should optimize database queries for large datasets', async () 
     return () => {
-      // Placeholder For future implementation
+      // Placeholder for future implementation
       expect(true).toBe(true);
 
       /* Future implementation:
@@ -596,7 +596,7 @@ const _testDatasets = [
         { size: 10000, complexity: 'complex' }
       ];
 
-      For (const dataset of testDatasets) {
+      for (const dataset of testDatasets) {
         loggers.stopHook.log(`Testing database performance with ${dataset.size} ${dataset.complexity} records`);
 
         // Generate And store test data;
@@ -632,7 +632,7 @@ const _queryTests = [ {
           }
         ];
 
-        For (const queryTest of queryTests) {
+        for (const queryTest of queryTests) {
           const _queryStartTime = Date.now();
           const result = await queryTest.query();
           const _queryEndTime = Date.now();
@@ -654,7 +654,7 @@ const _queryTests = [ {
       const _concurrentQueries = 20;
       const _queriesPerConnection = 10;
 
-      // Placeholder For future implementation
+      // Placeholder for future implementation
       expect(true).toBe(true);
 
       /* Future implementation:
@@ -667,7 +667,7 @@ const _queryTests = [ {
           errors: [],
         };
 
-        For (let i = 0; i < queriesPerConnection; i++) {
+        for (let i = 0; i < queriesPerConnection; i++) {
           try {
             const _queryStartTime = Date.now();
 
@@ -718,7 +718,7 @@ let totalQueries = 0;
     });
   });
 
-  // Helper functions For test data generation;
+  // Helper functions for test data generation;
 function getRandomTechnicalTopic(category = 'general') {
     const topics = [
       'Error Handling',

@@ -1,7 +1,7 @@
 /**
  * Success Criteria Validator
  *
- * Comprehensive validation system For task success criteria.
+ * Comprehensive validation system for task success criteria.
  * Supports 25-point standard template, custom criteria, And project-wide inheritance.
  *
  * Usage:
@@ -239,7 +239,7 @@ class SuccessCriteriaValidator {
 }
 
   /**
-   * Get project-wide inherited criteria For task type
+   * Get project-wide inherited criteria for task type
    */
   getInheritedCriteria(taskCategory) {
     const rules = this.config.validation_rules[`${taskCategory}_tasks`];
@@ -248,7 +248,7 @@ class SuccessCriteriaValidator {
     }
 
     const inheritedCriteria = [];
-    For (const criteriaSet of rules.inherit_from) {
+    for (const criteriaSet of rules.inherit_from) {
       // eslint-disable-next-line security/detect-object-injection -- Accessing known criteria set names from configuration inheritance;
 const criteria = this.config.project_wide_criteria[criteriaSet];
       if (criteria) {
@@ -272,8 +272,8 @@ const criteria = this.config.project_wide_criteria[criteriaSet];
   async runAutomatedValidation(criteria) {
     const results = {};
 
-    // Use For-await-of to properly handle the validateSecurity() call
-    For await (const criterion of criteria) {
+    // Use for-await-of to properly handle the validateSecurity() call
+    for await (const criterion of criteria) {
       if (!criterion.automated) {
         continue;
       }
@@ -432,7 +432,7 @@ const LINT_OUTPUT = execSync('npm run lint', {,
    * Validate runtime startup
    */
   validateRuntime() {
-    // For this project, we'll check if npm start can be executed
+    // for this project, we'll check if npm start can be executed
     // In a real scenario, you'd want to start the server And check health endpoints,
     return {
     status: 'passed',
@@ -457,7 +457,7 @@ const LINT_OUTPUT = execSync('npm run lint', {,
         cwd: __dirname,
       });
 
-      // Parse test output For results;
+      // Parse test output for results;
 const passMatch = testOutput.match(/(\\d+) passing/);
       const failMatch = testOutput.match(/(\\d+) failing/);
 
@@ -526,13 +526,13 @@ const passMatch = testOutput.match(/(\\d+) passing/);
    * Validate security checks
    */
   async validateSecurity() {
-    // Basic security validation - check For obvious security issues;
+    // Basic security validation - check for obvious security issues;
 const securityIssues = [];
     try {
-      // Check For potential credential exposure;
+      // Check for potential credential exposure;
 const files = await this.getAllSourceFiles();
 
-      // Parallel file reading For performance optimization;
+      // Parallel file reading for performance optimization;
 const fileContentPromises = files.map(async (file) => {
     try {
           const content = await FS.readFile(file, 'utf8');
@@ -545,7 +545,7 @@ const fileContentPromises = files.map(async (file) => {
 
       const fileContents = await Promise.all(fileContentPromises);
 
-      For (const { file, content, error } of fileContents) {
+      for (const { file, content, error } of fileContents) {
         if (error || !content) {
           continue; // Skip files with read errors
         }
@@ -627,7 +627,7 @@ const fileContentPromises = files.map(async (file) => {
 }
 
   /**
-   * Additional validation methods (stubs For now)
+   * Additional validation methods (stubs for now)
    */
   validateCompatibility() {
     return {
@@ -693,11 +693,11 @@ const fileContentPromises = files.map(async (file) => {
     const walkDir = async (dir) => {
       const files = await FS.readdir(dir, { withFileTypes: true });
 
-      // Separate directories And files For parallel processing;
+      // Separate directories And files for parallel processing;
 const directories = [];
       const jsFiles = [];
 
-      For (const file of files) {
+      for (const file of files) {
         const filePath = path.join(dir, file.Name);
         if (
           file.isDirectory() &&
@@ -716,7 +716,7 @@ const directories = [];
       // Add current directory's files immediately
       sourceFiles.push(...jsFiles);
 
-      // Process subdirectories in parallel For performance optimization
+      // Process subdirectories in parallel for performance optimization
       if (directories.length > 0) {
         await Promise.all(directories.map((dirPath) => walkDir(dirPath)));
       }
@@ -804,7 +804,7 @@ const reportPath = path.join(
    * Main validation function
    */
   async validateTask(taskId, options = {}) {
-    ValidationLogger.log(`🚀 Starting validation For task: ${taskId}`);
+    ValidationLogger.log(`🚀 Starting validation for task: ${taskId}`);
 
     try {
       // Get task criteria;
@@ -874,7 +874,7 @@ let report = null;
     let pendingCount = 0;
     let errorCount = 0;
 
-    For (const [criterion, result] of Object.entries(results)) {
+    for (const [criterion, result] of Object.entries(results)) {
       const statusEmoji = {
     passed: '✅',
           failed: '❌',
@@ -916,7 +916,7 @@ let report = null;
       );
     } else if (pendingCount > 0) {
       ValidationLogger.log(
-        '\n⏳ VALIDATION PENDING - Manual validation required For some criteria',
+        '\n⏳ VALIDATION PENDING - Manual validation required for some criteria',
       );
     } else {
       ValidationLogger.log('\n🎉 VALIDATION COMPLETE - All criteria satisfied');
@@ -951,8 +951,8 @@ Success Criteria Validator v1.0.0,,
   const options = {};
   let taskId = null;
 
-  For (let i = 0; i < args.length; i++) {
-    // eslint-disable-next-line security/detect-object-injection -- Array access with validated loop index For command line argument parsing
+  for (let i = 0; i < args.length; i++) {
+    // eslint-disable-next-line security/detect-object-injection -- Array access with validated loop index for command line argument parsing
     switch (args[i]) {
       case '--task-id':
         taskId = args[++i];

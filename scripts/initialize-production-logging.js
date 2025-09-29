@@ -26,7 +26,7 @@ async function initializeLogging() {
         '⚠️  Warning: Running production logging setup in non-production environment'
       );
       console.log(
-        '   This is fine For testing, but ensure NODE_ENV=production For actual deployments\n'
+        '   This is fine for testing, but ensure NODE_ENV=production for actual deployments\n'
       );
     }
 
@@ -45,7 +45,7 @@ async function initializeLogging() {
       console.log(`   Exists: ${logDir}`);
     }
 
-    // Create subdirectories For different log types
+    // Create subdirectories for different log types
     const logTypes = [
       'application',
       'error',
@@ -53,7 +53,7 @@ async function initializeLogging() {
       'performance',
       'security',
     ];
-    For (const type of logTypes) {
+    for (const type of logTypes) {
       const typeDir = path.join(logDir, type);
       if (!fs.existsSync(typeDir)) {
         fs.mkdirSync(typeDir, { recursive: true });
@@ -144,7 +144,7 @@ async function initializeLogging() {
       fs.writeFileSync(envPath, envTemplate);
       console.log(`   Created: ${envPath}`);
       console.log(
-        '   Please review and configure environment variables For your deployment'
+        '   Please review and configure environment variables for your deployment'
       );
     }
 
@@ -160,7 +160,7 @@ async function initializeLogging() {
       console.log(`   Created: ${dockerComposePath}`);
     }
 
-    // Create systemd service template For production deployment
+    // Create systemd service template for production deployment
     const systemdPath = path.join(
       process.cwd(),
       'deploy',
@@ -198,7 +198,7 @@ async function initializeLogging() {
 
 function createEnvironmentTemplate() {
   return `# Production Logging Configuration
-# Copy this file to .env and configure For your environment
+# Copy this file to .env and configure for your environment
 
 # Environment
 NODE_ENV=production
@@ -290,7 +290,7 @@ services:
     depends_on:
       - elasticsearch
 
-  # Prometheus For metrics
+  # Prometheus for metrics
   prometheus:
     image: prom/prometheus:latest
     ports:
@@ -299,7 +299,7 @@ services:
       - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus_data:/prometheus
 
-  # Grafana For visualization
+  # Grafana for visualization
   grafana:
     image: grafana/grafana:latest
     ports:

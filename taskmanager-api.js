@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
 /* eslint-disable security/detect-object-injection -- Object properties are validated */
-/* eslint-disable no-await-in-loop -- Sequential processing required For file operations */
-/* eslint-disable security/detect-unsafe-regex -- Regex patterns are validated For performance testing */
+/* eslint-disable no-await-in-loop -- Sequential processing required for file operations */
+/* eslint-disable security/detect-unsafe-regex -- Regex patterns are validated for performance testing */
 /* eslint-disable security/detect-non-literal-regexp -- Dynamic regex patterns are validated */
 /* eslint-disable no-unused-vars -- Many error variables are intentionally unused in catch blocks */
 /* eslint-disable no-undef -- Some variables are defined in conditional scopes */
-/* eslint-disable no-case-declarations -- Case blocks need variable declarations For distinct logic */
+/* eslint-disable no-case-declarations -- Case blocks need variable declarations for distinct logic */
 /* eslint-disable indent -- Mixed indentation from automated fixes */
 /**
  * Autonomous Task Management API - Advanced Feature Lifecycle & Task Orchestration
@@ -43,7 +43,7 @@ const path = require('path');
 const crypto = require('crypto');
 const FS = require('fs').promises;
 
-// Import RAG operations For self-learning capabilities;
+// Import RAG operations for self-learning capabilities;
 const RAGOPERATIONS = require('./lib/api-modules/rag/ragOperations');
 
 // Import structured logging And secret management
@@ -79,7 +79,7 @@ const TIMING_REPORTS_GENERATOR = require('./lib/timing-reports-generator');
 // Import bottleneck analyzer;
 const BOTTLENECK_ANALYZER = require('./lib/bottleneck-analyzer');
 
-// Import trend analyzer For historical performance tracking;
+// Import trend analyzer for historical performance tracking;
 const TREND_ANALYZER = require('./lib/trend-analyzer');
 
 // File locking mechanism to prevent race conditions across processes;
@@ -92,7 +92,7 @@ class FileLock {
   async acquire(filePath) {
     const lockPath = `${filePath}.lock`;
 
-    For (let attempt = 0; attempt < this.maxRetries; attempt++) {
+    for (let attempt = 0; attempt < this.maxRetries; attempt++) {
       try {
         // Try to create lock file exclusively
         await FS.writeFile(lockPath, process.pid.toString(), { flag: 'wx' });
@@ -147,7 +147,7 @@ class FileLock {
     }
 
     throw new Error(
-      `Could not acquire lock For ${filePath} after ${this.maxRetries} attempts`
+      `Could not acquire lock for ${filePath} after ${this.maxRetries} attempts`
     );
   }
 }
@@ -167,12 +167,12 @@ const TASKS_PATH = path.join(PROJECT_ROOT, 'TASKS.json');
 const dryRunIndex = args.indexOf('--dry-run');
 const DRY_RUN_MODE = dryRunIndex !== -1;
 
-// Remove --project-root And its value from args For command parsing
+// Remove --project-root And its value from args for command parsing
 if (projectRootIndex !== -1) {
   args.splice(projectRootIndex, 2);
 }
 
-// Remove --dry-run flag from args For command parsing
+// Remove --dry-run flag from args for command parsing
 if (dryRunIndex !== -1) {
   const adjustedIndex =
     projectRootIndex !== -1 && dryRunIndex > projectRootIndex
@@ -248,7 +248,7 @@ const PRIORITY_ORDER = ['USER_REQUESTS', 'ERROR', 'AUDIT', 'FEATURE', 'TEST'];
  */
 class AutonomousTaskManagerAPI {
   constructor(options = {}, agentId) {
-    // Handle both projectRoot string and options object For backward compatibility
+    // Handle both projectRoot string and options object for backward compatibility
     if (typeof options === 'string') {
       // If first parameter is a string, treat it as projectRoot;
       const projectRoot = options;
@@ -264,7 +264,7 @@ class AutonomousTaskManagerAPI {
     // Dry run mode configuration
     this.dryRunMode = options.dryRun || false;
 
-    // Performance configuration - 10 second timeout For all operations
+    // Performance configuration - 10 second timeout for all operations
     this.timeout = 10000;
 
     // Feature validation configuration
@@ -287,14 +287,14 @@ class AutonomousTaskManagerAPI {
     this.taskAssignments = new Map();
     this.taskDependencies = new Map();
 
-    // Initialize structured logger For TaskManager API
+    // Initialize structured logger for TaskManager API
     this.logger = createLogger('TaskManagerAPI', {
       agentId: options.agentId || 'system',
       taskId: options.taskId || null,
       logToFile: process.env.NODE_ENV === 'production',
     });
 
-    // Initialize RAG operations For self-learning capabilities
+    // Initialize RAG operations for self-learning capabilities
     this.ragOps = new RAGOPERATIONS({
       taskManager: this,
       agentManager: this,
@@ -314,7 +314,7 @@ class AutonomousTaskManagerAPI {
     // Initialize validation audit trail management system
     this.auditTrailManager = new VALIDATION_AUDIT_TRAIL_MANAGER(PROJECT_ROOT);
 
-    // Initialize trend analyzer For historical performance tracking
+    // Initialize trend analyzer for historical performance tracking
     this.trendAnalyzer = new TREND_ANALYZER(PROJECT_ROOT);
 
     // Initialize features file And task structures if they don't exist
@@ -384,9 +384,9 @@ class AutonomousTaskManagerAPI {
 
         auto_generation_config: {
           test_task_template: {
-            title_pattern: 'Implement comprehensive tests For: {feature_title}',
+            title_pattern: 'Implement comprehensive tests for: {feature_title}',
             description_pattern:
-              'Create unit tests, integration tests, And E2E tests to achieve >{coverage}% coverage For: {feature_title}. Must validate all functionality, edge cases, And error conditions.',
+              'Create unit tests, integration tests, And E2E tests to achieve >{coverage}% coverage for: {feature_title}. Must validate all functionality, edge cases, And error conditions.',
             priority: 'high',
             required_capabilities: ['testing'],
             validation_requirements: {
@@ -395,9 +395,9 @@ class AutonomousTaskManagerAPI {
             },
           },
           audit_task_template: {
-            title_pattern: 'Security And quality audit For: {feature_title}',
+            title_pattern: 'Security And quality audit for: {feature_title}',
             description_pattern:
-              'Run semgrep security scan, dependency vulnerability check, code quality analysis, And compliance validation For: {feature_title}. Zero tolerance For security vulnerabilities.',
+              'Run semgrep security scan, dependency vulnerability check, code quality analysis, And compliance validation for: {feature_title}. Zero tolerance for security vulnerabilities.',
             priority: 'high',
             required_capabilities: ['security', 'analysis'],
             validation_requirements: {
@@ -465,7 +465,7 @@ class AutonomousTaskManagerAPI {
   // Core feature lifecycle management operations
 
   /**
-   * Suggest a new feature For approval
+   * Suggest a new feature for approval
    */
   async suggestFeature(featureData) {
     try {
@@ -507,7 +507,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Approve a suggested feature For implementation
+   * Approve a suggested feature for implementation
    */
   async approveFeature(featureId, approvalData = {}) {
     try {
@@ -649,7 +649,7 @@ class AutonomousTaskManagerAPI {
       const results = [];
       const errors = [];
 
-      For (const featureId of featureIds) {
+      for (const featureId of featureIds) {
         try {
           const feature = features.features.find((f) => f.id === featureId);
 
@@ -1037,13 +1037,13 @@ class AutonomousTaskManagerAPI {
         dependencyConfig,
         configPath,
         validation,
-        message: `Validation dependency For '${criterion}' updated successfully`,
+        message: `Validation dependency for '${criterion}' updated successfully`,
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        message: `Failed to update validation dependency For '${criterion}'`,
+        message: `Failed to update validation dependency for '${criterion}'`,
       };
     }
   }
@@ -1119,7 +1119,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Get dependency visualization data For debugging
+   * Get dependency visualization data for debugging
    */
   async getDependencyVisualization() {
     try {
@@ -1149,7 +1149,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Record validation execution result For analytics
+   * Record validation execution result for analytics
    */
   recordValidationExecution(criterion, result, duration, metadata = {}) {
     try {
@@ -1285,19 +1285,19 @@ class AutonomousTaskManagerAPI {
           success: true,
           executedRules: 0,
           results: [],
-          message: 'No custom validation rules enabled For execution',
+          message: 'No custom validation rules enabled for execution',
         };
       }
 
       const results = [];
       const startTime = Date.now();
 
-      // Use structured logging For internal validation operations;
+      // Use structured logging for internal validation operations;
       const { createLogger } = require('./lib/utils/logger');
       const logger = createLogger('CustomValidation');
       logger.info(`Executing ${enabledRuleIds.length} custom validation rules`);
 
-      For (const ruleId of enabledRuleIds) {
+      for (const ruleId of enabledRuleIds) {
         logger.info(`Executing rule: ${ruleId}`);
         const result = await this.customValidationManager.executeRule(ruleId);
         results.push(result);
@@ -1381,7 +1381,7 @@ class AutonomousTaskManagerAPI {
     // Find the longest dependency chain;
     const chains = [];
 
-    For (const step of executionOrder) {
+    for (const step of executionOrder) {
       const criterion = step.criterion;
       const deps = this.dependencyManager.getDependency(criterion);
 
@@ -1418,7 +1418,7 @@ class AutonomousTaskManagerAPI {
     }
 
     let maxDepth = 0;
-    For (const dep of deps.dependencies) {
+    for (const dep of deps.dependencies) {
       maxDepth = Math.max(
         maxDepth,
         this._calculateDepth(dep.criterion, visited)
@@ -1471,7 +1471,7 @@ class AutonomousTaskManagerAPI {
       return {
         success: true,
         authKey,
-        message: `Multi-step authorization started For ${agentId}. Must complete ${authState.requiredSteps.length} validation steps sequentially.`,
+        message: `Multi-step authorization started for ${agentId}. Must complete ${authState.requiredSteps.length} validation steps sequentially.`,
         nextStep: authState.requiredSteps[0],
         instructions: `Next: validate-criterion ${authKey} ${authState.requiredSteps[0]}`,
       };
@@ -1539,7 +1539,7 @@ class AutonomousTaskManagerAPI {
         await this._performLanguageAgnosticValidation(criterion);
 
       if (!validationResult.success) {
-        // Store failure For selective re-validation
+        // Store failure for selective re-validation
         await this._storeValidationFailures(authKey, [
           {
             criterion,
@@ -1608,14 +1608,14 @@ class AutonomousTaskManagerAPI {
           : `Next: validate-criterion ${authKey} ${nextStep}`,
       };
     } catch (error) {
-      // Capture performance metrics For failed validation
+      // Capture performance metrics for failed validation
       performanceMetrics.endTime = new Date().toISOString();
       performanceMetrics.durationMs = Date.now() - startTime;
       performanceMetrics.memoryUsageAfter = process.memoryUsage();
       performanceMetrics.success = false;
       performanceMetrics.error = error.message;
 
-      // Store performance metrics even For failures,
+      // Store performance metrics even for failures,
       try {
         await this._storeValidationPerformanceMetrics(performanceMetrics);
       } catch (_1) {
@@ -1700,7 +1700,7 @@ class AutonomousTaskManagerAPI {
       const startTime = Date.now();
 
       // Execute validations in parallel groups
-      For (const group of validationGroups) {
+      for (const group of validationGroups) {
         const groupCriteria = group.criteria.filter((c) =>
           targetCriteria.includes(c)
         );
@@ -1770,7 +1770,7 @@ class AutonomousTaskManagerAPI {
           }
         });
 
-        // Wait For all validations in this group to complete;
+        // Wait for all validations in this group to complete;
         const groupResults = await Promise.all(groupPromises);
         const groupDuration = Date.now() - groupStartTime;
 
@@ -1825,7 +1825,7 @@ class AutonomousTaskManagerAPI {
           : 0;
 
       // Update authorization state
-      For (const completed of parallelResults.completedCriteria) {
+      for (const completed of parallelResults.completedCriteria) {
         if (!authState.completedSteps.includes(completed.criterion)) {
           authState.completedSteps.push(completed.criterion);
         }
@@ -1840,9 +1840,9 @@ class AutonomousTaskManagerAPI {
         authState.status = 'ready_for_completion';
       }
 
-      // Store detailed validation results For progress reporting
+      // Store detailed validation results for progress reporting
       authState.validation_results = authState.validation_results || {};
-      For (const result of [
+      for (const result of [
         ...parallelResults.completedCriteria,
         ...parallelResults.failedCriteria,
       ]) {
@@ -1854,7 +1854,7 @@ class AutonomousTaskManagerAPI {
         };
       }
 
-      // Store failures For selective re-validation
+      // Store failures for selective re-validation
       if (parallelResults.failedCriteria.length > 0) {
         await this._storeValidationFailures(
           authKey,
@@ -1895,7 +1895,7 @@ class AutonomousTaskManagerAPI {
           : `Continue with remaining validations or run: validate-criteria-parallel ${authKey}`,
         selectiveRevalidationNote:
           parallelResults.failedCriteria.length > 0
-            ? `Use selective re-validation For failed criteria: selective-revalidation ${authKey}`
+            ? `Use selective re-validation for failed criteria: selective-revalidation ${authKey}`
             : null,
       };
     } catch (error) {
@@ -1908,7 +1908,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Define validation dependency groups For parallel execution
+   * Define validation dependency groups for parallel execution
    * Groups independent validations That can run simultaneously
    */
   /**
@@ -1940,7 +1940,7 @@ class AutonomousTaskManagerAPI {
       const parallelPlan =
         this.dependencyManager.generateParallelExecutionPlan(defaultCriteria);
 
-      // Convert parallel execution plan to legacy group format For backward compatibility;
+      // Convert parallel execution plan to legacy group format for backward compatibility;
       const groups = parallelPlan.plan.map((wave, index) => ({
         name: `Execution Wave ${index + 1}`,
         criteria: wave.criteria.map((c) => c.criterion),
@@ -2107,7 +2107,7 @@ class AutonomousTaskManagerAPI {
       let testsFound = false;
       const testFiles = [];
 
-      For (const pattern of testPatterns) {
+      for (const pattern of testPatterns) {
         try {
           const glob = require('glob');
           const matches = glob.sync(pattern, { cwd: PROJECT_ROOT });
@@ -2120,10 +2120,10 @@ class AutonomousTaskManagerAPI {
         }
       }
 
-      // Also check For generic test content mentioning the feature
+      // Also check for generic test content mentioning the feature
       if (!testsFound) {
         const testDirs = ['test', 'tests', '__tests__', 'spec', 'specs'];
-        For (const testDir of testDirs) {
+        for (const testDir of testDirs) {
           const testDirPath = path.join(PROJECT_ROOT, testDir);
           try {
             if (await this._fileExists(testDirPath)) {
@@ -2150,9 +2150,9 @@ class AutonomousTaskManagerAPI {
           featureId,
           testsFound: false,
           error:
-            'CLAUDE.md VIOLATION: No tests found For this feature. Tests are MANDATORY before advancing to next feature.',
+            'CLAUDE.md VIOLATION: No tests found for this feature. Tests are MANDATORY before advancing to next feature.',
           instructions: [
-            '1. Write comprehensive unit tests For this feature',
+            '1. Write comprehensive unit tests for this feature',
             '2. Write integration tests if applicable',
             '3. Ensure test coverage >80%',
             '4. Run tests to verify they pass',
@@ -2167,7 +2167,7 @@ class AutonomousTaskManagerAPI {
         featureId,
         testsFound: true,
         testFiles,
-        message: 'Tests found For feature - proceeding to coverage validation',
+        message: 'Tests found for feature - proceeding to coverage validation',
         nextStep: `confirm-test-coverage ${featureId}`,
       };
     } catch (error) {
@@ -2195,7 +2195,7 @@ class AutonomousTaskManagerAPI {
       let coverageResult = null;
       let coveragePercentage = 0;
 
-      For (const cmd of coverageCommands) {
+      for (const cmd of coverageCommands) {
         try {
           const result = execSync(cmd, {
             cwd: PROJECT_ROOT,
@@ -2276,7 +2276,7 @@ class AutonomousTaskManagerAPI {
       const results = [];
       let allPassed = true;
 
-      For (const step of pipelineCommands) {
+      for (const step of pipelineCommands) {
         try {
           const result = execSync(step.cmd, {
             cwd: PROJECT_ROOT,
@@ -2323,7 +2323,7 @@ class AutonomousTaskManagerAPI {
         featureId,
         pipelineResults: results,
         message:
-          'All pipeline validations passed - feature ready For advancement',
+          'All pipeline validations passed - feature ready for advancement',
         nextStep: `advance-to-next-feature ${featureId}`,
       };
     } catch (error) {
@@ -2639,7 +2639,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: true,
           trends: [],
-          message: 'No performance data available For trend analysis',
+          message: 'No performance data available for trend analysis',
         };
       }
 
@@ -2686,7 +2686,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: true,
           bottlenecks: [],
-          message: 'No performance data available For bottleneck analysis',
+          message: 'No performance data available for bottleneck analysis',
         };
       }
 
@@ -2723,7 +2723,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Generate detailed timing report For specific validation runs
+   * Generate detailed timing report for specific validation runs
    */
   async getDetailedTimingReport(options = {}) {
     try {
@@ -2736,7 +2736,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: true,
           report: null,
-          message: 'No timing data available For detailed report',
+          message: 'No timing data available for detailed report',
         };
       }
 
@@ -2829,7 +2829,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: true,
           benchmarks: null,
-          message: 'No performance data available For benchmarking',
+          message: 'No performance data available for benchmarking',
         };
       }
 
@@ -2876,7 +2876,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Analyze trends For a specific validation criterion
+   * Analyze trends for a specific validation criterion
    */
   analyzeCriterionTrend(criterion, _options = {}) {
     try {
@@ -3001,7 +3001,7 @@ class AutonomousTaskManagerAPI {
       const timeRange = options.timeRange || 30;
       const criteria = options.criteria || null;
 
-      // Get analysis For all criteria or specific criterion
+      // Get analysis for all criteria or specific criterion
       if (criteria) {
         const result = await this.trendAnalyzer.analyzeCriterionTrend(
           criteria,
@@ -3181,7 +3181,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Group metrics by time period For trend analysis
+   * Group metrics by time period for trend analysis
    */
   _groupMetricsByTimePeriod(metrics, groupBy) {
     const groups = {};
@@ -3316,15 +3316,15 @@ class AutonomousTaskManagerAPI {
         // Generate recommendations
         if (criterion.includes('build')) {
           recommendations.push(
-            `Consider implementing incremental builds For ${criterion}`
+            `Consider implementing incremental builds for ${criterion}`
           );
         } else if (criterion.includes('test')) {
           recommendations.push(
-            `Optimize test suite For ${criterion} - consider parallel execution`
+            `Optimize test suite for ${criterion} - consider parallel execution`
           );
         } else if (criterion.includes('linter')) {
           recommendations.push(
-            `Review linter configuration For ${criterion} - disable non-critical rules`
+            `Review linter configuration for ${criterion} - disable non-critical rules`
           );
         }
       }
@@ -3483,7 +3483,7 @@ class AutonomousTaskManagerAPI {
    */
 
   /**
-   * Generate comprehensive timing report For all validation criteria
+   * Generate comprehensive timing report for all validation criteria
    */
   async getComprehensiveTimingReport(_options = {}) {
     try {
@@ -3509,7 +3509,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Generate timing report For a specific validation criterion
+   * Generate timing report for a specific validation criterion
    */
   async getCriterionTimingReport(criterion, _options = {}) {
     try {
@@ -3573,7 +3573,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Get available validation criteria For timing analysis
+   * Get available validation criteria for timing analysis
    */
   async getAvailableValidationCriteria() {
     try {
@@ -3629,7 +3629,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Analyze bottlenecks For a specific validation criterion
+   * Analyze bottlenecks for a specific validation criterion
    */
   async analyzeCriterionBottlenecks(criterion, _options = {}) {
     try {
@@ -3694,7 +3694,7 @@ class AutonomousTaskManagerAPI {
    */
   async getBottleneckSummary(_options = {}) {
     try {
-      // Use shorter time range For quick summary;
+      // Use shorter time range for quick summary;
       const summaryOptions = {
         timeRange: _options.timeRange || 7, // Last 7 days
         includeRecommendations: true,
@@ -3762,7 +3762,7 @@ class AutonomousTaskManagerAPI {
     if (memoryMetrics.length === 0) {
       return {
         memory: { available: false, message: 'No memory usage data available' },
-        recommendations: ['Enable memory monitoring For resource analysis'],
+        recommendations: ['Enable memory monitoring for resource analysis'],
       };
     }
 
@@ -3830,7 +3830,7 @@ class AutonomousTaskManagerAPI {
 
     if (highMemoryUsage.length > 0) {
       recommendations.push(
-        'Consider optimizing memory usage For high-consumption validation criteria'
+        'Consider optimizing memory usage for high-consumption validation criteria'
       );
 
       const highUsageCriteria = [
@@ -3838,7 +3838,7 @@ class AutonomousTaskManagerAPI {
       ];
       highUsageCriteria.forEach((criterion) => {
         recommendations.push(
-          `Review ${criterion} validation For memory optimization opportunities`
+          `Review ${criterion} validation for memory optimization opportunities`
         );
       });
     }
@@ -3947,7 +3947,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Get performance target For criterion
+   * Get performance target for criterion
    */
   _getTargetForCriterion(criterion) {
     const targets = {
@@ -3961,7 +3961,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Get optimization suggestion For criterion
+   * Get optimization suggestion for criterion
    */
   _getSuggestionForCriterion(criterion) {
     const suggestions = {
@@ -3982,7 +3982,7 @@ class AutonomousTaskManagerAPI {
 
   /**
    * 🚀 Feature 9: Stop Hook Rollback Capabilities
-   * Comprehensive rollback system For safe validation failure recovery
+   * Comprehensive rollback system for safe validation failure recovery
    * Provides snapshot management, git state restoration, And file system rollback
    */
 
@@ -4210,7 +4210,7 @@ class AutonomousTaskManagerAPI {
       const entries = await FS.readdir(snapshotsDir);
       const snapshots = [];
 
-      For (const entry of entries) {
+      for (const entry of entries) {
         const snapshotDir = path.join(snapshotsDir, entry);
         const metadataPath = path.join(snapshotDir, 'snapshot-metadata.json');
         try {
@@ -4323,7 +4323,7 @@ class AutonomousTaskManagerAPI {
       const snapshots = [];
 
       // Collect all valid snapshots with metadata
-      For (const entry of entries) {
+      for (const entry of entries) {
         if (entry === 'rollback-history.json') {
           continue;
         }
@@ -4343,7 +4343,7 @@ class AutonomousTaskManagerAPI {
             });
           }
         } catch (_1) {
-          // Invalid snapshot, mark For cleanup
+          // Invalid snapshot, mark for cleanup
           snapshots.push({
             id: entry,
             timestamp: '1970-01-01T00:00:00.000Z',
@@ -4353,7 +4353,7 @@ class AutonomousTaskManagerAPI {
         }
       }
 
-      // Sort by timestamp (oldest first For cleanup)
+      // Sort by timestamp (oldest first for cleanup)
       snapshots.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 
       const now = new Date();
@@ -4361,7 +4361,7 @@ class AutonomousTaskManagerAPI {
       let cleanedCount = 0;
 
       // Remove old snapshots
-      For (const snapshot of snapshots) {
+      for (const snapshot of snapshots) {
         const snapshotTime = new Date(snapshot.timestamp);
         const shouldCleanup =
           snapshot.invalid ||
@@ -4398,7 +4398,7 @@ class AutonomousTaskManagerAPI {
     }
   }
 
-  // Helper methods For Feature 9
+  // Helper methods for Feature 9
 
   _captureGitState() {
     const { execSync } = require('child_process');
@@ -4581,7 +4581,7 @@ class AutonomousTaskManagerAPI {
 
   /**
    * Feature 3: Validation Caching
-   * Intelligent caching system For expensive validation results with smart cache invalidation
+   * Intelligent caching system for expensive validation results with smart cache invalidation
    * Provides massive time savings on repeated authorization attempts
    */
   async _getValidationCacheKey(criterion) {
@@ -4591,7 +4591,7 @@ class AutonomousTaskManagerAPI {
     try {
       const cacheInputs = [];
 
-      // Git commit hash For change detection,
+      // Git commit hash for change detection,
       try {
         const gitHash = execSync('git rev-parse HEAD', {
           cwd: PROJECT_ROOT,
@@ -4605,7 +4605,7 @@ class AutonomousTaskManagerAPI {
         cacheInputs.push(`timestamp:${Date.now()}`);
       }
 
-      // Package.json modification time For dependency changes;
+      // Package.json modification time for dependency changes;
       const packageJsonPath = path.join(PROJECT_ROOT, 'package.json');
       try {
         const packageStats = await FS.stat(packageJsonPath);
@@ -4617,7 +4617,7 @@ class AutonomousTaskManagerAPI {
 
       // Key files modification times based on validation type;
       const keyFiles = this._getKeyFilesForValidation(criterion);
-      For (const filePath of keyFiles) {
+      for (const filePath of keyFiles) {
         try {
           const fullPath = path.join(PROJECT_ROOT, filePath);
           const stats = await FS.stat(fullPath);
@@ -4644,7 +4644,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Get key files That affect validation results For cache invalidation
+   * Get key files That affect validation results for cache invalidation
    */
   _getKeyFilesForValidation(criterion) {
     const baseFiles = [
@@ -4745,7 +4745,7 @@ class AutonomousTaskManagerAPI {
         const age = Date.now() - cacheData.timestamp;
 
         if (age < maxAge) {
-          this.logger.info('Cache hit For validation criterion', {
+          this.logger.info('Cache hit for validation criterion', {
             criterion,
             ageSeconds: Math.round(age / 1000),
             savedMs: cacheData.originalDuration || 'unknown',
@@ -4761,7 +4761,7 @@ class AutonomousTaskManagerAPI {
         } else {
           // Cache expired, remove it
           await FS.unlink(cacheFile);
-          this.logger.info('Cache expired For validation criterion', {
+          this.logger.info('Cache expired for validation criterion', {
             criterion,
             ageSeconds: Math.round(age / 1000),
             component: 'ValidationCache',
@@ -4771,7 +4771,7 @@ class AutonomousTaskManagerAPI {
       }
 
       loggers.taskManager.error(
-        `💾 Cache MISS For ${criterion} - executing validation`
+        `💾 Cache MISS for ${criterion} - executing validation`
       );
       return null;
     } catch (error) {
@@ -4831,7 +4831,7 @@ class AutonomousTaskManagerAPI {
       const maxAge = 7 * 24 * 60 * 60 * 1000; // 7 days;
       let cleanedCount = 0;
 
-      For (const file of files) {
+      for (const file of files) {
         if (!file.endsWith('.json')) {
           continue;
         }
@@ -4887,7 +4887,7 @@ class AutonomousTaskManagerAPI {
         await this._performLanguageAgnosticValidationCore(criterion);
       const DURATION = Date.now() - startTime;
 
-      // Store in cache For future use (only cache successful results to avoid caching transient failures)
+      // Store in cache for future use (only cache successful results to avoid caching transient failures)
       if (result.success) {
         await this._storeValidationCache(criterion, cacheKey, result, DURATION);
       }
@@ -4941,7 +4941,7 @@ class AutonomousTaskManagerAPI {
 
           // Filter rules based on conditions;
           const applicableRules = [];
-          For (const rule of enabledRules) {
+          for (const rule of enabledRules) {
             if (await this._evaluateRuleConditions(rule)) {
               applicableRules.push(rule);
             }
@@ -5000,7 +5000,7 @@ class AutonomousTaskManagerAPI {
 
     // Required fields;
     const requiredFields = ['id', 'name', 'command'];
-    For (const field of requiredFields) {
+    for (const field of requiredFields) {
       if (!rule[field] || typeof rule[field] !== 'string') {
         loggers.taskManager.warn(
           `⚠️ Custom rule missing required field: ${field}`
@@ -5050,7 +5050,7 @@ class AutonomousTaskManagerAPI {
     try {
       // Check file existence conditions
       if (rule.conditions.fileExists) {
-        For (const file of rule.conditions.fileExists) {
+        for (const file of rule.conditions.fileExists) {
           const filePath = path.join(PROJECT_ROOT, file);
           if (!(await this._fileExists(filePath))) {
             return false;
@@ -5060,7 +5060,7 @@ class AutonomousTaskManagerAPI {
 
       // Check directory existence conditions
       if (rule.conditions.directoryExists) {
-        For (const dir of rule.conditions.directoryExists) {
+        for (const dir of rule.conditions.directoryExists) {
           const dirPath = path.join(PROJECT_ROOT, dir);
           try {
             const stat = await FS.stat(dirPath);
@@ -5081,7 +5081,7 @@ class AutonomousTaskManagerAPI {
             await FS.readFile(packageJsonPath, 'utf8')
           );
           if (packageData.scripts) {
-            For (const script of rule.conditions.scriptExists) {
+            for (const script of rule.conditions.scriptExists) {
               if (!packageData.scripts[script]) {
                 return false;
               }
@@ -5096,7 +5096,7 @@ class AutonomousTaskManagerAPI {
 
       // Check environment variables
       if (rule.conditions.envVars) {
-        For (const envVar of rule.conditions.envVars) {
+        for (const envVar of rule.conditions.envVars) {
           if (!process.env[envVar]) {
             return false;
           }
@@ -5142,13 +5142,13 @@ class AutonomousTaskManagerAPI {
 
       // Check file contents
       if (rule.conditions.fileContains) {
-        For (const [filePath, patterns] of Object.entries(
+        for (const [filePath, patterns] of Object.entries(
           rule.conditions.fileContains
         )) {
           const fullPath = path.join(PROJECT_ROOT, filePath);
           if (await this._fileExists(fullPath)) {
             const content = await FS.readFile(fullPath, 'utf8');
-            For (const pattern of patterns) {
+            for (const pattern of patterns) {
               if (!content.includes(pattern)) {
                 return false;
               }
@@ -5161,7 +5161,7 @@ class AutonomousTaskManagerAPI {
 
       return true;
     } catch (error) {
-      this.logger.warn('Error evaluating conditions For rule', {
+      this.logger.warn('Error evaluating conditions for rule', {
         ruleId: rule.id,
         error: error.message,
         component: 'CustomValidator',
@@ -5242,7 +5242,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Evaluate success criteria For a custom rule
+   * Evaluate success criteria for a custom rule
    */
   _evaluateSuccessCriteria(rule, output, exitCode) {
     if (!rule.successCriteria) {
@@ -5259,7 +5259,7 @@ class AutonomousTaskManagerAPI {
 
     // Check output contains patterns
     if (criteria.outputContains) {
-      For (const pattern of criteria.outputContains) {
+      for (const pattern of criteria.outputContains) {
         if (!output.includes(pattern)) {
           return false;
         }
@@ -5268,7 +5268,7 @@ class AutonomousTaskManagerAPI {
 
     // Check output does not contain patterns
     if (criteria.outputNotContains) {
-      For (const pattern of criteria.outputNotContains) {
+      for (const pattern of criteria.outputNotContains) {
         if (output.includes(pattern)) {
           return false;
         }
@@ -5277,7 +5277,7 @@ class AutonomousTaskManagerAPI {
 
     // Check output matches regex patterns
     if (criteria.outputMatches) {
-      For (const pattern of criteria.outputMatches) {
+      for (const pattern of criteria.outputMatches) {
         const regex = new RegExp(pattern);
         if (!regex.test(output)) {
           return false;
@@ -5287,7 +5287,7 @@ class AutonomousTaskManagerAPI {
 
     // Check file existence (post-execution)
     if (criteria.fileExists) {
-      For (const file of criteria.fileExists) {
+      for (const file of criteria.fileExists) {
         const filePath = path.join(PROJECT_ROOT, file);
         if (!FS.existsSync(filePath)) {
           return false;
@@ -5297,13 +5297,13 @@ class AutonomousTaskManagerAPI {
 
     // Check file contents (post-execution)
     if (criteria.fileContains) {
-      For (const [filePath, patterns] of Object.entries(
+      for (const [filePath, patterns] of Object.entries(
         criteria.fileContains
       )) {
         const fullPath = path.join(PROJECT_ROOT, filePath);
         if (FS.existsSync(fullPath)) {
           const content = FS.readFileSync(fullPath, 'utf8');
-          For (const pattern of patterns) {
+          for (const pattern of patterns) {
             if (!content.includes(pattern)) {
               return false;
             }
@@ -5340,7 +5340,7 @@ class AutonomousTaskManagerAPI {
       let allSuccessful = true;
 
       // Execute rules sequentially to avoid resource conflicts
-      For (const rule of customRules) {
+      for (const rule of customRules) {
         const result = await this._executeCustomRule(rule);
         results.push(result);
 
@@ -5423,7 +5423,7 @@ class AutonomousTaskManagerAPI {
             'safety check --json || echo "safety not available"',
           ];
 
-          For (const cmd of securityCommands) {
+          for (const cmd of securityCommands) {
             try {
               const result = execSync(cmd, {
                 cwd: PROJECT_ROOT,
@@ -5488,7 +5488,7 @@ class AutonomousTaskManagerAPI {
           ];
 
           let hasTypeCheckableFiles = false;
-          For (const pattern of typeCheckFiles) {
+          for (const pattern of typeCheckFiles) {
             try {
               const { execSync } = require('child_process');
               const result = execSync(
@@ -5516,7 +5516,7 @@ class AutonomousTaskManagerAPI {
             };
           }
 
-          // Language-agnostic type checking For projects with typed languages;
+          // Language-agnostic type checking for projects with typed languages;
           const typeCommands = [
             'npm run typecheck',
             'tsc --noEmit',
@@ -5736,11 +5736,11 @@ class AutonomousTaskManagerAPI {
     let lastAttemptedCommand = null;
 
     // Enhanced fallback mechanism with intelligent retry And graceful degradation
-    For (let i = 0; i < commands.length; i++) {
+    for (let i = 0; i < commands.length; i++) {
       const cmd = commands[i];
       lastAttemptedCommand = cmd;
       try {
-        const timeout = isStartCommand ? 10000 : 45000; // Reduced timeout For better responsiveness
+        const timeout = isStartCommand ? 10000 : 45000; // Reduced timeout for better responsiveness
 
         if (isStartCommand) {
           // Enhanced start command validation with better error handling;
@@ -5763,7 +5763,7 @@ class AutonomousTaskManagerAPI {
           } catch (_1) {
             errors.push(`${cmd}: ${commandError.message}`);
 
-            // Special fallback For common build system issues
+            // Special fallback for common build system issues
             if (this._isKnownBuildSystemIssue(commandError.message, cmd)) {
               const fallbackResult = await this._attemptBuildSystemFallback(
                 cmd,
@@ -5813,7 +5813,7 @@ class AutonomousTaskManagerAPI {
       const child = spawn('sh', ['-c', cmd], {
         cwd: PROJECT_ROOT,
         stdio: isStartCommand ? 'pipe' : 'inherit',
-        detached: false, // Keep as child process For proper cleanup
+        detached: false, // Keep as child process for proper cleanup
       });
 
       let timedOut = false;
@@ -5856,7 +5856,7 @@ class AutonomousTaskManagerAPI {
           if (timedOut) {
             reject(new Error(`Command timed out: ${cmd}`));
           } else if (isStartCommand) {
-            // For start commands, any exit is considered success if it doesn't error immediately
+            // for start commands, any exit is considered success if it doesn't error immediately
             resolve({ success: true });
           } else if (code === 0) {
             resolve({ success: true });
@@ -5866,7 +5866,7 @@ class AutonomousTaskManagerAPI {
         }
       });
 
-      // For start commands, kill after 5 seconds if still running (success)
+      // for start commands, kill after 5 seconds if still running (success)
       if (isStartCommand) {
         setTimeout(() => {
           if (!resolved) {
@@ -5961,7 +5961,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Attempt specialized fallbacks For known build system issues
+   * Attempt specialized fallbacks for known build system issues
    */
   async _attemptBuildSystemFallback(originalCommand, timeout) {
     const fallbackStrategies = [];
@@ -5989,7 +5989,7 @@ class AutonomousTaskManagerAPI {
     }
 
     // Try each fallback strategy
-    For (const fallbackCmd of fallbackStrategies) {
+    for (const fallbackCmd of fallbackStrategies) {
       try {
         await this._executeCommandWithRobustTimeout(fallbackCmd, timeout);
         return {
@@ -6024,7 +6024,7 @@ class AutonomousTaskManagerAPI {
           '.pylintrc',
         ];
 
-        For (const config of lintConfigs) {
+        for (const config of lintConfigs) {
           if (FS.existsSync(config)) {
             return {
               success: true,
@@ -6089,7 +6089,7 @@ class AutonomousTaskManagerAPI {
         const testFiles = ['*.test.js', '*.spec.js', '*.test.ts', '*.spec.ts'];
 
         let hasTests = false;
-        For (const dir of testDirs) {
+        for (const dir of testDirs) {
           if (FS.existsSync(dir) && FS.statSync(dir).isDirectory()) {
             hasTests = true;
             break;
@@ -6100,7 +6100,7 @@ class AutonomousTaskManagerAPI {
           return {
             success: true,
             details:
-              'No test files detected - testing not required For this project',
+              'No test files detected - testing not required for this project',
             graceful: true,
           };
         }
@@ -6124,7 +6124,7 @@ class AutonomousTaskManagerAPI {
 
     return {
       success: false,
-      error: `No graceful fallback available For ${operation}`,
+      error: `No graceful fallback available for ${operation}`,
       attempted: false,
     };
   }
@@ -6139,11 +6139,11 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Helper method to detect project type For enhanced performance metrics
+   * Helper method to detect project type for enhanced performance metrics
    */
   async _detectProjectType() {
     try {
-      // Check For various project indicators;
+      // Check for various project indicators;
       const indicators = {
         frontend: [
           'webpack.config.js',
@@ -6168,8 +6168,8 @@ class AutonomousTaskManagerAPI {
         ],
       };
 
-      For (const [type, files] of Object.entries(indicators)) {
-        For (const file of files) {
+      for (const [type, files] of Object.entries(indicators)) {
+        for (const file of files) {
           const filePath = path.join(PROJECT_ROOT, file);
           if (await this._fileExists(filePath)) {
             return type;
@@ -6177,7 +6177,7 @@ class AutonomousTaskManagerAPI {
         }
       }
 
-      // Check package.json For additional clues;
+      // Check package.json for additional clues;
       const packageJsonPath = path.join(PROJECT_ROOT, 'package.json');
       if (await this._fileExists(packageJsonPath)) {
         try {
@@ -6185,7 +6185,7 @@ class AutonomousTaskManagerAPI {
             await FS.readFile(packageJsonPath, 'utf8')
           );
 
-          // Check scripts For type indicators;
+          // Check scripts for type indicators;
           const scripts = packageJson.scripts || {};
           if (scripts.build && scripts.start) {
             return 'frontend';
@@ -6214,7 +6214,7 @@ class AutonomousTaskManagerAPI {
    */
 
   /**
-   * Store validation failure state For selective re-validation
+   * Store validation failure state for selective re-validation
    */
   async _storeValidationFailures(authKey, failedCriteria) {
     try {
@@ -6242,7 +6242,7 @@ class AutonomousTaskManagerAPI {
 
       await FS.writeFile(failuresFile, JSON.stringify(failureData, null, 2));
       this.logger.info(
-        'Stored validation failures For selective re-validation',
+        'Stored validation failures for selective re-validation',
         {
           failureCount: failedCriteria.length,
           component: 'ValidationManager',
@@ -6350,7 +6350,7 @@ class AutonomousTaskManagerAPI {
     if (!authKey) {
       return {
         success: false,
-        error: 'Authorization key required For selective re-validation',
+        error: 'Authorization key required for selective re-validation',
       };
     }
 
@@ -6392,7 +6392,7 @@ class AutonomousTaskManagerAPI {
       const newFailures = [];
       const resolvedFailures = [];
 
-      For (const criterion of criteriaToValidate) {
+      for (const criterion of criteriaToValidate) {
         loggers.taskManager.error(`🔍 Re-validating: ${criterion}`);
         const startValidation = Date.now();
 
@@ -6484,7 +6484,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * List all criteria That can be validated For selective re-validation
+   * List all criteria That can be validated for selective re-validation
    */
   getSelectableValidationCriteria() {
     return {
@@ -6539,18 +6539,18 @@ class AutonomousTaskManagerAPI {
 
   /**
    * Feature 5: Emergency Override Protocol
-   * Emergency bypass mechanism For critical production issues with comprehensive audit trails
+   * Emergency bypass mechanism for critical production issues with comprehensive audit trails
    * Allows authorized users to override validation requirements in documented emergency situations
    */
 
   /**
-   * Create emergency override authorization For critical production incidents
+   * Create emergency override authorization for critical production incidents
    */
   async createEmergencyOverride(emergencyData) {
     if (!emergencyData) {
       return {
         success: false,
-        error: 'Emergency data required For override authorization',
+        error: 'Emergency data required for override authorization',
       };
     }
 
@@ -6699,13 +6699,13 @@ class AutonomousTaskManagerAPI {
           status: 'active',
         },
         usage: {
-          executeOverride: `timeout 10s node taskmanager-api.js execute-emergency-override ${emergencyKey} '{"reason":"Detailed reason For using override"}'`,
+          executeOverride: `timeout 10s node taskmanager-api.js execute-emergency-override ${emergencyKey} '{"reason":"Detailed reason for using override"}'`,
           checkStatus: `timeout 10s node taskmanager-api.js check-emergency-override ${emergencyKey}`,
           auditTrail: `timeout 10s node taskmanager-api.js emergency-audit-trail ${emergencyKey}`,
         },
         warnings: [
           'Emergency override expires in 2 hours',
-          `Limited to ${emergencyRecord.maxUsage} uses For ${emergencyData.impactLevel} impact incidents`,
+          `Limited to ${emergencyRecord.maxUsage} uses for ${emergencyData.impactLevel} impact incidents`,
           'All usage is logged And audited',
           'Abuse of emergency overrides may result in access revocation',
         ],
@@ -6725,14 +6725,14 @@ class AutonomousTaskManagerAPI {
     if (!emergencyKey) {
       return {
         success: false,
-        error: 'Emergency key required For override execution',
+        error: 'Emergency key required for override execution',
       };
     }
 
     if (!overrideReason) {
       return {
         success: false,
-        error: 'Override reason required For audit compliance',
+        error: 'Override reason required for audit compliance',
       };
     }
 
@@ -6981,9 +6981,9 @@ class AutonomousTaskManagerAPI {
     }
   }
 
-  // Legacy method For backward compatibility
+  // Legacy method for backward compatibility
   async authorizeStop(agentId, reason) {
-    // Allow legacy authorization in test environments For test compatibility;
+    // Allow legacy authorization in test environments for test compatibility;
     const isTestEnvironment =
       process.env.NODE_ENV === 'test' ||
       process.env.TEST_ENV === 'jest' ||
@@ -6993,7 +6993,7 @@ class AutonomousTaskManagerAPI {
     if (isTestEnvironment) {
       try {
         // Use the module-level fs That gets mocked in tests
-        // Create stop authorization flag For tests;
+        // Create stop authorization flag for tests;
         const stopFlagPath = path.join(PROJECT_ROOT, '.stop-allowed');
         const stopData = {
           stop_allowed: true,
@@ -7137,8 +7137,8 @@ class AutonomousTaskManagerAPI {
 
         const generatedTasks = [];
 
-        For (const feature of approvedFeatures) {
-          // Check if tasks already exist For this feature;
+        for (const feature of approvedFeatures) {
+          // Check if tasks already exist for this feature;
           const existingTasks = features.tasks.filter(
             (t) => t.feature_id === feature.id
           );
@@ -7185,7 +7185,7 @@ class AutonomousTaskManagerAPI {
               feature,
               mainTask.id
             );
-            For (const supportingTask of supportingTasks) {
+            for (const supportingTask of supportingTasks) {
               features.tasks.push(supportingTask);
               generatedTasks.push(supportingTask);
             }
@@ -7441,7 +7441,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Register agent capabilities For task matching
+   * Register agent capabilities for task matching
    */
   async registerAgentCapabilities(agentId, capabilities) {
     try {
@@ -7484,7 +7484,7 @@ class AutonomousTaskManagerAPI {
           success: true,
           agent_id: agentId,
           capabilities,
-          message: `Capabilities registered For agent ${agentId}`,
+          message: `Capabilities registered for agent ${agentId}`,
         };
       });
 
@@ -7585,7 +7585,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Get verification requirements For a task
+   * Get verification requirements for a task
    */
   async getVerificationRequirements(taskId) {
     try {
@@ -7626,7 +7626,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Submit verification evidence For a task
+   * Submit verification evidence for a task
    */
   async submitVerificationEvidence(taskId, evidenceData) {
     try {
@@ -7711,7 +7711,7 @@ class AutonomousTaskManagerAPI {
           'progress_percentage',
           'metadata',
         ];
-        For (const field of allowedFields) {
+        for (const field of allowedFields) {
           if (updates[field] !== undefined) {
             task[field] = updates[field];
           }
@@ -7825,7 +7825,7 @@ class AutonomousTaskManagerAPI {
         success: true,
         tasks: agentTasks,
         count: agentTasks.length,
-        message: `Found ${agentTasks.length} tasks For agent ${agentId}`,
+        message: `Found ${agentTasks.length} tasks for agent ${agentId}`,
       };
     } catch (error) {
       throw new Error(`Failed to get agent tasks: ${error.message}`);
@@ -7891,7 +7891,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Get available tasks For an agent based on capabilities
+   * Get available tasks for an agent based on capabilities
    */
   async getAvailableTasksForAgent(agentId) {
     try {
@@ -7933,7 +7933,7 @@ class AutonomousTaskManagerAPI {
         success: true,
         tasks: availableTasks,
         count: availableTasks.length,
-        message: `Found ${availableTasks.length} available tasks For agent ${agentId}`,
+        message: `Found ${availableTasks.length} available tasks for agent ${agentId}`,
       };
     } catch (error) {
       throw new Error(`Failed to get available tasks: ${error.message}`);
@@ -8032,7 +8032,7 @@ class AutonomousTaskManagerAPI {
         const createdTasks = [];
 
         approvedFeatures.forEach((feature) => {
-          // Skip if task already exists For this feature (unless force option is set)
+          // Skip if task already exists for this feature (unless force option is set)
           const existingTask = features.tasks.find(
             (t) => t.feature_id === feature.id
           );
@@ -8107,7 +8107,7 @@ class AutonomousTaskManagerAPI {
           return {
             success: true,
             assignments: [],
-            message: 'No tasks or agents available For optimization',
+            message: 'No tasks or agents available for optimization',
           };
         }
 
@@ -8160,7 +8160,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: true,
           assignments,
-          message: `Optimized assignments For ${assignments.length} tasks`,
+          message: `Optimized assignments for ${assignments.length} tasks`,
         };
       });
 
@@ -8271,7 +8271,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Start webSocket server For real-time updates
+   * Start webSocket server for real-time updates
    */
   startWebSocketServer(port = 8080) {
     try {
@@ -8368,7 +8368,7 @@ class AutonomousTaskManagerAPI {
   }
 
   // =================== UTILITY METHODS ===================
-  // Helper methods For feature management And task orchestration
+  // Helper methods for feature management And task orchestration
 
   /**
    * Validate feature data structure And required fields
@@ -8379,7 +8379,7 @@ class AutonomousTaskManagerAPI {
     }
 
     // Check required fields
-    For (const field of this.requiredFeatureFields) {
+    for (const field of this.requiredFeatureFields) {
       if (
         !featureData[field] ||
         (typeof featureData[field] === 'string' &&
@@ -8503,7 +8503,7 @@ class AutonomousTaskManagerAPI {
     }
   }
 
-  // Legacy method For backward compatibility during transition
+  // Legacy method for backward compatibility during transition
   /**
    * Atomic operation, Load, modify, And save features with file locking
    * @param {Function} modifier - Function That modifies the features object
@@ -8534,7 +8534,7 @@ class AutonomousTaskManagerAPI {
    */
   async _dryRunFeatureOperation(modifier) {
     try {
-      // Load current state For validation
+      // Load current state for validation
       await this._ensureFeaturesFile();
       const features = await this._loadFeatures();
 
@@ -8579,7 +8579,7 @@ class AutonomousTaskManagerAPI {
   _detectChanges(original, modified) {
     const changes = [];
 
-    // Check For feature changes
+    // Check for feature changes
     if (original.features && modified.features) {
       const originalFeatures = original.features || [];
       const modifiedFeatures = modified.features || [];
@@ -8618,7 +8618,7 @@ class AutonomousTaskManagerAPI {
       }
     }
 
-    // Check For task changes
+    // Check for task changes
     if (original.tasks && modified.tasks) {
       const originalTasks = original.tasks || [];
       const modifiedTasks = modified.tasks || [];
@@ -8657,7 +8657,7 @@ class AutonomousTaskManagerAPI {
       }
     }
 
-    // Check For agent changes
+    // Check for agent changes
     if (original.agents && modified.agents) {
       const originalAgents = Object.keys(original.agents || {});
       const modifiedAgents = Object.keys(modified.agents || {});
@@ -8882,7 +8882,7 @@ class AutonomousTaskManagerAPI {
                 'Strict feature approval And implementation workflow',
               statuses: {
                 suggested: 'Initial feature suggestion - requires approval',
-                approved: 'Feature approved For implementation',
+                approved: 'Feature approved for implementation',
                 rejected: 'Feature rejected with reason',
                 implemented: 'Feature successfully implemented',
               },
@@ -8923,7 +8923,7 @@ class AutonomousTaskManagerAPI {
                     'All required fields must be provided with proper lengths',
                 },
                 'approve-feature': {
-                  description: 'Approve suggested feature For implementation',
+                  description: 'Approve suggested feature for implementation',
                   usage:
                     'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" approve-feature <featureId> [approvalData]',
                   required_parameters: ['featureId'],
@@ -9033,7 +9033,7 @@ class AutonomousTaskManagerAPI {
                   ],
                   output:
                     'Parallel validation results with performance metrics And parallelization gain',
-                  note: 'Executes independent validations simultaneously For 70%+ time savings - respects dependency groups',
+                  note: 'Executes independent validations simultaneously for 70%+ time savings - respects dependency groups',
                   performance:
                     'Reduces validation time through concurrent execution while maintaining dependency constraints',
                 },
@@ -9068,7 +9068,7 @@ class AutonomousTaskManagerAPI {
               ],
               approvalWorkflow: [
                 "1. Features start in 'suggested' status",
-                "2. Use 'approve-feature' to approve For implementation",
+                "2. Use 'approve-feature' to approve for implementation",
                 "3. Use 'reject-feature' to reject with reason",
                 '4. Only approved features should be implemented',
               ],
@@ -9094,7 +9094,7 @@ class AutonomousTaskManagerAPI {
               approvalWorkflow: {
                 approve: [
                   'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" approve-feature feature_123',
-                  'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" approve-feature feature_123 \'{"approved_by":"product-owner", "notes":"High priority For next release"}\'',
+                  'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" approve-feature feature_123 \'{"approved_by":"product-owner", "notes":"High priority for next release"}\'',
                 ],
                 reject: [
                   'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reject-feature feature_456',
@@ -9156,8 +9156,8 @@ class AutonomousTaskManagerAPI {
               bestPractices: [
                 'Provide detailed descriptions explaining the feature thoroughly',
                 'Include clear business justification in business_value field',
-                'Use appropriate categories For better organization',
-                'Review feature suggestions regularly For approval/rejection',
+                'Use appropriate categories for better organization',
+                'Review feature suggestions regularly for approval/rejection',
               ],
             },
             taskManagement: {
@@ -9199,9 +9199,9 @@ class AutonomousTaskManagerAPI {
                   featureTask:
                     'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task \'{"title":"Implement user registration", "description":"Create user registration form with validation", "type":"feature", "priority":"normal"}\'',
                   testTask:
-                    'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task \'{"title":"Add unit tests For auth module", "description":"Create comprehensive test coverage For authentication functions", "type":"test", "priority":"normal"}\'',
+                    'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task \'{"title":"Add unit tests for auth module", "description":"Create comprehensive test coverage for authentication functions", "type":"test", "priority":"normal"}\'',
                   auditTask:
-                    'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task \'{"title":"Security audit For payment processing", "description":"Review payment flow For security vulnerabilities", "type":"audit", "priority":"high"}\'',
+                    'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task \'{"title":"Security audit for payment processing", "description":"Review payment flow for security vulnerabilities", "type":"audit", "priority":"high"}\'',
                 },
               },
               'get-task': {
@@ -9269,7 +9269,7 @@ class AutonomousTaskManagerAPI {
 
     // Generate bucket label based on today's start hour;
     const bucketStartHours = [];
-    For (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 5; i++) {
       bucketStartHours.push((todayStartHour + i * 5) % 24);
     }
 
@@ -9284,7 +9284,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Get all 5-hour time bucket labels For the current day
+   * Get all 5-hour time bucket labels for the current day
    */
   _getTodayTimeBuckets() {
     const now = new Date();
@@ -9306,7 +9306,7 @@ class AutonomousTaskManagerAPI {
     const todayStartHour = (7 + daysSinceReference) % 24;
 
     const buckets = [];
-    For (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 5; i++) {
       const startHour = (todayStartHour + i * 5) % 24;
       const endHour = (startHour + 4) % 24;
 
@@ -9351,7 +9351,7 @@ class AutonomousTaskManagerAPI {
         last_updated: new Date().toISOString(),
       };
     } else {
-      // Check if we need to update bucket labels For today;
+      // Check if we need to update bucket labels for today;
       const todayBuckets = this._getTodayTimeBuckets();
       const currentBuckets = Object.keys(
         features.metadata.initialization_stats.time_buckets
@@ -9409,7 +9409,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Update time bucket statistics For initialization or reinitialization
+   * Update time bucket statistics for initialization or reinitialization
    */
   async _updateTimeBucketStats(type) {
     try {
@@ -9476,7 +9476,7 @@ class AutonomousTaskManagerAPI {
         }
       }
 
-      // Reset buckets For new day with updated bucket labels;
+      // Reset buckets for new day with updated bucket labels;
       const newBuckets = this._getTodayTimeBuckets();
       const newTimeBuckets = {};
       newBuckets.forEach((bucket) => {
@@ -9494,7 +9494,7 @@ class AutonomousTaskManagerAPI {
   _getFallbackGuide(context = 'general') {
     return {
       message: `Feature Management API Guide - ${context}`,
-      helpText: 'For complete API usage guidance, run the guide command',
+      helpText: 'for complete API usage guidance, run the guide command',
       commands: [
         'guide - Get comprehensive guide',
         'methods - List available methods',
@@ -9565,7 +9565,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Estimate effort required For feature implementation
+   * Estimate effort required for feature implementation
    */
   _estimateEffort(feature) {
     let baseEffort = 5; // Base effort in hours
@@ -9607,7 +9607,7 @@ class AutonomousTaskManagerAPI {
       capabilities.push('analysis');
     }
 
-    // Check description For technology hints;
+    // Check description for technology hints;
     const description = feature.description.toLowerCase();
     if (
       description.includes('frontend') ||
@@ -9636,7 +9636,7 @@ class AutonomousTaskManagerAPI {
   _inferVerificationRequirements(feature) {
     const requirements = [];
 
-    // Base requirements For all features
+    // Base requirements for all features
     requirements.push({
       type: 'file',
       description: 'Review existing codebase patterns And conventions',
@@ -9786,17 +9786,17 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Generate supporting tasks For complex features
+   * Generate supporting tasks for complex features
    */
   _generateSupportingTasks(feature, mainTaskId) {
     const supportingTasks = [];
 
-    // Always add testing task For complex features
+    // Always add testing task for complex features
     supportingTasks.push({
       id: this._generateTaskId(),
       feature_id: feature.id,
       title: `Test: ${feature.title}`,
-      description: `Comprehensive testing For ${feature.title}`,
+      description: `Comprehensive testing for ${feature.title}`,
       type: 'testing',
       priority: this._inferTaskPriority(feature),
       status: 'queued',
@@ -9813,13 +9813,13 @@ class AutonomousTaskManagerAPI {
       },
     });
 
-    // Add documentation task For new features
+    // Add documentation task for new features
     if (feature.category === 'new-feature') {
       supportingTasks.push({
         id: this._generateTaskId(),
         feature_id: feature.id,
         title: `Document: ${feature.title}`,
-        description: `Documentation For ${feature.title}`,
+        description: `Documentation for ${feature.title}`,
         type: 'documentation',
         priority: 'normal',
         status: 'queued',
@@ -9844,7 +9844,7 @@ class AutonomousTaskManagerAPI {
   // Intelligent learning And knowledge management operations
 
   /**
-   * Store a lesson in the RAG database For future learning
+   * Store a lesson in the RAG database for future learning
    */
   async storeLesson(lessonData) {
     try {
@@ -9862,7 +9862,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Search For relevant lessons using semantic search
+   * Search for relevant lessons using semantic search
    */
   async searchLessons(query, _options = {}) {
     try {
@@ -9951,7 +9951,7 @@ class AutonomousTaskManagerAPI {
   // =================== LESSON VERSIONING METHODS ===================
 
   /**
-   * Get version history For a lesson
+   * Get version history for a lesson
    */
   async getLessonVersionHistory(lessonId) {
     try {
@@ -10005,7 +10005,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Get comprehensive version analytics For a lesson
+   * Get comprehensive version analytics for a lesson
    */
   async getLessonVersionAnalytics(lessonId) {
     try {
@@ -10061,7 +10061,7 @@ class AutonomousTaskManagerAPI {
   // =================== LESSON QUALITY SCORING METHODS ===================
 
   /**
-   * Record lesson usage For quality tracking
+   * Record lesson usage for quality tracking
    */
   async recordLessonUsage(lessonId, usageData = {}) {
     try {
@@ -10079,7 +10079,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Record lesson feedback For quality tracking
+   * Record lesson feedback for quality tracking
    */
   async recordLessonFeedback(lessonId, feedbackData = {}) {
     try {
@@ -10097,7 +10097,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Record lesson outcome For quality tracking
+   * Record lesson outcome for quality tracking
    */
   async recordLessonOutcome(lessonId, outcomeData = {}) {
     try {
@@ -10133,7 +10133,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Get quality analytics For lessons
+   * Get quality analytics for lessons
    */
   async getLessonQualityAnalytics(_options = {}) {
     try {
@@ -10207,7 +10207,7 @@ class AutonomousTaskManagerAPI {
   // ===== CROSS-PROJECT SHARING API METHODS =====
 
   /**
-   * Register a project For cross-project lesson sharing
+   * Register a project for cross-project lesson sharing
    */
   async registerProject(projectData) {
     try {
@@ -10261,7 +10261,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Get shared lessons For a specific project
+   * Get shared lessons for a specific project
    */
   async getSharedLessonsForProject(projectId, _options = {}) {
     try {
@@ -10279,7 +10279,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Get sharing recommendations For a project
+   * Get sharing recommendations for a project
    */
   async getProjectRecommendations(projectId, _options = {}) {
     try {
@@ -10425,7 +10425,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Get deprecation status And history For a lesson
+   * Get deprecation status And history for a lesson
    */
   async getLessonDeprecationStatus(lessonId) {
     try {
@@ -10517,7 +10517,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Analyze pattern evolution over time For specific categories
+   * Analyze pattern evolution over time for specific categories
    */
   async analyzePatternEvolution(category, _options = {}) {
     try {
@@ -10571,7 +10571,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Get pattern analytics And insights For the learning system
+   * Get pattern analytics And insights for the learning system
    */
   async getPatternAnalytics(_options = {}) {
     try {
@@ -10607,7 +10607,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Search For patterns similar to a given query or example
+   * Search for patterns similar to a given query or example
    */
   async searchSimilarPatterns(query, _options = {}) {
     try {
@@ -10625,7 +10625,7 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Generate insights from detected patterns For system improvement
+   * Generate insights from detected patterns for system improvement
    */
   async generatePatternInsights(_options = {}) {
     try {
@@ -10942,7 +10942,7 @@ async function main(category = 'general') {
         result = {
           success: true,
           message: specificCriteria
-            ? `Cleared failures For specific criteria: ${specificCriteria.join(', ')}`
+            ? `Cleared failures for specific criteria: ${specificCriteria.join(', ')}`
             : 'Cleared all validation failures',
           authKey: args[1],
         };
@@ -10966,7 +10966,7 @@ async function main(category = 'general') {
       case 'execute-emergency-override': {
         if (!args[1] || !args[2]) {
           throw new Error(
-            'Emergency key And reason required. Usage: execute-emergency-override <emergencyKey> \'{"reason":"Detailed reason For using override"}\''
+            'Emergency key And reason required. Usage: execute-emergency-override <emergencyKey> \'{"reason":"Detailed reason for using override"}\''
           );
         }
         const reasonData = JSON.parse(args[2]);
@@ -11006,9 +11006,9 @@ async function main(category = 'general') {
           } else {
             result = {
               success: false,
-              error: `No audit log found For date: ${args[1]}`,
+              error: `No audit log found for date: ${args[1]}`,
               availableDates:
-                'Check .emergency-audit/ directory For available dates',
+                'Check .emergency-audit/ directory for available dates',
             };
           }
         } catch (error) {
@@ -11026,7 +11026,7 @@ async function main(category = 'general') {
             const files = await FS.readdir(emergencyDir);
             const overrides = [];
 
-            For (const file of files) {
+            for (const file of files) {
               if (file.startsWith('emergency_') && file.endsWith('.json')) {
                 try {
                   const filePath = path.join(emergencyDir, file);
@@ -11198,7 +11198,7 @@ async function main(category = 'general') {
         }
         const port = parseInt(args[1]);
         result = await api.startWebSocketServer(port);
-        // Keep process alive For webSocket server
+        // Keep process alive for webSocket server
 
         loggers.taskManager.info(
           { additionalData: [null, 2] },
@@ -11217,7 +11217,7 @@ async function main(category = 'general') {
           api.cleanup();
           throw new Error('webSocket server shutdown requested');
         });
-        // Don't exit For webSocket server
+        // Don't exit for webSocket server
         return;
       }
       case 'register-agent': {
@@ -11852,7 +11852,7 @@ async function main(category = 'general') {
         api.dependencyManager.addDependency(criterion, dependencyConfig);
         result = {
           success: true,
-          message: `Dependency configuration added For ${criterion}`,
+          message: `Dependency configuration added for ${criterion}`,
         };
         break;
       }
@@ -11864,8 +11864,8 @@ async function main(category = 'general') {
         result = {
           success: removed,
           message: removed
-            ? `Dependency removed For ${args[1]}`
-            : `No dependency found For ${args[1]}`,
+            ? `Dependency removed for ${args[1]}`
+            : `No dependency found for ${args[1]}`,
         };
         break;
       }
@@ -12141,7 +12141,7 @@ async function main(category = 'general') {
   }
 }
 
-// Export For programmatic use
+// Export for programmatic use
 module.exports = AutonomousTaskManagerAPI;
 
 // Run CLI if called directly (CommonJS equivalent)

@@ -10,7 +10,7 @@ const { execSync } = require('child_process');
  */
 class TestLogger {
   static log(message) {
-    // Using process.stdout For proper test output
+    // Using process.stdout for proper test output
     process.stdout.write(message + '\n');
   }
 
@@ -32,7 +32,7 @@ TestLogger.log('🧪 Testing audit task override fix...');
 
 // Test 1: Create a simple audit task;
 const createResult = runCommand(
-  `timeout 10s node taskmanager-api.js create '{"title": "AUDIT: Test Audit Override", "description": "Test audit task For override functionality", "category": "audit", "original_implementer": "test_agent_123"}'`
+  `timeout 10s node taskmanager-api.js create '{"title": "AUDIT: Test Audit Override", "description": "Test audit task for override functionality", "category": "audit", "original_implementer": "test_agent_123"}'`
 );
 
 if (!createResult.success) {
@@ -84,8 +84,8 @@ TestLogger.log(
   '- Solution: Added "!options.allowOutOfOrder" condition to first check'
 );
 TestLogger.log(
-  '- Result: Agents can override audit tasks when needed For new work'
+  '- Result: Agents can override audit tasks when needed for new work'
 );
-TestLogger.log('- Objectivity: Still enforced For actual audit work execution');
+TestLogger.log('- Objectivity: Still enforced for actual audit work execution');
 
 // Test completed successfully

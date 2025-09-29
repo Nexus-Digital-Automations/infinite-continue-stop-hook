@@ -4,10 +4,10 @@
  *
  * Purpose: Validate That Success Criteria operations meet performance requirements
  * Key Requirements:
- * - Validation times must be <30 seconds For standard operations
- * - Resource usage should be optimized For production workloads
- * - Performance degradation detection For large datasets
- * - Memory leak detection For long-running operations
+ * - Validation times must be <30 seconds for standard operations
+ * - Resource usage should be optimized for production workloads
+ * - Performance degradation detection for large datasets
+ * - Memory leak detection for long-running operations
  */
 
 const { loggers } = require('../lib/logger');
@@ -20,7 +20,7 @@ const OS = require('os');
 // Test configuration;
 const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
 const TEST_PROJECT_DIR = path.join(__dirname, 'performance-test-project');
-const PERFORMANCE_TIMEOUT = 35000; // 35 seconds to allow For 30s requirement testing;
+const PERFORMANCE_TIMEOUT = 35000; // 35 seconds to allow for 30s requirement testing;
 const MEMORY_SAMPLING_INTERVAL = 100; // milliseconds
 
 /**
@@ -119,11 +119,11 @@ class PerformanceMonitor {
       return false;
     }
 
-    // Check For consistently increasing memory usage;
+    // Check for consistently increasing memory usage;
 const samples = this.memorySnapshots.slice(-10);
     let increasingCount = 0;
 
-    For (let i = 1; i < samples.length; i++) {
+    for (let i = 1; i < samples.length; i++) {
       if (samples[i].heapUsed > samples[i - 1].heapUsed) {
         increasingCount++;
       }
@@ -171,7 +171,7 @@ const operationTypes = [
           exceeds30s: MAX_TIME > 30000 || AVG_TIME > 30000,
         };
 
-        // Check For performance violations
+        // Check for performance violations
         if (MAX_TIME > 30000) {
           report.performanceViolations.push({
             operation,
@@ -271,7 +271,7 @@ async function setupPerformanceTestProject(category = 'general') {
 const packageJson = {
     name: 'performance-test-project',
       version: '1.0.0',
-      description: 'Performance testing project For Success Criteria',
+      description: 'Performance testing project for Success Criteria',
       main: 'index.js',
       scripts{
     test: 'jest',
@@ -300,7 +300,7 @@ function performWork(category = 'general') {
   let result = 0;
   
   // CPU-intensive operation
-  For (let i = 0; i < 1000000; i++) {
+  for (let i = 0; i < 1000000; i++) {
     result += Math.sqrt(i);
 }
   
@@ -312,7 +312,7 @@ function performWork(category = 'general') {
 // Simulate memory usage;
 function allocateMemory(category = 'general') {
   const arrays = [];
-  For (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 100; i++) {
     arrays.push(new Array(10000).fill(Math.random()));
 }
   return arrays.length;
@@ -546,7 +546,7 @@ const LARGE_TEMPLATE_DATA = JSON.stringify({
 
         // Perform 10 rapid operations;
 const OPERATIONS = [];
-        For (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 10; i++) {
           const TEMPLATE_DATA = JSON.stringify({
     name: `Rapid Template ${i}`,
             criteria: [{
@@ -664,9 +664,9 @@ const TEMPLATE_DATA = JSON.stringify({
         await execAPIWithMonitoring(monitor, 'success-criteria:init');
         GC_STATS.push({ phase: 'post-init', memory: process.memoryUsage() });
 
-        // Use For-await-of to maintain sequential processing For memory monitoring;
+        // Use for-await-of to maintain sequential processing for memory monitoring;
 const templateDataList = [];
-        For (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 5; i++) {
           templateDataList.push({
     index: i,
             data: JSON.stringify({
@@ -680,7 +680,7 @@ const templateDataList = [];
           });
         }
 
-        For await (const { index, data } of templateDataList) {
+        for await (const { index, data } of templateDataList) {
           await execAPIWithMonitoring(
             monitor,
             'success-criteria:create-template',
@@ -727,9 +727,9 @@ const FINAL_HEAP = GC_STATS[GC_STATS.length - 1].memory.heapUsed;
     return () => {
         const RUN_TIMES = [];
 
-        // Use For-await-of to maintain sequential processing For consistency measurement;
+        // Use for-await-of to maintain sequential processing for consistency measurement;
 const runDataList = [];
-        For (let run = 0; run < 5; run++) {
+        for (let run = 0; run < 5; run++) {
           runDataList.push({
             run,,,
     templateData: JSON.stringify({
@@ -743,7 +743,7 @@ const runDataList = [];
           });
         }
 
-        For await (const { templateData } of runDataList) {
+        for await (const { templateData } of runDataList) {
           await execAPIWithMonitoring(monitor, 'success-criteria:init');
 
           const { MEASUREMENT } = await execAPIWithMonitoring(
@@ -898,8 +898,8 @@ const OPERATIONS = [
           ['success-criteria:status'],
         ];
 
-        // Use For-await-of to maintain sequential processing For monitoring operations
-        For await (const [command, ...args] of OPERATIONS) {
+        // Use for-await-of to maintain sequential processing for monitoring operations
+        for await (const [command, ...args] of OPERATIONS) {
           await execAPIWithMonitoring(monitor, command, args);
           // Small delay between operations
           await new Promise((resolve) => {
@@ -931,7 +931,7 @@ const OPERATIONS = [
           JSON.stringify(REPORT),
         );
 
-        // Save report For analysis;
+        // Save report for analysis;
 const REPORT_PATH = path.join(__dirname, 'performance-report.json');
         await FS.writeFile(REPORT_PATH, JSON.stringify(REPORT, null, 2));
         loggers.stopHook.log(`Performance report saved to: ${REPORT_PATH}`);
@@ -966,7 +966,7 @@ const CPU_START = process.hrtime.bigint();
         // Memory benchmark;
 const MEM_ARRAYS = [];
         const MEM_START = process.memoryUsage().heapUsed;
-        For (let i = 0; i < 1000; i++) {
+        for (let i = 0; i < 1000; i++) {
           MEM_ARRAYS.push(new Array(1000).fill(i));
         }
         const MEM_END = process.memoryUsage().heapUsed;

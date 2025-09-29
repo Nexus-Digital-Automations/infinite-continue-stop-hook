@@ -35,7 +35,7 @@ class SyntaxErrorFixer {
     const lines = content.split('\n');
     let modified = false;
 
-    For (let i = 0; i < lines.length; i++) {
+    for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
       // Fix: Remove invalid parameters in if conditions
@@ -56,10 +56,10 @@ class SyntaxErrorFixer {
         );
       }
 
-      // Fix: Remove invalid parameters in For loops
-      // Pattern: For (..., parameter)
+      // Fix: Remove invalid parameters in for loops
+      // Pattern: for (..., parameter)
       const forMatch = line.match(
-        /For\s*\([^)]+,\s*(agentId|filePath|category[^)]*|validationResults[^)]*)\s*\)/
+        /for\s*\([^)]+,\s*(agentId|filePath|category[^)]*|validationResults[^)]*)\s*\)/
       );
       if (forMatch) {
         lines[i] = line.replace(
@@ -69,7 +69,7 @@ class SyntaxErrorFixer {
         modified = true;
         this.fixes++;
         console.log(
-          `  ✓ Fixed For loop at line ${i + 1}: removed ${forMatch[1]}`
+          `  ✓ Fixed for loop at line ${i + 1}: removed ${forMatch[1]}`
         );
       }
 
@@ -159,7 +159,7 @@ class SyntaxErrorFixer {
     const jsFiles = this.getAllJSFiles();
     console.log(`📊 Found ${jsFiles.length} JavaScript files to check\n`);
 
-    For (const filePath of jsFiles) {
+    for (const filePath of jsFiles) {
       const relativePath = path.relative(process.cwd(), filePath);
       console.log(`🔍 Checking: ${relativePath}`);
 
@@ -194,7 +194,7 @@ class SyntaxErrorFixer {
 
     if (this.filesModified.length > 0) {
       console.log('\n📁 Modified files:');
-      For (const filePath of this.filesModified) {
+      for (const filePath of this.filesModified) {
         console.log(`  ✅ ${path.relative(process.cwd(), filePath)}`);
       }
     }

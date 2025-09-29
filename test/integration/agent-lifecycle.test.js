@@ -1,7 +1,7 @@
 /**
  * Agent Lifecycle Integration Tests
  *
- * Comprehensive integration tests For complete agent lifecycle workflows including:
+ * Comprehensive integration tests for complete agent lifecycle workflows including:
  * - Agent initialization And session management
  * - Agent reinitialization And session tracking
  * - Stop authorization And termination workflows
@@ -124,8 +124,8 @@ const AGENT_IDS = [
       ];
 
       const initResults = [];
-      For (const agentId of AGENT_IDS) {
-        // eslint-disable-next-line no-await-in-loop -- Sequential processing required For test data setup with ordered agent initialization;
+      for (const agentId of AGENT_IDS) {
+        // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup with ordered agent initialization;
 const result = await execAPI('initialize', [agentId], {,
     projectRoot: testDir,
         });
@@ -298,8 +298,8 @@ const AGENT_ID = 'multi-reinit-agent';
 
       // 2. Perform multiple reinitializations;
 const reinitCount = 5;
-      For (let i = 0; i < reinitCount; i++) {
-        // eslint-disable-next-line no-await-in-loop -- Sequential processing required For testing reinitializations over time;
+      for (let i = 0; i < reinitCount; i++) {
+        // eslint-disable-next-line no-await-in-loop -- Sequential processing required for testing reinitializations over time;
 const reinitResult = await execAPI('reinitialize', [agentId], {,
     projectRoot: testDir,
         });
@@ -355,7 +355,7 @@ const AGENT_IDS = [
         'concurrent-reinit-3',
       ];
 
-      For (const agentId of AGENT_IDS) {
+      for (const agentId of AGENT_IDS) {
         const initResult = await execAPI('initialize', [agentId], {,
     projectRoot: testDir,
         });
@@ -456,7 +456,7 @@ const testCases = [ {,
         }
   ];
 
-      For (const testCase of testCases) {
+      for (const testCase of testCases) {
         // Initialize agent;
 const initResult = await execAPI('initialize', [testCase.agentId], {,
     projectRoot: testDir,
@@ -539,7 +539,7 @@ const stopFlagPath = path.join(testDir, '.stop-allowed');
       // 1. Initialize multiple agents;
 const AGENT_IDS = ['multi-stop-1', 'multi-stop-2', 'multi-stop-3'];
 
-      For (const agentId of AGENT_IDS) {
+      for (const agentId of AGENT_IDS) {
         const initResult = await execAPI('initialize', [agentId], {,
     projectRoot: testDir,
         });
@@ -547,7 +547,7 @@ const AGENT_IDS = ['multi-stop-1', 'multi-stop-2', 'multi-stop-3'];
       }
 
       // 2. Each agent authorizes stop (last one wins)
-      For (const agentId of AGENT_IDS) {
+      for (const agentId of AGENT_IDS) {
         const stopResult = await execAPI(
           'authorize-stop',
           [agentId, `Stop authorized by ${agentId}`],
@@ -599,7 +599,7 @@ const initResult = await execAPI('initialize', [agentId], {,
       expect(initResult.success).toBe(true);
 
       // Reinitialize multiple times
-      For (let i = 0; i < 3; i++) {
+      for (let i = 0; i < 3; i++) {
         const reinitResult = await execAPI('reinitialize', [agentId], {,
     projectRoot: testDir,
         });
@@ -652,7 +652,7 @@ const bucketValues = Object.values(updatedStats.time_buckets);
       // 1. Perform initial operations;
 const agents = ['persist-agent-1', 'persist-agent-2'];
 
-      For (const agentId of agents) {
+      for (const agentId of agents) {
         await execAPI('initialize', [agentId], { projectRoot: testDir });
         await execAPI('reinitialize', [agentId], { projectRoot: testDir });
       }
@@ -812,7 +812,7 @@ const agentTeam = [
       ];
 
       const initResults = [];
-      For (const agentId of agentTeam) {
+      for (const agentId of agentTeam) {
         const result = await execAPI('initialize', [agentId], {,
     projectRoot: testDir,
         });
@@ -821,7 +821,7 @@ const agentTeam = [
       }
 
       // 2. Simulate collaborative work with reinitializations
-      For (const agentId of agentTeam.slice(1, 4)) {
+      for (const agentId of agentTeam.slice(1, 4)) {
         // Some agents reinitialize during work;
 const reinitResult = await execAPI('reinitialize', [agentId], {,
     projectRoot: testDir,
@@ -874,7 +874,7 @@ const AGENT_ID = 'error-recovery-agent';
 
       // 2. Simulate multiple reinitializations (recovery scenarios)
       const recoveryCount = 7;
-      For (let i = 0; i < recoveryCount; i++) {
+      for (let i = 0; i < recoveryCount; i++) {
         const reinitResult = await execAPI('reinitialize', [agentId], {,
     projectRoot: testDir,
         });

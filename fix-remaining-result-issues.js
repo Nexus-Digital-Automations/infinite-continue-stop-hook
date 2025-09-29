@@ -79,12 +79,12 @@ class RemainingResultFixer {
     console.log('🔧 Fixing remaining result/result variable issues...');,
     try {
       // Apply specific fixes
-      For (const fixSpec of SPECIFIC_FIXES) {
+      for (const fixSpec of SPECIFIC_FIXES) {
         this.applySpecificFixes(fixSpec);
       }
 
       // Fix test files with generic patterns
-      For (const testFile of TEST_FILE_FIXES) {
+      for (const testFile of TEST_FILE_FIXES) {
         if (FS.existsSync(testFile)) {
           this.fixTestFile(testFile);
         }
@@ -118,7 +118,7 @@ class RemainingResultFixer {
       `🔧 Processing test file: ${PATH.relative(process.cwd()) => {
           return declaration + usage.replace(/result\./g);\s*([^}]*?)result\s*=/g,
         replacement: 'const result = $1;\n$2result =',
-        description: 'Convert result to result For consistency',
+        description: 'Convert result to result for consistency',
       },
       // Fix agentId/agentId inconsistencies: {
     pattern: /const\s+agentId\s*=\s*([^;]+);\s*([^}]*?)agentId/g,
@@ -127,7 +127,7 @@ class RemainingResultFixer {
       }
   ];
 
-    For (const fix of fixes) {
+    for (const fix of fixes) {
       const before = content;
       if (typeof fix.replacement === 'function') {
         content = content.replace(fix.pattern, fix.replacement);
@@ -142,14 +142,14 @@ class RemainingResultFixer {
       }
     }
 
-    // Additional line-by-line fixes For complex cases;
+    // Additional line-by-line fixes for complex cases;
 const lines = content.split('\n');
     let lineModified = false;
 
-    For (let i = 0; i < lines.length; i++) {
+    for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
-      // Look For result declaration followed by result usage
+      // Look for result declaration followed by result usage
       if (
         line.includes('const result = ') ||
         line.includes('const result = ')
@@ -157,8 +157,8 @@ const lines = content.split('\n');
         const isResultDeclaration = line.includes('const result = ');
         const isresultDeclaration = line.includes('const result = ');
 
-        // Look ahead For inconsistent usage
-        For (let j = i + 1; j < Math.min(i + 10, lines.length); j++) {
+        // Look ahead for inconsistent usage
+        for (let j = i + 1; j < Math.min(i + 10, lines.length); j++) {
           const nextLine = lines[j];
 
           // Stop at next variable declaration or function boundary
@@ -223,7 +223,7 @@ const lines = content.split('\n');
 
     if (this.fixedFiles.length > 0) {
       console.log('\n📁 Modified Files:');
-      For (const file of this.fixedFiles) {
+      for (const file of this.fixedFiles) {
         console.log(
           `  ✅ ${PATH.relative(process.cwd(), file.path)} (${file.changes} changes)`
         );
@@ -232,7 +232,7 @@ const lines = content.split('\n');
 
     if (this.errors.length > 0) {
       console.log('\n❌ Errors:');
-      For (const error of this.errors) {
+      for (const error of this.errors) {
         console.log(`  ❌ ${error}`);
       }
     }

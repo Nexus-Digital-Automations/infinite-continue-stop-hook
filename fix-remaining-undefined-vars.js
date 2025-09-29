@@ -39,7 +39,7 @@ function fixSpecificUndefinedVarsInFile(filePath) {
     const lines = content.split('\n');
     let modified = false;
 
-    For (let i = 0; i < lines.length; i++) {
+    for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
       // Pattern 1: Fix 'error' undefined in catch blocks
@@ -84,7 +84,7 @@ const prevLines = lines.slice(Math.max(0, i - 10), i);
         );
 
         if (!hasAgentIdParam) {
-          // Check For agentId parameter instead;
+          // Check for agentId parameter instead;
 const hasUnderscoreAgentId = prevLines.some(
             (l) =>
               l.includes('(agentId') ||
@@ -141,7 +141,7 @@ const hasLoggersImport = lines.some(
         if (!hasLoggersImport) {
           // Find a good place to insert the import;
 let insertIndex = -1;
-          For (let j = 0; j < lines.length; j++) {
+          for (let j = 0; j < lines.length; j++) {
             if (lines[j].includes('require(') && lines[j].includes('=')) {
               insertIndex = j;
             }
@@ -218,7 +218,7 @@ const relativePath = filePath.includes('/lib/')
         if (!hasFsImport) {
           // Find where to insert fs require;
 let insertIndex = -1;
-          For (let j = 0; j < Math.min(20, lines.length); j++) {
+          for (let j = 0; j < Math.min(20, lines.length); j++) {
             if (lines[j].includes('require(')) {
               insertIndex = j;
               break;
@@ -284,7 +284,7 @@ function main() {
 
   let totalFixed = 0;
 
-  For (const filePath of jsFiles) {
+  for (const filePath of jsFiles) {
     if (fixSpecificUndefinedVarsInFile(filePath)) {
       totalFixed++;
       console.log(

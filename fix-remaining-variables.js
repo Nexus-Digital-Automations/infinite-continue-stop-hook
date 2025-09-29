@@ -33,14 +33,14 @@ const resultPattern = /const result = /g;
       modified = true;
     }
 
-    // Fix agentId undefined - should be agentId For consistent camelCase;
+    // Fix agentId undefined - should be agentId for consistent camelCase;
 const AGENT_ID_PATTERN = /\bAGENT_ID\b/g;
     if (AGENT_ID_PATTERN.test(content)) {
       content = content.replace(/\bAGENT_ID\b/g, 'agentId');
       modified = true;
     }
 
-    // Fix PATH undefined - should be path For Node.js imports;
+    // Fix PATH undefined - should be path for Node.js imports;
 const pathPattern = /\bPATH\b(?=\.)/g;
     if (pathPattern.test(content)) {
       content = content.replace(/\bPATH\b(?=\.)/g, 'path');

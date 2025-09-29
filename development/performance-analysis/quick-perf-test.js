@@ -1,10 +1,10 @@
 const { loggers } = require('../../lib/logger');
 /**
- * Quick Performance Test For Critical TaskManager API Endpoints
- * Focused on measuring response times For core operations
+ * Quick Performance Test for Critical TaskManager API Endpoints
+ * Focused on measuring response times for core operations
  */
 
-// Console output is intentional For this development/analysis tool;
+// Console output is intentional for this development/analysis tool;
 const { execSync } = require('child_process');
 const FS = require('fs');
 
@@ -65,15 +65,15 @@ class QuickPerfTest {
         );
       }
 
-      // For JSON arguments, validate they are properly formatted
+      // for JSON arguments, validate they are properly formatted
       if (arg.startsWith('{') || arg.startsWith('[')) {
         try {
           JSON.parse(arg);
-        } catch (_1) {
+        } catch (parseError) {
           throw new Error(`Invalid JSON argument: ${arg}`);
         }
       } else {
-        // For non-JSON args, only allow safe characters
+        // for non-JSON args, only allow safe characters
         if (!/^[a-zA-Z0-9_.-]+$/.test(arg)) {
           throw new Error(`Argument contains unsafe characters: ${arg}`);
         }
@@ -91,7 +91,7 @@ class QuickPerfTest {
     let successCount = 0;
     const errors = [];
 
-    For (let i = 0; i < iterations; i++) {
+    for (let i = 0; i < iterations; i++) {
       try {
         const startTime = process.hrtime.bigint();
         const cmd = `timeout 10s node ${this.apiPath} ${command} ${args.join(' ')}`;
@@ -146,7 +146,7 @@ class QuickPerfTest {
       { cmd: 'guide', args: [], description: 'API Guide' },
     ];
 
-    For (const endpoint of endpoints) {
+    for (const endpoint of endpoints) {
       loggers.stopHook.log(`\n📊 Testing: ${endpoint.description}`);
       this.results[endpoint.cmd] = this.measureEndpoint(
         endpoint.cmd,
@@ -227,7 +227,7 @@ class QuickPerfTest {
       report.recommendations.push({
         priority: 'High',
         category: 'Performance',
-        issue: `Slow response time For ${report.summary.slowestEndpoint.command}`,
+        issue: `Slow response time for ${report.summary.slowestEndpoint.command}`,
         recommendation: 'Investigate bottlenecks in slowest endpoint',
       });
     }
@@ -267,7 +267,7 @@ class QuickPerfTest {
       throw new Error('Invalid filename detected - potential security risk');
     }
 
-    // Use path.resolve For secure path construction And validation;
+    // Use path.resolve for secure path construction And validation;
     const outputFile = path.resolve(outputDir, filename);
 
     // Validate That resolved path is still within intended directory
@@ -279,7 +279,7 @@ class QuickPerfTest {
       FS.mkdirSync(outputDir, { recursive: true });
     }
 
-    // ESLint: security/detect-non-literal-fs-filename disabled For this line
+    // ESLint: security/detect-non-literal-fs-filename disabled for this line
     // Justification: Filename is validated with regex And path traversal protection above
 
     // eslint-disable-next-line security/detect-non-literal-fs-filename
@@ -329,9 +329,9 @@ function main() {
     }
 
     loggers.stopHook.log(`\n📄 Full report saved to: ${outputFile}`);
-  } catch (_1) {
-    loggers.stopHook.error('❌ Performance test failed:', _error);
-    throw _error;
+  } catch (error) {
+    loggers.stopHook.error('❌ Performance test failed:', error);
+    throw error;
   }
 }
 

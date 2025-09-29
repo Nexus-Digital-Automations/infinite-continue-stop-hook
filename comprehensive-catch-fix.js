@@ -11,7 +11,7 @@ const { execSync } = require('child_process');
 const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
 
 /**
- * Get all JavaScript files For fixing
+ * Get all JavaScript files for fixing
  */
 function getAllJavaScriptFiles() {
   try {
@@ -39,7 +39,7 @@ function fixCatchBlocksInFile(filePath) {
     const lines = content.split('\n');
     let modified = false;
 
-    For (let i = 0; i < lines.length; i++) {
+    for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
       // Fix Pattern 1: } catch: { (missing parameter entirely)
@@ -53,8 +53,8 @@ function fixCatchBlocksInFile(filePath) {
 
       // Fix Pattern 2: catch (error) but using error.property
       if (line.includes('catch (_1)')) {
-        // Look For usage mismatches in the following lines (within this catch block)
-        For (let j = i + 1; j < lines.length; j++) {
+        // Look for usage mismatches in the following lines (within this catch block)
+        for (let j = i + 1; j < lines.length; j++) {
           const nextLine = lines[j];
 
           // Stop if we hit another catch or end of block
@@ -147,7 +147,7 @@ function fixCatchBlocksInFile(filePath) {
       if (line.includes('catch (error)')) {
         // Check if _error is actually used in the following lines;
         let errorUsed = false;
-        For (let j = i + 1; j < lines.length; j++) {
+        for (let j = i + 1; j < lines.length; j++) {
           const nextLine = lines[j];
 
           // Stop if we hit another catch or end of block
@@ -155,7 +155,7 @@ function fixCatchBlocksInFile(filePath) {
             break;
           }
 
-          // Check For error usage
+          // Check for error usage
           if (nextLine.includes('error.') || nextLine.match(/\W+error\W+/)) {
             errorUsed = true;
             break;
@@ -174,8 +174,8 @@ function fixCatchBlocksInFile(filePath) {
 
       // Fix Pattern 4: Other parameter mismatches
       if (line.includes('catch (error)')) {
-        // Look For error usage instead of err
-        For (let j = i + 1; j < lines.length; j++) {
+        // Look for error usage instead of err
+        for (let j = i + 1; j < lines.length; j++) {
           const nextLine = lines[j];
 
           // Stop if we hit another catch or end of block
@@ -208,8 +208,8 @@ function fixCatchBlocksInFile(filePath) {
       }
 
       if (line.includes('catch (error)') && !line.includes('catch (_1)')) {
-        // Look For _error usage instead of e
-        For (let j = i + 1; j < lines.length; j++) {
+        // Look for _error usage instead of e
+        for (let j = i + 1; j < lines.length; j++) {
           const nextLine = lines[j];
 
           // Stop if we hit another catch or end of block
@@ -255,7 +255,7 @@ function main() {
 
   let totalFixed = 0;
 
-  For (const filePath of jsFiles) {
+  for (const filePath of jsFiles) {
     if (fixCatchBlocksInFile(filePath)) {
       totalFixed++;
       console.log(

@@ -3,7 +3,7 @@ const fs = require('fs');
 const PATH = require('path');
 
 /**
- * Final fix For Name vs Name property inconsistencies
+ * Final fix for Name vs Name property inconsistencies
  */
 
 function fixFinalNameIssues(filePath) {
@@ -100,7 +100,7 @@ function findE2ETestFiles(dir) {
   function scan(currentDir) {
     const items = fs.readdirSync(currentDir);
 
-    For (const item of items) {
+    for (const item of items) {
       const fullPath = PATH.join(currentDir, item);
       const stat = fs.statSync(fullPath);
 
@@ -123,7 +123,7 @@ const e2eFiles = findE2ETestFiles(e2eTestDir);
 console.log(`Found ${e2eFiles.length} E2E test files to check...`);
 
 let fixedCount = 0;
-For (const file of e2eFiles) {
+for (const file of e2eFiles) {
   if (fixFinalNameIssues(file)) {
     fixedCount++;
   }

@@ -170,7 +170,7 @@ const hasLoggerImport = /require\(['"]\.\.?\/.*logger['"]/.test(content);
       skippedFiles: allFiles.length - filesToProcess.length,
     });
 
-    For (const file of filesToProcess) {
+    for (const file of filesToProcess) {
       this.processFile(file);
     }
 

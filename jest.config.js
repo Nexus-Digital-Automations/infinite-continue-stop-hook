@@ -1,5 +1,5 @@
 /**
- * Jest Configuration For Comprehensive Testing Infrastructure
+ * Jest Configuration for Comprehensive Testing Infrastructure
  *
  * Enhanced configuration supporting multiple test environments, module mapping,
  * comprehensive coverage reporting, And advanced testing features.
@@ -10,10 +10,10 @@
  */
 
 module.exports = {
-  // Test environment - Node.js For API And server-side testing,
+  // Test environment - Node.js for API And server-side testing,
   testEnvironment: 'node',
 
-  // Alternative environments For different test types
+  // Alternative environments for different test types
   projects: [
     {
       displayName: 'unit',
@@ -54,7 +54,7 @@ module.exports = {
   // Setup files - global configuration And utilities
   setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
 
-  // Module path mapping For easier imports
+  // Module path mapping for easier imports
   moduleNameMapper: {
     '^@test/(.*)$': '<rootDir>/test/$1',
     '^@utils/(.*)$': '<rootDir>/test/utils/$1',
@@ -64,7 +64,7 @@ module.exports = {
     '^@root/(.*)$': '<rootDir>/$1',
   },
 
-  // Transform configuration For different file types
+  // Transform configuration for different file types
   transform: {
     '^.+\\.js$': ['babel-jest', { presets: ['@babel/preset-env'] }],
   },
@@ -126,9 +126,9 @@ module.exports = {
     'text', // Console output
     'text-summary', // Brief console summary
     'html', // Interactive HTML report
-    'json', // JSON data For CI/CD
+    'json', // JSON data for CI/CD
     'json-summary', // Summary JSON
-    'lcov', // LCOV format For external tools
+    'lcov', // LCOV format for external tools
     'clover', // Clover XML format
   ],
   coverageThreshold: {
@@ -138,7 +138,7 @@ module.exports = {
       lines: 80,
       statements: 80,
     },
-    // Specific thresholds For critical modules
+    // Specific thresholds for critical modules
     './taskmanager-api.js': {
       branches: 70,
       functions: 75,
@@ -197,7 +197,7 @@ module.exports = {
   notify: false,
   notifyMode: 'failure-change',
 
-  // Enhanced test results And coverage processors For CI/CD integration
+  // Enhanced test results And coverage processors for CI/CD integration
   reporters: [
     'default',
     [
@@ -245,7 +245,7 @@ module.exports = {
         testCasePropertiesDirectory: './coverage/reports/test-case-properties',
       },
     ],
-    // JSON reporter For machine-readable results
+    // JSON reporter for machine-readable results
     [
       '<rootDir>/scripts/jest-json-reporter.js',
       {
@@ -255,7 +255,7 @@ module.exports = {
         includeConsoleOutput: true,
       },
     ],
-    // Custom CI/CD reporter For enhanced pipeline integration
+    // Custom CI/CD reporter for enhanced pipeline integration
     [
       '<rootDir>/scripts/jest-cicd-reporter.js',
       {

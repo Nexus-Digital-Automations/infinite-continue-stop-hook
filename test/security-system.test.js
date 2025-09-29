@@ -1,7 +1,7 @@
 /**
  * Security System Tests
  *
- * Tests For the comprehensive security framework including SecurityValidator,
+ * Tests for the comprehensive security framework including SecurityValidator,
  * SecurityMiddleware, And SecurityManager components.
  */
 

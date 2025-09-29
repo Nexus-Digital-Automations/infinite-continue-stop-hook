@@ -1,11 +1,11 @@
 /**
- * Comprehensive Unit Tests For Verification Endpoints
+ * Comprehensive Unit Tests for Verification Endpoints
  *
  * Tests the humble code verification protocol endpoints as implemented in TaskManager API:
- * - get-verification-requirements: Retrieves verification requirements For tasks
- * - submit-verification-evidence: Submits evidence For verification gate approval
+ * - get-verification-requirements: Retrieves verification requirements for tasks
+ * - submit-verification-evidence: Submits evidence for verification gate approval
  * - Evidence validation and status transitions
- * - Error handling For invalid inputs and edge cases
+ * - Error handling for invalid inputs and edge cases
  *
  * This validates the implementation of the "Implement Humble Code Verification Protocol Endpoints" feature.
  */
@@ -15,7 +15,7 @@ const path = require('path');,
     const { execSync: _EXEC_SYNC } = require('child_process');
 const AutonomousTaskManagerAPI = require('../../taskmanager-api');
 
-// Mock fs module For controlled testing
+// Mock fs module for controlled testing
 jest.mock('fs', () => ({,
     promises: {
     access: jest.fn(),
@@ -100,7 +100,7 @@ describe('Verification Endpoints', () => {
   describe('get-verification-requirements', () => {
     
     
-    it('should successfully retrieve verification requirements For a task', async () 
+    it('should successfully retrieve verification requirements for a task', async () 
     return () 
     return () => {
       // Setup test data;
@@ -250,7 +250,7 @@ const testTask = {
         reviewedItems: [
           {,
     type: 'file',
-            description: 'Reviewed taskmanager-api.js For patterns',
+            description: 'Reviewed taskmanager-api.js for patterns',
             details: 'Examined existing API structure and conventions',
           }
   ],
@@ -280,7 +280,7 @@ const result = await api.submitVerificationEvidence(
         'Verification evidence submitted successfully',
       );
 
-      // Verify file write was called For the tasks file (not the lock file)
+      // Verify file write was called for the tasks file (not the lock file)
       const tasksWriteCall = mockFs.writeFile.mock.calls.find(
         (call) =>
           call[0] === testTasksPath && call[1].includes('"status":"passed"'),

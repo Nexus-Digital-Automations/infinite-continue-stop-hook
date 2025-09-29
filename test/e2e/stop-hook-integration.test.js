@@ -44,7 +44,7 @@ describe.skip('Stop Hook Integration E2E', () => {
       async () 
     return () 
     return () => {
-        // Test basic stop hook authorization For a single agent;
+        // Test basic stop hook authorization for a single agent;
 const AGENT_ID = 'e2e-stop-test-agent';
 
         // Step 1: Initialize agent through proper API;
@@ -61,7 +61,7 @@ const initResult = await CommandExecutor.executeAPI(
           [], // No arguments - just test the hook: { projectRoot: environment.testDir, expectSuccess: false },
         );
 
-        // Should block (exit code 2 For infinite continue)
+        // Should block (exit code 2 for infinite continue)
         expect(blockResult.code).toBe(2);
 
         // Step 3: Create proper authorization file And test again;
@@ -86,7 +86,7 @@ const authPath = require('path').join(
         expect([0, 2]).toContain(allowResult.code);
 
         console.log(
-          `✅ Basic stop authorization test passed For agent: ${AGENT_ID}`,
+          `✅ Basic stop authorization test passed for agent: ${AGENT_ID}`,
         );
       },
       E2E_TIMEOUT,
@@ -141,7 +141,7 @@ const features = await environment.getFeatures();
         expect(stopResult).toBeTruthy();
 
         console.log(
-          `✅ Stop hook with feature operations integration test passed For agent: ${AGENT_ID}`,
+          `✅ Stop hook with feature operations integration test passed for agent: ${AGENT_ID}`,
         );
       },
       E2E_TIMEOUT,
@@ -168,7 +168,7 @@ const maxIterations = 3;
         expect(continueResults.length).toBeGreaterThan(0);
         expect(continueResults.length).toBeLessThanOrEqual(maxIterations);
 
-        // Check For proper blocking behavior
+        // Check for proper blocking behavior
         continueResults.forEach((result, _index) => {
           expect(result).toBeTruthy();
           expect(result.blocked).toBe(true); // Should always block in infinite mode
@@ -194,7 +194,7 @@ const streamCount = 3;
         const maxIterationsPerStream = 2;
 
         const concurrentStreams = [];
-        For (let i = 0; i < streamCount; i++) {
+        for (let i = 0; i < streamCount; i++) {
           concurrentStreams.push(
             StopHookTestHelpers.testInfiniteContinue(
               environment,
@@ -267,7 +267,7 @@ const AGENT_ID = 'conditional-stop-agent';
           environment,
           featureId,
           AGENT_ID,
-          'Completing pending task For stop condition test',
+          'Completing pending task for stop condition test',
         );
 
         // Test That stop hook still blocks after completing tasks (without authorization)
@@ -284,7 +284,7 @@ const features = await environment.getFeatures();
         expect(features.features[0].status).toBe('approved');
 
         console.log(
-          `✅ Conditional stop authorization test completed For agent: ${AGENT_ID}`,
+          `✅ Conditional stop authorization test completed for agent: ${AGENT_ID}`,
         );
       },
       E2E_TIMEOUT,
@@ -305,7 +305,7 @@ const stopTestResults = await Promise.allSettled([
             [], // Test again to ensure consistent blocking: { projectRoot: environment.testDir, expectSuccess: false },
           ),
           CommandExecutor.executeStopHook(
-            [], // Third test For reliability: { projectRoot: environment.testDir, expectSuccess: false },
+            [], // Third test for reliability: { projectRoot: environment.testDir, expectSuccess: false },
           ),
         ]);
 
@@ -328,7 +328,7 @@ const validStopResult =
         expect(validStopResult).toBeTruthy();
 
         console.log(
-          `✅ Stop hook error recovery test passed For agent: ${AGENT_ID}`,
+          `✅ Stop hook error recovery test passed for agent: ${AGENT_ID}`,
         );
       },
       E2E_TIMEOUT,
@@ -351,7 +351,7 @@ const initialFeature = await FeatureTestHelpers.suggestFeature(
           environment, {,
     title: 'Lifecycle Integration Test Feature',
             description:
-              'Feature For testing complete lifecycle with stop hook integration',
+              'Feature for testing complete lifecycle with stop hook integration',
             business_value:
               'Validates stop hook integration throughout feature management',
             category: 'enhancement',
@@ -398,7 +398,7 @@ const features = await environment.getFeatures();
         expect(features.features[0].approved_by).toBe(AGENT_ID);
 
         console.log(
-          `✅ Stop hook lifecycle integration test passed For feature: ${featureId}`,
+          `✅ Stop hook lifecycle integration test passed for feature: ${featureId}`,
         );
       },
       E2E_TIMEOUT,
@@ -413,13 +413,13 @@ const AGENT_ID = 'performance-test-agent';
 
         // Step 1: Rapid stop hook requests (should all block consistently)
         const rapidRequests = [];
-        For (let i = 0; i < requestCount; i++) {
+        for (let i = 0; i < requestCount; i++) {
           rapidRequests.push(
             CommandExecutor.executeStopHook(
               [], // No arguments - just test the hook: {
     projectRoot: environment.testDir,
                 expectSuccess: false, // Should block in infinite mode
-                timeout: 5000, // Shorter timeout For performance test
+                timeout: 5000, // Shorter timeout for performance test
               },
             ),
           );
@@ -518,10 +518,10 @@ const features = await environment.getFeatures();
         ).toBeTruthy();
 
         console.log(
-          `✅ Stop hook system recovery test passed For agent: ${AGENT_ID}`,
+          `✅ Stop hook system recovery test passed for agent: ${AGENT_ID}`,
         );
       },
       E2E_TIMEOUT * 2,
-    ); // Extended timeout For recovery testing
+    ); // Extended timeout for recovery testing
 });
 });

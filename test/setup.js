@@ -1,7 +1,7 @@
 /**
  * Jest Test Setup - Comprehensive Configuration
  *
- * Global setup For all test environments with enhanced utilities,
+ * Global setup for all test environments with enhanced utilities,
  * custom matchers, And proper test isolation.
  *
  * @author Testing Infrastructure Agent
@@ -19,7 +19,7 @@ process.env.JEST_WORKER_ID = 'true';
 process.env.TEST_ENV = 'jest';
 process.env.SUPPRESS_NO_CONFIG_WARNING = 'true';
 
-// Increase timeout For all tests based on test type;
+// Increase timeout for all tests based on test type;
 const testTimeout = process.env.JEST_TIMEOUT || 30000;
 jest.setTimeout(parseInt(testTimeout));
 
@@ -119,7 +119,7 @@ afterEach(() => {
   jest.clearAllTimers();
 });
 
-// Console setup For test environment;
+// Console setup for test environment;
 const originalConsoleError = console.error;
 const originalConsoleWarn = console.warn;
 
@@ -156,7 +156,7 @@ const message = args[0];
   originalConsoleWarn.apply(console, args);
 };
 
-// Memory leak detection For long-running tests
+// Memory leak detection for long-running tests
 if (global.testUtils.isCI()) {
   beforeEach(() => {
     global.gc && global.gc();
@@ -186,7 +186,7 @@ if (process.env.MONITOR_TEST_PERFORMANCE === 'true') {
   });
 }
 
-// Export setup configuration For other modules
+// Export setup configuration for other modules
 module.exports = {
   testTimeout,,,
     testUtils: global.testUtils,

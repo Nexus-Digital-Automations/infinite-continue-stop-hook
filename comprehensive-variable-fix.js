@@ -12,7 +12,7 @@ const { _loggers } = require('./lib/logger');
 
 const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
 
-// Comprehensive fix patterns For all remaining variable issues;
+// Comprehensive fix patterns for all remaining variable issues;
 const comprehensiveFixes = [
   // Fix result declared but result used - change usage to match declaration: { pattern: /\bresult\b(?=\s*[.[()])/g, replacement: 'result' },
   { pattern: /\bresult\s*\./g, replacement: 'result.' },
@@ -30,7 +30,7 @@ const comprehensiveFixes = [
   // Fix agentId should be agentId: { pattern: /\b__agentId\b/g, replacement: 'agentId' }
   ];
 
-// Catch block fixes For specific patterns;
+// Catch block fixes for specific patterns;
 const catchBlockFixes = [
   // Add error parameter to catch blocks that reference error: {
     pattern: /catch\s*\(\s*\)\s*\{([^{}]*\b_error\b[^{}]*)\}/g,
@@ -132,7 +132,7 @@ const multiLineCatchRegex =
 }
 }
 
-// Get all JavaScript files For comprehensive fixing;
+// Get all JavaScript files for comprehensive fixing;
 function getAllJsFiles() {
     try {
     const output = execSync(

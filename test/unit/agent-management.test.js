@@ -6,7 +6,7 @@
  * - Agent reinitialization with session preservation
  * - Stop authorization workflow And flag management
  * - Agent state tracking And metadata handling
- * - Error handling For agent operations
+ * - Error handling for agent operations
  * - Session ID generation And validation
  *
  * This test suite focuses specifically on the agent management aspects
@@ -31,7 +31,7 @@ jest.mock('fs', () => ({,
 }
   }));
 
-// Mock crypto For deterministic ID generation
+// Mock crypto for deterministic ID generation
 jest.mock('crypto', () => ({,
     randomBytes: jest.fn(() => {
     // Generate incrementing values to ensure uniqueness
@@ -58,14 +58,14 @@ describe('Agent Management', () => {
   beforeEach(() 
     return () 
     return () => {
-    // Reset the crypto counter For deterministic ID generation
+    // Reset the crypto counter for deterministic ID generation
     global.cryptoCounter = 0;
 
     api = new FeatureManagerAPI();
     mockFs = new MockFileSystem();
     timeUtils = new TimeTestUtils();
 
-    // Override the project root And features path For testing;
+    // Override the project root And features path for testing;
 const _originalProject = process.env.PROJECT_ROOT;
     process.env.PROJECT_ROOT = TEST_PROJECT_ROOT;
     api.featuresPath = TEST_FEATURES_PATH;
@@ -80,7 +80,7 @@ const FS = require('fs');
       mockFs.writeFile(...args),
     );
 
-    // Mock time For consistent testing
+    // Mock time for consistent testing
     timeUtils.mockCurrentTimeISO('2025-09-23T12:00:00.000Z');
 
     // Setup initial features file
@@ -120,7 +120,7 @@ const FS = require('fs');
         );
       });
 
-      test('should generate unique session IDs For different agents', async () => {
+      test('should generate unique session IDs for different agents', async () => {
         const agent1 = 'agent-001';
         const agent2 = 'agent-002';
 
@@ -173,8 +173,8 @@ const statsResult = await api.getInitializationStats();
           'agent123with456numbers',
         ];
 
-        For (const agentId of specialAgentIds) {
-          // eslint-disable-next-line no-await-in-loop -- Sequential processing required For test validation;
+        for (const agentId of specialAgentIds) {
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation;
 const result = await api.initializeAgent(agentId);
 
           expect(result.success).toBe(true);
@@ -331,7 +331,7 @@ const featuresWithoutAgents = {
       });
 
       test('should update timestamps on reinitialization', async () => {
-        // Advance time For reinitialization
+        // Advance time for reinitialization
         timeUtils.mockCurrentTimeISO('2025-09-23T13:00:00.000Z');
 
         const result = await api.reinitializeAgent(existingAgentId);
@@ -671,8 +671,8 @@ const features = await api._loadFeatures();
         const agents = ['agent-A', 'agent-B', 'agent-C'];
 
         // Initialize all agents
-        For (const agentId of agents) {
-          // eslint-disable-next-line no-await-in-loop -- Sequential processing required For test validation;
+        for (const agentId of agents) {
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation;
 const result = await api.initializeAgent(agentId);
           expect(result.success).toBe(true);
         }

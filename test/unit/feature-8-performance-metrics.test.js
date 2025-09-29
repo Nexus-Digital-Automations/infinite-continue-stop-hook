@@ -1,7 +1,7 @@
 const FS = require('fs');
 const path = require('path');
 
-// Test suite For Feature 8: Stop Hook Validation Performance Metrics
+// Test suite for Feature 8: Stop Hook Validation Performance Metrics
 // Feature ID: feature_1758946499841_cd5eba625370
 describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
   const mockProjectRoot = '/tmp/test-performance-metrics';
@@ -10,7 +10,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
     '.validation-performance.json',
   );
 
-  // Mock TaskManager class For testing
+  // Mock TaskManager class for testing
 class MockTaskManager {
     constructor() {
       this.PROJECT_ROOT = mockProjectRoot;
@@ -106,7 +106,7 @@ const enhancedStats =
     return {
     success: true,
             bottlenecks: [],
-            message: 'No performance data available For bottleneck analysis',
+            message: 'No performance data available for bottleneck analysis',
           };
         }
 
@@ -154,7 +154,7 @@ const bottleneckAnalysis = this._analyzeBottlenecks(metrics, options);
     return {
     success: true,
             benchmarks: null,
-            message: 'No performance data available For benchmarking',
+            message: 'No performance data available for benchmarking',
           };
         }
 
@@ -189,7 +189,7 @@ const benchmarks = this._calculatePerformanceBenchmarks(
       }
     }
 
-    // Helper methods For performance analysis
+    // Helper methods for performance analysis
     _calculateEnhancedPerformanceStatistics(metrics) {
       if (!metrics || metrics.length === 0) {
         return null;
@@ -252,15 +252,15 @@ const byCriterion = this._groupMetricsByCriteria(metrics);
           // Generate recommendations
           if (criterion.includes('build')) {
             recommendations.push(
-              `Consider implementing incremental builds For ${criterion}`,
+              `Consider implementing incremental builds for ${criterion}`,
             );
           } else if (criterion.includes('test')) {
             recommendations.push(
-              `Optimize test suite For ${criterion} - consider parallel execution`,
+              `Optimize test suite for ${criterion} - consider parallel execution`,
             );
           } else if (criterion.includes('linter')) {
             recommendations.push(
-              `Review linter configuration For ${criterion} - disable non-critical rules`,
+              `Review linter configuration for ${criterion} - disable non-critical rules`,
             );
           }
         }
@@ -591,7 +591,7 @@ const mockMetrics = {
       expect(result.success).toBe(true);
       expect(result.bottlenecks).toEqual([]);
       expect(result.message).toBe(
-        'No performance data available For bottleneck analysis',
+        'No performance data available for bottleneck analysis',
       );
     });
 
@@ -627,7 +627,7 @@ const mockMetrics = {
       expect(result.bottlenecks[1].criterion).toBe('linter-validation');
       expect(result.bottlenecks[1].severity).toBe('moderate');
       expect(result.recommendations).toContain(
-        'Consider implementing incremental builds For build-validation',
+        'Consider implementing incremental builds for build-validation',
       );
       expect(result.featureId).toBe('feature_1758946499841_cd5eba625370');
     });
@@ -669,7 +669,7 @@ const mockMetrics = {
       expect(result.success).toBe(true);
       expect(result.benchmarks).toBe(null);
       expect(result.message).toBe(
-        'No performance data available For benchmarking',
+        'No performance data available for benchmarking',
       );
     });
 
@@ -722,7 +722,7 @@ const buildBenchmark = result.benchmarks.by_criterion.find(
       expect(result.featureId).toBe('feature_1758946499841_cd5eba625370');
     });
 
-    test('should generate benchmark recommendations For slow criteria', async () => {
+    test('should generate benchmark recommendations for slow criteria', async () => {
       const mockMetrics = {
     metrics: [ {,
     criterion: 'linter-validation',

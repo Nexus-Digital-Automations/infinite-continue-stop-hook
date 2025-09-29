@@ -1,5 +1,5 @@
 /**
- * Integration Tests For Dependency Management API
+ * Integration Tests for Dependency Management API
  *
  * Tests the integration between ValidationDependencyManager And TaskManager API endpoints,
  * including API responses, error handling, And system-level functionality.
@@ -208,9 +208,7 @@ const linterIndex = orderCriteria.indexOf('linter-validation');
       expect(result.plan).toBeInstanceOf(Array);
 
       // With concurrency limit of 2, no wave should exceed 2 criteria
-      result.plan.forEach((wave) 
-    return () 
-    return () => {
+      result.plan.forEach((wave) => {
         expect(wave.concurrency).toBeLessThanOrEqual(2);
         expect(wave.criteria.length).toBeLessThanOrEqual(2);
       });
@@ -458,7 +456,7 @@ const getResult = executeTaskManagerCommand(
       expect(result.success).toBe(true);
       expect(result).toHaveProperty('analytics');
 
-      // For fresh system, might have no data
+      // for fresh system, might have no data
       if (result.analytics.noData) {
         expect(result.analytics.noData).toBe(true);
       } else {
@@ -596,9 +594,7 @@ const validationResult = executeTaskManagerCommand(
       expect(result.plan).toBeInstanceOf(Array);
 
       // With concurrency 1, should be essentially sequential
-      result.plan.forEach((wave) 
-    return () 
-    return () => {
+      result.plan.forEach((wave) => {
         expect(wave.concurrency).toBeLessThanOrEqual(1);
         expect(wave.criteria.length).toBeLessThanOrEqual(1);
       });
@@ -624,7 +620,7 @@ const validationResult = executeTaskManagerCommand(
       const startTime = Date.now();
 
       // Execute multiple API calls concurrently
-      For (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 5; i++) {
         const result = executeTaskManagerCommand('validate-dependency-graph');
         expect(result.success).toBe(true);
       }
@@ -635,7 +631,7 @@ const validationResult = executeTaskManagerCommand(
 
     test('should handle large parallel execution plans efficiently', () => {
       // Add many criteria to test scalability
-      For (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 10; i++) {
         const config = {
     dependencies:
             i > 0 ? [{ criterion: `scale-test-${i - 1}`, type: 'weak' }] : [],
@@ -660,7 +656,7 @@ const validationResult = executeTaskManagerCommand(
       expect(duration).toBeLessThan(8000); // Should handle larger graphs efficiently
 
       // Cleanup scale test criteria
-      For (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 10; i++) {
         executeTaskManagerCommand('remove-dependency', `scale-test-${i}`);
       }
     });

@@ -74,20 +74,20 @@ class LinterErrorFixAgent6 {
 
     // Pattern 4: Fix _error is not defined in catch blocks;
 const lines = content.split('\n');
-    For (let i = 0; i < lines.length; i++) {
+    for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
-      // Look For catch (_1) patterns
+      // Look for catch (_1) patterns
       if (line.includes('catch (_1)')) {
         lines[i] = line.replace('catch (_1)', 'catch (_1)');
         modified = true;
         fileFixCount++;
       }
 
-      // Look For _error references after catch (error) blocks
+      // Look for _error references after catch (error) blocks
       if (line.includes('_error') && !line.includes('catch')) {
         // Check if we're in a catch block that uses catch (error)
-        For (let j = i - 1; j >= Math.max(0, i - 20); j--) {
+        for (let j = i - 1; j >= Math.max(0, i - 20); j--) {
           if (lines[j].includes('catch (error)')) {
             // We found a catch (_1) block, this _error should exist
             break;
@@ -176,7 +176,7 @@ const firstParam = match.match(/fixTestFile\(([^,]+)/)[1];
 
     let filesFixed = 0;
 
-    For (const filePath of this.targetFiles) {
+    for (const filePath of this.targetFiles) {
       if (fs.existsSync(filePath)) {
         if (this.fixFile(filePath)) {
           filesFixed++;

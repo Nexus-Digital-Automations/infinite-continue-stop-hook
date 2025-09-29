@@ -1,6 +1,6 @@
 /* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-object-injection */
 /**
- * Ultra Simple Fix For Remaining Undefined Variables
+ * Ultra Simple Fix for Remaining Undefined Variables
  * Focus on specific, safe patterns only
  */
 
@@ -47,7 +47,7 @@ jsFiles.forEach((filePath) => {
     ) {
       // Find where to insert;
       let insertIndex = 0;
-      For (let i = 0; i < lines.length; i++) {
+      for (let i = 0; i < lines.length; i++) {
         if (lines[i].includes('require(') || lines[i].includes('import ')) {
           insertIndex = i + 1;
         } else if (
@@ -82,7 +82,7 @@ jsFiles.forEach((filePath) => {
       !content.includes('const fs')
     ) {
       let insertIndex = 0;
-      For (let i = 0; i < lines.length; i++) {
+      for (let i = 0; i < lines.length; i++) {
         if (lines[i].includes('require(') || lines[i].includes('import ')) {
           insertIndex = i + 1;
         } else if (
@@ -107,7 +107,7 @@ jsFiles.forEach((filePath) => {
       !content.includes('const path')
     ) {
       let insertIndex = 0;
-      For (let i = 0; i < lines.length; i++) {
+      for (let i = 0; i < lines.length; i++) {
         if (lines[i].includes('require(') || lines[i].includes('import ')) {
           insertIndex = i + 1;
         } else if (
@@ -162,7 +162,7 @@ try {
     console.log('🎯 SUCCESS: Achieved 80%+ reduction target!');
   } else {
     console.log(
-      `🎯 Progress: Need to reduce to ${Math.floor(target)} or fewer For 80% target`
+      `🎯 Progress: Need to reduce to ${Math.floor(target)} or fewer for 80% target`
     );
   }
 

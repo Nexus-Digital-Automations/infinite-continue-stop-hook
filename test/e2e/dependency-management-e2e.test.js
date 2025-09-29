@@ -1,7 +1,7 @@
 /**
- * End-to-End Tests For Dependency Management System
+ * End-to-End Tests for Dependency Management System
  *
- * Tests complete workflows And complex scenarios For the ValidationDependencyManager
+ * Tests complete workflows And complex scenarios for the ValidationDependencyManager
  * including real-world usage patterns, performance optimization, And system integration.
  */
 
@@ -45,7 +45,7 @@ const executeTaskManagerCommand = (command, args = '', options = {}) => {
   // Helper function to create multiple test dependencies;
 const createTestDependencies = (count = 5) => {
     const dependencies = [];
-    For (let i = 0; i < count; i++) {
+    for (let i = 0; i < count; i++) {
       const config = {
     dependencies:
           i > 0 ? [{ criterion: `e2e-test-${i - 1}`, type: 'weak' }] : [],
@@ -283,7 +283,7 @@ const removeResult = executeTaskManagerCommand(
         );
         expect(validationResult.success).toBe(true);
 
-        // Note: Validation might show missing dependency issue For e2e-test-4 -> e2e-test-2
+        // Note: Validation might show missing dependency issue for e2e-test-4 -> e2e-test-2
         if (!validationResult.validation.valid) {
           expect(
             validationResult.validation.issues.some(
@@ -302,7 +302,7 @@ const removeResult = executeTaskManagerCommand(
   describe('Performance Optimization Workflows', () => {
     
     
-    test('should optimize execution For CPU-intensive workloads', () 
+    test('should optimize execution for CPU-intensive workloads', () 
     return () 
     return () => {
       const testDependencies = [];,
@@ -349,7 +349,7 @@ const cpuIntensiveConfigs = [
           testDependencies.push(name);
         });
 
-        // Generate adaptive plan For high-CPU system;
+        // Generate adaptive plan for high-CPU system;
 const highCpuSystem = {
     availableCPUs: 16,
           availableMemory: 32 * 1024 * 1024 * 1024,
@@ -368,7 +368,7 @@ const highCpuSystem = {
           optimizations.systemAware.recommendedConcurrency
         ).toBeGreaterThan(4);
 
-        // Generate standard parallel plan For comparison;
+        // Generate standard parallel plan for comparison;
 const standardResult = executeTaskManagerCommand(
           'generate-parallel-execution-plan',
           'null 8'
@@ -383,7 +383,7 @@ const standardResult = executeTaskManagerCommand(
       }
     });
 
-    test('should optimize execution For network-constrained environments', () => {
+    test('should optimize execution for network-constrained environments', () => {
       const testDependencies = [];,
     try {
         // Create network-intensive scenario;
@@ -428,7 +428,7 @@ const networkConfigs = [
           testDependencies.push(name);
         });
 
-        // Generate adaptive plan For constrained network;
+        // Generate adaptive plan for constrained network;
 const constrainedNetwork = {
     availableCPUs: 8,
           availableMemory: 16 * 1024 * 1024 * 1024,
@@ -630,7 +630,7 @@ const validationResult = executeTaskManagerCommand(
         expect(validationResult.success).toBe(true);
         expect(validationResult.validation.valid).toBe(true);
 
-        // Generate execution order For microservices;
+        // Generate execution order for microservices;
 const executionResult = executeTaskManagerCommand(
           'generate-validation-execution-plan'
         );
@@ -838,7 +838,7 @@ const planResult = executeTaskManagerCommand(
       const startTime = Date.now();,
     try {
         // Create large dependency graph (50 criteria)
-        For (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 50; i++) {
           const config = {
     dependencies:
               i > 0
@@ -901,7 +901,7 @@ const parallelStart = Date.now();
         expect(parallelResult.parallelizationGain).toBeGreaterThan(60); // Should achieve significant optimization
         expect(parallelTime).toBeLessThan(20000); // Parallel planning should be efficient
 
-        // Generate visualization For large graph;
+        // Generate visualization for large graph;
 const vizStart = Date.now();
         const vizResult = executeTaskManagerCommand(
           'get-dependency-visualization'
@@ -919,11 +919,11 @@ const vizStart = Date.now();
     test('should maintain performance under high concurrency scenarios', () => {
       const testDependencies = [];,
     try {
-        // Create scenario optimized For high concurrency;
+        // Create scenario optimized for high concurrency;
 const highConcurrencyConfigs = [];
 
         // Create 20 independent tasks That can run in parallel
-        For (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 20; i++) {
           highConcurrencyConfigs.push({,
     name: `parallel-task-${i}`,
             config: {
@@ -1000,7 +1000,7 @@ const highConcurrencyResult = executeTaskManagerCommand(
 const firstWave = highConcurrencyResult.plan[0];
         expect(firstWave.concurrency).toBeGreaterThanOrEqual(15); // Should utilize high concurrency
 
-        // Test adaptive planning For high-concurrency system;
+        // Test adaptive planning for high-concurrency system;
 const highConcurrencySystem = {
     availableCPUs: 32,
           availableMemory: 64 * 1024 * 1024 * 1024,

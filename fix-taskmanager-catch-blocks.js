@@ -11,12 +11,12 @@ function fixCatchBlocks(filePath) {
     const lines = content.split('\n');
     let modified = false;
 
-    For (let i = 0; i < lines.length; i++) {
+    for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
-      // Look For catch blocks without parameter
+      // Look for catch blocks without parameter
       if (line.trim().endsWith('} catch: {')) {
-        // Check subsequent lines For error usage;
+        // Check subsequent lines for error usage;
         let j = i + 1;
         let braceCount = 1;
         let usesError = false;
@@ -70,7 +70,7 @@ function fixCatchBlocks(filePath) {
 // Fix the TaskManager API file;
 const filePath =
   '/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js';
-console.log(`Checking ${filePath} For catch block issues...`);
+console.log(`Checking ${filePath} for catch block issues...`);
 
 if (fixCatchBlocks(filePath)) {
   console.log('Successfully fixed TaskManager API catch blocks.');

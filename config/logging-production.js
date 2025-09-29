@@ -1,8 +1,8 @@
 /**
  * Production Logging Configuration
  *
- * Optimized configuration For production monitoring and observability.
- * Designed For integration with log aggregation systems like ELK, Splunk,
+ * Optimized configuration for production monitoring and observability.
+ * Designed for integration with log aggregation systems like ELK, Splunk,
  * or cloud-native logging services.
  */
 
@@ -10,20 +10,20 @@ const path = require('path');
 const os = require('os');
 
 /**
- * Production logging configuration optimized For monitoring systems
+ * Production logging configuration optimized for monitoring systems
  */
 const productionLogConfig = {
   level: process.env.LOG_LEVEL || 'info',
 
   // Production format - structured JSON without pretty printing
-  transport: undefined, // No transport = raw JSON output For log aggregators
+  transport: undefined, // No transport = raw JSON output for log aggregators
 
   formatters: {
     level: (label) => {
       return { level: label.toUpperCase() };
     },
     log: (object) => {
-      // Enhanced metadata For production monitoring
+      // Enhanced metadata for production monitoring
       return {
         ...object,
         hostname: os.hostname(),
@@ -34,7 +34,7 @@ const productionLogConfig = {
         deployment_id: process.env.DEPLOYMENT_ID || `deploy_${Date.now()}`,
         instance_id: process.env.INSTANCE_ID || `instance_${process.pid}`,
         region: process.env.AWS_REGION || process.env.REGION || 'unknown',
-        // Add correlation IDs For distributed tracing
+        // Add correlation IDs for distributed tracing
         trace_id: object.trace_id || null,
         span_id: object.span_id || null,
       };
@@ -43,13 +43,13 @@ const productionLogConfig = {
 
   timestamp: () => `,"timestamp":"${new Date().toISOString()}"`,
 
-  // Base configuration For all production loggers
+  // Base configuration for all production loggers
   base: {
     service: 'infinite-continue-stop-hook',
     environment: process.env.NODE_ENV || 'production',
   },
 
-  // Performance optimizations For production
+  // Performance optimizations for production
   serializers: {
     err: (err) => {
       return {
@@ -67,10 +67,10 @@ const productionLogConfig = {
         method: req.method,
         url: req.url,
         headers: {
-          // Only safe headers For production logs
+          // Only safe headers for production logs
           'user-agent': req.headers['user-agent'],
           'content-type': req.headers['content-type'],
-          'accept': req.headers['accept'],
+          accept: req.headers['accept'],
           // Never log Authorization, Cookie, or other sensitive headers
         },
         remoteAddress: req.connection?.remoteAddress,
@@ -81,10 +81,10 @@ const productionLogConfig = {
 };
 
 /**
- * Log rotation configuration For production
+ * Log rotation configuration for production
  */
 const logRotationConfig = {
-  // Log file locations For production
+  // Log file locations for production
   paths: {
     application: path.join(process.cwd(), 'logs', 'application.log'),
     error: path.join(process.cwd(), 'logs', 'error.log'),
@@ -218,7 +218,7 @@ const monitoringIntegration = {
     },
   },
 
-  // Custom webhook For critical alerts
+  // Custom webhook for critical alerts
   webhook: {
     enabled: process.env.ALERT_WEBHOOK_ENABLED === 'true',
     url: process.env.ALERT_WEBHOOK_URL,
@@ -231,16 +231,16 @@ const monitoringIntegration = {
  * Production performance optimization settings
  */
 const performanceConfig = {
-  // Async logging For better performance
+  // Async logging for better performance
   async: true,
 
-  // Buffer settings For high-throughput scenarios
+  // Buffer settings for high-throughput scenarios
   buffer: {
     size: 1000, // Buffer up to 1000 log entries
     flushInterval: 1000, // Flush every 1 second
   },
 
-  // Sampling For high-volume debug logs
+  // Sampling for high-volume debug logs
   sampling: {
     debug: 0.1, // Sample 10% of debug logs
     trace: 0.01, // Sample 1% of trace logs

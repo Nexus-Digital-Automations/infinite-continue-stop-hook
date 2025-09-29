@@ -1,6 +1,6 @@
 /* eslint-disable security/detect-non-literal-fs-filename */
 /**
- * Systematic fix For 2866 remaining linting errors
+ * Systematic fix for 2866 remaining linting errors
  * Zero tolerance approach to achieve perfect linting
  */
 
@@ -11,7 +11,7 @@ const { loggers } = require('./lib/logger');
 
 const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
 
-// Core fix patterns For systematic error resolution;
+// Core fix patterns for systematic error resolution;
 const systematicFixes = [
   // Fix variable naming inconsistencies - FS/PATH declared but fs/path used: { pattern: /\bfs\./g, replacement: 'FS.' },
   { pattern: /\bpath\./g, replacement: 'PATH.' },
@@ -104,7 +104,7 @@ function applySystematicFixes(filePath) {
   }
 }
 
-// Get all JavaScript files For systematic fixing;
+// Get all JavaScript files for systematic fixing;
 function getAllJsFiles() {
     try {
     const output = execSync(

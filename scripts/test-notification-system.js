@@ -1,8 +1,8 @@
 /* eslint-disable security/detect-non-literal-fs-filename */
 /**
- * Test Notification System For CI/CD Integration
+ * Test Notification System for CI/CD Integration
  *
- * Comprehensive notification system For test failures, coverage drops,
+ * Comprehensive notification system for test failures, coverage drops,
  * And quality gate violations with multiple notification channels.
  *
  * @author CI/CD Integration Agent
@@ -151,7 +151,7 @@ class TestNotificationSystem {
       },
       actions: [
         'Review failing tests in the CI/CD pipeline',
-        'Check test logs For error details',
+        'Check test logs for error details',
         'Fix failing tests before merging',
       ],
       channels: ['slack', 'teams', 'discord'],
@@ -183,7 +183,7 @@ class TestNotificationSystem {
       actions: [
         'Add more unit tests to improve coverage',
         'Focus on uncovered code paths',
-        'Review coverage report For specific files',
+        'Review coverage report for specific files',
       ],
       channels: ['slack', 'teams'],
       color: '#FFA500',
@@ -210,7 +210,7 @@ class TestNotificationSystem {
       },
       actions: [
         'Review recent code changes',
-        'Add tests For new functionality',
+        'Add tests for new functionality',
         'Check if tests were removed or modified',
       ],
       channels: ['slack', 'teams'],
@@ -309,7 +309,7 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
   async sendNotifications(notifications) {
     const promises = [];
 
-    For (const notification of notifications) {
+    for (const notification of notifications) {
       if (this.shouldSendNotification(notification)) {
         if (
           notification.channels.includes('slack') &&

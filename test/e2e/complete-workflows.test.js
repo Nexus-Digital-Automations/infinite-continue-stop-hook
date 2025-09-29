@@ -53,7 +53,7 @@ describe('Complete System Workflows E2E', () => {
 const featureData = FeatureTestHelpers.createFeatureData({,
     title: 'E2E Test Feature - Complete Workflow',
           description:
-            'Test feature For validating complete workflow from suggestion to implementation',
+            'Test feature for validating complete workflow from suggestion to implementation',
           business_value: 'Validates end-to-end feature management system',
           category: 'enhancement',
         });
@@ -93,7 +93,7 @@ const approvalResult = await FeatureTestHelpers.approveFeature(
           environment,
           featureId,
           'e2e-workflow-tester',
-          'Approved For complete workflow testing'
+          'Approved for complete workflow testing'
         );
         E2EAssertions.assertCommandSuccess(approvalResult, 'Feature approval');
         E2EAssertions.assertOutputContains(
@@ -109,7 +109,7 @@ const approvalResult = await FeatureTestHelpers.approveFeature(
         );
         expect(feature.approved_by).toBe('e2e-workflow-tester');
         expect(feature.approval_notes).toBe(
-          'Approved For complete workflow testing'
+          'Approved for complete workflow testing'
         );
         expect(feature.approval_date).toBeTruthy();
 
@@ -133,7 +133,7 @@ const features = await environment.getFeatures();
         );
 
         console.log(
-          `✅ Complete workflow test passed For feature: ${featureId}`
+          `✅ Complete workflow test passed for feature: ${featureId}`
         );
       },
       E2E_TIMEOUT
@@ -184,7 +184,7 @@ const feature = await FeatureTestHelpers.validateFeatureStatus(
         expect(feature.rejection_date).toBeTruthy();
 
         console.log(
-          `✅ Feature rejection workflow test passed For feature: ${featureId}`
+          `✅ Feature rejection workflow test passed for feature: ${featureId}`
         );
       },
       E2E_TIMEOUT
@@ -207,11 +207,11 @@ const initialFeatures = await environment.getFeatures();
 
         // Step 2: Create multiple features to simulate real usage;
 const featurePromises = [];
-        For (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 3; i++) {
           featurePromises.push(
             FeatureTestHelpers.suggestFeature(environment, {,
     title: `System Integration Feature ${i + 1}`,
-              description: `Feature ${i + 1} For system integration testing`,
+              description: `Feature ${i + 1} for system integration testing`,
               business_value: `Validates system scalability aspect ${i + 1}`,
               category: 'enhancement',
             })
@@ -229,7 +229,7 @@ const approvalPromises = featureIds.map((id) =>
             environment,
             id,
             'system-integrator',
-            'Batch approved For testing'
+            'Batch approved for testing'
           )
         );
         await Promise.all(approvalPromises);
@@ -336,7 +336,7 @@ const finalFeatures = await environment.getFeatures();
     return () => {
         // Test realistic user workflow from feature discovery to implementation tracking
 
-        // Step 1: User discovers need For new feature;
+        // Step 1: User discovers need for new feature;
 const userFeature = FeatureTestHelpers.createFeatureData({,
     title: 'User-Requested Dashboard Enhancement',
           description:
@@ -404,7 +404,7 @@ const features = await environment.getFeatures();
         );
 
         console.log(
-          `✅ Complete user journey test passed For feature: ${featureId}`
+          `✅ Complete user journey test passed for feature: ${featureId}`
         );
       },
       E2E_TIMEOUT
@@ -442,12 +442,12 @@ const { result: bizResult } = await FeatureTestHelpers.suggestFeature(
 
         const bizFeatureId = E2EAssertions.extractFeatureId(bizResult);
 
-        // Step 3: Different approvers For different features
+        // Step 3: Different approvers for different features
         await FeatureTestHelpers.approveFeature(
           environment,
           techFeatureId,
           'tech-lead',
-          'Critical For system scalability'
+          'Critical for system scalability'
         );
 
         await FeatureTestHelpers.approveFeature(

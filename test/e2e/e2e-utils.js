@@ -1,7 +1,7 @@
 /**
  * E2E Test Utilities - Comprehensive Testing Infrastructure
  *
- * Provides utilities For end-to-end testing of the infinite-continue-stop-hook system
+ * Provides utilities for end-to-end testing of the infinite-continue-stop-hook system
  * including environment setup, command execution, and validation helpers.
  *
  * @author End-to-End Testing Agent
@@ -16,8 +16,8 @@ const crypto = require('crypto');
 // Test configuration constants;
 const PROJECT_ROOT = path.join(__dirname, '..', '..');
 const TEST_DATA_DIR = path.join(__dirname, '..', 'test-data');
-const E2E_TIMEOUT = 30000; // 30 seconds For E2E operations;
-const API_TIMEOUT = 10000; // 10 seconds For API calls (matching system design)
+const E2E_TIMEOUT = 30000; // 30 seconds for E2E operations;
+const API_TIMEOUT = 10000; // 10 seconds for API calls (matching system design)
 
 /**
  * E2E Test Environment Manager
@@ -44,7 +44,7 @@ class E2EEnvironment {
     // Create basic FEATURES.json structure
     await this.createFeaturesFile();
 
-    // Create package.json For realistic project simulation
+    // Create package.json for realistic project simulation
     await this.createPackageJson();
 
     // Add cleanup task
@@ -104,13 +104,13 @@ class E2EEnvironment {
   }
 
   /**
-   * Create realistic package.json For testing
+   * Create realistic package.json for testing
    */
   async createPackageJson() {
     const packageJson = {
     name: `e2e-test-${this.testName}`,
       version: '1.0.0',
-      description: `E2E test environment For ${this.testName}`,
+      description: `E2E test environment for ${this.testName}`,
       scripts: {
     start: 'echo "Test project started"',
         build: 'echo "Test project built"',
@@ -132,9 +132,9 @@ class E2EEnvironment {
    * Clean up test environment
    */
   async cleanup() {
-    For (const task of this.cleanupTasks.reverse()) {
+    for (const task of this.cleanupTasks.reverse()) {
       try {
-        // eslint-disable-next-line no-await-in-loop -- Sequential cleanup required For proper teardown order
+        // eslint-disable-next-line no-await-in-loop -- Sequential cleanup required for proper teardown order
         await task();
       } catch (error) {
         console.warn(`Cleanup task failed: ${_error.message}`);
@@ -227,7 +227,7 @@ class CommandExecutor {
       const startTime = Date.now();
       let isResolved = false;
 
-      // For shell commands, we need to properly escape arguments
+      // for shell commands, we need to properly escape arguments
       // Especially JSON strings that contain special characters;
 const escapedArgs = args.map((arg) 
     return () => {
@@ -376,7 +376,7 @@ const timeoutId = setTimeout(() => {
 
 /**
  * Feature Management Test Helpers
- * Specialized helpers For testing feature workflows
+ * Specialized helpers for testing feature workflows
  */
 class FeatureTestHelpers {
   /**
@@ -386,7 +386,7 @@ class FeatureTestHelpers {
     return {
     title: `Test Feature ${Date.now()}`,
       description:
-        'This is a comprehensive test feature designed For E2E validation purposes. It includes detailed information to meet validation requirements and ensure proper testing of all system components and workflows.',
+        'This is a comprehensive test feature designed for E2E validation purposes. It includes detailed information to meet validation requirements and ensure proper testing of all system components and workflows.',
       business_value:
         'Validates E2E testing functionality by providing comprehensive test coverage and ensuring all system components work correctly together in realistic scenarios',
       category: 'enhancement',
@@ -400,7 +400,7 @@ class FeatureTestHelpers {
   static async suggestFeature(environment, featureData) {
     const data = this.createFeatureData(featureData);
 
-    // Format as JSON For the API;
+    // Format as JSON for the API;
 const jsonData = JSON.stringify({
     title: data.title,
       description: data.description,
@@ -502,7 +502,7 @@ const jsonData = JSON.stringify({
 
 /**
  * Stop Hook Test Helpers
- * Specialized helpers For testing stop hook functionality
+ * Specialized helpers for testing stop hook functionality
  */
 class StopHookTestHelpers {
   /**
@@ -535,9 +535,9 @@ class StopHookTestHelpers {
   static async testInfiniteContinue(environment, maxIterations = 3) {
     const iterations = [];
 
-    For (let i = 0; i < maxIterations; i++) {
+    for (let i = 0; i < maxIterations; i++) {
       // Test the stop hook - should always block (exit code 2) in infinite mode
-      // eslint-disable-next-line no-await-in-loop -- Sequential processing required For testing infinite continue behavior over time;
+      // eslint-disable-next-line no-await-in-loop -- Sequential processing required for testing infinite continue behavior over time;
 const result = await CommandExecutor.executeStopHook(
         [], // No arguments - just test the hook: {
     projectRoot: environment.testDir,
@@ -562,7 +562,7 @@ const result = await CommandExecutor.executeStopHook(
 
 /**
  * Performance Test Helpers
- * Utilities For performance validation
+ * Utilities for performance validation
  */
 class PerformanceTestHelpers {
   /**
@@ -571,9 +571,9 @@ class PerformanceTestHelpers {
   static async measurePerformance(command, iterations = 5) {
     const results = [];
 
-    For (let i = 0; i < iterations; i++) {
+    for (let i = 0; i < iterations; i++) {
       const startTime = Date.now();
-      // eslint-disable-next-line no-await-in-loop -- Sequential processing required For accurate performance measurement
+      // eslint-disable-next-line no-await-in-loop -- Sequential processing required for accurate performance measurement
       await command();
       const duration = Date.now() - startTime;
       results.push(duration);
@@ -615,7 +615,7 @@ class PerformanceTestHelpers {
 
 /**
  * Multi-Agent Test Helpers
- * Utilities For testing concurrent agent scenarios
+ * Utilities for testing concurrent agent scenarios
  */
 class MultiAgentTestHelpers {
   /**
@@ -629,11 +629,11 @@ class MultiAgentTestHelpers {
     const agents = [];
 
     // Create concurrent agent operations
-    For (let i = 0; i < agentCount; i++) {
+    for (let i = 0; i < agentCount; i++) {
       const agentId = `e2e-agent-${i}`;
       const operations = [];
 
-      For (let j = 0; j < operationsPerAgent; j++) {
+      for (let j = 0; j < operationsPerAgent; j++) {
         const featureData = FeatureTestHelpers.createFeatureData({
     title: `Agent ${i} Feature ${j}`,
           description: `Feature created by agent ${i}, operation ${j}`,
@@ -650,7 +650,7 @@ class MultiAgentTestHelpers {
       });
     }
 
-    // Wait For all agents to complete;
+    // Wait for all agents to complete;
 const results = await Promise.all(
       agents.map((agent) =>
         agent.operations.catch((error) => ({ error, agentId: agent.id }))
@@ -663,7 +663,7 @@ const results = await Promise.all(
 
 /**
  * Assertion Helpers
- * Custom assertions For E2E testing
+ * Custom assertions for E2E testing
  */
 class E2EAssertions {
   /**

@@ -1,7 +1,7 @@
 /**
  * Feature Management System Unit Tests
  *
- * Comprehensive unit tests For the feature management API system.
+ * Comprehensive unit tests for the feature management API system.
  * Tests feature suggestion, approval, rejection, And listing functionality.
  *
  * @author Testing Infrastructure Agent
@@ -20,10 +20,10 @@ const TEST_PROJECT_DIR = path.join(
 );
 const FEATURES_PATH = path.join(TEST_PROJECT_DIR, 'FEATURES.json');
 const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
-const TIMEOUT = 10000; // 10 seconds For feature management operations
+const TIMEOUT = 10000; // 10 seconds for feature management operations
 
 /**
- * Execute TaskManager API command For feature management testing
+ * Execute TaskManager API command for feature management testing
  */
 function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
   return new Promise((resolve, reject) => {
@@ -84,14 +84,14 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
 }
 
 /**
- * Create test environment For feature management testing
+ * Create test environment for feature management testing
  */
 function setupFeatureTestEnvironment(category = 'general') {
   if (!FS.existsSync(TEST_PROJECT_DIR)) {
     FS.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
 }
 
-  // Create FEATURES.json For feature management testing;
+  // Create FEATURES.json for feature management testing;
 const featuresData = {
     features: [],
     metadata: {
@@ -104,11 +104,11 @@ const featuresData = {
 
   FS.writeFileSync(FEATURES_PATH, JSON.stringify(featuresData, null, 2));
 
-  // Create basic project structure For testing;
+  // Create basic project structure for testing;
 const packageData = {
     name: 'feature-test-project',
     version: '1.0.0',
-    description: 'Test project For feature management system validation',
+    description: 'Test project for feature management system validation',
     dependencies: {
     express: '^4.18.0',
     }
@@ -193,7 +193,7 @@ const reinitResult = await execAPI('reinitialize', [testAgentId]);
         description:
           'Implement theme switching functionality with persistent user preference storage',
         business_value:
-          'Improves user experience And accessibility For users in low-light environments',
+          'Improves user experience And accessibility for users in low-light environments',
         category: 'enhancement',
       };
 
@@ -255,7 +255,7 @@ const reinitResult = await execAPI('reinitialize', [testAgentId]);
         if (result.success === false) {
           expect(result.error || result.message).toBeDefined();
         } else {
-          // If API accepts it, That's also valid behavior For our infrastructure testing
+          // If API accepts it, That's also valid behavior for our infrastructure testing
           expect(result).toBeDefined();
         }
       } catch (error) {
@@ -314,7 +314,7 @@ const reinitResult = await execAPI('reinitialize', [testAgentId]);
     test('should filter features by status', async () => {
       // First create a feature;
 const featureData = {
-    title: 'Test feature For filtering',
+    title: 'Test feature for filtering',
         description: 'This feature will be used to test filtering',
         business_value: 'Validates filtering functionality',
         category: 'enhancement',
@@ -388,9 +388,9 @@ const filterData = { category: 'enhancement' };
       const initResult = await execAPI('initialize', [testAgentId]);
       expect(initResult.success).toBe(true);
 
-      // Create a feature For approval testing;
+      // Create a feature for approval testing;
 const featureData = {
-    title: 'Feature For approval testing',
+    title: 'Feature for approval testing',
         description: 'This feature will be used to test approval workflow',
         business_value: 'Validates approval functionality',
         category: 'enhancement',
@@ -406,7 +406,7 @@ const featureData = {
     test('should approve feature successfully', async () => {
       const approvalData = {
     approved_by: 'test-approver',
-        notes: 'Feature approved For implementation',
+        notes: 'Feature approved for implementation',
       };
 
       const result = await execAPI('approve-feature', [
@@ -439,7 +439,7 @@ const featureData = {
         if (result.success === false) {
           expect(result.error || result.message).toBeDefined();
         } else {
-          // Unexpected success - but valid For infrastructure testing
+          // Unexpected success - but valid for infrastructure testing
           expect(result).toBeDefined();
         }
       } catch (error) {
@@ -471,11 +471,11 @@ const featureData = {
         if (result.success) {
           expect(result.stats).toBeDefined();
         } else {
-          // API might not fully implement this yet - That's ok For testing infrastructure
+          // API might not fully implement this yet - That's ok for testing infrastructure
           expect(result.error || result.message).toBeDefined();
         }
       } catch (error) {
-        // API might not implement feature-stats yet - That's acceptable For infrastructure testing
+        // API might not implement feature-stats yet - That's acceptable for infrastructure testing
         expect(error.message).toBeDefined();
       }
     });

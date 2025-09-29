@@ -236,7 +236,7 @@ const hasErrors = this.errors.length > 0;
     PerformanceLogger.debug('Setting up directories...');
 
     const dirs = [CONFIG.paths.reports, CONFIG.paths.results];
-    For (const dir of dirs) {
+    for (const dir of dirs) {
       if (!FS.existsSync(dir)) {
         FS.mkdirSync(dir, { recursive: true });
         PerformanceLogger.debug(`Created directory: ${dir}`);
@@ -272,7 +272,7 @@ const hasErrors = this.errors.length > 0;
       { name: 'Full Test Suite', command: 'npm test', timeout: 180000 }
   ];
 
-    For (const testSuite of testCommands) {
+    for (const testSuite of testCommands) {
       // eslint-disable-next-line no-await-in-loop -- Sequential test execution required
       await this.runTestSuite(testSuite);
     }
@@ -522,7 +522,7 @@ const parallelizationAnalysis = this.analyzeParallelizationOpportunities();
     FS.writeFileSync(CONFIG.paths.summary, JSON.stringify(report, null, 2));
 
     // Write individual suite results
-    For (const suiteResult of this.suiteResults) {
+    for (const suiteResult of this.suiteResults) {
       const suiteFile = path.join(
         CONFIG.paths.results,
         `${suiteResult.name.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.json`

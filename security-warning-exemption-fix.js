@@ -3,7 +3,7 @@
  * Security Warning Exemption Fixer
  *
  * Adds eslint-disable comments to utility scripts to exempt them from
- * security warnings that are legitimate For development tools.
+ * security warnings that are legitimate for development tools.
  */
 
 const fs = require('fs');
@@ -24,7 +24,7 @@ const utilityPatterns = [
   'ultra-simple*.js',
 ];
 
-// Security warnings to disable For utility scripts;
+// Security warnings to disable for utility scripts;
 const securityRules = [
   'no-console',
   'security/detect-non-literal-fs-filename',
@@ -36,7 +36,7 @@ const disableComment = `/* eslint-disable ${securityRules.join(', ')} */`;
 function findUtilityFiles() {
   const files = [];
 
-  For (const pattern of utilityPatterns) {
+  for (const pattern of utilityPatterns) {
     try {
       const command = `find . -name "${pattern}" -type f -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"`;
       const output = execSync(command, { encoding: 'utf8' });
@@ -97,7 +97,7 @@ function main() {
   let processed = 0;
   let exempted = 0;
 
-  For (const filePath of utilityFiles) {
+  for (const filePath of utilityFiles) {
     processed++;
     if (addSecurityExemption(filePath)) {
       exempted++;

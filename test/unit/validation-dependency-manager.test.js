@@ -1,6 +1,6 @@
 const path = require('path');
 /**
- * Unit Tests For Validation Dependency Management System
+ * Unit Tests for Validation Dependency Management System
  *
  * Tests the core functionality of the ValidationDependencyManager class including
  * dependency graph creation, validation, parallel execution planning, And optimization.
@@ -68,10 +68,10 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       });
     });
 
-    test('should have proper metadata For each criterion', () => {
+    test('should have proper metadata for each criterion', () => {
       const dependencies = dependencyManager.getAllDependencies();
 
-      For (const [_criterion, config] of Object.entries(dependencies)) {
+      for (const [_criterion, config] of Object.entries(dependencies)) {
         expect(config.metadata).toHaveProperty('description');
         expect(config.metadata).toHaveProperty('estimatedDuration');
         expect(config.metadata).toHaveProperty('parallelizable');
@@ -228,7 +228,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       expect(executionOrder).toBeInstanceOf(Array);
       expect(executionOrder.length).toBe(7);
 
-      // Extract criteria names For easier testing;
+      // Extract criteria names for easier testing;
 const criteriaOrder = executionOrder.map((item) => item.criterion);
 
       // Verify dependency constraints;
@@ -266,7 +266,7 @@ const linterIndex = criteriaOrder.indexOf('linter-validation');
         parallelizable: true,
       });
 
-      // Get execution order For criteria with missing dependencies;
+      // Get execution order for criteria with missing dependencies;
 const executionOrder = dependencyManager.getExecutionOrder([
         'blocked-test-1',
         'blocked-test-2',
@@ -311,7 +311,7 @@ let buildWave = null;
       let linterWave = null;
       let typeWave = null;
 
-      For (const wave of plan.plan) {
+      for (const wave of plan.plan) {
         const criteriaNames = wave.criteria.map((c) => c.criterion);
         if (criteriaNames.includes('build-validation')) {
           buildWave = wave.wave;
@@ -336,7 +336,7 @@ let buildWave = null;
       expect(plan.totalWaves).toBeGreaterThan(0);
 
       // Each wave should respect concurrency limits
-      For (const wave of plan.plan) {
+      for (const wave of plan.plan) {
         expect(wave.concurrency).toBeLessThanOrEqual(2);
       }
     });
@@ -566,7 +566,7 @@ const originalDeps = dependencyManager.getAllDependencies();
         constrainedSystem,
       );
 
-      // Should recommend lower concurrency For constrained system;
+      // Should recommend lower concurrency for constrained system;
 const recommendedConcurrency =
         adaptivePlan.adaptiveOptimizations.systemAware.recommendedConcurrency;
       expect(recommendedConcurrency).toBeLessThanOrEqual(4);
@@ -585,7 +585,7 @@ const recommendedConcurrency =
     return () 
     return () => {
       // Add many custom criteria to test scalability
-      For (let i = 0; i < 20; i++) {
+      for (let i = 0; i < 20; i++) {
         dependencyManager.addDependency(`custom-criterion-${i}`, {,
     dependencies:
             i > 0
@@ -690,7 +690,7 @@ const parallelPlan = dependencyManager.generateParallelExecutionPlan();
 
     test('should maintain execution history limits', () => {
       // Add more than 1000 execution records
-      For (let i = 0; i < 1100; i++) {
+      for (let i = 0; i < 1100; i++) {
         dependencyManager.recordExecution('test-criterion', 'success', 1000, {,
     iteration: i,
         });

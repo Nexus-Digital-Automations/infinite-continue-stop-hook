@@ -37,7 +37,7 @@ const SCRIPT_PATTERNS = [
 function getScriptFiles() {
   const scriptFiles = new Set();
 
-  For (const pattern of SCRIPT_PATTERNS) {
+  for (const pattern of SCRIPT_PATTERNS) {
     try {
       const result = execSync(
         `find . -name "${pattern}" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"`,
@@ -93,7 +93,7 @@ function main() {
 
   let totalProcessed = 0;
 
-  For (const filePath of scriptFiles) {
+  for (const filePath of scriptFiles) {
     if (addEslintDisableToFile(filePath)) {
       totalProcessed++;
       console.log(

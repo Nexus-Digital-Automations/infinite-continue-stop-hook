@@ -49,10 +49,10 @@ class FinalUndefinedVariableFixer {
 
   findFunctionContext(lines, lineIndex) {
     // Find the function containing this line
-    For (let i = lineIndex; i >= 0; i--) {
+    for (let i = lineIndex; i >= 0; i--) {
       const line = lines[i];
 
-      // Check For function declaration patterns
+      // Check for function declaration patterns
       if (
         line.match(
           /^\s*(async\s+)?function\s+[^(]+\s*\(([^)]*)\)|^\s*([^=]+)\s*=\s*(async\s+)?\s*\(([^)]*)\)\s*=>|^\s*(async\s+)?([^(]+)\s*\(([^)]*)\)\s*{/
@@ -84,7 +84,7 @@ class FinalUndefinedVariableFixer {
     const lines = content.split('\n');
     let modified = false;
 
-    For (let i = 0; i < lines.length; i++) {
+    for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
       // Skip comments and strings
@@ -174,7 +174,7 @@ const context = this.findFunctionContext(lines, i);
       ) {
         // Find where to insert the import;
 let insertIndex = 0;
-        For (let j = 0; j < lines.length; j++) {
+        for (let j = 0; j < lines.length; j++) {
           if (lines[j].includes('require(') || lines[j].includes('import ')) {
             insertIndex = j + 1;
           } else if (
@@ -245,8 +245,8 @@ const funcLine = lines[context.functionLine];
 
       // Fix 6: error/_error mismatches
       if (line.includes('catch (error)')) {
-        // Look For _error usage in following lines
-        For (let j = i + 1; j < Math.min(i + 20, lines.length); j++) {
+        // Look for _error usage in following lines
+        for (let j = i + 1; j < Math.min(i + 20, lines.length); j++) {
           if (lines[j].includes('}') && lines[j].trim() === '}') {
             break;
           }
@@ -313,7 +313,7 @@ const funcLine = lines[context.functionLine];
       ) {
         // Find where to insert the require;
 let insertIndex = 0;
-        For (let j = 0; j < lines.length; j++) {
+        for (let j = 0; j < lines.length; j++) {
           if (lines[j].includes('require(') || lines[j].includes('import ')) {
             insertIndex = j + 1;
           } else if (
@@ -383,7 +383,7 @@ const updated = funcLine.replace(
     const jsFiles = this.getAllJSFiles();
     console.log(`📊 Found ${jsFiles.length} JavaScript files to analyze\n`);
 
-    For (const filePath of jsFiles) {
+    for (const filePath of jsFiles) {
       const relativePath = path.relative(process.cwd(), filePath);
       console.log(`🔍 Analyzing: ${relativePath}`);
 
@@ -450,7 +450,7 @@ const updated = funcLine.replace(
 
     if (this.filesModified.length > 0) {
       console.log('\n📁 Modified files:');
-      For (const filePath of this.filesModified) {
+      for (const filePath of this.filesModified) {
         console.log(`  ✅ ${path.relative(process.cwd(), filePath)}`);
       }
     }
@@ -474,7 +474,7 @@ const updated = funcLine.replace(
         const lines = output.split('\n');
         const errorTypes = {};
 
-        For (const line of lines) {
+        for (const line of lines) {
           const match = line.match(/'([^']+)' is not defined/);
           if (match) {
             const variable = match[1];
@@ -482,7 +482,7 @@ const updated = funcLine.replace(
           }
         }
 
-        For (const [variable, count] of Object.entries(errorTypes)) {
+        for (const [variable, count] of Object.entries(errorTypes)) {
           console.log(`  ${variable}: ${count} occurrences`);
         }
       }

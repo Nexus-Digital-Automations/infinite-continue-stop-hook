@@ -31,9 +31,9 @@ class FinalSystematicResultFix {
 
     try {
       // Get all relevant files;
-const sourceFiles = await this.getAllSourceFiles();
+      const sourceFiles = await this.getAllSourceFiles();
 
-      For (const filePath of sourceFiles) {
+      for (const filePath of sourceFiles) {
         await this.processFile(filePath);
       }
 
@@ -70,12 +70,12 @@ const sourceFiles = await this.getAllSourceFiles();
         .split('\n')
         .filter((file) => file.trim());
 
-      For (const file of foundFiles) {
+      for (const file of foundFiles) {
         if (this.shouldProcessFile(file)) {
           files.push(file);
         }
       }
-    } catch (error) {
+    } catch (_error) {
       console.error('Error finding files:', _error.message);
     }
 
@@ -111,7 +111,7 @@ const sourceFiles = await this.getAllSourceFiles();
         this.fixedFiles++;
         console.log(`✅ Fixed: ${path.relative(this.projectRoot, filePath)}`);
       }
-    } catch (error) {
+    } catch (_error) {
       console.error(`❌ Error processing ${filePath}:`, _error.message);
     }
   }
@@ -125,7 +125,7 @@ const sourceFiles = await this.getAllSourceFiles();
     // Apply systematic fixes;
     const fixes = this.getSystematicFixes();
 
-    For (const fix of fixes) {
+    for (const fix of fixes) {
       const before = fixed;
       fixed = fixed.replace(fix.pattern, fix.replacement);
 
@@ -151,101 +151,111 @@ const sourceFiles = await this.getAllSourceFiles();
     return [
       // Primary fix: result -> result (declarations)
       {
-    pattern: /const result =/g,
+        pattern: /const result =/g,
         replacement: 'const result =',
       },
 
-      // Fix: let result = {
-    pattern: /let result =/g,
+      // Fix: let result =
+      {
+        pattern: /let result =/g,
         replacement: 'let result =',
       },
 
-      // Fix: var result = {
-    pattern: /var result =/g,
+      // Fix: var result =
+      {
+        pattern: /var result =/g,
         replacement: 'var result =',
       },
 
-      // Fix: result usage in assignments: {
-    pattern: /(\s+)result(\s*=\s*)/g,
+      // Fix: result usage in assignments
+      {
+        pattern: /(\s+)result(\s*=\s*)/g,
         replacement: '$1result$2',
       },
 
-      // Fix: result in return statements: {
-    pattern: /return result;/g,
+      // Fix: result in return statements
+      {
+        pattern: /return result;/g,
         replacement: 'return result;',
       },
 
-      // Fix: result in object/array access: {
-    pattern: /result\./g,
+      // Fix: result in object/array access
+      {
+        pattern: /result\./g,
         replacement: 'result.',
       },
       {
-    pattern: /result\[/g,
+        pattern: /result\[/g,
         replacement: 'result[',
       },
 
-      // Fix: result in function calls: {
-    pattern: /result\(/g,
+      // Fix: result in function calls
+      {
+        pattern: /result\(/g,
         replacement: 'result(',
       },
 
-      // Fix: result in conditionals: {
-    pattern: /if\s*\(\s*result\s*\)/g,
+      // Fix: result in conditionals
+      {
+        pattern: /if\s*\(\s*result\s*\)/g,
         replacement: 'if (result)',
       },
       {
-    pattern: /if\s*\(\s*!result\s*\)/g,
+        pattern: /if\s*\(\s*!result\s*\)/g,
         replacement: 'if (!result)',
       },
 
-      // Fix: result in logical operations: {
-    pattern: /(\s+)result(\s*&&\s*)/g,
+      // Fix: result in logical operations
+      {
+        pattern: /(\s+)result(\s*&&\s*)/g,
         replacement: '$1result$2',
       },
       {
-    pattern: /(\s+)result(\s*\|\|\s*)/g,
+        pattern: /(\s+)result(\s*\|\|\s*)/g,
         replacement: '$1result$2',
       },
 
-      // Fix: result in template literals: {
-    pattern: /\$\{result\}/g,
+      // Fix: result in template literals
+      {
+        pattern: /\$\{result\}/g,
         replacement: '${result}',
       },
 
       // Fix: result in console/logging
       {
-    pattern: /console\.(log|error|warn|info)\(.*result.*\)/g,
+        pattern: /console\.(log|error|warn|info)\(.*result.*\)/g,
         replacement: (match) => match.replace(/result/g, 'result'),
       },
 
-      // Fix: result in expect/assert statements: {
-    pattern: /expect\(result\)/g,
+      // Fix: result in expect/assert statements
+      {
+        pattern: /expect\(result\)/g,
         replacement: 'expect(result)',
       },
       {
-    pattern: /assert\(result\)/g,
+        pattern: /assert\(result\)/g,
         replacement: 'assert(result)',
-      }
-  ];
+      },
+    ];
   }
 
   /**
    * Apply context-specific fixes
    */
-  applyContextSpecificFixes(content, filePath) {
+  applyContextSpecificFixes(content, _filePath) {
     let fixed = content;
 
     // Handle test files specifically
     if (
-      filePath.includes('/test/') ||
-      filePath.includes('.test.') ||
-      filePath.includes('.spec.')
+      _filePath.includes('/test/') ||
+      _filePath.includes('.test.') ||
+      _filePath.includes('.spec.')
     ) {
       fixed = this.applyTestFileFixes(fixed);
     }
 
     // Handle API files specifically
-    if (filePath.includes('api') || filePath.includes('API')) {
+    if (_filePath.includes('api') || _filePath.includes('API')) {
       fixed = this.applyApiFixes(fixed);
     }
 
@@ -261,29 +271,29 @@ const sourceFiles = await this.getAllSourceFiles();
   applyTestFileFixes(content) {
     let fixed = content;
 
-    // Fix test assertion patterns;
-const testPatterns = [
+    // Fix test assertion patterns
+    const testPatterns = [
       // expect(result).toBe -> expect(result).toBe
       {
-    pattern:
+        pattern:
           /expect\(result\)\.(toBe|toEqual|toMatch|toContain|toHaveProperty)/g,
         replacement: 'expect(result).$1',
       },
 
       // result.should.* -> result.should.*
       {
-    pattern: /result\.should\./g,
+        pattern: /result\.should\./g,
         replacement: 'result.should.',
       },
 
       // assert.equal(result, -> assert.equal(result,
       {
-    pattern: /assert\.(equal|deepEqual|strictEqual)\(result,/g,
+        pattern: /assert\.(equal|deepEqual|strictEqual)\(result,/g,
         replacement: 'assert.$1(result,',
-      }
-  ];
+      },
+    ];
 
-    For (const pattern of testPatterns) {
+    for (const pattern of testPatterns) {
       fixed = fixed.replace(pattern.pattern, pattern.replacement);
     }
 
@@ -296,23 +306,24 @@ const testPatterns = [
   applyApiFixes(content) {
     let fixed = content;
 
-    // API response patterns;
-const apiPatterns = [
-      // API response handling: {
-    pattern: /result\.data/g,
+    // API response patterns
+    const apiPatterns = [
+      // API response handling
+      {
+        pattern: /result\.data/g,
         replacement: 'result.data',
       },
       {
-    pattern: /result\.status/g,
+        pattern: /result\.status/g,
         replacement: 'result.status',
       },
       {
-    pattern: /result\.error/g,
+        pattern: /result\.error/g,
         replacement: 'result.error',
-      }
-  ];
+      },
+    ];
 
-    For (const pattern of apiPatterns) {
+    for (const pattern of apiPatterns) {
       fixed = fixed.replace(pattern.pattern, pattern.replacement);
     }
 

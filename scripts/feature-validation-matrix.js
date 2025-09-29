@@ -170,7 +170,7 @@ const startTest = await this.testCommand(
 
       // Test RAG dependencies;
 const ragDeps = ['@xenova/transformers', 'faiss-node', 'natural'];
-      For (const dep of ragDeps) {
+      for (const dep of ragDeps) {
         try {
           require(dep);
           result.details[`${dep}_available`] = true;
@@ -193,7 +193,7 @@ const ragDeps = ['@xenova/transformers', 'faiss-node', 'natural'];
         }
       }
 
-      // Check For RAG library files
+      // Check for RAG library files
       if (FS.existsSync('lib')) {
         const libFiles = FS.readdirSync('lib');
         result.details.library_files = libFiles.length;
@@ -330,7 +330,7 @@ const readData = JSON.parse(FS.readFileSync(testFile, 'utf8'));
         }
       }
 
-      // Check For agent management features in codebase
+      // Check for agent management features in codebase
       if (FS.existsSync('taskmanager-api.js')) {
         const apiContent = FS.readFileSync('taskmanager-api.js', 'utf8');
         result.details.has_agent_endpoints =
@@ -436,7 +436,7 @@ const nativeDeps = [
         { name: 'faiss-node', test: () => require('faiss-node') }
   ];
 
-      For (const dep of nativeDeps) {
+      for (const dep of nativeDeps) {
         try {
           const module = dep.test();
           result.details[`${dep.name}_loaded`] = true;
@@ -514,7 +514,7 @@ const nativeDeps = [
   async runValidations() {
     loggers.stopHook.log('🧪 Running feature validation matrix...\n');
 
-    For (const feature of this.features) {
+    for (const feature of this.features) {
       try {
         loggers.stopHook.log(`Testing: ${feature.name} (${feature.type})`);
         // eslint-disable-next-line no-await-in-loop -- Sequential feature validation required;
@@ -703,7 +703,7 @@ ${
 
 ${
   this.validationResults.overall_status === 'excellent'
-    ? '🏆 All features validated successfully! This Node.js version is optimal For production.'
+    ? '🏆 All features validated successfully! This Node.js version is optimal for production.'
     : this.validationResults.overall_status === 'good'
       ? '✅ Most features working well. Minor issues detected but not blocking.'
       : this.validationResults.overall_status === 'fair'

@@ -38,11 +38,9 @@ class ComprehensiveLinterFixAgent6 {
     content = content.replace(
       /constructor\s*\(\s*([^)]+)\s*\)/g,
       (match, params) => {
-    
         const fixedParams = params
           .split(',')
-          .map((param) 
-    return () => {
+          .map((param) => {
             const trimmed = param.trim();
             // If parameter doesn't start with _ and has no default value
             if (!trimmed.startsWith('_') && !trimmed.includes('=')) {
@@ -84,15 +82,15 @@ class ComprehensiveLinterFixAgent6 {
     );
 
     // Fix 7: Fix specific _error is not defined issues by ensuring proper catch block structure;
-const lines = content.split('\n');
+    const lines = content.split('\n');
     let inCatchBlock = false;
     let catchErrorName = null;
 
-    For (let i = 0; i < lines.length; i++) {
+    for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
       // Detect catch block start;
-const catchMatch = line.match(/catch\s*\(\s*([^)]+)\s*\)/);
+      const catchMatch = line.match(/catch\s*\(\s*([^)]+)\s*\)/);
       if (catchMatch) {
         inCatchBlock = true;
         catchErrorName = catchMatch[1].trim();
@@ -141,7 +139,7 @@ const catchMatch = line.match(/catch\s*\(\s*([^)]+)\s*\)/);
     content = content.replace(/\bAGENT_ID\b/g, 'agentId');
 
     // Check if we made any changes;
-const originalContent = fs.readFileSync(filePath, 'utf8');
+    const originalContent = fs.readFileSync(filePath, 'utf8');
     if (content !== originalContent) {
       modified = true;
       fileFixCount =
@@ -167,7 +165,7 @@ const originalContent = fs.readFileSync(filePath, 'utf8');
 
   run() {
     console.log('🎯 Comprehensive Linter Error Fix Agent #6 Starting...\n');
-    console.log('🎯 Targeting files For complete error elimination:');
+    console.log('🎯 Targeting files for complete error elimination:');
     this.targetFiles.forEach((file) => {
       console.log(`  - ${path.basename(file)}`);
     });
@@ -175,7 +173,7 @@ const originalContent = fs.readFileSync(filePath, 'utf8');
 
     let filesFixed = 0;
 
-    For (const filePath of this.targetFiles) {
+    for (const filePath of this.targetFiles) {
       if (fs.existsSync(filePath)) {
         if (this.fixFile(filePath)) {
           filesFixed++;

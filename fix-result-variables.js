@@ -30,7 +30,7 @@ const FILES_TO_FIX = [
   '/Users/jeremyparker/infinite-continue-stop-hook/scripts/comprehensive-linting-fix.js',
 ];
 
-// Additional patterns to search For test files;
+// Additional patterns to search for test files;
 const TEST_DIRECTORIES = [
   '/Users/jeremyparker/infinite-continue-stop-hook/test/integration',
   '/Users/jeremyparker/infinite-continue-stop-hook/test/e2e',
@@ -63,7 +63,7 @@ const allFiles = this.findAllFilesWithResultIssues();
       console.log(`📁 Found ${allFiles.length} files with result issues`);
 
       // Process each file
-      For (const filePath of allFiles) {
+      for (const filePath of allFiles) {
         this.processFile(filePath);
       }
 
@@ -82,8 +82,8 @@ const allFiles = this.findAllFilesWithResultIssues();
   findAllFilesWithResultIssues() {
     const files = new Set([...FILES_TO_FIX]);
 
-    // Search For additional test files
-    For (const testDir of TEST_DIRECTORIES) {
+    // Search for additional test files
+    for (const testDir of TEST_DIRECTORIES) {
       if (FS.existsSync(testDir)) {
         this.findFilesInDirectory(testDir, files);
       }
@@ -100,7 +100,7 @@ const allFiles = this.findAllFilesWithResultIssues();
     try {
       const items = FS.readdirSync(dir);
 
-      For (const item of items) {
+      for (const item of items) {
         const fullPath = PATH.join(dir, item);
         const stat = FS.statSync(fullPath);
 
@@ -140,7 +140,7 @@ const content = FS.readFileSync(fullPath, 'utf8');
         this.fixSpecificPatterns.bind(this),
       ];
 
-      For (const fix of fixes) {
+      for (const fix of fixes) {
         const result = fix(content);
         if (result.modified) {
           content = result.content;
@@ -195,14 +195,14 @@ const patterns = [
         replacement: '(result) => result.',
         description: 'callback parameter consistency',
       },
-      // In assignments where result should be result For consistency: {
+      // In assignments where result should be result for consistency: {
     pattern: /const\s+result\s*=\s*[^;]+;\s*([^;]*result\.)/g,
         replacement: (match, _p1) => match.replace(/result\./g, 'result.'),
         description: 'result variable consistency in scope',
       }
   ];
 
-    For (const { pattern, replacement, description } of patterns) {
+    for (const { pattern, replacement, description } of patterns) {
       const beforeCount = (content.match(pattern) || []).length;
       if (typeof replacement === 'function') {
         content = content.replace(pattern, replacement);
@@ -262,7 +262,7 @@ const patterns = [
   },
     ];
 
-    For (const { pattern, replacement, description, condition } of patterns) {
+    for (const { pattern, replacement, description, condition } of patterns) {
       if (condition) {
         // Apply conditional replacement
         content = content.replace(pattern, (match, ...args) => {
@@ -305,13 +305,13 @@ const patterns = [
     // Fix specific scope issues where variables are inconsistently named;
 const lines = content.split('\n');
 
-    For (let i = 0; i < lines.length; i++) {
+    for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
-      // If we see a result declaration, check following lines For inconsistent usage
+      // If we see a result declaration, check following lines for inconsistent usage
       if (line.includes('const result = ')) {
-        // Look ahead For inconsistent usage in the same scope
-        For (let j = i + 1; j < Math.min(i + 20, lines.length); j++) {
+        // Look ahead for inconsistent usage in the same scope
+        for (let j = i + 1; j < Math.min(i + 20, lines.length); j++) {
           const followingLine = lines[j];
 
           // Stop at next function/block
@@ -418,7 +418,7 @@ const beforeContent = content;
 
     if (this.fixedFiles.length > 0) {
       console.log('\n📁 Modified Files:');
-      For (const file of this.fixedFiles) {
+      for (const file of this.fixedFiles) {
         console.log(
           `  ✅ ${PATH.relative(process.cwd(), file.path)} (${file.changes} changes)`
         );
@@ -427,7 +427,7 @@ const beforeContent = content;
 
     if (this.errors.length > 0) {
       console.log('\n❌ Errors:');
-      For (const error of this.errors) {
+      for (const error of this.errors) {
         console.log(
           `  ❌ ${PATH.relative(process.cwd(), error.file)}: ${error.error}`
         );

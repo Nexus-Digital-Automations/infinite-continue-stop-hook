@@ -1,6 +1,6 @@
 /**
- * Simple Jest Configuration For Unit Tests
- * Avoids complex configuration issues For unit test validation
+ * Simple Jest Configuration for Unit Tests
+ * Avoids complex configuration issues for unit test validation
  */
 
 module.exports = {

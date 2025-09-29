@@ -124,7 +124,7 @@ class CoverageThresholdChecker {
       this.generateReport();
       this.displayResults();
 
-      // Check For failures;
+      // Check for failures;
 const hasFailures = this.results.failures.length > 0;
       const hasWarnings = this.results.warnings.length > 0;
       const shouldFail =
@@ -198,9 +198,9 @@ const hasFailures = this.results.failures.length > 0;
     const failures = [];
     const warnings = [];
 
-    For (const [metric, threshold] of Object.entries(this.config.thresholds)) {
+    for (const [metric, threshold] of Object.entries(this.config.thresholds)) {
       if (!summary[metric]) {
-        warnings.push(`Missing coverage data For metric: ${metric}`);
+        warnings.push(`Missing coverage data for metric: ${metric}`);
         continue;
       }
 
@@ -257,7 +257,7 @@ const hasFailures = this.results.failures.length > 0;
 
     this.results.badge_url = badgeUrl;
 
-    // Write badge data to file For CI usage;
+    // Write badge data to file for CI usage;
 const badgeData = {
     coverage_percentage: overallCoverage,
       badge_url: badgeUrl,
@@ -437,7 +437,7 @@ const overallStatus = passed ? '✅ PASSED' : '❌ FAILED';
     // Exit guidance
     if (!passed) {
       loggers.stopHook.log('\n💡 To fix coverage issues:');
-      loggers.stopHook.log('   1. Add tests For uncovered code');
+      loggers.stopHook.log('   1. Add tests for uncovered code');
       loggers.stopHook.log('   2. Run: npm run coverage:report');
       loggers.stopHook.log(
         '   3. Check HTML report: coverage/lcov-report/index.html',

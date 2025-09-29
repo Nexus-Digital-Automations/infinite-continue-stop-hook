@@ -5,12 +5,12 @@
 
 /* eslint-disable no-console, security/detect-non-literal-fs-filename */
 const fs = require('fs');
-const PATH = require('path');
+const path = require('path');
 const { execSync } = require('child_process');
 
 const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
 
-// Get all JavaScript files For catch block fixing;
+// Get all JavaScript files for catch block fixing;
 function getAllJsFiles() {
   try {
     const output = execSync(
@@ -22,7 +22,7 @@ function getAllJsFiles() {
       .split('\n')
       .filter((f) => f && f.endsWith('.js'));
   } catch (error) {
-    console.error('Failed to get JS files:', _error.message);
+    console.error('Failed to get JS files:', error.message);
     return [];
   }
 }
@@ -226,13 +226,13 @@ function fixAllCatchBlocks(filePath) {
 
     if (modified && content !== originalContent) {
       fs.writeFileSync(filePath, content, 'utf8');
-      console.log(`Fixed catch blocks in: ${PATH.relative(rootDir, filePath)}`);
+      console.log(`Fixed catch blocks in: ${path.relative(rootDir, filePath)}`);
       return true;
     }
 
     return false;
   } catch (error) {
-    console.error(`Error fixing catch blocks in ${filePath}:`, _error.message);
+    console.error(`Error fixing catch blocks in ${filePath}:`, error.message);
     return false;
   }
 }
@@ -264,13 +264,13 @@ try {
 // Final status check
 console.log('🔄 Checking final linting status...');
 try {
-  const LINT_RESULT = execSync('npm run lint 2>&1', {
+  execSync('npm run lint 2>&1', {
     cwd: rootDir,
     encoding: 'utf8',
   });
   console.log('🎉 ALL LINTING ERRORS RESOLVED!');
 } catch (error) {
-  const output = _error.stdout || _error.message;
+  const output = error.stdout || error.message;
   const errorMatches = output.match(/(\d+) errors/);
   const warningMatches = output.match(/(\d+) warnings/);
 

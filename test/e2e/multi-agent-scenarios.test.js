@@ -53,16 +53,16 @@ const agentCount = 5;
 
         // Create concurrent feature suggestions;
 const agentPromises = [];
-        For (let i = 0; i < agentCount; i++) {
+        for (let i = 0; i < agentCount; i++) {
           const _AGENT_ID = `concurrent-agent-${i}`;
           const agentOperations = [];
 
           let category = 'general';
-          For (let j = 0; j < featuresPerAgent; j++, category = 'general') {
+          for (let j = 0; j < featuresPerAgent; j++, category = 'general') {
             const featureData = FeatureTestHelpers.createFeatureData({,
     title: `Agent ${i} Feature ${j} - Concurrent Test`,
-              description: `Feature ${j} suggested by agent ${i} For concurrent testing`,
-              business_value: `Validates concurrent operations For agent ${i}, feature ${j}`,
+              description: `Feature ${j} suggested by agent ${i} for concurrent testing`,
+              business_value: `Validates concurrent operations for agent ${i}, feature ${j}`,
               category: 'enhancement',
             });
 
@@ -139,11 +139,11 @@ const features = await environment.getFeatures();
 const featureCount = 6;
         const featurePromises = [];
 
-        For (let i = 0; i < featureCount; i++) {
+        for (let i = 0; i < featureCount; i++) {
           featurePromises.push(
             FeatureTestHelpers.suggestFeature(environment, {,
     title: `Approval Test Feature ${i}`,
-              description: `Feature ${i} For concurrent approval testing`,
+              description: `Feature ${i} for concurrent approval testing`,
               business_value: `Test concurrent approvals - feature ${i}`,
               category: 'enhancement',
             })
@@ -279,7 +279,7 @@ const featureIds = features.features.map((f) => f.id);
       async () => {
         // Test how the system handles potential conflicts between agents
 
-        // Step 1: Create a feature to compete For;,
+        // Step 1: Create a feature to compete for;,
     const { result } = await FeatureTestHelpers.suggestFeature(
           environment,
           {,
@@ -396,7 +396,7 @@ const agentCount = 4;
         const agents = [];
 
         // Step 1: Start multiple agents with different execution patterns
-        For (let i = 0; i < agentCount; i++) {
+        for (let i = 0; i < agentCount; i++) {
           agents.push({,
     id: `stop-hook-agent-${i}`,
             duration: 200 + i * 100, // Varying execution times
@@ -435,7 +435,7 @@ const featureOperationPromises = agents.slice(0, 2).map((agent) =>
           FeatureTestHelpers.suggestFeature(environment, {,
     title: `Stop Hook Feature - ${agent.id}`,
             description: `Feature with stop hook integration by ${agent.id}`,
-            business_value: `Validates stop hook integration For ${agent.id}`,
+            business_value: `Validates stop hook integration for ${agent.id}`,
             category: 'enhancement',
           })
         );
@@ -515,7 +515,7 @@ const operationCount = 10;
         const contentionPromises = [];
 
         // Step 1: Create many concurrent operations That modify FEATURES.json
-        For (let i = 0; i < operationCount; i++) {
+        for (let i = 0; i < operationCount; i++) {
           contentionPromises.push(
             FeatureTestHelpers.suggestFeature(environment, {,
     title: `Contention Test Feature ${i}`,
@@ -570,6 +570,6 @@ const features = await environment.getFeatures();
         );
       },
       E2E_TIMEOUT * 2
-    ); // Extended timeout For contention testing
+    ); // Extended timeout for contention testing
   });
 });

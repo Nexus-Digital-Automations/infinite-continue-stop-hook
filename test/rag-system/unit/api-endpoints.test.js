@@ -17,13 +17,11 @@ const _API_BASE =
   '/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js';
 
 describe('RAG System API Endpoints', () => {
-    
   let _app;
   let _testLessonId;
   let _testErrorId;
 
-  beforeAll(async () 
-    return () => {
+  beforeAll(async () => {
     // Setup test environment
     // Note: This will be implemented when RAG system is available
     loggers.stopHook.log('Setting up RAG test environment...');
@@ -40,23 +38,21 @@ describe('RAG System API Endpoints', () => {
   });
 
   describe('Lesson Storage Endpoints', () => {
-    
-    describe('POST /api/lessons', () 
-    return () => {
+    describe('POST /api/lessons', () => {
       test('should create new lesson with valid data', () => {
         const _lessonData = {
-    title: 'Test Lesson: API Error Handling',
+          title: 'Test Lesson: API Error Handling',
           content:
             'When dealing with API errors, always implement proper retry logic...',
           category: 'api-errors',
           project: 'test-project',
           tags: ['api', 'error-handling', 'retry'],
           metadata: {
-    agent_id: 'test-agent-001',
+            agent_id: 'test-agent-001',
             session_id: 'session-123',
             timestamp: new Date().toISOString(),
-          }
-  };
+          },
+        };
 
         // This test will be implemented when RAG endpoints are available
         expect(true).toBe(true); // Placeholder
@@ -76,11 +72,11 @@ describe('RAG System API Endpoints', () => {
 
       test('should validate required fields', () => {
         const _invalidData = {
-    title: '', // Empty title should fail
+          title: '', // Empty title should fail
           content: 'Some content',
         };
 
-        // Placeholder For future implementation
+        // Placeholder for future implementation
         expect(true).toBe(true);
 
         /* Future implementation:
@@ -93,12 +89,12 @@ describe('RAG System API Endpoints', () => {
 
       test('should sanitize input data', () => {
         const _maliciousData = {
-    title: '<script>alert("xss")</script>Lesson Title',
+          title: '<script>alert("xss")</script>Lesson Title',
           content: 'SELECT * FROM users WHERE 1=1',
           category: '../../../etc/passwd',
         };
 
-        // Placeholder For future implementation
+        // Placeholder for future implementation
         expect(true).toBe(true);
 
         /* Future implementation:
@@ -114,9 +110,9 @@ describe('RAG System API Endpoints', () => {
 
       test('should enforce 10-second timeout', () => {
         jest.setTimeout(15000); // Set test timeout to 15 seconds;
-const _start = Date.now();
+        const _start = Date.now();
 
-        // Placeholder For future implementation
+        // Placeholder for future implementation
         expect(true).toBe(true);
 
         /* Future implementation:
@@ -142,10 +138,8 @@ const _start = Date.now();
     });
 
     describe('GET /api/lessons/:id', () => {
-    
-      test('should retrieve lesson by ID', async () 
-    return () => {
-        // Placeholder For future implementation
+      test('should retrieve lesson by ID', async () => {
+        // Placeholder for future implementation
         expect(true).toBe(true);
 
         /* Future implementation:
@@ -160,8 +154,8 @@ const _start = Date.now();
         */
       });
 
-      test('should return 404 For non-existent lesson', () => {
-        // Placeholder For future implementation
+      test('should return 404 for non-existent lesson', () => {
+        // Placeholder for future implementation
         expect(true).toBe(true);
 
         /* Future implementation:
@@ -174,19 +168,17 @@ const _start = Date.now();
   });
 
   describe('Error Storage Endpoints', () => {
-    
-    describe('POST /api/errors', () 
-    return () => {
+    describe('POST /api/errors', () => {
       test('should create new error entry with full context', () => {
         const _errorData = {
-    error_type: 'linter_error',
+          error_type: 'linter_error',
           message: 'Unexpected token in expression',
           file_path: '/src/components/UserAuth.js',
           line_number: 42,
           column_number: 15,
           resolution: 'Added missing semicolon after variable declaration',
           context: {
-    project: 'user-management-system',
+            project: 'user-management-system',
             agent_id: 'linter-agent-001',
             timestamp: new Date().toISOString(),
             code_snippet:
@@ -195,7 +187,7 @@ const _start = Date.now();
           tags: ['linter', 'syntax', 'javascript'],
         };
 
-        // Placeholder For future implementation
+        // Placeholder for future implementation
         expect(true).toBe(true);
 
         /* Future implementation:
@@ -213,16 +205,16 @@ const _start = Date.now();
 
       test('should handle error without resolution', () => {
         const _errorData = {
-    error_type: 'runtime_error',
+          error_type: 'runtime_error',
           message: 'Cannot read property of undefined',
           file_path: '/src/utils/dataProcessor.js',
           context: {
-    project: 'data-analysis',
+            project: 'data-analysis',
             agent_id: 'runtime-agent-002',
-          }
-  };
+          },
+        };
 
-        // Placeholder For future implementation
+        // Placeholder for future implementation
         expect(true).toBe(true);
 
         /* Future implementation:
@@ -238,16 +230,14 @@ const _start = Date.now();
     });
 
     describe('PUT /api/errors/:id/resolve', () => {
-    
-      test('should update error with resolution', async () 
-    return () => {
+      test('should update error with resolution', async () => {
         const _resolutionData = {
-    resolution: 'Added null check before accessing object property',
+          resolution: 'Added null check before accessing object property',
           resolved_by: 'debug-agent-003',
           resolution_time: new Date().toISOString(),
         };
 
-        // Placeholder For future implementation
+        // Placeholder for future implementation
         expect(true).toBe(true);
 
         /* Future implementation:
@@ -264,21 +254,19 @@ const _start = Date.now();
   });
 
   describe('Semantic Search Endpoints', () => {
-    
-    describe('POST /api/search', () 
-    return () => {
+    describe('POST /api/search', () => {
       test('should perform semantic search across lessons And errors', () => {
         const _searchQuery = {
-    query: 'How to handle API timeout errors in Node.js',
+          query: 'How to handle API timeout errors in Node.js',
           type: 'lessons',
           limit: 10,
           filters: {
-    category: ['api-errors', 'timeout'],
+            category: ['api-errors', 'timeout'],
             project: 'current',
-          }
-  };
+          },
+        };
 
-        // Placeholder For future implementation
+        // Placeholder for future implementation
         expect(true).toBe(true);
 
         /* Future implementation:
@@ -302,12 +290,12 @@ const _start = Date.now();
 
       test('should handle empty search results', () => {
         const _searchQuery = {
-    query:
+          query:
             'extremely specific query That should return no results xyz123',
           type: 'lessons',
         };
 
-        // Placeholder For future implementation
+        // Placeholder for future implementation
         expect(true).toBe(true);
 
         /* Future implementation:
@@ -323,11 +311,11 @@ const _start = Date.now();
 
       test('should validate search parameters', () => {
         const _invalidQuery = {
-    query: '', // Empty query
+          query: '', // Empty query
           limit: 1000, // Excessive limit
         };
 
-        // Placeholder For future implementation
+        // Placeholder for future implementation
         expect(true).toBe(true);
 
         /* Future implementation:
@@ -340,10 +328,8 @@ const _start = Date.now();
     });
 
     describe('GET /api/search/similar/:id', () => {
-    
-      test('should find similar content based on embedding', async () 
-    return () => {
-        // Placeholder For future implementation
+      test('should find similar content based on embedding', async () => {
+        // Placeholder for future implementation
         expect(true).toBe(true);
 
         /* Future implementation:
@@ -356,7 +342,7 @@ const _start = Date.now();
         expect(response.body.similar_items).toBeInstanceOf(Array);
 
         // Results should be sorted by similarity
-        For (let i = 1; i < response.body.similar_items.length; i++) {
+        for (let i = 1; i < response.body.similar_items.length; i++) {
           expect(response.body.similar_items[i-1].similarity_score)
             .toBeGreaterThanOrEqual(response.body.similar_items[i].similarity_score);
         }
@@ -366,11 +352,9 @@ const _start = Date.now();
   });
 
   describe('Analytics And Metrics Endpoints', () => {
-    
-    describe('GET /api/analytics/usage', () 
-    return () => {
+    describe('GET /api/analytics/usage', () => {
       test('should provide usage statistics', () => {
-        // Placeholder For future implementation
+        // Placeholder for future implementation
         expect(true).toBe(true);
 
         /* Future implementation:
@@ -388,10 +372,8 @@ const _start = Date.now();
     });
 
     describe('GET /api/analytics/performance', () => {
-    
-      test('should provide performance metrics', async () 
-    return () => {
-        // Placeholder For future implementation
+      test('should provide performance metrics', async () => {
+        // Placeholder for future implementation
         expect(true).toBe(true);
 
         /* Future implementation:
@@ -409,21 +391,19 @@ const _start = Date.now();
   });
 
   describe('Integration Endpoints', () => {
-    
-    describe('POST /api/integration/taskmanager', () 
-    return () => {
+    describe('POST /api/integration/taskmanager', () => {
       test('should integrate with TaskManager API workflow', () => {
         const _integrationData = {
-    task_id: 'feature_123456789_test',
+          task_id: 'feature_123456789_test',
           lesson_data: {
-    title: 'Feature Implementation Best Practices',
+            title: 'Feature Implementation Best Practices',
             content:
               'When implementing new features, always start with comprehensive testing...',
             learned_from: 'task_completion',
-          }
-  };
+          },
+        };
 
-        // Placeholder For future implementation
+        // Placeholder for future implementation
         expect(true).toBe(true);
 
         /* Future implementation:
@@ -439,23 +419,21 @@ const _start = Date.now();
     });
 
     describe('POST /api/integration/migrate-lessons', () => {
-    
-      test('should migrate existing development/lessons files', async () 
-    return () => {
+      test('should migrate existing development/lessons files', async () => {
         const _migrationRequest = {
-    source_path: '/development/lessons',
+          source_path: '/development/lessons',
           preserve_structure: true,
           batch_size: 100,
         };
 
-        // Placeholder For future implementation
+        // Placeholder for future implementation
         expect(true).toBe(true);
 
         /* Future implementation:
         const _response = await request(app)
           .post('/api/integration/migrate-lessons')
           .send(migrationRequest)
-          .expect(202); // Accepted For background processing
+          .expect(202); // Accepted for background processing
 
         expect(response.body).toHaveProperty('migration_id');
         expect(response.body).toHaveProperty('estimated_count');
@@ -465,11 +443,9 @@ const _start = Date.now();
   });
 
   describe('Health And Status Endpoints', () => {
-    
-    describe('GET /api/health', () 
-    return () => {
+    describe('GET /api/health', () => {
       test('should return system health status', () => {
-        // Placeholder For future implementation
+        // Placeholder for future implementation
         expect(true).toBe(true);
 
         /* Future implementation:
@@ -487,7 +463,7 @@ const _start = Date.now();
       test('should complete health check within timeout', () => {
         const _start = Date.now();
 
-        // Placeholder For future implementation
+        // Placeholder for future implementation
         expect(true).toBe(true);
 
         /* Future implementation:

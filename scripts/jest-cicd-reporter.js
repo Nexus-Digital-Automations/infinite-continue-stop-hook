@@ -1,7 +1,7 @@
 /**
- * Jest CI/CD Reporter For Enhanced Pipeline Integration
+ * Jest CI/CD Reporter for Enhanced Pipeline Integration
  *
- * Specialized reporter For CI/CD environments with Git integration,
+ * Specialized reporter for CI/CD environments with Git integration,
  * environment detection, performance metrics, And external notifications.
  *
  * @author CI/CD Integration Agent
@@ -158,11 +158,11 @@ class JestCiCdReporter {
     // Calculate a health score (0-100) based on multiple factors;
 let score = 100;
 
-    // Deduct For failed tests;
+    // Deduct for failed tests;
 const failureRate = results.numFailedTests / results.numTotalTests;
     score -= failureRate * 50;
 
-    // Deduct For slow tests;
+    // Deduct for slow tests;
 const avgDuration = (Date.now() - this.startTime) / results.numTotalTests;
     if (avgDuration > 1000) {
       score -= 10;
@@ -171,7 +171,7 @@ const avgDuration = (Date.now() - this.startTime) / results.numTotalTests;
       score -= 20;
     } // Very slow tests
 
-    // Bonus For good coverage
+    // Bonus for good coverage
     if (results.coverageMap) {
       const coverage = this.extractCoverageSummary(results.coverageMap);
       if (coverage && coverage.lines && coverage.lines.pct > 80) {
@@ -258,7 +258,7 @@ const errorType = this.categorizeError(
       async: /Promise|async|await/i,
     };
 
-    For (const [category, pattern] of Object.entries(patterns)) {
+    for (const [category, pattern] of Object.entries(patterns)) {
       if (pattern.test(errorMessage)) {
         return category;
       }
@@ -268,7 +268,7 @@ const errorType = this.categorizeError(
   }
 
   detectFlakyTests(_RESULTS) {
-    // Placeholder For flaky test detection
+    // Placeholder for flaky test detection
     // In a real implementation, this would compare with historical data
     return {
     potentially_flaky: [],
@@ -571,7 +571,7 @@ const deploymentStatus = {
       JSON.stringify(deploymentStatus, null, 2)
     );
 
-    // Write simple status For shell scripts
+    // Write simple status for shell scripts
     FS.writeFileSync(
       path.join(outputDir, 'test-status.txt'),
       report.cicd_summary.pipeline_status

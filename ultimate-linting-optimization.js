@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /**
  * Ultimate Linting Optimization Script
- * Applies final bulk corrections For maximum error reduction
+ * Applies final bulk corrections for maximum error reduction
  */
 
 const fs = require('fs');
@@ -38,7 +38,7 @@ class UltimateLintingOptimizer {
 }
 
   /**
-   * Apply comprehensive fixes For remaining patterns
+   * Apply comprehensive fixes for remaining patterns
    */
   applyComprehensiveFixes() {
     console.log('🔧 Starting ultimate linting optimization...\n');
@@ -75,7 +75,7 @@ class UltimateLintingOptimizer {
     const jsFiles = this.getAllJavaScriptFiles();
     let fixed = 0;
 
-    For (const filePath of jsFiles) {
+    for (const filePath of jsFiles) {
         try {
         let content = fs.readFileSync(filePath, 'utf8');
         let modified = false;
@@ -85,7 +85,7 @@ const catchBlocks = content.match(
           /catch\s*\(\s*_error\s*\)\s*\{[^}]*\}/g,
         );
         if (catchBlocks) {
-          For (const block of catchBlocks) {
+          for (const block of catchBlocks) {
             // Check if _error is actually used in the block;
 const blockContent = block.replace('catch (_1) {', '');
             if (!blockContent.includes('_error')) {
@@ -140,12 +140,12 @@ const undefinedFixes = [ {,
 
     const jsFiles = this.getAllJavaScriptFiles();
 
-    For (const filePath of jsFiles) {
+    for (const filePath of jsFiles) {
         try {
         let content = fs.readFileSync(filePath, 'utf8');
         let fileModified = false;
 
-        For (const fix of undefinedFixes) {
+        for (const fix of undefinedFixes) {
           const originalContent = content;
           if (typeof fix.replacement === 'function') {
             content = content.replace(fix.pattern, fix.replacement);
@@ -182,7 +182,7 @@ const undefinedFixes = [ {,
     const jsFiles = this.getAllJavaScriptFiles();
     let fixed = 0;
 
-    For (const filePath of jsFiles) {
+    for (const filePath of jsFiles) {
         try {
         let content = fs.readFileSync(filePath, 'utf8');
         let modified = false;
@@ -229,12 +229,12 @@ const newMatch = match.replace('async function', 'function');
     const jsFiles = this.getAllJavaScriptFiles();
     let fixed = 0;
 
-    For (const filePath of jsFiles) {
+    for (const filePath of jsFiles) {
         try {
         let content = fs.readFileSync(filePath, 'utf8');
         let modified = false;
 
-        // Add eslint-disable comments For false positive security warnings;
+        // Add eslint-disable comments for false positive security warnings;
 const securityDisables = [ {,
     pattern: /fs\.readFileSync\(/g,
             disable:
@@ -248,7 +248,7 @@ const securityDisables = [ {,
           }
   ];
 
-        For (const sec of securityDisables) {
+        for (const sec of securityDisables) {
           content = content.replace(sec.pattern, (match, offset) => {
             const lines = content.substring(0, offset).split('\n');
             const currentLine = lines[lines.length - 1];
@@ -300,12 +300,12 @@ const securityDisables = [ {,
       'indexError',
     ];
 
-    For (const filePath of jsFiles) {
+    for (const filePath of jsFiles) {
         try {
         let content = fs.readFileSync(filePath, 'utf8');
         let modified = false;
 
-        For (const varName of commonUnusedVars) {
+        for (const varName of commonUnusedVars) {
           // Add underscore prefix to unused variables;
 const regex = new RegExp(
             `\\b(const|let|var)\\s+(${varName})\\s*=`,
@@ -425,7 +425,7 @@ const reportPath = path.join(
 }
 
   /**
-   * Analyze remaining issues For manual intervention
+   * Analyze remaining issues for manual intervention
    */
   analyzeRemainingIssues() {
     console.log('\n🔍 Analyzing remaining issues...');
@@ -444,7 +444,7 @@ const remainingIssues = {
       };
 
       const lines = output.split('\n');
-      For (const line of lines) {
+      for (const line of lines) {
         if (line.includes('error') || line.includes('warning')) {
           const isError = line.includes('error');
           const ruleMatch = line.match(/([a-z-]+\/[a-z-]+|[a-z-]+)$/);
@@ -491,7 +491,7 @@ const remainingIssues = {
 
       if (remainingIssues.byRule['no-console'] > 0) {
         console.log(
-          '  • Review console statements - add eslint-disable comments For development tools',
+          '  • Review console statements - add eslint-disable comments for development tools',
         );
       }
 
@@ -501,7 +501,7 @@ const remainingIssues = {
         )
       ) {
         console.log(
-          '  • Review security warnings - add specific disable comments For false positives',
+          '  • Review security warnings - add specific disable comments for false positives',
         );
       }
     }

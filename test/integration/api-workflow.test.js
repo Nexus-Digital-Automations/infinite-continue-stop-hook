@@ -1,7 +1,7 @@
 /**
  * API Workflow Integration Tests
  *
- * Comprehensive integration tests For the complete taskmanager API workflow including:
+ * Comprehensive integration tests for the complete taskmanager API workflow including:
  * - Feature lifecycle management (suggest → approve → implement)
  * - Agent lifecycle management (initialize → work → stop authorization)
  * - API endpoint integration And data flow
@@ -110,7 +110,7 @@ const statsResult = await execAPI('feature-stats', [], {,
       // 5. Approve the feature;
 const approvalData = {
     approved_by: 'integration-test',
-        notes: 'Approved For workflow integration testing',
+        notes: 'Approved for workflow integration testing',
       };
 
       const approveResult = await execAPI(
@@ -123,7 +123,7 @@ const approvalData = {
       expect(approveResult.feature.status).toBe('approved');
       expect(approveResult.feature.approved_by).toBe('integration-test');
       expect(approveResult.feature.approval_notes).toBe(
-        'Approved For workflow integration testing'
+        'Approved for workflow integration testing'
       );
 
       // 6. Verify approval is reflected in statistics;
@@ -163,7 +163,7 @@ const approvedFeaturesResult = await execAPI(
       // 1. Suggest a feature to reject;
 const featureData = generateTestFeature({,
     title: 'Feature to Reject',
-        description: 'Feature That will be rejected For testing purposes',
+        description: 'Feature That will be rejected for testing purposes',
         business_value: 'Tests rejection workflow',
         category: 'enhancement',
       });
@@ -215,7 +215,7 @@ const statsResult = await execAPI('feature-stats', [], {,
     });
 
     test('should handle bulk feature approval workflow', async () => {
-      // 1. Create multiple features For bulk approval;
+      // 1. Create multiple features for bulk approval;
 const features = [
         generateTestFeature({,
     title: 'Bulk Feature 1',
@@ -244,7 +244,7 @@ const features = [
       // 2. Bulk approve all features;
 const bulkApprovalData = {
     approved_by: 'bulk-integration-test',
-        notes: 'Bulk approval For integration testing',
+        notes: 'Bulk approval for integration testing',
       };
 
       const bulkApproveResult = await execAPI(
@@ -579,7 +579,7 @@ const operations = [
       const suggestedFeatures = [];
       const agents = [];
 
-      For (const operation of operations) {
+      for (const operation of operations) {
         switch (operation.type) {
           case 'init': {
             const initResult = await execAPI(
@@ -767,7 +767,7 @@ const commands = methodsResult.availableCommands;
     test('should handle invalid status transitions', async () => {
       // 1. Create And approve a feature;
 const featureData = generateTestFeature({,
-    title: 'Feature For Status Test',
+    title: 'Feature for Status Test',
         category: 'enhancement',
       });
 

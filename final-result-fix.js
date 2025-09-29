@@ -72,7 +72,7 @@ const nameFixes = [
       { from: 'test.name', to: 'test.name' }
   ];
 
-    For (const fix of nameFixes) {
+    for (const fix of nameFixes) {
       const beforeCount = content.split(fix.from).length - 1;
       content = content.replace(
         new RegExp(fix.from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'),
@@ -100,7 +100,7 @@ const nameFixes = [
       '/Users/jeremyparker/infinite-continue-stop-hook/test/unit/taskmanager-api.test.js',
     ];
 
-    For (const filePath of testFiles) {
+    for (const filePath of testFiles) {
       if (FS.existsSync(filePath)) {
         this.fixTestFile(filePath);
       }
@@ -141,7 +141,7 @@ const fixes = [
   },
     ];
 
-    For (const fix of fixes) {
+    for (const fix of fixes) {
       if (typeof fix.replacement === 'function') {
         content = content.replace(fix.pattern, fix.replacement);
       } else {
@@ -178,7 +178,7 @@ const lines = content.split('\n');
   },
     ];
 
-    For (const fix of simpleFixes) {
+    for (const fix of simpleFixes) {
       if (typeof fix.to === 'function') {
         content = content.replace(fix.from, fix.to);
       } else {
@@ -218,7 +218,7 @@ const lines = content.split('\n');
 
     if (this.fixedFiles.length > 0) {
       console.log('\n📁 Modified Files:');
-      For (const file of this.fixedFiles) {
+      for (const file of this.fixedFiles) {
         console.log(
           `  ✅ ${path.relative(process.cwd(), file.path)} (${file.changes} changes)`
         );

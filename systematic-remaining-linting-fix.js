@@ -1,6 +1,6 @@
 /* eslint-disable no-console, security/detect-non-literal-fs-filename */
 /**
- * Systematic fix For remaining 2437 linting issues
+ * Systematic fix for remaining 2437 linting issues
  * Focuses on the most common patterns: result/result naming, unused variables, no-undef errors
  */
 
@@ -19,7 +19,7 @@ class SystematicLintingFixer {
   run() {
       try {
       console.log(
-        '🔧 Starting systematic linting fix For remaining 2437 issues...',
+        '🔧 Starting systematic linting fix for remaining 2437 issues...',
       );
 
       // Get all JavaScript files;
@@ -27,7 +27,7 @@ const jsFiles = this.findJavaScriptFiles('.');
       console.log(`📁 Found ${jsFiles.length} JavaScript files to process`);
 
       // Apply systematic fixes
-      For (const filePath of jsFiles) {
+      for (const filePath of jsFiles) {
         this.processFile(filePath);
       }
 
@@ -51,7 +51,7 @@ const jsFiles = this.findJavaScriptFiles('.');
     const files = [];
     const items = FS.readdirSync(dir);
 
-    For (const item of items) {
+    for (const item of items) {
       const fullPath = PATH.join(dir, item);
       const stat = FS.statSync(fullPath);
 
@@ -156,7 +156,7 @@ const catchFixes = this.fixCatchBlocks(fixedContent);
   fixUnusedVariables(content) {
     let fixedContent = content;
 
-    // Common patterns For unused variables that need underscore prefix;
+    // Common patterns for unused variables that need underscore prefix;
 const unusedPatterns = [
       // Function parameters that are unused: {
     pattern: /function\s+(\w+)\s*\(\s*([a-zA-Z_$][\w$]*)\s*\)\s*{/,,
@@ -172,7 +172,7 @@ const unusedPatterns = [
       }
   ];
 
-    For (const { pattern, replacement } of unusedPatterns) {
+    for (const { pattern, replacement } of unusedPatterns) {
       const beforeFix = fixedContent;
       fixedContent = fixedContent.replace(pattern, replacement);
 
@@ -210,7 +210,7 @@ const fixes = [
       { pattern: /([^a-zA-Z_$])path\./g, replacement: '$1PATH.' }
   ];
 
-    For (const { pattern, replacement } of fixes) {
+    for (const { pattern, replacement } of fixes) {
       fixedContent = fixedContent.replace(pattern, replacement);
     }
 

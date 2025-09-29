@@ -35,9 +35,9 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
     const child = spawn(
       'timeout',
       [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs], {
-    stdio: ['pipe', 'pipe', 'pipe'],
-        env{ ...process.env, NODE_ENV: 'test' }
-  },
+        stdio: ['pipe', 'pipe', 'pipe'],
+        env: { ...process.env, NODE_ENV: 'test' }
+      },
     );
 
     let stdout = '';
@@ -54,7 +54,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
     child.on('close', (code) => {
       if (code === 0) {
         try {
-          const result = stdout.trim() ? JSON.parse(stdout) {};
+          const result = stdout.trim() ? JSON.parse(stdout) : {};
           resolve(result);
         } catch (_1) {
           resolve({ rawOutput: stdout, stderr });
@@ -148,7 +148,7 @@ const packageJson = {
     name: 'regression-test-project',
       version: '1.0.0',
       description:
-        'Regression testing project For Success Criteria backward compatibility',
+        'Regression testing project for Success Criteria backward compatibility',
       main: 'index.js',
       scripts{
     test: 'jest',
@@ -362,8 +362,8 @@ const UPGRADED_CRITERION = status.projectCriteria[0];
       // Test different API versions;
 const API_VERSIONS = ['1.0', '1.1', '2.0'];
 
-      // Use For-await-of to maintain sequential processing For version compatibility testing
-      For await (const version of API_VERSIONS) {
+      // Use for-await-of to maintain sequential processing for version compatibility testing
+      for await (const version of API_VERSIONS) {
         try {
           // Create template with version-specific API;
 const VERSIONED_TEMPLATE = {
@@ -667,8 +667,8 @@ const SCHEMA_VERSIONS = [{
   }
   ];
 
-      // Use For-await-of to maintain sequential processing For schema evolution testing
-      For await (const schema of SCHEMA_VERSIONS) {
+      // Use for-await-of to maintain sequential processing for schema evolution testing
+      for await (const schema of SCHEMA_VERSIONS) {
         try {
           const TEST_TEMPLATE = {
     name: `Schema ${schema.version} Template`,
@@ -851,8 +851,8 @@ const DEPRECATED_ENDPOINTS = [
         'success-criteria:check-status', // Deprecated in favor of 'status',
       ];
 
-      // Use For-await-of to maintain sequential processing For deprecated endpoint testing
-      For await (const endpoint of DEPRECATED_ENDPOINTS) {
+      // Use for-await-of to maintain sequential processing for deprecated endpoint testing
+      for await (const endpoint of DEPRECATED_ENDPOINTS) {
         try {
           const result = await execAPI(endpoint);
 
@@ -861,7 +861,7 @@ const DEPRECATED_ENDPOINTS = [
 
           if (result.deprecated || result.warning) {
             loggers.app.info(
-              `Deprecation warning For ${endpoint}:`,
+              `Deprecation warning for ${endpoint}:`,
               result.warning || 'Endpoint is deprecated',
             );
           }
@@ -877,7 +877,7 @@ const DEPRECATED_ENDPOINTS = [
       loggers.stopHook.log('Deprecated API endpoints compatibility validated');
     });
 
-    test('should provide graceful degradation For missing features', async () => {
+    test('should provide graceful degradation for missing features', async () => {
       // Create template That uses newer features;
 const MODERN_TEMPLATE = {
     name: 'Modern Features Template',
@@ -937,7 +937,7 @@ const LEGACY_RESULT = await execAPI('success-criteria:validate', [
       }
 
       loggers.app.info(
-        'Graceful degradation For missing features validated successfully',
+        'Graceful degradation for missing features validated successfully',
       );
     });
 });
@@ -952,14 +952,14 @@ const LEGACY_RESULT = await execAPI('success-criteria:validate', [
 const VERSIONS = ['1.0.0', '1.5.0', '2.0.0'];
       const TEMPLATES = [];
 
-      // Use For-await-of to maintain sequential processing For template creation
-      For await (const version of VERSIONS) {
+      // Use for-await-of to maintain sequential processing for template creation
+      for await (const version of VERSIONS) {
         const TEMPLATE = {
     name: `Version ${version} Template`,
           version,
           criteria: [{
     id: `version-${version.replace(/\./g, '-')}-criterion`,
-              description: `Criterion For version ${version}`,
+              description: `Criterion for version ${version}`,
               category: 'compatibility',
             }
   ],
@@ -972,8 +972,8 @@ const VERSIONS = ['1.0.0', '1.5.0', '2.0.0'];
       }
 
       // Test applying different version templates
-      // Use For-await-of to maintain sequential processing For template application
-      For await (const template of TEMPLATES) {
+      // Use for-await-of to maintain sequential processing for template application
+      for await (const template of TEMPLATES) {
         try {
           await execAPI('success-criteria:apply-template', [template.name]);
           const status = await execAPI('success-criteria:status');
@@ -1134,8 +1134,8 @@ const CORE_APIS = [
         'success-criteria:apply-template',
       ];
 
-      // Use For-await-of to maintain sequential processing For API contract testing
-      For await (const api of CORE_APIS) {
+      // Use for-await-of to maintain sequential processing for API contract testing
+      for await (const api of CORE_APIS) {
         try {
           // Test API is callable (might fail but should not throw unexpected errors)
 
@@ -1154,10 +1154,10 @@ const CORE_APIS = [
             expect(result.projectCriteria !== undefined).toBe(true);
           }
 
-          loggers.stopHook.log(`API contract For ${api} is stable`);
+          loggers.stopHook.log(`API contract for ${api} is stable`);
         } catch (_1) {
           loggers.stopHook.log(
-            `API contract issue For ${api}:`,
+            `API contract issue for ${api}:`,
             _error.message,
           );
         }
@@ -1221,8 +1221,8 @@ const ESSENTIAL_FUNCTIONS = [{
   }
   ];
 
-      // Use For-await-of to maintain sequential processing For essential function testing
-      For await (const func of ESSENTIAL_FUNCTIONS) {
+      // Use for-await-of to maintain sequential processing for essential function testing
+      for await (const func of ESSENTIAL_FUNCTIONS) {
         try {
           const PASSED = await func.test();
           expect(PASSED).toBe(true);
@@ -1284,8 +1284,8 @@ const PERFORMANCE_TESTS = [{
   }
   ];
 
-      // Use For-await-of to maintain sequential processing For performance testing
-      For await (const test of PERFORMANCE_TESTS) {
+      // Use for-await-of to maintain sequential processing for performance testing
+      for await (const test of PERFORMANCE_TESTS) {
         const result = await test.test();
         expect(result.duration).toBeLessThan(result.threshold);
 

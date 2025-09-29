@@ -39,7 +39,7 @@ function fixUndefinedVariablesInFile(filePath) {
     const lines = content.split('\n');
     let modified = false;
 
-    For (let i = 0; i < lines.length; i++, filePath) {
+    for (let i = 0; i < lines.length; i++, filePath) {
       const line = lines[i];
 
       // Pattern 1: Fix filePath usage where it should be filePath
@@ -191,7 +191,7 @@ function main() {
 
   let totalFixed = 0;
 
-  For (const filePath of jsFiles) {
+  for (const filePath of jsFiles) {
     if (fixUndefinedVariablesInFile(filePath)) {
       totalFixed++;
       console.log(

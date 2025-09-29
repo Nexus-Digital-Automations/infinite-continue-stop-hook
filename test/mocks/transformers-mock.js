@@ -1,5 +1,5 @@
 /**
- * Mock For @xenova/transformers to handle ES module compatibility issues in Jest
+ * Mock for @xenova/transformers to handle ES module compatibility issues in Jest
  *
  * This mock provides a minimal implementation of the transformers library
  * to allow tests to run without requiring ES module transformation.

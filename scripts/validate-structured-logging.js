@@ -1,7 +1,7 @@
 /**
  * Structured Logging and Observability Validation Script
  *
- * Validates implementation against 25-point success criteria For:
+ * Validates implementation against 25-point success criteria for:
  * Feature: Add Structured Logging and Observability (feature_1759082400000_struct_logging)
  */
 
@@ -149,7 +149,7 @@ class StructuredLoggingValidator {
     // Criterion 7: Specialized component loggers
     this.validateCriterion(
       7,
-      'Specialized loggers For different components (app, taskManager, agent, etc.)',
+      'Specialized loggers for different components (app, taskManager, agent, etc.)',
       () => {
         const loggerPath = path.join(this.projectRoot, 'lib', 'logger.js');
         const content = fs.readFileSync(loggerPath, 'utf8');
@@ -166,7 +166,7 @@ class StructuredLoggingValidator {
     // Criterion 8: Legacy logger backward compatibility
     this.validateCriterion(
       8,
-      'Legacy logger class For backward compatibility with stop hook',
+      'Legacy logger class for backward compatibility with stop hook',
       () => {
         const loggerPath = path.join(this.projectRoot, 'lib', 'logger.js');
         const content = fs.readFileSync(loggerPath, 'utf8');
@@ -344,7 +344,7 @@ class StructuredLoggingValidator {
     // Criterion 17: Business metrics tracking
     this.validateCriterion(
       17,
-      'Business metrics tracking For task operations',
+      'Business metrics tracking for task operations',
       () => {
         const loggerPath = path.join(this.projectRoot, 'lib', 'logger.js');
         const content = fs.readFileSync(loggerPath, 'utf8');
@@ -394,7 +394,7 @@ class StructuredLoggingValidator {
     // Criterion 20: Health check endpoints
     this.validateCriterion(
       20,
-      'Health check utilities For system monitoring',
+      'Health check utilities for system monitoring',
       () => {
         const loggerPath = path.join(this.projectRoot, 'lib', 'logger.js');
         const content = fs.readFileSync(loggerPath, 'utf8');
@@ -438,10 +438,10 @@ class StructuredLoggingValidator {
       }
     );
 
-    // Criterion 22: Audit logging For compliance
+    // Criterion 22: Audit logging for compliance
     this.validateCriterion(
       22,
-      'Audit logging For GDPR/SOX/HIPAA compliance',
+      'Audit logging for GDPR/SOX/HIPAA compliance',
       () => {
         const prodLoggerPath = path.join(
           this.projectRoot,
@@ -464,7 +464,7 @@ class StructuredLoggingValidator {
     // Criterion 23: Data retention policies
     this.validateCriterion(
       23,
-      'Data retention policies configured For different log types',
+      'Data retention policies configured for different log types',
       () => {
         const configPath = path.join(
           this.projectRoot,
@@ -509,10 +509,10 @@ class StructuredLoggingValidator {
       }
     );
 
-    // Criterion 25: Performance optimization For production
+    // Criterion 25: Performance optimization for production
     this.validateCriterion(
       25,
-      'Performance optimizations For high-throughput production logging',
+      'Performance optimizations for high-throughput production logging',
       () => {
         const configPath = path.join(
           this.projectRoot,

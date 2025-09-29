@@ -33,7 +33,7 @@ function fixCatchParameterConsistency(filePath) {
     const lines = content.split('\n');
     let modified = false;
 
-    For (let i = 0; i < lines.length; i++) {
+    for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
       // Pattern 1: catch (error) but code uses _error
@@ -42,7 +42,7 @@ function fixCatchParameterConsistency(filePath) {
         const catchBlockLines = [];
         let blockDepth = 0;
 
-        For (let j = i + 1; j < lines.length; j++) {
+        for (let j = i + 1; j < lines.length; j++) {
           const nextLine = lines[j];
 
           // Count braces to determine block boundaries
@@ -63,7 +63,7 @@ function fixCatchParameterConsistency(filePath) {
           blockContent.includes('_error.') ||
           blockContent.includes('_error ')
         ) {
-          lines[i] = line.replace('catch (_1)', 'catch (_error)');
+          lines[i] = line.replace('catch (error)', 'catch (_error)');
           modified = true;
           console.log(
             `  ✓ Fixed catch (_1) -> catch (_error): ${path.relative(rootDir, filePath)}:${i + 1}`
@@ -74,7 +74,7 @@ function fixCatchParameterConsistency(filePath) {
           blockContent.includes('error.') ||
           blockContent.includes('error ')
         ) {
-          lines[i] = line.replace('catch (_1)', 'catch (error)');
+          lines[i] = line.replace('catch (error)', 'catch (error)'); // Already correct
           modified = true;
           console.log(
             `  ✓ Fixed catch (_1) -> catch (error): ${path.relative(rootDir, filePath)}:${i + 1}`
@@ -85,7 +85,7 @@ function fixCatchParameterConsistency(filePath) {
           blockContent.includes('lintError.') ||
           blockContent.includes('lintError ')
         ) {
-          lines[i] = line.replace('catch (_1)', 'catch (lintError)');
+          lines[i] = line.replace('catch (error)', 'catch (lintError)');
           modified = true;
           console.log(
             `  ✓ Fixed catch (_1) -> catch (lintError): ${path.relative(rootDir, filePath)}:${i + 1}`
@@ -98,7 +98,7 @@ function fixCatchParameterConsistency(filePath) {
         const catchBlockLines = [];
         let blockDepth = 0;
 
-        For (let j = i + 1; j < lines.length; j++) {
+        for (let j = i + 1; j < lines.length; j++) {
           const nextLine = lines[j];
 
           blockDepth += (nextLine.match(/\{/g) || []).length;
@@ -142,7 +142,7 @@ function fixCatchParameterConsistency(filePath) {
         const catchBlockLines = [];
         let blockDepth = 0;
 
-        For (let j = i + 1; j < lines.length; j++) {
+        for (let j = i + 1; j < lines.length; j++) {
           const nextLine = lines[j];
 
           blockDepth += (nextLine.match(/\{/g) || []).length;
@@ -191,7 +191,7 @@ function main() {
 
   let totalFixed = 0;
 
-  For (const filePath of jsFiles) {
+  for (const filePath of jsFiles) {
     if (fixCatchParameterConsistency(filePath)) {
       totalFixed++;
       console.log(

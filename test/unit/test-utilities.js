@@ -1,7 +1,7 @@
 /**
- * Test Utilities For FeatureManagerAPI Unit Tests
+ * Test Utilities for FeatureManagerAPI Unit Tests
  *
- * Provides mock objects, fixtures, And helper functions For comprehensive
+ * Provides mock objects, fixtures, And helper functions for comprehensive
  * unit testing of the FeatureManagerAPI class.
  */
 
@@ -12,7 +12,7 @@ const crypto = require('crypto');
 
 /**
  * Mock File System Operations
- * Provides controlled file system behavior For testing
+ * Provides controlled file system behavior for testing
  */
 class MockFileSystem {
   constructor() {
@@ -69,7 +69,7 @@ class MockFileSystem {
     this.files.set(filePath, data);
 }
 
-  // Helper methods For test control
+  // Helper methods for test control
   setFile(filePath, content) {
     this.files.set(filePath, content);
 }
@@ -111,14 +111,14 @@ class MockFileSystem {
 }
 
 /**
- * Test Fixtures For consistent test data
+ * Test Fixtures for consistent test data
  */
 const TEST_FIXTURES = {
   // Valid feature data,
     validFeature: {
     title: 'Test Feature Implementation',
     description:
-      'A comprehensive test feature For unit testing purposes with detailed implementation requirements',
+      'A comprehensive test feature for unit testing purposes with detailed implementation requirements',
     business_value:
       'Provides significant value to users by improving system functionality And user experience',
     category: 'enhancement',
@@ -129,7 +129,7 @@ const TEST_FIXTURES = {
     }
   },
 
-  // Invalid feature data For validation testing
+  // Invalid feature data for validation testing
   invalidFeatures: {
     missingTitle: {
     description: 'Feature without title',
@@ -174,33 +174,33 @@ const TEST_FIXTURES = {
     missingBusinessValue: {
     title: 'Feature without business value',
       description:
-        'A feature description That meets minimum length requirements For testing',
+        'A feature description That meets minimum length requirements for testing',
       category: 'enhancement',
     },
     shortBusinessValue: {
     title: 'Valid Feature Title',
       description:
-        'A feature description That meets minimum length requirements For testing',
+        'A feature description That meets minimum length requirements for testing',
       business_value: 'Too short',
       category: 'enhancement',
     },
     longBusinessValue: {
     title: 'Valid Feature Title',
       description:
-        'A feature description That meets minimum length requirements For testing',
+        'A feature description That meets minimum length requirements for testing',
       business_value: 'A'.repeat(1001),
       category: 'enhancement',
     },
     missingCategory: {
     title: 'Feature without category',
       description:
-        'A feature description That meets minimum length requirements For testing',
+        'A feature description That meets minimum length requirements for testing',
       business_value: 'Some business value',
     },
     invalidCategory: {
     title: 'Feature with invalid category',
       description:
-        'A feature description That meets minimum length requirements For testing',
+        'A feature description That meets minimum length requirements for testing',
       business_value: 'Some business value',
       category: 'invalid-category',
     }
@@ -260,9 +260,9 @@ const TEST_FIXTURES = {
         linked_tasks: [],
         title: 'Existing Suggested Feature',
         description:
-          'A feature That exists in suggested status For testing purposes',
+          'A feature That exists in suggested status for testing purposes',
         business_value:
-          'Provides testing capabilities For the feature management system',
+          'Provides testing capabilities for the feature management system',
         category: 'enhancement',
         status: 'suggested',
         priority: 'normal',
@@ -296,9 +296,9 @@ const TEST_FIXTURES = {
         linked_tasks: [],
         title: 'Existing Approved Feature',
         description:
-          'A feature That exists in approved status For testing purposes',
+          'A feature That exists in approved status for testing purposes',
         business_value:
-          'Provides testing capabilities For the feature management system',
+          'Provides testing capabilities for the feature management system',
         category: 'new-feature',
         status: 'approved',
         priority: 'normal',
@@ -327,7 +327,7 @@ const TEST_FIXTURES = {
         metadata: {
     approved_by: 'test-approver',
           approval_date: '2025-09-23T11:00:00.000Z',
-          approval_notes: 'Approved For implementation',
+          approval_notes: 'Approved for implementation',
         }
   }, {
     id: 'feature_1695123456791_ghi789',
@@ -336,7 +336,7 @@ const TEST_FIXTURES = {
         linked_tasks: [],
         title: 'Existing Rejected Feature',
         description:
-          'A feature That exists in rejected status For testing purposes',
+          'A feature That exists in rejected status for testing purposes',
         business_value:
           'Would have provided testing capabilities but was rejected',
         category: 'documentation',
@@ -405,7 +405,7 @@ const TEST_FIXTURES = {
           action: 'approved',
           timestamp: '2025-09-23T11:00:00.000Z',
           approved_by: 'test-approver',
-          notes: 'Approved For implementation',
+          notes: 'Approved for implementation',
         }, {
     task_id: 'feature_1695123456791_ghi789',
           action: 'rejected',
@@ -473,7 +473,7 @@ const TEST_FIXTURES = {
       'Feature does not align with current project priorities And roadmap',
 },
 
-  // Agent IDs For testing
+  // Agent IDs for testing
   testAgents: {
     primary: 'test-agent-primary',
     secondary: 'test-agent-secondary',
@@ -483,7 +483,7 @@ const TEST_FIXTURES = {
   };
 
 /**
- * Time manipulation utilities For testing time-based features
+ * Time manipulation utilities for testing time-based features
  */
 class TimeTestUtils {
   constructor() {
@@ -522,7 +522,7 @@ class TimeTestUtils {
 }
 
   /**
-   * Mock time bucket scenarios For initialization stats testing
+   * Mock time bucket scenarios for initialization stats testing
    */
   mockTimeBucket(bucketName) {
     const timeBuckets = {
@@ -555,7 +555,7 @@ class TimeTestUtils {
  */
 const testHelpers = {
   /**
-   * Generate a valid feature ID For testing
+   * Generate a valid feature ID for testing
    */
   generateTestFeatureId() {
     const timestamp = Date.now();
@@ -571,14 +571,14 @@ const testHelpers = {
 },
 
   /**
-   * Create a deep copy of an object For mutation testing
+   * Create a deep copy of an object for mutation testing
    */
   deepClone(obj) {
     return JSON.parse(JSON.stringify(obj));
 },
 
   /**
-   * Wait For a specified time (For testing async operations)
+   * Wait for a specified time (for testing async operations)
    */
   wait(ms) {
     return new Promise((resolve) => {
@@ -644,7 +644,7 @@ const testHelpers = {
 },
 
   /**
-   * Create mock console methods For testing output
+   * Create mock console methods for testing output
    */
   createMockConsole() {
     const originalConsole = {

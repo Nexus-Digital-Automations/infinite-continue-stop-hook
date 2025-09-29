@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /**
- * Complete fix For audit test file - restore missing API calls
+ * Complete fix for audit test file - restore missing API calls
  */
 
 const FS = require('fs');

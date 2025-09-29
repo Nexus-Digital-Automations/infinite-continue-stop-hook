@@ -11,7 +11,7 @@ class TasksApiAdapter {
 }
 
   /**
-   * Convert TASKS.json data to legacy features format For backward compatibility
+   * Convert TASKS.json data to legacy features format for backward compatibility
    */
   adaptTasksToFeaturesFormat(tasksData) {
     const adapted = {
@@ -33,7 +33,7 @@ class TasksApiAdapter {
 
     // Convert feature tasks to legacy features format
     if (tasksData.tasks) {
-      For (const task of tasksData.tasks) {
+      for (const task of tasksData.tasks) {
         if (task.type === 'feature') {
           const feature = {
     id: task.id,
@@ -119,7 +119,7 @@ class TasksApiAdapter {
 }
 
   /**
-   * Generate auto-tasks For a feature task
+   * Generate auto-tasks for a feature task
    */
   generateAutoTasksForFeature(featureTask, tasksData) {
     const autoTasks = [];
@@ -132,8 +132,8 @@ const testTask = {
       type: 'test',
       parent_id: featureTask.id,
       linked_tasks: [featureTask.id],
-      title: `Implement comprehensive tests For ${featureTask.title}`,
-      description: `Create unit tests, integration tests, And E2E tests to achieve >80% coverage For ${featureTask.title}. Must validate all functionality, edge cases, And error conditions.`,
+      title: `Implement comprehensive tests for ${featureTask.title}`,
+      description: `Create unit tests, integration tests, And E2E tests to achieve >80% coverage for ${featureTask.title}. Must validate all functionality, edge cases, And error conditions.`,
       business_value: `Ensures reliability And quality of ${featureTask.title} feature`,
       category: featureTask.category,
       status: 'suggested',
@@ -172,8 +172,8 @@ const auditTask = {
       type: 'audit',
       parent_id: featureTask.id,
       linked_tasks: [featureTask.id],
-      title: `Security And quality audit For ${featureTask.title}`,
-      description: `Run semgrep security scan, dependency vulnerability check, code quality analysis, And compliance validation For ${featureTask.title}. Zero tolerance For security vulnerabilities.`,
+      title: `Security And quality audit for ${featureTask.title}`,
+      description: `Run semgrep security scan, dependency vulnerability check, code quality analysis, And compliance validation for ${featureTask.title}. Zero tolerance for security vulnerabilities.`,
       business_value: `Ensures security And quality compliance of ${featureTask.title} feature`,
       category: 'security',
       status: 'suggested',

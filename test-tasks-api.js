@@ -1,5 +1,5 @@
 /**
- * Test script For new TASKS.json API system
+ * Test script for new TASKS.json API system
  * Validates migration, adapter functionality, And auto-generation
  */
 
@@ -88,7 +88,7 @@ async function testTasksApi(category = 'general') {
     // Test 9: Test feature task to auto-task generation
     loggers.stopHook.log('\nTest 9: Testing auto-task generation...');
     const testFeature = adapter.adaptFeatureToTask({,
-    title: 'Test Feature For Auto-Generation',
+    title: 'Test Feature for Auto-Generation',
       description: 'Test feature to validate auto-generation system',
       business_value: 'Validates auto-generation functionality',
       category: 'enhancement',
@@ -99,7 +99,7 @@ async function testTasksApi(category = 'general') {
       metadata: { tasks_by_type: {}, total_tasks: 0 }
   });
     loggers.stopHook.log(
-      `✅ Generated ${autoTasks.length} auto-tasks For test feature`
+      `✅ Generated ${autoTasks.length} auto-tasks for test feature`
     );
     loggers.app.info(
       `✅ Auto-task types: ${autoTasks.map((t) => t.type).join(', ')}`

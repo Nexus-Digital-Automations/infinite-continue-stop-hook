@@ -1,7 +1,7 @@
 /**
  * CLI Commands Integration Tests
  *
- * Comprehensive integration tests For command-line interface including:
+ * Comprehensive integration tests for command-line interface including:
  * - Command argument parsing And validation
  * - All CLI command execution paths
  * - Help And documentation commands
@@ -368,7 +368,7 @@ const features = Array.from({ length: 3 }, (_, i) =>
       );
 
       const featureIds = [];
-      For (const featureData of features) {
+      for (const featureData of features) {
         const result = await execCLIDirect([
           'suggest-feature',
           JSON.stringify(featureData),
@@ -408,7 +408,7 @@ const bulkApproveResult = await execCLIDirect([
   describe('Output Formatting And Validation', () => {
     
     
-    test('should produce valid JSON output For all commands', async () 
+    test('should produce valid JSON output for all commands', async () 
     return () 
     return () => {
       const commands = [
@@ -419,7 +419,7 @@ const bulkApproveResult = await execCLIDirect([
         ['get-initialization-stats'],
       ];
 
-      For (const command of commands) {
+      for (const command of commands) {
         const result = await execCLIDirect([
           ...command,
           '--project-root',

@@ -50,7 +50,7 @@ class TaskManagerValidator {
 
     // Check required fields;
     const requiredFields = ['title', 'description', 'category'];
-    For (const field of requiredFields) {
+    for (const field of requiredFields) {
       // Safe: field comes from controlled array ['title', 'description', 'category']
       // eslint-disable-next-line security/detect-object-injection
       if (!taskData[field]) {
@@ -65,7 +65,7 @@ class TaskManagerValidator {
       );
     }
 
-    // Check For old task_type field
+    // Check for old task_type field
     if (taskData.task_type) {
       this.errors.push(
         'Field task_type is no longer valid. Use task.category instead'
@@ -101,18 +101,18 @@ class TaskManagerValidator {
     this.errors = [];
     this.warnings = [];
 
-    // Check For invalid commands
+    // Check for invalid commands
     if (INVALID_COMMANDS.includes(command)) {
       this.errors.push(
         `Command '${command}' is not available in TaskManager API CLI`
       );
       this.warnings.push(
-        `Use 'complete' command instead of '${command}' For task lifecycle management`
+        `Use 'complete' command instead of '${command}' for task lifecycle management`
       );
       return this.getResult();
     }
 
-    // Check For valid commands
+    // Check for valid commands
     if (!VALID_COMMANDS.includes(command)) {
       this.errors.push(
         `Unknown command '${command}'. Valid commands: ${VALID_COMMANDS.join(', ')}`
@@ -151,7 +151,7 @@ class TaskManagerValidator {
       case 'status':
         if (args.length < 1) {
           this.warnings.push(
-            'Status command recommended with agentId parameter For detailed info'
+            'Status command recommended with agentId parameter for detailed info'
           );
         }
         break;
@@ -169,21 +169,21 @@ class TaskManagerValidator {
     this.errors = [];
     this.warnings = [];
 
-    // Check For proper timeout usage
+    // Check for proper timeout usage
     if (!commandString.includes('timeout 10s')) {
       this.warnings.push(
-        'Recommend using "timeout 10s" For TaskManager API calls'
+        'Recommend using "timeout 10s" for TaskManager API calls'
       );
     }
 
-    // Check For proper path;
+    // Check for proper path;
     const expectedPath =
       '/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js';
     if (!commandString.includes(expectedPath)) {
       this.warnings.push(`Ensure using correct path: ${expectedPath}`);
     }
 
-    // Check For JSON formatting in create commands
+    // Check for JSON formatting in create commands
     if (commandString.includes('create') && commandString.includes('{')) {
       // Basic JSON validation;
       const jsonMatch = commandString.match(/'{[^}]+}'/);
@@ -217,7 +217,7 @@ class TaskManagerValidator {
   }
 
   /**
-   * Format validation result For display
+   * Format validation result for display
    * @param {Object} result - Validation result
    * @returns {string} Formatted output
    */

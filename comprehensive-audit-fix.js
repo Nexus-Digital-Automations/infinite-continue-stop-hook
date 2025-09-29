@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /**
- * Comprehensive fix For audit-system-validation.test.js undefined variables
+ * Comprehensive fix for audit-system-validation.test.js undefined variables
  */
 
 const FS = require('fs');

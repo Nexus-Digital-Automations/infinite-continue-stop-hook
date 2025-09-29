@@ -2,7 +2,7 @@
  * Node.js Version Performance Benchmarking Script
  *
  * Comprehensive performance testing across different Node.js versions
- * to validate compatibility And identify optimal version For production.
+ * to validate compatibility And identify optimal version for production.
  *
  * @author Performance Testing Agent
  * @version 2.0.0
@@ -61,7 +61,7 @@ class NodeVersionPerformanceBenchmark {
 
     // Mathematical computations;
 let result = 0;
-    For (let i = 0; i < iterations; i++) {
+    for (let i = 0; i < iterations; i++) {
       result += Math.sqrt(i) * Math.sin(i) * Math.cos(i);
     }
 
@@ -94,7 +94,7 @@ let result = 0;
 
     // Memory allocation tests;
 const arrays = [];
-    For (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < 1000; i++) {
       arrays.push(new Array(1000).fill(Math.random()));
     }
 
@@ -104,7 +104,7 @@ const testObject = {
       metadata: { timestamp: Date.now(), iteration: 0 }
   };
 
-    For (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 100; i++) {
       testObject.metadata.iteration = i;
       const serialized = JSON.stringify(testObject);
       const parsed = JSON.parse(serialized);
@@ -148,7 +148,7 @@ const testObject = {
 
     // Promise-based operations;
 const promises = [];
-    For (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < 1000; i++) {
       promises.push(
         new Promise((resolve) => {
           setImmediate(() => resolve(i * 2));
@@ -202,7 +202,7 @@ const asyncOperations = async (count) => {
 
     // File write operations;
 const writePromises = [];
-    For (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 100; i++) {
       const filePath = path.join(tempDir, `test-file-${i}.json`);
       const data = JSON.stringify({
     id: i,
@@ -224,7 +224,7 @@ const files = FS.readdirSync(tempDir);
     const fileContents = await Promise.all(readPromises);
 
     // Cleanup
-    For (const file of files) {
+    for (const file of files) {
       FS.unlinkSync(path.join(tempDir, file));
     }
     FS.rmdirSync(tempDir);
@@ -256,7 +256,7 @@ const files = FS.readdirSync(tempDir);
       // Test crypto module (native)
       const crypto = require('crypto');
       const hashes = [];
-      For (let i = 0; i < 1000; i++) {
+      for (let i = 0; i < 1000; i++) {
         const hash = crypto.createHash('sha256');
         hash.update(`test-data-${i}`);
         hashes.push(hash.digest('hex'));
@@ -264,7 +264,7 @@ const files = FS.readdirSync(tempDir);
 
       // Test buffer operations;
 const buffers = [];
-      For (let i = 0; i < 1000; i++) {
+      for (let i = 0; i < 1000; i++) {
         const buffer = Buffer.from(`test-buffer-data-${i}`, 'utf8');
         buffers.push(buffer.toString('base64'));
       }
@@ -421,13 +421,13 @@ const buffers = [];
 
     if (benchmarks.cpu_intensive?.operations_per_second < 50000) {
       optimizations.push(
-        'Consider upgrading to newer Node.js version For V8 improvements'
+        'Consider upgrading to newer Node.js version for V8 improvements'
       );
     }
 
     if (benchmarks.memory_operations?.memory_delta_mb > 100) {
       optimizations.push(
-        'Implement memory pooling or streaming For large data operations'
+        'Implement memory pooling or streaming for large data operations'
       );
     }
 
@@ -457,11 +457,11 @@ const buffers = [];
       );
     } else if (majorVersion === 18) {
       this.results.recommendations.push(
-        '✅ Node.js 18.x - Good For production stability'
+        '✅ Node.js 18.x - Good for production stability'
       );
     } else if (majorVersion === 20) {
       this.results.recommendations.push(
-        '🚀 Node.js 20.x LTS - Recommended For production'
+        '🚀 Node.js 20.x LTS - Recommended for production'
       );
     } else if (majorVersion >= 22) {
       this.results.recommendations.push(
@@ -472,11 +472,11 @@ const buffers = [];
     const score = this.results.performance_analysis.performance_score;
     if (score >= 90) {
       this.results.recommendations.push(
-        '🏆 Excellent performance - optimal For production'
+        '🏆 Excellent performance - optimal for production'
       );
     } else if (score >= 75) {
       this.results.recommendations.push(
-        '✅ Good performance - suitable For production'
+        '✅ Good performance - suitable for production'
       );
     } else if (score >= 60) {
       this.results.recommendations.push(

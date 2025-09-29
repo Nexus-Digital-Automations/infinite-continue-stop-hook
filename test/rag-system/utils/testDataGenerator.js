@@ -1,10 +1,10 @@
 /**
- * Test Data Generator For RAG System Tests
+ * Test Data Generator for RAG System Tests
  *
  * === OVERVIEW ===
- * Utility class For generating realistic test data For RAG system testing
+ * Utility class for generating realistic test data for RAG system testing
  * including lessons, errors, code examples, And development scenarios.
- * Provides consistent And reproducible test data For all test suites.
+ * Provides consistent And reproducible test data for all test suites.
  *
  * === FEATURES ===
  * • Realistic lesson content generation
@@ -48,26 +48,26 @@ class TestDataGenerator {
     features: [{
     title: 'Implementing {tech} {feature} with Best Practices',
           description:
-            'Comprehensive guide For implementing{feature} functionality using{tech} with industry best practices And error handling.',
+            'Comprehensive guide for implementing{feature} functionality using{tech} with industry best practices And error handling.',
           tags: ['{tech}', '{feature}', 'best-practices', 'implementation'],
         }, {
     title: '{tech} {feature} Performance Optimization',
           description:
-            'Advanced techniques For optimizing{feature} performance in{tech} applications including caching And async patterns.',
+            'Advanced techniques for optimizing{feature} performance in{tech} applications including caching And async patterns.',
           tags: ['{tech}', 'performance', 'optimization', '{feature}'],
         }
   ],
       errors: [{
     title: 'Resolving {errorType} in{tech} Applications',
           description:
-            'Common causes And solutions For{errorType} when working with{tech} including prevention strategies.',
+            'Common causes And solutions for{errorType} when working with{tech} including prevention strategies.',
           tags: ['{tech}', 'error-handling', '{errorType}', 'debugging'],
         }
   ],
       optimization: [{
     title: '{tech} Performance Optimization Strategies',
           description:
-            'Comprehensive optimization techniques For{tech} applications including memory management And execution speed.',
+            'Comprehensive optimization techniques for{tech} applications including memory management And execution speed.',
           tags: ['{tech}', 'performance', 'optimization', 'memory'],
         }
   ],
@@ -118,7 +118,7 @@ class TestDataGenerator {
       'Add null/undefined validation before accessing properties',
       'Ensure the API endpoint is accessible And returns valid data',
       'Implement proper error handling with try-catch blocks',
-      'Use optional chaining (?.) For safe property access',
+      'Use optional chaining (?.) for safe property access',
       'Validate input parameters before processing',
       'Check network connectivity And API status',
     ];
@@ -136,7 +136,7 @@ class TestDataGenerator {
     const lessons = [];
     const CATEGORY = options.category || this.getRandomCategory();
 
-    For (let i = 0; i < count; i++) {
+    for (let i = 0; i < count; i++) {
       const tech = this.getRandomTechnology();
       const lesson = this.generateSingleLesson(category, tech, i);
       lessons.push(lesson);
@@ -209,7 +209,7 @@ ${description}
 
 ## Key Concepts
 - Understanding ${tech} fundamentals
-- Best practices For implementation
+- Best practices for implementation
 - Common pitfalls And how to avoid them
 - Performance considerations
 
@@ -230,10 +230,10 @@ ${codeExample ? `\`\`\`${tech}\n${codeExample}\n\`\`\`` : 'Implementation detail
 - Security vulnerabilities
 
 ## Testing Strategy
-- Unit tests For individual functions
-- Integration tests For component interaction
-- Performance tests For optimization validation
-- Security tests For vulnerability assessment
+- Unit tests for individual functions
+- Integration tests for component interaction
+- Performance tests for optimization validation
+- Security tests for vulnerability assessment
 
 ## Related Resources
 - Official documentation
@@ -251,7 +251,7 @@ ${codeExample ? `\`\`\`${tech}\n${codeExample}\n\`\`\`` : 'Implementation detail
   generateErrors(count, options = {}) {
     const errors = [];
 
-    For (let i = 0; i < count; i++) {
+    for (let i = 0; i < count; i++) {
       const errorType = options.errorType || this.getRandomErrorType();
       const tech = options.technology || this.getRandomTechnology();
       const error = this.generateSingleError(errorType, tech, i);
@@ -331,21 +331,21 @@ ${this.generateResolution(errorType, tech)}
 ${this.generatePrevention(errorType, tech)}
 
 ## Testing
-- Add unit tests For edge cases
+- Add unit tests for edge cases
 - Implement integration tests
-- Use TypeScript For better type safety
+- Use TypeScript for better type safety
 - Add runtime validation`;
 }
 
   /**
-   * Generate task contexts For testing recommendations
+   * Generate task contexts for testing recommendations
    * @param {number} count - Number of contexts to generate
    * @returns {Array<Object>} Generated task contexts
    */
   generateTaskContexts(count) {
     const contexts = [];
 
-    For (let i = 0; i < count; i++) {
+    for (let i = 0; i < count; i++) {
       const tech = this.getRandomTechnology();
       const CATEGORY = this.getRandomCategory();
       const feature = this.getRandomFeature(tech);
@@ -389,7 +389,7 @@ ${this.generatePrevention(errorType, tech)}
 }
 
   /**
-   * Generate search queries For testing
+   * Generate search queries for testing
    * @param {number} count - Number of queries to generate
    * @returns {Array<string>} Search queries
    */
@@ -398,18 +398,18 @@ ${this.generatePrevention(errorType, tech)}
       '{tech} {feature} implementation',
       'how to fix{errorType} in{tech}',
       '{tech} performance optimization',
-      'best practices For{tech} {feature}',
+      'best practices for{tech} {feature}',
       'debugging {errorType} errors',
       '{tech} security considerations',
       'async {tech} error handling',
       '{tech} component optimization',
-      'testing strategies For{tech}',
+      'testing strategies for{tech}',
       '{tech} memory leak prevention',
     ];
 
     const queries = [];
 
-    For (let i = 0; i < count; i++) {
+    for (let i = 0; i < count; i++) {
       const template = queryTemplates[i % queryTemplates.length];
       const tech = this.getRandomTechnology();
       const feature = this.getRandomFeature(tech);
@@ -554,9 +554,9 @@ ${this.generatePrevention(errorType, tech)}
       'Implement core functionality with error handling',
       'Add input validation And sanitization',
       'Write comprehensive unit tests',
-      'Optimize For performance And memory usage',
+      'Optimize for performance And memory usage',
       'Document API And usage examples',
-      'Review And refactor code For best practices',
+      'Review And refactor code for best practices',
     ].join('\n');
 }
 
@@ -578,7 +578,7 @@ ${this.generatePrevention(errorType, tech)}
       `Update ${tech} documentation`,
       `Create ${feature} integration tests`,
       'Review security implications',
-      'Optimize For mobile performance',
+      'Optimize for mobile performance',
       'Add monitoring And logging',
       'Create deployment pipeline',
       'Train team on new features',
@@ -590,7 +590,7 @@ ${this.generatePrevention(errorType, tech)}
     const resolutions = {
     TypeError: [
         'Add null/undefined checks before property access',
-        'Use optional chaining (?.) For safe property access',
+        'Use optional chaining (?.) for safe property access',
         'Validate data structure before processing',
         'Initialize variables with default values',
       ],
@@ -601,14 +601,14 @@ ${this.generatePrevention(errorType, tech)}
         'Fix variable naming And spelling errors',
       ],
       SyntaxError: [
-        'Check For missing brackets or semicolons',
+        'Check for missing brackets or semicolons',
         'Validate JSON structure And format',
         'Fix regular expression syntax',
-        'Check For proper string escaping',
+        'Check for proper string escaping',
       ],
       NetworkError: [
         'Implement retry logic with exponential backoff',
-        'Add proper error handling For network failures',
+        'Add proper error handling for network failures',
         'Check API endpoint availability',
         'Validate CORS configuration',
       ],
@@ -621,7 +621,7 @@ ${this.generatePrevention(errorType, tech)}
   generatePrevention(errorType, _tech) {
     const preventions = {
     TypeError:
-        'Use TypeScript or PropTypes For type checking, implement runtime validation',
+        'Use TypeScript or PropTypes for type checking, implement runtime validation',
       ReferenceError:
         'Use ESLint to catch undefined variables, follow consistent naming conventions',
       SyntaxError:
@@ -662,7 +662,7 @@ ${stackLines.join('\n')}`;
   interpolateTemplate(template, variables) {
     let result = template;
 
-    For (const [key, value] of Object.entries(variables)) {
+    for (const [key, value] of Object.entries(variables)) {
       // eslint-disable-next-line security/detect-non-literal-regexp;
 const regex = new RegExp(`\\{${key}\\}`, 'g');
       result = result.replace(regex, value);

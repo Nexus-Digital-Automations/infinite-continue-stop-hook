@@ -2,7 +2,7 @@ const fs = require('fs');
 /**
  * ESLint 9 Flat Configuration
  *
- * Zero-tolerance ESLint configuration For TaskManager Node.js system.
+ * Zero-tolerance ESLint configuration for TaskManager Node.js system.
  * Focused on CommonJS patterns, security, And code quality standards.
  */
 
@@ -26,7 +26,7 @@ module.exports = [
       sourceType: 'commonjs',
       globals: {
         ...GLOBALS.node,
-        // Jest globals For test files
+        // Jest globals for test files
         ...GLOBALS.jest,
       },
     },
@@ -77,7 +77,7 @@ module.exports = [
       'n/no-extraneous-require': 'error',
 
       // === SECURITY RULES ===
-      'security/detect-object-injection': 'warn', // May need adjustment For TaskManager
+      'security/detect-object-injection': 'warn', // May need adjustment for TaskManager
       'security/detect-non-literal-fs-filename': 'warn',
       'security/detect-non-literal-require': 'warn',
       'security/detect-unsafe-regex': 'error',
@@ -146,7 +146,7 @@ module.exports = [
       },
     },
     rules: {
-      // Relax some rules For tests
+      // Relax some rules for tests
       'no-console': 'off',
       'security/detect-object-injection': 'off',
       'security/detect-non-literal-fs-filename': 'off',
@@ -166,14 +166,14 @@ module.exports = [
       'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
       // Allow require-await warnings instead of errors
       'require-await': 'warn',
-      // Allow security warnings For test scripts
+      // Allow security warnings for test scripts
       'security/detect-object-injection': 'warn',
       'security/detect-non-literal-fs-filename': 'warn',
-      // Allow await in loops For sequential test operations
+      // Allow await in loops for sequential test operations
       'no-await-in-loop': 'warn',
-      // Reduce severity For test-only dependencies
+      // Reduce severity for test-only dependencies
       'n/no-missing-require': 'warn',
-      // Reduce severity For promise executor return values
+      // Reduce severity for promise executor return values
       'no-promise-executor-return': 'warn',
       // Allow redundant await on return values in test scripts
       'no-return-await': 'warn',

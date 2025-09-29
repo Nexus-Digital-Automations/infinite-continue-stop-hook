@@ -99,7 +99,7 @@ class QuickPerformanceTest {
       { name: 'Usage Analytics', command: 'usage-analytics' }
   ];
 
-    For (const test of tests) {
+    for (const test of tests) {
       loggers.stopHook.log(`📊 Testing: ${test.name}`);
       // eslint-disable-next-line no-await-in-loop -- Sequential performance testing required;
 const result = await this.executeCommand(test.command);
@@ -198,7 +198,7 @@ const totalMemoryUsed = this.results.reduce(
 
     if (failed.length > 0) {
       loggers.app.info(
-        `   • Address ${failed.length} failing operations For system reliability`
+        `   • Address ${failed.length} failing operations for system reliability`
       );
     }
 
@@ -256,21 +256,21 @@ const totalMemoryUsed = this.results.reduce(
   calculatePerformanceScore(report) {
     let score = 100;
 
-    // Deduct points For failed operations
+    // Deduct points for failed operations
     score -= report.summary.failed * 15;
 
-    // Deduct points For slow operations;
+    // Deduct points for slow operations;
 const slowOps = report.performance.slowOperations.length;
     score -= slowOps * 10;
 
-    // Deduct points For high average response time
+    // Deduct points for high average response time
     if (report.summary.avgResponseTime > 3000) {
       score -= 20;
     } else if (report.summary.avgResponseTime > 1500) {
       score -= 10;
     }
 
-    // Deduct points For high memory usage
+    // Deduct points for high memory usage
     if (report.summary.avgMemoryPerOp > 20 * 1024 * 1024) {
       // 20MB
       score -= 15;

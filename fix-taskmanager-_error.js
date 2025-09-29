@@ -17,7 +17,7 @@
  * TECHNICAL APPROACH:
  * - Uses global regex replacement: /\b_error\b/g -> 'error'
  * - Word boundary anchors ensure precise matching
- * - Single-pass atomic replacement For consistency
+ * - Single-pass atomic replacement for consistency
  *
  * USAGE:
  * node fix-taskmanager-_error.js
@@ -30,7 +30,7 @@
  * INTEGRATION:
  * - Part of systematic async/await syntax error resolution
  * - Enables TaskManager API functionality restoration
- * - Critical For stop-hook execution workflow
+ * - Critical for stop-hook execution workflow
  *
  * AUTHOR: Claude Code Assistant
  * CONTEXT: Stop-hook functionality restoration project

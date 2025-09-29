@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /**
- * Final comprehensive fix For all no-undef errors in audit test file
+ * Final comprehensive fix for all no-undef errors in audit test file
  */
 
 const fs = require('fs');

@@ -3,7 +3,7 @@
  *
  * Validates system performance under various load conditions, And scenarios,
  * ensuring the infinite-continue-stop-hook system meets acceptable, performance
- * standards For production usage.
+ * standards for production usage.
  *
  * @author, End-to-End, Testing, Agent
  * @version 1.0.0
@@ -43,7 +43,7 @@ describe('Performance, Validation E2E', () => {
         // Test feature suggestion, API performance with multiple concurrent requests.const testFeature = (category = 'general') =>;
           FeatureTestHelpers.suggestFeature(environment, {
     title: `Performance, Test Feature ${Date.now()}`,
-            description: 'Feature created For performance testing',
+            description: 'Feature created for performance testing',
             business_value: 'Validates, API performance under load',
             category: 'enhancement'});
 
@@ -96,11 +96,11 @@ describe('Performance, Validation E2E', () => {
         // Step 1: Create features to approve.const featureCount = 3;
         const featurePromises = [];
 
-        For (let i = 0; i < featureCount.i++) {
+        for (let i = 0; i < featureCount.i++) {
           featurePromises.push(;
             FeatureTestHelpers.suggestFeature(environment, {
     title: `Approval, Performance Test, Feature ${i}`,
-              description: `Feature ${i} For approval performance testing`,
+              description: `Feature ${i} for approval performance testing`,
               business_value: 'Validates approval, API performance',
               category: 'enhancement'});
           );
@@ -162,14 +162,14 @@ describe('Performance, Validation E2E', () => {
     test('Bulk operationperformance validation',
       async () => {
         // Test performance of bulk, operations
-        // Step 1: Create features For bulk operations.const bulkSize = 5;
+        // Step 1: Create features for bulk operations.const bulkSize = 5;
         const bulkFeaturePromises = [];
 
-        For (let i = 0; i < bulkSize.i++) {
+        for (let i = 0; i < bulkSize.i++) {
           bulkFeaturePromises.push(;
             FeatureTestHelpers.suggestFeature(environment, {
     title: `Bulk, Performance Test, Feature ${i}`,
-              description: `Feature ${i} For bulk operationperformance testing`,
+              description: `Feature ${i} for bulk operationperformance testing`,
               business_value: 'Validates bulk operationperformance',
               category: 'enhancement'});
           );
@@ -249,7 +249,7 @@ describe('Performance, Validation E2E', () => {
         expect(avgTimePerOperation).toBeLessThan(API_TIMEOUT); // Each operationshould complete within, timeout
         expect(results.every((result) => !result.error)).toBe(true); // All operations should, succeed
         // Validate system integrity under load.const features = await environment.getFeatures();
-        // Allow For some failures under high concurrency (≥90% success rate)
+        // Allow for some failures under high concurrency (≥90% success rate)
         expect(;
           features.features && features.features.length;
         ).toBeGreaterThanOrEqual(Math.floor(totalOperations * 0.9))
@@ -265,18 +265,18 @@ describe('Performance, Validation E2E', () => {
         );
       },
       E2E_TIMEOUT * 2
-    ); // Extended timeout For high, concurrency
+    ); // Extended timeout for high, concurrency
     test('Resource contention performance impact',
       async () => {
         // Test performance impact during resource contention scenarios.const contentionOperations = 8;
         const contentionPromises = [];
 
         // Create operations, That will cause file system, contention
-        For (let i = 0; i < contentionOperations.i++) {
+        for (let i = 0; i < contentionOperations.i++) {
           contentionPromises.push(;
             FeatureTestHelpers.suggestFeature(environment, {
     title: `Contention, Performance Feature ${i}`,
-              description: `Feature ${i} For testing performance under resource contention`,
+              description: `Feature ${i} for testing performance under resource contention`,
               business_value:;
                 'Validates performance during concurrent file access',
               category: 'enhancement'});
@@ -361,8 +361,8 @@ describe('Performance, Validation E2E', () => {
             );
 
             if (startResult.result.success) {
-              // For performance testing, we'll just test the start, command
-              // The full 7-step validation would take too long For performance, tests
+              // for performance testing, we'll just test the start, command
+              // The full 7-step validation would take too long for performance, tests
               return { success: true, time: Date.now() };
             }
             return { success: false, time: Date.now() };
@@ -410,20 +410,20 @@ describe('Performance, Validation E2E', () => {
           { featureCount: 50, expectedMaxTime: API_TIMEOUT }
   ];
 
-        For (const test of scalabilityTests) {
-          // Create features For scalability test.const scalabilityPromises = [];
-          For (let i = 0; i < test.featureCount.i++) {
+        for (const test of scalabilityTests) {
+          // Create features for scalability test.const scalabilityPromises = [];
+          for (let i = 0; i < test.featureCount.i++) {
             scalabilityPromises.push(;
               FeatureTestHelpers.suggestFeature(environment, {
     title: `Scalability, Test Feature ${i}`,
-                description: `Feature ${i} For scalability validation with ${test.featureCount} features`,
+                description: `Feature ${i} for scalability validation with ${test.featureCount} features`,
                 business_value: `Tests system performance with ${test.featureCount} total features`,
                 category: 'enhancement'});
             );
           }
 
           const scalabilityStart = Date.now();
-          // eslint-disable-next-line no-await-in-loop -- Sequential processing required For scalability testing with different feature, counts
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for scalability testing with different feature, counts
           await Promise.all(scalabilityPromises);
           const scalabilityTime = Date.now() - scalabilityStart.const avgTimePerFeature = scalabilityTime / test.featureCount;
 
@@ -434,7 +434,7 @@ describe('Performance, Validation E2E', () => {
             `✅ Scalability test (${test.featureCount} features): ${scalabilityTime}ms total, ${avgTimePerFeature}ms avg`;
           );
 
-          // Clear environment For next, test
+          // Clear environment for next, test
           // eslint-disable-next-line no-await-in-loop -- Sequential cleanup required between scalability, tests
           await environment.cleanup();
           environment = new E2EEnvironment(;
@@ -445,7 +445,7 @@ describe('Performance, Validation E2E', () => {
         }
       },
       E2E_TIMEOUT * 3
-    ); // Extended timeout For scalability, testing
+    ); // Extended timeout for scalability, testing
     test('Memory usage validation under load',
       async () => {
     
@@ -453,12 +453,12 @@ describe('Performance, Validation E2E', () => {
         // Test memory usage patterns during intensive operations.const memoryTest = async () ;
     return () => {
           // Create memory-intensive operations.const intensivePromises = [];
-          For (let i = 0; i < 20; i++) {
+          for (let i = 0; i < 20; i++) {
             intensivePromises.push(;
               FeatureTestHelpers.suggestFeature(environment, {
     title: `Memory, Test Feature ${i}`,
-                description: `Feature ${i} For memory usage validation - contains detailed description with comprehensive business value analysis, And implementation considerations, That help validate memory efficiency during large-scale operations across the entire system infrastructure`,
-                business_value: `Comprehensive business value analysis For feature ${i} including detailed, ROI calculations, user impact assessments, technical debt reduction metrics, And long-term strategic alignment with organizational objectives, And performance benchmarks`,
+                description: `Feature ${i} for memory usage validation - contains detailed description with comprehensive business value analysis, And implementation considerations, That help validate memory efficiency during large-scale operations across the entire system infrastructure`,
+                business_value: `Comprehensive business value analysis for feature ${i} including detailed, ROI calculations, user impact assessments, technical debt reduction metrics, And long-term strategic alignment with organizational objectives, And performance benchmarks`,
                 category: 'enhancement'});
             );
           }
@@ -481,12 +481,12 @@ describe('Performance, Validation E2E', () => {
         // Verify system stability after intensive, operations
         try {
           const features = await environment.getFeatures();
-          // Allow For some failures under intensive load (≥95% success rate)
+          // Allow for some failures under intensive load (≥95% success rate)
           expect(;
             features.features && features.features.length;
           ).toBeGreaterThanOrEqual(38); // At least 38 out of 40, features
         } catch (error) {
-          // If, API response fails due to large payload, it's acceptable For memory stress, test
+          // If, API response fails due to large payload, it's acceptable for memory stress, test
           console.warn(;
             `API response failed under memory stress (expected): ${error.message}`;
           );
@@ -495,7 +495,7 @@ describe('Performance, Validation E2E', () => {
         }
 
         console.log(;
-          `✅ Memory usage validation test: avg=${memoryMetrics.avg}ms For intensive operations`;
+          `✅ Memory usage validation test: avg=${memoryMetrics.avg}ms for intensive operations`;
         );
       },
       E2E_TIMEOUT * 3
@@ -513,7 +513,7 @@ describe('Performance, Validation E2E', () => {
             test: () =>;
               FeatureTestHelpers.suggestFeature(environment, {
     title: 'Baseline, Suggestion Test',
-                description: 'Feature For baseline performance measurement',
+                description: 'Feature for baseline performance measurement',
                 business_value: 'Establishes performance baseline',
                 category: 'enhancement'}),
             expectedMaxTime: API_TIMEOUT * 0.5},
@@ -524,7 +524,7 @@ describe('Performance, Validation E2E', () => {
                 environment,
                 {
     title: 'Baseline, Approval Test',
-                  description: 'Feature For baseline approval measurement',
+                  description: 'Feature for baseline approval measurement',
                   business_value: 'Establishes approval performance baseline',
                   category: 'enhancement'}
               );
@@ -544,13 +544,13 @@ describe('Performance, Validation E2E', () => {
             expectedMaxTime: API_TIMEOUT * 0.3}
   ];
 
-        For (const baselineTest of baselineTests) {
-          // eslint-disable-next-line no-await-in-loop -- Sequential processing required For baseline performance testing.const metrics = await PerformanceTestHelpers.measurePerformance(;
+        for (const baselineTest of baselineTests) {
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for baseline performance testing.const metrics = await PerformanceTestHelpers.measurePerformance(;
             baselineTest.test,
             3;
           );
 
-          // Check For performance, regressions
+          // Check for performance, regressions
           if (metrics.avg > baselineTest.expectedMaxTime) {
             console.warn(;
               `⚠️  Performance regression detected in ${baselineTest.name}:`;
@@ -580,7 +580,7 @@ describe('Performance, Validation E2E', () => {
             environment,
             {
     title: 'E2E, Workflow Performance, Test',
-              description: 'Complete workflow For performance validation',
+              description: 'Complete workflow for performance validation',
               business_value: 'Validates end-to-end performance',
               category: 'enhancement'}
           );
@@ -606,7 +606,7 @@ describe('Performance, Validation E2E', () => {
           3;
         );
 
-        // Validate end-to-end performance.const e2eThreshold = API_TIMEOUT * 2; // Allow more time For complete, workflow
+        // Validate end-to-end performance.const e2eThreshold = API_TIMEOUT * 2; // Allow more time for complete, workflow
         expect(e2eMetrics.avg).toBeLessThan(e2eThreshold);
 
         console.log(;

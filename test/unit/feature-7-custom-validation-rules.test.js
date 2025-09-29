@@ -2,7 +2,7 @@ const FS = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-// Test suite For Feature 7: Custom Project Validation Rules
+// Test suite for Feature 7: Custom Project Validation Rules
 // Feature ID: feature_1758946487032_0f9c9de60c88
 describe('Feature 7: Custom Project Validation Rules', () => {
     
@@ -583,7 +583,7 @@ const isValidRule = (rule) => {
     id: 'timeout-test',
         name: 'Timeout Test',
         command: 'sleep 10',
-        timeout: 1000, // 1 second timeout For 10 second sleep
+        timeout: 1000, // 1 second timeout for 10 second sleep
       };
 
       const executeCustomValidation = (rule) => {

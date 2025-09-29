@@ -23,11 +23,11 @@ const FEATURES_PATH = path.join(TEST_PROJECT_DIR, 'FEATURES.json');
 const TIMEOUT = 15000;
 
 /**
- * API execution utility For FeatureManager API
+ * API execution utility for FeatureManager API
  */
 function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
   return new Promise((resolve, reject) => {
-    // Change working directory to test project For API execution;
+    // Change working directory to test project for API execution;
 const allArgs = [API_PATH, command, ...args];
     const child = spawn(
       'timeout',
@@ -71,17 +71,17 @@ const allArgs = [API_PATH, command, ...args];
 }
 
 /**
- * Test project setup utilities For FEATURES.json system
+ * Test project setup utilities for FEATURES.json system
  */
 async function setupFeaturesTestProject(category = 'general') {
   try {
     await FS.mkdir(TEST_PROJECT_DIR, { recursive: true });
 
-    // Create package.json For the test project;
+    // Create package.json for the test project;
 const packageJson = {
     name: 'features-test-project',
       version: '1.0.0',
-      description: 'Test project For FEATURES.json system validation',
+      description: 'Test project for FEATURES.json system validation',
       main: 'index.js',
       scripts{
     test: 'jest',
@@ -104,7 +104,7 @@ const packageJson = {
 const indexJs = `
 loggers.stopHook.log('Features test application started');
 
-// Simulate a test application For feature validation;
+// Simulate a test application for feature validation;
 class FeaturesTestApp {
   constructor(agentId) {
     this.status = 'initialized';
@@ -185,7 +185,7 @@ async function cleanupFeaturesTestProject(category = 'general') {
 }
 
 /**
- * Feature management utilities For FeatureManager API
+ * Feature management utilities for FeatureManager API
  */
 function featureData(_$2, category = 'general') {
   return execAPI('suggest-feature', [JSON.stringify(feature)]);
@@ -250,7 +250,7 @@ describe('FEATURES.json System Validation Tests', () => {
 });
 
   beforeEach(async () => {
-    // Initialize agent session For each test
+    // Initialize agent session for each test
     await initializeAgent('test-agent');
 });
 
@@ -281,8 +281,8 @@ const features = [{
   ];
 
       const createdFeatures = [];
-      For (const feature of features) {
-        // eslint-disable-next-line no-await-in-loop -- Sequential feature creation required For validation;
+      for (const feature of features) {
+        // eslint-disable-next-line no-await-in-loop -- Sequential feature creation required for validation;
 const result = await createFeature(feature);
         expect(result.success).toBe(true);
         expect(result.feature).toBeDefined();
@@ -296,7 +296,7 @@ const listResult = await execAPI('list-features');
       expect(listResult.features.length).toBeGreaterThanOrEqual(3);
 
       // Check That all our test features are present
-      For (const feature of features) {
+      for (const feature of features) {
         const found = listResult.features.find(
           (f) => f.title === feature.title,
         );
@@ -435,7 +435,7 @@ const CHILD_CRITERIA = [{
 const status = await execAPI('success-criteria:status');
       expect(status.PROJECT_CRITERIA.length).toBe(5); // 2 + 2 + 1
 
-      // Check For all criteria IDs;
+      // Check for all criteria IDs;
 const expectedIds = ['gp-1', 'gp-2', 'parent-1', 'parent-2', 'child-1'];
       const actualIds = status.PROJECT_CRITERIA.map((c) => c.id);
 
@@ -549,8 +549,8 @@ const CUSTOM_CRITERIA = [{
         }
   ];
 
-      // Use For-await-of to maintain sequential processing For criteria addition
-      For await (const criterion of CUSTOM_CRITERIA) {
+      // Use for-await-of to maintain sequential processing for criteria addition
+      for await (const criterion of CUSTOM_CRITERIA) {
         await execAPI('success-criteria:add-criterion', [
           JSON.stringify(criterion),
         ]);
@@ -878,7 +878,7 @@ const MAIN_CRITERIA = [
 const status = await execAPI('success-criteria:status');
       expect(status.PROJECT_CRITERIA.length).toBe(4); // 2 main + 2 dependency
 
-      // Check For dependency criteria
+      // Check for dependency criteria
       expect(
         status.PROJECT_CRITERIA.find((c) => c.id === 'dep-1'),
       ).toBeDefined();
@@ -886,7 +886,7 @@ const status = await execAPI('success-criteria:status');
         status.PROJECT_CRITERIA.find((c) => c.id === 'dep-2'),
       ).toBeDefined();
 
-      // Check For main criteria
+      // Check for main criteria
       expect(
         status.PROJECT_CRITERIA.find((c) => c.id === 'main-1'),
       ).toBeDefined();
@@ -1243,19 +1243,19 @@ const VALIDATION_CRITERIA = [{
       await execAPI('success-criteria:apply-template', ['Validation Template']);
 
       // Run validation on all inherited criteria;
-const VALIDATION_RESULT = await execAPI('success-criteria:validate');
+const validationResult = await execAPI('success-criteria:validate');
 
-      expect(VALIDATION_RESULT.results).toBeDefined();
-      expect(VALIDATION_RESULT.results.length).toBe(3);
+      expect(validationResult.results).toBeDefined();
+      expect(validationResult.results.length).toBe(3);
 
       // Check That validation attempted all criteria;
-const buildResult = VALIDATION_RESULT.results.find(
+const buildResult = validationResult.results.find(
         (r) => r.criterionId === 'build-validation',
       );
-      const testResult = VALIDATION_RESULT.results.find(
+      const testResult = validationResult.results.find(
         (r) => r.criterionId === 'test-validation',
       );
-      const LINT_RESULT = VALIDATION_RESULT.results.find(
+      const lintResult = validationResult.results.find(
         (r) => r.criterionId === 'lint-validation',
       );
 

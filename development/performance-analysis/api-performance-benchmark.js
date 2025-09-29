@@ -2,14 +2,14 @@ const { loggers } = require('../../lib/logger');
 /**
  * TaskManager API Performance Benchmark Suite
  *
- * Comprehensive performance analysis tool For measuring API response times,
+ * Comprehensive performance analysis tool for measuring API response times,
  * endpoint optimization opportunities, and system bottlenecks.
  *
  * @author Performance Research Agent #4
  * @date 2025-09-21
  */
 
-// Console output is intentional For this development/analysis tool;
+// Console output is intentional for this development/analysis tool;
 const { spawn } = require('child_process');
 const FS = require('fs');
 const path = require('path');
@@ -43,11 +43,11 @@ class APIPerformanceBenchmark {
   async executeCommand(command, args = [], iterations = 5) {
     const results = [];
 
-    For (let i = 0; i < iterations; i++) {
+    for (let i = 0; i < iterations; i++) {
       const startTime = process.hrtime.bigint();
       const startMemory = process.memoryUsage();
       try {
-        // eslint-disable-next-line no-await-in-loop -- Sequential execution required For accurate performance measurement;
+        // eslint-disable-next-line no-await-in-loop -- Sequential execution required for accurate performance measurement;
         const result = await this.runCommand(command, args);
         const endTime = process.hrtime.bigint();
         const endMemory = process.memoryUsage();
@@ -65,7 +65,7 @@ class APIPerformanceBenchmark {
         });
 
         // Small delay between iterations
-        // eslint-disable-next-line no-await-in-loop -- Sequential delay required For benchmark accuracy
+        // eslint-disable-next-line no-await-in-loop -- Sequential delay required for benchmark accuracy
         await this.sleep(100);
       } catch (error) {
         results.push({
@@ -73,7 +73,7 @@ class APIPerformanceBenchmark {
           responseTime: -1,
           memoryDelta: -1,
           success: false,
-          errorDetails: _error.message,
+          errorDetails: error.message,
           outputSize: 0,
         });
       }
@@ -180,12 +180,12 @@ class APIPerformanceBenchmark {
     );
 
     // Initialize system first
-    loggers.stopHook.log('📋 Initializing agent For testing...');
+    loggers.stopHook.log('📋 Initializing agent for testing...');
     const initResult = await this.executeCommand('init');
     this.results.endpoints.init = initResult;
 
     if (initResult.success) {
-      // Extract agent ID For subsequent tests;
+      // Extract agent ID for subsequent tests;
       const agentMatch = JSON.stringify(initResult).match(
         /"agentId":\s*"([^"]+)"/
       );
@@ -206,11 +206,11 @@ class APIPerformanceBenchmark {
     loggers.stopHook.log('\n📝 Testing task management endpoints...');
     this.results.endpoints.listTasks = await this.executeCommand('list');
 
-    // Create test task For further testing;
+    // Create test task for further testing;
     const createTaskResult = await this.executeCommand('create', [
       JSON.stringify({
         title: 'Performance Test Task',
-        description: 'Test task For performance benchmarking',
+        description: 'Test task for performance benchmarking',
         category: 'test',
       }),
     ]);
@@ -251,7 +251,7 @@ class APIPerformanceBenchmark {
           JSON.stringify({
             parentTaskId: this.testData.taskId,
             title: 'Performance Test Subtask',
-            description: 'Subtask For performance testing',
+            description: 'Subtask for performance testing',
             type: 'implementation',
           }),
         ]
@@ -354,10 +354,10 @@ class APIPerformanceBenchmark {
         recommendation: 'Optimize slowest endpoints',
         details: `Endpoints requiring attention: ${analysis.slowestEndpoints.map((e) => e.endpoint).join(', ')}`,
         strategies: [
-          'Implement response caching For read operations',
+          'Implement response caching for read operations',
           'Optimize JSON parsing and serialization',
-          'Add connection pooling For file operations',
-          'Implement lazy loading For non-critical data',
+          'Add connection pooling for file operations',
+          'Implement lazy loading for non-critical data',
         ],
       });
     }
@@ -367,10 +367,10 @@ class APIPerformanceBenchmark {
       recommendations.push({
         category: 'Memory Usage',
         priority: 'Medium',
-        recommendation: 'Reduce memory footprint For high-memory endpoints',
+        recommendation: 'Reduce memory footprint for high-memory endpoints',
         details: `Memory-intensive endpoints: ${analysis.highMemoryEndpoints.map((e) => e.endpoint).join(', ')}`,
         strategies: [
-          'Implement streaming For large data operations',
+          'Implement streaming for large data operations',
           'Add garbage collection optimization',
           'Use memory-efficient data structures',
           'Implement data pagination',
@@ -386,7 +386,7 @@ class APIPerformanceBenchmark {
         recommendation: 'Improve error handling and reliability',
         details: `Error-prone endpoints: ${analysis.errorProneEndpoints.map((e) => e.endpoint).join(', ')}`,
         strategies: [
-          'Add retry mechanisms For transient failures',
+          'Add retry mechanisms for transient failures',
           'Implement circuit breaker patterns',
           'Enhance input validation',
           'Add better error recovery',
@@ -399,12 +399,12 @@ class APIPerformanceBenchmark {
       category: 'Caching',
       priority: 'Medium',
       recommendation: 'Implement intelligent caching strategies',
-      details: 'Add caching For frequently accessed data and computed results',
+      details: 'Add caching for frequently accessed data and computed results',
       strategies: [
         'Cache task lists and agent status',
         'Implement time-based cache invalidation',
-        'Add in-memory caching For hot data',
-        'Use file-based caching For expensive operations',
+        'Add in-memory caching for hot data',
+        'Use file-based caching for expensive operations',
       ],
     });
 
@@ -422,7 +422,7 @@ class APIPerformanceBenchmark {
     const startTime = Date.now();
     const promises = [];
 
-    For (let i = 0; i < concurrency; i++) {
+    for (let i = 0; i < concurrency; i++) {
       const promise = this.loadTestWorker(
         endpoint,
         startTime + duration * 1000,
@@ -481,13 +481,13 @@ class APIPerformanceBenchmark {
           requestCount: ++requestCount,
           responseTime: -1,
           success: false,
-          error: _error.message,
+          error: error.message,
           timestamp: Date.now(),
         });
       }
 
       // Small delay to prevent overwhelming the system
-      // eslint-disable-next-line no-await-in-loop -- Sequential delay required For controlled load testing
+      // eslint-disable-next-line no-await-in-loop -- Sequential delay required for controlled load testing
       await this.sleep(10);
     }
 
@@ -607,10 +607,10 @@ class APIPerformanceBenchmark {
             : 'Medium',
       })),
       recommendations: [
-        'Implement in-memory caching For frequently accessed task lists',
-        'Add file-based caching For agent status information',
-        'Use time-based cache invalidation For dynamic data',
-        'Implement request deduplication For concurrent operations',
+        'Implement in-memory caching for frequently accessed task lists',
+        'Add file-based caching for agent status information',
+        'Use time-based cache invalidation for dynamic data',
+        'Implement request deduplication for concurrent operations',
       ],
     };
   }
@@ -632,9 +632,9 @@ class APIPerformanceBenchmark {
         'Memory usage grows with task and agent count',
       ],
       recommendations: [
-        'Implement asynchronous I/O For all file operations',
+        'Implement asynchronous I/O for all file operations',
         'Add connection pooling and request queuing',
-        'Consider database backend For high-scale deployments',
+        'Consider database backend for high-scale deployments',
         'Implement horizontal scaling capabilities',
       ],
     };
@@ -648,7 +648,7 @@ class APIPerformanceBenchmark {
     return sorted.length % 2 !== 0
       ? // eslint-disable-next-line security/detect-object-injection -- Safe array access with calculated midpoint index
         sorted[mid]
-      : // eslint-disable-next-line security/detect-object-injection -- Safe array access with calculated indices For median calculation
+      : // eslint-disable-next-line security/detect-object-injection -- Safe array access with calculated indices for median calculation
         (sorted[mid - 1] + sorted[mid]) / 2;
   }
 
@@ -680,7 +680,7 @@ class APIPerformanceBenchmark {
       throw new Error('Invalid filename detected - potential security risk');
     }
 
-    // Use path.resolve For secure path construction and validation;
+    // Use path.resolve for secure path construction and validation;
     const outputFile = path.resolve(outputDir, filename);
 
     // Validate that resolved path is still within intended directory
@@ -693,7 +693,7 @@ class APIPerformanceBenchmark {
       FS.mkdirSync(outputDir, { recursive: true });
     }
 
-    // ESLint: security/detect-non-literal-fs-filename disabled For this line
+    // ESLint: security/detect-non-literal-fs-filename disabled for this line
     // Justification: Filename is validated with regex and path traversal protection above
 
     // eslint-disable-next-line security/detect-non-literal-fs-filename
@@ -748,9 +748,9 @@ async function main() {
     }
 
     loggers.stopHook.log(`\n📄 Full report: ${outputFile}`);
-  } catch (_1) {
-    loggers.stopHook.error('❌ Benchmark failed:', _error);
-    throw _error;
+  } catch (error) {
+    loggers.stopHook.error('❌ Benchmark failed:', error);
+    throw error;
   }
 }
 

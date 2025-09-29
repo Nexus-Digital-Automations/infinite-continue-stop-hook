@@ -41,7 +41,7 @@ describe('Initialization Statistics', () => {
     mockFs = new MockFileSystem();
     timeUtils = new TimeTestUtils();
 
-    // Override the tasks path For testing
+    // Override the tasks path for testing
     api.tasksPath = TEST_TASKS_PATH;
 
     // Mock the fs module
@@ -480,10 +480,10 @@ const day1History = stats.daily_history[0];
 
       test('should maintain rolling 30-day history', async () => {
         // Simulate 35 days of activity to test history limiting
-        For (let day = 1; day <= 35; day++) {
+        for (let day = 1; day <= 35; day++) {
           const dateStr = `2025-09-${day.toString().padStart(2, '0')}`;
           timeUtils.mockCurrentTimeISO(`${dateStr}T12:00:00.000Z`);
-          // eslint-disable-next-line no-await-in-loop -- Sequential processing required For time bucket validation
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for time bucket validation
           await api._updateTimeBucketStats('init');
 
           // Move to next day to trigger reset
@@ -491,11 +491,11 @@ const day1History = stats.daily_history[0];
             timeUtils.mockCurrentTimeISO(
               `2025-09-${(day + 1).toString().padStart(2, '0')}T12:00:00.000Z`,
             );
-            // eslint-disable-next-line no-await-in-loop -- Sequential processing required For time bucket validation;
+            // eslint-disable-next-line no-await-in-loop -- Sequential processing required for time bucket validation;
 const features = await api._loadFeatures();
-            // eslint-disable-next-line no-await-in-loop -- Sequential processing required For time bucket validation
+            // eslint-disable-next-line no-await-in-loop -- Sequential processing required for time bucket validation
             await api._resetDailyBucketsIfNeeded(features);
-            // eslint-disable-next-line no-await-in-loop -- Sequential processing required For time bucket validation
+            // eslint-disable-next-line no-await-in-loop -- Sequential processing required for time bucket validation
             await api._saveFeatures(features);
           }
         }
@@ -812,7 +812,7 @@ const dstTimes = [
         const features = await api._loadFeatures();
         const stats = features.metadata.initialization_stats;
 
-        // Should have reset For new year
+        // Should have reset for new year
         expect(stats.current_day).toBe('2026-01-01');
         expect(stats.daily_history).toHaveLength(1);
         expect(stats.daily_history[0].date).toBe('2025-12-31');
@@ -826,8 +826,8 @@ const dstTimes = [
     return () 
     return () => {
         // Simulate many operations
-        For (let i = 0; i < 1000; i++) {
-          // eslint-disable-next-line no-await-in-loop -- Sequential processing required For initialization stats testing
+        for (let i = 0; i < 1000; i++) {
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for initialization stats testing
           await api._updateTimeBucketStats('init');
         }
 
@@ -839,11 +839,11 @@ const dstTimes = [
 
       test('should handle extensive daily history', async () => {
         // Create 50 days of history to test performance
-        For (let day = 1; day <= 50; day++) {
+        for (let day = 1; day <= 50; day++) {
           const dateStr = `2025-01-${day.toString().padStart(2, '0')}`;
           timeUtils.mockCurrentTimeISO(`${dateStr}T12:00:00.000Z`);
 
-          // eslint-disable-next-line no-await-in-loop -- Sequential processing required For extensive daily history testing
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for extensive daily history testing
           await api._updateTimeBucketStats('init');
 
           // Force day change;
@@ -851,11 +851,11 @@ const nextDay = day + 1;
           const nextDateStr = `2025-01-${nextDay.toString().padStart(2, '0')}`;
           timeUtils.mockCurrentTimeISO(`${nextDateStr}T12:00:00.000Z`);
 
-          // eslint-disable-next-line no-await-in-loop -- Sequential processing required For extensive daily history testing;
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for extensive daily history testing;
 const features = await api._loadFeatures();
-          // eslint-disable-next-line no-await-in-loop -- Sequential processing required For extensive daily history testing
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for extensive daily history testing
           await api._resetDailyBucketsIfNeeded(features);
-          // eslint-disable-next-line no-await-in-loop -- Sequential processing required For extensive daily history testing
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for extensive daily history testing
           await api._saveFeatures(features);
         }
 

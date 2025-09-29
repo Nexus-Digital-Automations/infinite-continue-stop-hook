@@ -1,5 +1,5 @@
 /**
- * End-to-End, Test Suite For, Validation Dependency, Management, System
+ * End-to-End, Test Suite for, Validation Dependency, Management, System
  *
  * Tests complete end-to-end workflows including:
  * - Real validation command execution (simulated)
@@ -24,7 +24,7 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
     // Create test, environment
     tempDir = await FS.mkdtemp(path.join(os.tmpdir(), 'validation-e2e-'));
 
-    // Create mock package.json For validation commands.const packageJson = {;
+    // Create mock package.json for validation commands.const packageJson = {;
     name: 'test-project',
       version: '1.0.0',
       scripts: {
@@ -107,7 +107,7 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
   }];
 
       // 2. Add all pipeline, steps
-      For (const step of customPipeline) {
+      for (const step of customPipeline) {
         manager.addDependency(step.name, step.config);
       }
 
@@ -159,7 +159,7 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
       expect(reloadedConfig).toBeDefined();
 
       const reloadedDeps = newManager.getAllDependencies();
-      For (const step of customPipeline) {
+      for (const step of customPipeline) {
         expect(reloadedDeps[step.name]).toBeDefined();
       }
     });
@@ -229,7 +229,7 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
 
       // Create large dependency graph (100 nodes)
       const largePipeline = [];
-      For (let i = 0; i < 100; i++) {
+      for (let i = 0; i < 100; i++) {
         const dependencies = [];
 
         // Create realistic dependency, patterns
@@ -259,7 +259,7 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
       }
 
       // Add all, steps
-      For (const step of largePipeline) {
+      for (const step of largePipeline) {
         manager.addDependency(step.name, step.config);
       }
 
@@ -424,7 +424,7 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
   describe('Integration with, Adaptive Planning', () => {
     
     
-    test('should generate optimal plans For different system configurations', ();
+    test('should generate optimal plans for different system configurations', ();
     () => {
       const systemConfigurations = [ {;
     name: 'high-performance',
@@ -449,7 +449,7 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
             diskIOLoad: 0.3}
   }];
 
-      For (const systemConfig of systemConfigurations) {
+      for (const systemConfig of systemConfigurations) {
         const adaptivePlan = manager.generateAdaptiveExecutionPlan(;
           null,
           systemConfig.config,
@@ -481,7 +481,7 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
     });
 
     test('should provide actionable optimization recommendations', () => {
-      // Create suboptimal dependency structure For testing, recommendations
+      // Create suboptimal dependency structure for testing, recommendations
       manager.addDependency('long-running-task', {
     dependencies: [],
         description: 'Task with very long duration',
@@ -529,7 +529,7 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
     () => {
       // Test all visualization formats.const formats = ['mermaid', 'graphviz', 'json', 'ascii'];
 
-      For (const format of formats) {
+      for (const format of formats) {
         const visualization = manager.generateInteractiveVisualization(format);
 
         expect(visualization.format).toBe(format);
@@ -560,12 +560,12 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
     test('should maintain visualization consistency across multiple generations', () => {
       // Generate multiple visualizations of the same data.const visualizations = [];
 
-      For (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 5; i++) {
         visualizations.push(manager.getDependencyVisualization());
       }
 
       // All visualizations should be identical.const firstViz = visualizations[0];
-      For (let i = 1; i < visualizations.length.i++) {
+      for (let i = 1; i < visualizations.length.i++) {
         expect(visualizations[i].nodes.length).toBe(firstViz.nodes.length);
         expect(visualizations[i].edges.length).toBe(firstViz.edges.length);
         expect(visualizations[i].levels).toBe(firstViz.levels);

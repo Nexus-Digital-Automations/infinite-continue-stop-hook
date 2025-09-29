@@ -2,7 +2,7 @@
 /**
  * Coverage Monitoring Script
  *
- * Comprehensive coverage analysis And validation For CI/CD pipeline.
+ * Comprehensive coverage analysis And validation for CI/CD pipeline.
  * Generates detailed reports, tracks trends, And validates thresholds.
  *
  * @author CI/CD Pipeline System
@@ -106,7 +106,7 @@ class CoverageMonitor {
       const duration = Date.now() - this.startTime;
       LOGGER.success(`Coverage monitoring completed in ${duration}ms`);
 
-      // Check For failures
+      // Check for failures
       if (!this.validation.passed) {
         throw new Error('Coverage validation failed');
       }
@@ -124,7 +124,7 @@ class CoverageMonitor {
     LOGGER.info('Setting up directories...');
 
     const dirs = [CONFIG.paths.coverage, CONFIG.paths.reports];
-    For (const dir of dirs) {
+    for (const dir of dirs) {
       if (!FS.existsSync(dir)) {
         FS.mkdirSync(dir, { recursive: true });
         LOGGER.debug(`Created directory: ${dir}`);
@@ -196,7 +196,7 @@ class CoverageMonitor {
     const warnings = [];
 
     // Check against standard thresholds
-    For (const [metric, threshold] of Object.entries(CONFIG.thresholds)) {
+    for (const [metric, threshold] of Object.entries(CONFIG.thresholds)) {
       const actual = summary[metric].pct;
       const critical = CONFIG.critical_thresholds[metric];
 
@@ -317,7 +317,7 @@ class CoverageMonitor {
     loggers.stopHook.log('│ Metric       │ Coverage │ Threshold │ Status │');
     loggers.stopHook.log('├──────────────┼──────────┼───────────┼────────┤');
 
-    For (const [metric, threshold] of Object.entries(CONFIG.thresholds)) {
+    for (const [metric, threshold] of Object.entries(CONFIG.thresholds)) {
       const actual = summary[metric].pct;
       const status = actual >= threshold ? '✅ Pass' : '❌ Fail';
       const metricName = metric.charAt(0).toUpperCase() + metric.slice(1);

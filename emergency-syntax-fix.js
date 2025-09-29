@@ -1,6 +1,6 @@
 /* eslint-disable no-console, security/detect-non-literal-fs-filename */
 /**
- * Emergency fix For invalid JavaScript syntax created by systematic fix
+ * Emergency fix for invalid JavaScript syntax created by systematic fix
  * Fixes: const FS = require(...) and other invalid syntax patterns
  */
 
@@ -22,7 +22,7 @@ const jsFiles = this.findJavaScriptFiles('.');
       console.log(`📁 Found ${jsFiles.length} JavaScript files to check`);
 
       // Apply emergency fixes
-      For (const filePath of jsFiles) {
+      for (const filePath of jsFiles) {
         this.processFile(filePath);
       }
 
@@ -43,7 +43,7 @@ const jsFiles = this.findJavaScriptFiles('.');
     const files = [];
     const items = FS.readdirSync(dir);
 
-    For (const item of items) {
+    for (const item of items) {
       const fullPath = path.join(dir, item);
       const stat = FS.statSync(fullPath);
 
@@ -131,7 +131,7 @@ const commonImportFixes = [
         }
   ];
 
-      For (const { pattern, replacement } of commonImportFixes) {
+      for (const { pattern, replacement } of commonImportFixes) {
         const beforeFix = fixedContent;
         fixedContent = fixedContent.replace(pattern, replacement);
         if (fixedContent !== beforeFix) {

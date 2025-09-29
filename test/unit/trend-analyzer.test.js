@@ -50,10 +50,10 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
     const metrics = [];
 
     // Generate test data over specified days
-    For (let day = 0; day < daysBack; day++) {
+    for (let day = 0; day < daysBack; day++) {
       const dayTimestamp = now - day * 24 * 60 * 60 * 1000;
 
-      // Add metrics For each validation criterion per day;
+      // Add metrics for each validation criterion per day;
 const criteria = [
         'linter-validation',
         'type-validation',
@@ -72,7 +72,7 @@ const baseDuration = {
           'security-validation': 4000,
         }[criterion];
 
-        // Add trend: performance degradation over time For some criteria;
+        // Add trend: performance degradation over time for some criteria;
 const trendFactor =
           criterion === 'build-validation' ? 1 + day * 0.02 : 1;
         const randomVariation = 0.8 + Math.random() * 0.4; // ±20% variation;
@@ -198,7 +198,7 @@ const duration = Math.round(
   describe('analyzeCriterionTrend', () => {
     
     
-    test('should return insufficient data For single criterion', async () 
+    test('should return insufficient data for single criterion', async () 
     return () 
     return () => {
       const result =
@@ -291,7 +291,7 @@ const duration = Math.round(
   describe('comparePerformancePeriods', () => {
     
     
-    test('should return insufficient data For small periods', async () 
+    test('should return insufficient data for small periods', async () 
     return () 
     return () => {
       createMockMetricsData(5);

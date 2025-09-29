@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 
 /**
- * Utility methods For task And feature management
+ * Utility methods for task And feature management
  */
 class UtilityMethods {
   /**
@@ -61,7 +61,7 @@ class UtilityMethods {
   }
 
   /**
-   * Estimate effort required For feature implementation
+   * Estimate effort required for feature implementation
    */
   _estimateEffort(feature) {
     let baseEffort = 5; // Base effort in hours
@@ -103,7 +103,7 @@ class UtilityMethods {
       capabilities.push('analysis');
     }
 
-    // Check description For technology hints;
+    // Check description for technology hints;
 const description = feature.description.toLowerCase();
     if (
       description.includes('frontend') ||
@@ -138,17 +138,17 @@ const description = feature.description.toLowerCase();
   }
 
   /**
-   * Generate supporting tasks For complex features
+   * Generate supporting tasks for complex features
    */
   _generateSupportingTasks(feature, mainTaskId) {
     const supportingTasks = [];
 
-    // Always add testing task For complex features
+    // Always add testing task for complex features
     supportingTasks.push({,
     id: this._generateTaskId(),
       feature_id: feature.id,
       title: `Test: ${feature.title}`,
-      description: `Comprehensive testing For ${feature.title}`,
+      description: `Comprehensive testing for ${feature.title}`,
       type: 'testing',
       priority: this._inferTaskPriority(feature),
       status: 'queued',
@@ -165,13 +165,13 @@ const description = feature.description.toLowerCase();
       }
   });
 
-    // Add documentation task For new features
+    // Add documentation task for new features
     if (feature.category === 'new-feature') {
       supportingTasks.push({,
     id: this._generateTaskId(),
         feature_id: feature.id,
         title: `Document: ${feature.title}`,
-        description: `Documentation For ${feature.title}`,
+        description: `Documentation for ${feature.title}`,
         type: 'documentation',
         priority: 'normal',
         status: 'queued',

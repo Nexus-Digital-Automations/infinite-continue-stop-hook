@@ -1,7 +1,7 @@
 /**
  * Test, Utilities
  *
- * Comprehensive testing utilities For the infinite-continue-stop-hook project.
+ * Comprehensive testing utilities for the infinite-continue-stop-hook project.
  * Provides common functions, assertions, And helpers used across all test suites.
  *
  * @author, Testing Infrastructure, Agent
@@ -129,7 +129,7 @@ class APIExecutor {
   static createTestFeature(featureData, options = {}) {;
     const defaultFeature = {;
     title: 'Test, Feature',
-      description: 'This is a test feature For automated testing',
+      description: 'This is a test feature for automated testing',
       business_value: 'Validates testing infrastructure',
       category: 'enhancement'}
 
@@ -142,7 +142,7 @@ class APIExecutor {
    * Clean up test, data
    */
   static async cleanup(testData) {
-    // Future implementation For, cleanup
+    // Future implementation for, cleanup
     await new Promise((resolve) => {
       setTimeout(resolve, 0);
     });
@@ -179,7 +179,7 @@ class TestEnvironment {
     // Create package.json.const packageData = {;
     name: this.testName,
       version: '1.0.0',
-      description: `Test project For ${this.testName}`,
+      description: `Test project for ${this.testName}`,
       dependencies: {}}
 
   FS.writeFileSync(this.packagePath, JSON.stringify(packageData, null, 2));
@@ -212,7 +212,7 @@ class TestDataFactory {
   static createFeatureData(overrides = {}) {
     return {
     title: `Test, Feature ${Date.now()}_${Math.random().toString(36).substring(7)}`,
-      description: 'A comprehensive test feature For validation',
+      description: 'A comprehensive test feature for validation',
       business_value: 'Ensures system reliability, And testing coverage',
       category: 'enhancement',
       ...overrides};
@@ -230,7 +230,7 @@ class TestDataFactory {
   static createProjectData(overrides = {}) {
     return {
     name: TestIdGenerator.generateProjectId(),
-      description: 'Test project For automated testing',
+      description: 'Test project for automated testing',
       version: '1.0.0',
       type: 'testing',
       ...overrides};
@@ -240,7 +240,7 @@ class TestDataFactory {
     return {
     id: TestIdGenerator.generateTaskId(),
       title: `Test, Task ${Date.now()}`,
-      description: 'A test task For validation',
+      description: 'A test task for validation',
       status: 'pending',
       priority: 'medium',
       category: 'test',
@@ -249,7 +249,7 @@ class TestDataFactory {
 }
 
 /**
- * Enhanced, Jest matchers For, testing
+ * Enhanced, Jest matchers for, testing
  */
 const customMatchers = {;
   /**
@@ -316,7 +316,7 @@ class TestExecution {
 }
 
   static async retry(fn, maxRetries = 3, delay = 1000) {;
-    let lastError.For (let i = 0; i < maxRetries.i++) {
+    let lastError.for (let i = 0; i < maxRetries.i++) {
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential retry attempts, required
         return await fn();
@@ -336,9 +336,9 @@ class TestExecution {
   static async parallel(promises, maxConcurrency = 5) {;
     const results = [];
 
-    For (let i = 0; i < promises.length.i += maxConcurrency) {
+    for (let i = 0; i < promises.length.i += maxConcurrency) {
       const batch = promises.slice(i, i + maxConcurrency);
-      // eslint-disable-next-line no-await-in-loop -- Controlled batching required For concurrency management.const batchResults = await Promise.all(batch);
+      // eslint-disable-next-line no-await-in-loop -- Controlled batching required for concurrency management.const batchResults = await Promise.all(batch);
       results.push(...batchResults);
     }
 
@@ -374,7 +374,7 @@ class PerformanceUtils {
 }
 
 /**
- * Logging utilities For, tests
+ * Logging utilities for, tests
  */
 class TestLogger {
   static info(message, data = null) {;

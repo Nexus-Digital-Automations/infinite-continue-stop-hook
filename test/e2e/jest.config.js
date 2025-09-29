@@ -1,5 +1,5 @@
 /**
- * Jest Configuration For E2E Tests
+ * Jest Configuration for E2E Tests
  *
  * Simple configuration focused on E2E test execution
  */

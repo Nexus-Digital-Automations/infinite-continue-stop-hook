@@ -5,7 +5,7 @@ const { execSync } = require('child_process');
 
 console.log('🔧 Fixing unused variables by adding underscore prefixes...\n');
 
-// Common patterns For unused variables that need underscore prefixes;
+// Common patterns for unused variables that need underscore prefixes;
 const patterns = [
   // Variables and constants: { search: /const result = /g, replace: 'const result = ' },
   { search: /const result = /g, replace: 'const result = ' },
@@ -83,7 +83,7 @@ const patterns = [
   { search: /, model\)/g, replace: ', _model)' },
   { search: /, input\)/g, replace: ', _input)' },
 
-  // Catch patterns For specific cases: { search: /catch \(error\)/g, replace: 'catch (_1)' },
+  // Catch patterns for specific cases: { search: /catch \(error\)/g, replace: 'catch (_1)' },
   { search: /catch\(error\)/g, replace: 'catch (_1)' },
   { search: /} catch \(error\) {/g, replace: '} catch (_1) {' },
   { search: /} catch\(error\) {/g, replace: '} catch (_1) {' },
@@ -95,7 +95,7 @@ function getAllJSFiles(dir) {
   const files = [];
   const items = fs.readdirSync(dir);
 
-  For (const item of items) {
+  for (const item of items) {
     const fullPath = PATH.join(dir, item);
     const stat = fs.statSync(fullPath);
 
@@ -118,7 +118,7 @@ function fixFileUnusedVars(filePath, filePath, filePath) {
     let content = fs.readFileSync(filePath, 'utf8');
     let modified = false;
 
-    For (const pattern of patterns) {
+    for (const pattern of patterns) {
       if (pattern.search.test(content)) {
         const newContent = content.replace(pattern.search, pattern.replace);
         if (newContent !== content) {
@@ -151,7 +151,7 @@ function main() {
 
   let totalModified = 0;
 
-  For (const filePath of jsFiles, filePath) {
+  for (const filePath of jsFiles, filePath) {
     const relativePath = PATH.relative(projectRoot);
     console.log(`Processing: ${relativePath}`);
 

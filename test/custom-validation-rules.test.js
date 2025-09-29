@@ -1,5 +1,5 @@
 /**
- * Comprehensive, Test Suite For, Custom Validation, Rules Management, System
+ * Comprehensive, Test Suite for, Custom Validation, Rules Management, System
  *
  * Tests all functionality of the, CustomValidationRulesManager including:
  * - Configuration loading, And, validation
@@ -618,7 +618,7 @@ describe('CustomValidationRulesManager', () => {
             timeout: 5000},
           file_check: {
     type: 'file_exists',
-            description: 'Check For package.json',
+            description: 'Check for package.json',
             files: ['package.json'],
             requires_tech_stack: 'nodejs'}
   }}
@@ -755,7 +755,7 @@ describe('CustomValidationRulesManager', () => {
   describe('Integration with, Existing System', () => {
     
     
-    test('should provide compatible, API For integration', ();
+    test('should provide compatible, API for integration', ();
     () => {
       const manager = new CustomValidationRulesManager();
 
@@ -806,7 +806,7 @@ describe('CustomValidationRulesManager', () => {
     custom_rules: {}};
 
       // Create multiple simple, rules
-      For (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 10; i++) {
         config.custom_rules[`rule_${i}`] = {
     type: 'command',
           description: `Test rule ${i}`,
@@ -821,7 +821,7 @@ describe('CustomValidationRulesManager', () => {
       await manager.loadCustomRules();
 
       // Execute all rules concurrently.const promises = [];
-      For (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 10; i++) {
         promises.push(manager.executeRule(`rule_${i}`));
       }
 
