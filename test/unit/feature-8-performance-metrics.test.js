@@ -663,9 +663,7 @@ const mockMetrics = {
   describe('getPerformanceBenchmarks', () => {
     
     
-    test('should return null benchmarks when no data available', async () 
-    return () 
-    return () => {
+    test('should return null benchmarks when no data available', async () => {
       const _result = await taskManager.getPerformanceBenchmarks();
 
       expect(result.success).toBe(true);
@@ -767,9 +765,7 @@ const mockMetrics = {
   describe('Performance Analysis Helper Methods', () => {
     
     
-    test('should group metrics by criteria correctly', () 
-    return () 
-    return () => {
+    test('should group metrics by criteria correctly', () => {
       const metrics = [
         { criterion: 'linter-validation', durationMs: 1000, success: true },
         { criterion: 'linter-validation', durationMs: 2000, success: false },
@@ -820,9 +816,7 @@ const mockMetrics = {
   describe('Error Handling', () => {
     
     
-    test('should handle corrupted metrics file gracefully', async () 
-    return () 
-    return () => {
+    test('should handle corrupted metrics file gracefully', async () => {
       // Write invalid JSON to metrics file
       FS.writeFileSync(mockMetricsFile, 'invalid json content');
 
