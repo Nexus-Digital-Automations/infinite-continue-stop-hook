@@ -31,7 +31,7 @@ const TIMEOUT = 60000; // 60 seconds for E2E operations
  * @param {Object} options - Execution options
  * @returns {Promise<Object>} Command result
  */
-function execCommand(command, args = [], options = {}) {
+function execCommand(command, args = [], options = {}, category = 'general') {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, {
       stdio: ['pipe', 'pipe', 'pipe'],
@@ -72,7 +72,7 @@ function execCommand(command, args = [], options = {}) {
  * @param {string[]} args - Command arguments
  * @returns {Promise<Object>} Parsed API response
  */
-async function execAPI(command, args = []) {
+async function execAPI(command, args = [], category = 'general') {
   const allArgs = [API_PATH, command, ...args];
 
   const result = await execCommand('timeout', [`60s`, 'node', ...allArgs]);
@@ -84,8 +84,8 @@ async function execAPI(command, args = []) {
 
   try {
     return JSON.parse(result.stdout);
-  } catch (_error) {
-    loggers.app.error(
+  } catch (_) {
+    loggers.app._error(
       'Failed to parse API response:',
       result.stdout,
       'Error:',
@@ -99,7 +99,7 @@ async function execAPI(command, args = []) {
 /**
  * Setup comprehensive E2E test project
  */
-async function setupE2EProject() {
+async function setupE2EProject(category = 'general') {
   try {
     // Create project directory
     await FS.mkdir(E2E_PROJECT_DIR, { recursive: true });
@@ -146,7 +146,7 @@ async function setupE2EProject() {
  * @param {string} message - Message to process
  * @returns {string} Processed message
  */
-function processMessage(_message) {
+function processMessage(_message, category = 'general') {
   if (!message) {
     throw new Error('Message is required');
   }
@@ -259,7 +259,7 @@ describe('Application Tests', () => {
       path.join(E2E_PROJECT_DIR, 'development', 'success-criteria-config.json'),
       JSON.stringify(successCriteriaConfig, null, 2)
     );
-  } catch (_error) {
+  } catch (_) {
     loggers.stopHook.error('Failed to setup E2E project:', error);
     throw _error;
   }
@@ -268,10 +268,10 @@ describe('Application Tests', () => {
 /**
  * Cleanup E2E test project
  */
-async function cleanupE2EProject() {
+async function cleanupE2EProject(category = 'general') {
   try {
     await FS.rm(E2E_PROJECT_DIR, { recursive: true, force: true });
-  } catch (_error) {
+  } catch (_) {
     // Ignore cleanup errors
   }
 }
@@ -300,7 +300,7 @@ describe('Success Criteria End-to-End Tests', () => {
       } else {
         expect(initResult.success).toBe(true);
       }
-    } catch (_error) {
+    } catch (_) {
       loggers.stopHook.warn(`Agent initialization warning: ${_error.message}`);
       // Continue with test - some initialization issues may be recoverable
     }
@@ -339,7 +339,7 @@ describe('Success Criteria End-to-End Tests', () => {
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (_error) {
+      } catch (_) {
         loggers.stopHook.warn(`Feature approval warning: ${_error.message}`);
       }
 
@@ -347,7 +347,7 @@ describe('Success Criteria End-to-End Tests', () => {
       const VALIDATION_RESULTS = {};
 
       // Linter validation
-      const lintResult = await execCommand('npm', ['run', 'lint']);
+      const _LINT_RESULT = await execCommand('npm', ['run', 'lint']);
       validationResults.linter = lintResult.success ? 'passed' : 'failed';
 
       // Build validation
@@ -381,7 +381,7 @@ describe('Success Criteria End-to-End Tests', () => {
             }
           }
         }
-      } catch (_error) {
+      } catch (_error, validationResults = {}) {
         loggers.stopHook.warn(`Feature listing warning: ${_error.message}`);
       }
 
@@ -420,7 +420,7 @@ describe('Success Criteria End-to-End Tests', () => {
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (_error) {
+      } catch (_) {
         loggers.stopHook.warn(`Feature approval warning: ${_error.message}`);
       }
 
@@ -452,7 +452,7 @@ describe('Success Criteria End-to-End Tests', () => {
             }
           }
         }
-      } catch (_error) {
+      } catch (_error, validationResults = {}) {
         loggers.stopHook.warn(
           `Feature verification warning: ${_error.message}`
         );
@@ -497,7 +497,7 @@ describe('Success Criteria End-to-End Tests', () => {
             }
           }
         }
-      } catch (_error) {
+      } catch (_) {
         loggers.stopHook.warn(
           `Feature metadata verification warning: ${_error.message}`
         );
@@ -511,7 +511,7 @@ describe('Success Criteria End-to-End Tests', () => {
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (_error) {
+      } catch (_) {
         loggers.stopHook.warn(
           `Enterprise feature approval warning: ${_error.message}`
         );
@@ -547,7 +547,7 @@ describe('Success Criteria End-to-End Tests', () => {
             }
           }
         }
-      } catch (_error) {
+      } catch (_) {
         loggers.app.warn(
           `Enhanced validation verification warning: ${_error.message}`
         );
@@ -582,7 +582,7 @@ describe('Success Criteria End-to-End Tests', () => {
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (_error) {
+      } catch (_) {
         loggers.stopHook.warn(`Feature approval warning: ${_error.message}`);
       }
 
@@ -590,7 +590,7 @@ describe('Success Criteria End-to-End Tests', () => {
       await FS.writeFile(
         path.join(E2E_PROJECT_DIR, 'src', 'auth.js'),
         `// User authentication module
-function authenticate(username, password) {
+function authenticate(username, password, category = 'general') {
   if (!username || !password) {
     throw new Error('Username And password required');
   }
@@ -603,7 +603,7 @@ module.exports = { authenticate };
       );
 
       // 4. Run validation checks
-      const lintResult = await execCommand('npm', ['run', 'lint']);
+      const _LINT_RESULT = await execCommand('npm', ['run', 'lint']);
       const buildResult = await execCommand('npm', ['run', 'build']);
       const TEST_RESULT = await execCommand('npm', ['run', 'test']);
 
@@ -626,7 +626,7 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch (_error) {
+      } catch (_) {
         loggers.app.warn(
           `Feature workflow completion verification warning: ${_error.message}`
         );
@@ -661,7 +661,7 @@ module.exports = { authenticate };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (_error) {
+      } catch (_) {
         loggers.stopHook.warn(`Bug fix approval warning: ${_error.message}`);
       }
 
@@ -669,7 +669,7 @@ module.exports = { authenticate };
       await FS.writeFile(
         path.join(E2E_PROJECT_DIR, 'src', 'auth-fix.js'),
         `// Bug fix for authentication timeout
-function authenticateWithTimeout(username, password, timeout = 10000) {
+async function authenticateWithTimeout(username, password, timeout = 10000, category = 'general') {
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => {
       reject(new Error('Authentication timeout'));
@@ -707,14 +707,14 @@ module.exports = { authenticateWithTimeout };
             }
           }
         }
-      } catch (_error) {
+      } catch (_) {
         loggers.stopHook.warn(
           `Bug fix workflow verification warning: ${_error.message}`
         );
       }
 
       // Validation checks should pass
-      const lintResult = await execCommand('npm', ['run', 'lint']);
+      const _LINT_RESULT = await execCommand('npm', ['run', 'lint']);
       const buildResult = await execCommand('npm', ['run', 'build']);
       expect(lintResult.success).toBe(true);
       expect(buildResult.success).toBe(true);
@@ -744,7 +744,7 @@ module.exports = { authenticateWithTimeout };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (_error) {
+      } catch (_) {
         loggers.stopHook.warn(
           `Refactoring feature approval warning: ${_error.message}`
         );
@@ -772,7 +772,7 @@ module.exports = { authenticateWithTimeout };
  * @returns {Promise<Object>} Authentication result
  * @throws {Error} When credentials are missing or invalid
  */
-async function authenticate(username, password, options = {}) {
+async function authenticate(username, password, options = {}, category = 'general') {
   const { timeout = 10000 } = options;
 
   if (!username || !password) {
@@ -821,14 +821,14 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch (_error) {
+      } catch (_) {
         loggers.app.warn(
           `Refactoring workflow verification warning: ${_error.message}`
         );
       }
 
       // Quality gate validations
-      const lintResult = await execCommand('npm', ['run', 'lint']);
+      const _LINT_RESULT = await execCommand('npm', ['run', 'lint']);
       const buildResult = await execCommand('npm', ['run', 'build']);
       const testResult = await execCommand('npm', ['run', 'test']);
 
@@ -880,7 +880,7 @@ module.exports = { authenticate };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (_error) {
+      } catch (_) {
         loggers.stopHook.warn(
           `Multi-agent feature approval warning: ${_error.message}`
         );
@@ -915,7 +915,7 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch (_error) {
+      } catch (_error, validationResults = {}) {
         loggers.app.warn(
           `Multi-agent coordination verification warning: ${_error.message}`
         );
@@ -953,7 +953,7 @@ module.exports = { authenticate };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (_error) {
+      } catch (_) {
         loggers.stopHook.warn(
           `Performance feature approval warning: ${_error.message}`
         );
@@ -991,7 +991,7 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch (_error) {
+      } catch (_) {
         loggers.app.warn(
           `Performance feature verification warning: ${_error.message}`
         );
@@ -1002,7 +1002,7 @@ module.exports = { authenticate };
       expect(performanceResult.code).toBeDefined();
 
       // Basic validation checks should pass
-      const lintResult = await execCommand('npm', ['run', 'lint']);
+      const _LINT_RESULT = await execCommand('npm', ['run', 'lint']);
       expect(lintResult.success).toBe(true);
     }, 30000);
 
@@ -1030,7 +1030,7 @@ module.exports = { authenticate };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (_error) {
+      } catch (_) {
         loggers.stopHook.warn(
           `Regression detection approval warning: ${_error.message}`
         );
@@ -1064,7 +1064,7 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch (_error) {
+      } catch (_) {
         loggers.app.warn(
           `Regression detection verification warning: ${_error.message}`
         );
@@ -1110,14 +1110,14 @@ module.exports = { authenticate };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (_error) {
+      } catch (_) {
         loggers.stopHook.warn(
           `Evidence collection approval warning: ${_error.message}`
         );
       }
 
       // Collect evidence during validation
-      const lintResult = await execCommand('npm', ['run', 'lint']);
+      const _LINT_RESULT = await execCommand('npm', ['run', 'lint']);
       const buildResult = await execCommand('npm', ['run', 'build']);
       const testResult = await execCommand('npm', ['run', 'test']);
 
@@ -1162,7 +1162,7 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch (_error) {
+      } catch (_) {
         loggers.app.warn(
           `Evidence collection verification warning: ${_error.message}`
         );

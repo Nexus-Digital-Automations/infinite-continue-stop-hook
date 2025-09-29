@@ -1,3 +1,4 @@
+const { loggers } = require('../lib/logger');
 /**
 const { loggers } = require('../../lib/logger');
  * Stress Testing And Error Recovery Integration Tests
@@ -298,30 +299,30 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
 
     test('should handle concurrent agent operations safely', async () => {
       // 1. Create concurrent agent operations
-      const agentIds = Array.from(
+      const AGENT_IDS = Array.from(
         { length: 15 },
         (_, i) => `stress-agent-${i + 1}`,
       );
 
       const agentCommands = [
         // Initialize all agents
-        ...agentIds.map((_AGENT_ID) => ({
+        ...AGENT_IDS.map((AGENT_ID) => ({
           command: 'initialize',
-          args: [_AGENT_ID],
+          args: [AGENT_ID],
           options: { projectRoot: testDir },
         })),
 
         // Reinitialize some agents
-        ...agentIds.slice(0, 5).map((_AGENT_ID) => ({
+        ...AGENT_IDS.slice(0, 5).map((AGENT_ID) => ({
           command: 'reinitialize',
-          args: [_AGENT_ID],
+          args: [AGENT_ID],
           options: { projectRoot: testDir },
         })),
 
         // More initializations (duplicates)
-        ...agentIds.slice(5, 10).map((_AGENT_ID) => ({
+        ...AGENT_IDS.slice(5, 10).map((AGENT_ID) => ({
           command: 'initialize',
-          args: [_AGENT_ID],
+          args: [AGENT_ID],
           options: { projectRoot: testDir },
         })),
 
@@ -349,9 +350,9 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
       validateFeaturesStructure(featuresData);
 
       // All agents should be present
-      agentIds.forEach((_AGENT_ID) => {
-        expect(featuresData.agents[_AGENT_ID]).toBeDefined();
-        expect(featuresData.agents[_AGENT_ID].status).toBe('active');
+      AGENT_IDS.forEach((AGENT_ID) => {
+        expect(featuresData.agents[AGENT_ID]).toBeDefined();
+        expect(featuresData.agents[AGENT_ID].status).toBe('active');
       });
 
       // 5. Verify statistics consistency
@@ -360,7 +361,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
       });
       expect(statsResult.success).toBe(true);
       expect(statsResult.stats.total_initializations).toBeGreaterThanOrEqual(
-        agentIds.length,
+        AGENT_IDS.length,
       );
     });
   });
@@ -781,7 +782,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
             break;
 
           case 'agent-init':
-            result = await execAPI('initialize', [_operationagentId], {
+            result = await execAPI('initialize', [_operation_agentId], {
               projectRoot: testDir,
             });
             break;

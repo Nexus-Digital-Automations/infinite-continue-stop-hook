@@ -63,7 +63,7 @@ class QuickPerformanceTest {
             if (jsonMatch) {
               response = JSON.parse(jsonMatch[0]);
             }
-          } catch (_error) {
+          } catch (_) {
             response = stdout;
           }
 

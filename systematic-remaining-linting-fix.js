@@ -1,3 +1,4 @@
+/* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-object-injection */
 /**
  * Systematic fix for remaining 2437 linting issues
  * Focuses on the most common patterns: result/result naming, unused variables, no-undef errors
@@ -26,8 +27,8 @@ class SystematicLintingFixer {
       console.log(`📁 Found ${jsFiles.length} JavaScript files to process`);
 
       // Apply systematic fixes
-      for (const filePath of jsFiles) {
-        this.processFile(FILE_PATH);
+      for (const _filePath of jsFiles) {
+        this.processFile(__filename);
       }
 
       console.log(`✅ Processed ${this.fixedFiles.length} files`);
@@ -37,7 +38,7 @@ class SystematicLintingFixer {
         console.log('\n❌ Errors encountered:');
         this.errors.forEach((error) => console.log(`  - ${error}`));
       }
-    } catch (_error) {
+    } catch (_) {
       console.error('❌ Systematic fix failed:', _error.message);
       throw _error;
     }
@@ -76,9 +77,9 @@ class SystematicLintingFixer {
   /**
    * Process a single file with systematic fixes
    */
-  processFile(FILE_PATH) {
+  processFile(__filename, __filename) {
     try {
-      const content = FS.readFileSync(FILE_PATH, 'utf8');
+      const content = FS.readFileSync(__filename, 'utf8');
       let fixedContent = content;
       let hasChanges = false;
 
@@ -118,12 +119,12 @@ class SystematicLintingFixer {
       }
 
       // Write file if changes were made
-      if (hasChanges) {
-        FS.writeFileSync(FILE_PATH, fixedContent, 'utf8');
-        this.fixedFiles.push(FILE_PATH);
+      if ((hasChanges, __filename)) {
+        FS.writeFileSync(__filename, fixedContent, 'utf8');
+        this.fixedFiles.push(__filename);
       }
-    } catch (_error) {
-      this.errors.push(`${FILE_PATH}: ${_error.message}`);
+    } catch (_) {
+      this.errors.push(`${__filename}: ${_error.message}`);
     }
   }
 

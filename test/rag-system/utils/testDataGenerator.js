@@ -81,10 +81,10 @@ class TestDataGenerator {
       javascript: [
         'async function fetchData() {\n  const https = require("https");\n  try {\n    const response = await new Promise((resolve, reject) => {\n      const req = https.get("/api/data", (res) => {\n        let data = "";\n        res.on("data", chunk => data += chunk);\n        res.on("end", () => resolve({ ok: res.statusCode === 200, json: () => JSON.parse(data) }));\n      });\n      req.on("error", reject);\n    });\n    return await response.json();\n  } catch {\n    console.error("Fetch failed:", error);\n    throw error;\n  }\n}',
         'const memoizedFunction = useMemo(() => {\n  return expensiveComputation(data);\n}, [data]);',
-        'function debounce(_func, wait) {\n  let timeout;\n  return function executedFunction(...args) {\n    const later = () => {\n      clearTimeout(timeout);\n      _func(...args);\n    };\n    clearTimeout(timeout);\n    timeout = setTimeout(later, wait);\n  };\n}',
+        'function debounce(_func, wait, category = 'general') {\n  let timeout;\n  return function executedFunction(...args) {\n    const later = () => {\n      clearTimeout(timeout);\n      _func(...args);\n    };\n    clearTimeout(timeout);\n    timeout = setTimeout(later, wait);\n  };\n}',
       ],
       react: [
-        'function Component({ data }) {\n  const [loading, setLoading] = useState(false);\n  const [error, setError] = useState(null);\n  \n  useEffect(() => {\n    // Effect logic here\n  }, [data]);\n  \n  return <div>{loading ? "Loading..." : data}</div>;\n}',
+        'function Component({ data }, category = 'general') {\n  const [loading, setLoading] = useState(false);\n  const [error, setError] = useState(null);\n  \n  useEffect(() => {\n    // Effect logic here\n  }, [data]);\n  \n  return <div>{loading ? "Loading..." : data}</div>;\n}',
         'const OptimizedComponent = React.memo(({ items }) => {\n  return (\n    <ul>\n      {items.map(item => <li key={item.id}>{item.name}</li>)}\n    </ul>\n  );\n});',
       ],
     };
@@ -281,7 +281,7 @@ ${codeExample ? `\`\`\`${tech}\n${codeExample}\n\`\`\`` : 'Implementation detail
       type: errorType,
       message,
       description: `Encountered ${errorType} while working with ${tech}: ${message}`,
-      filePath: this.generateFilePath(tech),
+      _filePath: this.generateFilePath(tech),
       content: this.generateErrorContent(errorType, message, tech),
       timestamp: new Date().toISOString(),
       resolution: this.generateResolution(errorType, tech),

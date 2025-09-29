@@ -1,3 +1,4 @@
+const { loggers } = require('../lib/logger');
 /**
  * RAG System Semantic Search Accuracy Tests
  *
@@ -238,7 +239,7 @@ describe('Semantic Search Accuracy Validation', () => {
                   throw new Error(\`HTTP \${response.status}: \${response.statusText}\`);
                 }
                 return await response.json();
-              } catch (_error) {
+              } catch (_) {
         loggers.stopHook.error('Failed to fetch user:', error);
                 throw _error;
               }

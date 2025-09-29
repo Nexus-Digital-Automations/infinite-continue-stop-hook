@@ -1,3 +1,4 @@
+const { loggers } = require('../lib/logger');
 /**
  * Complete Workflows E2E Tests
  *

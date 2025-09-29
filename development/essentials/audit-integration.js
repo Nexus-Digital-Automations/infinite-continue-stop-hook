@@ -16,7 +16,7 @@
  * @author Audit System Agent #4
  */
 
-const _FS = require('fs').promises;
+const FS = require('fs').promises;
 const path = require('path');
 const { execSync } = require('child_process');
 
@@ -27,18 +27,18 @@ class SecurityUtils {
   /**
    * Sanitize And validate file path to prevent directory traversal
    * @param {string} basePath - Base directory path (trusted)
-   * @param {string} filePath - File path to validate
+   * @param {string} _filePath - File path to validate
    * @returns {string} Safe resolved path
    * @throws {Error} If path is invalid or outside base directory
    */
-  static validatePath(basePath, FILE_PATH) {
-    if (!filePath || typeof filePath !== 'string') {
+  static validatePath(basePath, _filePath) {
+    if (!_filePath || typeof _filePath !== 'string') {
       throw new Error('Invalid file path provided');
     }
 
     // Resolve paths to prevent directory traversal
     const resolvedBase = path.resolve(basePath);
-    const resolvedPath = path.resolve(basePath, path.basename(FILE_PATH));
+    const resolvedPath = path.resolve(basePath, path.basename(_filePath));
 
     // Ensure the resolved path is within the base directory
     if (
@@ -46,7 +46,7 @@ class SecurityUtils {
       resolvedPath !== resolvedBase
     ) {
       throw new Error(
-        `Path ${FILE_PATH} is outside allowed directory ${basePath}`,
+        `Path ${_filePath} is outside allowed directory ${basePath}`,
       );
     }
 
@@ -56,44 +56,44 @@ class SecurityUtils {
   /**
    * Safely read file with path validation
    * @param {string} basePath - Base directory
-   * @param {string} filePath - File to read
+   * @param {string} _filePath - File to read
    * @param {string} encoding - File encoding
    * @returns {Promise<string>} File contents
    */
-  static safeReadFile(basePath, filePath, encoding = 'utf-8') {
-    const safePath = this.validatePath(basePath, filePath);
+  static safeReadFile(basePath, _filePath, encoding = 'utf-8') {
+    const safePath = this.validatePath(basePath, _filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
-    return _FS.readFile(safePath, encoding);
+    return FS.readFile(safePath, encoding);
   }
 
   /**
    * Safely write file with path validation
    * @param {string} basePath - Base directory
-   * @param {string} filePath - File to write
+   * @param {string} _filePath - File to write
    * @param {string} content - Content to write
    * @returns {Promise<void>}
    */
-  static async safeWriteFile(basePath, filePath, content) {
-    const safePath = this.validatePath(basePath, filePath);
+  static async safeWriteFile(basePath, _filePath, content) {
+    const safePath = this.validatePath(basePath, _filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
-    await _FS.mkdir(path.dirname(safePath), { recursive: true });
+    await FS.mkdir(path.dirname(safePath), { recursive: true });
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
-    return _FS.writeFile(safePath, content, 'utf-8');
+    return FS.writeFile(safePath, content, 'utf-8');
   }
 
   /**
    * Safely append to file with path validation
    * @param {string} basePath - Base directory
-   * @param {string} filePath - File to append to
+   * @param {string} _filePath - File to append to
    * @param {string} content - Content to append
    * @returns {Promise<void>}
    */
-  static async safeAppendFile(basePath, filePath, content) {
-    const safePath = this.validatePath(basePath, filePath);
+  static async safeAppendFile(basePath, _filePath, content) {
+    const safePath = this.validatePath(basePath, _filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
-    await _FS.mkdir(path.dirname(safePath), { recursive: true });
+    await FS.mkdir(path.dirname(safePath), { recursive: true });
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
-    return _FS.appendFile(safePath, content);
+    return FS.appendFile(safePath, content);
   }
 }
 
@@ -101,7 +101,7 @@ class SecurityUtils {
  * Audit logger to replace console statements
  */
 class AuditLogger {
-  constructor() {
+  constructor(__agentId) {
     this.logs = [];
   }
 
@@ -132,7 +132,7 @@ class AuditLogger {
 }
 
 class AUDIT_INTEGRATION {
-  constructor() {
+  constructor(__agentId) {
     this.projectRoot = process.cwd();
     this.essentialsDir = path.join(__dirname);
     this.taskManagerApiPath = path.join(this.projectRoot, 'taskmanager-api.js');
@@ -375,7 +375,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
       };
 
       return criteria;
-    } catch (_error) {
+    } catch (_) {
       this.logger.log(`⚠️ Could not load task requirements: ${_error.message}`);
       return {};
     }
@@ -418,9 +418,9 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
         this.projectRoot,
         'package.json',
       );
-      await _FS.access(packageJsonPath);
+      await FS.access(packageJsonPath);
       hasPackageJson = true;
-    } catch (_error) {
+    } catch (_) {
       // Package.json not found or access denied
     }
 
@@ -483,7 +483,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
       } else {
         throw new Error(`TaskManager API error: ${JSON.stringify(result)}`);
       }
-    } catch (_error) {
+    } catch (_) {
       this.logger.error(`❌ Failed to create audit task: ${_error.message}`);
       throw _error;
     }
@@ -565,7 +565,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
         'development/logs/audit_integration.log',
         JSON.stringify(logEntry) + '\n',
       );
-    } catch (_error) {
+    } catch (_) {
       this.logger.log(`⚠️ Failed to log audit task creation: ${_error.message}`);
     }
   }

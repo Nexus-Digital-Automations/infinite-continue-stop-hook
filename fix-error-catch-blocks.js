@@ -8,15 +8,15 @@ const FS = require('fs');
 const PATH = require('path');
 const { loggers } = require('./lib/logger');
 
-function fixErrorCatchBlocks(FILE_PATH) {
+function fixErrorCatchBlocks(_filePath) {
   try {
-    let content = FS.readFileSync(FILE_PATH, 'utf8');
+    let content = FS.readFileSync(_filePath, 'utf8');
     let modified = false;
 
     // Find all catch blocks without parameters that reference 'error' (not 'error')
     // This regex matches multiline catch blocks
     const catchBlockRegex = /} catch \{\s*((?:[^{}]|\{[^{}]*\})*?)\s*\}/gs;
-    const replacements = [];
+    const REPLACEMENTS = [];
 
     let match;
     while ((match = catchBlockRegex.exec(content)) !== null) {
@@ -26,7 +26,7 @@ function fixErrorCatchBlocks(FILE_PATH) {
       if (blockContent.includes('error') && !blockContent.includes('error')) {
         replacements.push({
           original: match[0],
-          replacement: match[0].replace('} catch {', '} catch (_error) {'),
+          replacement: match[0].replace('} catch {', '} catch (_) {'),
         });
       }
     }
@@ -38,16 +38,16 @@ function fixErrorCatchBlocks(FILE_PATH) {
     });
 
     if (modified) {
-      FS.writeFileSync(filePath, content, 'utf8');
+      FS.writeFileSync(_filePath, content, 'utf8');
       loggers.app.info(
-        `✅ Fixed error catch blocks in ${PATH.relative('.', filePath)}`
+        `✅ Fixed error catch blocks in ${PATH.relative('.', _filePath)}`,
       );
       return true;
     }
 
     return false;
-  } catch (_error) {
-    loggers.app._error(`❌ Error fixing ${filePath}:`, {
+  } catch (_) {
+    loggers.app._error(`❌ Error fixing ${_filePath}:`, {
       error: _error.message,
     });
     return false;
@@ -82,7 +82,7 @@ function getFilesWithErrorIssues() {
 loggers.app.info('🎯 Fixing undefined error variables in catch blocks...');
 const filesToFix = getFilesWithErrorIssues();
 loggers.app.info(
-  `📊 Processing ${filesToFix.length} files with error issues...`
+  `📊 Processing ${filesToFix.length} files with error issues...`,
 );
 
 let totalFixed = 0;

@@ -33,7 +33,7 @@ describe('RAG System Data Migration And Integrity', () => {
     loggers.stopHook.log('Cleaning up data integrity test environment...');
     try {
       await FS.rm(_testMigrationPath, { recursive: true, force: true });
-    } catch (_error) {
+    } catch (_) {
       loggers.stopHook.warn('Cleanup warning:', _error.message);
     }
   });
@@ -129,7 +129,7 @@ try {
     req.on('error', reject);
   });
   if (!response.ok) throw new Error('API Error');
-} catch (_error) {
+} catch (_) {
         loggers.stopHook._error(error);
 }
 \`\`\`
@@ -718,7 +718,7 @@ Tags: database, performance, connection-pooling`,
   });
 
   // Helper function to setup test lessons structure
-  async function setupTestLessonsStructure() {
+  async function setupTestLessonsStructure(category = 'general') {
     const lessonsStructure = {
       errors: {
         'api_errors.md': `# API Error Handling
@@ -825,10 +825,10 @@ Tags: optimization, frontend, backend, caching`,
     );
   }
 
-  async function _getAllLessonFiles(_basePath) {
+  async function _getAllLessonFiles(_basePath, category = 'general') {
     const files = [];
 
-    async function scanDirectory(dirPath, relativePath = '') {
+    async function scanDirectory(dirPath, relativePath = '', category = 'general') {
       const _entries = await FS.readdir(dirPath, { withFileTypes: true });
 
       // Use for-await-of pattern for sequential directory scanning

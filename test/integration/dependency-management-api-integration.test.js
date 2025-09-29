@@ -27,11 +27,11 @@ describe('Dependency Management API Integration Tests', () => {
       });
 
       return JSON.parse(output.trim());
-    } catch (_error) {
+    } catch (_) {
       if (_error.stdout) {
         try {
           return JSON.parse(_error.stdout.trim());
-        } catch (_error) {
+        } catch (_) {
           throw new Error(
             `Command failed: ${_error.message}, Output: ${_error.stdout || _error.stderr}`,
           );

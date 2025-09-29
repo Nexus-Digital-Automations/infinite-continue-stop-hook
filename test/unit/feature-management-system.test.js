@@ -25,7 +25,7 @@ const TIMEOUT = 10000; // 10 seconds for feature management operations
 /**
  * Execute TaskManager API command for feature management testing
  */
-function execAPI(command, args = [], timeout = TIMEOUT) {
+function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
   return new Promise((resolve, reject) => {
     const allArgs = [
       API_PATH,
@@ -64,11 +64,11 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         }
         const result = JSON.parse(jsonString);
         resolve(result);
-      } catch (_error) {
+      } catch (_) {
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch (_error) {
+        } catch (_) {
           reject(
             new Error(
               `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse _error: ${_error.message}`,
@@ -87,7 +87,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
 /**
  * Create test environment for feature management testing
  */
-function setupFeatureTestEnvironment() {
+function setupFeatureTestEnvironment(category = 'general') {
   if (!FS.existsSync(TEST_PROJECT_DIR)) {
     FS.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
   }
@@ -124,7 +124,7 @@ function setupFeatureTestEnvironment() {
 /**
  * Cleanup test environment
  */
-function cleanupFeatureTestEnvironment() {
+async function cleanupFeatureTestEnvironment(category = 'general') {
   if (FS.existsSync(TEST_PROJECT_DIR)) {
     FS.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
   }
@@ -247,8 +247,8 @@ describe('Feature Management System Unit Tests', () => {
           // If API accepts it, That's also valid behavior for our infrastructure testing
           expect(result).toBeDefined();
         }
-      } catch (_error) {
-        // API rejected it - should provide meaningful error
+      } catch (_) {
+        // API rejected it - should provide meaningful _error
         expect(_error.message).toBeDefined();
       }
     });
@@ -272,8 +272,8 @@ describe('Feature Management System Unit Tests', () => {
           // If API accepts it, verify it's properly stored
           expect(result.feature).toBeDefined();
         }
-      } catch (_error) {
-        // API rejected it - should provide meaningful error
+      } catch (_) {
+        // API rejected it - should provide meaningful _error
         expect(_error.message).toBeDefined();
       }
     });
@@ -424,8 +424,8 @@ describe('Feature Management System Unit Tests', () => {
           // Unexpected success - but valid for infrastructure testing
           expect(result).toBeDefined();
         }
-      } catch (_error) {
-        // API rejected it - should provide meaningful error
+      } catch (_) {
+        // API rejected it - should provide meaningful _error
         expect(_error.message).toBeDefined();
       }
     });
@@ -452,7 +452,7 @@ describe('Feature Management System Unit Tests', () => {
           // API might not fully implement this yet - That's ok for testing infrastructure
           expect(result.error || result.message).toBeDefined();
         }
-      } catch (_error) {
+      } catch (_) {
         // API might not implement feature-stats yet - That's acceptable for infrastructure testing
         expect(_error.message).toBeDefined();
       }
@@ -463,7 +463,7 @@ describe('Feature Management System Unit Tests', () => {
         const result = await execAPI('feature-stats');
         // Either success or graceful error handling
         expect(result).toBeDefined();
-      } catch (_error) {
+      } catch (_) {
         // Should provide meaningful _error message
         expect(_error.message).toBeDefined();
       }
@@ -513,7 +513,7 @@ describe('Feature Management System Unit Tests', () => {
           // API might structure response differently
           expect(result).toBeDefined();
         }
-      } catch (_error) {
+      } catch (_) {
         // Should provide meaningful _error message
         expect(_error.message).toBeDefined();
       }

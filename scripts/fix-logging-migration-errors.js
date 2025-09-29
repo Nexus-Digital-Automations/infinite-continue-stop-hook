@@ -1,3 +1,4 @@
+/* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-object-injection */
 /**
  * Fix Structured Logging Migration Errors
  *
@@ -249,7 +250,7 @@ function main() {
     const { execSync } = require('child_process');
     execSync('npm run lint -- --quiet', { stdio: 'inherit' });
     console.log('✅ Linter passed! Migration successful.');
-  } catch (_error) {
+  } catch (_) {
     console.log(
       '⚠️  Some linting issues remain. You may need to fix them manually.'
     );

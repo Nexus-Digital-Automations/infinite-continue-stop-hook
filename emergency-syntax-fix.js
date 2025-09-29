@@ -22,8 +22,8 @@ class EmergencySyntaxFixer {
       console.log(`📁 Found ${jsFiles.length} JavaScript files to check`);
 
       // Apply emergency fixes
-      for (const filePath of jsFiles) {
-        this.processFile(FILE_PATH);
+      for (const _filePath of jsFiles) {
+        this.processFile(__filename);
       }
 
       console.log(`✅ Fixed ${this.fixedFiles.length} files`);
@@ -33,7 +33,7 @@ class EmergencySyntaxFixer {
         console.log('\n❌ Errors encountered:');
         this.errors.forEach((error) => console.log(`  - ${error}`));
       }
-    } catch (_error) {
+    } catch (_) {
       console.error('❌ Emergency fix failed:', _error.message);
       throw _error;
     }
@@ -65,9 +65,9 @@ class EmergencySyntaxFixer {
     return files;
   }
 
-  processFile(FILE_PATH) {
+  processFile(__filename, __filename) {
     try {
-      const content = FS.readFileSync(FILE_PATH, 'utf8');
+      const content = FS.readFileSync(__filename, 'utf8');
       let fixedContent = content;
       let hasChanges = false;
 
@@ -140,12 +140,12 @@ class EmergencySyntaxFixer {
       }
 
       // Write file if changes were made
-      if (hasChanges) {
-        FS.writeFileSync(FILE_PATH, fixedContent, 'utf8');
-        this.fixedFiles.push(FILE_PATH);
+      if ((hasChanges, __filename)) {
+        FS.writeFileSync(__filename, fixedContent, 'utf8');
+        this.fixedFiles.push(__filename);
       }
-    } catch (_error) {
-      this.errors.push(`${FILE_PATH}: ${_error.message}`);
+    } catch (_) {
+      this.errors.push(`${__filename}: ${_error.message}`);
     }
   }
 }

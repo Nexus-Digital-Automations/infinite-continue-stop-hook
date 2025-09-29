@@ -1,3 +1,4 @@
+const fs = require('fs');
 /**
  * ESLint 9 Flat Configuration
  *

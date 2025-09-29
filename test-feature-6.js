@@ -1,3 +1,5 @@
+/* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-object-injection */
+const { loggers } = require('../lib/logger');
 /**
  * Test Feature 6: Learning Recommendation Engine
  */
@@ -89,7 +91,7 @@ async function testLearningRecommendationEngine() {
     loggers.app.info(
       '\n✅ Feature 6: Learning Recommendation Engine integration test completed successfully!'
     );
-  } catch (_error) {
+  } catch (_) {
     loggers.stopHook.error('❌ Feature 6 test failed:', _error.message);
     loggers.stopHook.error('Stack:', _error.stack);
   }

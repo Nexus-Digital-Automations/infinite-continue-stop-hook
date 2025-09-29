@@ -681,7 +681,7 @@ describe('File Operations Integration Tests', () => {
         if (!secondResult.success) {
           expect(secondResult.error).toBeDefined();
         }
-      } catch (_error) {
+      } catch (_) {
         // If permission operations fail, skip this test
         console.warn(
           'Permission test skipped due to system limitations:',

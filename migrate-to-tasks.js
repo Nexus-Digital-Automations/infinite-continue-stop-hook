@@ -60,7 +60,7 @@ class TaskMigrator {
         newFile: this.tasksPath,
         stats: await this.getMigrationStats(tasksData),
       };
-    } catch (_error) {
+    } catch (_) {
       loggers.stopHook.error('❌ Migration failed:', _error.message);
       throw _error;
     }
@@ -73,7 +73,7 @@ class TaskMigrator {
     try {
       await FS.access(this.featuresPath);
       loggers.stopHook.log('✓ Source FEATURES.json found');
-    } catch (_error) {
+    } catch (_) {
       throw new Error(`FEATURES.json not found at ${this.featuresPath}`);
     }
   }
@@ -85,8 +85,8 @@ class TaskMigrator {
     try {
       await FS.copyFile(this.featuresPath, this.backupPath);
       loggers.stopHook.log(`✓ Backup created: ${this.backupPath}`);
-    } catch (_error) {
-      throw new Error(`Failed to create backup: ${error.message}`);
+    } catch (_) {
+      throw new Error(`Failed to create backup: ${_error.message}`);
     }
   }
 
@@ -99,8 +99,8 @@ class TaskMigrator {
       const parsedData = JSON.parse(data);
       loggers.stopHook.log('✓ Features data loaded And parsed');
       return parsedData;
-    } catch (_error) {
-      throw new Error(`Failed to load features data: ${error.message}`);
+    } catch (_) {
+      throw new Error(`Failed to load features data: ${_error.message}`);
     }
   }
 
@@ -516,8 +516,8 @@ class TaskMigrator {
     try {
       await FS.writeFile(this.tasksPath, JSON.stringify(tasksData, null, 2));
       loggers.stopHook.log(`✓ TASKS.json written to ${this.tasksPath}`);
-    } catch (_error) {
-      throw new Error(`Failed to write TASKS.json: ${error.message}`);
+    } catch (_) {
+      throw new Error(`Failed to write TASKS.json: ${_error.message}`);
     }
   }
 

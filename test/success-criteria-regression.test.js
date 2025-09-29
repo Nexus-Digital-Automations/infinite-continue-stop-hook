@@ -23,7 +23,7 @@ const TIMEOUT = 30000;
 /**
  * API execution utility
  */
-function execAPI(command, args = [], timeout = TIMEOUT) {
+function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
   return new Promise((resolve, reject) => {
     const allArgs = [
       API_PATH,
@@ -38,7 +38,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
       {
         stdio: ['pipe', 'pipe', 'pipe'],
         env: { ...process.env, NODE_ENV: 'test' },
-      }
+      },
     );
 
     let stdout = '';
@@ -57,12 +57,12 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         try {
           const result = stdout.trim() ? JSON.parse(stdout) : {};
           resolve(result);
-        } catch (_error) {
+        } catch (_) {
           resolve({ rawOutput: stdout, stderr });
         }
       } else {
         reject(
-          new Error(`Command failed with code ${code}: ${stderr || stdout}`)
+          new Error(`Command failed with code ${code}: ${stderr || stdout}`),
         );
       }
     });
@@ -76,7 +76,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
 /**
  * Legacy data simulation utilities
  */
-function createLegacyTemplate(version = '1.0.0') {
+function createLegacyTemplate(version = '1.0.0', category = 'general') {
   const legacyTemplate = {
     name: 'Legacy Template',
     version,
@@ -111,7 +111,7 @@ function createLegacyTemplate(version = '1.0.0') {
   ]);
 }
 
-async function createLegacyProjectConfig() {
+async function createLegacyProjectConfig(category = 'general') {
   const legacyConfig = {
     version: '1.0.0',
     appliedTemplate: 'Legacy Template',
@@ -143,7 +143,7 @@ async function createLegacyProjectConfig() {
 /**
  * Test project setup utilities
  */
-async function setupRegressionTestProject() {
+async function setupRegressionTestProject(category = 'general') {
   try {
     await FS.mkdir(TEST_PROJECT_DIR, { recursive: true });
 
@@ -168,7 +168,7 @@ async function setupRegressionTestProject() {
 
     await FS.writeFile(
       path.join(TEST_PROJECT_DIR, 'package.json'),
-      JSON.stringify(packageJson, null, 2)
+      JSON.stringify(packageJson, null, 2),
     );
 
     // Create main application file
@@ -220,17 +220,17 @@ describe('Regression Test Suite', () => {
     await FS.writeFile(path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
 
     loggers.stopHook.log('Regression test project setup completed');
-  } catch (_error) {
+  } catch (_) {
     loggers.stopHook.error('Failed to setup regression test project:', error);
     throw _error;
   }
 }
 
-async function cleanupRegressionTestProject() {
+async function cleanupRegressionTestProject(category = 'general') {
   try {
     await FS.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     loggers.stopHook.log('Regression test project cleanup completed');
-  } catch (_error) {
+  } catch (_) {
     loggers.stopHook.error('Failed to cleanup regression test project:', error);
   }
 }
@@ -267,14 +267,14 @@ describe('Success Criteria Regression Tests', () => {
 
       // Check legacy criteria are preserved
       const LEGACY_BUILD = status.projectCriteria.find(
-        (c) => c.id === 'legacy-build'
+        (c) => c.id === 'legacy-build',
       );
       expect(LEGACY_BUILD).toBeDefined();
       expect(LEGACY_BUILD.description).toBe('Legacy build requirement');
       expect(LEGACY_BUILD.category).toBe('build');
 
       const LEGACY_TEST = status.projectCriteria.find(
-        (c) => c.id === 'legacy-test'
+        (c) => c.id === 'legacy-test',
       );
       expect(LEGACY_TEST).toBeDefined();
       expect(LEGACY_TEST.category).toBe('test');
@@ -284,7 +284,7 @@ describe('Success Criteria Regression Tests', () => {
       expect(status.appliedTemplate.version).toBe('1.0.0');
 
       loggers.app.info(
-        'Legacy template format v1.0 compatibility validated successfully'
+        'Legacy template format v1.0 compatibility validated successfully',
       );
     });
 
@@ -294,23 +294,23 @@ describe('Success Criteria Regression Tests', () => {
 
       const status = await execAPI('success-criteria:status');
       const LEGACY_BUILD = status.projectCriteria.find(
-        (c) => c.id === 'legacy-build'
+        (c) => c.id === 'legacy-build',
       );
 
       // Legacy 'required' field should map to modern 'priority' or similar
       expect(
         LEGACY_BUILD.required !== undefined ||
-          LEGACY_BUILD.priority !== undefined
+          LEGACY_BUILD.priority !== undefined,
       ).toBe(true);
 
       // Legacy 'type' field should be handled appropriately
       expect(
         LEGACY_BUILD.type !== undefined ||
-          LEGACY_BUILD.validationType !== undefined
+          LEGACY_BUILD.validationType !== undefined,
       ).toBe(true);
 
       loggers.stopHook.log(
-        'Legacy criteria field mappings validated successfully'
+        'Legacy criteria field mappings validated successfully',
       );
     });
 
@@ -321,7 +321,7 @@ describe('Success Criteria Regression Tests', () => {
       // Perform upgrade
       const UPGRADE_RESULT = await execAPI(
         'success-criteria:upgrade-template',
-        ['Legacy Template', 'current']
+        ['Legacy Template', 'current'],
       );
 
       expect(UPGRADE_RESULT.upgraded).toBe(true);
@@ -342,7 +342,7 @@ describe('Success Criteria Regression Tests', () => {
       expect(UPGRADED_CRITERION.category).toBeDefined();
 
       loggers.app.info(
-        'Legacy template upgrade compatibility validated successfully'
+        'Legacy template upgrade compatibility validated successfully',
       );
     });
 
@@ -375,17 +375,17 @@ describe('Success Criteria Regression Tests', () => {
 
           const status = await execAPI('success-criteria:status');
           expect(status.projectCriteria.length).toBeGreaterThan(0);
-        } catch (_error) {
+        } catch (_) {
           // Log version compatibility issues but don't fail test
           loggers.app.info(
             `API version ${version} compatibility note:`,
-            _error.message
+            _error.message,
           );
         }
       }
 
       loggers.stopHook.log(
-        'API version backward compatibility validated successfully'
+        'API version backward compatibility validated successfully',
       );
     });
   });
@@ -413,7 +413,7 @@ describe('Success Criteria Regression Tests', () => {
       // Legacy custom criteria should be migrated
       if (status.projectCriteria && status.projectCriteria.length > 0) {
         const LEGACY_CUSTOM = status.projectCriteria.find(
-          (c) => c.id === 'legacy-custom'
+          (c) => c.id === 'legacy-custom',
         );
         if (LEGACY_CUSTOM) {
           expect(LEGACY_CUSTOM.description).toBe('Legacy custom criterion');
@@ -422,7 +422,7 @@ describe('Success Criteria Regression Tests', () => {
       }
 
       loggers.app.info(
-        'Legacy project configuration migration validated successfully'
+        'Legacy project configuration migration validated successfully',
       );
     });
 
@@ -448,11 +448,11 @@ describe('Success Criteria Regression Tests', () => {
 
       const CONFIG_PATH = path.join(
         TEST_PROJECT_DIR,
-        '.success-criteria-deprecated.json'
+        '.success-criteria-deprecated.json',
       );
       await FS.writeFile(
         CONFIG_PATH,
-        JSON.stringify(DEPRECATED_CONFIG, null, 2)
+        JSON.stringify(DEPRECATED_CONFIG, null, 2),
       );
 
       // Load deprecated config
@@ -471,22 +471,22 @@ describe('Success Criteria Regression Tests', () => {
       const status = await execAPI('success-criteria:status');
       if (status.projectCriteria && status.projectCriteria.length > 0) {
         const MAPPED_CRITERION = status.projectCriteria.find(
-          (c) => c.id === 'deprecated-field-test'
+          (c) => c.id === 'deprecated-field-test',
         );
         if (MAPPED_CRITERION) {
           // 'name' should be mapped to 'description'
           expect(
-            MAPPED_CRITERION.description || MAPPED_CRITERION.name
+            MAPPED_CRITERION.description || MAPPED_CRITERION.name,
           ).toBeDefined();
           // 'type' should be mapped to 'validationType'
           expect(
-            MAPPED_CRITERION.validationType || MAPPED_CRITERION.type
+            MAPPED_CRITERION.validationType || MAPPED_CRITERION.type,
           ).toBeDefined();
         }
       }
 
       loggers.app.info(
-        'Deprecated configuration fields handling validated successfully'
+        'Deprecated configuration fields handling validated successfully',
       );
     });
 
@@ -524,7 +524,7 @@ describe('Success Criteria Regression Tests', () => {
 
       const CONFIG_PATH = path.join(
         TEST_PROJECT_DIR,
-        '.success-criteria-extended.json'
+        '.success-criteria-extended.json',
       );
       await FS.writeFile(CONFIG_PATH, JSON.stringify(EXTENDED_CONFIG, null, 2));
 
@@ -545,18 +545,18 @@ describe('Success Criteria Regression Tests', () => {
       // Validate custom criterion data is preserved
       if (status.projectCriteria && status.projectCriteria.length > 0) {
         const EXTENDED_CRITERION = status.projectCriteria.find(
-          (c) => c.id === 'extended-criterion'
+          (c) => c.id === 'extended-criterion',
         );
         if (EXTENDED_CRITERION && EXTENDED_CRITERION.customData) {
           expect(EXTENDED_CRITERION.customData.complianceMapping).toBe(
-            'SOX-404'
+            'SOX-404',
           );
           expect(EXTENDED_CRITERION.customData.riskLevel).toBe('high');
         }
       }
 
       loggers.stopHook.log(
-        'Custom extensions preservation validated successfully'
+        'Custom extensions preservation validated successfully',
       );
     });
   });
@@ -586,7 +586,7 @@ describe('Success Criteria Regression Tests', () => {
       const OLD_DATA_PATH = path.join(TEST_PROJECT_DIR, 'old-format-data.json');
       await FS.writeFile(
         OLD_DATA_PATH,
-        JSON.stringify(OLD_FORMAT_DATA, null, 2)
+        JSON.stringify(OLD_FORMAT_DATA, null, 2),
       );
 
       // Migrate old format data
@@ -678,12 +678,12 @@ describe('Success Criteria Regression Tests', () => {
           expect(status.projectCriteria.length).toBeGreaterThan(0);
 
           loggers.stopHook.log(
-            `Schema ${schema.version} compatibility confirmed`
+            `Schema ${schema.version} compatibility confirmed`,
           );
-        } catch (_error) {
+        } catch (_) {
           loggers.app.info(
             `Schema ${schema.version} evolution note:`,
-            _error.message
+            _error.message,
           );
         }
       }
@@ -757,16 +757,16 @@ describe('Success Criteria Regression Tests', () => {
         // Validate specific integrity checks
         if (MIGRATION_RESULT.integrityCheck.details) {
           expect(
-            MIGRATION_RESULT.integrityCheck.details.dataCount
+            MIGRATION_RESULT.integrityCheck.details.dataCount,
           ).toBeDefined();
           expect(MIGRATION_RESULT.integrityCheck.details.checksumValid).toBe(
-            true
+            true,
           );
         }
       }
 
       loggers.stopHook.log(
-        'Data integrity validation after migration confirmed'
+        'Data integrity validation after migration confirmed',
       );
     });
   });
@@ -819,20 +819,20 @@ describe('Success Criteria Regression Tests', () => {
 
       // Check legacy shell validation result
       const SHELL_RESULT = VALIDATION_RESULT.results.find(
-        (r) => r.criterionId === 'legacy-shell-validation'
+        (r) => r.criterionId === 'legacy-shell-validation',
       );
       expect(SHELL_RESULT).toBeDefined();
       expect(['passed', 'failed', 'error']).toContain(SHELL_RESULT.status);
 
       // Check legacy file validation result
       const FILE_RESULT = VALIDATION_RESULT.results.find(
-        (r) => r.criterionId === 'legacy-file-validation'
+        (r) => r.criterionId === 'legacy-file-validation',
       );
       expect(FILE_RESULT).toBeDefined();
       expect(['passed', 'failed', 'error']).toContain(FILE_RESULT.status);
 
       loggers.stopHook.log(
-        'Legacy validation commands support validated successfully'
+        'Legacy validation commands support validated successfully',
       );
     });
 
@@ -855,14 +855,14 @@ describe('Success Criteria Regression Tests', () => {
           if (result.deprecated || result.warning) {
             loggers.app.info(
               `Deprecation warning for ${endpoint}:`,
-              result.warning || 'Endpoint is deprecated'
+              result.warning || 'Endpoint is deprecated',
             );
           }
-        } catch (_error) {
+        } catch (_) {
           // Some deprecated endpoints might be completely removed
           loggers.app.info(
             `Deprecated endpoint ${endpoint} is no longer available:`,
-            _error.message
+            _error.message,
           );
         }
       }
@@ -911,7 +911,7 @@ describe('Success Criteria Regression Tests', () => {
       expect(LEGACY_RESULT.results.length).toBeGreaterThan(0);
 
       const MODERN_RESULT = LEGACY_RESULT.results.find(
-        (r) => r.criterionId === 'modern-feature-test'
+        (r) => r.criterionId === 'modern-feature-test',
       );
       expect(MODERN_RESULT).toBeDefined();
 
@@ -926,12 +926,12 @@ describe('Success Criteria Regression Tests', () => {
       if (LEGACY_RESULT.degradationWarnings) {
         loggers.app.info(
           'Graceful degradation warnings:',
-          LEGACY_RESULT.degradationWarnings
+          LEGACY_RESULT.degradationWarnings,
         );
       }
 
       loggers.app.info(
-        'Graceful degradation for missing features validated successfully'
+        'Graceful degradation for missing features validated successfully',
       );
     });
   });
@@ -974,18 +974,18 @@ describe('Success Criteria Regression Tests', () => {
           expect(status.projectCriteria.length).toBeGreaterThan(0);
 
           loggers.app.info(
-            `Template version ${template.version} compatibility confirmed`
+            `Template version ${template.version} compatibility confirmed`,
           );
-        } catch (_error) {
+        } catch (_) {
           loggers.app.info(
             `Template version ${template.version} compatibility issue:`,
-            _error.message
+            _error.message,
           );
         }
       }
 
       loggers.app.info(
-        'Cross-version template compatibility validated successfully'
+        'Cross-version template compatibility validated successfully',
       );
     });
 
@@ -1037,7 +1037,7 @@ describe('Success Criteria Regression Tests', () => {
       // Upgrade to v2.0.0
       const UPGRADE_RESULT = await execAPI(
         'success-criteria:upgrade-template',
-        ['Conflict Template', '2.0.0']
+        ['Conflict Template', '2.0.0'],
       );
       expect(UPGRADE_RESULT.upgraded).toBe(true);
 
@@ -1046,13 +1046,13 @@ describe('Success Criteria Regression Tests', () => {
       expect(status.appliedTemplate.version).toBe('2.0.0');
 
       const RESOLVED_CRITERION = status.projectCriteria.find(
-        (c) => c.id === 'conflict-criterion'
+        (c) => c.id === 'conflict-criterion',
       );
       expect(RESOLVED_CRITERION.description).toBe('Version 2.0.0 description');
       expect(RESOLVED_CRITERION.priority).toBe('high');
 
       loggers.stopHook.log(
-        'Version conflict resolution validated successfully'
+        'Version conflict resolution validated successfully',
       );
     });
 
@@ -1083,7 +1083,7 @@ describe('Success Criteria Regression Tests', () => {
       // Check system compatibility
       const COMPAT_RESULT = await execAPI(
         'success-criteria:check-compatibility',
-        ['System Requirements Template']
+        ['System Requirements Template'],
       );
 
       expect(COMPAT_RESULT.compatible).toBeDefined();
@@ -1103,12 +1103,12 @@ describe('Success Criteria Regression Tests', () => {
         expect(Array.isArray(COMPAT_RESULT.errors)).toBe(true);
         loggers.stopHook.log(
           'System compatibility errors:',
-          COMPAT_RESULT.errors
+          COMPAT_RESULT.errors,
         );
       }
 
       loggers.stopHook.log(
-        'System compatibility validation completed successfully'
+        'System compatibility validation completed successfully',
       );
     });
   });
@@ -1145,10 +1145,10 @@ describe('Success Criteria Regression Tests', () => {
           }
 
           loggers.stopHook.log(`API contract for ${api} is stable`);
-        } catch (_error) {
+        } catch (_) {
           loggers.stopHook.log(
             `API contract issue for ${api}:`,
-            _error.message
+            _error.message,
           );
         }
       }
@@ -1205,7 +1205,7 @@ describe('Success Criteria Regression Tests', () => {
             ]);
             const status = await execAPI('success-criteria:status');
             return status.projectCriteria.some(
-              (c) => c.id === 'essential-custom'
+              (c) => c.id === 'essential-custom',
             );
           },
         },
@@ -1217,19 +1217,19 @@ describe('Success Criteria Regression Tests', () => {
           const PASSED = await func.test();
           expect(PASSED).toBe(true);
           loggers.stopHook.log(
-            `Essential function '${func.name}' is preserved`
+            `Essential function '${func.name}' is preserved`,
           );
-        } catch (_error) {
+        } catch (_) {
           loggers.app._error(
             `Essential function '${func.name}' failed:`,
-            _error.message
+            _error.message,
           );
           throw _error; // Essential functions must pass
         }
       }
 
       loggers.app.info(
-        'Essential functionality preservation validated successfully'
+        'Essential functionality preservation validated successfully',
       );
     });
 
@@ -1278,18 +1278,18 @@ describe('Success Criteria Regression Tests', () => {
         expect(result.duration).toBeLessThan(result.threshold);
 
         loggers.app.info(
-          `Performance test '${test.name}': ${result.duration}ms (threshold: ${result.threshold}ms)`
+          `Performance test '${test.name}': ${result.duration}ms (threshold: ${result.threshold}ms)`,
         );
 
         if (result.duration > result.threshold * 0.8) {
           loggers.app.warn(
-            `Performance warning: '${test.name}' is approaching threshold`
+            `Performance warning: '${test.name}' is approaching threshold`,
           );
         }
       }
 
       loggers.stopHook.log(
-        'Performance regression prevention validated successfully'
+        'Performance regression prevention validated successfully',
       );
     });
   });

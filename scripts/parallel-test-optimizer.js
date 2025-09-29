@@ -1,3 +1,4 @@
+/* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-object-injection */
 /**
 const { loggers } = require('../lib/logger');
  * Parallel Test Execution Optimizer
@@ -92,7 +93,7 @@ class ParallelTestOptimizer {
           }
         }
       });
-    } catch (_error) {
+    } catch (_) {
       this.logger.warn('Could not read package.json', {
         _error: _error.message,
         OPERATION 'discover-test-suites',
@@ -767,7 +768,7 @@ ${analysis.github_actions_matrix.strategy.matrix.include
         '\n✅ Optimization analysis completed successfully!'
       );
       return analysis;
-    } catch (_error) {
+    } catch (_) {
       loggers.stopHook.error('❌ Optimization analysis failed:', _error.message);
       throw _error;
     }

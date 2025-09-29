@@ -1,3 +1,4 @@
+const { loggers } = require('../lib/logger');
 /**
  * Test Utilities
  *
@@ -349,7 +350,7 @@ class TestExecution {
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential retry attempts required
         return await fn();
-      } catch (_error) {
+      } catch (_) {
         lastError = _error;
         if (i < maxRetries - 1) {
           // eslint-disable-next-line no-await-in-loop -- Sequential delay required between retry attempts

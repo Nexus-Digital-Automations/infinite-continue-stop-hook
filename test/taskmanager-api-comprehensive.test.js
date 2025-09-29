@@ -34,7 +34,7 @@ const TIMEOUT = 15000; // 15 seconds for API operations
  * @param {number} timeout - Command timeout in milliseconds
  * @returns {Promise<Object>} Parsed JSON response from API
  */
-function execAPI(command, args = [], timeout = TIMEOUT) {
+function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
   return new Promise((resolve, reject) => {
     const allArgs = [
       API_PATH,
@@ -78,12 +78,12 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         // Try to parse JSON response
         const result = JSON.parse(jsonString);
         resolve(result);
-      } catch (_error) {
+      } catch (_) {
         // If JSON parsing fails, check if we can extract JSON from stderr
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch (_error) {
+        } catch (_) {
           // If both fail, include raw output for debugging
           reject(
             new Error(
@@ -103,7 +103,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
 /**
  * Create a clean test TODO.json file with basic structure
  */
-function createTestTodoFile() {
+function createTestTodoFile(category = 'general') {
   const todoData = {
     project: 'test-taskmanager-api',
     tasks: [],
@@ -128,7 +128,7 @@ function createTestTodoFile() {
 /**
  * Setup test environment before each test
  */
-function setupTestEnvironment() {
+function setupTestEnvironment(category = 'general') {
   // Create test project directory
   if (!FS.existsSync(TEST_PROJECT_DIR)) {
     FS.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
@@ -141,7 +141,7 @@ function setupTestEnvironment() {
 /**
  * Cleanup test environment after each test
  */
-function cleanupTestEnvironment() {
+async function cleanupTestEnvironment(agentId, category = 'general') {
   // Remove test project directory And all contents
   if (FS.existsSync(TEST_PROJECT_DIR)) {
     FS.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
@@ -696,7 +696,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
       // Find the test task ID from results
       tasks.forEach((taskData, index) => {
-        if (taskData.title === 'Second task') {
+        if (taskData.title === 'Second task', agentId) {
           testTaskId = createResults[index].taskId;
         }
       });
@@ -1000,7 +1000,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
     test('should handle invalid command gracefully', async () => {
       try {
         await execAPI('invalid-command');
-      } catch (_error) {
+      } catch (_) {
         expect(_error.message).toContain('Command failed');
       }
     });
@@ -1045,7 +1045,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       // by using a very short timeout
       try {
         await execAPI('guide', [], 100); // 100ms timeout
-      } catch (_error) {
+      } catch (_) {
         expect(_error.message).toContain('Command failed');
       }
     }, 10000);

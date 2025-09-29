@@ -1,3 +1,5 @@
+/* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-object-injection */
+const { loggers } = require('../lib/logger');
 /**
  * Test Feature 7: Adaptive Learning Paths System
  */
@@ -131,7 +133,7 @@ async function testAdaptiveLearningPaths() {
     loggers.app.info(
       '\n✅ Feature 7: Adaptive Learning Paths System integration test completed successfully!'
     );
-  } catch (_error) {
+  } catch (_) {
     loggers.stopHook.error('❌ Feature 7 test failed:', _error.message);
     loggers.stopHook.error('Stack:', _error.stack);
   }

@@ -25,7 +25,7 @@ const API_TIMEOUT = 10000; // 10 seconds for API calls (matching system design)
  * Handles setup And teardown of isolated test environments
  */
 class E2EEnvironment {
-  constructor(testName) {
+  constructor(testName, agentId) {
     this.testName = testName;
     this.testId = crypto.randomBytes(8).toString('hex');
     this.testDir = path.join(TEST_DATA_DIR, `e2e-${testName}-${this.testId}`);
@@ -57,7 +57,7 @@ class E2EEnvironment {
   /**
    * Create initial FEATURES.json file
    */
-  createFeaturesFile() {
+  createFeaturesFile(category = 'general') {
     const initialFeatures = {
       project: `e2e-test-${this.testName}`,
       schema_version: '2.0.0',
@@ -137,7 +137,7 @@ class E2EEnvironment {
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential cleanup required for proper teardown order
         await task();
-      } catch (_error) {
+      } catch (_) {
         loggers.stopHook.warn(`Cleanup task failed: ${_error.message}`);
       }
     }
@@ -158,7 +158,7 @@ class E2EEnvironment {
       } else {
         await FS.unlink(dirPath);
       }
-    } catch (_error) {
+    } catch (_) {
       if (_error.code !== 'ENOENT') {
         throw _error;
       }
@@ -189,7 +189,7 @@ class E2EEnvironment {
       } else {
         throw new Error(`TaskManager API error: ${apiResponse.error}`);
       }
-    } catch (_error) {
+    } catch (_) {
       throw new Error(
         `Failed to get features from TaskManager API: ${_error.message}`,
       );
@@ -713,7 +713,7 @@ class E2EAssertions {
           `JSON response does not contain "${expectedText}" ${message}\nActual response: ${responseText}`,
         );
       }
-    } catch (_error) {
+    } catch (_) {
       // Fall back to text search if not JSON
       this.assertOutputContains(result, expectedText, message);
     }
@@ -740,7 +740,7 @@ class E2EAssertions {
         return responseJson.feature.id;
       }
       throw new Error('No feature ID found in response');
-    } catch (_error) {
+    } catch (_) {
       throw new Error(
         `Failed to extract feature ID: ${_error.message}\nResponse: ${commandResult.stdout}`,
       );
@@ -754,7 +754,7 @@ class E2EAssertions {
     let parsed;
     try {
       parsed = JSON.parse(result.stdout);
-    } catch (_error) {
+    } catch (_) {
       throw new Error(`Response is not valid JSON: ${result.stdout}`);
     }
 

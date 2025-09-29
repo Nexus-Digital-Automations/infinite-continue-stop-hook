@@ -16,7 +16,7 @@ const OS = require('os');
 const { loggers } = require('../lib/logger');
 
 class FeatureValidationMatrix {
-  constructor() {
+  constructor(validationResults = {}) {
     this.environment = {
       node_version: process.version,
       platform: process.platform,
@@ -146,7 +146,7 @@ class FeatureValidationMatrix {
       if (!startTest.success) {
         result.errors.push(`API startup failed: ${startTest.error}`);
       }
-    } catch (_error) {
+    } catch (_) {
       result.status = 'failed';
       result.errors.push(`API validation error: ${_error.message}`);
     }
@@ -174,7 +174,7 @@ class FeatureValidationMatrix {
         try {
           require(dep);
           result.details[`${dep}_available`] = true;
-        } catch (_error) {
+        } catch (_) {
           result.details[`${dep}_available`] = false;
           result.errors.push(`RAG dependency missing: ${dep}`);
         }
@@ -206,7 +206,7 @@ class FeatureValidationMatrix {
       }
 
       result.status = result.errors.length === 0 ? 'passed' : 'failed';
-    } catch (_error) {
+    } catch (_) {
       result.status = 'failed';
       result.errors.push(`RAG validation error: ${_error.message}`);
     }
@@ -272,7 +272,7 @@ class FeatureValidationMatrix {
       }
 
       result.status = result.errors.length === 0 ? 'passed' : 'failed';
-    } catch (_error) {
+    } catch (_) {
       result.status = 'failed';
       result.errors.push(`File operations validation error: ${_error.message}`);
     }
@@ -340,7 +340,7 @@ class FeatureValidationMatrix {
       }
 
       result.status = result.errors.length === 0 ? 'passed' : 'failed';
-    } catch (_error) {
+    } catch (_) {
       result.status = 'failed';
       result.errors.push(`Agent management validation error: ${_error.message}`);
     }
@@ -404,7 +404,7 @@ class FeatureValidationMatrix {
       };
 
       result.status = result.errors.length === 0 ? 'passed' : 'failed';
-    } catch (_error) {
+    } catch (_) {
       result.status = 'failed';
       result.errors.push(
         `Performance monitoring validation error: ${_error.message}`,
@@ -439,7 +439,7 @@ class FeatureValidationMatrix {
           const module = dep.test();
           result.details[`${dep.name}_loaded`] = true;
           result.details[`${dep.name}_version`] = module.version || 'unknown';
-        } catch (_error) {
+        } catch (_) {
           result.details[`${dep.name}_loaded`] = false;
           result.errors.push(
             `Native dependency failed: ${dep.name} - ${_error.message}`,
@@ -459,13 +459,13 @@ class FeatureValidationMatrix {
             `Native module rebuild failed: ${rebuildTest.error}`,
           );
         }
-      } catch (_error) {
+      } catch (_) {
         result.details.rebuild_capability = false;
         result.errors.push(`Rebuild test error: ${_error.message}`);
       }
 
       result.status = result.errors.length === 0 ? 'passed' : 'failed';
-    } catch (_error) {
+    } catch (_) {
       result.status = 'failed';
       result.errors.push(
         `Native dependencies validation error: ${_error.message}`,
@@ -495,7 +495,7 @@ class FeatureValidationMatrix {
           duration: Date.now() - start,
           error: null,
         });
-      } catch (_error) {
+      } catch (_) {
         resolve({
           success: false,
           output: _error.stdout || '',
@@ -529,7 +529,7 @@ class FeatureValidationMatrix {
             errors: result.errors,
           });
         }
-      } catch (_error) {
+      } catch (_) {
         loggers.stopHook.log(`❌ ${feature.name}: validation failed`);
         this.validationResults.feature_tests[feature.name] = {
           name: feature.name,
@@ -541,7 +541,7 @@ class FeatureValidationMatrix {
           this.validationResults.issues_found.push({
             feature: feature.name,
             type: 'critical',
-            errors: [`Validation error: ${error.message}`],
+            errors: [`Validation error: ${_error.message}`],
           });
         }
       }
@@ -551,7 +551,7 @@ class FeatureValidationMatrix {
   /**
    * Generate compatibility matrix
    */
-  generateCompatibilityMatrix() {
+  generateCompatibilityMatrix(validationResults = {}) {
     loggers.stopHook.log('📊 Generating compatibility matrix...');
 
     const matrix = {
@@ -599,7 +599,7 @@ class FeatureValidationMatrix {
   /**
    * Save validation results
    */
-  saveResults() {
+  saveResults(validationResults = {}) {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const resultsFile = path.join(
       this.outputDir,
@@ -635,7 +635,7 @@ class FeatureValidationMatrix {
   /**
    * Generate markdown report
    */
-  generateMarkdownReport() {
+  generateMarkdownReport(validationResults = {}) {
     const env = this.validationResults.environment;
     const matrix = this.validationResults.compatibility_matrix;
 
@@ -717,7 +717,7 @@ ${
   /**
    * Display validation summary
    */
-  displaySummary() {
+  displaySummary(validationResults = {}) {
     loggers.stopHook.log('\n📊 Feature Validation Summary');
     loggers.stopHook.log('=============================');
     loggers.stopHook.log(`Node.js Version: ${this.environment.node_version}`);
@@ -750,7 +750,7 @@ ${
   /**
    * Run complete validation suite
    */
-  run() {
+  run(validationResults = {}) {
     loggers.stopHook.log('🚀 Starting Feature Validation Matrix...\n');
 
     try {
@@ -761,7 +761,7 @@ ${
 
       loggers.stopHook.log('\n✅ Feature validation completed successfully!');
       return this.validationResults;
-    } catch (_error) {
+    } catch (_) {
       loggers.stopHook.error('❌ Feature validation failed:', _error.message);
       throw _error;
     }

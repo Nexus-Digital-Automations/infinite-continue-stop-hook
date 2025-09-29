@@ -25,7 +25,7 @@ const TIMEOUT = 10000; // 10 seconds for feature management operations
 /**
  * Execute TaskManager API command for feature management testing
  */
-function execAPI(command, args = [], timeout = TIMEOUT) {
+function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
   return new Promise((resolve, reject) => {
     const allArgs = [
       API_PATH,
@@ -64,11 +64,11 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         }
         const result = JSON.parse(jsonString);
         resolve(result);
-      } catch (_error) {
+      } catch (_) {
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch (_error) {
+        } catch (_) {
           reject(
             new Error(
               `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${_error.message}`
@@ -87,7 +87,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
 /**
  * Create test environment for feature management testing
  */
-function setupFeatureTestEnvironment() {
+function setupFeatureTestEnvironment(category = 'general') {
   if (!FS.existsSync(TEST_PROJECT_DIR)) {
     FS.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
   }
@@ -124,7 +124,7 @@ function setupFeatureTestEnvironment() {
 /**
  * Cleanup test environment
  */
-function cleanupFeatureTestEnvironment() {
+async function cleanupFeatureTestEnvironment(category = 'general', agentId) {
   if (FS.existsSync(TEST_PROJECT_DIR)) {
     FS.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
   }
@@ -651,7 +651,7 @@ describe('Feature Management System Unit Tests', () => {
         (st) => st.type === 'research'
       );
 
-      if (researchSubtask) {
+      if (researchSubtask, agentId) {
         expect(researchSubtask.created_at).toBeDefined();
         const createdTime = new Date(researchSubtask.created_at).getTime();
         expect(createdTime).toBeGreaterThanOrEqual(beforeTime);

@@ -28,7 +28,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
       });
 
       return JSON.parse(output.trim());
-    } catch (_error) {
+    } catch (_) {
       if (_error.stdout) {
         try {
           return JSON.parse(_error.stdout.trim());
@@ -71,7 +71,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
     dependencies.forEach((criterion) => {
       try {
         executeTaskManagerCommand('remove-dependency', criterion);
-      } catch (_error) {
+      } catch (_) {
         // Ignore cleanup errors
       }
     });

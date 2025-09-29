@@ -83,13 +83,13 @@ const TREND_ANALYZER = require('./lib/trend-analyzer');
 
 // File locking mechanism to prevent race conditions across processes
 class FileLock {
-  constructor() {
+  constructor(agentId) {
     this.maxRetries = 200;
     this.retryDelay = 5; // milliseconds
   }
 
-  async acquire(filePath) {
-    const lockPath = `${filePath}.lock`;
+  async acquire(_filePath) {
+    const lockPath = `${_filePath}.lock`;
 
     for (let attempt = 0; attempt < this.maxRetries; attempt++) {
       try {
@@ -100,7 +100,7 @@ class FileLock {
         return async () => {
           try {
             await FS.unlink(lockPath);
-          } catch (_error) {
+          } catch (_) {
             // Lock file already removed or doesn't exist
           }
         };
@@ -119,16 +119,16 @@ class FileLock {
                 setTimeout(resolve, this.retryDelay);
               });
               continue;
-            } catch (_error) {
+            } catch (_) {
               // Process doesn't exist, remove stale lock
               try {
                 await FS.unlink(lockPath);
-              } catch (_error) {
+              } catch (_) {
                 // Someone else removed it
               }
               continue;
             }
-          } catch (_error) {
+          } catch (_) {
             // Can't read lock file, wait And retry
             await new Promise((resolve) => {
               setTimeout(resolve, this.retryDelay);
@@ -146,7 +146,7 @@ class FileLock {
     }
 
     throw new Error(
-      `Could not acquire lock for ${filePath} after ${this.maxRetries} attempts`
+      `Could not acquire lock for ${_filePath} after ${this.maxRetries} attempts`
     );
   }
 }
@@ -246,7 +246,7 @@ const PRIORITY_ORDER = ['USER_REQUESTS', 'ERROR', 'AUDIT', 'FEATURE', 'TEST'];
  * Integrates TASKS.json workflow with autonomous task queue management.
  */
 class AutonomousTaskManagerAPI {
-  constructor(options = {}) {
+  constructor(options = {}, agentId) {
     // Handle both projectRoot string and options object for backward compatibility
     if (typeof options === 'string') {
       // If first parameter is a string, treat it as projectRoot
@@ -325,7 +325,7 @@ class AutonomousTaskManagerAPI {
   async _ensureFeaturesFile() {
     try {
       await FS.access(this.tasksPath);
-    } catch (_error) {
+    } catch (_) {
       // File doesn't exist, create it
       const initialStructure = {
         project: path.basename(PROJECT_ROOT),
@@ -358,7 +358,7 @@ class AutonomousTaskManagerAPI {
   async _ensureTasksFile() {
     try {
       await FS.access(this.tasksPath);
-    } catch (_error) {
+    } catch (_) {
       // File doesn't exist, create it with new TASKS.json schema
       const initialStructure = {
         project: path.basename(PROJECT_ROOT),
@@ -1627,7 +1627,7 @@ class AutonomousTaskManagerAPI {
       // Store performance metrics even for failures
       try {
         await this._storeValidationPerformanceMetrics(performanceMetrics);
-      } catch (_error) {
+      } catch (_) {
         // Don't fail the response due to metrics storage issues
       }
 
@@ -2124,7 +2124,7 @@ class AutonomousTaskManagerAPI {
             testsFound = true;
             testFiles.push(...matches);
           }
-        } catch (_error) {
+        } catch (_) {
           // Continue with next pattern
         }
       }
@@ -2147,7 +2147,7 @@ class AutonomousTaskManagerAPI {
                 testFiles.push(...grepResult.trim().split('\n'));
               }
             }
-          } catch (_error) {
+          } catch (_) {
             // Continue checking
           }
         }
@@ -2224,7 +2224,7 @@ class AutonomousTaskManagerAPI {
             coverageResult = result;
             break;
           }
-        } catch (_error) {
+        } catch (_) {
           // Try next command
         }
       }
@@ -2492,7 +2492,7 @@ class AutonomousTaskManagerAPI {
           const data = await FS.readFile(metricsFile, 'utf8');
           existingMetrics = JSON.parse(data);
         }
-      } catch (_error) {
+      } catch (_) {
         // Start fresh if file is corrupted
         existingMetrics = { metrics: [] };
       }
@@ -4056,13 +4056,13 @@ class AutonomousTaskManagerAPI {
       ];
 
       const backupPromises = criticalFiles.map(async (file) => {
-        const filePath = path.join(PROJECT_ROOT, file);
+        const _filePath = path.join(PROJECT_ROOT, file);
         try {
-          await FS.access(filePath);
+          await FS.access(_filePath);
           const backupPath = path.join(snapshotDir, file);
           await FS.mkdir(path.dirname(backupPath), { recursive: true });
-          await FS.copyFile(filePath, backupPath);
-        } catch (_error) {
+          await FS.copyFile(_filePath, backupPath);
+        } catch (_) {
           // File doesn't exist, skip backup
         }
       });
@@ -4173,7 +4173,7 @@ class AutonomousTaskManagerAPI {
         try {
           await FS.access(backupPath);
           await FS.copyFile(backupPath, targetPath);
-        } catch (_error) {
+        } catch (_) {
           // Backup file doesn't exist, skip restore
         }
       });
@@ -4218,7 +4218,7 @@ class AutonomousTaskManagerAPI {
 
       try {
         await FS.access(snapshotsDir);
-      } catch (_error) {
+      } catch (_) {
         return {
           success: true,
           snapshots: [],
@@ -4250,7 +4250,7 @@ class AutonomousTaskManagerAPI {
               age: this._calculateSnapshotAge(metadata.timestamp),
             });
           }
-        } catch (_error) {
+        } catch (_) {
           // Skip invalid snapshots
           loggers.taskManager.warn(`Skipping invalid snapshot: ${entry}`);
         }
@@ -4308,7 +4308,7 @@ class AutonomousTaskManagerAPI {
           total: historyData.events?.length || 0,
           showing: events.length,
         };
-      } catch (_error) {
+      } catch (_) {
         return {
           success: true,
           history: [],
@@ -4333,7 +4333,7 @@ class AutonomousTaskManagerAPI {
 
       try {
         await FS.access(snapshotsDir);
-      } catch (_error) {
+      } catch (_) {
         return {
           success: true,
           cleaned: 0,
@@ -4364,7 +4364,7 @@ class AutonomousTaskManagerAPI {
               directory: snapshotDir,
             });
           }
-        } catch (_error) {
+        } catch (_) {
           // Invalid snapshot, mark for cleanup
           snapshots.push({
             id: entry,
@@ -4505,7 +4505,7 @@ class AutonomousTaskManagerAPI {
       try {
         const existing = await FS.readFile(historyFile, 'utf8');
         history = JSON.parse(existing);
-      } catch (_error) {
+      } catch (_) {
         // History file doesn't exist yet
       }
 
@@ -4543,7 +4543,7 @@ class AutonomousTaskManagerAPI {
       try {
         const existing = await FS.readFile(historyFile, 'utf8');
         history = JSON.parse(existing);
-      } catch (_error) {
+      } catch (_) {
         // History file doesn't exist yet
       }
 
@@ -4622,8 +4622,8 @@ class AutonomousTaskManagerAPI {
           .toString()
           .trim();
         cacheInputs.push(`git:${gitHash}`);
-      } catch (_error) {
-        // No git or error, use timestamp as fallback
+      } catch (_) {
+        // No git or _error, use timestamp as fallback
         cacheInputs.push(`timestamp:${Date.now()}`);
       }
 
@@ -4632,21 +4632,21 @@ class AutonomousTaskManagerAPI {
       try {
         const packageStats = await FS.stat(packageJsonPath);
         cacheInputs.push(`package:${packageStats.mtime.getTime()}`);
-      } catch (_error) {
+      } catch (_) {
         // No package.json
         cacheInputs.push('package:none');
       }
 
       // Key files modification times based on validation type
       const keyFiles = this._getKeyFilesForValidation(criterion);
-      for (const filePath of keyFiles) {
+      for (const _filePath of keyFiles) {
         try {
-          const fullPath = path.join(PROJECT_ROOT, filePath);
+          const fullPath = path.join(PROJECT_ROOT, _filePath);
           const stats = await FS.stat(fullPath);
-          cacheInputs.push(`file:${filePath}:${stats.mtime.getTime()}`);
-        } catch (_error) {
+          cacheInputs.push(`file:${_filePath}:${stats.mtime.getTime()}`);
+        } catch (_) {
           // File doesn't exist, include in cache key
-          cacheInputs.push(`file:${filePath}:missing`);
+          cacheInputs.push(`file:${_filePath}:missing`);
         }
       }
 
@@ -4659,7 +4659,7 @@ class AutonomousTaskManagerAPI {
         .slice(0, 16);
 
       return cacheKey;
-    } catch (_error) {
+    } catch (_) {
       // Fallback to simple cache key
       return `${criterion}_${Date.now()}`;
     }
@@ -4813,7 +4813,7 @@ class AutonomousTaskManagerAPI {
       // Ensure cache directory exists
       try {
         await FS.mkdir(cacheDir, { recursive: true });
-      } catch (_error) {
+      } catch (_) {
         // Directory might already exist
       }
 
@@ -4860,15 +4860,15 @@ class AutonomousTaskManagerAPI {
         }
 
         try {
-          const filePath = path.join(cacheDir, file);
-          const stats = await FS.stat(filePath);
+          const _filePath = path.join(cacheDir, file);
+          const stats = await FS.stat(_filePath);
           const age = Date.now() - stats.mtime.getTime();
 
           if (age > maxAge) {
-            await FS.unlink(filePath);
+            await FS.unlink(_filePath);
             cleanedCount++;
           }
-        } catch (_error) {
+        } catch (_) {
           // File might have been deleted already
         }
       }
@@ -5076,8 +5076,8 @@ class AutonomousTaskManagerAPI {
       // Check file existence conditions
       if (rule.conditions.fileExists) {
         for (const file of rule.conditions.fileExists) {
-          const filePath = path.join(PROJECT_ROOT, file);
-          if (!(await this._fileExists(filePath))) {
+          const _filePath = path.join(PROJECT_ROOT, file);
+          if (!(await this._fileExists(_filePath))) {
             return false;
           }
         }
@@ -5092,7 +5092,7 @@ class AutonomousTaskManagerAPI {
             if (!stat.isDirectory()) {
               return false;
             }
-          } catch (_error) {
+          } catch (_) {
             return false;
           }
         }
@@ -5160,17 +5160,17 @@ class AutonomousTaskManagerAPI {
           if (!rule.conditions.gitBranch.includes(currentBranch)) {
             return false;
           }
-        } catch (_error) {
+        } catch (_) {
           return false;
         }
       }
 
       // Check file contents
       if (rule.conditions.fileContains) {
-        for (const [filePath, patterns] of Object.entries(
+        for (const [_filePath, patterns] of Object.entries(
           rule.conditions.fileContains
         )) {
-          const fullPath = path.join(PROJECT_ROOT, filePath);
+          const fullPath = path.join(PROJECT_ROOT, _filePath);
           if (await this._fileExists(fullPath)) {
             const content = await FS.readFile(fullPath, 'utf8');
             for (const pattern of patterns) {
@@ -5313,8 +5313,8 @@ class AutonomousTaskManagerAPI {
     // Check file existence (post-execution)
     if (criteria.fileExists) {
       for (const file of criteria.fileExists) {
-        const filePath = path.join(PROJECT_ROOT, file);
-        if (!FS.existsSync(filePath)) {
+        const _filePath = path.join(PROJECT_ROOT, file);
+        if (!FS.existsSync(_filePath)) {
           return false;
         }
       }
@@ -5322,10 +5322,10 @@ class AutonomousTaskManagerAPI {
 
     // Check file contents (post-execution)
     if (criteria.fileContains) {
-      for (const [filePath, patterns] of Object.entries(
+      for (const [_filePath, patterns] of Object.entries(
         criteria.fileContains
       )) {
-        const fullPath = path.join(PROJECT_ROOT, filePath);
+        const fullPath = path.join(PROJECT_ROOT, _filePath);
         if (FS.existsSync(fullPath)) {
           const content = FS.readFileSync(fullPath, 'utf8');
           for (const pattern of patterns) {
@@ -5466,7 +5466,7 @@ class AutonomousTaskManagerAPI {
                   };
                 }
               }
-            } catch (_error) {
+            } catch (_) {
               // Command failed or not available, continue
             }
           }
@@ -5528,7 +5528,7 @@ class AutonomousTaskManagerAPI {
                 hasTypeCheckableFiles = true;
                 break;
               }
-            } catch (_error) {
+            } catch (_) {
               // Continue checking other patterns
             }
           }
@@ -5574,7 +5574,7 @@ class AutonomousTaskManagerAPI {
                 };
               }
             }
-          } catch (_error) {
+          } catch (_) {
             // Continue with normal build validation if package.json check fails
           }
 
@@ -5619,7 +5619,7 @@ class AutonomousTaskManagerAPI {
                 };
               }
             }
-          } catch (_error) {
+          } catch (_) {
             // Continue with normal start validation if self-validation check fails
           }
 
@@ -5652,7 +5652,7 @@ class AutonomousTaskManagerAPI {
                 };
               }
             }
-          } catch (_error) {
+          } catch (_) {
             // Continue with normal test validation if self-validation check fails
           }
 
@@ -5786,7 +5786,7 @@ class AutonomousTaskManagerAPI {
               success: true,
               details: `passed with command: ${cmd}`,
             };
-          } catch (_error) {
+          } catch (_) {
             errors.push(`${cmd}: ${commandError.message}`);
 
             // Special fallback for common build system issues
@@ -5856,7 +5856,7 @@ class AutonomousTaskManagerAPI {
               // Kill entire process group to handle spawned processes
               process.kill(-child.pid, 'SIGKILL');
             }
-          } catch (_error) {
+          } catch (_) {
             // Fallback: direct kill
             child.kill('SIGKILL');
           }
@@ -5901,7 +5901,7 @@ class AutonomousTaskManagerAPI {
 
             try {
               child.kill('SIGTERM');
-            } catch (_error) {
+            } catch (_) {
               // Already killed
             }
 
@@ -5933,10 +5933,10 @@ class AutonomousTaskManagerAPI {
             details:
               'Start command executed successfully (killed after timeout)',
           });
-        } catch (_error) {
+        } catch (_) {
           resolve({
             success: false,
-            error: `Failed to kill start process: ${killError.message}`,
+            _error: `Failed to kill start process: ${killError.message}`,
           });
         }
       }, timeout);
@@ -6023,7 +6023,7 @@ class AutonomousTaskManagerAPI {
           success: true,
           details: `passed with fallback strategy: ${fallbackCmd}`,
         };
-      } catch (_error) {
+      } catch (_) {
         // Continue to next fallback
         continue;
       }
@@ -6140,10 +6140,10 @@ class AutonomousTaskManagerAPI {
       try {
         const result = await strategy();
         return { ...result, attempted: true };
-      } catch (_error) {
+      } catch (_) {
         return {
           success: false,
-          error: `Graceful fallback failed: ${strategyError.message}`,
+          _error: `Graceful fallback failed: ${strategyError.message}`,
           attempted: true,
         };
       }
@@ -6156,11 +6156,11 @@ class AutonomousTaskManagerAPI {
     };
   }
 
-  async _fileExists(filePath) {
+  async _fileExists(_filePath) {
     try {
-      await FS.access(filePath);
+      await FS.access(_filePath);
       return true;
-    } catch (_error) {
+    } catch (_) {
       return false;
     }
   }
@@ -6197,8 +6197,8 @@ class AutonomousTaskManagerAPI {
 
       for (const [type, files] of Object.entries(indicators)) {
         for (const file of files) {
-          const filePath = path.join(PROJECT_ROOT, file);
-          if (await this._fileExists(filePath)) {
+          const _filePath = path.join(PROJECT_ROOT, file);
+          if (await this._fileExists(_filePath)) {
             return type;
           }
         }
@@ -6223,13 +6223,13 @@ class AutonomousTaskManagerAPI {
           if (scripts.test && Object.keys(scripts).length <= 3) {
             return 'library';
           }
-        } catch (_error) {
+        } catch (_) {
           // Ignore JSON parsing errors
         }
       }
 
       return 'generic';
-    } catch (_error) {
+    } catch (_) {
       return 'unknown';
     }
   }
@@ -6250,7 +6250,7 @@ class AutonomousTaskManagerAPI {
       // Ensure failures directory exists
       try {
         await FS.mkdir(failuresDir, { recursive: true });
-      } catch (_error) {
+      } catch (_) {
         // Directory might already exist
       }
 
@@ -6645,7 +6645,7 @@ class AutonomousTaskManagerAPI {
       // Ensure emergency directory exists
       try {
         await FS.mkdir(emergencyDir, { recursive: true });
-      } catch (_error) {
+      } catch (_) {
         // Directory might already exist
       }
 
@@ -6975,7 +6975,7 @@ class AutonomousTaskManagerAPI {
       // Ensure audit directory exists
       try {
         await FS.mkdir(auditDir, { recursive: true });
-      } catch (_error) {
+      } catch (_) {
         // Directory might already exist
       }
 
@@ -8316,7 +8316,7 @@ class AutonomousTaskManagerAPI {
       try {
         // eslint-disable-next-line n/no-missing-require
         webSocket = require('ws');
-      } catch (_error) {
+      } catch (_) {
         throw new Error(
           'webSocket package (ws) not installed. Run: npm install ws'
         );
@@ -8897,7 +8897,7 @@ class AutonomousTaskManagerAPI {
     };
   }
 
-  getComprehensiveGuide() {
+  getComprehensiveGuide(category = 'general') {
     try {
       return await this.withTimeout(
         (() => {
@@ -10704,7 +10704,7 @@ class AutonomousTaskManagerAPI {
 }
 
 // CLI interface
-async function main() {
+async function main(category = 'general') {
   // Initialize structured logging And secret management
   const logger = createContextLogger({ module: 'taskManagerAPI' });
 
@@ -11052,9 +11052,9 @@ async function main() {
             for (const file of files) {
               if (file.startsWith('emergency_') && file.endsWith('.json')) {
                 try {
-                  const filePath = path.join(emergencyDir, file);
+                  const _filePath = path.join(emergencyDir, file);
                   const record = JSON.parse(
-                    await FS.readFile(filePath, 'utf8')
+                    await FS.readFile(_filePath, 'utf8')
                   );
                   overrides.push({
                     emergencyKey: record.emergencyKey,
@@ -11067,7 +11067,7 @@ async function main() {
                     expiresAt: record.expiresAt,
                     timestamp: record.timestamp,
                   });
-                } catch (_error) {
+                } catch (_) {
                   // Skip invalid files
                 }
               }
@@ -11904,9 +11904,9 @@ async function main() {
         break;
       }
       case 'save-dependency-config': {
-        const filePath = args[1] || null;
+        const _filePath = args[1] || null;
         const savedPath =
-          await api.dependencyManager.saveDependencyConfig(filePath);
+          await api.dependencyManager.saveDependencyConfig(_filePath);
         result = {
           success: true,
           savedPath,
@@ -11915,9 +11915,9 @@ async function main() {
         break;
       }
       case 'load-dependency-config': {
-        const filePath = args[1] || null;
+        const _filePath = args[1] || null;
         const config =
-          await api.dependencyManager.loadDependencyConfig(filePath);
+          await api.dependencyManager.loadDependencyConfig(_filePath);
         result = {
           success: true,
           config,

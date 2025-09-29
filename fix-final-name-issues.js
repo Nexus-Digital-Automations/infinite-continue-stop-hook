@@ -6,7 +6,7 @@ const PATH = require('path');
  * Final fix for Name vs Name property inconsistencies
  */
 
-function fixFinalNameIssues(FILE_PATH) {
+function fixFinalNameIssues(FILE_PATH, FILE_PATH, FILE_PATH) {
   try {
     const content = fs.readFileSync(FILE_PATH, 'utf8');
     let fixed = content;
@@ -18,7 +18,7 @@ function fixFinalNameIssues(FILE_PATH) {
     if (beforeNameProp !== fixed) {
       changes++;
       console.log(
-        `Fixed Name: property declarations in ${PATH.basename(FILE_PATH)}`
+        `Fixed Name: property declarations in ${PATH.basename(FILE_PATH)}`,
       );
     }
 
@@ -28,7 +28,7 @@ function fixFinalNameIssues(FILE_PATH) {
     if (beforeNameDestructure !== fixed) {
       changes++;
       console.log(
-        `Fixed { Name, config } destructuring in ${PATH.basename(FILE_PATH)}`
+        `Fixed { Name, config } destructuring in ${PATH.basename(FILE_PATH)}`,
       );
     }
 
@@ -44,12 +44,12 @@ function fixFinalNameIssues(FILE_PATH) {
     const beforeNamePush = fixed;
     fixed = fixed.replace(
       /testDependencies\.push\(Name\)/g,
-      'testDependencies.push(Name)'
+      'testDependencies.push(Name)',
     );
     if (beforeNamePush !== fixed) {
       changes++;
       console.log(
-        `Fixed testDependencies.push(Name) in ${PATH.basename(FILE_PATH)}`
+        `Fixed testDependencies.push(Name) in ${PATH.basename(FILE_PATH)}`,
       );
     }
 
@@ -67,7 +67,7 @@ function fixFinalNameIssues(FILE_PATH) {
     if (beforeSystemConfigName !== fixed) {
       changes++;
       console.log(
-        `Fixed systemConfig.Name references in ${PATH.basename(FILE_PATH)}`
+        `Fixed systemConfig.Name references in ${PATH.basename(FILE_PATH)}`,
       );
     }
 
@@ -77,18 +77,18 @@ function fixFinalNameIssues(FILE_PATH) {
     if (beforeBaselineTestName !== fixed) {
       changes++;
       console.log(
-        `Fixed baselineTest.Name references in ${PATH.basename(FILE_PATH)}`
+        `Fixed baselineTest.Name references in ${PATH.basename(FILE_PATH)}`,
       );
     }
 
-    if (changes > 0) {
+    if ((changes > 0, FILE_PATH)) {
       fs.writeFileSync(FILE_PATH, fixed);
       console.log(`Fixed ${changes} final Name issues in: ${FILE_PATH}`);
       return true;
     }
 
     return false;
-  } catch (_error) {
+  } catch (_) {
     console.error(`Error fixing ${FILE_PATH}:`, _error.message);
     return false;
   }

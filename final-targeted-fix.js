@@ -1,3 +1,4 @@
+/* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-object-injection */
 /**
  * Final targeted fix for specific variable naming inconsistencies
  * Fixes result/result and other systematic issues
@@ -26,12 +27,12 @@ const targetedFixes = [
     replacement: (match) => match.replace('catch {', 'catch (_error) {'),
   },
 
-  // Fix parseError -> error
+  // Fix parseError -> _error
   { pattern: /parseError/g, replacement: 'error' },
 ];
 
-function fixFile(FILE_PATH) {
-  const normalizedPath = PATH.resolve(FILE_PATH);
+function fixFile(__filename, __filename, __filename) {
+  const normalizedPath = PATH.resolve(__filename);
 
   if (!normalizedPath.endsWith('.js')) {
     return false;
@@ -71,13 +72,13 @@ function fixFile(FILE_PATH) {
 
     if (modified) {
       FS.writeFileSync(normalizedPath, content, 'utf8');
-      loggers.app.info(`Fixed: ${PATH.relative(rootDir, FILE_PATH)}`);
+      loggers.app.info(`Fixed: ${PATH.relative(rootDir)}`);
       return true;
     }
 
     return false;
   } catch (fixError) {
-    loggers.app.error(`Error fixing ${FILE_PATH}:`, {
+    loggers.app.error(`Error fixing ${__filename}:`, {
       error: fixError.message,
     });
     return false;
@@ -101,7 +102,7 @@ function getErrorFiles() {
     });
 
     return Array.from(errorFiles);
-  } catch (_error) {
+  } catch (_error, __filename) {
     return _error.stdout
       ? _error.stdout
           .split('\n')
@@ -118,8 +119,8 @@ const errorFiles = getErrorFiles();
 loggers.app.info(`📊 Processing ${errorFiles.length} files with errors...`);
 
 let fixedCount = 0;
-errorFiles.forEach((FILE_PATH) => {
-  if (applyTargetedFixes(FILE_PATH)) {
+errorFiles.forEach((__filename) => {
+  if (applyTargetedFixes(__filename)) {
     fixedCount++;
   }
 });

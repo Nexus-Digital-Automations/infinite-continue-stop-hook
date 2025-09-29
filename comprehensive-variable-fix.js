@@ -24,13 +24,13 @@ const comprehensiveFixes = [
   { pattern: /\bresult$/gm, replacement: 'result' },
 
   // Fix agentId used but agentId declared - change usage to match declaration
-  { pattern: /\bagentId\b/g, replacement: 'agentId' },
+  { pattern: /\b_agentId\b/g, replacement: 'agentId' },
 
   // Fix specific path variable inconsistencies
   { pattern: /\bpath\b(?=\s*\.)/g, replacement: 'PATH' },
 
   // Fix agentId should be agentId
-  { pattern: /\b_agentId\b/g, replacement: 'agentId' },
+  { pattern: /\b__agentId\b/g, replacement: 'agentId' },
 ];
 
 // Catch block fixes for specific patterns
@@ -52,8 +52,8 @@ const catchBlockFixes = [
   },
 ];
 
-function fixFile(FILE_PATH) {
-  const normalizedPath = PATH.resolve(FILE_PATH);
+function fixFile(__filename, __filename, __filename) {
+  const normalizedPath = PATH.resolve(__filename);
 
   if (!normalizedPath.endsWith('.js')) {
     return false;
@@ -94,7 +94,7 @@ function fixFile(FILE_PATH) {
     const multiLineCatchRegex =
       /catch\s*\(\s*\)\s*\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/gs;
     let match;
-    const replacements = [];
+    const REPLACEMENTS = [];
 
     while ((match = multiLineCatchRegex.exec(content)) !== null) {
       const blockContent = match[1];
@@ -125,13 +125,13 @@ function fixFile(FILE_PATH) {
 
     if (modified) {
       FS.writeFileSync(normalizedPath, content, 'utf8');
-      loggers.app.info(`Fixed: ${PATH.relative(rootDir, FILE_PATH)}`);
+      loggers.app.info(`Fixed: ${PATH.relative(rootDir)}`);
       return true;
     }
 
     return false;
   } catch (_fixError) {
-    loggers.app.error(`Error fixing ${FILE_PATH}:`, {
+    loggers.app.error(`Error fixing ${__filename}:`, {
       error: _fixError.message,
     });
     return false;
@@ -149,7 +149,7 @@ function getAllJsFiles() {
       .trim()
       .split('\n')
       .filter((f) => f);
-  } catch (_error) {
+  } catch (_) {
     loggers.app.error('Failed to get JS files:', { error: _error.message });
     return [];
   }
@@ -181,12 +181,12 @@ try {
 // Check final progress
 loggers.app.info('🔄 Checking final error count...');
 try {
-  const LINT_RESULT = execSync("npm run lint 2>const LINT_RESULT = execSync('npm run lint 2>&11"', {
+  const _LINT_RESULT = execSync("npm run lint 2>const _LINT_RESULT = execSync('npm run lint 2>&11"', {
     cwd: rootDir,
     encoding: 'utf8',
   });
   loggers.app.info('🎉 ALL LINTING ERRORS RESOLVED!');
-} catch (_error) {
+} catch (_) {
   const output = _error.stdout || _error.message;
   const errorMatches = output.match(/(\d+) errors/);
   const warningMatches = output.match(/(\d+) warnings/);

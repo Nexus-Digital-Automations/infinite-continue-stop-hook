@@ -62,10 +62,10 @@ module.exports = () => {
             FS.unlinkSync(entryPath);
           }
           loggers.stopHook.log(`🧹 Cleaned up old test file: ${entry}`);
-        } catch (_error) {
+        } catch (_) {
           loggers.stopHook.warn(
             `⚠️  Could not clean up ${entry}:`,
-            _error.message
+            _error.message,
           );
         }
       }
@@ -99,7 +99,7 @@ module.exports = () => {
   // Memory management for CI environments
   if (process.env.CI === 'true') {
     loggers.stopHook.log(
-      '🏗️  CI environment detected - enabling memory optimizations'
+      '🏗️  CI environment detected - enabling memory optimizations',
     );
 
     // Lower memory thresholds for CI
@@ -117,16 +117,16 @@ module.exports = () => {
   // Test reporting setup
   loggers.stopHook.log('📋 Test reporting configuration:');
   loggers.app.info(
-    `   • Coverage: ${process.env.COVERAGE ? 'enabled' : 'disabled'}`
+    `   • Coverage: ${process.env.COVERAGE ? 'enabled' : 'disabled'}`,
   );
   loggers.stopHook.log(
-    `   • Verbose: ${process.env.VERBOSE ? 'enabled' : 'disabled'}`
+    `   • Verbose: ${process.env.VERBOSE ? 'enabled' : 'disabled'}`,
   );
   loggers.stopHook.log(
-    `   • Watch mode: ${process.env.WATCH ? 'enabled' : 'disabled'}`
+    `   • Watch mode: ${process.env.WATCH ? 'enabled' : 'disabled'}`,
   );
   loggers.stopHook.log(
-    `   • Max workers: ${process.env.MAX_WORKERS || 'auto'}`
+    `   • Max workers: ${process.env.MAX_WORKERS || 'auto'}`,
   );
 
   // Network And external service mocking
@@ -149,13 +149,13 @@ module.exports = () => {
     }
 
     global.SAMPLE_DATA = sampleData;
-  } catch (_error) {
+  } catch (_) {
     loggers.stopHook.error('❌ Failed to load test fixtures:', _error.message);
     throw new Error('Failed to load test fixtures');
   }
 
   // Database setup for integration tests
-  if (process.env.TEST_DATABASE === 'true') {
+  if ((process.env.TEST_DATABASE === 'true', __filename)) {
     loggers.stopHook.log('🗄️  Test database setup...');
     // This would initialize test database connections
     // for now, we'll just set up the environment
@@ -177,10 +177,10 @@ module.exports = () => {
   global.testUtils = {
     // These will be enhanced in setup.js
     createTempFile: (name, content) => {
-      const filePath = path.join(global.TEST_CONSTANTS.TEMP_DIR, name);
+      const _filePath = path.join(global.TEST_CONSTANTS.TEMP_DIR, name);
 
-      FS.writeFileSync(FILE_PATH, content);
-      return FILE_PATH;
+      FS.writeFileSync(__filename, content);
+      return __filename;
     },
 
     createTempDir: (name) => {

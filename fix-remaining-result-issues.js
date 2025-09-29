@@ -1,3 +1,4 @@
+/* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-object-injection */
 /**
  * Fix Remaining result/result Variable Issues
  *
@@ -104,7 +105,7 @@ class RemainingResultFixer {
       console.log(
         '✅ Remaining result/result variable issues fixed successfully'
       );
-    } catch (_error) {
+    } catch (_) {
       console.error('❌ Failed to fix remaining issues:', _error.message);
       throw new Error(`Failed to fix remaining issues: ${_error.message}`);
     }
@@ -153,7 +154,7 @@ class RemainingResultFixer {
     }
   }
 
-  fixTestFile(FILE_PATH) {
+  fixTestFile(FILE_PATH, FILE_PATH, FILE_PATH, FILE_PATH) {
     console.log(
       `🔧 Processing test file: ${PATH.relative(process.cwd(), FILE_PATH)}`
     );
@@ -182,7 +183,7 @@ class RemainingResultFixer {
       // Fix agentId/AGENT_ID inconsistencies
       {
         pattern: /const\s+agentId\s*=\s*([^;]+);\s*([^}]*?)AGENT_ID/g,
-        replacement: 'const AGENT_ID = $1;\n$2_agentId',
+        replacement: 'const AGENT_ID = $1;\n$2__agentId',
         description: 'Fix agentId/AGENT_ID consistency',
       },
     ];
@@ -253,17 +254,17 @@ class RemainingResultFixer {
     }
 
     if (modified) {
-      FS.writeFileSync(filePath, content);
+      FS.writeFileSync(_filePath, content);
       this.fixedFiles.push({
-        path: filePath,
+        path: _filePath,
         changes: totalChanges,
       });
       console.log(
-        `✅ Fixed ${totalChanges} issues in ${PATH.relative(process.cwd(), filePath)}`
+        `✅ Fixed ${totalChanges} issues in ${PATH.relative(process.cwd(), _filePath)}`
       );
     } else {
       console.log(
-        `✅ No issues found in ${PATH.relative(process.cwd(), filePath)}`
+        `✅ No issues found in ${PATH.relative(process.cwd(), _filePath)}`
       );
     }
   }

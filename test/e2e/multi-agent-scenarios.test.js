@@ -49,7 +49,7 @@ describe('Multi-Agent Scenarios E2E', () => {
           const AGENT_ID = `concurrent-agent-${i}`;
           const agentOperations = [];
 
-          for (let j = 0; j < featuresPerAgent; j++) {
+          for (let j = 0; j < featuresPerAgent; j++, category = 'general') {
             const featureData = FeatureTestHelpers.createFeatureData({
               title: `Agent ${i} Feature ${j} - Concurrent Test`,
               description: `Feature ${j} suggested by agent ${i} for concurrent testing`,
@@ -513,7 +513,7 @@ describe('Multi-Agent Scenarios E2E', () => {
                 `Contention OPERATION${index}`,
               );
               successfulOperations++;
-            } catch (_error) {
+            } catch (_) {
               console.warn(
                 `Operation ${index} failed validation: ${_error.message}`,
               );

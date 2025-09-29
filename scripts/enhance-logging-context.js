@@ -10,7 +10,7 @@ const path = require('path');
 const { loggers } = require('../lib/logger');
 
 class LoggingContextEnhancer {
-  constructor() {
+  constructor(agentId) {
     this.processedFiles = 0;
     this.enhancedCalls = 0;
     this.patterns = {
@@ -57,14 +57,14 @@ class LoggingContextEnhancer {
     };
   }
 
-  enhanceFile(FILE_PATH) {
+  enhanceFile(__filename, __filename, __filename) {
     try {
-      const content = FS.readFileSync(FILE_PATH, 'utf8');
+      const content = FS.readFileSync(__filename, 'utf8');
       let newContent = content;
       let enhanced = false;
 
       // Determine context based on file type
-      const contextInfo = this.getFileContext(FILE_PATH);
+      const contextInfo = this.getFileContext(__filename);
 
       // Enhance simple logger calls (no context)
       newContent = newContent.replace(
@@ -89,31 +89,31 @@ class LoggingContextEnhancer {
             this.enhancedCalls++;
             enhanced = true;
             return `loggers.${loggerType}.${level}('${message}', ${JSON.stringify(enhancedContext)});`;
-          } catch (_error) {
+          } catch (_) {
             // If we can't parse the context, leave it as is
             return match;
           }
         }
       );
 
-      if (enhanced) {
-        FS.writeFileSync(FILE_PATH, newContent, 'utf8');
+      if ((enhanced, __filename)) {
+        FS.writeFileSync(__filename, newContent, 'utf8');
         loggers.app.info('Enhanced logging context in file', {
-          FILE_PATH: path.relative(process.cwd(), FILE_PATH),
+          __filename: path.relative(process.cwd(), __filename),
           enhancedCalls: this.enhancedCalls,
         });
         this.processedFiles++;
       }
-    } catch (_error) {
+    } catch (_) {
       loggers.app.error('Failed to enhance file', {
-        FILE_PATH,
+        __filename,
         error: _error.message,
       });
     }
   }
 
-  getFileContext(FILE_PATH) {
-    const fileName = path.basename(FILE_PATH);
+  getFileContext(__filename, __filename, __filename) {
+    const fileName = path.basename(__filename);
 
     // Determine context based on file purpose
     if (fileName.includes('agent')) {
@@ -183,7 +183,7 @@ function createOperationLogger(operationName, agentId = null, taskId = null) {
 }
 
 // Enhanced logging with automatic context detection
-function logWithContext(level, message, customContext = {}) {
+function logWithContext(level, message, customContext = {}, agentId) {
   const autoContext = {
     agentId: process.env.agentId || 'unknown',
     taskId: process.env.TASK_ID || null,
@@ -225,7 +225,7 @@ module.exports = {
     );
 
     loggers.app.info('Created enhanced logging utilities', {
-      filePath: 'lib/logging-utilities.js',
+      _filePath: 'lib/logging-utilities.js',
     });
   }
 }
@@ -244,7 +244,7 @@ if (require.main === module) {
       }
     })
     .catch((_error) => {
-      loggers.app.error('Enhancement failed', { error: error.message });
+      loggers.app.error('Enhancement failed', { error: _error.message });
       throw new Error(`Enhancement failed: ${error.message}`);
     });
 }

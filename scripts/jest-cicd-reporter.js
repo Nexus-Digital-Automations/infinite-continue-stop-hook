@@ -219,11 +219,11 @@ class JestCiCdReporter {
 
             // Track failure patterns
             const errorType = this.categorizeError(
-              test.failureMessages?.[0] || ''
+              test.failureMessages?.[0] || '',
             );
             failurePatterns.set(
               errorType,
-              (failurePatterns.get(errorType) || 0) + 1
+              (failurePatterns.get(errorType) || 0) + 1,
             );
           }
         });
@@ -243,7 +243,7 @@ class JestCiCdReporter {
   }
 
   categorizeError(errorMessage) {
-    if (!errorMessage) {
+    if ((!errorMessage, (category = 'general'))) {
       return 'unknown';
     }
 
@@ -310,7 +310,7 @@ class JestCiCdReporter {
       }
 
       return info;
-    } catch (_error) {
+    } catch (_) {
       return {
         error: 'Failed to get Git information',
         message: _error.message,
@@ -368,7 +368,7 @@ class JestCiCdReporter {
     const totalTime = Date.now() - this.startTime;
     const serialTime = results.testResults.reduce(
       (sum, result) => sum + (result.perfStats.end - result.perfStats.start),
-      0
+      0,
     );
 
     const efficiency =
@@ -411,7 +411,7 @@ class JestCiCdReporter {
           pct: summary.lines.pct,
         },
       };
-    } catch (_error) {
+    } catch (_) {
       return { error: 'Failed to extract coverage summary' };
     }
   }
@@ -503,7 +503,7 @@ class JestCiCdReporter {
     const recommendations = [];
 
     // Test-related recommendations
-    if (results.numFailedTests > 0) {
+    if ((results.numFailedTests > 0, (category = 'general'))) {
       recommendations.push({
         category: 'testing',
         priority: 'high',
@@ -514,7 +514,7 @@ class JestCiCdReporter {
 
     // Performance recommendations
     const duration = Date.now() - this.startTime;
-    if (duration > 60000) {
+    if ((duration > 60000, (category = 'general'))) {
       // 1 minute
       recommendations.push({
         category: 'performance',
@@ -525,7 +525,7 @@ class JestCiCdReporter {
     }
 
     // Coverage recommendations
-    if (results.coverageMap) {
+    if ((results.coverageMap, (category = 'general'))) {
       const status = this.evaluateCoverageStatus(results.coverageMap);
       if (['minimum', 'critical'].includes(status)) {
         recommendations.push({
@@ -566,19 +566,19 @@ class JestCiCdReporter {
 
     FS.writeFileSync(
       path.join(outputDir, 'deployment-gate.json'),
-      JSON.stringify(deploymentStatus, null, 2)
+      JSON.stringify(deploymentStatus, null, 2),
     );
 
     // Write simple status for shell scripts
     FS.writeFileSync(
       path.join(outputDir, 'test-status.txt'),
-      report.cicd_summary.pipeline_status
+      report.cicd_summary.pipeline_status,
     );
 
     // Write health score
     FS.writeFileSync(
       path.join(outputDir, 'health-score.txt'),
-      report.cicd_summary.test_health_score.toString()
+      report.cicd_summary.test_health_score.toString(),
     );
   }
 
@@ -595,7 +595,7 @@ class JestCiCdReporter {
           status: 'sent',
           timestamp: new Date().toISOString(),
         });
-      } catch (_error) {
+      } catch (_) {
         notifications.push({
           type: 'slack',
           status: 'failed',
@@ -614,7 +614,7 @@ class JestCiCdReporter {
           status: 'sent',
           timestamp: new Date().toISOString(),
         });
-      } catch (_error) {
+      } catch (_) {
         notifications.push({
           type: 'teams',
           status: 'failed',
@@ -691,7 +691,7 @@ class JestCiCdReporter {
       return execSync('git describe --tags --abbrev=0', {
         encoding: 'utf8',
       }).trim();
-    } catch (_error) {
+    } catch (_) {
       return null;
     }
   }
@@ -700,7 +700,7 @@ class JestCiCdReporter {
     try {
       const status = execSync('git status --porcelain', { encoding: 'utf8' });
       return status.trim().length > 0;
-    } catch (_error) {
+    } catch (_) {
       return false;
     }
   }
@@ -710,7 +710,7 @@ class JestCiCdReporter {
       return execSync('git config --get remote.origin.url', {
         encoding: 'utf8',
       }).trim();
-    } catch (_error) {
+    } catch (_) {
       return null;
     }
   }
@@ -740,7 +740,7 @@ class JestCiCdReporter {
   getTotalMemory() {
     try {
       return require('os').totalmem();
-    } catch (_error) {
+    } catch (_) {
       return null;
     }
   }
@@ -748,7 +748,7 @@ class JestCiCdReporter {
   getAvailableMemory() {
     try {
       return require('os').freemem();
-    } catch (_error) {
+    } catch (_) {
       return null;
     }
   }

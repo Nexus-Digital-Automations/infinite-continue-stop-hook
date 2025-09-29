@@ -1,3 +1,4 @@
+/* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-object-injection */
 /**
 const { loggers } = require('../lib/logger');
  * RAG System Test Setup
@@ -196,7 +197,7 @@ global.RAG_TEST_UTILS = {
   cleanupTestDirectory: async (dirPath) => {
     try {
       await FS.rm(dirPath, { recursive: true, force: true });
-    } catch (_error) {
+    } catch (_) {
       loggers.stopHook.warn(`Cleanup warning for ${dirPath}:`, _error.message);
     }
   },
@@ -260,7 +261,7 @@ afterEach(async () => {
         }),
       ),
     );
-  } catch (_error) {
+  } catch (_) {
     // Ignore cleanup errors
   }
 });

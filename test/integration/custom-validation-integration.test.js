@@ -1,3 +1,4 @@
+const { loggers } = require('../lib/logger');
 /**
 const { loggers } = require('../../lib/logger');
  * Integration Test Suite for Custom Validation Rules with TaskManager API
@@ -30,7 +31,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
   afterAll(async () => {
     try {
       await FS.rm(testProjectRoot, { recursive: true, force: true });
-    } catch (_error) {
+    } catch (_) {
       loggers.stopHook.warn(
         'Failed to cleanup test directory:',
         _error.message,
@@ -49,7 +50,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
           force: true,
         });
       }
-    } catch (_error) {
+    } catch (_) {
       // Ignore cleanup errors
     }
   });

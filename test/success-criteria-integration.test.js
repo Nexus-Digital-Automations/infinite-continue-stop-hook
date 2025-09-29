@@ -31,7 +31,7 @@ const TIMEOUT = 15000; // 15 seconds for API operations
  * @param {number} timeout - Command timeout in milliseconds
  * @returns {Promise<Object>} Parsed JSON response from API
  */
-function execAPI(command, args = [], timeout = TIMEOUT) {
+function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
   return new Promise((resolve, reject) => {
     const allArgs = [
       API_PATH,
@@ -66,9 +66,9 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         try {
           const result = JSON.parse(stdout);
           resolve(result);
-        } catch (_error) {
+        } catch (_) {
           reject(
-            new Error(`JSON parse error: ${error.message}\nOutput: ${stdout}`)
+            new Error(`JSON parse error: ${_error.message}\nOutput: ${stdout}`)
           );
         }
       } else {
@@ -89,7 +89,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
 /**
  * Create test project structure
  */
-async function setupTestProject() {
+async function setupTestProject(category = 'general') {
   try {
     await FS.mkdir(TEST_PROJECT_DIR, { recursive: true });
 
@@ -130,7 +130,7 @@ async function setupTestProject() {
       path.join(TEST_PROJECT_DIR, 'package.json'),
       JSON.stringify(packageJson, null, 2)
     );
-  } catch (_error) {
+  } catch (_) {
     loggers.stopHook.error('Failed to setup test project:', error);
     throw _error;
   }
@@ -139,10 +139,10 @@ async function setupTestProject() {
 /**
  * Cleanup test project
  */
-async function cleanupTestProject() {
+async function cleanupTestProject(category = 'general') {
   try {
     await FS.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
-  } catch (_error) {
+  } catch (_error, agentId) {
     // Ignore cleanup errors
   }
 }
@@ -423,9 +423,9 @@ describe('Success Criteria Integration Tests', () => {
       try {
         const result = await execAPI('complete', ['non_existent_task_id']);
         expect(result.success).toBe(false);
-      } catch (_error) {
+      } catch (_error, category = 'general') {
         // Expected to fail
-        expect(error).toBeDefined();
+        expect(_error).toBeDefined();
       }
     });
 
@@ -594,7 +594,7 @@ describe('Success Criteria Integration Tests', () => {
       const TASK = listResult.tasks.find((t) => t.id === TASK_ID);
       expect(TASK).toBeDefined();
       expect(TASK.status).toBe('in_progress');
-      expect(TASK.assigned_agent).toBe(_AGENT_ID);
+      expect(TASK.assigned_agent).toBe(AGENT_ID);
     });
 
     test('should validate criteria format consistency', async () => {

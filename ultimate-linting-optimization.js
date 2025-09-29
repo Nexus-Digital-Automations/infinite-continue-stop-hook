@@ -8,7 +8,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 class UltimateLintingOptimizer {
-  constructor() {
+  constructor(agentId) {
     this.rootDir = process.cwd();
     this.results = {
       initialErrorCount: 0,
@@ -25,7 +25,7 @@ class UltimateLintingOptimizer {
     try {
       execSync('npx eslint . 2>&1', { stdio: 'pipe' });
       return 0;
-    } catch (_error) {
+    } catch (_) {
       const output = _error.stdout?.toString() || _error.message;
       const lines = output
         .split('\n')
@@ -74,14 +74,14 @@ class UltimateLintingOptimizer {
     const jsFiles = this.getAllJavaScriptFiles();
     let fixed = 0;
 
-    for (const filePath of jsFiles) {
+    for (const _filePath of jsFiles) {
       try {
-        let content = fs.readFileSync(filePath, 'utf8');
+        let content = fs.readFileSync(_filePath, 'utf8');
         let modified = false;
 
         // Pattern 1: catch (_error) where _error is truly unused
         const catchBlocks = content.match(
-          /catch\s*\(\s*_error\s*\)\s*\{[^}]*\}/g
+          /catch\s*\(\s*_error\s*\)\s*\{[^}]*\}/g,
         );
         if (catchBlocks) {
           for (const block of catchBlocks) {
@@ -98,11 +98,11 @@ class UltimateLintingOptimizer {
         }
 
         if (modified) {
-          fs.writeFileSync(filePath, content);
-          console.log(`  ✓ Fixed ${path.relative(this.rootDir, filePath)}`);
+          fs.writeFileSync(_filePath, content);
+          console.log(`  ✓ Fixed ${path.relative(this.rootDir, _filePath)}`);
         }
-      } catch (_error) {
-        console.log(`  ⚠️  Error processing ${filePath}: ${_error.message}`);
+      } catch (_) {
+        console.log(`  ⚠️  Error processing ${_filePath}: ${_error.message}`);
       }
     }
 
@@ -143,9 +143,9 @@ class UltimateLintingOptimizer {
 
     const jsFiles = this.getAllJavaScriptFiles();
 
-    for (const filePath of jsFiles) {
+    for (const _filePath of jsFiles) {
       try {
-        let content = fs.readFileSync(filePath, 'utf8');
+        let content = fs.readFileSync(_filePath, 'utf8');
         let fileModified = false;
 
         for (const fix of undefinedFixes) {
@@ -163,13 +163,13 @@ class UltimateLintingOptimizer {
         }
 
         if (fileModified) {
-          fs.writeFileSync(filePath, content);
+          fs.writeFileSync(_filePath, content);
           console.log(
-            `  ✓ Fixed undefined vars in ${path.relative(this.rootDir, filePath)}`
+            `  ✓ Fixed undefined vars in ${path.relative(this.rootDir, _filePath)}`,
           );
         }
-      } catch (_error) {
-        console.log(`  ⚠️  Error processing ${filePath}: ${_error.message}`);
+      } catch (_) {
+        console.log(`  ⚠️  Error processing ${_filePath}: ${_error.message}`);
       }
     }
 
@@ -185,9 +185,9 @@ class UltimateLintingOptimizer {
     const jsFiles = this.getAllJavaScriptFiles();
     let fixed = 0;
 
-    for (const filePath of jsFiles) {
+    for (const _filePath of jsFiles) {
       try {
-        let content = fs.readFileSync(filePath, 'utf8');
+        let content = fs.readFileSync(_filePath, 'utf8');
         let modified = false;
 
         // Pattern: async function with no await
@@ -209,14 +209,14 @@ class UltimateLintingOptimizer {
               return newMatch;
             }
             return match;
-          }
+          },
         );
 
         if (modified) {
-          fs.writeFileSync(filePath, content);
+          fs.writeFileSync(_filePath, content);
         }
-      } catch (_error) {
-        console.log(`  ⚠️  Error processing ${filePath}: ${_error.message}`);
+      } catch (_) {
+        console.log(`  ⚠️  Error processing ${_filePath}: ${_error.message}`);
       }
     }
 
@@ -232,9 +232,9 @@ class UltimateLintingOptimizer {
     const jsFiles = this.getAllJavaScriptFiles();
     let fixed = 0;
 
-    for (const filePath of jsFiles) {
+    for (const _filePath of jsFiles) {
       try {
-        let content = fs.readFileSync(filePath, 'utf8');
+        let content = fs.readFileSync(_filePath, 'utf8');
         let modified = false;
 
         // Add eslint-disable comments for false positive security warnings
@@ -270,13 +270,13 @@ class UltimateLintingOptimizer {
         }
 
         if (modified) {
-          fs.writeFileSync(filePath, content);
+          fs.writeFileSync(_filePath, content);
           console.log(
-            `  ✓ Added security disables to ${path.relative(this.rootDir, filePath)}`
+            `  ✓ Added security disables to ${path.relative(this.rootDir, _filePath)}`,
           );
         }
-      } catch (_error) {
-        console.log(`  ⚠️  Error processing ${filePath}: ${_error.message}`);
+      } catch (_) {
+        console.log(`  ⚠️  Error processing ${_filePath}: ${_error.message}`);
       }
     }
 
@@ -287,7 +287,7 @@ class UltimateLintingOptimizer {
   /**
    * Fix remaining unused variables
    */
-  fixRemainingUnusedVariables() {
+  fixRemainingUnusedVariables(agentId) {
     console.log('🎯 Fixing remaining unused variables...');
     const jsFiles = this.getAllJavaScriptFiles();
     let fixed = 0;
@@ -305,16 +305,16 @@ class UltimateLintingOptimizer {
       'indexError',
     ];
 
-    for (const filePath of jsFiles) {
+    for (const _filePath of jsFiles) {
       try {
-        let content = fs.readFileSync(filePath, 'utf8');
+        let content = fs.readFileSync(_filePath, 'utf8');
         let modified = false;
 
         for (const varName of commonUnusedVars) {
           // Add underscore prefix to unused variables
           const regex = new RegExp(
             `\\b(const|let|var)\\s+(${varName})\\s*=`,
-            'g'
+            'g',
           );
           content = content.replace(regex, (match, keyword, variable) => {
             modified = true;
@@ -324,13 +324,13 @@ class UltimateLintingOptimizer {
         }
 
         if (modified) {
-          fs.writeFileSync(filePath, content);
+          fs.writeFileSync(_filePath, content);
           console.log(
-            `  ✓ Prefixed unused vars in ${path.relative(this.rootDir, filePath)}`
+            `  ✓ Prefixed unused vars in ${path.relative(this.rootDir, _filePath)}`,
           );
         }
-      } catch (_error) {
-        console.log(`  ⚠️  Error processing ${filePath}: ${_error.message}`);
+      } catch (_) {
+        console.log(`  ⚠️  Error processing ${_filePath}: ${_error.message}`);
       }
     }
 
@@ -346,7 +346,7 @@ class UltimateLintingOptimizer {
     try {
       execSync('npx eslint . --fix', { stdio: 'pipe' });
       console.log('✅ ESLint autofix completed\n');
-    } catch (_error) {
+    } catch (_) {
       console.log('⚠️  ESLint autofix completed with remaining issues\n');
     }
   }
@@ -358,14 +358,14 @@ class UltimateLintingOptimizer {
     try {
       const result = execSync(
         'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
-        { cwd: this.rootDir, encoding: 'utf-8' }
+        { cwd: this.rootDir, encoding: 'utf-8' },
       );
 
       return result
         .split('\n')
         .filter((f) => f && f.endsWith('.js'))
         .map((f) => path.resolve(this.rootDir, f.replace('./', '')));
-    } catch (_error) {
+    } catch (_) {
       console.error('Failed to get JS files:', _error.message);
       return [];
     }
@@ -381,7 +381,7 @@ class UltimateLintingOptimizer {
     try {
       execSync('npx eslint . 2>&1', { stdio: 'pipe' });
       this.results.finalErrorCount = 0;
-    } catch (_error) {
+    } catch (_) {
       const output = _error.stdout?.toString() || _error.message;
       const lines = output
         .split('\n')
@@ -391,16 +391,16 @@ class UltimateLintingOptimizer {
 
     const totalFixed = Object.values(this.results.categorizedFixes).reduce(
       (sum, count) => sum + count,
-      0
+      0,
     );
 
     const reductionPercentage =
       this.results.initialErrorCount > 0
         ? (
-            ((this.results.initialErrorCount - this.results.finalErrorCount) /
+          ((this.results.initialErrorCount - this.results.finalErrorCount) /
               this.results.initialErrorCount) *
             100
-          ).toFixed(1)
+        ).toFixed(1)
         : 0;
 
     console.log('\n🎉 ULTIMATE LINTING OPTIMIZATION COMPLETE');
@@ -414,7 +414,7 @@ class UltimateLintingOptimizer {
     Object.entries(this.results.categorizedFixes).forEach(
       ([category, count]) => {
         console.log(`  • ${category}: ${count} fixes`);
-      }
+      },
     );
 
     // Analyze remaining issues
@@ -423,7 +423,7 @@ class UltimateLintingOptimizer {
     // Save report
     const reportPath = path.join(
       this.rootDir,
-      'linting-optimization-report.json'
+      'linting-optimization-report.json',
     );
     fs.writeFileSync(reportPath, JSON.stringify(this.results, null, 2));
     console.log(`\n📄 Full report saved: ${reportPath}`);
@@ -438,7 +438,7 @@ class UltimateLintingOptimizer {
     try {
       const LINT_OUTPUT = execSync('npx eslint . 2>&1', { encoding: 'utf8' });
       console.log('✅ No remaining linting errors!');
-    } catch (_error) {
+    } catch (_) {
       const output = _error.stdout?.toString() || _error.message;
 
       // Categorize remaining issues
@@ -484,29 +484,29 @@ class UltimateLintingOptimizer {
 
       if (remainingIssues.byRule['no-undef'] > 0) {
         console.log(
-          '  • Review no-undef errors - may need proper imports or variable declarations'
+          '  • Review no-undef errors - may need proper imports or variable declarations',
         );
       }
 
       if (remainingIssues.byRule['no-unused-vars'] > 0) {
         console.log(
-          '  • Review remaining unused variables - consider removing or prefixing with _'
+          '  • Review remaining unused variables - consider removing or prefixing with _',
         );
       }
 
       if (remainingIssues.byRule['no-console'] > 0) {
         console.log(
-          '  • Review console statements - add eslint-disable comments for development tools'
+          '  • Review console statements - add eslint-disable comments for development tools',
         );
       }
 
       if (
         Object.keys(remainingIssues.byRule).some((rule) =>
-          rule.startsWith('security/')
+          rule.startsWith('security/'),
         )
       ) {
         console.log(
-          '  • Review security warnings - add specific disable comments for false positives'
+          '  • Review security warnings - add specific disable comments for false positives',
         );
       }
     }
@@ -514,7 +514,7 @@ class UltimateLintingOptimizer {
 }
 
 // Execute optimization
-function main() {
+function main(category = 'general') {
   const optimizer = new UltimateLintingOptimizer();
   optimizer.applyComprehensiveFixes();
 }

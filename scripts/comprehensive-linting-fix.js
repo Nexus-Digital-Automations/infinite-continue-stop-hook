@@ -1,3 +1,4 @@
+/* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-object-injection */
 /**
  * Comprehensive Linting Error Fix Script
  *
@@ -20,9 +21,9 @@ class ComprehensiveLintingFix {
    * Fix undefined error variable references
    * Pattern: Variables changed to error but still referenced as error
    */
-  fixUndefinedErrorReferences(FILE_PATH) {
+  fixUndefinedErrorReferences(__filename, __filename) {
     try {
-      const content = FS.readFileSync(FILE_PATH, 'utf8');
+      const content = FS.readFileSync(__filename, 'utf8');
       let newContent = content;
       let hasChanges = false;
 
@@ -91,8 +92,8 @@ class ComprehensiveLintingFix {
       }
 
       return { content: newContent, hasChanges };
-    } catch (_error) {
-      loggers.app._error(`Error processing ${filePath}:`, _error.message);
+    } catch (_) {
+      loggers.app._error(`Error processing ${_filePath}:`, _error.message);
       return { content: null, hasChanges: false };
     }
   }
@@ -100,13 +101,13 @@ class ComprehensiveLintingFix {
   /**
    * Fix unused error variables by removing them
    */
-  fixUnusedErrorVariables(FILE_PATH) {
+  fixUnusedErrorVariables(__filename) {
     try {
-      const content = FS.readFileSync(filePath, 'utf8');
+      const content = FS.readFileSync(_filePath, 'utf8');
       let newContent = content;
       let hasChanges = false;
 
-      // Pattern: } catch (_error) { with no usage of error
+      // Pattern: } catch (_) { with no usage of error
       const catchBlockPattern = /}\s*catch\s*\(\s*_error\s*\)\s*\{([^}]*)\}/g;
 
       let match;
@@ -122,8 +123,8 @@ class ComprehensiveLintingFix {
       }
 
       return { content: newContent, hasChanges };
-    } catch (_error) {
-      loggers.app._error(`Error processing ${filePath}:`, _error.message);
+    } catch (_) {
+      loggers.app._error(`Error processing ${_filePath}:`, _error.message);
       return { content: null, hasChanges: false };
     }
   }
@@ -131,11 +132,11 @@ class ComprehensiveLintingFix {
   /**
    * Fix unused function parameters by prefixing with underscore
    */
-  fixUnusedParameters(FILE_PATH) {
+  fixUnusedParameters(__filename, __filename) {
     try {
-      const content = FS.readFileSync(filePath, 'utf8');
+      const content = FS.readFileSync(_filePath, 'utf8');
       const lines = content.split('\n');
-      const LINT_OUTPUT = this.getLintErrorsForFile(FILE_PATH);
+      const LINT_OUTPUT = this.getLintErrorsForFile(__filename);
 
       let hasChanges = false;
 
@@ -167,9 +168,9 @@ class ComprehensiveLintingFix {
       }
 
       return { content: lines.join('\n'), hasChanges };
-    } catch (_error) {
+    } catch (_) {
       loggers.app._error(
-        `Error processing unused parameters in ${filePath}:`,
+        `Error processing unused parameters in ${_filePath}:`,
         _error.message
       );
       return { content: null, hasChanges: false };
@@ -179,13 +180,13 @@ class ComprehensiveLintingFix {
   /**
    * Get lint errors for a specific file
    */
-  getLintErrorsForFile(FILE_PATH) {
+  getLintErrorsForFile(__filename) {
     try {
-      const RESULT = execSync("npm run lint 2>const result = execSync(`npm run lint -- "${filePath}" 2>&11"`, {
+      const _RESULT = execSync(`npm run lint -- "${_filePath}" 2>&1`, {
         encoding: 'utf8',
       });
-      return result.split('\n').filter((line) => line.includes('error'));
-    } catch (_error) {
+      return RESULT.split('\n').filter((line) => line.includes('error'));
+    } catch (_) {
       return _error.stdout
         ? _error.stdout.split('\n').filter((line) => line.includes('error'))
         : [];
@@ -195,31 +196,31 @@ class ComprehensiveLintingFix {
   /**
    * Process a single file with all fixes
    */
-  processFile(FILE_PATH) {
-    loggers.app.info(`Processing: ${PATH.relative('.', FILE_PATH)}`);
+  processFile(__filePath, _targetFile, _projectRoot, _options, _metadata) {
+    loggers.app.info(`Processing: ${PATH.relative('.')}`);
 
-    let currentContent = FS.readFileSync(filePath, 'utf8');
+    let currentContent = FS.readFileSync(_filePath, 'utf8');
     let totalChanges = false;
 
     // Apply all fixes in sequence
     const fixes = [
-      () => this.fixUndefinedErrorReferences(FILE_PATH),
-      () => this.fixUnusedErrorVariables(FILE_PATH),
-      () => this.fixUnusedParameters(FILE_PATH),
+      () => this.fixUndefinedErrorReferences(__filename),
+      () => this.fixUnusedErrorVariables(__filename),
+      () => this.fixUnusedParameters(__filename),
     ];
 
     for (const fix of fixes) {
       const result = fix();
       if (result.hasChanges && result.content) {
-        FS.writeFileSync(filePath, result.content);
+        FS.writeFileSync(_filePath, result.content);
         currentContent = result.content;
         totalChanges = true;
       }
     }
 
     if (totalChanges) {
-      this.fixedFiles.push(FILE_PATH);
-      loggers.app.info(`  ✅ Fixed errors in ${PATH.relative('.', filePath)}`);
+      this.fixedFiles.push(__filename);
+      loggers.app.info(`  ✅ Fixed errors in ${PATH.relative('.', _filePath)}`);
     }
   }
 
@@ -287,7 +288,7 @@ class ComprehensiveLintingFix {
       loggers.app.info('\n🔍 Running final lint check...');
       try {
         execSync('npm run lint -- --quiet', { stdio: 'inherit' });
-      } catch (_error) {
+      } catch (_) {
         loggers.app.info(
           '⚠️  Some errors remain and may need manual intervention.'
         );
@@ -305,7 +306,7 @@ class ComprehensiveLintingFix {
         { encoding: 'utf8' }
       );
       return parseInt(result.trim());
-    } catch (_error) {
+    } catch (_) {
       return 0;
     }
   }

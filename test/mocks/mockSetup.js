@@ -1,3 +1,5 @@
+const { loggers } = require('../lib/logger');
+const path = require('path');
 /**
  * Mock Setup Helper
  *
@@ -133,7 +135,7 @@ class MockManager {
         default:
           result = { success: false, error: `Unknown command: ${apiCommand}` };
       }
-    } catch (_error) {
+    } catch (_) {
       result = { success: false, error: _error.message };
     }
 
@@ -257,7 +259,7 @@ class MockManager {
           };
         });
       }
-    } catch (_error) {
+    } catch (_) {
       // Fetch not available in this Node.js version, skip mocking
       loggers.stopHook.log('Fetch not available for mocking:', _error.message);
     }
@@ -345,7 +347,7 @@ class MockManager {
       if (this.originalModules.has('global.fetch')) {
         global[fetchProp] = this.originalModules.get('global.fetch');
       }
-    } catch (_error) {
+    } catch (_) {
       // Fetch not available, skip restoration
       loggers.stopHook.log(
         'Fetch not available for restoration:',
@@ -446,10 +448,10 @@ function featureData(_$2) {
   return null;
 }
 
-function expectAgentInitialized(_AGENT_ID) {
+function expectAgentInitialized(AGENT_ID) {
   const mockManager = getMockManager();
   if (mockManager) {
-    const agent = mockManager.taskManagerAPI.agents.get(_AGENT_ID);
+    const agent = mockManager.taskManagerAPI.agents.get(AGENT_ID);
     expect(agent).toBeDefined();
     expect(agent.status).toBe('active');
     return agent;

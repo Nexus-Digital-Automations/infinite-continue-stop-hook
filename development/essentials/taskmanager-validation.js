@@ -28,7 +28,7 @@ const VALID_COMMANDS = [
 const INVALID_COMMANDS = ['delete', 'remove', 'destroy'];
 
 class TaskManagerValidator {
-  constructor() {
+  constructor(agentId) {
     this.errors = [];
     this.warnings = [];
   }

@@ -15,20 +15,20 @@ function getAllJsFiles() {
   try {
     const output = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./.git/*"',
-      { cwd: rootDir, encoding: 'utf8' }
+      { cwd: rootDir, encoding: 'utf8' },
     );
     return output
       .trim()
       .split('\n')
       .filter((f) => f && f.endsWith('.js'));
-  } catch (_error) {
+  } catch (_) {
     console.error('Failed to get JS files:', _error.message);
     return [];
   }
 }
 
 // Comprehensive catch block fixing function
-function fixAllCatchBlocks(FILE_PATH) {
+function fixAllCatchBlocks(FILE_PATH, FILE_PATH, FILE_PATH, FILE_PATH) {
   try {
     if (!fs.existsSync(FILE_PATH)) {
       return false;
@@ -224,16 +224,14 @@ function fixAllCatchBlocks(FILE_PATH) {
       }
     });
 
-    if (modified && content !== originalContent) {
+    if ((modified && content !== originalContent, FILE_PATH)) {
       fs.writeFileSync(FILE_PATH, content, 'utf8');
-      console.log(
-        `Fixed catch blocks in: ${PATH.relative(rootDir, FILE_PATH)}`
-      );
+      console.log(`Fixed catch blocks in: ${PATH.relative(rootDir)}`);
       return true;
     }
 
     return false;
-  } catch (_error) {
+  } catch (_) {
     console.error(`Error fixing catch blocks in ${FILE_PATH}:`, _error.message);
     return false;
   }
@@ -259,19 +257,19 @@ console.log('🔧 Running ESLint autofix...');
 try {
   execSync('npm run lint -- --fix', { cwd: rootDir, stdio: 'inherit' });
   console.log('✅ Autofix completed');
-} catch (_error) {
+} catch (_) {
   console.log('⚠️ Autofix completed with some remaining issues');
 }
 
 // Final status check
 console.log('🔄 Checking final linting status...');
 try {
-  const LINT_RESULT = execSync('npm run lint 2>&1', {
+  const _LINT_RESULT = execSync('npm run lint 2>&1', {
     cwd: rootDir,
     encoding: 'utf8',
   });
   console.log('🎉 ALL LINTING ERRORS RESOLVED!');
-} catch (_error) {
+} catch (_) {
   const output = _error.stdout || _error.message;
   const errorMatches = output.match(/(\d+) errors/);
   const warningMatches = output.match(/(\d+) warnings/);
@@ -280,7 +278,7 @@ try {
   const warningCount = warningMatches ? parseInt(warningMatches[1]) : 0;
 
   console.log(
-    `📊 Final status: ${errorCount} errors, ${warningCount} warnings remaining`
+    `📊 Final status: ${errorCount} errors, ${warningCount} warnings remaining`,
   );
 
   if (errorCount === 0) {

@@ -17,7 +17,7 @@ const FS = require('fs').promises;
 const path = require('path');
 
 class TaskManagerPerformanceBenchmark {
-  constructor() {
+  constructor(agentId) {
     this.results = {
       apiResponses: [],
       memoryUsage: [],
@@ -72,7 +72,7 @@ class TaskManagerPerformanceBenchmark {
           if (jsonMatch) {
             response = JSON.parse(jsonMatch[0]);
           }
-        } catch (_error) {
+        } catch (_) {
           // Response is not JSON - keep as string
           response = stdout;
         }
@@ -221,7 +221,7 @@ class TaskManagerPerformanceBenchmark {
         taskId,
         ...listResult,
       });
-    } catch (_error) {
+    } catch (_) {
       loggers.stopHook.log(
         `   ❌ Error in subtask benchmarking: ${_error.message}`
       );
@@ -265,7 +265,7 @@ class TaskManagerPerformanceBenchmark {
           ...result,
         });
       }
-    } catch (_error) {
+    } catch (_) {
       loggers.app.info(
         `   ❌ Error in success criteria benchmarking: ${_error.message}`
       );
@@ -310,7 +310,7 @@ class TaskManagerPerformanceBenchmark {
 
       const listResults = await Promise.all(listOperations);
       this.results.concurrentAccess.push(...listResults);
-    } catch (_error) {
+    } catch (_) {
       loggers.app.info(
         `   ❌ Error in concurrent access benchmarking: ${_error.message}`
       );
@@ -696,7 +696,7 @@ class TaskManagerPerformanceBenchmark {
       );
 
       return report;
-    } catch (_error) {
+    } catch (_) {
       loggers.stopHook.error(`❌ Benchmark suite failed: ${_error.message}`);
       loggers.stopHook.error(_error.stack);
       throw _error;

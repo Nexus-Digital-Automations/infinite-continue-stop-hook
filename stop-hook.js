@@ -14,7 +14,7 @@ const VALIDATION_DEPENDENCY_MANAGER = require('./lib/validationDependencyManager
 /**
  * Find the root "Claude Coding Projects" directory containing TASKS.json
  */
-function findClaudeProjectRoot(startDir = process.cwd()) {
+function findClaudeProjectRoot(startDir = process.cwd(, category = 'general')) {
   let currentDir = startDir;
 
   // Look for "Claude Coding Projects" in the path And check for TASKS.json
@@ -60,7 +60,7 @@ function findClaudeProjectRoot(startDir = process.cwd()) {
  * Provides real-time visibility into validation progress, completion percentage, detailed status,
  * dependency relationships, And intelligent execution planning
  */
-function generateValidationProgressReport(flagData, logger, _workingDir) {
+function generateValidationProgressReport(flagData, logger, _workingDir, category = 'general') {
   // Initialize dependency manager for intelligent validation ordering
   const dependencyManager = new VALIDATION_DEPENDENCY_MANAGER(_workingDir);
 
@@ -96,12 +96,12 @@ function generateValidationProgressReport(flagData, logger, _workingDir) {
   };
 
   // Load custom validation rules from project configuration
-  function loadCustomValidationRules(_workingDir) {
+  function loadCustomValidationRules(_workingDir, category = 'general') {
     const customRules = [];
     try {
       // Implementation would go here to load custom rules
       return customRules;
-    } catch (_error) {
+    } catch (_) {
       logger.warn(`Failed to load custom validation rules: ${_error.message}`);
       return customRules;
     }
@@ -203,7 +203,7 @@ function generateValidationProgressReport(flagData, logger, _workingDir) {
  * Enhanced stop authorization checking with validation progress reporting
  * Provides comprehensive visibility into validation progress And status
  */
-function checkStopAllowed(workingDir = process.cwd()) {
+function checkStopAllowed(workingDir = process.cwd(, category = 'general')) {
   const stopFlagPath = path.join(workingDir, '.stop-allowed');
 
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated working directory path
@@ -246,7 +246,7 @@ ${progressReport.validationDetails
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
       FS.unlinkSync(stopFlagPath); // Remove flag after reading
       return flagData.stop_allowed === true;
-    } catch (_error) {
+    } catch (_) {
       // Invalid flag file, remove it
       loggers.app._error(
         `⚠️ Invalid validation progress file detected - cleaning up. Error: ${_error.message}`
@@ -289,7 +289,7 @@ When running the multi-step authorization protocol, progress will be displayed h
  * @param {Object} logger - LOGGER instance for output
  * @returns {Object} Cleanup results
  */
-function cleanupStaleAgentsInProject(projectPath, logger) {
+function cleanupStaleAgentsInProject(projectPath, logger, category = 'general') {
   const todoPath = path.join(projectPath, 'TASKS.json');
 
   // Check if TASKS.json exists in this project
@@ -308,7 +308,7 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
   try {
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path constructed from trusted hook configuration
     todoData = JSON.parse(FS.readFileSync(todoPath, 'utf8'));
-  } catch (_error) {
+  } catch (_) {
     logger.addFlow(
       `Failed to read TASKS.json in ${projectPath}: ${_error.message}`
     );
@@ -352,7 +352,7 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
     const isActive = timeSinceHeartbeat < staleAgentTimeout;
 
     if (!isActive) {
-      staleAgents.push(_AGENT_ID);
+      staleAgents.push(AGENT_ID);
     }
   }
 
@@ -414,7 +414,7 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- Hook system path controlled by stop hook security protocols
       FS.writeFileSync(todoPath, JSON.stringify(todoData, null, 2));
       logger.addFlow(`Updated ${projectPath}/TASKS.json with cleanup results`);
-    } catch (_error) {
+    } catch (_) {
       logger.addFlow(
         `Failed to write TASKS.json in ${projectPath}: ${_error.message}`
       );
@@ -436,7 +436,7 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
  * @param {Object} logger - LOGGER instance for output
  * @returns {Object} Overall cleanup results
  */
-async function cleanupStaleAgentsAcrossProjects(logger) {
+async function cleanupStaleAgentsAcrossProjects(logger, category = 'general') {
   // Define known project paths to check for stale agents
   const knownProjects = [
     '/Users/jeremyparker/Desktop/Claude Coding Projects/AIgent/bytebot',
@@ -475,7 +475,7 @@ async function cleanupStaleAgentsAcrossProjects(logger) {
           skipped: true,
         };
       }
-    } catch (_error) {
+    } catch (_) {
       const errorMsg = `Failed to process ${projectPath}: ${_error.message}`;
       logger.addFlow(errorMsg);
       return {
@@ -512,7 +512,7 @@ async function cleanupStaleAgentsAcrossProjects(logger) {
 /**
  * Automatically reclassify test errors And sort tasks according to CLAUDE.md priority rules
  */
-async function autoSortTasksByPriority(_taskManager) {
+async function autoSortTasksByPriority(_taskManager, category = 'general') {
   try {
     const todoData = await _taskManager.readTodo();
     let tasksMoved = 0;
@@ -743,7 +743,7 @@ async function autoSortTasksByPriority(_taskManager) {
       tasksUpdated,
       totalTasks: tasksOrFeatures.length,
     };
-  } catch (_error) {
+  } catch (_) {
     // Log _error through logger for proper tracking - use loggers.app for _error handling
     loggers.app.error('autoSortTasksByPriority error:', _error);
     return { error: _error.message, tasksMoved: 0, tasksUpdated: 0 };
@@ -753,7 +753,12 @@ async function autoSortTasksByPriority(_taskManager) {
 /**
  * Provides standardized TaskManager API guidance for all scenarios
  */
-function provideInstructiveTaskGuidance(taskManager, taskStatus) {
+function provideInstructiveTaskGuidance(
+  taskManager,
+  taskStatus,
+  agentId,
+  category = 'general'
+) {
   return `
 📋 CLAUDE CODE AGENT TASK CONTINUATION PROTOCOL
 
@@ -1124,9 +1129,9 @@ If you want to enable task management for this project:
       );
 
       if (isActive) {
-        activeAgents.push(_AGENT_ID);
+        activeAgents.push(AGENT_ID);
       } else {
-        staleAgents.push(_AGENT_ID);
+        staleAgents.push(AGENT_ID);
       }
     }
 
@@ -1231,7 +1236,7 @@ If you want to enable task management for this project:
     const orphanedTaskTimeout = 86400000; // 24 hours in milliseconds
     let orphanedTasksReset = 0;
 
-    function getLastActivityTime(item) {
+    function getLastActivityTime(item, category = 'general') {
       if (
         !item.agent_assignment_history ||
         item.agent_assignment_history.length === 0
@@ -1566,7 +1571,7 @@ node -e "const TASK_MANAGER = require('/Users/jeremyparker/infinite-continue-sto
     let taskStatus;
     try {
       taskStatus = await taskManager.getTaskStatus();
-    } catch (_error) {
+    } catch (_) {
       // Handle corrupted TASKS.json by using autoFixer
       logger.addFlow(
         `Task status failed, attempting auto-fix: ${_error.message}`
@@ -1673,7 +1678,7 @@ This system operates in infinite continue mode. To authorize a stop, use:
 
     // eslint-disable-next-line n/no-process-exit
     process.exit(2); // Always continue - never allow natural stops
-  } catch (_error) {
+  } catch (_) {
     console.error('DETAILED ERROR DEBUG:', _error.name, ':', _error.message);
     console.error('STACK TRACE:', _error.stack);
     loggers.app.error('stop-hook-main error:', _error);

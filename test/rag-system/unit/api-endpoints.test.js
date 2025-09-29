@@ -1,3 +1,4 @@
+const { loggers } = require('../lib/logger');
 /**
  * RAG System API Endpoints Unit Tests
  *
@@ -131,7 +132,7 @@ describe('RAG System API Endpoints', () => {
 
           const DURATION = Date.now() - start;
           expect(duration).toBeLessThan(10000);
-        } catch (_error) {
+        } catch (_) {
         expect(_error.code).toBe('ECONNABORTED');
         }
         */

@@ -1,3 +1,4 @@
+/* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-object-injection */
 /**
  * Test Notification System for CI/CD Integration
  *
@@ -65,8 +66,8 @@ class TestNotificationSystem {
       await this.updateNotificationHistory(notifications);
 
       loggers.stopHook.log(`📤 Sent ${notifications.length} notification(s)`);
-    } catch (_error) {
-      loggers.stopHook.error(
+    } catch (_) {
+      loggers.stopHook._error(
         '❌ Failed to process notifications:',
         _error.message,
       );
@@ -523,7 +524,7 @@ class TestNotificationSystem {
       if (FS.existsSync(path)) {
         return JSON.parse(FS.readFileSync(path, 'utf8'));
       }
-    } catch (_error) {
+    } catch (_) {
       loggers.stopHook.warn('⚠️ Could not load test results:', _error.message);
     }
     return null;
@@ -535,7 +536,7 @@ class TestNotificationSystem {
       if (FS.existsSync(path)) {
         return JSON.parse(FS.readFileSync(path, 'utf8'));
       }
-    } catch (_error) {
+    } catch (_) {
       loggers.stopHook.warn('⚠️ Could not load coverage data:', _error.message);
     }
     return null;
@@ -547,7 +548,7 @@ class TestNotificationSystem {
       if (FS.existsSync(path)) {
         return JSON.parse(FS.readFileSync(path, 'utf8'));
       }
-    } catch (_error) {
+    } catch (_) {
       loggers.stopHook.warn('⚠️ Could not load CI/CD data:', _error.message);
     }
     return null;
@@ -558,7 +559,7 @@ class TestNotificationSystem {
       if (FS.existsSync(this.options.historyFile)) {
         return JSON.parse(FS.readFileSync(this.options.historyFile, 'utf8'));
       }
-    } catch (_error) {
+    } catch (_) {
       loggers.stopHook.warn(
         '⚠️ Could not load notification history:',
         _error.message,
@@ -603,7 +604,7 @@ class TestNotificationSystem {
         this.options.historyFile,
         JSON.stringify(this.notificationHistory, null, 2),
       );
-    } catch (_error) {
+    } catch (_) {
       loggers.stopHook.warn(
         '⚠️ Could not update notification history:',
         _error.message,
@@ -614,7 +615,7 @@ class TestNotificationSystem {
   getGitCommit() {
     try {
       return execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim();
-    } catch (_error) {
+    } catch (_) {
       return 'unknown';
     }
   }

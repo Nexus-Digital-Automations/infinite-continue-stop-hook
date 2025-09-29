@@ -573,7 +573,7 @@ describe('Agent Management', () => {
 
           expect(result.success).toBe(false);
           expect(result.error).toContain('Failed to authorize stop');
-        } catch (_error) {
+        } catch (_) {
           // Expected in this test scenario
           expect(_error.message).toContain('File system unavailable');
         }
@@ -733,8 +733,8 @@ describe('Agent Management', () => {
         const agents = ['concurrent-1', 'concurrent-2', 'concurrent-3'];
 
         // Simulate concurrent operations
-        const promises = agents.map((_AGENT_ID) =>
-          api.initializeAgent(_AGENT_ID),
+        const promises = agents.map((AGENT_ID) =>
+          api.initializeAgent(AGENT_ID),
         );
         const results = await Promise.all(promises);
 
@@ -744,8 +744,8 @@ describe('Agent Management', () => {
         });
 
         const features = await api._loadFeatures();
-        agents.forEach((_AGENT_ID) => {
-          expect(features.agents[_AGENT_ID]).toBeDefined();
+        agents.forEach((AGENT_ID) => {
+          expect(features.agents[AGENT_ID]).toBeDefined();
         });
       });
     });

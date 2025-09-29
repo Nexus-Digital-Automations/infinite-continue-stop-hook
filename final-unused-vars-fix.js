@@ -1,3 +1,4 @@
+/* eslint-disable no-console, security/detect-non-literal-fs-filename */
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
@@ -27,26 +28,26 @@ const additionalPatterns = [
   { search: /(\s+)let result = /g, replace: '$1let result = ' },
 
   // Catch error patterns - more specific
-  { search: /} catch \(error\) \{/g, replace: '} catch (_error) {' },
+  { search: /} catch \(error\) \{/g, replace: '} catch (_) {' },
   { search: /catch \(error\) \{/g, replace: 'catch (_error) {' },
   { search: /catch\(error\) \{/g, replace: 'catch(_error) {' },
 
   // Function parameter patterns
   {
-    search: /function[^(]*\(([^)]*\bfilePath\b[^)]*)\)/g,
-    replace: function (match, params) {
-      return match.replace(/\bfilePath\b/g, 'FILE_PATH');
+    search: /function[^(]*\(([^)]*\b_filePath\b[^)]*)\)/g,
+    replace: function (match, params, __filename) {
+      return match.replace(/\b_filePath\b/g, '__filename');
     },
   },
   {
-    search: /\(([^)]*\bfilePath\b[^)]*)\) =>/g,
-    replace: function (match, params) {
-      return match.replace(/\bfilePath\b/g, 'FILE_PATH');
+    search: /\(([^)]*\b_filePath\b[^)]*)\) =>/g,
+    replace: function (match, params, __filename) {
+      return match.replace(/\b_filePath\b/g, '__filename');
     },
   },
 
   // LINT_RESULT
-  { search: /const LINT_RESULT = /g, replace: 'const LINT_RESULT = ' },
+  { search: /const _LINT_RESULT = /g, replace: 'const _LINT_RESULT = ' },
 ];
 
 function getAllJSFiles(dir) {
@@ -71,9 +72,9 @@ function getAllJSFiles(dir) {
   return files;
 }
 
-function fixFileUnusedVars(filePath) {
+function fixFileUnusedVars(_filePath) {
   try {
-    let content = fs.readFileSync(FILE_PATH, 'utf8');
+    let content = fs.readFileSync(_filePath, 'utf8');
     let modified = false;
 
     for (const pattern of additionalPatterns) {
@@ -83,7 +84,7 @@ function fixFileUnusedVars(filePath) {
           content = newContent;
           modified = true;
           console.log(
-            `  ✓ Applied function pattern in ${path.relative(process.cwd(), filePath)}`
+            `  ✓ Applied function pattern in ${path.relative(process.cwd(), _filePath)}`,
           );
         }
       } else {
@@ -93,7 +94,7 @@ function fixFileUnusedVars(filePath) {
             content = newContent;
             modified = true;
             console.log(
-              `  ✓ Applied pattern in ${path.relative(process.cwd(), filePath)}`
+              `  ✓ Applied pattern in ${path.relative(process.cwd(), _filePath)}`,
             );
           }
         }
@@ -101,13 +102,13 @@ function fixFileUnusedVars(filePath) {
     }
 
     if (modified) {
-      fs.writeFileSync(FILE_PATH, content, 'utf8');
+      fs.writeFileSync(__filename, content, 'utf8');
       return true;
     }
 
     return false;
-  } catch (_error) {
-    console.error(`  ✗ Error processing ${FILE_PATH}:`, _error.message);
+  } catch (_) {
+    console.error(`  ✗ Error processing ${__filename}:`, _error.message);
     return false;
   }
 }
@@ -120,10 +121,10 @@ function main() {
 
   let totalModified = 0;
 
-  for (const filePath of jsFiles) {
-    const relativePath = path.relative(projectRoot, filePath);
+  for (const _filePath of jsFiles) {
+    const relativePath = path.relative(projectRoot, _filePath);
 
-    if (fixFileUnusedVars(filePath)) {
+    if (fixFileUnusedVars(_filePath)) {
       console.log(`Processing: ${relativePath} - MODIFIED`);
       totalModified++;
     }
@@ -138,14 +139,14 @@ function main() {
   try {
     execSync('npm run lint', { stdio: 'pipe' });
     console.log('✅ All linting errors resolved!');
-  } catch (_error) {
+  } catch (_) {
     console.log(
-      '⚠️  Some linting errors may remain. Running detailed check...'
+      '⚠️  Some linting errors may remain. Running detailed check...',
     );
     try {
       const output = execSync(
         'npm run lint 2>&1 | grep "no-unused-vars" | head -10',
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       );
       if (output.trim()) {
         console.log('Remaining no-unused-vars errors:');

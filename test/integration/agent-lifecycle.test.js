@@ -108,7 +108,7 @@ describe('Agent Lifecycle Integration Tests', () => {
 
     test('should handle multiple agent initialization', async () => {
       // 1. Initialize multiple agents
-      const agentIds = [
+      const AGENT_IDS = [
         'multi-agent-001',
         'multi-agent-002',
         'multi-agent-003',
@@ -117,7 +117,7 @@ describe('Agent Lifecycle Integration Tests', () => {
       ];
 
       const initResults = [];
-      for (const agentId of agentIds) {
+      for (const agentId of AGENT_IDS) {
         // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup with ordered agent initialization
         const result = await execAPI('initialize', [agentId], {
           projectRoot: testDir,
@@ -129,11 +129,11 @@ describe('Agent Lifecycle Integration Tests', () => {
       // 2. Verify all agents have unique session IDs
       const sessionIds = initResults.map((result) => result.agent.sessionId);
       const uniqueSessionIds = new Set(sessionIds);
-      expect(uniqueSessionIds.size).toBe(agentIds.length);
+      expect(uniqueSessionIds.size).toBe(AGENT_IDS.length);
 
       // 3. Verify all agents are recorded
       const featuresData = await readFeaturesFile(testDir);
-      agentIds.forEach((_AGENT_ID) => {
+      AGENT_IDS.forEach((AGENT_ID) => {
         expect(featuresData.agents[agentId]).toBeDefined();
         expect(featuresData.agents[agentId].status).toBe('active');
       });
@@ -144,20 +144,20 @@ describe('Agent Lifecycle Integration Tests', () => {
       });
       expect(statsResult.success).toBe(true);
       expect(statsResult.stats.total_initializations).toBeGreaterThanOrEqual(
-        agentIds.length,
+        AGENT_IDS.length,
       );
     });
 
     test('should handle concurrent agent initialization', async () => {
       // 1. Create multiple agents concurrently
-      const agentIds = Array.from(
+      const AGENT_IDS = Array.from(
         { length: 10 },
         (_, i) => `concurrent-agent-${i + 1}`,
       );
 
-      const concurrentCommands = agentIds.map((_AGENT_ID) => ({
+      const concurrentCommands = AGENT_IDS.map((AGENT_ID) => ({
         command: 'initialize',
-        args: [_AGENT_ID],
+        args: [AGENT_ID],
         options: { projectRoot: testDir },
       }));
 
@@ -169,13 +169,13 @@ describe('Agent Lifecycle Integration Tests', () => {
       // 3. Verify all agents have unique session IDs
       const sessionIds = results.map((result) => result.agent.sessionId);
       const uniqueSessionIds = new Set(sessionIds);
-      expect(uniqueSessionIds.size).toBe(agentIds.length);
+      expect(uniqueSessionIds.size).toBe(AGENT_IDS.length);
 
       // 4. Verify file integrity after concurrent operations
       const featuresData = await readFeaturesFile(testDir);
       validateFeaturesStructure(featuresData);
 
-      agentIds.forEach((_AGENT_ID) => {
+      AGENT_IDS.forEach((AGENT_ID) => {
         expect(featuresData.agents[agentId]).toBeDefined();
         expect(featuresData.agents[agentId].status).toBe('active');
       });
@@ -186,7 +186,7 @@ describe('Agent Lifecycle Integration Tests', () => {
       });
       expect(statsResult.success).toBe(true);
       expect(statsResult.stats.total_initializations).toBeGreaterThanOrEqual(
-        agentIds.length,
+        AGENT_IDS.length,
       );
     });
 
@@ -338,13 +338,13 @@ describe('Agent Lifecycle Integration Tests', () => {
 
     test('should handle concurrent reinitializations', async () => {
       // 1. Initialize multiple agents
-      const agentIds = [
+      const AGENT_IDS = [
         'concurrent-reinit-1',
         'concurrent-reinit-2',
         'concurrent-reinit-3',
       ];
 
-      for (const agentId of agentIds) {
+      for (const agentId of AGENT_IDS) {
         const initResult = await execAPI('initialize', [agentId], {
           projectRoot: testDir,
         });
@@ -352,9 +352,9 @@ describe('Agent Lifecycle Integration Tests', () => {
       }
 
       // 2. Reinitialize all agents concurrently
-      const reinitCommands = agentIds.map((_AGENT_ID) => ({
+      const reinitCommands = AGENT_IDS.map((AGENT_ID) => ({
         command: 'reinitialize',
-        args: [_AGENT_ID],
+        args: [AGENT_ID],
         options: { projectRoot: testDir },
       }));
 
@@ -366,13 +366,13 @@ describe('Agent Lifecycle Integration Tests', () => {
       // 4. Verify unique session IDs
       const sessionIds = reinitResults.map((result) => result.agent.sessionId);
       const uniqueSessionIds = new Set(sessionIds);
-      expect(uniqueSessionIds.size).toBe(agentIds.length);
+      expect(uniqueSessionIds.size).toBe(AGENT_IDS.length);
 
       // 5. Verify file integrity
       const featuresData = await readFeaturesFile(testDir);
       validateFeaturesStructure(featuresData);
 
-      agentIds.forEach((_AGENT_ID) => {
+      AGENT_IDS.forEach((AGENT_ID) => {
         expect(featuresData.agents[agentId]).toBeDefined();
         expect(featuresData.agents[agentId].previousSessions).toHaveLength(1);
       });
@@ -528,9 +528,9 @@ describe('Agent Lifecycle Integration Tests', () => {
 
     test('should handle multiple stop authorizations', async () => {
       // 1. Initialize multiple agents
-      const agentIds = ['multi-stop-1', 'multi-stop-2', 'multi-stop-3'];
+      const AGENT_IDS = ['multi-stop-1', 'multi-stop-2', 'multi-stop-3'];
 
-      for (const agentId of agentIds) {
+      for (const agentId of AGENT_IDS) {
         const initResult = await execAPI('initialize', [agentId], {
           projectRoot: testDir,
         });
@@ -538,7 +538,7 @@ describe('Agent Lifecycle Integration Tests', () => {
       }
 
       // 2. Each agent authorizes stop (last one wins)
-      for (const agentId of agentIds) {
+      for (const agentId of AGENT_IDS) {
         const stopResult = await execAPI(
           'authorize-stop',
           [agentId, `Stop authorized by ${agentId}`],
@@ -553,9 +553,9 @@ describe('Agent Lifecycle Integration Tests', () => {
       const stopFlagContent = await FS.readFile(stopFlagPath, 'utf8');
       const stopFlagData = JSON.parse(stopFlagContent);
 
-      expect(stopFlagData.authorized_by).toBe(agentIds[agentIds.length - 1]);
+      expect(stopFlagData.authorized_by).toBe(AGENT_IDS[AGENT_IDS.length - 1]);
       expect(stopFlagData.reason).toBe(
-        `Stop authorized by ${agentIds[agentIds.length - 1]}`,
+        `Stop authorized by ${AGENT_IDS[AGENT_IDS.length - 1]}`,
       );
     });
   });
@@ -815,9 +815,9 @@ describe('Agent Lifecycle Integration Tests', () => {
 
       // 3. Verify all agents are tracked
       const featuresData = await readFeaturesFile(testDir);
-      agentTeam.forEach((_AGENT_ID) => {
-        expect(featuresData.agents[_AGENT_ID]).toBeDefined();
-        expect(featuresData.agents[_AGENT_ID].status).toBe('active');
+      agentTeam.forEach((AGENT_ID) => {
+        expect(featuresData.agents[AGENT_ID]).toBeDefined();
+        expect(featuresData.agents[AGENT_ID].status).toBe('active');
       });
 
       // 4. Lead agent authorizes stop after team completion

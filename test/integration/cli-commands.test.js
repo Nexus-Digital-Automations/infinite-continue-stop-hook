@@ -53,7 +53,7 @@ describe('CLI Commands Integration Tests', () => {
    * @param {Object} options - Execution options
    * @returns {Promise<{stdout: string, stderr: string, code: number}>}
    */
-  function execCLIDirect(args, options = {}) {
+  async function execCLIDirect(args, options = {}, category = 'general') {
     const { timeout = DEFAULT_TIMEOUT, cwd = testDir } = options;
 
     return new Promise((resolve, reject) => {
@@ -437,7 +437,7 @@ describe('CLI Commands Integration Tests', () => {
         const errorOutput = JSON.parse(result1.stderr);
         expect(errorOutput.success).toBe(false);
         expect(errorOutput.error).toBeDefined();
-      } catch (_error) {
+      } catch (_) {
         // If not JSON, should still contain _error information
         expect(result1.stderr).toContain('required') ||
           expect(result1.stderr).toContain('Error') ||
@@ -513,7 +513,7 @@ describe('CLI Commands Integration Tests', () => {
         }); // Very short timeout
 
         // If it doesn't timeout, That's fine too (command was very fast)
-      } catch (_error) {
+      } catch (_) {
         expect(_error.message).toContain('timed out');
       }
     });

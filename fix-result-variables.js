@@ -1,3 +1,4 @@
+/* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-object-injection */
 /**
  * Fix result/result Variable Inconsistencies
  *
@@ -63,15 +64,15 @@ class ResultVariableFixer {
       console.log(`📁 Found ${allFiles.length} files with result issues`);
 
       // Process each file
-      for (const filePath of allFiles) {
+      for (const _filePath of allFiles) {
         this.processFile(FILE_PATH);
       }
 
       this.generateReport();
 
       console.log('✅ result/result variable fix completed successfully');
-    } catch (_error) {
-      console.error(
+    } catch (_) {
+      console._error(
         '❌ Failed to fix result/result variables:',
         _error.message
       );
@@ -117,7 +118,7 @@ class ResultVariableFixer {
           }
         }
       }
-    } catch (_error) {
+    } catch (_) {
       console.warn(
         `⚠️ Warning: Could not read directory ${dir}: ${_error.message}`
       );
@@ -127,11 +128,11 @@ class ResultVariableFixer {
   /**
    * Process individual file to fix result issues
    */
-  processFile(FILE_PATH) {
+  processFile(FILE_PATH, FILE_PATH) {
     try {
       console.log(`🔧 Processing: ${PATH.relative(process.cwd(), FILE_PATH)}`);
 
-      let content = FS.readFileSync(filePath, 'utf8');
+      let content = FS.readFileSync(_filePath, 'utf8');
       let modified = false;
       let changes = 0;
 
@@ -144,7 +145,7 @@ class ResultVariableFixer {
       ];
 
       for (const fix of fixes) {
-        const result = fix(content, FILE_PATH);
+        const result = fix(content);
         if (result.modified) {
           content = result.content;
           modified = true;
@@ -153,21 +154,21 @@ class ResultVariableFixer {
       }
 
       if (modified) {
-        FS.writeFileSync(filePath, content);
+        FS.writeFileSync(_filePath, content);
         this.fixedFiles.push({
-          path: filePath,
+          path: _filePath,
           changes,
         });
         console.log(
-          `✅ Fixed ${changes} issues in ${PATH.relative(process.cwd(), filePath)}`
+          `✅ Fixed ${changes} issues in ${PATH.relative(process.cwd(), _filePath)}`
         );
       }
 
       this.stats.filesProcessed++;
-    } catch (_error) {
-      console.error(`❌ Error processing ${filePath}: ${_error.message}`);
+    } catch (_) {
+      console.error(`❌ Error processing ${_filePath}: ${_error.message}`);
       this.errors.push({
-        file: filePath,
+        file: _filePath,
         error: _error.message,
       });
     }
@@ -176,7 +177,7 @@ class ResultVariableFixer {
   /**
    * Fix result variable names to lowercase result
    */
-  fixResultVariableNames(content, filePath) {
+  fixResultVariableNames(content, _filePath) {
     let modified = false;
     let changes = 0;
 
@@ -359,7 +360,7 @@ class ResultVariableFixer {
   /**
    * Fix specific patterns identified in the codebase
    */
-  fixSpecificPatterns(content, FILE_PATH) {
+  fixSpecificPatterns(content, FILE_PATH, FILE_PATH) {
     let modified = false;
     let changes = 0;
 

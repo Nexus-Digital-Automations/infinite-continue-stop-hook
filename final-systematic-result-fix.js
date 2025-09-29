@@ -1,3 +1,4 @@
+/* eslint-disable no-console, security/detect-non-literal-fs-filename */
 /**
  * Final Systematic result/result Variable Pattern Fix
  *
@@ -25,19 +26,19 @@ class FinalSystematicResultFix {
    */
   async applySystematicFixes() {
     console.log(
-      '🔧 Starting final systematic result/result variable pattern fixes...'
+      '🔧 Starting final systematic result/result variable pattern fixes...',
     );
 
     try {
       // Get all relevant files
       const sourceFiles = await this.getAllSourceFiles();
 
-      for (const filePath of sourceFiles) {
-        await this.processFile(filePath);
+      for (const _filePath of sourceFiles) {
+        await this.processFile(_filePath);
       }
 
       this.reportResults();
-    } catch (_error) {
+    } catch (_) {
       console.error('❌ Error during systematic fixes:', _error.message);
       throw new Error(`Systematic fixes failed: ${_error.message}`);
     }
@@ -74,7 +75,7 @@ class FinalSystematicResultFix {
           files.push(file);
         }
       }
-    } catch (_error) {
+    } catch (_) {
       console.error('Error finding files:', _error.message);
     }
 
@@ -84,11 +85,11 @@ class FinalSystematicResultFix {
   /**
    * Check if file should be processed
    */
-  shouldProcessFile(filePath) {
+  shouldProcessFile(_filePath) {
     // Skip if file doesn't exist or is not readable
     try {
-      fs.accessSync(filePath, fs.constants.R_OK | fs.constants.W_OK);
-    } catch (_error) {
+      fs.accessSync(_filePath, fs.constants.R_OK | fs.constants.W_OK);
+    } catch (_) {
       return false;
     }
 
@@ -98,27 +99,27 @@ class FinalSystematicResultFix {
   /**
    * Process individual file
    */
-  processFile(filePath) {
+  processFile(_filePath) {
     this.processedFiles++;
 
     try {
-      const originalContent = fs.readFileSync(filePath, 'utf8');
-      const fixedContent = this.applyResultFixes(originalContent, filePath);
+      const originalContent = fs.readFileSync(_filePath, 'utf8');
+      const fixedContent = this.applyResultFixes(originalContent, _filePath);
 
       if (fixedContent !== originalContent) {
-        fs.writeFileSync(filePath, fixedContent);
+        fs.writeFileSync(_filePath, fixedContent);
         this.fixedFiles++;
-        console.log(`✅ Fixed: ${path.relative(this.projectRoot, filePath)}`);
+        console.log(`✅ Fixed: ${path.relative(this.projectRoot, _filePath)}`);
       }
-    } catch (_error) {
-      console.error(`❌ Error processing ${filePath}:`, _error.message);
+    } catch (_) {
+      console.error(`❌ Error processing ${_filePath}:`, _error.message);
     }
   }
 
   /**
    * Apply all result variable fixes
    */
-  applyResultFixes(content, filePath) {
+  applyResultFixes(content, _filePath) {
     let fixed = content;
     let replacements = 0;
 
@@ -137,7 +138,7 @@ class FinalSystematicResultFix {
     }
 
     // Apply context-specific fixes
-    fixed = this.applyContextSpecificFixes(fixed, FILE_PATH);
+    fixed = this.applyContextSpecificFixes(fixed);
 
     // Final validation and cleanup
     fixed = this.validateAndCleanup(fixed);
@@ -243,20 +244,20 @@ class FinalSystematicResultFix {
   /**
    * Apply context-specific fixes
    */
-  applyContextSpecificFixes(content, filePath) {
+  applyContextSpecificFixes(content, _filePath) {
     let fixed = content;
 
     // Handle test files specifically
     if (
-      filePath.includes('/test/') ||
-      filePath.includes('.test.') ||
-      filePath.includes('.spec.')
+      _filePath.includes('/test/') ||
+      _filePath.includes('.test.') ||
+      _filePath.includes('.spec.')
     ) {
       fixed = this.applyTestFileFixes(fixed);
     }
 
     // Handle API files specifically
-    if (filePath.includes('api') || filePath.includes('API')) {
+    if (_filePath.includes('api') || _filePath.includes('API')) {
       fixed = this.applyApiFixes(fixed);
     }
 
@@ -340,7 +341,7 @@ class FinalSystematicResultFix {
     // Handle multiline declarations
     fixed = fixed.replace(
       /const result = ([^;]+);\s*([^=\n]+)\s*=\s*result/gm,
-      'const result = $1;\n$2 = result'
+      'const result = $1;\n$2 = result',
     );
 
     // Handle destructuring
@@ -349,7 +350,7 @@ class FinalSystematicResultFix {
     // Handle array destructuring
     fixed = fixed.replace(
       /const \[([^\]]+)\] = result/g,
-      'const [$1] = result'
+      'const [$1] = result',
     );
 
     return fixed;
@@ -367,7 +368,7 @@ class FinalSystematicResultFix {
       (match) => {
         const lines = match.split('\n');
         return lines[lines.length - 1] || match;
-      }
+      },
     );
 
     // Fix spacing issues
@@ -377,7 +378,7 @@ class FinalSystematicResultFix {
     // Ensure consistent semicolons
     cleaned = cleaned.replace(
       /const result = ([^;]+)(?!;)/gm,
-      'const result = $1;'
+      'const result = $1;',
     );
 
     return cleaned;
@@ -394,14 +395,14 @@ class FinalSystematicResultFix {
 
     if (this.fixedFiles > 0) {
       console.log(
-        '\n✅ All result/result variable patterns have been systematically fixed!'
+        '\n✅ All result/result variable patterns have been systematically fixed!',
       );
       console.log(
-        '🎯 Codebase now has consistent lowercase "result" variable naming.'
+        '🎯 Codebase now has consistent lowercase "result" variable naming.',
       );
     } else {
       console.log(
-        '\n✅ No result/result inconsistencies found - codebase is already consistent!'
+        '\n✅ No result/result inconsistencies found - codebase is already consistent!',
       );
     }
   }

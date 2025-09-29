@@ -569,7 +569,7 @@ class TestAssertions {
         throw new Error(
           `Function should have thrown an error for input: ${JSON.stringify(invalidInput)}`,
         );
-      } catch (_error) {
+      } catch (_) {
         // This is expected - function should handle invalid input gracefully
         expect(_error).toBeInstanceOf(Error);
         expect(_error.message).toBeDefined();

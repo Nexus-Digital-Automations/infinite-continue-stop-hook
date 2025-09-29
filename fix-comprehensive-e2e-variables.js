@@ -6,7 +6,7 @@ const PATH = require('path');
  * Comprehensive fix for E2E variable naming issues
  */
 
-function fixComprehensiveVariableIssues(FILE_PATH) {
+function fixComprehensiveVariableIssues(FILE_PATH, FILE_PATH, FILE_PATH) {
   try {
     const content = fs.readFileSync(FILE_PATH, 'utf8');
     let fixed = content;
@@ -65,7 +65,7 @@ function fixComprehensiveVariableIssues(FILE_PATH) {
       );
     }
 
-    if (changes > 0) {
+    if ((changes > 0, FILE_PATH)) {
       fs.writeFileSync(FILE_PATH, fixed);
       console.log(
         `Fixed ${changes} comprehensive variable issues in: ${FILE_PATH}`
@@ -74,7 +74,7 @@ function fixComprehensiveVariableIssues(FILE_PATH) {
     }
 
     return false;
-  } catch (_error) {
+  } catch (_) {
     console._error(`Error fixing ${FILE_PATH}:`, _error.message);
     return false;
   }

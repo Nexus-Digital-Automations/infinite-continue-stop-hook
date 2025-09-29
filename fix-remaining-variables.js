@@ -14,16 +14,16 @@ function getAllJsFiles() {
       .trim()
       .split('\n')
       .filter((f) => f && f.endsWith('.js'));
-  } catch (_error) {
+  } catch (_) {
     console.error('Failed to get JS files:', _error.message);
     return [];
   }
 }
 
 // Fix common variable naming issues
-function fixFile(FILE_PATH) {
+function fixFile(_filePath) {
   try {
-    let content = fs.readFileSync(FILE_PATH, 'utf8');
+    let content = fs.readFileSync(_filePath, 'utf8');
     let modified = false;
 
     // Fix result unused variables - add underscore prefix
@@ -34,8 +34,8 @@ function fixFile(FILE_PATH) {
     }
 
     // Fix AGENT_ID undefined - should be agentId for consistent camelCase
-    const agentIdPattern = /\bAGENT_ID\b/g;
-    if (agentIdPattern.test(content)) {
+    const AGENT_ID_PATTERN = /\bAGENT_ID\b/g;
+    if (AGENT_ID_PATTERN.test(content)) {
       content = content.replace(/\bAGENT_ID\b/g, 'agentId');
       modified = true;
     }
@@ -66,14 +66,14 @@ function fixFile(FILE_PATH) {
     });
 
     if (modified) {
-      fs.writeFileSync(FILE_PATH, content, 'utf8');
-      console.log(`Fixed: ${FILE_PATH}`);
+      fs.writeFileSync(_filePath, content, 'utf8');
+      console.log(`Fixed: ${_filePath}`);
       return true;
     }
 
     return false;
-  } catch (_error) {
-    console.error(`Error fixing ${FILE_PATH}:`, _error.message);
+  } catch (_) {
+    console.error(`Error fixing ${_filePath}:`, _error.message);
     return false;
   }
 }
@@ -98,7 +98,7 @@ console.log('🔧 Running ESLint autofix...');
 try {
   execSync('npm run lint -- --fix', { stdio: 'inherit' });
   console.log('✅ Autofix completed');
-} catch (_error) {
+} catch (_) {
   console.log('⚠️ Autofix completed with some remaining issues');
 }
 

@@ -11,7 +11,7 @@
 
 const { customMatchers } = require('./utils/testUtils');
 const { TestLogger } = require('./utils/testUtils');
-const { _loggers } = require('../lib/logger');
+const { LOGGERS } = require('../lib/logger');
 
 // Set test environment variables
 process.env.NODE_ENV = 'test';
@@ -52,7 +52,7 @@ global.testUtils = {
         // eslint-disable-next-line no-await-in-loop -- Retry mechanism requires sequential attempts
         await fn();
         return;
-      } catch (_error) {
+      } catch (_) {
         // eslint-disable-next-line no-await-in-loop -- Retry mechanism requires sequential delays
         await new Promise((resolve) => {
           setTimeout(resolve, interval);
@@ -131,7 +131,7 @@ console.error = (...args) => {
     if (
       message.includes('Warning: ReactDOM.render is deprecated') ||
       message.includes(
-        'Jest did not exit one second after the test run completed'
+        'Jest did not exit one second after the test run completed',
       ) ||
       message.includes('A worker process has failed to exit gracefully')
     ) {

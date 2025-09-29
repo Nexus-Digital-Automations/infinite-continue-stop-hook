@@ -1,3 +1,4 @@
+const { loggers } = require('../lib/logger');
 /**
  * Quick Performance Test for Critical TaskManager API Endpoints
  * Focused on measuring response times for core operations
@@ -331,7 +332,7 @@ function main() {
     }
 
     loggers.stopHook.log(`\n📄 Full report saved to: ${outputFile}`);
-  } catch (_error) {
+  } catch (_) {
     loggers.stopHook.error('❌ Performance test failed:', _error);
     throw _error;
   }

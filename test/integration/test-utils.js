@@ -1,3 +1,5 @@
+/* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-object-injection */
+const { loggers } = require('../lib/logger');
 /**
  * Integration Test Utilities
  *
@@ -28,7 +30,7 @@ const DEFAULT_TIMEOUT = 15000; // 15 seconds for API operations
  * @param {string} options.projectRoot - Project root directory for the command
  * @returns {Promise<Object>} Parsed JSON response from API
  */
-function execAPI(command, args = [], options = {}) {
+function execAPI(command, args = [], options = {}, category = 'general') {
   const { timeout = DEFAULT_TIMEOUT, projectRoot } = options;
 
   return new Promise((resolve, reject) => {
@@ -74,12 +76,12 @@ function execAPI(command, args = [], options = {}) {
         // Try to parse JSON response
         const result = JSON.parse(jsonString);
         resolve(result);
-      } catch (_error) {
+      } catch (_) {
         // If JSON parsing fails, check if we can extract JSON from stderr
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch (_error) {
+        } catch (_) {
           // If both fail, include raw output for debugging
           reject(
             new Error(
@@ -101,7 +103,7 @@ function execAPI(command, args = [], options = {}) {
  * @param {string} testName - name of the test (used for directory naming)
  * @returns {Promise<string>} Path to the created test environment
  */
-async function createTestEnvironment(testName) {
+async function createTestEnvironment(testName, category = 'general') {
   const testId = `${testName}-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`;
   const testDir = path.join(BASE_TEST_DIR, testId);
 
@@ -139,10 +141,10 @@ async function createTestEnvironment(testName) {
  * @param {string} testDir - Path to the test directory to cleanup
  * @returns {Promise<void>}
  */
-async function cleanupTestEnvironment(testDir) {
+async function cleanupTestEnvironment(testDir, category = 'general') {
   try {
     await FS.rm(testDir, { recursive: true, force: true });
-  } catch (_error) {
+  } catch (_) {
     loggers.stopHook.warn(`Cleanup warning for ${testDir}:`, _error.message);
   }
 }
@@ -219,7 +221,7 @@ function execAPIConcurrently(commands) {
  * @param {Object} overrides - Properties to override in the default feature data
  * @returns {Object} Test feature data
  */
-function generateTestFeature(overrides = {}) {
+function generateTestFeature(overrides = {}, category = 'general') {
   return {
     title: 'Test Feature Integration',
     description: 'This is a test feature for integration testing purposes',
@@ -286,7 +288,7 @@ async function setupGlobalCleanup() {
       return FS.rm(fullPath, { recursive: true, force: true });
     });
     await Promise.all(cleanupPromises);
-  } catch (_error) {
+  } catch (_) {
     loggers.stopHook.warn('Global cleanup warning:', _error.message);
   }
 }
@@ -297,7 +299,7 @@ async function setupGlobalCleanup() {
 async function teardownGlobalCleanup() {
   try {
     await FS.rm(BASE_TEST_DIR, { recursive: true, force: true });
-  } catch (_error) {
+  } catch (_) {
     loggers.stopHook.warn('Global teardown warning:', _error.message);
   }
 }

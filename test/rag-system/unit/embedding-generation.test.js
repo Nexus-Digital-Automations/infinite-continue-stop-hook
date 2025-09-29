@@ -1,3 +1,4 @@
+const { loggers } = require('../lib/logger');
 /**
  * RAG System Embedding Generation Unit Tests
  *
@@ -41,7 +42,7 @@ describe('Embedding Generation System', () => {
           try {
             const _users = await getUsersFromDatabase();
             res.json(users);
-          } catch (_error) {
+          } catch (_) {
             res.status(500).json({ error: 'Internal server error' });
           }
         });
@@ -66,7 +67,7 @@ describe('Embedding Generation System', () => {
 
     test('should handle code snippets appropriately', () => {
       const _codeSnippet = `
-        function calculateUserMetrics(_users) {
+        async function calculateUserMetrics(_users) {
           return users.map(user => ({
             id: user.id,
             totalPosts: user.posts.length,
@@ -152,7 +153,7 @@ describe('Embedding Generation System', () => {
         const DURATION = Date.now() - start;
         expect(duration).toBeLessThan(10000);
         expect(embedding).toBeDefined();
-      } catch (_error) {
+      } catch (_) {
         if (_error.message === 'Timeout') {
           // Acceptable if service properly times out
           const DURATION = Date.now() - start;
@@ -318,7 +319,7 @@ describe('Embedding Generation System', () => {
 
     test('should preserve code structure in preprocessing', () => {
       const _codeContent = `
-        function example() {
+        async function example() {
           const DATA = {
             key: "value",
             number: 42
@@ -457,7 +458,7 @@ describe('Embedding Generation System', () => {
       try {
         const _embedding = await embeddingService.generateEmbedding('test content');
         expect(embedding).toBeNull(); // Should handle gracefully
-      } catch (_error) {
+      } catch (_) {
         expect(_error.message).toContain('Embedding service unavailable');
       } finally {
         embeddingService.embeddingClient = originalService;

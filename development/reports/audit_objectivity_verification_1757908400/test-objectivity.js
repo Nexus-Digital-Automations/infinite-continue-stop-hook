@@ -1,7 +1,8 @@
+/* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-object-injection */
 const FS = require('./lib/taskManager');
 const { loggers } = require('./lib/logger');
 
-async function testObjectivityEnforcement() {
+async function testObjectivityEnforcement(agentId, category = 'general') {
   const tm = new TaskManager('./TODO.json');
   const data = await tm.readTodo();
 

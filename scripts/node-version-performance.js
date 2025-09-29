@@ -203,14 +203,14 @@ class NodeVersionPerformanceBenchmark {
     // File write operations
     const writePromises = [];
     for (let i = 0; i < 100; i++) {
-      const filePath = path.join(tempDir, `test-file-${i}.json`);
+      const _filePath = path.join(tempDir, `test-file-${i}.json`);
       const data = JSON.stringify({
         id: i,
         data: new Array(100).fill(i),
         timestamp: Date.now(),
       });
 
-      writePromises.push(FS.promises.writeFile(filePath, data, 'utf8'));
+      writePromises.push(FS.promises.writeFile(_filePath, data, 'utf8'));
     }
 
     await Promise.all(writePromises);
@@ -282,7 +282,7 @@ class NodeVersionPerformanceBenchmark {
       loggers.app.info(
         `✅ Native modules benchmark completed: ${duration.toFixed(2)}ms`
       );
-    } catch (_error) {
+    } catch (_) {
       this.results.benchmarks.native_modules = {
         duration_ms: 0,
         status: 'failed',
@@ -621,7 +621,7 @@ ${this.results.recommendations?.map((r) => `- ${r}`).join('\n')}
       this.displaySummary();
 
       loggers.stopHook.log('\n✅ Benchmark suite completed successfully!');
-    } catch (_error) {
+    } catch (_) {
       loggers.stopHook.error('❌ Benchmark suite failed:', _error.message);
       throw new Error(`Benchmark suite failed: ${_error.message}`);
     }

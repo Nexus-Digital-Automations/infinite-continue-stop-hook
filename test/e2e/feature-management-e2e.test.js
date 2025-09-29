@@ -170,7 +170,7 @@ describe('Feature Management System E2E', () => {
               const response = JSON.parse(result.value.stdout);
               expect(response.success).toBe(false);
               expect(response.error).toContain('missing');
-            } catch (_error) {
+            } catch (_) {
               // If we can't parse JSON, the command itself may have failed which is also valid
               expect(result.value.success).toBe(false);
             }
@@ -251,7 +251,7 @@ describe('Feature Management System E2E', () => {
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature?.id;
-          } catch (_error) {
+          } catch (_) {
             throw new Error(
               `Failed to extract feature ID from: ${result.result.stdout}`,
             );
@@ -363,7 +363,7 @@ describe('Feature Management System E2E', () => {
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature?.id;
-          } catch (_error) {
+          } catch (_) {
             throw new Error(
               `Failed to extract feature ID from: ${result.result.stdout}`,
             );
@@ -445,7 +445,7 @@ describe('Feature Management System E2E', () => {
           try {
             const response = JSON.parse(result.stdout);
             return response.feature?.id;
-          } catch (_error) {
+          } catch (_) {
             throw new Error(
               `Failed to extract feature ID from: ${result.stdout}`,
             );
@@ -557,7 +557,7 @@ describe('Feature Management System E2E', () => {
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature?.id;
-          } catch (_error) {
+          } catch (_) {
             throw new Error(
               `Failed to extract feature ID from: ${result.result.stdout}`,
             );
@@ -703,7 +703,7 @@ describe('Feature Management System E2E', () => {
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature?.id;
-          } catch (_error) {
+          } catch (_) {
             throw new Error(
               `Failed to extract feature ID from: ${result.result.stdout}`,
             );
@@ -814,7 +814,7 @@ describe('Feature Management System E2E', () => {
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature?.id;
-          } catch (_error) {
+          } catch (_) {
             throw new Error(
               `Failed to extract feature ID from: ${result.result.stdout}`,
             );

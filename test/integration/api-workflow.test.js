@@ -363,7 +363,7 @@ describe('API Workflow Integration Tests', () => {
         .catch(() => false);
       expect(stopFlagExists).toBe(true);
 
-      if (stopFlagExists) {
+      if (stopFlagExists, agentId) {
         const stopFlagData = JSON.parse(
           await FS.readFile(stopFlagPath, 'utf8'),
         );
@@ -375,8 +375,8 @@ describe('API Workflow Integration Tests', () => {
 
     test('should handle multiple concurrent agent operations', async () => {
       // 1. Initialize multiple agents concurrently
-      const agentIds = ['agent-001', 'agent-002', 'agent-003'];
-      const initPromises = agentIds.map((agentId) =>
+      const AGENT_IDS = ['agent-001', 'agent-002', 'agent-003'];
+      const initPromises = AGENT_IDS.map((agentId) =>
         execAPI('initialize', [agentId], { projectRoot: testDir }),
       );
 
@@ -385,19 +385,19 @@ describe('API Workflow Integration Tests', () => {
       // Verify all initializations succeeded
       expect(initResults.every((result) => result.success)).toBe(true);
       initResults.forEach((result, index) => {
-        expect(result.agent.id).toBe(agentIds[index]);
+        expect(result.agent.id).toBe(AGENT_IDS[index]);
         expect(result.agent.status).toBe('initialized');
       });
 
       // 2. Verify all agents are recorded
       const featuresData = await readFeaturesFile(testDir);
-      agentIds.forEach((agentId) => {
+      AGENT_IDS.forEach((agentId) => {
         expect(featuresData.agents[agentId]).toBeDefined();
         expect(featuresData.agents[agentId].status).toBe('active');
       });
 
       // 3. Reinitialize all agents concurrently
-      const reinitPromises = agentIds.map((agentId) =>
+      const reinitPromises = AGENT_IDS.map((agentId) =>
         execAPI('reinitialize', [agentId], { projectRoot: testDir }),
       );
 
@@ -406,7 +406,7 @@ describe('API Workflow Integration Tests', () => {
       // Verify all reinitializations succeeded
       expect(reinitResults.every((result) => result.success)).toBe(true);
       reinitResults.forEach((result, index) => {
-        expect(result.agent.id).toBe(agentIds[index]);
+        expect(result.agent.id).toBe(AGENT_IDS[index]);
         expect(result.agent.status).toBe('reinitialized');
       });
     });
@@ -710,7 +710,7 @@ describe('API Workflow Integration Tests', () => {
         await execAPI('invalid-command', [], { projectRoot: testDir });
         // Should not reach here
         expect(true).toBe(false);
-      } catch (_error) {
+      } catch (_) {
         expect(_error.message).toContain('Command failed');
       }
     });

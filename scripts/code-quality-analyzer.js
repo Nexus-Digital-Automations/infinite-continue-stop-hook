@@ -257,7 +257,7 @@ class CodeQualityAnalyzer {
         recommendations: this.recommendations,
         detailed_metrics: this.metrics,
       };
-    } catch (_error) {
+    } catch (_) {
       this.logger.error('Code quality analysis failed', {
         error: _error.message,
       });
@@ -281,7 +281,7 @@ class CodeQualityAnalyzer {
           absolute: true,
         });
         allFiles.push(...files);
-      } catch (_error) {
+      } catch (_) {
         this.logger.warning(`Failed to glob pattern ${pattern}`, {
           error: _error.message,
         });
@@ -305,12 +305,12 @@ class CodeQualityAnalyzer {
       functions: { total: 0, complex_functions: 0 },
     };
 
-    for (const filePath of this.sourceFiles) {
+    for (const _filePath of this.sourceFiles) {
       try {
-        const fileComplexity = this.analyzeFileComplexity(FILE_PATH);
+        const fileComplexity = this.analyzeFileComplexity(__filename);
 
         // Aggregate cyclomatic complexity
-        complexityData.cyclomatic.files[filePath] = fileComplexity.cyclomatic;
+        complexityData.cyclomatic.files[_filePath] = fileComplexity.cyclomatic;
         complexityData.cyclomatic.total += fileComplexity.cyclomatic;
         complexityData.cyclomatic.max = Math.max(
           complexityData.cyclomatic.max,
@@ -318,7 +318,7 @@ class CodeQualityAnalyzer {
         );
 
         // Aggregate cognitive complexity
-        complexityData.cognitive.files[filePath] = fileComplexity.cognitive;
+        complexityData.cognitive.files[_filePath] = fileComplexity.cognitive;
         complexityData.cognitive.total += fileComplexity.cognitive;
         complexityData.cognitive.max = Math.max(
           complexityData.cognitive.max,
@@ -341,14 +341,14 @@ class CodeQualityAnalyzer {
               this.config.complexity.cyclomatic.critical
                 ? 'critical'
                 : 'warning',
-            file: filePath,
+            file: _filePath,
             metric: 'cyclomatic_complexity',
             value: fileComplexity.cyclomatic,
             message: `High cyclomatic complexity: ${fileComplexity.cyclomatic}`,
           });
         }
-      } catch (_error) {
-        this.logger.debug(`Failed to analyze complexity for ${filePath}`, {
+      } catch (_) {
+        this.logger.debug(`Failed to analyze complexity for ${_filePath}`, {
           error: _error.message,
         });
       }
@@ -370,9 +370,9 @@ class CodeQualityAnalyzer {
   /**
    * Analyze complexity for a single file
    */
-  analyzeFileComplexity(FILE_PATH) {
+  analyzeFileComplexity(__filename, __filename) {
     try {
-      const content = FS.readFileSync(FILE_PATH, 'utf8');
+      const content = FS.readFileSync(__filename, 'utf8');
 
       // Simple complexity analysis (can be enhanced with AST parsing)
       const lines = content.split('\n');
@@ -410,7 +410,7 @@ class CodeQualityAnalyzer {
         complex_functions: complexFunctions,
         line_count: lines.length,
       };
-    } catch (_error) {
+    } catch (_) {
       return {
         cyclomatic: 0,
         cognitive: 0,
@@ -444,15 +444,15 @@ class CodeQualityAnalyzer {
       files_over_threshold: 0,
     };
 
-    for (const filePath of this.sourceFiles) {
+    for (const _filePath of this.sourceFiles) {
       try {
-        const content = FS.readFileSync(FILE_PATH, 'utf8');
+        const content = FS.readFileSync(__filename, 'utf8');
         const lineCount = content.split('\n').length;
 
         sizeData.total_lines += lineCount;
 
         if (lineCount > sizeData.largest_file.lines) {
-          sizeData.largest_file = { path: filePath, lines: lineCount };
+          sizeData.largest_file = { path: _filePath, lines: lineCount };
         }
 
         if (lineCount > this.config.size.lines_per_file.warning) {
@@ -464,14 +464,14 @@ class CodeQualityAnalyzer {
               lineCount > this.config.size.lines_per_file.critical
                 ? 'critical'
                 : 'warning',
-            file: filePath,
+            file: _filePath,
             metric: 'file_size',
             value: lineCount,
             message: `Large file: ${lineCount} lines`,
           });
         }
-      } catch (_error) {
-        this.logger.debug(`Failed to analyze size for ${filePath}`, {
+      } catch (_) {
+        this.logger.debug(`Failed to analyze size for ${_filePath}`, {
           error: _error.message,
         });
       }
@@ -506,9 +506,9 @@ class CodeQualityAnalyzer {
     const lineHashes = new Map();
     const blockHashes = new Map();
 
-    for (const filePath of this.sourceFiles) {
+    for (const _filePath of this.sourceFiles) {
       try {
-        const content = FS.readFileSync(FILE_PATH, 'utf8');
+        const content = FS.readFileSync(__filename, 'utf8');
         const lines = content.split('\n');
 
         // Track line-level duplication
@@ -523,7 +523,7 @@ class CodeQualityAnalyzer {
             if (!lineHashes.has(hash)) {
               lineHashes.set(hash, []);
             }
-            lineHashes.get(hash).push({ file: filePath, line: i + 1 });
+            lineHashes.get(hash).push({ file: _filePath, line: i + 1 });
           }
         }
 
@@ -538,11 +538,11 @@ class CodeQualityAnalyzer {
             if (!blockHashes.has(hash)) {
               blockHashes.set(hash, []);
             }
-            blockHashes.get(hash).push({ file: filePath, startLine: i + 1 });
+            blockHashes.get(hash).push({ file: _filePath, startLine: i + 1 });
           }
         }
-      } catch (_error) {
-        this.logger.debug(`Failed to analyze duplication for ${filePath}`, {
+      } catch (_) {
+        this.logger.debug(`Failed to analyze duplication for ${_filePath}`, {
           error: _error.message,
         });
       }
@@ -656,9 +656,9 @@ class CodeQualityAnalyzer {
       },
     ];
 
-    for (const filePath of this.sourceFiles) {
+    for (const _filePath of this.sourceFiles) {
       try {
-        const content = FS.readFileSync(FILE_PATH, 'utf8');
+        const content = FS.readFileSync(__filename, 'utf8');
         const lines = content.split('\n');
 
         for (let i = 0; i < lines.length; i++) {
@@ -669,7 +669,7 @@ class CodeQualityAnalyzer {
               const vulnerability = {
                 type: 'security',
                 severity: secPattern.severity,
-                file: filePath,
+                file: _filePath,
                 line: i + 1,
                 pattern: secPattern.pattern.source,
                 message: secPattern.message,
@@ -684,8 +684,8 @@ class CodeQualityAnalyzer {
             }
           }
         }
-      } catch (_error) {
-        this.logger.debug(`Failed to analyze security for ${filePath}`, {
+      } catch (_) {
+        this.logger.debug(`Failed to analyze security for ${_filePath}`, {
           error: _error.message,
         });
       }
@@ -790,9 +790,9 @@ class CodeQualityAnalyzer {
     };
 
     // Detect various code smells
-    for (const filePath of this.sourceFiles) {
+    for (const _filePath of this.sourceFiles) {
       try {
-        const content = FS.readFileSync(FILE_PATH, 'utf8');
+        const content = FS.readFileSync(__filename, 'utf8');
         const lines = content.split('\n');
 
         // Detect long methods/functions
@@ -822,7 +822,7 @@ class CodeQualityAnalyzer {
                   this.config.size.lines_per_function.critical
                     ? 'critical'
                     : 'warning',
-                file: filePath,
+                file: _filePath,
                 line: i + 1 - functionLineCount,
                 metric: 'long_method',
                 value: functionLineCount,
@@ -839,8 +839,8 @@ class CodeQualityAnalyzer {
         if (lines.length > this.config.size.lines_per_file.critical) {
           smellsData.god_objects++;
         }
-      } catch (_error) {
-        this.logger.debug(`Failed to detect smells for ${filePath}`, {
+      } catch (_) {
+        this.logger.debug(`Failed to detect smells for ${_filePath}`, {
           error: _error.message,
         });
       }
@@ -887,9 +887,9 @@ class CodeQualityAnalyzer {
     const imports = new Map();
     const exports = new Map();
 
-    for (const filePath of this.sourceFiles) {
+    for (const _filePath of this.sourceFiles) {
       try {
-        const content = FS.readFileSync(FILE_PATH, 'utf8');
+        const content = FS.readFileSync(__filename, 'utf8');
         const lines = content.split('\n');
 
         const fileImports = [];
@@ -917,10 +917,10 @@ class CodeQualityAnalyzer {
           }
         }
 
-        imports.set(filePath, fileImports);
-        exports.set(filePath, fileExports);
-      } catch (_error) {
-        this.logger.debug(`Failed to analyze architecture for ${filePath}`, {
+        imports.set(_filePath, fileImports);
+        exports.set(_filePath, fileExports);
+      } catch (_) {
+        this.logger.debug(`Failed to analyze architecture for ${_filePath}`, {
           error: _error.message,
         });
       }
@@ -1241,7 +1241,7 @@ Examples:
     try {
       const customConfig = JSON.parse(FS.readFileSync(configPath, 'utf8'));
       options.config = customConfig;
-    } catch (_error) {
+    } catch (_) {
       loggers.stopHook.error(`❌ Failed to load config: ${_error.message}`);
       throw _error;
     }
@@ -1263,7 +1263,7 @@ Examples:
     if (result.overall_score < 70) {
       throw new Error('Code quality score below threshold');
     }
-  } catch (_error) {
+  } catch (_) {
     loggers.stopHook.error('❌ Code quality analysis failed:', _error.message);
     throw _error;
   }

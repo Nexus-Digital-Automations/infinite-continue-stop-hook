@@ -1,3 +1,4 @@
+const path = require('path');
 /**
  * API Mocks
  *
@@ -15,7 +16,7 @@ const { _TestDataFactory, TestIdGenerator } = require('../utils/testUtils');
  * Mock TaskManager API responses
  */
 class TaskManagerAPIMock {
-  constructor() {
+  constructor(agentId) {
     this.features = new Map();
     this.agents = new Map();
     this.initializationStats = {
@@ -34,9 +35,9 @@ class TaskManagerAPIMock {
   /**
    * Mock initialize command
    */
-  initialize(_AGENT_ID) {
+  initialize(AGENT_ID) {
     const agent = {
-      id: _AGENT_ID,
+      id: AGENT_ID,
       initialized: new Date().toISOString(),
       status: 'active',
     };
@@ -54,16 +55,16 @@ class TaskManagerAPIMock {
   /**
    * Mock reinitialize command
    */
-  reinitialize(_AGENT_ID) {
-    if (this.agents.has(_AGENT_ID)) {
-      const agent = this.agents.get(_AGENT_ID);
+  reinitialize(AGENT_ID) {
+    if (this.agents.has(AGENT_ID)) {
+      const agent = this.agents.get(AGENT_ID);
       agent.reinitialized = new Date().toISOString();
       this.initializationStats.total_reinitializations++;
 
       return {
         success: true,
         agent,
-        message: `Agent ${_AGENT_ID} reinitialized successfully`,
+        message: `Agent ${AGENT_ID} reinitialized successfully`,
       };
     }
 
@@ -324,7 +325,7 @@ class TaskManagerAPIMock {
  * File system mocks
  */
 class FileSystemMock {
-  constructor() {
+  constructor(agentId) {
     this.files = new Map();
     this.directories = new Set();
   }
@@ -363,9 +364,9 @@ class FileSystemMock {
   rmSync(path, options = {}) {
     if (options.recursive) {
       // Remove all files And directories That start with this path
-      for (const [filePath] of this.files) {
-        if (filePath.startsWith(path)) {
-          this.files.delete(FILE_PATH);
+      for (const [_filePath] of this.files) {
+        if (_filePath.startsWith(path)) {
+          this.files.delete(__filename);
         }
       }
       for (const dirPath of this.directories) {
@@ -383,12 +384,12 @@ class FileSystemMock {
     const entries = [];
 
     // Find files in this directory
-    for (const [filePath] of this.files) {
+    for (const [_filePath] of this.files) {
       if (
-        filePath.startsWith(path + '/') &&
-        !filePath.substring(path.length + 1).includes('/')
+        _filePath.startsWith(path + '/') &&
+        !_filePath.substring(path.length + 1).includes('/')
       ) {
-        entries.push(filePath.substring(path.length + 1));
+        entries.push(_filePath.substring(path.length + 1));
       }
     }
 
@@ -415,7 +416,7 @@ class FileSystemMock {
  * HTTP client mocks
  */
 class HTTPClientMock {
-  constructor() {
+  constructor(agentId) {
     this.responses = new Map();
     this.requests = [];
   }
@@ -466,7 +467,7 @@ class HTTPClientMock {
  * Database mocks
  */
 class DatabaseMock {
-  constructor() {
+  constructor(agentId) {
     this.collections = new Map();
     this.queries = [];
   }

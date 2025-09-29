@@ -45,11 +45,11 @@ describe('Performance Metrics System E2E Tests', () => {
       });
 
       return JSON.parse(result.trim());
-    } catch (_error) {
+    } catch (_) {
       if (_error.stdout) {
         try {
           return JSON.parse(_error.stdout.trim());
-        } catch (_error) {
+        } catch (_) {
           return { success: false, _error: _error.message, stdout: _error.stdout };
         }
       }

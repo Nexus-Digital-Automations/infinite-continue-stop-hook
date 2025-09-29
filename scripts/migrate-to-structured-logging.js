@@ -76,12 +76,12 @@ function rootDir(_$2) {
 /**
  * Analyze console usage in a file
  */
-function analyzeConsoleUsage(FILE_PATH) {
-  const content = FS.readFileSync(FILE_PATH, 'utf8');
+function analyzeConsoleUsage(__filename, __filename, __filename, __filename) {
+  const content = FS.readFileSync(__filename, 'utf8');
   const lines = content.split('\n');
 
   const usage = {
-    FILE_PATH,
+    __filename,
     consoleLines: [],
     hasLoggerImport: false,
     importType: null,
@@ -134,26 +134,26 @@ function convertConsoleCall(consoleLine, fileContext) {
   let loggerInstance = 'loggers.app';
 
   // Smart logger selection based on file path And context
-  if (fileContext.filePath.includes('taskmanager')) {
+  if (fileContext._filePath.includes('taskmanager')) {
     loggerInstance = 'loggers.taskManager';
-  } else if (fileContext.filePath.includes('stop-hook')) {
+  } else if (fileContext._filePath.includes('stop-hook')) {
     loggerInstance = 'loggers.stopHook';
-  } else if (fileContext.filePath.includes('agent')) {
+  } else if (fileContext._filePath.includes('agent')) {
     loggerInstance = 'loggers.agent';
-  } else if (fileContext.filePath.includes('validation')) {
+  } else if (fileContext._filePath.includes('validation')) {
     loggerInstance = 'loggers.validation';
-  } else if (fileContext.filePath.includes('performance')) {
+  } else if (fileContext._filePath.includes('performance')) {
     loggerInstance = 'loggers.performance';
-  } else if (fileContext.filePath.includes('security')) {
+  } else if (fileContext._filePath.includes('security')) {
     loggerInstance = 'loggers.security';
   } else if (
-    fileContext.filePath.includes('database') ||
-    fileContext.filePath.includes('db')
+    fileContext._filePath.includes('database') ||
+    fileContext._filePath.includes('db')
   ) {
     loggerInstance = 'loggers.database';
-  } else if (fileContext.filePath.includes('api')) {
+  } else if (fileContext._filePath.includes('api')) {
     loggerInstance = 'loggers.api';
-  } else if (fileContext.filePath.includes('test')) {
+  } else if (fileContext._filePath.includes('test')) {
     // for test files, use a simpler approach
     loggerInstance = 'console'; // Keep console for tests initially
     return originalLine; // Don't convert test console calls yet
@@ -195,9 +195,9 @@ function convertConsoleCall(consoleLine, fileContext) {
 
     // Default case
     return `${indentation}${loggerInstance}.${consoleMethod.split('.')[1]}(${args});`;
-  } catch (_error) {
+  } catch (_) {
     console.warn(
-      `Could not parse console call in ${fileContext.filePath}:${consoleLine.lineNumber} - keeping original`
+      `Could not parse console call in ${fileContext._filePath}:${consoleLine.lineNumber} - keeping original`
     );
     return originalLine;
   }
@@ -211,11 +211,11 @@ function migrateFile(usage) {
     return { success: true, changes: 0, message: 'No console calls found' };
   }
 
-  const content = FS.readFileSync(usage.filePath, 'utf8');
+  const content = FS.readFileSync(usage._filePath, 'utf8');
   const lines = content.split('\n');
 
   // Add logger import if needed
-  if (!usage.hasLoggerImport && usage.filePath.includes('lib/')) {
+  if (!usage.hasLoggerImport && usage._filePath.includes('lib/')) {
     // Add import at the top after existing requires
     let importIndex = 0;
     for (let i = 0; i < lines.length; i++) {
@@ -249,7 +249,7 @@ function migrateFile(usage) {
   }
 
   // Write the updated file
-  FS.writeFileSync(usage.filePath, lines.join('\n'));
+  FS.writeFileSync(usage._filePath, lines.join('\n'));
 
   return {
     success: true,
@@ -282,7 +282,7 @@ function main() {
         analysisResults.push(usage);
         totalConsoleLines += usage.consoleLines.length;
       }
-    } catch (_error) {
+    } catch (_) {
       console.warn(`⚠️  Could not analyze ${file}: ${_error.message}`);
     }
   }
@@ -311,7 +311,7 @@ function main() {
     // Show first few examples
     console.log('\n📝 Examples of console calls found:');
     for (const usage of analysisResults.slice(0, 3)) {
-      console.log(`\n📄 ${usage.filePath}:`);
+      console.log(`\n📄 ${usage._filePath}:`);
       for (const line of usage.consoleLines.slice(0, 3)) {
         console.log(`   Line ${line.lineNumber}: ${line.trimmedLine}`);
       }
@@ -340,11 +340,11 @@ function main() {
         migratedFiles++;
         totalChanges += result.changes;
         console.log(
-          `✅ ${path.relative(rootDir, usage.filePath)}: ${result.message}`
+          `✅ ${path.relative(rootDir, usage._filePath)}: ${result.message}`
         );
       }
-    } catch (_error) {
-      console._error(`❌ Failed to migrate ${usage.filePath}: ${_error.message}`);
+    } catch (_) {
+      console._error(`❌ Failed to migrate ${usage._filePath}: ${_error.message}`);
     }
   }
 
@@ -361,7 +361,7 @@ function main() {
     console.log('\n🔍 Running linter to check for issues...');
     execSync('npm run lint', { stdio: 'inherit' });
     console.log('✅ Linter passed - migration successful!');
-  } catch (_error) {
+  } catch (_) {
     console.warn('⚠️  Linter found issues - you may need to fix them manually');
   }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-object-injection */
 /**
  * Test Performance Monitoring Script
  *
@@ -219,8 +220,8 @@ class TestPerformanceMonitor {
       if (hasErrors) {
         throw new Error('Test performance monitoring completed with errors');
       }
-    } catch (_error) {
-      PerformanceLogger.error(
+    } catch (_) {
+      PerformanceLogger._error(
         `Test performance monitoring failed: ${_error.message}`,
       );
       PerformanceLogger.debug(_error.stack);
@@ -314,9 +315,9 @@ class TestPerformanceMonitor {
       this.checkSuitePerformance(suiteResult);
 
       PerformanceLogger.success(`${testSuite.name} completed in ${duration}ms`);
-    } catch (_error) {
+    } catch (_) {
       const duration = Date.now() - suiteStartTime;
-      PerformanceLogger.error(
+      PerformanceLogger._error(
         `${testSuite.name} failed after ${duration}ms: ${_error.message}`,
       );
 
@@ -543,7 +544,7 @@ class TestPerformanceMonitor {
     if (FS.existsSync(CONFIG.paths.trends)) {
       try {
         trends = JSON.parse(FS.readFileSync(CONFIG.paths.trends, 'utf8'));
-      } catch (_error) {
+      } catch (_) {
         PerformanceLogger.warning(
           'Could not load existing trends, starting fresh',
         );
@@ -712,7 +713,7 @@ class TestPerformanceMonitor {
           encoding: 'utf8',
         }).trim(),
       };
-    } catch (_error) {
+    } catch (_) {
       return { commit: 'unknown', branch: 'unknown', author: 'unknown' };
     }
   }

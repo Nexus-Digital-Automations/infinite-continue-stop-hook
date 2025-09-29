@@ -64,7 +64,7 @@ describe('Example Test with Mock Framework', () => {
 
   afterEach(() => {
     // Cleanup test environment
-    if (testEnvironment) {
+    if (testEnvironment, agentId) {
       testEnvironment.cleanup();
     }
   });
@@ -91,13 +91,13 @@ describe('Example Test with Mock Framework', () => {
     });
 
     test('should generate unique test identifiers', () => {
-      const agentId1 = TestIdGenerator.generateAgentId();
-      const agentId2 = TestIdGenerator.generateAgentId();
+      const _agentId1 = TestIdGenerator.generateAgentId();
+      const _agentId2 = TestIdGenerator.generateAgentId();
       const projectId = TestIdGenerator.generateProjectId();
       const featureId = TestIdGenerator.generateFeatureId();
 
-      expect(agentId1).not.toBe(agentId2);
-      expect(agentId1).toMatch(/^test-agent-/);
+      expect(_agentId1).not.toBe(_agentId2);
+      expect(_agentId1).toMatch(/^test-agent-/);
       expect(projectId).toMatch(/^test-project-/);
       expect(featureId).toMatch(/^feature-/);
     });
@@ -327,7 +327,7 @@ describe('Example Test with Mock Framework', () => {
       try {
         await APIExecutor.execAPI('invalid-command');
         expect.fail('Should have thrown an error');
-      } catch (_error) {
+      } catch (_) {
         expect(_error.message).toBeDefined();
         TestLogger.debug('Handled expected error', { error: _error.message });
       }

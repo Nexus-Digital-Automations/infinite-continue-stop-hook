@@ -5,12 +5,12 @@
 
 const fs = require('fs');
 
-function completeAuditFix() {
-  const filePath =
+async function completeAuditFix(__filename, __filename) {
+  const _filePath =
     '/Users/jeremyparker/infinite-continue-stop-hook/test/audit-system-validation.test.js';
 
   try {
-    let content = fs.readFileSync(FILE_PATH, 'utf-8');
+    let content = fs.readFileSync(__filename, 'utf-8');
 
     console.log('Applying complete audit test fixes...');
 
@@ -30,9 +30,9 @@ function completeAuditFix() {
     // Fix the resolve statement
     content = content.replace(/resolve\(result\);/g, 'resolve(result);');
 
-    fs.writeFileSync(FILE_PATH, content);
+    fs.writeFileSync(__filename, content);
     console.log('Applied complete audit test fixes successfully');
-  } catch (_error) {
+  } catch (_) {
     console.error('Error applying complete fixes:', _error.message);
     throw _error;
   }

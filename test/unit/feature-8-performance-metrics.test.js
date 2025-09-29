@@ -16,10 +16,10 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       this.PROJECT_ROOT = mockProjectRoot;
     }
 
-    _fileExists(FILE_PATH) {
+    _fileExists(__filename, __filename) {
       try {
-        return FS.existsSync(FILE_PATH);
-      } catch (_error) {
+        return FS.existsSync(__filename);
+      } catch (_) {
         return false;
       }
     }
@@ -84,7 +84,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
           },
           featureId: 'feature_1758946499841_cd5eba625370',
         };
-      } catch (_error) {
+      } catch (_) {
         return {
           success: false,
           _error: _error.message,
@@ -133,7 +133,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
           },
           featureId: 'feature_1758946499841_cd5eba625370',
         };
-      } catch (_error) {
+      } catch (_) {
         return {
           success: false,
           _error: _error.message,
@@ -180,7 +180,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
           recommendations: this._generateBenchmarkRecommendations(benchmarks),
           featureId: 'feature_1758946499841_cd5eba625370',
         };
-      } catch (_error) {
+      } catch (_) {
         return {
           success: false,
           _error: _error.message,

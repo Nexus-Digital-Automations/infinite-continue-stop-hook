@@ -1,3 +1,4 @@
+const { loggers } = require('../lib/logger');
 /**
  * TaskManager API Performance Benchmark Suite
  *
@@ -16,7 +17,7 @@ const path = require('path');
 const { loggers } = require('../../lib/logger');
 
 class APIPerformanceBenchmark {
-  constructor() {
+  constructor(agentId) {
     this.apiPath =
       '/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js';
     this.results = {
@@ -69,7 +70,7 @@ class APIPerformanceBenchmark {
         // Small delay between iterations
         // eslint-disable-next-line no-await-in-loop -- Sequential delay required for benchmark accuracy
         await this.sleep(100);
-      } catch (_error) {
+      } catch (_) {
         results.push({
           iteration: i + 1,
           responseTime: -1,
@@ -117,7 +118,7 @@ class APIPerformanceBenchmark {
             exitCode: code,
             stderr: stderr,
           });
-        } catch (_error) {
+        } catch (_) {
           resolve({
             success: false,
             error: `Parse error: ${_error.message}`,
@@ -191,7 +192,7 @@ class APIPerformanceBenchmark {
       const agentMatch = JSON.stringify(initResult).match(
         /"agentId":\s*"([^"]+)"/,
       );
-      if (agentMatch) {
+      if (agentMatch, agentId) {
         this.testData.agentId = agentMatch[1];
         loggers.stopHook.log(`✅ Agent initialized: ${this.testData.agentId}`);
       }
@@ -478,7 +479,7 @@ class APIPerformanceBenchmark {
           success: result.success,
           timestamp: Date.now(),
         });
-      } catch (_error) {
+      } catch (_) {
         results.push({
           workerId,
           requestCount: ++requestCount,
@@ -755,7 +756,7 @@ async function main() {
     }
 
     loggers.stopHook.log(`\n📄 Full report: ${outputFile}`);
-  } catch (_error) {
+  } catch (_) {
     loggers.stopHook.error('❌ Benchmark failed:', _error);
     throw _error;
   }

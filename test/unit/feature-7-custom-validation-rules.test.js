@@ -186,7 +186,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             );
           }
           return [];
-        } catch (_error) {
+        } catch (_) {
           return [];
         }
       };
@@ -234,7 +234,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             success: true,
             details: `Custom validation '${rule.name}' passed`,
           };
-        } catch (_error) {
+        } catch (_) {
           return {
             success: false,
             error: `Custom validation '${rule.name}' failed: ${_error.message}`,
@@ -284,7 +284,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             success: true,
             details: `Custom validation '${rule.name}' passed`,
           };
-        } catch (_error) {
+        } catch (_) {
           return {
             success: false,
             error: `Custom validation '${rule.name}' failed: ${_error.message}`,
@@ -334,7 +334,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             success: true,
             details: `Custom validation '${rule.name}' passed`,
           };
-        } catch (_error) {
+        } catch (_) {
           return {
             success: false,
             error: `Custom validation '${rule.name}' failed: ${_error.message}`,
@@ -367,7 +367,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             success: true,
             details: `Custom validation '${rule.name}' passed`,
           };
-        } catch (_error) {
+        } catch (_) {
           return {
             success: false,
             error: `Custom validation '${rule.name}' failed: ${_error.message}`,
@@ -421,7 +421,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             success: true,
             details: `Custom validation '${rule.name}' passed`,
           };
-        } catch (_error) {
+        } catch (_) {
           return {
             success: false,
             error: `Custom validation '${rule.name}' failed: ${_error.message}`,
@@ -567,7 +567,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             success: true,
             details: `Custom validation '${rule.name}' passed`,
           };
-        } catch (_error) {
+        } catch (_) {
           return {
             success: false,
             error: `Custom validation '${rule.name}' failed: ${_error.message}`,
@@ -599,7 +599,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             }
           }
           return [];
-        } catch (_error) {
+        } catch (_) {
           return [];
         }
       };

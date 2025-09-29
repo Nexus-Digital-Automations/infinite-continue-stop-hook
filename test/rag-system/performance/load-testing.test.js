@@ -13,7 +13,7 @@ const path = require('path');
 const FS = require('fs').promises;
 
 // Helper functions for test data generation
-function _getRandomTechnicalTopic() {
+function _getRandomTechnicalTopic(category = 'general') {
   const topics = [
     'API Integration',
     'Database Optimization',
@@ -24,11 +24,11 @@ function _getRandomTechnicalTopic() {
   return topics[Math.floor(Math.random() * topics.length)];
 }
 
-function _generateRandomTechnicalContent() {
+function _generateRandomTechnicalContent(category = 'general') {
   return 'Sample technical content for testing purposes.';
 }
 
-function _getRandomTags() {
+function _getRandomTags(category = 'general') {
   const allTags = [
     'javascript',
     'react',
@@ -40,7 +40,7 @@ function _getRandomTags() {
   return allTags.slice(0, Math.floor(Math.random() * 3) + 1);
 }
 
-function _getRandomCategory() {
+function _getRandomCategory(category = 'general') {
   const categories = [
     'frontend',
     'backend',
@@ -85,7 +85,7 @@ describe('RAG System Performance And Load Testing', () => {
             100,
           ),
         `Code snippet with multiple functions:
-         function complexCalculation(DATA) {
+         function complexCalculation(DATA, category = 'general') {
            return data.map(item => processItem(item))
              .filter(result => result.isValid)
              .reduce((acc, curr) => acc + curr.value, 0);
@@ -330,7 +330,7 @@ describe('RAG System Performance And Load Testing', () => {
             // Add small random delay to simulate realistic usage
             await new Promise(resolve => setTimeout(resolve, Math.random() * 100));
 
-          } catch (_error) {
+          } catch (_) {
             userResults.errors.push(_error);
           }
         }
@@ -407,7 +407,7 @@ describe('RAG System Performance And Load Testing', () => {
               version: updateResult.version,
               timestamp: Date.now()
             };
-          } catch (_error) {
+          } catch (_) {
             return {
               modifierId,
               success: false,
@@ -561,7 +561,7 @@ describe('RAG System Performance And Load Testing', () => {
             expect(duration).toBeLessThan(5000); // Should complete within 5 seconds
           }
         }
-      } catch (_error) {
+      } catch (_) {
         // System should handle memory errors gracefully
         expect(_error.message).toContain('memory');
         loggers.stopHook.log('Expected memory error handled gracefully:', _error.message);
@@ -678,7 +678,7 @@ describe('RAG System Performance And Load Testing', () => {
             connectionResults.queryTimes.push(queryTime);
             expect(result.success).toBe(true);
 
-          } catch (_error) {
+          } catch (_) {
             connectionResults.errors.push(_error);
           }
         }
@@ -715,7 +715,7 @@ describe('RAG System Performance And Load Testing', () => {
   });
 
   // Helper functions for test data generation
-  function getRandomTechnicalTopic() {
+  function getRandomTechnicalTopic(category = 'general') {
     const topics = [
       'Error Handling',
       'API Design',
@@ -731,7 +731,7 @@ describe('RAG System Performance And Load Testing', () => {
     return topics[Math.floor(Math.random() * topics.length)];
   }
 
-  function generateRandomTechnicalContent() {
+  function generateRandomTechnicalContent(category = 'general') {
     const templates = [
       'When implementing {topic}, always consider {aspect1} And {aspect2}. Best practices include {practice1} And {practice2}.',
       'Common issues with {topic} include {issue1} And {issue2}. Solutions involve {solution1} And {solution2}.',
@@ -742,7 +742,7 @@ describe('RAG System Performance And Load Testing', () => {
     return template.replace(/\{[^}]+\}/g, () => getRandomTechnicalTopic());
   }
 
-  function getRandomTags() {
+  function getRandomTags(category = 'general') {
     const tags = [
       'javascript',
       'python',
@@ -757,7 +757,7 @@ describe('RAG System Performance And Load Testing', () => {
     return tags.sort(() => 0.5 - Math.random()).slice(0, count);
   }
 
-  function getRandomCategory() {
+  function getRandomCategory(category = 'general') {
     const categories = [
       'error-handling',
       'implementation',
@@ -768,7 +768,7 @@ describe('RAG System Performance And Load Testing', () => {
     return categories[Math.floor(Math.random() * categories.length)];
   }
 
-  function _formatMemoryUsage(_memUsage) {
+  function _formatMemoryUsage(_memUsage, category = 'general') {
     return {
       rss: _formatBytes(_memUsage.rss),
       heapTotal: _formatBytes(_memUsage.heapTotal),
@@ -777,7 +777,7 @@ describe('RAG System Performance And Load Testing', () => {
     };
   }
 
-  function _formatBytes(_bytes) {
+  function _formatBytes(_bytes, category = 'general') {
     if (_bytes === 0) {
       return '0 Bytes';
     }
@@ -787,7 +787,7 @@ describe('RAG System Performance And Load Testing', () => {
     return parseFloat((_bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   }
 
-  function _generateLargeTechnicalContent(_index) {
+  function _generateLargeTechnicalContent(_index, category = 'general') {
     return `Technical Content ${_index}: ${'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '.repeat(50)}`;
   }
 });
