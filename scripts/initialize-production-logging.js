@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 /**
  * Production Logging Initialization Script
  *
@@ -6,6 +8,8 @@
  * - Monitoring integrations
  * - Health checks and alerting
  * - Security compliance
+ *
+ * Console output is intentional for CLI feedback during initialization.
  */
 
 const fs = require('fs');

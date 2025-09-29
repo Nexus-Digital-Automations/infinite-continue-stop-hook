@@ -147,7 +147,7 @@ class FileLock {
     }
 
     throw new Error(
-      `Could not acquire lock for ${filePath} after ${this.maxRetries} attempts`,
+      `Could not acquire lock for ${_filePath} after ${this.maxRetries} attempts`,
     );
   }
 }
@@ -4044,7 +4044,7 @@ class AutonomousTaskManagerAPI {
       const backupPromises = criticalFiles.map(async (file) => {
         const filePath = path.join(PROJECT_ROOT, file);
         try {
-          await FS.access(_filePath);
+          await FS.access(filePath);
           const backupPath = path.join(snapshotDir, file);
           await FS.mkdir(path.dirname(backupPath), { recursive: true });
           await FS.copyFile(filePath, backupPath);
@@ -4614,7 +4614,7 @@ class AutonomousTaskManagerAPI {
       const keyFiles = this._getKeyFilesForValidation(criterion);
       for (const filePath of keyFiles) {
         try {
-          const fullPath = path.join(PROJECT_ROOT, _filePath);
+          const fullPath = path.join(PROJECT_ROOT, filePath);
           const stats = await FS.stat(fullPath);
           cacheInputs.push(`file:${filePath}:${stats.mtime.getTime()}`);
         } catch (_) {
@@ -4833,11 +4833,11 @@ class AutonomousTaskManagerAPI {
 
         try {
           const filePath = path.join(cacheDir, file);
-          const stats = await FS.stat(_filePath);
+          const stats = await FS.stat(filePath);
           const age = Date.now() - stats.mtime.getTime();
 
           if (age > maxAge) {
-            await FS.unlink(_filePath);
+            await FS.unlink(filePath);
             cleanedCount++;
           }
         } catch (_) {
@@ -7036,7 +7036,7 @@ class AutonomousTaskManagerAPI {
    */
   async createTaskFromFeature(featureId, taskOptions = {}) {
     try {
-      const _result = await this._atomicFeatureOperation((features) => {
+      const result = await this._atomicFeatureOperation((features) => {
         const feature = features.features.find((f) => f.id === featureId);
 
         if (!feature) {
@@ -7112,7 +7112,7 @@ class AutonomousTaskManagerAPI {
    */
   async generateTasksFromApprovedFeatures(_options = {}) {
     try {
-      const _result = await this._atomicFeatureOperation((features) => {
+      const result = await this._atomicFeatureOperation((features) => {
         const approvedFeatures = features.features.filter(
           (f) => f.status === 'approved',
         );
@@ -7279,7 +7279,7 @@ class AutonomousTaskManagerAPI {
    */
   async assignTask(taskId, agentId, assignmentOptions = {}) {
     try {
-      const _result = await this._atomicFeatureOperation((features) => {
+      const result = await this._atomicFeatureOperation((features) => {
         if (!features.tasks) {
           throw new Error('No tasks exist in the system');
         }
@@ -7361,7 +7361,7 @@ class AutonomousTaskManagerAPI {
    */
   async updateTaskProgress(taskId, progressUpdate) {
     try {
-      const _result = await this._atomicFeatureOperation((features) => {
+      const result = await this._atomicFeatureOperation((features) => {
         if (!features.tasks) {
           throw new Error('No tasks exist in the system');
         }
@@ -7440,7 +7440,7 @@ class AutonomousTaskManagerAPI {
    */
   async registerAgentCapabilities(agentId, capabilities) {
     try {
-      const _result = await this._atomicFeatureOperation((features) => {
+      const result = await this._atomicFeatureOperation((features) => {
         if (!features.agents) {
           features.agents = {};
         }
@@ -7499,7 +7499,7 @@ class AutonomousTaskManagerAPI {
    */
   async createTask(taskData) {
     try {
-      const _result = await this._atomicFeatureOperation((features) => {
+      const result = await this._atomicFeatureOperation((features) => {
         // Initialize tasks array if it doesn't exist
         if (!features.tasks) {
           features.tasks = [];
@@ -7623,7 +7623,7 @@ class AutonomousTaskManagerAPI {
    */
   async submitVerificationEvidence(taskId, evidenceData) {
     try {
-      const _result = await this._atomicFeatureOperation((features) => {
+      const result = await this._atomicFeatureOperation((features) => {
         if (!features.tasks) {
           throw new Error('No tasks exist in the system');
         }
@@ -7683,7 +7683,7 @@ class AutonomousTaskManagerAPI {
    */
   async updateTask(taskId, updates) {
     try {
-      const _result = await this._atomicFeatureOperation((features) => {
+      const result = await this._atomicFeatureOperation((features) => {
         if (!features.tasks) {
           throw new Error('No tasks exist in the system');
         }
@@ -7739,7 +7739,7 @@ class AutonomousTaskManagerAPI {
    */
   async completeTask(taskId, resultData) {
     try {
-      const _result = await this._atomicFeatureOperation((features) => {
+      const result = await this._atomicFeatureOperation((features) => {
         if (!features.tasks) {
           throw new Error('No tasks exist in the system');
         }
@@ -8002,7 +8002,7 @@ class AutonomousTaskManagerAPI {
    */
   async createTasksFromApprovedFeatures(_options = {}) {
     try {
-      const _result = await this._atomicFeatureOperation((features) => {
+      const result = await this._atomicFeatureOperation((features) => {
         const approvedFeatures = features.features.filter(
           (f) => f.status === 'approved',
         );
@@ -8093,7 +8093,7 @@ class AutonomousTaskManagerAPI {
    */
   async optimizeTaskAssignments() {
     try {
-      const _result = await this._atomicFeatureOperation((features) => {
+      const result = await this._atomicFeatureOperation((features) => {
         if (!features.tasks || !features.agents) {
           return {
             success: true,
@@ -8166,7 +8166,7 @@ class AutonomousTaskManagerAPI {
    */
   async registerAgent(agentId, capabilities) {
     try {
-      const _result = await this._atomicFeatureOperation((features) => {
+      const result = await this._atomicFeatureOperation((features) => {
         if (!features.agents) {
           features.agents = {};
         }
@@ -8201,7 +8201,7 @@ class AutonomousTaskManagerAPI {
    */
   async unregisterAgent(_agentId) {
     try {
-      const _result = await this._atomicFeatureOperation((features) => {
+      const result = await this._atomicFeatureOperation((features) => {
         if (!features.agents || !features.agents[agentId]) {
           throw new Error(`Agent ${agentId} not found`);
         }
