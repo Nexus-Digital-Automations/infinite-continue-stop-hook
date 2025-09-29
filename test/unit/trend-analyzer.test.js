@@ -127,8 +127,8 @@ const duration = Math.round(
     test('should analyze comprehensive trends with sufficient data', async () => {
       createMockMetricsData(30);
 
-      const _result = await trendAnalyzer.analyzeTrends({,
-    timeRange: 30,
+      const _result = await trendAnalyzer.analyzeTrends({
+        timeRange: 30,
         granularity: 'daily',
       });
 

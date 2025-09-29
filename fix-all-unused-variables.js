@@ -11,7 +11,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const { execSync: _execSync } = require('child_process');
 
 const rootDir = process.cwd();
 
@@ -22,14 +22,14 @@ function getAllJavaScriptFiles() {
   try {
     const _result = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
-      { cwd: rootDir, encoding: 'utf-8' }
+      { cwd: rootDir, encoding: 'utf-8' },
     );
 
     return result
       .split('\n')
       .filter((f) => f && f.endsWith('.js'))
       .map((f) => path.resolve(rootDir, f.replace('./', '')));
-  } catch (_) {
+  } catch (_error) {
     console.error('Failed to get JS files:', error.message);
     return [];
   }
@@ -45,7 +45,7 @@ function getUnusedVariableViolations() {
       encoding: 'utf-8',
     });
     return output;
-  } catch (_) {
+  } catch (_error) {
     // ESLint returns non-zero exit code when there are errors
     return error.stdout || '';
   }
@@ -125,11 +125,11 @@ function fixUnusedVariablesInFile(filePath, violations) {
         if (line.includes(`catch (${variable})`)) {
           lines[lineIndex] = line.replace(
             `catch (${variable})`,
-            `catch (${newVariable})`
+            `catch (${newVariable})`,
           );
           modified = true;
           console.log(
-            `  ✓ Fixed catch parameter: ${variable} → ${newVariable} at line ${violation.line}`
+            `  ✓ Fixed catch parameter: ${variable} → ${newVariable} at line ${violation.line}`,
           );
         } else if (
           line.includes(`function`) &&
@@ -138,13 +138,13 @@ function fixUnusedVariablesInFile(filePath, violations) {
           lines[lineIndex] = line.replace(`, ${variable}`, `, ${newVariable}`);
           modified = true;
           console.log(
-            `  ✓ Fixed function parameter: ${variable} → ${newVariable} at line ${violation.line}`
+            `  ✓ Fixed function parameter: ${variable} → ${newVariable} at line ${violation.line}`,
           );
         } else if (line.includes(`function`) && line.includes(`(${variable}`)) {
           lines[lineIndex] = line.replace(`(${variable}`, `(${newVariable}`);
           modified = true;
           console.log(
-            `  ✓ Fixed function parameter: ${variable} → ${newVariable} at line ${violation.line}`
+            `  ✓ Fixed function parameter: ${variable} → ${newVariable} at line ${violation.line}`,
           );
         } else if (
           line.includes(`const ${variable} =`) ||
@@ -154,7 +154,7 @@ function fixUnusedVariablesInFile(filePath, violations) {
           lines[lineIndex] = line.replace(`${variable} =`, `${newVariable} =`);
           modified = true;
           console.log(
-            `  ✓ Fixed variable assignment: ${variable} → ${newVariable} at line ${violation.line}`
+            `  ✓ Fixed variable assignment: ${variable} → ${newVariable} at line ${violation.line}`,
           );
         } else if (
           line.includes(`const ${variable};`) ||
@@ -164,7 +164,7 @@ function fixUnusedVariablesInFile(filePath, violations) {
           lines[lineIndex] = line.replace(`${variable};`, `${newVariable};`);
           modified = true;
           console.log(
-            `  ✓ Fixed variable declaration: ${variable} → ${newVariable} at line ${violation.line}`
+            `  ✓ Fixed variable declaration: ${variable} → ${newVariable} at line ${violation.line}`,
           );
         }
       }
@@ -182,7 +182,7 @@ function fixUnusedVariablesInFile(filePath, violations) {
             lines[lineIndex] = ''; // Remove entire line
             modified = true;
             console.log(
-              `  ✓ Removed unused variable: ${variable} at line ${violation.line}`
+              `  ✓ Removed unused variable: ${variable} at line ${violation.line}`,
             );
           }
         }
@@ -207,8 +207,8 @@ function fixUnusedVariablesInFile(filePath, violations) {
     }
 
     return false;
-  } catch (_) {
-    console.error(`Error fixing file ${filePath}:`, error.message);
+  } catch (_error) {
+    console.error(`Error fixing file ${ filePath: _filePath }:`, error.message);
     return false;
   }
 }
@@ -238,7 +238,7 @@ function shouldAddUnderscorePrefix(variable, line) {
   ];
 
   return prefixPatterns.some(
-    (pattern) => line.includes(pattern) && line.includes(variable)
+    (pattern) => line.includes(pattern) && line.includes(variable),
   );
 }
 
@@ -282,30 +282,30 @@ function main() {
   }
 
   console.log(
-    `📁 Processing ${Object.keys(violationsByFile).length} files...\n`
+    `📁 Processing ${Object.keys(violationsByFile).length} files...\n`,
   );
 
   let totalFixed = 0;
 
   for (const [filePath, fileViolations] of Object.entries(violationsByFile)) {
     console.log(
-      `🔍 Processing: ${path.relative(rootDir, _filePath)} (${fileViolations.length} violations)`
+      `🔍 Processing: ${path.relative(rootDir, _filePath)} (${fileViolations.length} violations)`,
     );
 
     if (fixUnusedVariablesInFile(filePath, fileViolations)) {
       totalFixed++;
       console.log(
-        `✅ Fixed unused variables in: ${path.relative(rootDir, _filePath)}\n`
+        `✅ Fixed unused variables in: ${path.relative(rootDir, _filePath)}\n`,
       );
     } else {
       console.log(
-        `⚠️  No changes made to: ${path.relative(rootDir, _filePath)}\n`
+        `⚠️  No changes made to: ${path.relative(rootDir, _filePath)}\n`,
       );
     }
   }
 
   console.log(
-    `\n📈 Summary: Processed unused variables in ${totalFixed} files`
+    `\n📈 Summary: Processed unused variables in ${totalFixed} files`,
   );
 
   // Run autofix to clean up any remaining formatting issues
@@ -316,7 +316,7 @@ function main() {
       stdio: 'inherit',
     });
     console.log('✅ Autofix completed successfully');
-  } catch (_) {
+  } catch (_error) {
     console.log('⚠️  Autofix completed with some remaining issues');
   }
 
@@ -327,25 +327,25 @@ function main() {
     const finalViolations = parseUnusedVars(finalOutput);
 
     console.log(
-      `📊 Final status: ${finalViolations.length} unused variable violations remaining`
+      `📊 Final status: ${finalViolations.length} unused variable violations remaining`,
     );
 
     if (finalViolations.length === 0) {
       console.log(
-        '🎉 SUCCESS: All unused variable violations have been resolved!'
+        '🎉 SUCCESS: All unused variable violations have been resolved!',
       );
     } else {
       console.log('📋 Remaining violations:');
       finalViolations.slice(0, 10).forEach((v) => {
         console.log(
-          `  - ${v.variable} in ${path.relative(rootDir, v.file)}:${v.line}`
+          `  - ${v.variable} in ${path.relative(rootDir, v.file)}:${v.line}`,
         );
       });
       if (finalViolations.length > 10) {
         console.log(`  ... and ${finalViolations.length - 10} more`);
       }
     }
-  } catch (_) {
+  } catch (_error) {
     console.log('⚠️  Could not run final verification');
   }
 

@@ -1,7 +1,7 @@
 /* eslint-disable no-console, security/detect-non-literal-fs-filename */
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const { execSync: _execSync } = require('child_process');
 
 console.log('🔧 Final fix for remaining unused variables...\n');
 
@@ -26,9 +26,9 @@ const additionalPatterns = [
   { search: /(\s+)let _result = /g, replace: '$1let _result = ' },
 
   // Catch error patterns - more specific
-  { search: /} catch \(error\) \{/g, replace: '} catch (_) {' },
-  { search: /catch \(error\) \{/g, replace: 'catch (_) {' },
-  { search: /catch\(error\) \{/g, replace: 'catch (_) {' },
+  { search: /} catch \(error\) \{/g, replace: '} catch (_error) {' },
+  { search: /catch \(error\) \{/g, replace: 'catch (_error) {' },
+  { search: /catch\(error\) \{/g, replace: 'catch (_error) {' },
 
   // Function parameter patterns {
     search: /function[^(]*\(([^)]*\b_filePath\b[^)]*)\)/g,
@@ -103,8 +103,8 @@ function fixFileUnusedVars(_filePath) {
     }
 
     return false;
-} catch (_) {
-    console.error(`  ✗ Error processing ${filePath}:`, error.message);
+} catch (_error) {
+    console.error(`  ✗ Error processing ${ filePath: _filePath }:`, error.message);
     return false;
 }
 }
@@ -135,7 +135,7 @@ function main() {
   try {
     execSync('npm run lint', { stdio: 'pipe' });
     console.log('✅ All linting errors resolved!');
-} catch (_) {
+} catch (_error) {
     console.log(
       '⚠️  Some linting errors may remain. Running detailed check...'
     );
@@ -150,7 +150,7 @@ function main() {
       } else {
         console.log('✅ All no-unused-vars errors resolved!');
       }
-    } catch (_) {
+    } catch (_error) {
       console.log('✅ All no-unused-vars errors resolved!');
     }
 }

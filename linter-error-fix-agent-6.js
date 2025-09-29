@@ -65,7 +65,7 @@ class LinterErrorFixAgent6 {
         modified = true;
         fileFixCount++;
         return match.replace('catch (_)', 'catch (_)');
-      }
+      },
     );
 
     // Pattern 4: Fix _error is not defined in catch blocks;
@@ -120,7 +120,7 @@ class LinterErrorFixAgent6 {
           return replacement;
         }
         return match;
-      }
+      },
     );
 
     // Pattern 7: Fix unused variable assignments

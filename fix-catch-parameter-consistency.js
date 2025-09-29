@@ -6,7 +6,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const { execSync: _execSync } = require('child_process');
 
 const rootDir = process.cwd();
 
@@ -14,14 +14,14 @@ function getAllJavaScriptFiles() {
   try {
     const _result = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
-      { cwd: rootDir, encoding: 'utf-8' }
+      { cwd: rootDir, encoding: 'utf-8' },
     );
 
     return result
       .split('\n')
       .filter((f) => f && f.endsWith('.js'))
       .map((f) => path.resolve(rootDir, f.replace('./', '')));
-  } catch (_) {
+  } catch (_error) {
     console.error('Failed to get JS files:', error.message);
     return [];
   }
@@ -36,8 +36,8 @@ function fixCatchParameterConsistency(_filePath) {
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
-      // Pattern 1: catch (_) but code uses _error
-      if (line.includes('catch (_)')) {
+      // Pattern 1: catch (_error) but code uses _error
+      if (line.includes('catch (_error)')) {
         // Check what error variables are used in the catch block
         const catchBlockLines = [];
         let blockDepth = 0;
@@ -63,10 +63,10 @@ function fixCatchParameterConsistency(_filePath) {
           blockContent.includes('_error.') ||
           blockContent.includes('_error ')
         ) {
-          lines[i] = line.replace('catch (_)', 'catch (_)');
+          lines[i] = line.replace('catch (_error)', 'catch (_error)');
           modified = true;
           console.log(
-            `  ✓ Fixed catch (_) -> catch (_): ${path.relative(rootDir, _filePath)}:${i + 1}`
+            `  ✓ Fixed catch (_error) -> catch (_error): ${path.relative(rootDir, _filePath)}:${i + 1}`,
           );
         }
         // If block uses error, change parameter to error
@@ -74,10 +74,10 @@ function fixCatchParameterConsistency(_filePath) {
           blockContent.includes('error.') ||
           blockContent.includes('error ')
         ) {
-          lines[i] = line.replace('catch (_)', 'catch (_)'); // Already correct
+          lines[i] = line.replace('catch (_error)', 'catch (_error)'); // Already correct
           modified = true;
           console.log(
-            `  ✓ Fixed catch (_) -> catch (_): ${path.relative(rootDir, _filePath)}:${i + 1}`
+            `  ✓ Fixed catch (_error) -> catch (_error): ${path.relative(rootDir, _filePath)}:${i + 1}`,
           );
         }
         // If block uses lintError, change parameter to lintError
@@ -85,16 +85,16 @@ function fixCatchParameterConsistency(_filePath) {
           blockContent.includes('lintError.') ||
           blockContent.includes('lintError ')
         ) {
-          lines[i] = line.replace('catch (_)', 'catch (_)');
+          lines[i] = line.replace('catch (_error)', 'catch (_error)');
           modified = true;
           console.log(
-            `  ✓ Fixed catch (_) -> catch (_): ${path.relative(rootDir, _filePath)}:${i + 1}`
+            `  ✓ Fixed catch (_error) -> catch (_error): ${path.relative(rootDir, _filePath)}:${i + 1}`,
           );
         }
       }
 
-      // Pattern 2: catch (_) but code uses error
-      else if (line.includes('catch (_)')) {
+      // Pattern 2: catch (_error) but code uses error
+      else if (line.includes('catch (_error)')) {
         const catchBlockLines = [];
         let blockDepth = 0;
 
@@ -118,10 +118,10 @@ function fixCatchParameterConsistency(_filePath) {
           blockContent.includes('error.') ||
           blockContent.includes('error ')
         ) {
-          lines[i] = line.replace('catch (_)', 'catch (_)');
+          lines[i] = line.replace('catch (_error)', 'catch (_error)');
           modified = true;
           console.log(
-            `  ✓ Fixed catch (_) -> catch (_): ${path.relative(rootDir, _filePath)}:${i + 1}`
+            `  ✓ Fixed catch (_error) -> catch (_error): ${path.relative(rootDir, _filePath)}:${i + 1}`,
           );
         }
         // If block uses lintError but parameter is _error, change parameter to lintError
@@ -129,16 +129,16 @@ function fixCatchParameterConsistency(_filePath) {
           blockContent.includes('lintError.') ||
           blockContent.includes('lintError ')
         ) {
-          lines[i] = line.replace('catch (_)', 'catch (_)');
+          lines[i] = line.replace('catch (_error)', 'catch (_error)');
           modified = true;
           console.log(
-            `  ✓ Fixed catch (_) -> catch (_): ${path.relative(rootDir, _filePath)}:${i + 1}`
+            `  ✓ Fixed catch (_error) -> catch (_error): ${path.relative(rootDir, _filePath)}:${i + 1}`,
           );
         }
       }
 
-      // Pattern 3: catch (_) but code uses _error
-      else if (line.includes('catch (_)')) {
+      // Pattern 3: catch (_error) but code uses _error
+      else if (line.includes('catch (_error)')) {
         const catchBlockLines = [];
         let blockDepth = 0;
 
@@ -162,10 +162,10 @@ function fixCatchParameterConsistency(_filePath) {
           blockContent.includes('_error.') ||
           blockContent.includes('_error ')
         ) {
-          lines[i] = line.replace('catch (_)', 'catch (_)');
+          lines[i] = line.replace('catch (_error)', 'catch (_error)');
           modified = true;
           console.log(
-            `  ✓ Fixed catch (_) -> catch (_): ${path.relative(rootDir, _filePath)}:${i + 1}`
+            `  ✓ Fixed catch (_error) -> catch (_error): ${path.relative(rootDir, _filePath)}:${i + 1}`,
           );
         }
       }
@@ -177,8 +177,8 @@ function fixCatchParameterConsistency(_filePath) {
     }
 
     return false;
-  } catch (_) {
-    console.error(`Error fixing ${filePath}:`, error.message);
+  } catch (_error) {
+    console.error(`Error fixing ${ filePath: _filePath }:`, error.message);
     return false;
   }
 }
@@ -195,13 +195,13 @@ function main() {
     if (fixCatchParameterConsistency(_filePath)) {
       totalFixed++;
       console.log(
-        `✅ Fixed catch consistency in: ${path.relative(rootDir, _filePath)}`
+        `✅ Fixed catch consistency in: ${path.relative(rootDir, _filePath)}`,
       );
     }
   }
 
   console.log(
-    `\n📈 Summary: Fixed catch parameter consistency in ${totalFixed} files`
+    `\n📈 Summary: Fixed catch parameter consistency in ${totalFixed} files`,
   );
 
   // Run autofix after our fixes
@@ -212,7 +212,7 @@ function main() {
       stdio: 'inherit',
     });
     console.log('✅ Autofix completed successfully');
-  } catch (_) {
+  } catch (_error) {
     console.log('⚠️ Autofix completed with some remaining issues');
   }
 
@@ -222,7 +222,7 @@ function main() {
 if (require.main === module) {
   try {
     main();
-  } catch (_) {
+  } catch (_error) {
     console.error('Fatal error:', error.message);
     process.exit(1);
   }

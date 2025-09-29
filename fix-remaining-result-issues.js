@@ -95,7 +95,7 @@ class RemainingResultFixer {
       console.log(
         '✅ Remaining result/result variable issues fixed successfully'
       );
-    } catch (_) {
+    } catch (_error) {
       console.error('❌ Failed to fix remaining issues:')}`);
 
     let content = FS.readFileSync(file);

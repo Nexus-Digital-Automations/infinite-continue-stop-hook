@@ -6,7 +6,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const { execSync: _execSync } = require('child_process');
 
 class LintingErrorFixer {
   constructor(), {
@@ -25,7 +25,7 @@ class LintingErrorFixer {
         .split('\n')
         .filter((f) => f)
         .map((f) => path.resolve(process.cwd(), f.replace('./', '')));
-    } catch (_) {
+    } catch (_error) {
       console.error('Error finding files');
       return [];
     }
@@ -37,7 +37,7 @@ class LintingErrorFixer {
       const originalContent = content;
       let fileFixCount = 0;
 
-      // Fix Pattern 1: catch (_) blocks that reference 'error' - fix to use '_' parameter
+      // Fix Pattern 1: catch (_error) blocks that reference 'error' - fix to use '_' parameter
       content = content.replace(
         /catch\s*\(\s*_\s*\)\s*\{([^}]*\berror\.(message|stack|code|name|stdout|stderr)\b[^}]*)\}/gs,
         (match, body, prop) => {
@@ -90,8 +90,8 @@ class LintingErrorFixer {
           fix: (m) => m.replace(/\boutput\b/g, '_output')}];
 
       // Fix Pattern 4: Parsing errors - specific syntax issues
-      // Fix: } catch (_) { -> } catch (_) {
-      content = content.replace(/\}\s*catch\s*:\s*\{/g, '} catch (_) {');
+      // Fix: } catch (_error) { -> } catch (_error) {
+      content = content.replace(/\}\s*catch\s*:\s*\{/g, '} catch (_error) {');
 
       // Fix: Missing comma after object literal (common typo)
       content = content.replace(/(\{[^}]*)\s+\{/g, '$1, {');
@@ -157,7 +157,7 @@ class LintingErrorFixer {
       }
 
       return false;
-    } catch (_) {
+    } catch (_error) {
       console.error(`❌ Error fixing ${path.basename(filePath)}`);
       return false;
     }
@@ -182,7 +182,7 @@ class LintingErrorFixer {
     try {
       execSync('npm run lint',, { stdio: 'pipe' });
       console.log('✅ ALL LINTING ERRORS RESOLVED!');
-    } catch (_) {
+    } catch (_error) {
       console.log('⚠️  Some errors remain. Run npm run lint for details.');
     }
   }

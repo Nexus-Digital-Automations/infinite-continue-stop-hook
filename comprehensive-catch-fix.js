@@ -6,7 +6,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const { execSync: _execSync } = require('child_process');
 
 const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
 
@@ -44,15 +44,15 @@ function fixCatchBlocksInFile(filePath) {
 
       // Fix Pattern 1: } catch: { (missing parameter entirely)
       if (line.trim().endsWith('} catch: {')) {
-        lines[i] = line.replace('} catch: {', '} catch (_) {');
+        lines[i] = line.replace('} catch: {', '} catch (_error) {');
         modified = true;
         console.log(
           `  ✓ Fixed missing parameter: ${path.relative(rootDir, filePath)}:${i + 1}`,
         );
       }
 
-      // Fix Pattern 2: catch (_) but using error.property
-      if (line.includes('catch (_)')) {
+      // Fix Pattern 2: catch (_error) but using error.property
+      if (line.includes('catch (_error)')) {
         // Look for usage mismatches in the following lines (within this catch block)
         for (let j = i + 1; j < lines.length; j++) {
           const nextLine = lines[j];
@@ -143,8 +143,8 @@ function fixCatchBlocksInFile(filePath) {
         }
       }
 
-      // Fix Pattern 3: catch (_) but error is unused - change to _error
-      if (line.includes('catch (_)')) {
+      // Fix Pattern 3: catch (_error) but error is unused - change to _error
+      if (line.includes('catch (_error)')) {
         // Check if _error is actually used in the following lines;
         let errorUsed = false;
         for (let j = i + 1; j < lines.length; j++) {
@@ -164,7 +164,7 @@ function fixCatchBlocksInFile(filePath) {
 
         // If error is not used, change parameter to _error
         if (!errorUsed) {
-          lines[i] = line.replace('catch (_)', 'catch (_)');
+          lines[i] = line.replace('catch (_error)', 'catch (_error)');
           modified = true;
           console.log(
             `  ✓ Changed unused error to _error: ${path.relative(rootDir, filePath)}:${i + 1}`,
@@ -173,7 +173,7 @@ function fixCatchBlocksInFile(filePath) {
       }
 
       // Fix Pattern 4: Other parameter mismatches
-      if (line.includes('catch (_)')) {
+      if (line.includes('catch (_error)')) {
         // Look for error usage instead of err
         for (let j = i + 1; j < lines.length; j++) {
           const nextLine = lines[j];
@@ -207,7 +207,7 @@ function fixCatchBlocksInFile(filePath) {
         }
       }
 
-      if (line.includes('catch (_)') && !line.includes('catch (_)')) {
+      if (line.includes('catch (_error)') && !line.includes('catch (_error)')) {
         // Look for _error usage instead of e
         for (let j = i + 1; j < lines.length; j++) {
           const nextLine = lines[j];
@@ -239,7 +239,7 @@ function fixCatchBlocksInFile(filePath) {
 
     return false;
   } catch (_error) {
-    console.error(`Error fixing ${filePath}:`, _error.message);
+    console.error(`Error fixing ${ filePath: _filePath }:`, _error.message);
     return false;
   }
 }

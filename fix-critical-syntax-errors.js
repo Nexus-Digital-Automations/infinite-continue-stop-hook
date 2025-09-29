@@ -4,7 +4,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const { execSync: _execSync } = require('child_process');
 
 console.log('🔧 Starting critical syntax error fixes...');
 
@@ -53,11 +53,11 @@ function fixFile(_filePath) {
 
     if (hasChanges) {
       fs.writeFileSync(filePath, fixedContent);
-      console.log(`✅ Fixed: ${filePath}`);
+      console.log(`✅ Fixed: ${ filePath: _filePath }`);
       return true;
     }
-  } catch (_) {
-    console.error(`❌ Error processing ${filePath}:`, error.message);
+  } catch (_error) {
+    console.error(`❌ Error processing ${ filePath: _filePath }:`, error.message);
   }
   return false;
 }
@@ -73,7 +73,7 @@ function getAllJSFiles(dir) {
       // Skip certain directories
       if (
         ['node_modules', '.git', 'coverage', 'dist', 'build'].includes(
-          entry.name
+          entry.name,
         )
       ) {
         continue;

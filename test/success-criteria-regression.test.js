@@ -122,12 +122,12 @@ async function createLegacyProjectConfig(category = 'general') {
       },
   ],
     // Legacy settings structure
-    settings{
-    validation_mode: 'strict',
+    settings: {
+      validation_mode: 'strict',
       auto_fix: false,
       report_format: 'json',
-    }
-};
+    },
+  };
 
   // Write legacy config file;
 const configPath = path.join(TEST_PROJECT_DIR, '.success-criteria.json');
@@ -194,8 +194,7 @@ app.start().then(() => {
     
   loggers.stopHook.log('App version:', app.getVersion());
   setTimeout(() 
-    return () 
-    return () => {
+  
     process.exit(0);
 }, 200);
 });
@@ -209,8 +208,7 @@ describe('Regression Test Suite', () => {
     
     
   test('should maintain backward compatibility', () 
-    return () 
-    return () => {
+  
     expect(true).toBe(true);
 });
   
@@ -245,11 +243,9 @@ async function cleanupRegressionTestProject(category = 'general') {
 describe('Success Criteria Regression Tests', () => {
     
     
-  beforeAll(async () 
-    return () 
-    return () => {
+  beforeAll(async () => {
     await setupRegressionTestProject();
-}, 30000);
+  }, 30000);
 
   afterAll(async () => {
     await cleanupRegressionTestProject();
@@ -262,9 +258,8 @@ describe('Success Criteria Regression Tests', () => {
   describe('Legacy Template Compatibility', () => {
     
     
-    test('should load And process legacy template format v1.0', async () 
-    return () 
-    return () => {
+    test('should load And process legacy template format v1.0', async () => {
+  
       // Create legacy template
       await createLegacyTemplate('1.0.0');
 
@@ -404,9 +399,8 @@ const VERSIONED_TEMPLATE = {
   describe('Legacy Configuration Compatibility', () => {
     
     
-    test('should load And migrate legacy project configurations', async () 
-    return () 
-    return () => {
+    test('should load And migrate legacy project configurations', async () => {
+  
       // Create legacy config file
       await createLegacyProjectConfig();
 
@@ -506,28 +500,29 @@ const status = await execAPI('success-criteria:status');
 
     test('should preserve custom extensions in legacy configs', async () => {
       // Create config with custom extensions;
-const EXTENDED_CONFIG = {
-    version: '1.0.0',
+      const EXTENDED_CONFIG = {
+        version: '1.0.0',
         // Custom extension fields That should be preserved
-        customExtensions{
-    organizationStandards{
-    complianceLevel: 'enterprise',
+        customExtensions: {
+          organizationStandards: {
+            complianceLevel: 'enterprise',
             auditRequirements: ['SOX', 'GDPR'],
             customValidators: ['security-scan', 'license-check'],
           },
-          teamConfiguration{
-    notificationSettings{
-    slack{ webhook: 'test-webhook' },
-              email{ recipients: ['team@example.com'] },
-}
-}
-},
-        criteria: [{
-    id: 'extended-criterion',
+          teamConfiguration: {
+            notificationSettings: {
+              slack: { webhook: 'test-webhook' },
+              email: { recipients: ['team@example.com'] },
+            },
+          },
+        },
+        criteria: [
+          {
+            id: 'extended-criterion',
             description: 'Criterion with custom extensions',
             category: 'compliance',
             // Custom extension on criterion
-            customData{
+            customData: {
     complianceMapping: 'SOX-404',
               riskLevel: 'high',
             }
@@ -577,9 +572,8 @@ const status = await execAPI('success-criteria:status');
   describe('Data Format Migration', () => {
     
     
-    test('should migrate data between format versions', async () 
-    return () 
-    return () => {
+    test('should migrate data between format versions', async () => {
+  
       // Create old format data;
 const OLD_FORMAT_DATA = {
     format_version: '1.0',
@@ -779,9 +773,8 @@ const MIGRATION_RESULT = await execAPI('success-criteria:migrate-data', [
   describe('Legacy Feature Support', () => {
     
     
-    test('should support legacy validation commands', async () 
-    return () 
-    return () => {
+    test('should support legacy validation commands', async () => {
+  
       // Create template with legacy validation commands;
 const LEGACY_VALIDATION_TEMPLATE = {
     name: 'Legacy Validation Template',
@@ -945,9 +938,8 @@ const LEGACY_RESULT = await execAPI('success-criteria:validate', [
   describe('Compatibility Validation', () => {
     
     
-    test('should validate cross-version template compatibility', async () 
-    return () 
-    return () => {
+    test('should validate cross-version template compatibility', async () => {
+  
       // Create templates with different versions;
 const VERSIONS = ['1.0.0', '1.5.0', '2.0.0'];
       const TEMPLATES = [];
@@ -1122,9 +1114,8 @@ const COMPAT_RESULT = await execAPI(
   describe('Regression Prevention', () => {
     
     
-    test('should maintain API contract consistency', async () 
-    return () 
-    return () => {
+    test('should maintain API contract consistency', async () => {
+  
       // Test core API contracts That should remain stable;
 const CORE_APIS = [
         'success-criteria:init',
@@ -1173,8 +1164,7 @@ const CORE_APIS = [
 const ESSENTIAL_FUNCTIONS = [{
     name: 'Template Creation And Application',
           test: async () 
-    return () 
-    return () => {
+  
             const TEMPLATE = {
     name: 'Essential Function Template',
               criteria: [{
@@ -1250,8 +1240,7 @@ const ESSENTIAL_FUNCTIONS = [{
 const PERFORMANCE_TESTS = [{
     name: 'Template Application Performance',
           test: async () 
-    return () 
-    return () => {
+  
             const START_TIME = Date.now();
 
             const TEMPLATE = {

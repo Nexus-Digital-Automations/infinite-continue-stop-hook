@@ -114,7 +114,7 @@ function main() {
   try {
     const beforeOutput = execSync(
       'npm run lint 2>&1 | grep -E "(no-console|security/detect)" | wc -l',
-      { encoding: 'utf8' }
+      { encoding: 'utf8' },
     );
     const warningCount = parseInt(beforeOutput.trim());
 
@@ -126,7 +126,7 @@ function main() {
       // Show sample of remaining warnings;
       const sampleOutput = execSync(
         'npm run lint 2>&1 | grep -E "(no-console|security/detect)" | head -5',
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       );
       if (sampleOutput.trim()) {
         console.log('\n🔍 Sample remaining warnings:');

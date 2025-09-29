@@ -24,8 +24,8 @@ const {
 } = require('../fixtures/sampleData');
 
 describe('Basic Testing Infrastructure', () => {
-    
-    
+
+
   describe('Test ID Generation', () => {
     test('should generate unique agent IDs', () => {
       const id1 = TestIdGenerator.generateAgentId();
@@ -62,11 +62,11 @@ describe('Basic Testing Infrastructure', () => {
       expect(id2).toMatch(/^task-/);
       expect(id1).not.toBe(id2);
     });
-});
+  });
 
   describe('Test Data Factory', () => {
-    
-    
+
+
     test('should create valid feature data', () => {
       const feature = TestDataFactory.createFeatureData();
 
@@ -117,11 +117,11 @@ describe('Basic Testing Infrastructure', () => {
       expect(task.priority).toBe('medium');
       expect(task.task.category).toBe('test');
     });
-});
+  });
 
   describe('Sample Data Fixtures', () => {
-    
-    
+
+
     test('should provide valid sample features', () => {
       expect(SAMPLE_FEATURES).toBeDefined();
       expect(SAMPLE_FEATURES.enhancement).toBeDefined();
@@ -161,17 +161,17 @@ describe('Basic Testing Infrastructure', () => {
       expect(unit.testTimeout).toBe(5000);
       expect(unit.coverage.threshold.functions).toBe(80);
     });
-});
+  });
 
   describe('Performance Utilities', () => {
-    
-    
+
+
     test('should measure execution time accurately', async () => {
       const delay = 50; // 50ms delay
       const { result, duration } = await PerformanceUtils.measureTime(
         async () => {
-    
-    
+
+
           await new Promise((resolve) => {
             setTimeout(resolve, delay);
           });
@@ -202,11 +202,11 @@ describe('Basic Testing Infrastructure', () => {
       expect(typeof memoryDelta.heapUsed).toBe('number');
       expect(typeof memoryDelta.rss).toBe('number');
     });
-});
+  });
 
   describe('Test Execution Utilities', () => {
-    
-    
+
+
     test('should enforce timeouts', async () => {
       const promise = new Promise((resolve) => {
         setTimeout(resolve, 200);
@@ -219,8 +219,8 @@ describe('Basic Testing Infrastructure', () => {
     });
 
     test('should allow operations within timeout', async () => {
-    
-    
+
+
       const promise = new Promise((resolve) => {
         setTimeout(() => resolve('success'), 50);
       }); // 50ms
@@ -230,8 +230,8 @@ describe('Basic Testing Infrastructure', () => {
     });
 
     test('should retry failed operations', async () => {
-    
-    
+
+
       let attempts = 0;
 
       const result = await TestExecution.retry(
@@ -251,8 +251,8 @@ describe('Basic Testing Infrastructure', () => {
     });
 
     test('should fail after max retries', async () => {
-    
-    
+
+
       let attempts = 0;
 
       await expect(
@@ -285,11 +285,11 @@ describe('Basic Testing Infrastructure', () => {
         0, 2, 4, 6, 8, 10, 12, 14,
       ]);
     });
-});
+  });
 
   describe('Test LOGGER', () => {
-    
-    
+
+
     test('should provide logging methods', () => {
       // Test That logging methods exist And don't throw
       expect(() => TestLogger.info('Test info message')).not.toThrow();
@@ -306,11 +306,11 @@ describe('Basic Testing Infrastructure', () => {
       expect(() => TestLogger.error('Test with data', testData)).not.toThrow();
       expect(() => TestLogger.debug('Test with data', testData)).not.toThrow();
     });
-});
+  });
 
   describe('Data Validation', () => {
-    
-    
+
+
     test('should validate feature data structure', () => {
       const validFeature = SAMPLE_FEATURES.enhancement;
 
@@ -342,11 +342,11 @@ describe('Basic Testing Infrastructure', () => {
       expect(Array.isArray(validAgent.skills)).toBe(true);
       expect(validAgent.status).toBeDefined();
     });
-});
+  });
 
   describe('Error Handling', () => {
-    
-    
+
+
     test('should handle async errors gracefully', async () => {
       const errorPromise = Promise.reject(new Error('Test error'));
 
@@ -354,8 +354,8 @@ describe('Basic Testing Infrastructure', () => {
     });
 
     test('should handle synchronous errors', () => {
-    
-    
+
+
       expect(() => {
         throw new Error('Sync test error');
       }).toThrow('Sync test error');
@@ -367,5 +367,5 @@ describe('Basic Testing Infrastructure', () => {
       expect(() => TestDataFactory.createFeatureData(null)).not.toThrow();
       expect(() => TestDataFactory.createFeatureData(undefined)).not.toThrow();
     });
-});
+  });
 });

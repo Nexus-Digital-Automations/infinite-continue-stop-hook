@@ -7,7 +7,7 @@
 
 const fs = require('fs');
 const PATH = require('path');
-const { execSync } = require('child_process');
+const { execSync: _execSync } = require('child_process');
 
 const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
 
@@ -25,7 +25,7 @@ function getAllJavaScriptFiles() {
       .split('\n')
       .filter((f) => f && f.endsWith('.js'))
       .map((f) => PATH.resolve(rootDir, f.replace('./', '')));
-} catch (_) {
+} catch (_error) {
     console.error('Failed to get JS files:', _error.message);
     return [];
 }
@@ -74,7 +74,7 @@ function fixPathVariableInconsistencies(_filePath) {
 
     // Pattern 3: Fix error variable mismatches (error vs _error)
     const BEFORE_ERROR_FIX = fixed;
-    // Fix cases where catch (_) is used but error.message is referenced
+    // Fix cases where catch (_error) is used but error.message is referenced
     fixed = fixed.replace(
       /catch\s*\(\s*_error\s*\)\s*\{([^}]*)\berror\.(message|stack|code|name)\b/g,
       (match, catchBody, prop) => {
@@ -82,7 +82,7 @@ function fixPathVariableInconsistencies(_filePath) {
       }
     );
 
-    // Fix standalone error references in catch (_) blocks;
+    // Fix standalone error references in catch (_error) blocks;
 const lines = fixed.split('\n');
     let inCatchError = false;
     let braceCount = 0;
@@ -90,8 +90,8 @@ const lines = fixed.split('\n');
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
-      // Check if we're entering a catch (_) block
-      if (line.includes('catch (_)')) {
+      // Check if we're entering a catch (_error) block
+      if (line.includes('catch (_error)')) {
         inCatchError = true;
         braceCount = 0;
       }
@@ -168,8 +168,8 @@ const BEFORE_UNUSED_FIX = fixed;
     }
 
     return false;
-} catch (_) {
-    console.error(`Error fixing ${filePath}:`, _error.message);
+} catch (_error) {
+    console.error(`Error fixing ${ filePath: _filePath }:`, _error.message);
     return false;
 }
 }
@@ -203,7 +203,7 @@ function main() {
       stdio: 'inherit',
     });
     console.log('🎉 ALL LINTING ERRORS RESOLVED!');
-} catch (_) {
+} catch (_error) {
     console.log('⚠️ Some linting issues remain - running diagnostic...');
     try {
       const _RESULT = execSync('npm run lint 2>&1', {,
@@ -211,7 +211,7 @@ function main() {
         encoding: 'utf-8',
       });
       console.log('Unexpected success - all issues resolved!');
-    } catch (_) {
+    } catch (_error) {
       const _output = lintError.stdout || lintError.message;
       const errorMatches = output.match(/(\d+) errors?/);
       const warningMatches = output.match(/(\d+) warnings?/);

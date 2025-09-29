@@ -10,9 +10,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
   const mockProjectRoot = '/tmp/test-project';
   const mockConfigPath = path.join(mockProjectRoot, '.claude-validation.json');
 
-  beforeEach(() 
-    return () 
-    return () => {
+  beforeEach(() => {
     // Create mock project directory
     if (!FS.existsSync(mockProjectRoot)) {
       FS.mkdirSync(mockProjectRoot, { recursive: true });
@@ -29,29 +27,28 @@ describe('Feature 7: Custom Project Validation Rules', () => {
   describe('Custom Validation Configuration Loading', () => {
     
     
-    test('should load valid custom validation rules from .claude-validation.json', () 
-    return () 
-    return () => {
+    test('should load valid custom validation rules from .claude-validation.json', () => {
       const mockConfig = {
-    customValidationRules: [ {,
-    id: 'test-rule-1',
+        customValidationRules: [
+          {
+            id: 'test-rule-1',
             name: 'Test Rule 1',
             description: 'A test validation rule',
             command: 'echo "test passed"',
             timeout: 5000,
             enabled: true,
             successCriteria: {
-    exitCode: 0,
+              exitCode: 0,
               outputContains: 'test passed',
-            }
-},
-  ],
+            },
+          },
+        ],
       };
 
       FS.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
 
-      // Mock the loadCustomValidationRules function;
-const loadCustomValidationRules = (projectRoot) => {
+      // Mock the loadCustomValidationRules function
+      const loadCustomValidationRules = (projectRoot) => {
         const configPath = path.join(projectRoot, '.claude-validation.json');
         if (FS.existsSync(configPath)) {
           const configData = FS.readFileSync(configPath, 'utf8');
@@ -75,25 +72,29 @@ const loadCustomValidationRules = (projectRoot) => {
 
     test('should filter out invalid rules missing required fields', () => {
       const mockConfig = {
-    customValidationRules: [ {,
-    id: 'valid-rule',
+        customValidationRules: [
+          {
+            id: 'valid-rule',
             name: 'Valid Rule',
             command: 'echo "valid"',
             enabled: true,
-          }, {
-            // Missing id,,
-    name: 'Invalid Rule 1',
+          },
+          {
+            // Missing id
+            name: 'Invalid Rule 1',
             command: 'echo "invalid"',
-          }, {,
-    id: 'invalid-rule-2',
+          },
+          {
+            id: 'invalid-rule-2',
             // Missing name
             command: 'echo "invalid"',
-          }, {,
-    id: 'invalid-rule-3',
+          },
+          {
+            id: 'invalid-rule-3',
             name: 'Invalid Rule 3',
             // Missing command
           },
-  ],
+        ],
       };
 
       FS.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
@@ -119,18 +120,20 @@ const loadCustomValidationRules = (projectRoot) => {
 
     test('should exclude disabled rules', () => {
       const mockConfig = {
-    customValidationRules: [ {,
-    id: 'enabled-rule',
+        customValidationRules: [
+          {
+            id: 'enabled-rule',
             name: 'Enabled Rule',
             command: 'echo "enabled"',
             enabled: true,
-          }, {,
-    id: 'disabled-rule',
+          },
+          {
+            id: 'disabled-rule',
             name: 'Disabled Rule',
             command: 'echo "disabled"',
             enabled: false,
           },
-  ],
+        ],
       };
 
       FS.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
@@ -157,9 +160,7 @@ const loadCustomValidationRules = (projectRoot) => {
     test('should return empty array when no config file exists', () => {
     
     
-      const loadCustomValidationRules = (projectRoot) 
-    return () 
-    return () => {
+      const loadCustomValidationRules = (projectRoot) => {
         const configPath = path.join(projectRoot, '.claude-validation.json');
         if (FS.existsSync(configPath)) {
           const configData = FS.readFileSync(configPath, 'utf8');
@@ -177,14 +178,12 @@ const loadCustomValidationRules = (projectRoot) => {
     });
 
     test('should handle malformed JSON gracefully', () => {
-    
-    
+
+
       FS.writeFileSync(mockConfigPath, 'invalid json content');
 
-      const loadCustomValidationRules = (projectRoot) 
-    return () 
-    return () => {
-    try {
+      const loadCustomValidationRules = (projectRoot) => {
+        try {
           const configPath = path.join(projectRoot, '.claude-validation.json');
           if (FS.existsSync(configPath)) {
             const configData = FS.readFileSync(configPath, 'utf8');
@@ -208,25 +207,23 @@ const loadCustomValidationRules = (projectRoot) => {
   describe('Custom Validation Execution', () => {
     
     
-    test('should execute custom validation rule with success criteria', () 
-    return () 
-    return () => {
+    test('should execute custom validation rule with success criteria', () => {
       const mockRule = {
-    id: 'success-test',
+        id: 'success-test',
         name: 'Success Test',
         command: 'echo "validation successful"',
         timeout: 5000,
         successCriteria: {
-    exitCode: 0,
+          exitCode: 0,
           outputContains: 'validation successful',
-        }
-};
+        },
+      };
 
-      // Mock validation execution;
-const executeCustomValidation = (rule) => {
-    try {
-          const _result = execSync(rule.command, {,
-    timeout: rule.timeout || 60000,
+      // Mock validation execution
+      const executeCustomValidation = (rule) => {
+        try {
+          const result = execSync(rule.command, {
+            timeout: rule.timeout || 60000,
             encoding: 'utf8',
           });
 
@@ -263,15 +260,15 @@ const executeCustomValidation = (rule) => {
 
     test('should fail when output does not contain required text', () => {
       const mockRule = {
-    id: 'fail-test',
+        id: 'fail-test',
         name: 'Fail Test',
         command: 'echo "wrong output"',
         timeout: 5000,
         successCriteria: {
-    exitCode: 0,
+          exitCode: 0,
           outputContains: 'expected text',
-        }
-};
+        },
+      };
 
       const executeCustomValidation = (rule) => {
     try {
@@ -313,15 +310,15 @@ const executeCustomValidation = (rule) => {
 
     test('should fail when output contains forbidden text', () => {
       const mockRule = {
-    id: 'forbidden-test',
+        id: 'forbidden-test',
         name: 'Forbidden Test',
         command: 'echo "test failed"',
         timeout: 5000,
         successCriteria: {
-    exitCode: 0,
+          exitCode: 0,
           outputNotContains: 'failed',
-        }
-};
+        },
+      };
 
       const executeCustomValidation = (rule) => {
     try {
@@ -331,31 +328,31 @@ const executeCustomValidation = (rule) => {
           });
 
           if (rule.successCriteria) {
-    const { _exitCode, outputContains, outputNotContains } =
+            const { _exitCode, outputContains, outputNotContains } =
               rule.successCriteria;
 
             if (outputContains && !result.includes(outputContains)) {
-    return { success: false, error: 'Expected output not found' };
+              return { success: false, error: 'Expected output not found' };
             }
 
             if (outputNotContains && result.includes(outputNotContains)) {
-    return { success: false, error: 'Forbidden output detected' };
+              return { success: false, error: 'Forbidden output detected' };
             }
           }
 
           return {
-    success: true,
+            success: true,
             details: `Custom validation '${rule.name}' passed`,
           };
-        } catch (_) {
-    return {
-    success: false,
+        } catch (_error) {
+          return {
+            success: false,
             error: `Custom validation '${rule.name}' failed: ${_error.message}`,
           };
         }
       };
 
-      const _result = executeCustomValidation(mockRule);
+      const result = executeCustomValidation(mockRule);
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Forbidden output detected');
@@ -363,7 +360,7 @@ const executeCustomValidation = (rule) => {
 
     test('should handle command execution failures', () => {
       const mockRule = {
-    id: 'command-fail-test',
+        id: 'command-fail-test',
         name: 'Command Fail Test',
         command: 'nonexistent-command',
         timeout: 5000,
@@ -398,57 +395,53 @@ const executeCustomValidation = (rule) => {
   describe('Environment Variable Support', () => {
     
     
-    test('should support environment variable substitution', () 
-    return () 
-    return () => {
+    test('should support environment variable substitution', () => {
       const mockRule = {
-    id: 'env-test',
+        id: 'env-test',
         name: 'Environment Test',
         command: 'echo $TEST_VAR',
         environment: {
-    TEST_VAR: 'environment_value',
+          TEST_VAR: 'environment_value',
         },
         successCriteria: {
-    outputContains: 'environment_value',
-        }
-};
+          outputContains: 'environment_value',
+        },
+      };
 
       const executeCustomValidationWithEnv = (rule) => {
-    try {
+        try {
           // Set environment variables
           if (rule.environment) {
-            Object.keys(rule.environment).forEach((key) 
-    return () 
-    return () => {
+            Object.keys(rule.environment).forEach((key) => {
               process.env[key] = rule.environment[key];
             });
           }
 
-          const _result = execSync(rule.command, {,
-    timeout: rule.timeout || 60000,
+          const result = execSync(rule.command, {
+            timeout: rule.timeout || 60000,
             encoding: 'utf8',
-            env: { ...process.env, ...rule.environment }
-});
+            env: { ...process.env, ...rule.environment },
+          });
 
           if (rule.successCriteria && rule.successCriteria.outputContains) {
             if (!result.includes(rule.successCriteria.outputContains)) {
-    return { success: false, error: 'Expected output not found' };
+              return { success: false, error: 'Expected output not found' };
             }
           }
 
           return {
-    success: true,
+            success: true,
             details: `Custom validation '${rule.name}' passed`,
           };
-        } catch (_) {
-    return {
-    success: false,
+        } catch (_error) {
+          return {
+            success: false,
             error: `Custom validation '${rule.name}' failed: ${_error.message}`,
           };
         }
       };
 
-      const _result = executeCustomValidationWithEnv(mockRule);
+      const result = executeCustomValidationWithEnv(mockRule);
 
       expect(result.success).toBe(true);
     });
@@ -457,9 +450,7 @@ const executeCustomValidation = (rule) => {
   describe('Stop Hook Integration', () => {
     
     
-    test('should merge custom criteria with standard validation criteria', () 
-    return () 
-    return () => {
+    test('should merge custom criteria with standard validation criteria', () => {
       const standardCriteria = [
         'focused-codebase',
         'security-validation',
@@ -473,7 +464,7 @@ const executeCustomValidation = (rule) => {
       const customRules = [
         { id: 'custom-rule-1', name: 'Custom Rule 1', command: 'echo test' },
         { id: 'custom-rule-2', name: 'Custom Rule 2', command: 'echo test' },
-  ];
+      ];
 
       const customCriteriaIds = customRules.map((rule) => rule.id);
       const allCriteria = [...standardCriteria, ...customCriteriaIds];
@@ -493,15 +484,15 @@ const executeCustomValidation = (rule) => {
       ];
 
       const progressReport = {
-    totalValidations: mockValidationCriteria.length,
+        totalValidations: mockValidationCriteria.length,
         completedValidations: 0,
         validationDetails: [],
       };
 
       // Simulate processing validation results
       mockValidationCriteria.forEach((criteria) => {
-        progressReport.validationDetails.push({,
-    criterion: criteria,
+        progressReport.validationDetails.push({
+          criterion: criteria,
           status: 'pending',
         });
       });
@@ -524,32 +515,31 @@ const executeCustomValidation = (rule) => {
   describe('Configuration Schema Validation', () => {
     
     
-    test('should validate complete configuration schema', () 
-    return () 
-    return () => {
+    test('should validate complete configuration schema', () => {
       const mockConfig = {
-    customValidationRules: [ {,
-    id: 'complete-rule',
+        customValidationRules: [
+          {
+            id: 'complete-rule',
             name: 'Complete Test Rule',
             description: 'A complete test rule with all properties',
             command: 'npm run custom-test',
             timeout: 120000,
             enabled: true,
             successCriteria: {
-    exitCode: 0,
+              exitCode: 0,
               outputContains: 'All tests passed',
               outputNotContains: 'FAILED',
             },
             environment: {
-    NODE_ENV: 'test',
+              NODE_ENV: 'test',
               CUSTOM_FLAG: 'true',
-            }
-},
-  ],
+            },
+          },
+        ],
       };
 
-      // Validate schema;
-const isValidRule = (rule) => {
+      // Validate schema
+      const isValidRule = (rule) => {
         return (
           typeof rule.id === 'string' &&
           rule.id.length > 0 &&
@@ -576,11 +566,9 @@ const isValidRule = (rule) => {
   describe('Error Handling And Edge Cases', () => {
     
     
-    test('should handle timeout errors gracefully', () 
-    return () 
-    return () => {
+    test('should handle timeout errors gracefully', () => {
       const mockRule = {
-    id: 'timeout-test',
+        id: 'timeout-test',
         name: 'Timeout Test',
         command: 'sleep 10',
         timeout: 1000, // 1 second timeout for 10 second sleep

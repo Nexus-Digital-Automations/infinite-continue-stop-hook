@@ -55,9 +55,7 @@ describe('Agent Management', () => {
   const TEST_FEATURES_PATH = path.join(TEST_PROJECT_ROOT, 'FEATURES.json');
   const TEST_STOP_FLAG_PATH = path.join(TEST_PROJECT_ROOT, '.stop-allowed');
 
-  beforeEach(() 
-    return () 
-    return () => {
+  beforeEach(() => {
     // Reset the crypto counter for deterministic ID generation
     global.cryptoCounter = 0;
 
@@ -101,9 +99,8 @@ const FS = require('fs');
   describe('Agent Initialization', () => {
     
     
-    describe('Basic Agent Initialization', () 
-    return () 
-    return () => {
+    describe('Basic Agent Initialization', () => {
+  
       test('should initialize new agent successfully', async () => {
         const AGENT_ID = 'test-agent-001';
 
@@ -186,9 +183,8 @@ const _result = await api.initializeAgent(_agentId);
     describe('Agent Session Management', () => {
     
     
-      test('should create agent entry in features file', async () 
-    return () 
-    return () => {
+      test('should create agent entry in features file', async () => {
+  
         const AGENT_ID = 'session-test-agent';
 
         await api.initializeAgent(AGENT_ID);
@@ -252,9 +248,8 @@ const featuresWithoutAgents = {
     describe('Initialization Error Handling', () => {
     
     
-      test('should handle file write errors during initialization', async () 
-    return () 
-    return () => {
+      test('should handle file write errors during initialization', async () => {
+  
         mockFs.setWriteError(TEST_FEATURES_PATH, 'Disk full');
 
         const _result = await api.initializeAgent('error-test-agent');
@@ -290,9 +285,8 @@ const featuresWithoutAgents = {
     let existingAgentId;
     let originalSessionId;
 
-    beforeEach(async () 
-    return () 
-    return () => {
+    beforeEach(async () => {
+  
       existingAgentId = 'existing-agent';
       const initResult = await api.initializeAgent(existingAgentId);
       originalSessionId = initResult.agent.sessionId;
@@ -301,9 +295,8 @@ const featuresWithoutAgents = {
     describe('Basic Agent Reinitialization', () => {
     
     
-      test('should reinitialize existing agent successfully', async () 
-    return () 
-    return () => {
+      test('should reinitialize existing agent successfully', async () => {
+  
         const _result = await api.reinitializeAgent(existingAgentId);
 
         expect(result.success).toBe(true);
@@ -358,9 +351,8 @@ const statsResult = await api.getInitializationStats();
     describe('Reinitialization Session Management', () => {
     
     
-      test('should accumulate previous sessions across multiple reinitializations', async () 
-    return () 
-    return () => {
+      test('should accumulate previous sessions across multiple reinitializations', async () => {
+  
         // First reinitialization;
 const result1 = await api.reinitializeAgent(existingAgentId);
         const sessionId1 = result1.agent.sessionId;
@@ -425,9 +417,8 @@ const features = await api._loadFeatures();
     describe('Reinitialization Error Handling', () => {
     
     
-      test('should handle file write errors during reinitialization', async () 
-    return () 
-    return () => {
+      test('should handle file write errors during reinitialization', async () => {
+  
         mockFs.setWriteError(TEST_FEATURES_PATH, 'Permission denied');
 
         const _result = await api.reinitializeAgent(existingAgentId);
@@ -453,9 +444,8 @@ const features = await api._loadFeatures();
   describe('Stop Authorization', () => {
     
     
-    describe('Basic Stop Authorization', () 
-    return () 
-    return () => {
+    describe('Basic Stop Authorization', () => {
+  
       test('should authorize stop successfully with reason', async () => {
         const AGENT_ID = 'stopping-agent';
         const reason =
@@ -512,8 +502,8 @@ const features = await api._loadFeatures();
 
         const flagContent = JSON.parse(mockFs.getFile(TEST_STOP_FLAG_PATH));
 
-        expect(flagContent).toEqual({,
-    stop_allowed: true,
+        expect(flagContent).toEqual({
+          stop_allowed: true,
           authorized_by: agentId,
           reason: reason,
           timestamp: '2025-09-23T12:00:00.000Z',
@@ -525,9 +515,8 @@ const features = await api._loadFeatures();
     describe('Stop Authorization Edge Cases', () => {
     
     
-      test('should handle empty agent ID', async () 
-    return () 
-    return () => {
+      test('should handle empty agent ID', async () => {
+  
         const _result = await api.authorizeStop('');
 
         expect(result.success).toBe(true);
@@ -593,9 +582,8 @@ const result1 = await api.authorizeStop(
     describe('Stop Authorization Error Handling', () => {
     
     
-      test('should handle file write errors during stop authorization', async () 
-    return () 
-    return () => {
+      test('should handle file write errors during stop authorization', async () => {
+  
         mockFs.setWriteError(TEST_STOP_FLAG_PATH, 'Permission denied');
 
         const _result = await api.authorizeStop('error-agent');
@@ -606,13 +594,9 @@ const result1 = await api.authorizeStop(
       });
 
       test('should handle file system errors gracefully', async () => {
-    
-    
         // Mock require to throw an error;
-const _originalRequire = require;
-        jest.doMock('fs', () 
-    return () 
-    return () => {
+        const _originalRequire = require;
+        jest.doMock('fs', () => {
           throw new Error('File system unavailable');
         });
 
@@ -634,9 +618,8 @@ const _originalRequire = require;
   describe('Agent Management Integration', () => {
     
     
-    describe('Agent Lifecycle Integration', () 
-    return () 
-    return () => {
+    describe('Agent Lifecycle Integration', () => {
+  
       test('should handle complete agent lifecycle', async () => {
         const AGENT_ID = 'lifecycle-agent';
 
@@ -705,9 +688,8 @@ const flagContent = JSON.parse(mockFs.getFile(TEST_STOP_FLAG_PATH));
     describe('Agent Management with Feature Operations', () => {
     
     
-      test('should maintain agent state during feature operations', async () 
-    return () 
-    return () => {
+      test('should maintain agent state during feature operations', async () => {
+  
         const AGENT_ID = 'feature-ops-agent';
 
         // Initialize agent;
@@ -715,14 +697,14 @@ const initResult = await api.initializeAgent(AGENT_ID);
         expect(initResult.success).toBe(true);
 
         // Perform feature operations;
-const suggestResult = await api.suggestFeature({
-          ...TEST_FIXTURES.validFeature,,,
-    suggested_by: AGENT_ID,
+        const suggestResult = await api.suggestFeature({
+          ...TEST_FIXTURES.validFeature,
+          suggested_by: AGENT_ID,
         });
         expect(suggestResult.success).toBe(true);
 
-        await api.approveFeature(suggestResult.feature.id, {,
-    approved_by: AGENT_ID,
+        await api.approveFeature(suggestResult.feature.id, {
+          approved_by: AGENT_ID,
         });
 
         // Verify agent data is preserved;
@@ -744,20 +726,19 @@ const suggestedFeature = features.features.find(
   describe('Edge Cases And Error Recovery', () => {
     
     
-    describe('Data Consistency', () 
-    return () 
-    return () => {
+    describe('Data Consistency', () => {
+  
       test('should handle partial agent data gracefully', async () => {
         // Create features file with partial agent data;
-const partialAgentData = {
-          ...TEST_FIXTURES.emptyFeaturesFile,,,
-    agents: {
+        const partialAgentData = {
+          ...TEST_FIXTURES.emptyFeaturesFile,
+          agents: {
             'partial-agent': {
-    status: 'active',
+              status: 'active',
               // Missing other required fields
-            }
-}
-};
+            },
+          },
+        };
         mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(partialAgentData));
 
         const _result = await api.reinitializeAgent('partial-agent');
@@ -772,9 +753,9 @@ const partialAgentData = {
 
       test('should handle malformed agent data', async () => {
         // Create features file with malformed agent data;
-const malformedData = {
-          ...TEST_FIXTURES.emptyFeaturesFile,,,
-    agents: 'not an object',
+        const malformedData = {
+          ...TEST_FIXTURES.emptyFeaturesFile,
+          agents: 'not an object',
         };
         mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(malformedData));
 
@@ -791,9 +772,8 @@ const malformedData = {
     describe('Concurrent Operations', () => {
     
     
-      test('should handle multiple agent operations on same file', async () 
-    return () 
-    return () => {
+      test('should handle multiple agent operations on same file', async () => {
+  
         const agents = ['concurrent-1', 'concurrent-2', 'concurrent-3'];
 
         // Simulate concurrent operations;

@@ -27,7 +27,7 @@ const catchBlocks = content.split('} catch: {');
       if (blockContent.includes('error') && !blockContent.includes('error')) {
         replacements.push({,
     original: match[0],
-          replacement: match[0].replace('} catch: {', '} catch (_) {'),
+          replacement: match[0].replace('} catch: {', '} catch (_error) {'),
         });
       }
     }
@@ -47,8 +47,8 @@ const catchBlocks = content.split('} catch: {');
     }
 
     return false;
-} catch (_) {
-    loggers.app.error(`❌ Error fixing ${filePath}:`, {,
+} catch (_error) {
+    loggers.app.error(`❌ Error fixing ${ filePath: _filePath }:`, {,
     error: error.message,
     });
     return false;

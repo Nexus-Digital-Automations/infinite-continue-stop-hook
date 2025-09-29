@@ -11,7 +11,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const { execSync: _execSync } = require('child_process');
 
 class FinalSystematicResultFix {
   constructor() {
@@ -38,7 +38,7 @@ class FinalSystematicResultFix {
       }
 
       this.reportResults();
-    } catch (_) {
+    } catch (_error) {
       console.error('❌ Error during systematic fixes:', _1.message);
       throw new Error(`Systematic fixes failed: ${_1.message}`);
     }
@@ -75,7 +75,7 @@ class FinalSystematicResultFix {
           files.push(file);
         }
       }
-    } catch (_) {
+    } catch (_error) {
       console.error('Error finding files:', _error.message);
     }
 
@@ -89,7 +89,7 @@ class FinalSystematicResultFix {
     // Skip if file doesn't exist or is not readable
     try {
       fs.accessSync(filePath, fs.constants.R_OK | fs.constants.W_OK);
-    } catch (_) {
+    } catch (_error) {
       return false;
     }
 
@@ -111,8 +111,8 @@ class FinalSystematicResultFix {
         this.fixedFiles++;
         console.log(`✅ Fixed: ${path.relative(this.projectRoot, _filePath)}`);
       }
-    } catch (_) {
-      console.error(`❌ Error processing ${filePath}:`, _error.message);
+    } catch (_error) {
+      console.error(`❌ Error processing ${ filePath: _filePath }:`, _error.message);
     }
 }
 

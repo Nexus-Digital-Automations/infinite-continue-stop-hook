@@ -133,11 +133,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
     });
 
     test('should handle missing criterion parameter', () => {
-    
-    
-      expect(() 
-    return () 
-    return () => {
+      expect(() => {
         dependencyManager.addDependency('', {});
       }).toThrow('Criterion must be a non-empty string');
     });

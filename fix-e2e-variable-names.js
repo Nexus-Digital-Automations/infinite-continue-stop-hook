@@ -48,13 +48,13 @@ function fixVariableNames(filePath) {
 
     if (changes > 0) {
       fs.writeFileSync(filePath, fixed);
-      console.log(`Fixed ${changes} variable naming issues in: ${filePath}`);
+      console.log(`Fixed ${changes} variable naming issues in: ${ filePath: _filePath }`);
       return true;
     }
 
     return false;
-  } catch (_) {
-    console.error(`Error fixing ${filePath}:`, error.message);
+  } catch (_error) {
+    console.error(`Error fixing ${ filePath: _filePath }:`, error.message);
     return false;
   }
 }

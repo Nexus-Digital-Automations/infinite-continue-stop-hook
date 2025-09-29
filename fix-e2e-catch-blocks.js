@@ -48,22 +48,22 @@ function fixCatchBlocks(_filePath) {
 
         // If error is used, fix the catch declaration
         if (usesError) {
-          lines[i] = line.replace('} catch: {', '} catch (_) {');
+          lines[i] = line.replace('} catch: {', '} catch (_error) {');
           modified = true;
-          console.log(`Fixed catch block at line ${i + 1} in ${filePath}`);
+          console.log(`Fixed catch block at line ${i + 1} in ${ filePath: _filePath }`);
         }
       }
     }
 
     if ((modified, _filePath)) {
       fs.writeFileSync(filePath, lines.join('\n'));
-      console.log(`Fixed catch blocks in: ${filePath}`);
+      console.log(`Fixed catch blocks in: ${ filePath: _filePath }`);
       return true;
     }
 
     return false;
-  } catch (_) {
-    console.error(`Error fixing ${filePath}:`, error.message);
+  } catch (_error) {
+    console.error(`Error fixing ${ filePath: _filePath }:`, error.message);
     return false;
   }
 }

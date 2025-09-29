@@ -242,8 +242,8 @@ const byCriterion = this._groupMetricsByCriteria(metrics);
 
           bottlenecks.push({
             criterion,
-            severity,,,
-    avgDuration: Math.round(stats.avgDuration),
+            severity,
+            avgDuration: Math.round(stats.avgDuration),
             maxDuration: Math.round(stats.maxDuration),
             frequency: stats.count,
             failureRate: Math.round((1 - stats.successRate / 100) * 100),
@@ -276,8 +276,8 @@ const byCriterion = this._groupMetricsByCriteria(metrics);
 
       return {
         bottlenecks,
-        recommendations,,,
-    totalCriteria: Object.keys(byCriterion).length,
+        recommendations,
+        totalCriteria: Object.keys(byCriterion).length,
         averageExecutionTime: Math.round(
           metrics.reduce((sum, m) => sum + m.durationMs, 0) / metrics.length,
         ),
@@ -329,9 +329,9 @@ const cutoffDate = new Date(Date.now() - timeRange * 24 * 60 * 60 * 1000);
       const recentMetrics = metrics.filter(
         (m) => new Date(m.startTime) >= cutoffDate,
       );
-    return {
-    overall: {
-    current_avg: Math.round(
+      return {
+        overall: {
+          current_avg: Math.round(
             recentMetrics.reduce((sum, m) => sum + m.durationMs, 0) /
               recentMetrics.length,
           ),
@@ -344,8 +344,8 @@ const cutoffDate = new Date(Date.now() - timeRange * 24 * 60 * 60 * 1000);
           ),
         },
         by_criterion: Object.entries(byCriterion).map(([criterion, stats]) => ({
-          criterion,,,
-    benchmark: Math.round(stats.avgDuration),
+          criterion,
+          benchmark: Math.round(stats.avgDuration),
           grade: this._getPerformanceGrade(stats.avgDuration),
           meets_target: this._meetsPerformanceTarget(
             criterion,
@@ -414,8 +414,8 @@ const cutoffDate = new Date(Date.now() - timeRange * 24 * 60 * 60 * 1000);
 
       benchmarks.by_criterion.forEach((criterion) => {
         if (!criterion.meets_target) {
-          recommendations.push({,
-    criterion: criterion.criterion,
+          recommendations.push({
+            criterion: criterion.criterion,
             current: `${criterion.benchmark}ms`,
             target: `< ${this._getTargetForCriterion(criterion.criterion)}ms`,
             suggestion: this._getSuggestionForCriterion(criterion.criterion),
@@ -504,24 +504,26 @@ const mockMetrics = {
             startTime: '2025-09-27T01:00:00.000Z',
             durationMs: 1500,
             success: true,
-          }, {,
-    criterion: 'build-validation',
+          },
+          {
+            criterion: 'build-validation',
             startTime: '2025-09-27T02:00:00.000Z',
             durationMs: 8000,
             success: false,
-          }, {,
-    criterion: 'test-validation',
+          },
+          {
+            criterion: 'test-validation',
             startTime: '2025-09-27T03:00:00.000Z',
             durationMs: 3000,
             success: true,
           },
-  ],
+        ],
       };
 
       FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const _result = await taskManager.getValidationPerformanceMetrics({,
-    criterion: 'linter-validation',
+      const result = await taskManager.getValidationPerformanceMetrics({
+        criterion: 'linter-validation',
         limit: 10,
       });
 
@@ -550,18 +552,20 @@ const mockMetrics = {
             durationMs: 3000,
             success: false,
             startTime: '2025-09-27T03:00:00.000Z',
-          }, {,
-    criterion: 'test-validation',
+          },
+          {
+            criterion: 'test-validation',
             durationMs: 4000,
             success: true,
             startTime: '2025-09-27T04:00:00.000Z',
-          }, {,
-    criterion: 'test-validation',
+          },
+          {
+            criterion: 'test-validation',
             durationMs: 5000,
             success: true,
             startTime: '2025-09-27T05:00:00.000Z',
           },
-  ],
+        ],
       };
 
       FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));

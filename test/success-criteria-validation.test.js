@@ -135,8 +135,7 @@ app.start().then(() => {
     
     
   setTimeout(() 
-    return () 
-    return () => {
+  
     app.stop();
     process.exit(0);
 }, 500);
@@ -240,11 +239,9 @@ async function createChildTemplate(
 describe('FEATURES.json System Validation Tests', () => {
     
     
-  beforeAll(async () 
-    return () 
-    return () => {
+  beforeAll(async () => {
     await setupFeaturesTestProject();
-}, 30000);
+  }, 30000);
 
   afterAll(async () => {
     await cleanupFeaturesTestProject();
@@ -258,9 +255,8 @@ describe('FEATURES.json System Validation Tests', () => {
   describe('Feature Lifecycle Management', () => {
     
     
-    test('should create And manage feature suggestions correctly', async () 
-    return () 
-    return () => {
+    test('should create And manage feature suggestions correctly', async () => {
+  
       // Create multiple feature suggestions with different categories;
 const features = [{
     title: 'Add user authentication',
@@ -517,9 +513,8 @@ const BASE_CRITERIA = [{
   describe('Custom Criteria Validation', () => {
     
     
-    test('should validate custom criteria addition to templates', async () 
-    return () 
-    return () => {
+    test('should validate custom criteria addition to templates', async () => {
+  
       // Create base template;
 const BASE_CRITERIA = [
         { id: 'base-1', description: 'Base requirement 1', category: 'build' },
@@ -707,9 +702,8 @@ const status = await execAPI('success-criteria:status');
   describe('Template Versioning And Compatibility', () => {
     
     
-    test('should validate template version compatibility', async () 
-    return () 
-    return () => {
+    test('should validate template version compatibility', async () => {
+  
       // Create template with version metadata;
 const VERSIONED_CRITERIA = [
         { id: 'v1-1', description: 'Version 1 requirement', category: 'build' }, {
@@ -773,15 +767,17 @@ const V1CRITERIA = [
 
       // Create upgraded version with additional criteria And modifications;
 const V2CRITERIA = [{
-    id: 'upgrade-1',
-          description: 'V2 updated requirement',
-          category: 'build',
-          priority: 'high',
-        }, // Modified{ id: 'upgrade-2', description: 'V1 requirement 2', category: 'test' }, // Unchanged{
-    id: 'upgrade-3',
-          description: 'V2 new requirement',
-          category: 'security',
-        }, // New,
+        id: 'upgrade-1',
+        description: 'V2 updated requirement',
+        category: 'build',
+        priority: 'high',
+      }, // Modified
+      { id: 'upgrade-2', description: 'V1 requirement 2', category: 'test' }, // Unchanged
+      {
+        id: 'upgrade-3',
+        description: 'V2 new requirement',
+        category: 'security',
+      }, // New
       ];
 
       const v2Template = {
@@ -912,9 +908,8 @@ const status = await execAPI('success-criteria:status');
   describe('Project-Specific Customization Validation', () => {
     
     
-    test('should validate project environment-specific criteria', async () 
-    return () 
-    return () => {
+    test('should validate project environment-specific criteria', async () => {
+  
       // Create base template;
 const BASE_CRITERIA = [{
     id: 'env-base-1',
@@ -1118,9 +1113,8 @@ const HIGH_PRIORITY_PERFORMANCE = await execAPI(
   describe('Integration And Workflow Validation', () => {
     
     
-    test('should validate complete template inheritance workflow', async () 
-    return () 
-    return () => {
+    test('should validate complete template inheritance workflow', async () => {
+  
       // Step 1: Create organizational base template;
 const ORG_CRITERIA = [{
     id: 'org-security',

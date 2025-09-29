@@ -155,11 +155,9 @@ describe('TaskManager API Comprehensive Test Suite', () => {
   let testTaskId = null;
   let testFeatureId = null;
 
-  beforeEach(() 
-    return () 
-    return () => {
+  beforeEach(() => {
     setupTestEnvironment();
-});
+  });
 
   afterEach(() => {
     cleanupTestEnvironment();
@@ -172,9 +170,8 @@ describe('TaskManager API Comprehensive Test Suite', () => {
   describe('API Discovery', () => {
     
     
-    test('should return comprehensive guide', async () 
-    return () 
-    return () => {
+    test('should return comprehensive guide', async () => {
+  
       const _result = await execAPI('guide');
 
       expect(result.success).toBe(true);
@@ -226,9 +223,8 @@ const taskTypes = result.taskClassification.types;
   describe('Agent Lifecycle Management', () => {
     
     
-    test('should initialize agent with default configuration', async () 
-    return () 
-    return () => {
+    test('should initialize agent with default configuration', async () => {
+  
       const _result = await execAPI('init');
 
       expect(result.success).toBe(true);
@@ -315,9 +311,8 @@ const initResult = await execAPI('init');
   describe('Task Creation', () => {
     
     
-    beforeEach(async () 
-    return () 
-    return () => {
+    beforeEach(async () => {
+  
       // Initialize agent for task operations;
 const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
@@ -436,9 +431,8 @@ const initResult = await execAPI('init');
   describe('Task Claiming', () => {
     
     
-    beforeEach(async () 
-    return () 
-    return () => {
+    beforeEach(async () => {
+  
       // Initialize agent for task operations;
 const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
@@ -530,9 +524,8 @@ const _result = await execAPI('current', [testAgentId]);
   describe('Task Completion', () => {
     
     
-    beforeEach(async () 
-    return () 
-    return () => {
+    beforeEach(async () => {
+  
       // Initialize agent And create/claim a task;
 const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
@@ -607,9 +600,8 @@ const featureTaskData = {
   describe('Task Listing And Filtering', () => {
     
     
-    beforeEach(async () 
-    return () 
-    return () => {
+    beforeEach(async () => {
+  
       // Initialize agent;
 const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
@@ -705,9 +697,8 @@ const tasks = [{
   describe('Task Reordering', () => {
     
     
-    beforeEach(async () 
-    return () 
-    return () => {
+    beforeEach(async () => {
+  
       // Initialize agent And create multiple tasks;
 const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
@@ -779,9 +770,8 @@ const listResult = await execAPI('list');
   describe('Feature Management', () => {
     
     
-    beforeEach(async () 
-    return () 
-    return () => {
+    beforeEach(async () => {
+  
       // Initialize agent;
 const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
@@ -948,9 +938,8 @@ const features = [
   describe('Task Deletion', () => {
     
     
-    beforeEach(async () 
-    return () 
-    return () => {
+    beforeEach(async () => {
+  
       // Initialize agent And create test task;
 const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
@@ -994,9 +983,8 @@ const listResult = await execAPI('list');
   describe('Statistics And Monitoring', () => {
     
     
-    beforeEach(async () 
-    return () 
-    return () => {
+    beforeEach(async () => {
+  
       // Initialize agent And create some tasks;
 const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
@@ -1039,9 +1027,8 @@ const stats = result.statistics;
   describe('Error Handling And Edge Cases', () => {
     
     
-    test('should handle invalid command gracefully', async () 
-    return () 
-    return () => {
+    test('should handle invalid command gracefully', async () => {
+  
       try {
         await execAPI('invalid-command');
       } catch (_) {
@@ -1102,9 +1089,8 @@ const _result = await execAPI('claim');
   describe('Complete Workflow Integration', () => {
     
     
-    test('should complete full task lifecycle', async () 
-    return () 
-    return () => {
+    test('should complete full task lifecycle', async () => {
+  
       // 1. Initialize agent;
 const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
