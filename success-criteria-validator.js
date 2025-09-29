@@ -45,7 +45,7 @@ class SuccessCriteriaValidator {
   constructor(validationResults = {}) {
     this.configPath = path.join(
       __dirname,
-      'development/essentials/success-criteria-config.json',
+      'development/essentials/success-criteria-config.json'
     );
     this.config = null;
     this.validationResults = {};
@@ -72,7 +72,7 @@ class SuccessCriteriaValidator {
       ValidationLogger.log(`📊 Report storage: ${this.reportDir}`);
     } catch (_) {
       ValidationLogger._error(
-        `❌ Failed to initialize validator: ${_error.message}`,
+        `❌ Failed to initialize validator: ${_error.message}`
       );
       throw _error;
     }
@@ -88,7 +88,7 @@ class SuccessCriteriaValidator {
       await FS.mkdir(this.reportDir, { recursive: true });
     } catch (_) {
       ValidationLogger._error(
-        `❌ Failed to create directories: ${_error.message}`,
+        `❌ Failed to create directories: ${_error.message}`
       );
       throw _error;
     }
@@ -253,7 +253,7 @@ class SuccessCriteriaValidator {
       };
     } catch (_) {
       ValidationLogger._error(
-        `❌ Failed to get task criteria: ${_error.message}`,
+        `❌ Failed to get task criteria: ${_error.message}`
       );
       throw _error;
     }
@@ -279,7 +279,7 @@ class SuccessCriteriaValidator {
             category: criteriaSet,
             mandatory: criteria.mandatory,
             validation_method: criteria.validation_method,
-          })),
+          }))
         );
       }
     }
@@ -776,7 +776,7 @@ class SuccessCriteriaValidator {
     // Save report to file
     const reportPath = path.join(
       this.reportDir,
-      `${taskId}_validation_report.json`,
+      `${taskId}_validation_report.json`
     );
 
     await FS.writeFile(reportPath, JSON.stringify(report, null, 2));
@@ -801,16 +801,16 @@ class SuccessCriteriaValidator {
   generateCriteriaSummary(results) {
     const total = Object.keys(results).length;
     const passed = Object.values(results).filter(
-      (r) => r.status === 'passed',
+      (r) => r.status === 'passed'
     ).length;
     const failed = Object.values(results).filter(
-      (r) => r.status === 'failed',
+      (r) => r.status === 'failed'
     ).length;
     const pending = Object.values(results).filter(
-      (r) => r.status === 'pending',
+      (r) => r.status === 'pending'
     ).length;
     const error = Object.values(results).filter(
-      (r) => r.status === 'error',
+      (r) => r.status === 'error'
     ).length;
 
     return {
@@ -852,13 +852,15 @@ class SuccessCriteriaValidator {
       // Filter by task.category if specified
       if (options.task.category) {
         allCriteria = allCriteria.filter(
-          (c) => c.category === options.category,
+          (c) => c.category === options.category
         );
-        ValidationLogger.log(`🔍 Filtering by task.category: ${options.task.category}`);
+        ValidationLogger.log(
+          `🔍 Filtering by task.category: ${options.task.category}`
+        );
       }
 
       ValidationLogger.log(
-        `📊 Total criteria to validate: ${allCriteria.length}`,
+        `📊 Total criteria to validate: ${allCriteria.length}`
       );
 
       // Run automated validation
@@ -869,7 +871,7 @@ class SuccessCriteriaValidator {
       if (options.report) {
         report = await this.generateReport(taskId, results);
         ValidationLogger.log(
-          `📋 Validation report generated: ${path.join(this.reportDir, `${taskId}_validation_report.json`)}`,
+          `📋 Validation report generated: ${path.join(this.reportDir, `${taskId}_validation_report.json`)}`
         );
       }
 
@@ -934,11 +936,11 @@ class SuccessCriteriaValidator {
 
     if (failedCount > 0 || errorCount > 0) {
       ValidationLogger.log(
-        '\n⚠️  VALIDATION INCOMPLETE - Address failed criteria before task completion',
+        '\n⚠️  VALIDATION INCOMPLETE - Address failed criteria before task completion'
       );
     } else if (pendingCount > 0) {
       ValidationLogger.log(
-        '\n⏳ VALIDATION PENDING - Manual validation required for some criteria',
+        '\n⏳ VALIDATION PENDING - Manual validation required for some criteria'
       );
     } else {
       ValidationLogger.log('\n🎉 VALIDATION COMPLETE - All criteria satisfied');
