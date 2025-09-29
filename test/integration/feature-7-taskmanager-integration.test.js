@@ -38,15 +38,15 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
       // Mock TaskManager _loadCustomValidationRules method
       const mockTaskManager = {
-        _fileExists(__filename, __filename) {
-          return FS.existsSync(__filename);
+        _fileExists(filePath) {
+          return FS.existsSync(filePath);
         },
 
-        _loadCustomValidationRules() {
+        async _loadCustomValidationRules() {
           const fsPromises = require('fs').promises;
           const configPath = path.join(
             mockProjectRoot,
-            '.claude-validation.json',
+            '.claude-validation.json'
           );
 
           try {
@@ -63,7 +63,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                     rule.id &&
                     rule.name &&
                     rule.command &&
-                    rule.enabled !== false,
+                    rule.enabled !== false
                 );
               }
             }
@@ -84,14 +84,14 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
     test('should return empty array for missing config file', async () => {
       const mockTaskManager = {
-        _fileExists(__filename, __filename) {
-          return FS.existsSync(__filename);
+        _fileExists(filePath) {
+          return FS.existsSync(filePath);
         },
 
-        _loadCustomValidationRules() {
+        async _loadCustomValidationRules() {
           const configPath = path.join(
             '/nonexistent',
-            '.claude-validation.json',
+            '.claude-validation.json'
           );
 
           try {
@@ -108,7 +108,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                     rule.id &&
                     rule.name &&
                     rule.command &&
-                    rule.enabled !== false,
+                    rule.enabled !== false
                 );
               }
             }
@@ -148,14 +148,14 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
       // Mock TaskManager validation method
       const mockTaskManager = {
-        _fileExists(__filename, __filename) {
-          return FS.existsSync(__filename);
+        _fileExists(filePath) {
+          return FS.existsSync(filePath);
         },
 
-        _loadCustomValidationRules() {
+        async _loadCustomValidationRules() {
           const configPath = path.join(
             mockProjectRoot,
-            '.claude-validation.json',
+            '.claude-validation.json'
           );
 
           try {
@@ -172,7 +172,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                     rule.id &&
                     rule.name &&
                     rule.command &&
-                    rule.enabled !== false,
+                    rule.enabled !== false
                 );
               }
             }
@@ -183,7 +183,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           return [];
         },
 
-        _performLanguageAgnosticValidationCore(criterion) {
+        async _performLanguageAgnosticValidationCore(criterion) {
           const { execSync } = require('child_process');
 
           try {
@@ -197,7 +197,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 // Check if this is a custom validation rule
                 const customRules = await this._loadCustomValidationRules();
                 const customRule = customRules.find(
-                  (rule) => rule.id === criterion,
+                  (rule) => rule.id === criterion
                 );
 
                 if (customRule) {
@@ -258,7 +258,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
       const result =
         await mockTaskManager._performLanguageAgnosticValidationCore(
-          'custom-api-tests',
+          'custom-api-tests'
         );
 
       expect(result.success).toBe(true);
@@ -268,11 +268,11 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
     test('should fail unknown custom validation criterion', async () => {
       const mockTaskManager = {
-        _loadCustomValidationRules() {
+        async _loadCustomValidationRules() {
           return []; // No custom rules
         },
 
-        _performLanguageAgnosticValidationCore(criterion) {
+        async _performLanguageAgnosticValidationCore(criterion) {
           try {
             switch (criterion) {
               case 'focused-codebase': {
@@ -282,7 +282,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
               default: {
                 const customRules = this._loadCustomValidationRules();
                 const customRule = customRules.find(
-                  (rule) => rule.id === criterion,
+                  (rule) => rule.id === criterion
                 );
 
                 if (customRule) {
@@ -303,12 +303,12 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
       const result =
         await mockTaskManager._performLanguageAgnosticValidationCore(
-          'nonexistent-rule',
+          'nonexistent-rule'
         );
 
       expect(result.success).toBe(false);
       expect(result.error).toContain(
-        'Unknown validation criterion: nonexistent-rule',
+        'Unknown validation criterion: nonexistent-rule'
       );
     });
 
@@ -327,14 +327,14 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
       FS.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
 
       const mockTaskManager = {
-        _fileExists(__filename, __filename) {
-          return FS.existsSync(__filename);
+        _fileExists(filePath) {
+          return FS.existsSync(filePath);
         },
 
-        _loadCustomValidationRules() {
+        async _loadCustomValidationRules() {
           const configPath = path.join(
             mockProjectRoot,
-            '.claude-validation.json',
+            '.claude-validation.json'
           );
 
           try {
@@ -351,7 +351,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                     rule.id &&
                     rule.name &&
                     rule.command &&
-                    rule.enabled !== false,
+                    rule.enabled !== false
                 );
               }
             }
@@ -362,13 +362,13 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           return [];
         },
 
-        _performLanguageAgnosticValidationCore(criterion) {
+        async _performLanguageAgnosticValidationCore(criterion) {
           const { execSync } = require('child_process');
 
           try {
             const customRules = await this._loadCustomValidationRules();
             const customRule = customRules.find(
-              (rule) => rule.id === criterion,
+              (rule) => rule.id === criterion
             );
 
             if (customRule) {
@@ -404,7 +404,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
       const result =
         await mockTaskManager._performLanguageAgnosticValidationCore(
-          'failing-rule',
+          'failing-rule'
         );
 
       expect(result.success).toBe(false);
@@ -434,14 +434,14 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
       FS.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
 
       const mockTaskManager = {
-        _fileExists(__filename, __filename) {
-          return FS.existsSync(__filename);
+        _fileExists(filePath) {
+          return FS.existsSync(filePath);
         },
 
-        _loadCustomValidationRules() {
+        async _loadCustomValidationRules() {
           const configPath = path.join(
             mockProjectRoot,
-            '.claude-validation.json',
+            '.claude-validation.json'
           );
 
           try {
@@ -458,7 +458,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                     rule.id &&
                     rule.name &&
                     rule.command &&
-                    rule.enabled !== false,
+                    rule.enabled !== false
                 );
               }
             }
@@ -469,13 +469,13 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           return [];
         },
 
-        _performLanguageAgnosticValidationCore(criterion) {
+        async _performLanguageAgnosticValidationCore(criterion) {
           const { execSync } = require('child_process');
 
           try {
             const customRules = await this._loadCustomValidationRules();
             const customRule = customRules.find(
-              (rule) => rule.id === criterion,
+              (rule) => rule.id === criterion
             );
 
             if (customRule) {
@@ -539,7 +539,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
       const result =
         await mockTaskManager._performLanguageAgnosticValidationCore(
-          'env-rule',
+          'env-rule'
         );
 
       expect(result.success).toBe(true);
@@ -565,14 +565,14 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
       FS.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
 
       const mockTaskManager = {
-        _fileExists(__filename, __filename) {
-          return FS.existsSync(__filename);
+        _fileExists(filePath) {
+          return FS.existsSync(filePath);
         },
 
-        _loadCustomValidationRules() {
+        async _loadCustomValidationRules() {
           const configPath = path.join(
             mockProjectRoot,
-            '.claude-validation.json',
+            '.claude-validation.json'
           );
 
           try {
@@ -589,7 +589,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                     rule.id &&
                     rule.name &&
                     rule.command &&
-                    rule.enabled !== false,
+                    rule.enabled !== false
                 );
               }
             }
@@ -600,13 +600,13 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           return [];
         },
 
-        _performLanguageAgnosticValidationCore(criterion) {
+        async _performLanguageAgnosticValidationCore(criterion) {
           const { execSync } = require('child_process');
 
           try {
             const customRules = await this._loadCustomValidationRules();
             const customRule = customRules.find(
-              (rule) => rule.id === criterion,
+              (rule) => rule.id === criterion
             );
 
             if (customRule) {
@@ -669,7 +669,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
       const result =
         await mockTaskManager._performLanguageAgnosticValidationCore(
-          'exit-code-rule',
+          'exit-code-rule'
         );
 
       expect(result.success).toBe(true);
@@ -695,14 +695,14 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
       FS.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
 
       const mockTaskManager = {
-        _fileExists(__filename, __filename) {
-          return FS.existsSync(__filename);
+        _fileExists(filePath) {
+          return FS.existsSync(filePath);
         },
 
-        _loadCustomValidationRules() {
+        async _loadCustomValidationRules() {
           const configPath = path.join(
             mockProjectRoot,
-            '.claude-validation.json',
+            '.claude-validation.json'
           );
 
           try {
@@ -719,7 +719,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                     rule.id &&
                     rule.name &&
                     rule.command &&
-                    rule.enabled !== false,
+                    rule.enabled !== false
                 );
               }
             }
@@ -730,13 +730,13 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           return [];
         },
 
-        _performLanguageAgnosticValidationCore(criterion) {
+        async _performLanguageAgnosticValidationCore(criterion) {
           const { execSync } = require('child_process');
 
           try {
             const customRules = await this._loadCustomValidationRules();
             const customRule = customRules.find(
-              (rule) => rule.id === criterion,
+              (rule) => rule.id === criterion
             );
 
             if (customRule) {
@@ -799,7 +799,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
       const result =
         await mockTaskManager._performLanguageAgnosticValidationCore(
-          'multi-criteria-rule',
+          'multi-criteria-rule'
         );
 
       expect(result.success).toBe(true);
@@ -816,14 +816,14 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
       FS.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
 
       const mockTaskManager = {
-        _fileExists(__filename, __filename) {
-          return FS.existsSync(__filename);
+        _fileExists(filePath) {
+          return FS.existsSync(filePath);
         },
 
-        _loadCustomValidationRules() {
+        async _loadCustomValidationRules() {
           const configPath = path.join(
             mockProjectRoot,
-            '.claude-validation.json',
+            '.claude-validation.json'
           );
 
           try {
@@ -840,7 +840,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                     rule.id &&
                     rule.name &&
                     rule.command &&
-                    rule.enabled !== false,
+                    rule.enabled !== false
                 );
               }
             }
@@ -864,14 +864,14 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
       FS.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
 
       const mockTaskManager = {
-        _fileExists(__filename, __filename) {
-          return FS.existsSync(__filename);
+        _fileExists(filePath) {
+          return FS.existsSync(filePath);
         },
 
-        _loadCustomValidationRules() {
+        async _loadCustomValidationRules() {
           const configPath = path.join(
             mockProjectRoot,
-            '.claude-validation.json',
+            '.claude-validation.json'
           );
 
           try {
@@ -888,7 +888,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                     rule.id &&
                     rule.name &&
                     rule.command &&
-                    rule.enabled !== false,
+                    rule.enabled !== false
                 );
               }
             }

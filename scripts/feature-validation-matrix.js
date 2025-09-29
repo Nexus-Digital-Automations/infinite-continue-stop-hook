@@ -125,7 +125,7 @@ class FeatureValidationMatrix {
       // Test basic API startup
       const startTest = await this.testCommand(
         'node taskmanager-api.js guide',
-        10000,
+        10000
       );
       result.details.startup = {
         success: startTest.success,
@@ -201,7 +201,7 @@ class FeatureValidationMatrix {
           (file) =>
             file.includes('rag') ||
             file.includes('vector') ||
-            file.includes('embeddings'),
+            file.includes('embeddings')
         );
       }
 
@@ -217,7 +217,7 @@ class FeatureValidationMatrix {
   /**
    * Validate File Operations functionality
    */
-  validateFileOperations() {
+  async validateFileOperations() {
     const result = {
       name: 'File Operations',
       status: 'unknown',
@@ -257,7 +257,7 @@ class FeatureValidationMatrix {
       if (FS.existsSync('test/integration/file-operations.test.js')) {
         const fileTest = await this.testCommand(
           'npm run test:integration:files',
-          30000,
+          30000
         );
         result.details.integration_tests = {
           success: fileTest.success,
@@ -266,7 +266,7 @@ class FeatureValidationMatrix {
 
         if (!fileTest.success) {
           result.errors.push(
-            `File integration tests failed: ${fileTest.error}`,
+            `File integration tests failed: ${fileTest.error}`
           );
         }
       }
@@ -283,7 +283,7 @@ class FeatureValidationMatrix {
   /**
    * Validate Agent Management functionality
    */
-  validateAgentManagement() {
+  async validateAgentManagement() {
     const result = {
       name: 'Agent Management',
       status: 'unknown',
@@ -298,7 +298,7 @@ class FeatureValidationMatrix {
       if (FS.existsSync('test/integration/agent-lifecycle.test.js')) {
         const agentTest = await this.testCommand(
           'npm run test:integration:agents',
-          30000,
+          30000
         );
         result.details.lifecycle_tests = {
           success: agentTest.success,
@@ -307,7 +307,7 @@ class FeatureValidationMatrix {
 
         if (!agentTest.success) {
           result.errors.push(
-            `Agent lifecycle tests failed: ${agentTest.error}`,
+            `Agent lifecycle tests failed: ${agentTest.error}`
           );
         }
       }
@@ -316,7 +316,7 @@ class FeatureValidationMatrix {
       if (FS.existsSync('test/e2e/multi-agent-scenarios.test.js')) {
         const multiAgentTest = await this.testCommand(
           'npm run test:e2e:multi-agent',
-          45000,
+          45000
         );
         result.details.multi_agent_tests = {
           success: multiAgentTest.success,
@@ -325,7 +325,7 @@ class FeatureValidationMatrix {
 
         if (!multiAgentTest.success) {
           result.errors.push(
-            `Multi-agent tests failed: ${multiAgentTest.error}`,
+            `Multi-agent tests failed: ${multiAgentTest.error}`
           );
         }
       }
@@ -342,7 +342,9 @@ class FeatureValidationMatrix {
       result.status = result.errors.length === 0 ? 'passed' : 'failed';
     } catch (_) {
       result.status = 'failed';
-      result.errors.push(`Agent management validation error: ${_error.message}`);
+      result.errors.push(
+        `Agent management validation error: ${_error.message}`
+      );
     }
 
     return result;
@@ -351,7 +353,7 @@ class FeatureValidationMatrix {
   /**
    * Validate Performance Monitoring functionality
    */
-  validatePerformanceMonitoring() {
+  async validatePerformanceMonitoring() {
     const result = {
       name: 'Performance Monitoring',
       status: 'unknown',
@@ -366,7 +368,7 @@ class FeatureValidationMatrix {
       if (FS.existsSync('scripts/test-performance.js')) {
         const perfTest = await this.testCommand(
           'npm run performance:test',
-          30000,
+          30000
         );
         result.details.performance_script = {
           success: perfTest.success,
@@ -382,7 +384,7 @@ class FeatureValidationMatrix {
       if (FS.existsSync('test/rag-system/performance')) {
         const ragPerfTest = await this.testCommand(
           'npm run test:rag:performance',
-          45000,
+          45000
         );
         result.details.rag_performance_tests = {
           success: ragPerfTest.success,
@@ -391,7 +393,7 @@ class FeatureValidationMatrix {
 
         if (!ragPerfTest.success) {
           result.errors.push(
-            `RAG performance tests failed: ${ragPerfTest.error}`,
+            `RAG performance tests failed: ${ragPerfTest.error}`
           );
         }
       }
@@ -407,7 +409,7 @@ class FeatureValidationMatrix {
     } catch (_) {
       result.status = 'failed';
       result.errors.push(
-        `Performance monitoring validation error: ${_error.message}`,
+        `Performance monitoring validation error: ${_error.message}`
       );
     }
 
@@ -417,7 +419,7 @@ class FeatureValidationMatrix {
   /**
    * Validate Native Dependencies functionality
    */
-  validateNativeDependencies() {
+  async validateNativeDependencies() {
     const result = {
       name: 'Native Dependencies',
       status: 'unknown',
@@ -442,7 +444,7 @@ class FeatureValidationMatrix {
         } catch (_) {
           result.details[`${dep.name}_loaded`] = false;
           result.errors.push(
-            `Native dependency failed: ${dep.name} - ${_error.message}`,
+            `Native dependency failed: ${dep.name} - ${_error.message}`
           );
         }
       }
@@ -451,12 +453,12 @@ class FeatureValidationMatrix {
       try {
         const rebuildTest = await this.testCommand(
           'npm rebuild --silent',
-          60000,
+          60000
         );
         result.details.rebuild_capability = rebuildTest.success;
         if (!rebuildTest.success) {
           result.errors.push(
-            `Native module rebuild failed: ${rebuildTest.error}`,
+            `Native module rebuild failed: ${rebuildTest.error}`
           );
         }
       } catch (_) {
@@ -468,7 +470,7 @@ class FeatureValidationMatrix {
     } catch (_) {
       result.status = 'failed';
       result.errors.push(
-        `Native dependencies validation error: ${_error.message}`,
+        `Native dependencies validation error: ${_error.message}`
       );
     }
 
@@ -509,7 +511,7 @@ class FeatureValidationMatrix {
   /**
    * Run all feature validations
    */
-  runValidations() {
+  async runValidations() {
     loggers.stopHook.log('🧪 Running feature validation matrix...\n');
 
     for (const feature of this.features) {
@@ -574,7 +576,7 @@ class FeatureValidationMatrix {
     // Calculate overall compatibility score
     const totalTests = Object.keys(matrix.features).length;
     const passedTests = Object.values(matrix.features).filter(
-      (f) => f.status === 'passed',
+      (f) => f.status === 'passed'
     ).length;
     matrix.compatibility_score =
       totalTests > 0 ? Math.round((passedTests / totalTests) * 100) : 0;
@@ -583,7 +585,7 @@ class FeatureValidationMatrix {
 
     // Determine overall status
     const criticalIssues = this.validationResults.issues_found.filter(
-      (i) => i.type === 'critical',
+      (i) => i.type === 'critical'
     ).length;
     if (criticalIssues === 0 && matrix.compatibility_score >= 90) {
       this.validationResults.overall_status = 'excellent';
@@ -603,26 +605,26 @@ class FeatureValidationMatrix {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const resultsFile = path.join(
       this.outputDir,
-      `feature-validation-${timestamp}.json`,
+      `feature-validation-${timestamp}.json`
     );
     const latestFile = path.join(
       this.outputDir,
-      'latest-feature-validation.json',
+      'latest-feature-validation.json'
     );
 
     FS.writeFileSync(
       resultsFile,
-      JSON.stringify(this.validationResults, null, 2),
+      JSON.stringify(this.validationResults, null, 2)
     );
     FS.writeFileSync(
       latestFile,
-      JSON.stringify(this.validationResults, null, 2),
+      JSON.stringify(this.validationResults, null, 2)
     );
 
     // Generate human-readable report
     const reportFile = path.join(
       this.outputDir,
-      'feature-validation-report.md',
+      'feature-validation-report.md'
     );
     const report = this.generateMarkdownReport();
     FS.writeFileSync(reportFile, report);
@@ -654,48 +656,48 @@ class FeatureValidationMatrix {
 | Feature | Status | Errors | Details |
 |---------|--------|--------|---------|
 ${Object.values(this.validationResults.feature_tests)
-    .map((test) => {
-      const status = test.status === 'passed' ? '✅ Passed' : '❌ Failed';
-      const errorCount = test.errors.length;
-      const details = test.details
-        ? Object.keys(test.details).length + ' checks'
-        : 'N/A';
-      return `| ${test.name} | ${status} | ${errorCount} | ${details} |`;
-    })
-    .join('\n')}
+  .map((test) => {
+    const status = test.status === 'passed' ? '✅ Passed' : '❌ Failed';
+    const errorCount = test.errors.length;
+    const details = test.details
+      ? Object.keys(test.details).length + ' checks'
+      : 'N/A';
+    return `| ${test.name} | ${status} | ${errorCount} | ${details} |`;
+  })
+  .join('\n')}
 
 ## Critical Issues
 ${
   this.validationResults.issues_found.length > 0
     ? this.validationResults.issues_found
-      .map(
-        (issue) =>
-          `### ${issue.feature}
+        .map(
+          (issue) =>
+            `### ${issue.feature}
 - **Type**: ${issue.type}
-- **Errors**: ${issue.errors.join(', ')}`,
-      )
-      .join('\n\n')
+- **Errors**: ${issue.errors.join(', ')}`
+        )
+        .join('\n\n')
     : 'None identified ✅'
 }
 
 ## Feature Details
 
 ${Object.values(this.validationResults.feature_tests)
-    .map(
-      (test) => `### ${test.name}
+  .map(
+    (test) => `### ${test.name}
 - **Status**: ${test.status}
 - **Error Count**: ${test.errors.length}
 ${test.errors.length > 0 ? `- **Errors**: ${test.errors.join(', ')}` : ''}
 ${
   test.details
     ? Object.entries(test.details)
-      .map(([key, value]) => `- **${key}**: ${JSON.stringify(value)}`)
-      .join('\n')
+        .map(([key, value]) => `- **${key}**: ${JSON.stringify(value)}`)
+        .join('\n')
     : ''
 }
-`,
-    )
-    .join('\n')}
+`
+  )
+  .join('\n')}
 
 ## Recommendations
 
@@ -723,17 +725,17 @@ ${
     loggers.stopHook.log(`Node.js Version: ${this.environment.node_version}`);
     loggers.stopHook.log(`Platform: ${this.environment.platform}`);
     loggers.app.info(
-      `Overall Status: ${this.validationResults.overall_status.toUpperCase()}`,
+      `Overall Status: ${this.validationResults.overall_status.toUpperCase()}`
     );
     loggers.app.info(
-      `Compatibility Score: ${this.validationResults.compatibility_matrix.compatibility_score}/100`,
+      `Compatibility Score: ${this.validationResults.compatibility_matrix.compatibility_score}/100`
     );
 
     loggers.stopHook.log('\n🧪 Feature Results:');
     Object.values(this.validationResults.feature_tests).forEach((test) => {
       const status = test.status === 'passed' ? '✅' : '❌';
       loggers.app.info(
-        `  ${status} ${test.name}: ${test.status} (${test.errors.length} errors)`,
+        `  ${status} ${test.name}: ${test.status} (${test.errors.length} errors)`
       );
     });
 
@@ -741,7 +743,7 @@ ${
       loggers.stopHook.log('\n⚠️ Critical Issues:');
       this.validationResults.issues_found.forEach((issue) => {
         loggers.app.info(
-          `  ${issue.feature}: ${issue.errors.length} critical errors`,
+          `  ${issue.feature}: ${issue.errors.length} critical errors`
         );
       });
     }
@@ -750,7 +752,7 @@ ${
   /**
    * Run complete validation suite
    */
-  run(validationResults = {}) {
+  async run(validationResults = {}) {
     loggers.stopHook.log('🚀 Starting Feature Validation Matrix...\n');
 
     try {
