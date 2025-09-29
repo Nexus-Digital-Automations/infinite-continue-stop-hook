@@ -485,9 +485,7 @@ const cutoffDate = new Date(Date.now() - timeRange * 24 * 60 * 60 * 1000);
   describe('getValidationPerformanceMetrics', () => {
     
     
-    test('should return empty metrics when no data available', async () 
-    return () 
-    return () => {
+    test('should return empty metrics when no data available', async () => {
       const _result = await taskManager.getValidationPerformanceMetrics();
 
       expect(result.success).toBe(true);
@@ -601,13 +599,15 @@ const mockMetrics = {
 
     test('should identify bottlenecks correctly', async () => {
       const mockMetrics = {
-    metrics: [ {,
-    criterion: 'build-validation',
+        metrics: [
+          {
+            criterion: 'build-validation',
             durationMs: 15000, // Critical bottleneck (>10000ms)
             success: true,
             startTime: '2025-09-27T01:00:00.000Z',
-          }, {,
-    criterion: 'linter-validation',
+          },
+          {
+            criterion: 'linter-validation',
             durationMs: 7000, // Moderate bottleneck (>5000ms but <10000ms)
             success: true,
             startTime: '2025-09-27T02:00:00.000Z',
@@ -644,13 +644,13 @@ const mockMetrics = {
             success: true,
             startTime: '2025-09-27T01:00:00.000Z',
           },
-  ],
+        ],
       };
 
       FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const _result = await taskManager.identifyPerformanceBottlenecks({,
-    slowThreshold: 2000,
+      const result = await taskManager.identifyPerformanceBottlenecks({
+        slowThreshold: 2000,
         criticalThreshold: 4000,
       });
 
@@ -684,8 +684,9 @@ const mockMetrics = {
             durationMs: 1500,
             success: true,
             startTime: '2025-09-27T01:00:00.000Z',
-          }, {,
-    criterion: 'build-validation',
+          },
+          {
+            criterion: 'build-validation',
             durationMs: 25000,
             success: true,
             startTime: '2025-09-27T02:00:00.000Z',
@@ -700,7 +701,7 @@ const mockMetrics = {
 
       FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const _result = await taskManager.getPerformanceBenchmarks();
+      const result = await taskManager.getPerformanceBenchmarks();
 
       expect(result.success).toBe(true);
       expect(result.benchmarks).toBeDefined();
@@ -711,8 +712,8 @@ const mockMetrics = {
       );
       expect(linterBenchmark.benchmark).toBe(1500);
       expect(linterBenchmark.grade).toBe('B'); // 1000ms < duration < 2000ms
-      expect(linterBenchmark.meets_target).toBe(true); // < 2000ms target;
-const buildBenchmark = result.benchmarks.by_criterion.find(
+      expect(linterBenchmark.meets_target).toBe(true); // < 2000ms target
+      const buildBenchmark = result.benchmarks.by_criterion.find(
         (c) => c.criterion === 'build-validation',
       );
       expect(buildBenchmark.benchmark).toBe(25000);
@@ -739,7 +740,7 @@ const buildBenchmark = result.benchmarks.by_criterion.find(
             success: true,
             startTime: '2025-09-27T02:00:00.000Z',
           },
-  ],
+        ],
       };
 
       FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));

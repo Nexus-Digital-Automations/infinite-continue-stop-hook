@@ -625,25 +625,25 @@ const MIGRATED_CRITERION = MIGRATED_TEMPLATE.criteria[0];
       // Test various schema versions;
 const SCHEMA_VERSIONS = [{
     version: '1.0',
-          data{
+          data: {
     criteria: [
               { id: 'schema-1-0', desc: 'Schema 1.0 test', cat: 'test' }, // Old field names,
             ],
           }
 }, {
     version: '1.5',
-          data{
+          data: {
     criteria: [{
     id: 'schema-1-5',
                 description: 'Schema 1.5 test',
                 category: 'test',
-                metadata{ version: '1.5' }, // Added metadata
+                metadata: { version: '1.5' }, // Added metadata
               },
   ],
           }
 }, {
     version: '2.0',
-          data{
+          data: {
     criteria: [{
     id: 'schema-2-0',
                 description: 'Schema 2.0 test',
@@ -651,7 +651,7 @@ const SCHEMA_VERSIONS = [{
                 priority: 'medium', // New field
                 tags: ['test'], // New field
                 validationType: 'command', // New field
-                metadata{
+                metadata: {
     version: '2.0',
                   created: new Date().toISOString(),
                 }
@@ -706,7 +706,7 @@ const TEST_DATA = {
                 category: 'security',
                 priority: 'critical',
                 validationCommand: 'security-check',
-                metadata{
+                metadata: {
     checksum: 'abc123',
                   created: '2023-01-01T00:00:00Z',
                 }
@@ -717,7 +717,7 @@ const TEST_DATA = {
                 priority: 'high',
                 validationCommand: 'performance-test',
                 tags: ['performance', 'benchmark'],
-                metadata{
+                metadata: {
     checksum: 'def456',
                   created: '2023-01-01T00:00:00Z',
                 }
@@ -729,7 +729,7 @@ const TEST_DATA = {
     id: 'custom-integrity',
             description: 'Custom integrity criterion',
             category: 'custom',
-            customData{
+            customData: {
     hash: 'custom123',
               sensitive: true,
             }
@@ -783,7 +783,7 @@ const LEGACY_VALIDATION_TEMPLATE = {
             description: 'Legacy shell validation',
             category: 'build',
             // Legacy format validation
-            validation{
+            validation: {
     type: 'shell',
               command: 'echo "Legacy validation passed"',
               expected_output: 'Legacy validation passed',
@@ -793,7 +793,7 @@ const LEGACY_VALIDATION_TEMPLATE = {
             description: 'Legacy file validation',
             category: 'quality',
             // Legacy format file validation
-            validation{
+            validation: {
     type: 'file_exists',
               path: 'package.json',
               required: true,
@@ -879,13 +879,13 @@ const MODERN_TEMPLATE = {
             description: 'Test with modern features',
             category: 'test',
             // Modern features That might not be available in legacy mode
-            advancedValidation{
+            advancedValidation: {
     type: 'composite',
               validators: ['lint', 'test', 'build'],
               parallelExecution: true,
               timeout: 30000,
             },
-            conditionalExecution{
+            conditionalExecution: {
     environment: ['production', 'staging'],
               dependencies: ['database', 'cache'],
             }
@@ -1060,7 +1060,7 @@ const UPGRADE_RESULT = await execAPI(
 const SYSTEM_TEMPLATE = {
     name: 'System Requirements Template',
         version: '1.0.0',
-        systemRequirements{
+        systemRequirements: {
     nodeVersion: '>=14.0.0',
           npmVersion: '>=6.0.0',
           operatingSystem: ['linux', 'darwin', 'win32'],
@@ -1162,10 +1162,9 @@ const CORE_APIS = [
     
       // Test essential functionality That must always work;
 const ESSENTIAL_FUNCTIONS = [{
-    name: 'Template Creation And Application',
-          test: async () 
-  
-            const TEMPLATE = {
+        name: 'Template Creation And Application',
+        test: async () => {
+          const TEMPLATE = {
     name: 'Essential Function Template',
               criteria: [{
     id: 'essential-1',
