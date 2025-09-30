@@ -133,7 +133,7 @@ All work must be committed and pushed before a task is marked as complete.
 
 **MANDATORY TASK BREAKDOWN FOR COMPLEX REQUESTS:**
 
-**PROACTIVE TASK DECOMPOSITION**: For any large or multi-step user request, you MUST use the `create-project-task` command to break down the request into smaller, manageable tasks. Each task should represent a logical unit of work that can be independently implemented and verified.
+**PROACTIVE TASK DECOMPOSITION**: For any large or multi-step user request, you MUST use the `create-task` command to break down the request into smaller, manageable tasks. Each task should represent a logical unit of work that can be independently implemented and verified.
 
 **DECOMPOSITION REQUIREMENTS:**
 
@@ -147,7 +147,7 @@ All work must be committed and pushed before a task is marked as complete.
 
 ```bash
 # Create tasks for complex user requests
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-project-task '{"title":"Specific Task Title", "description":"Detailed description with acceptance criteria", "type":"feature|error|test|audit", "priority":"normal|high|urgent"}'
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task '{"title":"Specific Task Title", "description":"Detailed description with acceptance criteria", "type":"feature|error|test|audit", "priority":"normal|high|urgent"}'
 ```
 
 ## 🚨 FEATURES.MD MANAGEMENT PROTOCOL
@@ -431,7 +431,7 @@ For ALL user requests, create tasks in TASKS.json via taskmanager-api.js to ensu
 
 ### Task Creation Command
 ```bash
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-project-task '{"title":"Specific Task Title", "description":"Detailed description with acceptance criteria", "type":"feature|error|test|audit", "priority":"low|normal|high|urgent"}'
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task '{"title":"Specific Task Title", "description":"Detailed description with acceptance criteria", "type":"feature|error|test|audit", "priority":"low|normal|high|urgent"}'
 ```
 
 ### Examples
@@ -478,19 +478,19 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" rag-analytics
 ```
 
-### Project Task Management
+### Task Management
 ```bash
-# Project TASKS.json Management
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" init-project-tasks
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-project-tasks
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-project-tasks-by-status pending
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-project-tasks-by-type error
+# Task Management Commands
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-task-stats
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-tasks-by-status approved
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-tasks-by-priority high
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-available-tasks [AGENT_ID]
 
-# Create Project Tasks
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-project-task '{"title":"Task Title", "description":"Detailed description", "type":"error|feature|test|audit", "priority":"low|normal|high|urgent"}'
+# Create Tasks
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task '{"title":"Task Title", "description":"Detailed description", "type":"error|feature|test|audit", "priority":"low|normal|high|urgent"}'
 
-# Update Project Tasks
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" update-project-task <taskId> '{"status":"in-progress|completed|blocked", "progress_percentage":50}'
+# Update Tasks
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" update-task <taskId> '{"status":"in-progress|completed|blocked", "progress_percentage":50}'
 ```
 
 ### Stop Authorization Commands
