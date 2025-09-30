@@ -16,28 +16,28 @@ class LintingErrorFixer {
 
   getAllJSFiles() {
     try {
-      const output = execSync(
+      const output = _execSync(
         'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*" -not -path "./.claude-temp/*"',
-       , { encoding: 'utf8' },
+        { encoding: 'utf8' },
       );
       return output
         .trim()
         .split('\n')
         .filter((f) => f)
         .map((f) => path.resolve(process.cwd(), f.replace('./', '')));
-    } catch (_error) {
+    } catch {
       console.error('Error finding files');
       return [];
     }
   }
 
   fixFile(filePath) {
-    try, {
-      let content = fs.readFileSync(filePath, 'utf8');
+    try {
+      let content = fs.readFileSync(_filePath, 'utf8');
       const originalContent = content;
       let fileFixCount = 0;
 
-      // Fix Pattern 1: catch (_error) blocks that reference 'error' - fix to use '_' parameter
+      // Fix Pattern 1: catch (_) blocks that reference 'error' - fix to use '_' parameter
       content = content.replace(
         /catch\s*\(\s*_\s*\)\s*\{([^}]*\berror\.(message|stack|code|name|stdout|stderr)\b[^}]*)\}/gs,
         (match, body, prop) => {
@@ -77,21 +77,25 @@ class LintingErrorFixer {
 
       // Fix Pattern 3: Variables used but never declared (common in catch/try blocks)
       // Find undefined variables and declare them or remove usage
-      const undefinedPatterns = [
+      const _undefinedPatterns = [
         // result used but not declared - declare it
         {
           search: /(\btry\s*\{[^}]*)(const\s+_result\s*=)/gs,
           check: (m) => !m.includes('const result =') && m.includes('result.'),
-          fix: (m) => m.replace('try {', 'try, {\n      let result;')},
+          fix: (m) => m.replace('try {', 'try {\n      let result;'),
+        },
+
         // output used in catch but not from try - fix to _
         {
           search: /catch\s*\(\s*_\s*\)\s*\{[^}]*\boutput\b/gs,
           check: () => true,
-          fix: (m) => m.replace(/\boutput\b/g, '_output')}];
+          fix: (m) => m.replace(/\boutput\b/g, '_output'),
+        },
+      ];
 
       // Fix Pattern 4: Parsing errors - specific syntax issues
-      // Fix: } catch (_error) { -> } catch (_error) {
-      content = content.replace(/\}\s*catch\s*:\s*\{/g, '} catch (_error) {');
+      // Fix: } catch { -> } catch {
+      content = content.replace(/\}\s*catch\s*:\s*\{/g, '} catch {');
 
       // Fix: Missing comma after object literal (common typo)
       content = content.replace(/(\{[^}]*)\s+\{/g, '$1, {');
@@ -124,7 +128,7 @@ class LintingErrorFixer {
         if (matches && matches.length === 1) {
           // Only one declaration, check if it's used elsewhere
           const usages = content.match(usageRegex);
-          if (usages && usages.length === 1), {
+          if (usages && usages.length === 1) {
             // Only the declaration, never used - prefix it
             content = content.replace(declareRegex, `$1 ${prefix} =`);
             fileFixCount++;
@@ -157,7 +161,7 @@ class LintingErrorFixer {
       }
 
       return false;
-    } catch (_error) {
+    } catch {
       console.error(`❌ Error fixing ${path.basename(filePath)}`);
       return false;
     }
@@ -180,9 +184,9 @@ class LintingErrorFixer {
     // Run linter to check status
     console.log('\n🔍 Running linter to verify...');
     try {
-      execSync('npm run lint',, { stdio: 'pipe' });
+      ___execSync('npm run lint', { stdio: 'pipe' });
       console.log('✅ ALL LINTING ERRORS RESOLVED!');
-    } catch (_error) {
+    } catch {
       console.log('⚠️  Some errors remain. Run npm run lint for details.');
     }
   }

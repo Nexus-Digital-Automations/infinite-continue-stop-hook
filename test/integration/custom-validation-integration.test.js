@@ -10,7 +10,7 @@ const { loggers } = require('../../lib/logger');
  * @since 2025-09-27
  */
 
-const FS = require('fs').promises;
+const fs = require('fs').promises;
 const path = require('path');
 const { execSync } = require('child_process');
 
@@ -26,16 +26,16 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
   beforeAll(async () => {
     originalCwd = process.cwd();
     testProjectRoot = path.join(__dirname, '../test-data', 'integration-test');
-    await FS.mkdir(testProjectRoot, { recursive: true });
+    await fs.mkdir(testProjectRoot, { recursive: true });
 });
 
   afterAll(async () => {
     try {
-      await FS.rm(testProjectRoot, { recursive: true, force: true });
+      await fs.rm(testProjectRoot, { recursive: true, force: true });
     } catch (_) {
       loggers.stopHook.warn(
         'Failed to cleanup test directory:',
-        error.message,
+        __error.message,
       );
     }
     process.chdir(originalCwd);
@@ -44,9 +44,9 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
   beforeEach(async () => {
     // Clean up test files before each test,
     try {
-      const files = await FS.readdir(testProjectRoot);
+      const files = await fs.readdir(testProjectRoot);
       for (const file of files) {
-        await FS.rm(path.join(testProjectRoot, file), {,
+        await fs.rm(path.join(testProjectRoot, file), {,
     recursive: true,
           force: true,
         });
@@ -59,9 +59,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
   describe('CLI Command Integration', () => {
     
     
-    test('should load custom validation rules via CLI', async () 
-    return () 
-    return () => {
+    test('should load custom validation rules via CLI', async () => {
       // Create test configuration;
 const config = {
     project_type: 'backend',
@@ -74,7 +72,7 @@ const config = {
 }
 };
 
-      await FS.writeFile(
+      await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
@@ -110,7 +108,7 @@ const config = {
 }
 };
 
-      await FS.writeFile(
+      await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
@@ -141,7 +139,7 @@ const config = {
 }
 };
 
-      await FS.writeFile(
+      await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
@@ -161,7 +159,7 @@ const config = {
 
     test('should execute all custom validation rules via CLI', async () => {
       // Create package.json for file_exists rule
-      await FS.writeFile(path.join(testProjectRoot, 'package.json'), '{}');
+      await fs.writeFile(path.join(testProjectRoot, 'package.json'), '{}');
 
       const config = {
     custom_rules: {
@@ -178,7 +176,7 @@ const config = {
 }
 };
 
-      await FS.writeFile(
+      await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
@@ -224,7 +222,7 @@ const config = {
 }
 };
 
-      await FS.writeFile(
+      await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
@@ -254,9 +252,7 @@ const config = {
   describe('Error Handling in CLI Integration', () => {
     
     
-    test('should handle missing rule ID in execute command', () 
-    return () 
-    return () => {
+    test('should handle missing rule ID in execute command', () => {
       expect(() => {
         execSync(
           `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule`,
@@ -266,7 +262,7 @@ const config = {
     });
 
     test('should handle invalid configuration file', async () => {
-      await FS.writeFile(
+      await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
         'invalid json',
       );
@@ -279,7 +275,7 @@ const config = {
       const _output = JSON.parse(result);
 
       expect(output.success).toBe(false);
-      expect(output.error).toBeDefined();
+      expect(output._error).toBeDefined();
     });
 
     test('should handle execution of non-existent rule', async () => {
@@ -293,7 +289,7 @@ const config = {
 }
 };
 
-      await FS.writeFile(
+      await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
@@ -306,7 +302,7 @@ const config = {
       const _output = JSON.parse(result);
 
       expect(output.success).toBe(false);
-      expect(output.error).toContain('not found or not enabled');
+      expect(output._error).toContain('not found or not enabled');
     });
 });
 
@@ -314,7 +310,7 @@ const config = {
     
     
     test('should detect Node.js project and enable appropriate rules', async () => {
-      await FS.writeFile(
+      await fs.writeFile(
         path.join(testProjectRoot, 'package.json'),
         '{"name": "test-project"}',
       );
@@ -336,7 +332,7 @@ const config = {
 }
 };
 
-      await FS.writeFile(
+      await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
@@ -356,8 +352,8 @@ const config = {
     });
 
     test('should detect multiple technologies', async () => {
-      await FS.writeFile(path.join(testProjectRoot, 'package.json'), '{}');
-      await FS.writeFile(
+      await fs.writeFile(path.join(testProjectRoot, 'package.json'), '{}');
+      await fs.writeFile(
         path.join(testProjectRoot, 'Dockerfile'),
         'FROM node:14',
       );
@@ -378,9 +374,7 @@ const config = {
   describe('Rule Type Integration Testing', () => {
     
     
-    test('should execute command rules with environment variables', async () 
-    return () 
-    return () => {
+    test('should execute command rules with environment variables', async () => {
       const config = {
     custom_rules: {
     env_test: {
@@ -394,7 +388,7 @@ const config = {
 }
 };
 
-      await FS.writeFile(
+      await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
@@ -411,7 +405,7 @@ const config = {
     });
 
     test('should execute file existence rules', async () => {
-      await FS.writeFile(
+      await fs.writeFile(
         path.join(testProjectRoot, 'required-file.txt'),
         'content',
       );
@@ -426,7 +420,7 @@ const config = {
 }
 };
 
-      await FS.writeFile(
+      await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
@@ -452,7 +446,7 @@ const config = {
         }
 };
 
-      await FS.writeFile(
+      await fs.writeFile(
         path.join(testProjectRoot, 'package.json'),
         JSON.stringify(packageJson, null, 2),
       );
@@ -468,7 +462,7 @@ const config = {
 }
 };
 
-      await FS.writeFile(
+      await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
@@ -485,7 +479,7 @@ const config = {
     });
 
     test('should execute conditional rules', async () => {
-      await FS.writeFile(path.join(testProjectRoot, 'package.json'), '{}');
+      await fs.writeFile(path.join(testProjectRoot, 'package.json'), '{}');
 
       const config = {
     custom_rules: {
@@ -505,7 +499,7 @@ const config = {
 }
 };
 
-      await FS.writeFile(
+      await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
@@ -541,7 +535,7 @@ const config = {
 }
 };
 
-      await FS.writeFile(
+      await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
@@ -562,9 +556,7 @@ const config = {
   describe('Performance And Concurrency Integration', () => {
     
     
-    test('should handle multiple concurrent CLI commands', async () 
-    return () 
-    return () => {
+    test('should handle multiple concurrent CLI commands', async () => {
       const config = {
     custom_rules: {
     concurrent_test_1: {
@@ -585,7 +577,7 @@ const config = {
 }
 };
 
-      await FS.writeFile(
+      await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
@@ -637,7 +629,7 @@ const config = {
 }
 };
 
-      await FS.writeFile(
+      await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
@@ -715,11 +707,9 @@ const config = {
   describe('Real-world Use Case Integration', () => {
     
     
-    test('should support a realistic security audit configuration', async () 
-    return () 
-    return () => {
+    test('should support a realistic security audit configuration', async () => {
       // Create realistic project structure
-      await FS.writeFile(
+      await fs.writeFile(
         path.join(testProjectRoot, 'package.json'),
         JSON.stringify( {,
     name: 'test-project',
@@ -737,8 +727,8 @@ const config = {
         ),
       );
 
-      await FS.mkdir(path.join(testProjectRoot, 'src'), { recursive: true });
-      await FS.writeFile(
+      await fs.mkdir(path.join(testProjectRoot, 'src'), { recursive: true });
+      await fs.writeFile(
         path.join(testProjectRoot, 'src', 'app.js'),
         `
 const express = require('express');
@@ -780,7 +770,7 @@ module.exports = app;
 }
 };
 
-      await FS.writeFile(
+      await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );

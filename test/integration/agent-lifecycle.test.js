@@ -15,7 +15,7 @@
  * @version 1.0.0
  */
 
-const FS = require('fs').promises;
+const fs = require('fs').promises;
 const path = require('path');
 const {
   execAPI,
@@ -59,7 +59,6 @@ describe('Agent Lifecycle Integration Tests', () => {
     
     
     test('should handle single agent initialization process', async () 
-    return () 
     return () => {
       // 1. Initialize agent;
 const AGENT_ID = 'test-agent-001';
@@ -231,7 +230,6 @@ const featuresData = await readFeaturesFile(testDir);
     
     
     test('should handle agent reinitialization process', async () 
-    return () 
     return () => {
       // 1. Initialize agent first;
 const AGENT_ID = 'reinit-test-agent';
@@ -397,7 +395,6 @@ const featuresData = await readFeaturesFile(testDir);
     
     
     test('should handle agent stop authorization process', async () 
-    return () 
     return () => {
       // 1. Initialize agent;
 const AGENT_ID = 'stop-auth-agent';
@@ -431,7 +428,7 @@ const stopFlagPath = path.join(testDir, '.stop-allowed');
       expect(stopFlagExists).toBe(true);
 
       // 4. Verify stop flag content;
-const stopFlagContent = await FS.readFile(stopFlagPath, 'utf8');
+const stopFlagContent = await fs.readFile(stopFlagPath, 'utf8');
       const stopFlagData = JSON.parse(stopFlagContent);
 
       expect(stopFlagData.stop_allowed).toBe(true);
@@ -475,7 +472,7 @@ const stopResult = await execAPI(
 
         // Verify stop flag (each authorization overwrites the previous one)
         const stopFlagPath = path.join(testDir, '.stop-allowed');
-        const stopFlagContent = await FS.readFile(stopFlagPath, 'utf8');
+        const stopFlagContent = await fs.readFile(stopFlagPath, 'utf8');
         const stopFlagData = JSON.parse(stopFlagContent);
 
         expect(stopFlagData.authorized_by).toBe(testCase.agentId);
@@ -503,7 +500,7 @@ const stopResult = await execAPI('authorize-stop', [AGENT_ID], {,
 
       // 3. Verify default reason in stop flag;
 const stopFlagPath = path.join(testDir, '.stop-allowed');
-      const stopFlagContent = await FS.readFile(stopFlagPath, 'utf8');
+      const stopFlagContent = await fs.readFile(stopFlagPath, 'utf8');
       const stopFlagData = JSON.parse(stopFlagContent);
 
       expect(stopFlagData.reason).toContain('completing all tasks');
@@ -558,7 +555,7 @@ const AGENT_IDS = ['multi-stop-1', 'multi-stop-2', 'multi-stop-3'];
 
       // 3. Verify final stop flag reflects last authorization;
 const stopFlagPath = path.join(testDir, '.stop-allowed');
-      const stopFlagContent = await FS.readFile(stopFlagPath, 'utf8');
+      const stopFlagContent = await fs.readFile(stopFlagPath, 'utf8');
       const stopFlagData = JSON.parse(stopFlagContent);
 
       expect(stopFlagData.authorized_by).toBe(AGENT_IDS[AGENT_IDS.length - 1]);
@@ -576,7 +573,6 @@ const stopFlagPath = path.join(testDir, '.stop-allowed');
     
     
     test('should track initialization statistics accurately', async () 
-    return () 
     return () => {
       // 1. Get initial stats;
 const initialStatsResult = await execAPI('get-initialization-stats', [], {,
@@ -735,7 +731,6 @@ const expectedBuckets = [
     
     
     test('should handle complete agent workflow from initialization to stop', async () 
-    return () 
     return () => {
       // 1. Initialize agent;
 const AGENT_ID = 'complete-lifecycle-agent';
@@ -786,7 +781,7 @@ const stopFlagPath = path.join(testDir, '.stop-allowed');
         .catch(() => false);
       expect(stopFlagExists).toBe(true);
 
-      const stopFlagContent = await FS.readFile(stopFlagPath, 'utf8');
+      const stopFlagContent = await fs.readFile(stopFlagPath, 'utf8');
       const stopFlagData = JSON.parse(stopFlagContent);
       expect(stopFlagData.authorized_by).toBe(AGENT_ID);
       expect(stopFlagData.reason).toBe(stopReason);

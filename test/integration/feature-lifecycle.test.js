@@ -66,12 +66,12 @@ const categories = [
         'security',
         'documentation',
       ];
-      const features = categories.map((category, index) =>
+      const features = categories.map((_category, index) =>
         generateTestFeature({
     title: `${category.charAt(0).toUpperCase() + category.slice(1)} Feature ${index + 1}`,
           description: `Comprehensive test for ${category} category feature lifecycle`,
           business_value: `Validates ${category} workflow functionality`,
-          category,
+          _category,
         }),
       );
 
@@ -88,7 +88,7 @@ const _result = await execAPI(
 
         expect(_result.success).toBe(true);
         expect(_result.feature.status).toBe('suggested');
-        expect(_result.feature.category).toBe(featureData.category);
+        expect(_result.feature._category).toBe(featureData._category);
         expect(_result.feature.id).toMatch(/^feature_\d+_\w+$/);
         expect(_result.feature.created_at).toBeDefined();
         expect(_result.feature.updated_at).toBeDefined();
@@ -117,7 +117,7 @@ const categoryResult = await execAPI(
 
         expect(categoryResult.success).toBe(true);
         expect(categoryResult.features).toHaveLength(1);
-        expect(categoryResult.features[0].category).toBe(_category);
+        expect(categoryResult.features[0]._category).toBe(_category);
       }
 
       // 5. Verify statistics;
@@ -173,7 +173,7 @@ const incompleteFeatures = [ {,
           expect(_result.error).toContain('missing');
       }
 
-      // 2. Test invalid category;
+      // 2. Test invalid _category;
 const invalidCategoryFeature = generateTestFeature({,
     title: 'Invalid Category Feature',
         category: 'invalid-category',
@@ -759,7 +759,7 @@ const rejectedResult = await execAPI(
 
         expect(categoryResult.success).toBe(true);
         expect(categoryResult.features).toHaveLength(1);
-        expect(categoryResult.features[0].category).toBe(_category);
+        expect(categoryResult.features[0]._category).toBe(_category);
       }
     });
 

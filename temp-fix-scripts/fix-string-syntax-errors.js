@@ -17,7 +17,7 @@ function getAllJSFiles() {
       { encoding: 'utf-8' },
     );
     return result.split('\n').filter((f) => f && f.endsWith('.js'));
-  } catch (_) {
+  } catch {
     console.error('Failed to get JS files');
     return [];
   }
@@ -69,7 +69,7 @@ function fixStringSyntaxErrors(filePath) {
       return true;
     }
     return false;
-  } catch (_) {
+  } catch {
     console.error(`❌ Error processing ${filePath}:`, _error.message);
     return false;
   }
@@ -99,7 +99,7 @@ function main() {
   try {
     execSync('npm run lint > /dev/null 2>&1');
     console.log('✅ All syntax errors resolved!');
-  } catch (_) {
+  } catch {
     console.log('⚠️ Some issues may remain - checking specific errors...');
     try {
       const output = execSync(
@@ -110,7 +110,7 @@ function main() {
         console.log('Remaining parsing errors:');
         console.log(output);
       }
-    } catch (_) {
+    } catch {
       // No parsing errors found
     }
   }

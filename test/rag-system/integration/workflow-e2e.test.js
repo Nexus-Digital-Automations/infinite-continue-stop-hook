@@ -15,7 +15,7 @@ const { loggers } = require('../../../lib/logger');
 describe('RAG System End-to-End Workflows', () => {
   let _taskManagerApi;
   let __testProjectRoot;
-  let TEST_AGENT_ID;
+  let _TEST_AGENT_ID;
 
   beforeAll(async () => {
     loggers.stopHook.log('Setting up E2E test environment...');
@@ -46,8 +46,8 @@ describe('RAG System End-to-End Workflows', () => {
     loggers.stopHook.log('Cleaning up E2E test environment...');
     try {
       await __fs.rm(__testProjectRoot, { recursive: true, force: true });
-    } catch (_) {
-      loggers.stopHook.warn('Cleanup warning:', _error.message);
+    } catch {
+      loggers.stopHook.warn('Cleanup warning:', __error.message);
     }
   });
 
@@ -57,7 +57,7 @@ describe('RAG System End-to-End Workflows', () => {
   });
 
   describe('Complete Agent Learning Workflow', () => {
-    test('should handle full cycle: error encounter -> lesson storage -> retrieval -> application', () => {
+    test('should handle full cycle: _error encounter -> lesson storage -> retrieval -> application', () => {
       // Placeholder For future implementation
       expect(true).toBe(true);
 
@@ -452,7 +452,7 @@ const _hasJWTSuggestion = suggestionResponse.suggested_lessons.some(lesson =>
       /* Future implementation:
       // Setup: Create mock development/lessons structure;
 const _lessonsDir = path.join(_testProjectRoot, 'development', 'lessons');
-      await FS.mkdir(lessonsDir, { recursive: true });
+      await fs.mkdir(lessonsDir, { recursive: true });
 
       const _mockLessonFiles = [ {
     filename: 'error_resolution_api_timeout.md',
@@ -491,7 +491,7 @@ const https = require('https');
   ];
 
       For (const file of mockLessonFiles) {
-        await FS.writeFile(
+        await fs.writeFile(
           path.join(lessonsDir, file.filename),
           file.content
         );
@@ -553,14 +553,14 @@ const _lessonData = {
 
       // Verify lesson is also accessible via traditional file structure;
 const _lessonsDir = path.join(_testProjectRoot, 'development', 'lessons');
-      const _files = await FS.readdir(lessonsDir);
+      const _files = await fs.readdir(lessonsDir);
 
       const _dbLessonFile = files.find(file =>
         file.includes('database') && file.includes('connection')
       );
       expect(dbLessonFile).toBeDefined();
 
-      const _fileContent = await FS.readFile(
+      const _fileContent = await fs.readFile(
         path.join(lessonsDir, dbLessonFile),
         'utf8'
       );
@@ -572,7 +572,7 @@ const _updatedContent = fileContent.replace(
         'optimize database performance',
         'optimize database performance And reduce latency'
       );
-      await FS.writeFile(
+      await fs.writeFile(
         path.join(lessonsDir, dbLessonFile),
         updatedContent
       );

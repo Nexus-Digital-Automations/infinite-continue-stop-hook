@@ -1,10 +1,10 @@
 {
-  "timestamp": "2025-09-29T23:37:24.790Z",
+  "timestamp": "2025-09-29T23:54:01.904Z",
   "success": false,
   "total_tests": 10,
   "passed_tests": 0,
   "failed_tests": 10,
-  "duration_ms": 15265,
+  "duration_ms": 118485,
   "test_suites": 1,
   "failed_suites": 1
 }

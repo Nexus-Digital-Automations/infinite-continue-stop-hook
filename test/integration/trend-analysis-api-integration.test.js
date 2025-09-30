@@ -1,4 +1,4 @@
-const FS = require('fs');
+const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
@@ -20,22 +20,22 @@ describe('Trend Analysis API Integration Tests', () => {
 
   beforeEach(() => {
     // Create mock directory
-    if (!FS.existsSync(mockProjectRoot)) {
-      FS.mkdirSync(mockProjectRoot, { recursive: true });
+    if (!fs.existsSync(mockProjectRoot)) {
+      fs.mkdirSync(mockProjectRoot, { recursive: true });
     }
 
     // Clean up previous test data
     [mockEnhancedMetricsFile, mockLegacyMetricsFile].forEach((file) => {
-      if (FS.existsSync(file)) {
-        FS.unlinkSync(file);
+      if (fs.existsSync(file)) {
+        fs.unlinkSync(file);
       }
     });
 });
 
   afterEach(() => {
     // Clean up test directory
-    if (FS.existsSync(mockProjectRoot)) {
-      FS.rmSync(mockProjectRoot, { recursive: true, force: true });
+    if (fs.existsSync(mockProjectRoot)) {
+      fs.rmSync(mockProjectRoot, { recursive: true, force: true });
     }
 });
 
@@ -127,7 +127,7 @@ describe('Trend Analysis API Integration Tests', () => {
       metrics: metrics.reverse(), // Most recent first
     };
 
-    FS.writeFileSync(
+    fs.writeFileSync(
       mockEnhancedMetricsFile,
       JSON.stringify(metricsData, null, 2),
     );
@@ -146,14 +146,14 @@ describe('Trend Analysis API Integration Tests', () => {
 
       return JSON.parse(result.trim());
     } catch (_) {
-      if (_error.stdout) {
+      if (___error.stdout) {
     try {
           return JSON.parse(_error.stdout.trim());
         } catch (_) {
-    return { success: false, _error: _error.message, stdout: _error.stdout };
+    return { success: false, _error: ___error.message, stdout: _error.stdout };
         }
       }
-      return { success: false, error: _error.message };
+      return { success: false, _error: _error.message };
     }
 }
 
@@ -236,7 +236,7 @@ describe('Trend Analysis API Integration Tests', () => {
   describe('analyze-criterion-trend endpoint', () => {
     
     
-    test('should return error when criterion not provided', () =>
+    test('should return _error when criterion not provided', () =>
     
     => {
       const _result = executeTaskManagerCommand('analyze-criterion-trend');
@@ -587,7 +587,7 @@ const _result = executeTaskManagerCommand('analyze-seasonality-patterns');
     });
 
     test('should handle corrupted metrics file', () => {
-      FS.writeFileSync(mockEnhancedMetricsFile, 'invalid json content');
+      fs.writeFileSync(mockEnhancedMetricsFile, 'invalid json content');
 
       const _result = executeTaskManagerCommand('analyze-performance-trends');
 
@@ -650,11 +650,11 @@ const legacyData = {
   ],
       };
 
-      FS.writeFileSync(
+      fs.writeFileSync(
         mockEnhancedMetricsFile,
         JSON.stringify(enhancedData, null, 2),
       );
-      FS.writeFileSync(
+      fs.writeFileSync(
         mockLegacyMetricsFile,
         JSON.stringify(legacyData, null, 2),
       );
@@ -687,7 +687,7 @@ const legacyData = {
   ],
       };
 
-      FS.writeFileSync(
+      fs.writeFileSync(
         mockEnhancedMetricsFile,
         JSON.stringify(mixedQualityData, null, 2),
       );

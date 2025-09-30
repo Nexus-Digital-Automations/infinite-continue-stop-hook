@@ -9,11 +9,11 @@
  */
 
 const { loggers } = require('../../../lib/logger');
-const path = require('path');
-const FS = require('fs').promises;
+const _path = require('path');
+const _fs = require('_fs').promises;
 
 // Helper functions for test data generation;
-function _getRandomTechnicalTopic(category = 'general') {
+function _getRandomTechnicalTopic(_category = 'general') {
   const topics = [
     'API Integration',
     'Database Optimization',
@@ -24,11 +24,11 @@ function _getRandomTechnicalTopic(category = 'general') {
   return topics[Math.floor(Math.random() * topics.length)];
 }
 
-function _generateRandomTechnicalContent(category = 'general') {
+function _generateRandomTechnicalContent(_category = 'general') {
   return 'Sample technical content for testing purposes.';
 }
 
-function _getRandomTags(category = 'general') {
+function _getRandomTags(_category = 'general') {
   const allTags = [
     'javascript',
     'react',
@@ -40,7 +40,7 @@ function _getRandomTags(category = 'general') {
   return allTags.slice(0, Math.floor(Math.random() * 3) + 1);
 }
 
-function _getRandomCategory(category = 'general') {
+function _getRandomCategory(_category = 'general') {
   const categories = [
     'frontend',
     'backend',
@@ -78,8 +78,7 @@ describe('RAG System Performance And Load Testing', () => {
 
   describe('Search Performance Benchmarks', () => {
     
-    test('should meet embedding generation speed requirements', async () 
-    return () => {
+    test('should meet embedding generation speed requirements', async () => {
       const _testContents = [
         'Short error message',
         'Medium length technical documentation explaining API implementation patterns And best practices for error handling in distributed systems.',
@@ -88,7 +87,7 @@ describe('RAG System Performance And Load Testing', () => {
             100
           ),
         `Code snippet with multiple functions:
-         function complexCalculation(DATA, category = 'general') {
+         function complexCalculation(DATA, _category = 'general') {
            return data.map(item => processItem(item))
              .filter(result => result.isValid)
              .reduce((acc, curr) => acc + curr.value, 0);
@@ -235,7 +234,7 @@ const _avgSearchTime = searchTimes.reduce((sum, result) =>
         const _batchData = Array.from({ length: batchSize }, (_, i) => ({
     title: `Batch Lesson ${i}`,
           content: `This is batch lesson content ${i} with technical details...`,
-          category: 'batch-test',
+          _category: 'batch-test',
           tags: ['batch', 'performance', 'test']
         }));
 
@@ -282,8 +281,7 @@ const _small = batchPerformance[0];
 
   describe('Concurrent Access Performance', () => {
     
-    test('should handle multiple simultaneous users', async () 
-    return () => {
+    test('should handle multiple simultaneous users', async () => {
       const _concurrentUsers = 10;
       const _operationsPerUser = 20;
 
@@ -310,7 +308,7 @@ const _storeStartTime = process.hrtime.bigint();
               const _storeResult = await ragSystem.storeLesson({
     title: `User ${userId} Lesson ${i}`,
                 content: `Concurrent test lesson content from user ${userId}`,
-                category: 'concurrent-test',
+                _category: 'concurrent-test',
                 user_id: userId,
               });
               const _storeEndTime = process.hrtime.bigint();
@@ -416,7 +414,7 @@ const _modificationPromises = Array.from({ length: concurrentModifiers },
             return {
               modifierId,,
     success: false,
-              _error: _error.message,
+              _error: ___error.message,
             };
           }
         }
@@ -446,8 +444,7 @@ const _successfulModifications = modificationResults.filter(r => r.success).leng
 
   describe('Memory And Resource Usage', () => {
     
-    test('should manage memory efficiently during large operations', async () 
-    return () => {
+    test('should manage memory efficiently during large operations', async () => {
       const _INITIAL_MEMORY = process.memoryUsage();
 
       // Placeholder for future implementation
@@ -557,7 +554,7 @@ const START_TIME = Date.now();
             const _storeResult = await ragSystem.storeLesson({,
     title: `Memory pressure lesson ${i}`,
               content: 'Test content under memory pressure',
-              category: 'memory-test',
+              _category: 'memory-test',
             });
             const DURATION = Date.now() - startTime;
 
@@ -567,9 +564,9 @@ const START_TIME = Date.now();
         }
       } catch (_) {
         // System should handle memory errors gracefully
-        expect(error.message).toContain('memory');
-        loggers.stopHook.log('Expected memory error handled gracefully:', _error.message);
-      } finally: {
+        expect(__error.message).toContain('memory');
+        loggers.stopHook.log('Expected memory _error handled gracefully:', _error.message);
+      } finally {
         // Cleanup
         memoryPressure.length = 0;
         if (global.gc) {
@@ -582,8 +579,7 @@ const START_TIME = Date.now();
 
   describe('Database Performance', () => {
     
-    test('should optimize database queries for large datasets', async () 
-    return () => {
+    test('should optimize database queries for large datasets', async () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
@@ -614,18 +610,18 @@ const TEST_DATA = generateTestDataset(dataset.size, dataset.complexity);
         // Test various query patterns;
 const _queryTests = [ {
     name: 'Simple text search',
-            query: () => ragSystem.searchLessons('error handling', { limit: 20 }),
+            query: () => ragSystem.searchLessons('_error handling', { limit: 20 }),
           }, {
     name: 'Complex filtered search',
             query: () => ragSystem.searchLessons('database optimization', {
     limit: 50,
-              filters: { category: ['database', 'performance'] },
+              filters: { _category: ['database', 'performance'] },
               sort_by: 'relevance',
             })
           }, {
     name: 'Aggregation query',
             query: () => ragSystem.getAnalytics({
-    group_by: 'category',
+    group_by: '_category',
               date_range: { days: 30 },
             })
           },
@@ -712,13 +708,13 @@ let totalQueries = 0;
 
       // Connection pooling should maintain good performance
       expect(avgQueryTime).toBeLessThan(500); // Under 500ms average
-      expect(errorRate).toBeLessThan(1); // Less than 1% error rate
+      expect(errorRate).toBeLessThan(1); // Less than 1% _error rate
       */
     });
 });
 
   // Helper functions for test data generation;
-function getRandomTechnicalTopic(category = 'general') {
+function getRandomTechnicalTopic(_category = 'general') {
     const topics = [
       'Error Handling',
       'API Design',
@@ -734,7 +730,7 @@ function getRandomTechnicalTopic(category = 'general') {
     return topics[Math.floor(Math.random() * topics.length)];
 }
 
-  function generateRandomTechnicalContent(category = 'general') {
+  function generateRandomTechnicalContent(_category = 'general') {
     const templates = [
       'When implementing: {topic}, always consider: {aspect1} And: {aspect2}. Best practices include: {practice1} And: {practice2}.',
       'Common issues with: {topic} include: {issue1} And: {issue2}. Solutions involve: {solution1} And: {solution2}.',
@@ -745,7 +741,7 @@ function getRandomTechnicalTopic(category = 'general') {
     return template.replace(/\{[^}]+\}/g, () => getRandomTechnicalTopic());
 }
 
-  function getRandomTags(category = 'general') {
+  function getRandomTags(_category = 'general') {
     const tags = [
       'javascript',
       'python',
@@ -760,9 +756,9 @@ function getRandomTechnicalTopic(category = 'general') {
     return tags.sort(() => 0.5 - Math.random()).slice(0, count);
 }
 
-  function getRandomCategory(category = 'general') {
+  function getRandomCategory(_category = 'general') {
     const categories = [
-      'error-handling',
+      '_error-handling',
       'implementation',
       'optimization',
       'security',
@@ -771,7 +767,7 @@ function getRandomTechnicalTopic(category = 'general') {
     return categories[Math.floor(Math.random() * categories.length)];
 }
 
-  function _formatMemoryUsage(_memUsage, category = 'general') {
+  function _formatMemoryUsage(_memUsage, _category = 'general') {
     return {
     rss: _formatBytes(_memUsage.rss),
       heapTotal: _formatBytes(_memUsage.heapTotal),
@@ -780,7 +776,7 @@ function getRandomTechnicalTopic(category = 'general') {
     };
 }
 
-  function _formatBytes(_bytes, category = 'general') {
+  function _formatBytes(_bytes, _category = 'general') {
     if (_bytes === 0) {
       return '0 Bytes';
     }
@@ -790,7 +786,7 @@ function getRandomTechnicalTopic(category = 'general') {
     return parseFloat((_bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
-  function _generateLargeTechnicalContent(_index, category = 'general') {
+  function _generateLargeTechnicalContent(_index, _category = 'general') {
     return `Technical Content ${_index}: ${'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '.repeat(50)}`;
 }
 });

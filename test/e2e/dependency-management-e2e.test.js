@@ -6,7 +6,7 @@
  */
 
 const { execSync } = require('child_process');
-const FS = require('fs').promises;
+const fs = require('fs').promises;
 const _path = require('path');
 
 describe('Dependency Management E2E Tests - Complete Workflows', () => {
@@ -29,12 +29,12 @@ const executeTaskManagerCommand = (command, args = '', options = {}) => {
 
       return JSON.parse(output.trim());
     } catch (_) {
-      if (_error.stdout) {
+      if (___error.stdout) {
     try {
           return JSON.parse(_error.stdout.trim());
         } catch (_) {
           throw new Error(
-            `Command failed: ${error.message}, Output: ${_error.stdout || _error.stderr}`
+            `Command failed: ${__error.message}, Output: ${_error.stdout || _error.stderr}`
           );
         }
       }
@@ -70,9 +70,7 @@ const createTestDependencies = (count = 5) => {
 const cleanupTestDependencies = (dependencies) => {
     
     
-    dependencies.forEach((criterion) 
-    return () 
-    return () => {
+    dependencies.forEach((criterion) => {
     try {
         executeTaskManagerCommand('remove-dependency', criterion);
       } catch (_) {
@@ -84,9 +82,7 @@ const cleanupTestDependencies = (dependencies) => {
   describe('Complete Dependency Management Lifecycle', () => {
     
     
-    test('should handle full dependency management workflow from creation to execution', async () 
-    return () 
-    return () => {
+    test('should handle full dependency management workflow from creation to execution', async () => {
       const testDependencies = [];
     try {
         // Step 1: Create a complex dependency scenario;
@@ -125,15 +121,13 @@ let _result = executeTaskManagerCommand(
         );
         expect(_result.success).toBe(true);
         testDependencies.push('microservice-validation');
-
-        result = executeTaskManagerCommand(
+    const result = executeTaskManagerCommand(
           'add-dependency',
           `'database-validation' '${JSON.stringify(databaseConfig)}'`
         );
         expect(_result.success).toBe(true);
         testDependencies.push('database-validation');
-
-        result = executeTaskManagerCommand(
+    const result = executeTaskManagerCommand(
           'add-dependency',
           `'integration-validation' '${JSON.stringify(integrationConfig)}'`
         );
@@ -218,8 +212,8 @@ const finalValidation = executeTaskManagerCommand(
         expect(finalValidation.validation.valid).toBe(true);
 
         // Cleanup config file
-        await FS.unlink(saveResult.configPath);
-      } finally: {
+        await fs.unlink(saveResult.configPath);
+      } finally {
         cleanupTestDependencies(testDependencies);
       }
     });
@@ -293,7 +287,7 @@ const removeResult = executeTaskManagerCommand(
             )
           ).toBe(true);
         }
-      } finally: {
+      } finally {
         cleanupTestDependencies(testDependencies);
       }
     });
@@ -302,9 +296,7 @@ const removeResult = executeTaskManagerCommand(
   describe('Performance Optimization Workflows', () => {
     
     
-    test('should optimize execution for CPU-intensive workloads', () 
-    return () 
-    return () => {
+    test('should optimize execution for CPU-intensive workloads', () => {
       const testDependencies = [];
     try {
         // Create CPU-intensive dependency scenario;
@@ -378,7 +370,7 @@ const standardResult = executeTaskManagerCommand(
         // Verify both plans handle CPU constraints appropriately
         expect(adaptiveResult.parallelizationGain).toBeGreaterThan(0);
         expect(standardResult.parallelizationGain).toBeGreaterThan(0);
-      } finally: {
+      } finally {
         cleanupTestDependencies(testDependencies);
       }
     });
@@ -450,7 +442,7 @@ const resourceScheduling =
             (opt) => opt.type === 'network_prioritization'
           )
         ).toBe(true);
-      } finally: {
+      } finally {
         cleanupTestDependencies(testDependencies);
       }
     });
@@ -529,7 +521,7 @@ const vizResult = executeTaskManagerCommand(
         expect(
           vizResult.visualization.statistics.totalCriteria
         ).toBeGreaterThanOrEqual(11); // 7 default + 4 custom
-      } finally: {
+      } finally {
         cleanupTestDependencies(testDependencies);
       }
     });
@@ -538,9 +530,7 @@ const vizResult = executeTaskManagerCommand(
   describe('Complex Scenario Testing', () => {
     
     
-    test('should handle large-scale microservices validation workflow', () 
-    return () 
-    return () => {
+    test('should handle large-scale microservices validation workflow', () => {
       const testDependencies = [];
     try {
         // Create microservices dependency scenario;
@@ -668,7 +658,7 @@ const debugResult = executeTaskManagerCommand(
         expect(
           debugResult.visualization.statistics.totalCriteria
         ).toBeGreaterThanOrEqual(15);
-      } finally: {
+      } finally {
         cleanupTestDependencies(testDependencies);
       }
     });
@@ -753,7 +743,7 @@ const parallelResult = executeTaskManagerCommand(
         );
         expect(parallelResult.success).toBe(true);
         expect(parallelResult.plan.length).toBeGreaterThan(0);
-      } finally: {
+      } finally {
         cleanupTestDependencies(testDependencies);
       }
     });
@@ -822,7 +812,7 @@ const planResult = executeTaskManagerCommand(
         );
         expect(planResult.success).toBe(true);
         expect(planResult.plan.length).toBeGreaterThan(0);
-      } finally: {
+      } finally {
         cleanupTestDependencies(testDependencies);
       }
     });
@@ -831,9 +821,7 @@ const planResult = executeTaskManagerCommand(
   describe('Performance And Scalability E2E', () => {
     
     
-    test('should handle large dependency graphs efficiently', () 
-    return () 
-    return () => {
+    test('should handle large dependency graphs efficiently', () => {
       const testDependencies = [];
       const startTime = Date.now();
     try {
@@ -911,7 +899,7 @@ const vizStart = Date.now();
         expect(vizResult.success).toBe(true);
         expect(vizResult.visualization.statistics.totalCriteria).toBe(57);
         expect(vizTime).toBeLessThan(10000); // Visualization should be fast
-      } finally: {
+      } finally {
         cleanupTestDependencies(testDependencies);
       }
     });
@@ -1017,7 +1005,7 @@ const highConcurrencySystem = {
           adaptiveResult.adaptiveOptimizations.systemAware
             .recommendedConcurrency
         ).toBeGreaterThan(8);
-      } finally: {
+      } finally {
         cleanupTestDependencies(testDependencies);
       }
     });
@@ -1026,9 +1014,7 @@ const highConcurrencySystem = {
   describe('System Integration And Real-World Scenarios', () => {
     
     
-    test('should integrate seamlessly with existing validation system', () 
-    return () 
-    return () => {
+    test('should integrate seamlessly with existing validation system', () => {
       // Test integration with standard validation criteria;
 const _result = executeTaskManagerCommand('get-dependency-graph');
       expect(_result.success).toBe(true);
@@ -1142,7 +1128,7 @@ const debugResult = executeTaskManagerCommand(
           'get-dependency-visualization'
         );
         expect(debugResult.success).toBe(true);
-      } finally: {
+      } finally {
         cleanupTestDependencies(testDependencies);
       }
     });
@@ -1172,7 +1158,7 @@ const saveResult = executeTaskManagerCommand('save-dependency-config');
         configPath = saveResult.configPath;
 
         // Verify file exists And has correct content;
-const configData = await FS.readFile(configPath, 'utf8');
+const configData = await fs.readFile(configPath, 'utf8');
         const config = JSON.parse(configData);
         expect(config).toHaveProperty('dependencies');
         expect(config.dependencies).toHaveProperty('persistence-test');
@@ -1207,10 +1193,10 @@ const restoredResult = executeTaskManagerCommand(
         expect(restoredResult.dependency.metadata.description).toBe(
           'Persistence test dependency'
         );
-      } finally: {
+      } finally {
         cleanupTestDependencies(testDependencies);
         if (configPath) {
-          await FS.unlink(configPath).catch(() => {}); // Ignore errors
+          await fs.unlink(configPath).catch(() => {}); // Ignore errors
         }
       }
     });

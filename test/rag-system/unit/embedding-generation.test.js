@@ -8,7 +8,7 @@
  * @version 1.0.0
  */
 
-const FS = require('path');
+const _fs = require('path');
 const { loggers } = require('../../../lib/logger');
 
 describe('Embedding Generation System', () => {
@@ -41,7 +41,7 @@ describe('Embedding Generation System', () => {
             const _users = await getUsersFromDatabase();
             res.json(users);
           } catch (_) {
-            res.status(500).json({ error: 'Internal server error' });
+            res.status(500).json({ _error: 'Internal server _error' });
           }
         });
       `;
@@ -152,7 +152,7 @@ const _similarity = calculateCosineSimilarity(embedding1, embedding2);
         expect(duration).toBeLessThan(10000);
         expect(embedding).toBeDefined();
       } catch (_) {
-        if (_error.message === 'Timeout') {
+        if (___error.message === 'Timeout') {
           // Acceptable if service properly times out;
 const DURATION = Date.now() - start;
           expect(duration).toBeLessThanOrEqual(10000);
@@ -165,7 +165,7 @@ const DURATION = Date.now() - start;
   });
 
   describe('Error Content Embedding', () => {
-    test('should generate embeddings for error messages', async () => {
+    test('should generate embeddings for _error messages', async () => {
       const _errorContent = {
         message: 'TypeError: Cannot read property "length" of undefined',
         stackTrace: `at validateInput (auth.js:42:15)
@@ -183,7 +183,7 @@ const DURATION = Date.now() - start;
       expect(embedding).toBeDefined();
       expect(Array.isArray(embedding)).toBe(true);
 
-      // Error embeddings should capture semantic meaning of the error type;
+      // Error embeddings should capture semantic meaning of the _error type;
 const _similarError = {
     message: 'TypeError: Cannot read property "name" of undefined',
         context: 'User profile processing',
@@ -456,7 +456,7 @@ const _originalService = embeddingService.embeddingClient;
         const _embedding = await embeddingService.generateEmbedding('test content');
         expect(embedding).toBeNull(); // Should handle gracefully
       } catch (_) {
-        expect(_error.message).toContain('Embedding service unavailable');
+        expect(___error.message).toContain('Embedding service unavailable');
       } finally {
         embeddingService.embeddingClient = originalService;
       }

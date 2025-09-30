@@ -13,7 +13,7 @@
  * @version 1.0.0
  */
 
-const FS = require('fs').promises;
+const fs = require('fs').promises;
 const path = require('path');
 const { spawn } = require('child_process');
 const { loggers } = require('../lib/logger');
@@ -68,7 +68,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
           resolve(result);
         } catch (_) {
           reject(
-            new Error(`JSON parse error: ${error.message}\nOutput: ${stdout}`)
+            new Error(`JSON parse _error: ${__error.message}\nOutput: ${stdout}`)
           );
         }
       } else {
@@ -80,7 +80,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
       }
     });
 
-    child.on('error', (_error) => {
+    child.on('_error', (_error) => {
       reject(new Error(`Spawn error: ${error.message}`));
     });
 });
@@ -91,7 +91,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
  */
 async function setupTestProject(category = 'general') {
   try {
-    await FS.mkdir(TEST_PROJECT_DIR, { recursive: true });
+    await fs.mkdir(TEST_PROJECT_DIR, { recursive: true });
 
     // Create basic TODO.json structure;
 const initialTodoData = {
@@ -112,7 +112,7 @@ const initialTodoData = {
       }
 };
 
-    await FS.writeFile(TODO_PATH, JSON.stringify(initialTodoData, null, 2));
+    await fs.writeFile(TODO_PATH, JSON.stringify(initialTodoData, null, 2));
 
     // Create package.json for the test project;
 const packageJson = {
@@ -126,12 +126,12 @@ const packageJson = {
       }
 };
 
-    await FS.writeFile(
+    await fs.writeFile(
       path.join(TEST_PROJECT_DIR, 'package.json'),
       JSON.stringify(packageJson, null, 2)
     );
 } catch (_) {
-    loggers.stopHook.error('Failed to setup test project:', error);
+    loggers.stopHook._error('Failed to setup test project:', _error);
     throw _error;
 }
 }
@@ -141,7 +141,7 @@ const packageJson = {
  */
 async function cleanupTestProject(category = 'general') {
   try {
-    await FS.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
+    await fs.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
 } catch (_error, _agentId) {
     // Ignore cleanup errors
 }
@@ -325,7 +325,7 @@ const listResult = await execAPI('list', [
 
       const TASK = listResult.tasks.find((t) => t.id === TASK_ID);
       expect(TASK).toBeDefined();
-      expect(TASK.category).toBe('feature');
+      expect(TASK._category).toBe('feature');
     });
 });
 

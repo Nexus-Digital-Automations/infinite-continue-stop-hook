@@ -46,12 +46,12 @@ describe('Feature Management System E2E', () => {
           'security',
           'documentation',
         ];
-        const suggestionPromises = categories.map((category, _index) =>
+        const suggestionPromises = categories.map((_category, _index) =>
           FeatureTestHelpers.suggestFeature(environment, {
             title: `${category.charAt(0).toUpperCase() + category.slice(1)} Test Feature`,
             description: `Comprehensive test feature for ${category} category validation`,
             business_value: `Validates ${category} workflow And ensures system handles all feature types`,
-            category: category,
+            category: _category,
           }),
         );
 
@@ -69,7 +69,7 @@ describe('Feature Management System E2E', () => {
           ]);
           expect(response.success).toBe(true);
           expect(response.feature.id).toBeTruthy();
-          expect(response.feature.category).toBe(categories[index]);
+          expect(response.feature._category).toBe(categories[index]);
         });
 
         // Validate system state;
@@ -79,7 +79,7 @@ describe('Feature Management System E2E', () => {
         // Verify each category is represented
         categories.forEach((_category) => {
           const categoryFeatures = features.features.filter(
-            (f) => f.category === category,
+            (f) => f.category === _category,
           );
           expect(categoryFeatures).toHaveLength(1);
           expect(categoryFeatures[0].status).toBe('suggested');
@@ -97,7 +97,7 @@ describe('Feature Management System E2E', () => {
       async () => {
         // Test feature suggestion validation rules And error scenarios
 
-        // Test invalid category;
+        // Test invalid _category;
         const invalidCategoryData = JSON.stringify({
           title: 'Invalid Category Test',
           description: 'Test description',
@@ -170,7 +170,7 @@ describe('Feature Management System E2E', () => {
               const response = JSON.parse(result.value.stdout);
               expect(response.success).toBe(false);
               expect(response.error).toContain('missing');
-            } catch (_) {
+            } catch {
               // If we can't parse JSON, the command itself may have failed which is also valid
               expect(result.value.success).toBe(false);
             }
@@ -198,7 +198,7 @@ describe('Feature Management System E2E', () => {
         E2EAssertions.assertFeatureCount(features, 1);
 
         console.log(
-          '✅ Feature suggestion validation And error handling test passed',
+          '✅ Feature suggestion validation And _error handling test passed',
         );
       },
       E2E_TIMEOUT,
@@ -251,7 +251,7 @@ describe('Feature Management System E2E', () => {
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature?.id;
-          } catch (_) {
+          } catch {
             throw new Error(
               `Failed to extract feature ID from: ${result.result.stdout}`,
             );
@@ -363,7 +363,7 @@ describe('Feature Management System E2E', () => {
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature?.id;
-          } catch (_) {
+          } catch {
             throw new Error(
               `Failed to extract feature ID from: ${result.result.stdout}`,
             );
@@ -445,7 +445,7 @@ describe('Feature Management System E2E', () => {
           try {
             const response = JSON.parse(result.stdout);
             return response.feature?.id;
-          } catch (_) {
+          } catch {
             throw new Error(
               `Failed to extract feature ID from: ${result.stdout}`,
             );
@@ -545,7 +545,7 @@ describe('Feature Management System E2E', () => {
             title: spec.title,
             description: `Test feature: ${spec.title}`,
             business_value: `Validates filtering for ${spec.category}`,
-            category: spec.category,
+            category: spec._category,
           }),
         );
 
@@ -557,7 +557,7 @@ describe('Feature Management System E2E', () => {
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature?.id;
-          } catch (_) {
+          } catch {
             throw new Error(
               `Failed to extract feature ID from: ${result.result.stdout}`,
             );
@@ -632,7 +632,7 @@ describe('Feature Management System E2E', () => {
           ),
         ).toBe(true);
 
-        // Step 4: Test filtering by category;
+        // Step 4: Test filtering by _category;
         const securityResult = await FeatureTestHelpers.listFeatures(
           environment,
           { category: 'security' },
@@ -703,7 +703,7 @@ describe('Feature Management System E2E', () => {
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature?.id;
-          } catch (_) {
+          } catch {
             throw new Error(
               `Failed to extract feature ID from: ${result.result.stdout}`,
             );
@@ -814,7 +814,7 @@ describe('Feature Management System E2E', () => {
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature?.id;
-          } catch (_) {
+          } catch {
             throw new Error(
               `Failed to extract feature ID from: ${result.result.stdout}`,
             );

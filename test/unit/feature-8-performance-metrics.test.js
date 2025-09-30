@@ -1,4 +1,4 @@
-const FS = require('fs');
+const fs = require('fs');
 const path = require('path');
 
 // Test suite for Feature 8: Stop Hook Validation Performance Metrics
@@ -16,10 +16,10 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       this.PROJECT_ROOT = mockProjectRoot;
     }
 
-    _fileExists(_filePath) {
+    _fileExists(filePath) {
       try {
-        return FS.existsSync(_filePath);
-      } catch (_) {
+        return fs.existsSync(filePath);
+      } catch {
         return false;
       }
     }
@@ -84,10 +84,10 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
           },
           featureId: 'feature_1758946499841_cd5eba625370',
         };
-      } catch (_) {
+      } catch {
         return {
           success: false,
-          error: error.message,
+          _error: _error.message,
           metrics: [],
           statistics: null,
         };
@@ -96,6 +96,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
     async identifyPerformanceBottlenecks(options = {}) {
       try {
+        const fsPromises = require('fs').promises;
         const path = require('path');
         const metricsFile = path.join(
           this.PROJECT_ROOT,
@@ -133,10 +134,10 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
           },
           featureId: 'feature_1758946499841_cd5eba625370',
         };
-      } catch (_) {
+      } catch {
         return {
           success: false,
-          error: error.message,
+          _error: _error.message,
           bottlenecks: [],
         };
       }
@@ -144,6 +145,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
     async getPerformanceBenchmarks(options = {}) {
       try {
+        const fsPromises = require('fs').promises;
         const path = require('path');
         const metricsFile = path.join(
           this.PROJECT_ROOT,
@@ -180,10 +182,10 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
           recommendations: this._generateBenchmarkRecommendations(benchmarks),
           featureId: 'feature_1758946499841_cd5eba625370',
         };
-      } catch (_) {
+      } catch {
         return {
           success: false,
-          error: error.message,
+          _error: _error.message,
           benchmarks: null,
         };
       }
@@ -460,13 +462,13 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
   beforeEach(() => {
     // Create mock directory if it doesn't exist
-    if (!FS.existsSync(mockProjectRoot)) {
-      FS.mkdirSync(mockProjectRoot, { recursive: true });
+    if (!fs.existsSync(mockProjectRoot)) {
+      fs.mkdirSync(mockProjectRoot, { recursive: true });
     }
 
     // Clean up previous test data
-    if (FS.existsSync(mockMetricsFile)) {
-      FS.unlinkSync(mockMetricsFile);
+    if (fs.existsSync(mockMetricsFile)) {
+      fs.unlinkSync(mockMetricsFile);
     }
 
     taskManager = new MockTaskManager();
@@ -474,11 +476,11 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
   afterEach(() => {
     // Clean up test directory
-    if (FS.existsSync(mockMetricsFile)) {
-      FS.unlinkSync(mockMetricsFile);
+    if (fs.existsSync(mockMetricsFile)) {
+      fs.unlinkSync(mockMetricsFile);
     }
-    if (FS.existsSync(mockProjectRoot)) {
-      FS.rmSync(mockProjectRoot, { recursive: true, force: true });
+    if (fs.existsSync(mockProjectRoot)) {
+      fs.rmSync(mockProjectRoot, { recursive: true, force: true });
     }
   });
 
@@ -518,9 +520,9 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
         ],
       };
 
-      FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
+      fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const result = await taskManager.getValidationPerformanceMetrics({
+      const _result = await taskManager.getValidationPerformanceMetrics({
         criterion: 'linter-validation',
         limit: 10,
       });
@@ -566,7 +568,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
         ],
       };
 
-      FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
+      fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
       const _result = await taskManager.getValidationPerformanceMetrics();
 
@@ -618,7 +620,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
         ],
       };
 
-      FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
+      fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
       const _result = await taskManager.identifyPerformanceBottlenecks();
 
@@ -645,9 +647,9 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
         ],
       };
 
-      FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
+      fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const result = await taskManager.identifyPerformanceBottlenecks({
+      const _result = await taskManager.identifyPerformanceBottlenecks({
         slowThreshold: 2000,
         criticalThreshold: 4000,
       });
@@ -695,9 +697,9 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
         ],
       };
 
-      FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
+      fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const result = await taskManager.getPerformanceBenchmarks();
+      const _result = await taskManager.getPerformanceBenchmarks();
 
       expect(_result.success).toBe(true);
       expect(_result.benchmarks).toBeDefined();
@@ -739,7 +741,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
         ],
       };
 
-      FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
+      fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
       const _result = await taskManager.getPerformanceBenchmarks();
 
@@ -818,7 +820,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
     test('should handle corrupted metrics file gracefully', async () => {
       // Write invalid JSON to metrics file
-      FS.writeFileSync(mockMetricsFile, 'invalid json content');
+      fs.writeFileSync(mockMetricsFile, 'invalid json content');
 
       const _result = await taskManager.getValidationPerformanceMetrics();
 
@@ -830,7 +832,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
     test('should handle empty metrics array', async () => {
       const mockMetrics = { metrics: [] };
-      FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
+      fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
       const _result = await taskManager.getValidationPerformanceMetrics();
 
@@ -841,7 +843,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
     test('should handle missing metrics property', async () => {
       const mockMetrics = { otherData: 'test' };
-      FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
+      fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
       const _result = await taskManager.getValidationPerformanceMetrics();
 

@@ -14,7 +14,7 @@
  * @version 1.0.0
  */
 
-const FS = require('../lib/api-modules/core/successCriteriaManager');
+const fs = require('../lib/api-modules/core/successCriteriaManager');
 
 describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
     

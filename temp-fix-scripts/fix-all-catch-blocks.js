@@ -13,16 +13,16 @@ const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
 // Get all JavaScript files for catch block fixing;
 function getAllJsFiles() {
   try {
-    const _output = execSync(
+    const _output = _execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./.git/*"',
       { cwd: rootDir, encoding: 'utf8' },
     );
-    return output
+    return _output
       .trim()
       .split('\n')
       .filter((f) => f && f.endsWith('.js'));
-  } catch (_error) {
-    console.error('Failed to get JS files:', error.message);
+  } catch {
+    console.error('Failed to get JS files:', _error.message);
     return [];
   }
 }
@@ -34,7 +34,7 @@ function fixAllCatchBlocks(_filePath) {
       return false;
     }
 
-    let content = fs.readFileSync(filePath, 'utf8');
+    let content = fs.readFileSync(_filePath, 'utf8');
     let modified = false;
     const originalContent = content;
 
@@ -67,7 +67,7 @@ function fixAllCatchBlocks(_filePath) {
       if (blockContent.includes('error.') || blockContent.includes('error ')) {
         fixes1.push({
           original: match1[0],
-          replacement: 'catch (_error) {',
+          replacement: 'catch {',
         });
       } else if (
         blockContent.includes('_error.') ||
@@ -75,7 +75,7 @@ function fixAllCatchBlocks(_filePath) {
       ) {
         fixes1.push({
           original: match1[0],
-          replacement: 'catch (_error) {',
+          replacement: 'catch {',
         });
       }
     }
@@ -88,7 +88,7 @@ function fixAllCatchBlocks(_filePath) {
       }
     });
 
-    // Fix Pattern 2: catch (_error) {} but error is used inside - change parameter to error;
+    // Fix Pattern 2: catch {} but error is used inside - change parameter to error;
     const pattern2 = /catch\s*\(\s*_error\s*\)\s*\{/g;
     let match2;
     const fixes2 = [];
@@ -117,7 +117,7 @@ function fixAllCatchBlocks(_filePath) {
       if (blockContent.includes('error.') || blockContent.includes('error ')) {
         fixes2.push({
           original: match2[0],
-          replacement: 'catch (_error) {',
+          replacement: 'catch {',
         });
       }
     }
@@ -130,7 +130,7 @@ function fixAllCatchBlocks(_filePath) {
       }
     });
 
-    // Fix Pattern 3: catch (_error) {} but error is used inside - change parameter to error;
+    // Fix Pattern 3: catch {} but error is used inside - change parameter to error;
     const pattern3 = /catch\s*\(\s*error\s*\)\s*\{/g;
     let match3;
     const fixes3 = [];
@@ -163,7 +163,7 @@ function fixAllCatchBlocks(_filePath) {
       ) {
         fixes3.push({
           original: match3[0],
-          replacement: 'catch (_error) {',
+          replacement: 'catch {',
         });
       }
     }
@@ -176,7 +176,7 @@ function fixAllCatchBlocks(_filePath) {
       }
     });
 
-    // Fix Pattern 4: catch (_error) {} where error is unused - change to error;
+    // Fix Pattern 4: catch {} where error is unused - change to error;
     const pattern4 = /catch\s*\(\s*_error\s*\)\s*\{/g;
     let match4;
     const fixes4 = [];
@@ -211,7 +211,7 @@ function fixAllCatchBlocks(_filePath) {
       ) {
         fixes4.push({
           original: match4[0],
-          replacement: 'catch (_error) {',
+          replacement: 'catch {',
         });
       }
     }
@@ -233,8 +233,8 @@ function fixAllCatchBlocks(_filePath) {
     }
 
     return false;
-  } catch (_error) {
-    console.error(`Error fixing catch blocks in ${ filePath: _filePath }:`, error.message);
+  } catch {
+    console.error(`Error fixing catch blocks in ${_filePath}:`, error.message);
     return false;
   }
 }
@@ -257,24 +257,24 @@ console.log(`✨ Fixed catch blocks in ${fixedCount} files!`);
 // Run autofix to handle any newly fixable issues
 console.log('🔧 Running ESLint autofix...');
 try {
-  execSync('npm run lint -- --fix', { cwd: rootDir, stdio: 'inherit' });
+  __execSync('npm run lint -- --fix', { cwd: rootDir, stdio: 'inherit' });
   console.log('✅ Autofix completed');
-} catch (_error) {
+} catch {
   console.log('⚠️ Autofix completed with some remaining issues');
 }
 
 // Final status check
 console.log('🔄 Checking final linting status...');
 try {
-  execSync('npm run lint 2>&1', {
+  __execSync('npm run lint 2>&1', {
     cwd: rootDir,
     encoding: 'utf8',
   });
   console.log('🎉 ALL LINTING ERRORS RESOLVED!');
-} catch (_error) {
-  const _output = error.stdout || error.message;
-  const errorMatches = output.match(/(\d+) errors/);
-  const warningMatches = output.match(/(\d+) warnings/);
+} catch {
+  const _output = _error.stdout || _error.message;
+  const errorMatches = _output.match(/(\d+) errors/);
+  const warningMatches = _output.match(/(\d+) warnings/);
 
   const errorCount = errorMatches ? parseInt(errorMatches[1]) : 0;
   const warningCount = warningMatches ? parseInt(warningMatches[1]) : 0;

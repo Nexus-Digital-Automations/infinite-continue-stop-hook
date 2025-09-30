@@ -16,7 +16,7 @@ const { loggers } = require('../../lib/logger');
  * @version 1.0.0
  */
 
-const FS = require('fs').promises;
+const fs = require('fs').promises;
 const path = require('path');
 const {
   execAPI,
@@ -431,7 +431,7 @@ const feature = generateTestFeature({
 
       // 2. Delete FEATURES.json file;
 const featuresPath = path.join(testDir, 'FEATURES.json');
-      await FS.unlink(featuresPath);
+      await fs.unlink(featuresPath);
 
       // 3. Try to perform operations (should recreate file)
       const recoveryFeature = generateTestFeature({
@@ -512,12 +512,12 @@ const features = Array.from({ length: 10 }, (_, i) =>
 
       // 2. Simulate partial write by creating truncated file;
 const featuresPath = path.join(testDir, 'FEATURES.json');
-      const originalContent = await FS.readFile(featuresPath, 'utf8');
+      const originalContent = await fs.readFile(featuresPath, 'utf8');
       const truncatedContent = originalContent.substring(
         0,
         originalContent.length / 2,
       );
-      await FS.writeFile(featuresPath, truncatedContent);
+      await fs.writeFile(featuresPath, truncatedContent);
 
       // 3. Try to perform operations;
 const recoveryFeature = generateTestFeature({
@@ -756,7 +756,7 @@ const startTime = Date.now();
 
         switch (operation.type) {
           case 'suggest':
-            result = await execAPI(
+    const result = await execAPI(
               'suggest-feature',
               [JSON.stringify(operation.data)], {
     projectRoot: testDir,
@@ -768,13 +768,13 @@ const startTime = Date.now();
             break;
 
           case 'agent-init':
-            result = await execAPI('initialize', [operation.agentId], {
+    const result = await execAPI('initialize', [operation.agentId], {
     projectRoot: testDir,
             });
             break;
 
           case 'stats':
-            result = await execAPI('feature-stats', [], {
+    const result = await execAPI('feature-stats', [], {
     projectRoot: testDir,
             });
             break;
@@ -843,7 +843,7 @@ const results = await execAPIConcurrently(intensiveOperations);
 
       // 3. Verify file size is reasonable (not excessive)
       const featuresPath = path.join(testDir, 'FEATURES.json');
-      const stats = await FS.stat(featuresPath);
+      const stats = await fs.stat(featuresPath);
       expect(stats.size).toBeLessThan(500000); // Should be under 500KB
 
       // 4. Verify data integrity despite large content;

@@ -13,6 +13,7 @@
  * features of the FeatureManagerAPI with detailed time-based testing.
  */
 
+const fs = require('fs');
 const path = require('path');
 const {
   MockFileSystem,
@@ -44,9 +45,8 @@ describe('Initialization Statistics', () => {
     api.tasksPath = TEST_TASKS_PATH;
 
     // Mock the fs module
-    originalFs = require('fs').promises;
-    const FS = require('fs');
-    FS.promises = mockFs;
+    originalFs = fs.promises;
+    fs.promises = mockFs;
 
     // Setup initial tasks file
     mockFs.setFile(
@@ -57,8 +57,8 @@ describe('Initialization Statistics', () => {
 
   afterEach(() => {
     // Restore original file system
-    // Use existing FS declaration from line 46
-    FS.promises = originalFs;
+    // Use existing fs declaration from line 46
+    fs.promises = originalFs;
 
     jest.clearAllMocks();
     mockFs.clearAll();

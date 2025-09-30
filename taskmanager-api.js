@@ -49,6 +49,7 @@ const RAGOPERATIONS = require('./lib/api-modules/rag/ragOperations');
 // Import structured logging And secret management
 const {
   createLogger,
+  createSilentLogger,
   createAgentLogger,
   systemLogger,
 } = require('./lib/utils/logger');
@@ -288,11 +289,19 @@ class AutonomousTaskManagerAPI {
     this.taskDependencies = new Map();
 
     // Initialize structured logger for TaskManager API
-    this.logger = createLogger('TaskManagerAPI', {
-      agentId: options.agentId || 'system',
-      taskId: options.taskId || null,
-      logToFile: process.env.NODE_ENV === 'production',
-    });
+    // Use silent logger when running as CLI tool to avoid interference with JSON output
+    const isCliUsage = require.main === module;
+    this.logger = isCliUsage
+      ? createSilentLogger('TaskManagerAPI', {
+          agentId: options.agentId || 'system',
+          taskId: options.taskId || null,
+          logToFile: process.env.NODE_ENV === 'production',
+        })
+      : createLogger('TaskManagerAPI', {
+          agentId: options.agentId || 'system',
+          taskId: options.taskId || null,
+          logToFile: process.env.NODE_ENV === 'production',
+        });
 
     // Initialize RAG operations for self-learning capabilities
     this.ragOps = new RAGOPERATIONS({
@@ -5047,7 +5056,7 @@ class AutonomousTaskManagerAPI {
       if (rule.conditions.fileExists) {
         for (const file of rule.conditions.fileExists) {
           const filePath = path.join(PROJECT_ROOT, file);
-          if (!(await this._fileExists(_filePath))) {
+          if (!(await this._fileExists(filePath))) {
             return false;
           }
         }
@@ -5140,7 +5149,7 @@ class AutonomousTaskManagerAPI {
         for (const [filePath, patterns] of Object.entries(
           rule.conditions.fileContains,
         )) {
-          const fullPath = path.join(PROJECT_ROOT, _filePath);
+          const fullPath = path.join(PROJECT_ROOT, filePath);
           if (await this._fileExists(fullPath)) {
             const content = await FS.readFile(fullPath, 'utf8');
             for (const pattern of patterns) {
@@ -5284,7 +5293,7 @@ class AutonomousTaskManagerAPI {
     if (criteria.fileExists) {
       for (const file of criteria.fileExists) {
         const filePath = path.join(PROJECT_ROOT, file);
-        if (!FS.existsSync(_filePath)) {
+        if (!FS.existsSync(filePath)) {
           return false;
         }
       }
@@ -5295,7 +5304,7 @@ class AutonomousTaskManagerAPI {
       for (const [filePath, patterns] of Object.entries(
         criteria.fileContains,
       )) {
-        const fullPath = path.join(PROJECT_ROOT, _filePath);
+        const fullPath = path.join(PROJECT_ROOT, filePath);
         if (FS.existsSync(fullPath)) {
           const content = FS.readFileSync(fullPath, 'utf8');
           for (const pattern of patterns) {
@@ -6166,7 +6175,7 @@ class AutonomousTaskManagerAPI {
       for (const [type, files] of Object.entries(indicators)) {
         for (const file of files) {
           const filePath = path.join(PROJECT_ROOT, file);
-          if (await this._fileExists(_filePath)) {
+          if (await this._fileExists(filePath)) {
             return type;
           }
         }
@@ -12143,6 +12152,8 @@ module.exports = AutonomousTaskManagerAPI;
 
 // Run CLI if called directly (CommonJS equivalent)
 if (require.main === module) {
+  // Note: Logging output doesn't interfere with JSON parsing as fallback handles mixed output
+
   main().catch((error) => {
     loggers.app.error('TaskManager API Error', {
       errorMessage: error.message,

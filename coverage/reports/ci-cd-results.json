@@ -1,14 +1,14 @@
 {
   "metadata": {
-    "timestamp": "2025-09-29T23:37:24.792Z",
+    "timestamp": "2025-09-29T23:54:01.907Z",
     "reporter": "jest-cicd-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System",
-    "duration_ms": 15267
+    "duration_ms": 118488
   },
   "cicd_summary": {
     "pipeline_status": "FAILURE",
-    "total_duration_ms": 15267,
+    "total_duration_ms": 118488,
     "should_block_deployment": true,
     "quality_gate_status": {
       "status": "FAILED",
@@ -16,7 +16,7 @@
         "tests_passing": false,
         "no_failed_tests": false,
         "coverage_adequate": false,
-        "performance_acceptable": true
+        "performance_acceptable": false
       },
       "blocking_issues": [
         {
@@ -30,10 +30,16 @@
           "severity": "warning",
           "message": "Code coverage below acceptable threshold",
           "action": "Add more tests to improve coverage"
+        },
+        {
+          "type": "performance",
+          "severity": "warning",
+          "message": "Test execution time is slow",
+          "action": "Optimize slow tests or improve test parallelization"
         }
       ]
     },
-    "test_health_score": 40
+    "test_health_score": 20
   },
   "test_execution": {
     "summary": {
@@ -45,26 +51,26 @@
       "failed_tests": 10,
       "pending_tests": 0,
       "success_rate": "0.00",
-      "execution_time_ms": 15267
+      "execution_time_ms": 118488
     },
     "performance_metrics": {
-      "average_test_duration": 1526.7,
+      "average_test_duration": 11848.8,
       "slowest_suite": {
         "path": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
-        "duration_ms": 14259,
+        "duration_ms": 117585,
         "num_tests": 10
       },
       "memory_usage": {
-        "rss": 127729664,
-        "heap_total": 156925952,
-        "heap_used": 141788392,
-        "external": 4976203,
-        "heap_usage_percent": "90.35"
+        "rss": 86507520,
+        "heap_total": 51609600,
+        "heap_used": 48464720,
+        "external": 4976267,
+        "heap_usage_percent": "93.91"
       },
       "parallel_efficiency": {
-        "parallel_efficiency_percent": "93.40",
-        "total_execution_time_ms": 15267,
-        "serial_time_ms": 14259,
+        "parallel_efficiency_percent": "99.24",
+        "total_execution_time_ms": 118488,
+        "serial_time_ms": 117585,
         "time_saved_ms": 0
       }
     },
@@ -75,66 +81,66 @@
         {
           "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
           "test": "Success Criteria End-to-End Tests Complete Validation Workflows should execute full feature validation workflow",
-          "duration": 1397,
-          "error": "Error: expect(received).toContain(expected) // indexOf\n\nExpected substring: \"suggested\"\nReceived string:    \"[dotenv@17.2.2] injecting env (0) from .env -- tip: 📡 version env with Radar: https://dote"
+          "duration": 12176,
+          "error": "ReferenceError: error is not defined\n    at Object.error (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:345:60)"
         },
         {
           "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
           "test": "Success Criteria End-to-End Tests Complete Validation Workflows should handle validation failures gracefully",
-          "duration": 1122,
-          "error": "Error: expect(received).toContain(expected) // indexOf\n\nExpected substring: \"suggested\"\nReceived string:    \"[dotenv@17.2.2] injecting env (0) from .env -- tip: 🔐 prevent committing .env to code: htt"
+          "duration": 12029,
+          "error": "ReferenceError: error is not defined\n    at Object.error (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:426:60)"
         },
         {
           "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
           "test": "Success Criteria End-to-End Tests Complete Validation Workflows should validate feature categorization workflow",
-          "duration": 1975,
-          "error": "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:481:46)\n    at processTicksAndReje"
+          "duration": 11759,
+          "error": "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:481:46)"
         },
         {
           "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
           "test": "Success Criteria End-to-End Tests Real-World Usage Scenarios should handle typical development workflow",
-          "duration": 1440,
-          "error": "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:575:47)\n    at processTicksAndReje"
+          "duration": 11589,
+          "error": "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:575:47)"
         },
         {
           "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
           "test": "Success Criteria End-to-End Tests Real-World Usage Scenarios should handle bug fix workflow with criteria",
-          "duration": 1106,
-          "error": "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:654:46)\n    at processTicksAndReje"
+          "duration": 11268,
+          "error": "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:654:46)"
         },
         {
           "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
           "test": "Success Criteria End-to-End Tests Real-World Usage Scenarios should handle refactoring workflow with quality gates",
-          "duration": 1543,
+          "duration": 11565,
           "error": "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:741:48)\n    at processTicksAndReje"
         },
         {
           "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
           "test": "Success Criteria End-to-End Tests Multi-Agent Coordination should coordinate feature validation across multiple agents",
-          "duration": 1136,
+          "duration": 11468,
           "error": "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:864:46)\n    at processTicksAndReje"
         },
         {
           "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
           "test": "Success Criteria End-to-End Tests Performance Validation And Benchmarking should validate performance criteria with actual benchmarks",
-          "duration": 1091,
+          "duration": 11475,
           "error": "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:954:46)\n    at processTicksAndReje"
         },
         {
           "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
           "test": "Success Criteria End-to-End Tests Performance Validation And Benchmarking should handle performance regression detection",
-          "duration": 1062,
+          "duration": 11115,
           "error": "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:1031:46)\n    at processTicksAndRej"
         },
         {
           "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
           "test": "Success Criteria End-to-End Tests Evidence Collection And Reporting should collect And store validation evidence",
-          "duration": 1163,
+          "duration": 11497,
           "error": "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:1111:46)\n    at processTicksAndRej"
         }
       ],
       "failure_patterns": {
-        "assertion": 2,
+        "reference": 2,
         "type": 8
       },
       "common_failure_type": "type"
@@ -146,11 +152,11 @@
     }
   },
   "git": {
-    "commit_sha": "ae958d9e959b5c2dac3cb818e43016f9b3513db0",
+    "commit_sha": "a46e72677791fe28b6d8f41a59dec05f09cc6ea5",
     "branch": "main",
     "author": "Claude <claude@anthropic.com>",
-    "commit_message": "fix: resolve systematic JavaScript syntax errors preventing TaskManager API execution",
-    "commit_date": "2025-09-29 18:36:32 -0500",
+    "commit_message": "fix: restore TaskManager API agent initialization and fix core variable reference errors",
+    "commit_date": "2025-09-29 18:41:51 -0500",
     "tag": null,
     "is_dirty": true,
     "remote_url": "https://github.com/Nexus-Digital-Automations/infinite-continue-stop-hook.git"
@@ -166,7 +172,7 @@
     "locale": "en-US",
     "memory": {
       "total": 25769803776,
-      "available": 396738560
+      "available": 244875264
     },
     "cpu": {
       "cores": 8,
@@ -190,6 +196,12 @@
       "priority": "high",
       "recommendation": "Fix failing tests immediately",
       "details": "10 tests are currently failing"
+    },
+    {
+      "category": "performance",
+      "priority": "medium",
+      "recommendation": "Consider optimizing test execution time",
+      "details": "Tests took 118s to complete"
     }
   ]
 }

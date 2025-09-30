@@ -20,18 +20,18 @@ class SyntaxErrorFixer {
         { encoding: 'utf-8' },
       );
 
-      return result
+      return _result
         .split('\n')
         .filter((f) => f && f.endsWith('.js'))
         .map((f) => path.resolve(f.replace('./', '')));
-    } catch (_) {
+    } catch {
       console.error('Failed to get JS files:', error.message);
       return [];
     }
   }
 
   fixFile(_filePath) {
-    const content = fs.readFileSync(filePath, 'utf8');
+    const content = fs.readFileSync(_filePath, 'utf8');
     const lines = content.split('\n');
     let modified = false;
 
@@ -46,7 +46,7 @@ class SyntaxErrorFixer {
       if (ifMatch) {
         // Remove the extra parameter from the condition
         lines[i] = line.replace(
-          /,\s*(agentId|filePath|category[^,)]*|validationResults[^,)]*)\s*\)/,
+          /,\s*(agentId|_filePath|category[^,)]*|validationResults[^,)]*)\s*\)/,
           ')',
         );
         modified = true;
@@ -63,7 +63,7 @@ class SyntaxErrorFixer {
       );
       if (forMatch) {
         lines[i] = line.replace(
-          /,\s*(agentId|filePath|category[^,)]*|validationResults[^,)]*)\s*\)/,
+          /,\s*(agentId|_filePath|category[^,)]*|validationResults[^,)]*)\s*\)/,
           ')',
         );
         modified = true;
@@ -80,7 +80,7 @@ class SyntaxErrorFixer {
       );
       if (callMatch && !line.includes('function') && !line.includes('=>')) {
         lines[i] = line.replace(
-          /,\s*(agentId|filePath|category\s*=\s*'[^']*'|validationResults\s*=\s*\{[^}]*\})\s*\)/,
+          /,\s*(agentId|_filePath|category\s*=\s*'[^']*'|validationResults\s*=\s*\{[^}]*\})\s*\)/,
           ')',
         );
         modified = true;
@@ -93,11 +93,11 @@ class SyntaxErrorFixer {
       // Fix: Remove parameters added to catch blocks incorrectly
       // Pattern: catch (_error, parameter)
       const catchMatch = line.match(
-        /catch\s*\(\s*_error\s*,\s*(agentId|filePath|category[^)]*|validationResults[^)]*)\s*\)/,
+        /catch\s*\(\s*_error\s*,\s*(agentId|_filePath|category[^)]*|validationResults[^)]*)\s*\)/,
       );
       if (catchMatch) {
         lines[i] = line.replace(
-          /,\s*(agentId|filePath|category[^,)]*|validationResults[^,)]*)\s*\)/,
+          /,\s*(agentId|_filePath|category[^,)]*|validationResults[^,)]*)\s*\)/,
           ')',
         );
         modified = true;
@@ -110,11 +110,11 @@ class SyntaxErrorFixer {
       // Fix: Remove parameters added incorrectly to array destructuring or other contexts
       // Pattern: const [item] = array, parameter;
       const destructureMatch = line.match(
-        /const\s+\[[^\]]+\]\s*=\s*[^,]+,\s*(agentId|filePath|category[^,]*|validationResults[^,]*)/,
+        /const\s+\[[^\]]+\]\s*=\s*[^,]+,\s*(agentId|_filePath|category[^,]*|validationResults[^,]*)/,
       );
       if (destructureMatch) {
         lines[i] = line.replace(
-          /,\s*(agentId|filePath|category[^,]*|validationResults[^,]*)/,
+          /,\s*(agentId|_filePath|category[^,]*|validationResults[^,]*)/,
           '',
         );
         modified = true;
@@ -128,11 +128,11 @@ class SyntaxErrorFixer {
       if (
         line.includes('constructor(') &&
         line.includes('agentId') &&
-        line.includes('filePath')
+        line.includes('_filePath')
       ) {
         const cleaned = line
           .replace(/, agentId[^,)]*/, '')
-          .replace(/, filePath[^,)]*/, '')
+          .replace(/, _filePath[^,)]*/, '')
           .replace(/, category[^,)]*/, '')
           .replace(/, validationResults[^,)]*/, '');
         if (cleaned !== line) {
@@ -145,7 +145,7 @@ class SyntaxErrorFixer {
     }
 
     if (modified) {
-      fs.writeFileSync(filePath, lines.join('\n'));
+      fs.writeFileSync(_filePath, lines.join('\n'));
       this.filesModified.push(_filePath);
       return true;
     }
@@ -159,7 +159,7 @@ class SyntaxErrorFixer {
     const jsFiles = this.getAllJSFiles();
     console.log(`📊 Found ${jsFiles.length} JavaScript files to check\n`);
 
-    for (const filePath of jsFiles) {
+    for (const _filePath of jsFiles) {
       const relativePath = path.relative(process.cwd(), _filePath);
       console.log(`🔍 Checking: ${relativePath}`);
 
@@ -169,7 +169,7 @@ class SyntaxErrorFixer {
         } else {
           console.log(`✅ No syntax errors found in: ${relativePath}\n`);
         }
-      } catch (_) {
+      } catch {
         console.error(
           `❌ Error processing ${relativePath}: ${error.message}\n`,
         );
@@ -194,7 +194,7 @@ class SyntaxErrorFixer {
 
     if (this.filesModified.length > 0) {
       console.log('\n📁 Modified files:');
-      for (const filePath of this.filesModified) {
+      for (const _filePath of this.filesModified) {
         console.log(`  ✅ ${path.relative(process.cwd(), _filePath)}`);
       }
     }

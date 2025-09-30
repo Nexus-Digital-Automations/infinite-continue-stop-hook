@@ -18,7 +18,7 @@
 
 const FS = require('fs').promises;
 const path = require('path');
-const { execSync: _execSync } = require('child_process');
+const { execSync } = require('child_process');
 
 /**
  * Security utilities for safe filesystem operations
@@ -419,7 +419,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
       );
       await FS.access(packageJsonPath);
       hasPackageJson = true;
-    } catch (_error) {
+    } catch {
       // Package.json not found or access denied
     }
 

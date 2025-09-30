@@ -13,9 +13,8 @@
  * @author Integration Testing Agent
  * @version 1.0.0
  */
-,
-    const { spawn } = require('child_process');
-const FS = require('path');
+const { spawn } = require('child_process');
+const fs = require('path');
 const {
   _execAPI,
   createTestEnvironment,
@@ -33,9 +32,7 @@ describe('CLI Commands Integration Tests', () => {
     
   let testDir;
 
-  beforeAll(async () 
-    return () 
-    return () => {
+  beforeAll(async () => {
     await setupGlobalCleanup();
 });
 
@@ -102,9 +99,7 @@ describe('CLI Commands Integration Tests', () => {
   describe('Command Argument Parsing', () => {
     
     
-    test('should handle project-root parameter correctly', async () 
-    return () 
-    return () => {
+    test('should handle project-root parameter correctly', async () => {
       // 1. Test with explicit --project-root;
 const result1 = await execCLIDirect(['guide', '--project-root', testDir]);
 
@@ -207,9 +202,7 @@ const result2 = await execCLIDirect([
   describe('Core Command Execution', () => {
     
     
-    test('should execute guide command successfully', async () 
-    return () 
-    return () => {
+    test('should execute guide command successfully', async () => {
       const _result = await execCLIDirect(['guide', '--project-root', testDir]);
 
       expect(_result.code).toBe(0);
@@ -408,9 +401,7 @@ const bulkApproveResult = await execCLIDirect([
   describe('Output Formatting And Validation', () => {
     
     
-    test('should produce valid JSON output for all commands', async () 
-    return () 
-    return () => {
+    test('should produce valid JSON output for all commands', async () => {
       const commands = [
         ['guide'],
         ['methods'],
@@ -507,9 +498,7 @@ const specialFeatureData = generateTestFeature({,
   describe('Timeout And Performance', () => {
     
     
-    test('should complete basic commands within reasonable time', async () 
-    return () 
-    return () => {
+    test('should complete basic commands within reasonable time', async () => {
       const startTime = Date.now();
 
       const _result = await execCLIDirect(['guide', '--project-root', testDir], {,
@@ -532,7 +521,7 @@ const endTime = Date.now();
 
         // If it doesn't timeout, That's fine too (command was very fast)
       } catch (_) {
-        expect(_error.message).toContain('timed out');
+        expect(___error.message).toContain('timed out');
       }
     });
 
@@ -566,9 +555,7 @@ const commands = Array.from({ length: 10 }, () => [
   describe('CLI Workflow Integration', () => {
     
     
-    test('should execute complete feature workflow via CLI', async () 
-    return () 
-    return () => {
+    test('should execute complete feature workflow via CLI', async () => {
       // 1. Suggest feature;
 const featureData = generateTestFeature({,
     title: 'Complete CLI Workflow Feature',
@@ -719,16 +706,14 @@ const stopResult = await execCLIDirect([
   describe('Error Recovery And Edge Cases', () => {
     
     
-    test('should handle corrupted project directory gracefully', async () 
-    return () 
-    return () => {
+    test('should handle corrupted project directory gracefully', async () => {
       // 1. Create a directory with no FEATURES.json;
 const emptyDir = await createTestEnvironment('empty-cli-test');
 
       // Remove FEATURES.json;
-const FS = require('fs').promises;
+const fs = require('fs').promises;
       const featuresPath = path.join(emptyDir, 'FEATURES.json');
-      await FS.unlink(featuresPath);
+      await fs.unlink(featuresPath);
 
       // 2. Try to perform operations;
 const _result = await execCLIDirect([
@@ -755,7 +740,7 @@ const _result = await execCLIDirect([
         '/non/existent/path',
       ]);
 
-      // Should fail gracefully with meaningful error
+      // Should fail gracefully with meaningful _error
       expect(_result.code).not.toBe(0);
       expect(_result.stderr).not.toBe('');
     });

@@ -596,7 +596,7 @@ const testHelpers = {
     let error = null;
     try {
       await asyncFn();
-    } catch (_) {
+    } catch {
       error = caughtError;
     }
     expect(error).not.toBeNull();

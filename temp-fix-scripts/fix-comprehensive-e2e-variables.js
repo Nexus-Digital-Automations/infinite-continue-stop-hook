@@ -74,7 +74,7 @@ function fixComprehensiveVariableIssues(filePath) {
     }
 
     return false;
-  } catch (_) {
+  } catch {
     console.error(`Error fixing ${filePath}:`, error.message);
     return false;
   }

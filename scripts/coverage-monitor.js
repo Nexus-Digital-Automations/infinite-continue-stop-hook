@@ -110,7 +110,7 @@ class CoverageMonitor {
       if (!this.validation.passed) {
         throw new Error('Coverage validation failed');
       }
-    } catch (_) {
+    } catch {
       LOGGER.error(`Coverage monitoring failed: ${_error.message}`);
       LOGGER.debug(_error.stack);
       throw _error;
@@ -146,7 +146,7 @@ class CoverageMonitor {
       });
 
       LOGGER.success('Coverage analysis completed');
-    } catch (_) {
+    } catch {
       // Check if it's just a test failure but coverage was generated
       if (FS.existsSync(CONFIG.paths.summary)) {
         LOGGER.warning('Tests failed but coverage data was generated');
@@ -180,7 +180,7 @@ class CoverageMonitor {
       LOGGER.debug(
         `Total coverage: ${JSON.stringify(coverageData.total, null, 2)}`,
       );
-    } catch (_) {
+    } catch {
       throw new Error(`Failed to parse coverage data: ${_error.message}`);
     }
   }
@@ -278,7 +278,7 @@ class CoverageMonitor {
     if (FS.existsSync(CONFIG.paths.trends)) {
       try {
         trends = JSON.parse(FS.readFileSync(CONFIG.paths.trends, 'utf8'));
-      } catch (_) {
+      } catch {
         LOGGER.warning('Could not load existing trends, starting fresh');
       }
     }
@@ -366,7 +366,7 @@ class CoverageMonitor {
           encoding: 'utf8',
         }).trim(),
       };
-    } catch (_) {
+    } catch {
       LOGGER.debug('Could not get Git information');
       return {
         commit: 'unknown',
@@ -383,7 +383,7 @@ if (require.main === module) {
   const monitor = new CoverageMonitor();
   try {
     monitor.run();
-  } catch (_) {
+  } catch {
     LOGGER.error(`Fatal error: ${_error.message}`);
     throw _error;
   }

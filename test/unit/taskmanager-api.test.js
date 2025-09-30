@@ -383,7 +383,7 @@ describe('FeatureManagerAPI', () => {
         expect(_result.feature.title).toBe(TEST_FIXTURES.validFeature.title);
         expect(_result.message).toBe('Feature suggestion created successfully');
 
-        testHelpers.validateFeatureStructure(result.feature);
+        testHelpers.validateFeatureStructure(_result.feature);
       });
 
       test('should handle validation errors gracefully', async () => {
@@ -609,7 +609,7 @@ describe('FeatureManagerAPI', () => {
         for (const feature of features) {
           // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup;
           const _result = await api.suggestFeature(feature);
-          suggestedFeatureIds.push(result.feature.id);
+          suggestedFeatureIds.push(_result.feature.id);
         }
       });
 
@@ -627,7 +627,7 @@ describe('FeatureManagerAPI', () => {
         expect(_result.errors).toHaveLength(0);
 
         // Verify all features are approved
-        result.approved_features.forEach((approvedFeature) => {
+        _result.approved_features.forEach((approvedFeature) => {
           expect(approvedFeature.status).toBe('approved');
           expect(approvedFeature.success).toBe(true);
         });
@@ -659,7 +659,7 @@ describe('FeatureManagerAPI', () => {
         expect(_result.approved_count).toBe(0);
         expect(_result.error_count).toBe(2);
         expect(_result.errors).toHaveLength(2);
-        result.errors.forEach((error) => {
+        _result.errors.forEach((error) => {
           expect(error).toContain('not found');
         });
       });
@@ -693,7 +693,7 @@ describe('FeatureManagerAPI', () => {
         expect(_result.metadata).toBeDefined();
 
         // Verify features are correctly returned;
-        const statuses = result.features.map((f) => f.status);
+        const statuses = _result.features.map((f) => f.status);
         expect(statuses).toContain('suggested');
         expect(statuses).toContain('approved');
         expect(statuses).toContain('rejected');
@@ -746,7 +746,7 @@ describe('FeatureManagerAPI', () => {
         expect(_result.stats).toBeDefined();
         expect(_result.metadata).toBeDefined();
 
-        const stats = result.stats;
+        const stats = _result.stats;
         expect(stats.total).toBe(3);
         expect(stats.by_status.suggested).toBe(1);
         expect(stats.by_status.approved).toBe(1);
@@ -760,7 +760,7 @@ describe('FeatureManagerAPI', () => {
         const _result = await api.getFeatureStats();
         expect(_result.success).toBe(true);
         expect(_result.stats.recent_activity).toBeDefined();
-        expect(Array.isArray(result.stats.recent_activity)).toBe(true);
+        expect(Array.isArray(_result.stats.recent_activity)).toBe(true);
         expect(_result.stats.recent_activity.length).toBeGreaterThan(0);
       });
 
@@ -789,7 +789,7 @@ describe('FeatureManagerAPI', () => {
         const quickPromise = Promise.resolve('success');
 
         const _result = await api.withTimeout(quickPromise, 1000);
-        expect(result).toBe('success');
+        expect(_result).toBe('success');
       });
 
       test('should timeout slow operations with custom timeout', async () => {
@@ -1106,8 +1106,8 @@ describe('FeatureManagerAPI', () => {
         const _result = await api.getInitializationStats();
         expect(_result.success).toBe(true);
         expect(_result.stats.today_totals).toBeDefined();
-        expect(typeof result.stats.today_totals.initializations).toBe('number');
-        expect(typeof result.stats.today_totals.reinitializations).toBe(
+        expect(typeof _result.stats.today_totals.initializations).toBe('number');
+        expect(typeof _result.stats.today_totals.reinitializations).toBe(
           'number',
         );
       });

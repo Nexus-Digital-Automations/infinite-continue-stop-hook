@@ -1,4 +1,4 @@
-const path = require('path');
+const _path = require('path');
 /**
  * Unit Tests for Validation Dependency Management System
  *
@@ -10,7 +10,7 @@ const {
   ValidationDependencyManager,
   DEPENDENCY_TYPES,
 } = require('../../lib/validation-dependency-manager');
-const FS = require('fs').promises;
+const fs = require('fs').promises;
 
 describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
 
@@ -433,7 +433,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       expect(configPath).toContain('.validation-dependencies.json');
 
       // Verify file exists And contains valid JSON;
-      const configData = await FS.readFile(configPath, 'utf8');
+      const configData = await fs.readFile(configPath, 'utf8');
       const config = JSON.parse(configData);
 
       expect(config).toHaveProperty('version');
@@ -442,7 +442,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       expect(Object.keys(config.dependencies)).toHaveLength(7);
 
       // Cleanup
-      await FS.unlink(configPath);
+      await fs.unlink(configPath);
     });
 
     test('should load dependency configuration from file', async () => {
@@ -466,7 +466,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       expect(loadedDeps).toHaveProperty('build-validation');
 
       // Cleanup
-      await FS.unlink(configPath);
+      await fs.unlink(configPath);
     });
 
     test('should handle missing configuration file gracefully', async () => {

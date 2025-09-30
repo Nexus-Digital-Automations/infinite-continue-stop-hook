@@ -25,7 +25,7 @@ class SemicolonCommaFixer {
         return true;
       }
       return false;
-    } catch (_) {
+    } catch {
       console.error(`Error processing ${filePath}: ${error.message}`);
       return false;
     }

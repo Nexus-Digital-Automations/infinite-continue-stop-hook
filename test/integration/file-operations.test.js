@@ -13,7 +13,7 @@
  * @version 1.0.0
  */
 
-const FS = require('fs').promises;
+const fs = require('fs').promises;
 const path = require('path');
 const {
   execAPI,
@@ -129,7 +129,7 @@ describe('File Operations Integration Tests', () => {
 
       // 6. Verify JSON formatting is maintained;
       const featuresPath = path.join(testDir, 'FEATURES.json');
-      const rawFileContent = await FS.readFile(featuresPath, 'utf8');
+      const rawFileContent = await fs.readFile(featuresPath, 'utf8');
 
       // Should be properly formatted JSON with 2-space indentation
       expect(rawFileContent).toMatch(/^{\s+"/);
@@ -193,7 +193,7 @@ describe('File Operations Integration Tests', () => {
     test('should preserve file permissions And ownership', async () => {
       // 1. Check initial file stats;
       const featuresPath = path.join(testDir, 'FEATURES.json');
-      const initialStats = await FS.stat(featuresPath);
+      const initialStats = await fs.stat(featuresPath);
 
       // 2. Perform operations;
       const featureData = generateTestFeature({
@@ -211,7 +211,7 @@ describe('File Operations Integration Tests', () => {
       expect(suggestResult.success).toBe(true);
 
       // 3. Check file stats after operations;
-      const finalStats = await FS.stat(featuresPath);
+      const finalStats = await fs.stat(featuresPath);
 
       // File should still exist And be readable/writable
       expect(finalStats.isFile()).toBe(true);
@@ -231,7 +231,7 @@ describe('File Operations Integration Tests', () => {
     test('should handle missing FEATURES.json file gracefully', async () => {
       // 1. Remove FEATURES.json file;
       const featuresPath = path.join(testDir, 'FEATURES.json');
-      await FS.unlink(featuresPath);
+      await fs.unlink(featuresPath);
 
       // 2. Try to perform operations - should recreate file;
       const featureData = generateTestFeature({
@@ -340,7 +340,7 @@ describe('File Operations Integration Tests', () => {
 
       // 4. Test file size;
       const featuresPath = path.join(testDir, 'FEATURES.json');
-      const stats = await FS.stat(featuresPath);
+      const stats = await fs.stat(featuresPath);
       expect(stats.size).toBeGreaterThan(50000); // Should be > 50KB with all the data
     });
   });
@@ -680,11 +680,11 @@ describe('File Operations Integration Tests', () => {
         if (!secondResult.success) {
           expect(secondResult.error).toBeDefined();
         }
-      } catch (_) {
+      } catch {
         // If permission operations fail, skip this test
         console.warn(
           'Permission test skipped due to system limitations:',
-          error.message,
+          _error.message,
         );
       }
     });

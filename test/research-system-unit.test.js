@@ -11,7 +11,7 @@
 
 const path = require('path');
 const { spawn } = require('child_process');
-const FS = require('fs');
+const fs = require('fs');
 
 // Test configuration;
 const TEST_PROJECT_DIR = path.join(
@@ -25,7 +25,7 @@ const TIMEOUT = 10000; // 10 seconds for feature management operations
 /**
  * Execute TaskManager API command for feature management testing
  */
-function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
+function execAPI(command, args = [], timeout = TIMEOUT, _category = 'general') {
   return new Promise((resolve, reject) => {
     const allArgs = [
       API_PATH,
@@ -64,14 +64,14 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
         }
         const _result = JSON.parse(jsonString);
         resolve(result);
-      } catch (_) {
+      } catch {
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch (_) {
+        } catch {
           reject(
             new Error(
-              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${_error.message}`,
+              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse _error: ${__error.message}`,
             ),
           );
         }
@@ -87,9 +87,9 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
 /**
  * Create test environment for feature management testing
  */
-function setupFeatureTestEnvironment(category = 'general') {
-  if (!FS.existsSync(TEST_PROJECT_DIR)) {
-    FS.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
+function setupFeatureTestEnvironment(_category = 'general') {
+  if (!fs.existsSync(TEST_PROJECT_DIR)) {
+    fs.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
   }
 
   // Create FEATURES.json for feature management testing
@@ -103,7 +103,7 @@ function setupFeatureTestEnvironment(category = 'general') {
     },
   };
 
-  FS.writeFileSync(FEATURES_PATH, JSON.stringify(featuresData, null, 2));
+  fs.writeFileSync(FEATURES_PATH, JSON.stringify(featuresData, null, 2));
 
   // Create basic project structure for testing
   const packageData = {
@@ -115,7 +115,7 @@ function setupFeatureTestEnvironment(category = 'general') {
     },
   };
 
-  FS.writeFileSync(
+  fs.writeFileSync(
     path.join(TEST_PROJECT_DIR, 'package.json'),
     JSON.stringify(packageData, null, 2),
   );
@@ -124,9 +124,9 @@ function setupFeatureTestEnvironment(category = 'general') {
 /**
  * Cleanup test environment
  */
-async function cleanupFeatureTestEnvironment(category = 'general', _agentId) {
-  if (FS.existsSync(TEST_PROJECT_DIR)) {
-    FS.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
+async function cleanupFeatureTestEnvironment(_category = 'general', _agentId) {
+  if (fs.existsSync(TEST_PROJECT_DIR)) {
+    fs.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
   }
 }
 
@@ -172,7 +172,7 @@ describe('Feature Management System Unit Tests', () => {
       expect(initResult.success).toBe(true);
     });
 
-    test('should create feature suggestion with enhancement category', async () => {
+    test('should create feature suggestion with enhancement _category', async () => {
       const featureData = {
         title: 'Add dark mode toggle',
         description:
@@ -609,7 +609,7 @@ describe('Feature Management System Unit Tests', () => {
         taskDataList.push({
           title: `Research task ${i + 1}`,
           description: `Description for research task ${i + 1}`,
-          category: 'feature',
+          _category: 'feature',
           priority: 'medium',
         });
       }

@@ -29,23 +29,23 @@ class TargetedUndefinedFixer {
         { encoding: 'utf-8' },
       );
 
-      return result
+      return _result
         .split('\n')
         .filter((f) => f && f.endsWith('.js'))
         .map((f) => path.resolve(f.replace('./', '')));
-    } catch (_) {
+    } catch {
       console.error('Failed to get JS files:', error.message);
       return [];
     }
   }
 
   fixFile(_filePath) {
-    const content = fs.readFileSync(filePath, 'utf8');
+    const content = fs.readFileSync(_filePath, 'utf8');
     const lines = content.split('\n');
     let modified = false;
 
     // Skip files that are our own fixers to avoid recursion
-    if (filePath.includes('fix-') || filePath.includes('fixer')) {
+    if (_filePath.includes('fix-') || filePath.includes('fixer')) {
       return false;
     }
 
@@ -84,9 +84,9 @@ class TargetedUndefinedFixer {
 
         // Determine correct path based on file location;
         let loggerPath = '../lib/logger';
-        if (filePath.includes('/lib/')) {
+        if (_filePath.includes('/lib/')) {
           loggerPath = './logger';
-        } else if (filePath.includes('/test/')) {
+        } else if (_filePath.includes('/test/')) {
           loggerPath = '../lib/logger';
         }
 
@@ -128,7 +128,7 @@ class TargetedUndefinedFixer {
       }
 
       // Fix 3: Convert filePath to __dirname + '/path' where appropriate
-      if (line.includes('filePath') && !line.includes('const filePath')) {
+      if (line.includes('_filePath') && !line.includes('const _filePath')) {
         // Replace filePath with __filename in most cases;
         const updated = line.replace(/\bFILE_PATH\b/g, '__filename');
         if (updated !== line) {
@@ -195,7 +195,7 @@ class TargetedUndefinedFixer {
       ) {
         const updated = line.replace(
           /constructor\s*\(([^)]*)\)/,
-          (match, _params) => {
+          (_match, _params) => {
             const cleanParams = params.trim();
             return cleanParams
               ? `constructor(${cleanParams}, _agentId)`
@@ -215,7 +215,7 @@ class TargetedUndefinedFixer {
     }
 
     if (modified) {
-      fs.writeFileSync(filePath, lines.join('\n'));
+      fs.writeFileSync(_filePath, lines.join('\n'));
       this.filesModified.push(_filePath);
       return true;
     }
@@ -231,7 +231,7 @@ class TargetedUndefinedFixer {
 
     let processedCount = 0;
 
-    for (const filePath of jsFiles) {
+    for (const _filePath of jsFiles) {
       const relativePath = path.relative(process.cwd(), _filePath);
       try {
         if (this.fixFile(_filePath)) {
@@ -244,7 +244,7 @@ class TargetedUndefinedFixer {
             `📊 Processed ${processedCount}/${jsFiles.length} files...`,
           );
         }
-      } catch (_) {
+      } catch {
         console.error(`❌ Error processing ${relativePath}: ${error.message}`);
       }
     }
@@ -278,7 +278,7 @@ class TargetedUndefinedFixer {
     try {
       const _output = execSync('npm run lint 2>&1', { encoding: 'utf-8' });
       console.log('🎉 No linting errors found!');
-    } catch (_) {
+    } catch {
       const _output = lintError.stdout || lintError.message;
       const undefinedMatches = output.match(/is not defined/g);
       const undefinedCount = undefinedMatches ? undefinedMatches.length : 0;
@@ -291,8 +291,8 @@ class TargetedUndefinedFixer {
         const errorMap = {};
 
         lines.forEach((line) => {
-          const match = line.match(/'([^']+)' is not defined/);
-          if (match) {
+          const _match = line.match(/'([^']+)' is not defined/);
+          if (_match) {
             const variable = match[1];
             errorMap[variable] = (errorMap[variable] || 0) + 1;
           }

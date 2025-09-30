@@ -58,7 +58,7 @@ function fixDuplicateFS(_filePath) {
     }
 
     return false;
-  } catch (_) {
+  } catch {
     console.error(`Error fixing ${filePath}:`, _error.message);
     return false;
   }

@@ -13,7 +13,7 @@
 const { spawn } = require('child_process');
 const path = require('path');
 const { loggers } = require('../lib/logger');
-const FS = require('fs').promises;
+const fs = require('fs').promises;
 
 // Test configuration;
 const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
@@ -23,7 +23,7 @@ const TIMEOUT = 30000;
 /**
  * API execution utility
  */
-function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
+function execAPI(command, args = [], timeout = TIMEOUT, _category = 'general') {
   return new Promise((resolve, reject) => {
     const allArgs = [
       API_PATH,
@@ -54,9 +54,9 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
     child.on('close', (code) => {
       if (code === 0) {
         try {
-          const _result = stdout.trim() ? JSON.parse(stdout) : {};
+          const result = stdout.trim() ? JSON.parse(stdout) : {};
           resolve(result);
-        } catch (_) {
+        } catch {
           resolve({ rawOutput: stdout, stderr });
         }
       } else {
@@ -66,7 +66,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
       }
     });
 
-    child.on('error', (error) => {
+    child.on('_error', (error) => {
       reject(error);
     });
   });
@@ -75,7 +75,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
 /**
  * Legacy data simulation utilities
  */
-function createLegacyTemplate(version = '1.0.0', category = 'general') {
+function createLegacyTemplate(version = '1.0.0', _category = 'general') {
   const legacyTemplate = {
     name: 'Legacy Template',
     version,
@@ -108,7 +108,7 @@ function createLegacyTemplate(version = '1.0.0', category = 'general') {
   ]);
 }
 
-async function createLegacyProjectConfig(category = 'general') {
+async function createLegacyProjectConfig(_category = 'general') {
   const legacyConfig = {
     version: '1.0.0',
     appliedTemplate: 'Legacy Template',
@@ -131,7 +131,7 @@ async function createLegacyProjectConfig(category = 'general') {
 
   // Write legacy config file;
   const configPath = path.join(TEST_PROJECT_DIR, '.success-criteria.json');
-  await FS.writeFile(configPath, JSON.stringify(legacyConfig, null, 2));
+  await fs.writeFile(configPath, JSON.stringify(legacyConfig, null, 2));
 
   return configPath;
 }
@@ -139,9 +139,9 @@ async function createLegacyProjectConfig(category = 'general') {
 /**
  * Test project setup utilities
  */
-async function setupRegressionTestProject(category = 'general') {
+async function setupRegressionTestProject(_category = 'general') {
   try {
-    await FS.mkdir(TEST_PROJECT_DIR, { recursive: true });
+    await fs.mkdir(TEST_PROJECT_DIR, { recursive: true });
 
     // Create package.json;
     const packageJson = {
@@ -162,7 +162,7 @@ async function setupRegressionTestProject(category = 'general') {
       },
     };
 
-    await FS.writeFile(
+    await fs.writeFile(
       path.join(TEST_PROJECT_DIR, 'package.json'),
       JSON.stringify(packageJson, null, 2),
     );
@@ -200,7 +200,7 @@ app.start().then(() => {
 });
 `;
 
-    await FS.writeFile(path.join(TEST_PROJECT_DIR, 'index.js'), indexJs);
+    await fs.writeFile(path.join(TEST_PROJECT_DIR, 'index.js'), indexJs);
 
     // Create test file;
     const testJs = `
@@ -219,21 +219,21 @@ describe('Regression Test Suite', () => {
 });
 `;
 
-    await FS.writeFile(path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
+    await fs.writeFile(path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
 
     loggers.stopHook.log('Regression test project setup completed');
-  } catch (_) {
-    loggers.stopHook.error('Failed to setup regression test project:', error);
+  } catch {
+    loggers.stopHook._error('Failed to setup regression test project:', error);
     throw _error;
   }
 }
 
-async function cleanupRegressionTestProject(category = 'general') {
+async function cleanupRegressionTestProject(_category = 'general') {
   try {
-    await FS.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
+    await fs.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     loggers.stopHook.log('Regression test project cleanup completed');
-  } catch (_) {
-    loggers.stopHook.error('Failed to cleanup regression test project:', error);
+  } catch {
+    loggers.stopHook._error('Failed to cleanup regression test project:', error);
   }
 }
 
@@ -278,13 +278,13 @@ describe('Success Criteria Regression Tests', () => {
       );
       expect(LEGACY_BUILD).toBeDefined();
       expect(LEGACY_BUILD.description).toBe('Legacy build requirement');
-      expect(LEGACY_BUILD.category).toBe('build');
+      expect(LEGACY_BUILD._category).toBe('build');
 
       const LEGACY_TEST = status.projectCriteria.find(
         (c) => c.id === 'legacy-test',
       );
       expect(LEGACY_TEST).toBeDefined();
-      expect(LEGACY_TEST.category).toBe('test');
+      expect(LEGACY_TEST._category).toBe('test');
 
       // Validate metadata is preserved or migrated
       expect(status.appliedTemplate).toBeDefined();
@@ -346,7 +346,7 @@ describe('Success Criteria Regression Tests', () => {
       const UPGRADED_CRITERION = status.projectCriteria[0];
       expect(UPGRADED_CRITERION.id).toBeDefined();
       expect(UPGRADED_CRITERION.description).toBeDefined();
-      expect(UPGRADED_CRITERION.category).toBeDefined();
+      expect(UPGRADED_CRITERION._category).toBeDefined();
 
       loggers.app.info(
         'Legacy template upgrade compatibility validated successfully',
@@ -381,11 +381,11 @@ describe('Success Criteria Regression Tests', () => {
 
           const status = await execAPI('success-criteria:status');
           expect(status.projectCriteria.length).toBeGreaterThan(0);
-        } catch (_) {
+        } catch {
           // Log version compatibility issues but don't fail test
           loggers.app.info(
             `API version ${version} compatibility note:`,
-            _error.message,
+            __error.message,
           );
         }
       }
@@ -426,7 +426,7 @@ describe('Success Criteria Regression Tests', () => {
         );
         if (LEGACY_CUSTOM) {
           expect(LEGACY_CUSTOM.description).toBe('Legacy custom criterion');
-          expect(LEGACY_CUSTOM.category).toBe('custom');
+          expect(LEGACY_CUSTOM._category).toBe('custom');
         }
       }
 
@@ -458,7 +458,7 @@ describe('Success Criteria Regression Tests', () => {
         TEST_PROJECT_DIR,
         '.success-criteria-deprecated.json',
       );
-      await FS.writeFile(
+      await fs.writeFile(
         CONFIG_PATH,
         JSON.stringify(DEPRECATED_CONFIG, null, 2),
       );
@@ -534,7 +534,7 @@ describe('Success Criteria Regression Tests', () => {
         TEST_PROJECT_DIR,
         '.success-criteria-extended.json',
       );
-      await FS.writeFile(CONFIG_PATH, JSON.stringify(EXTENDED_CONFIG, null, 2));
+      await fs.writeFile(CONFIG_PATH, JSON.stringify(EXTENDED_CONFIG, null, 2));
 
       // Load extended config;
       const LOAD_RESULT = await execAPI('success-criteria:load-config', [
@@ -593,7 +593,7 @@ describe('Success Criteria Regression Tests', () => {
       };
 
       const OLD_DATA_PATH = path.join(TEST_PROJECT_DIR, 'old-format-data.json');
-      await FS.writeFile(
+      await fs.writeFile(
         OLD_DATA_PATH,
         JSON.stringify(OLD_FORMAT_DATA, null, 2),
       );
@@ -683,10 +683,10 @@ describe('Success Criteria Regression Tests', () => {
           loggers.stopHook.log(
             `Schema ${schema.version} compatibility confirmed`,
           );
-        } catch (_) {
+        } catch {
           loggers.app.info(
             `Schema ${schema.version} evolution note:`,
-            _error.message,
+            __error.message,
           );
         }
       }
@@ -738,7 +738,7 @@ describe('Success Criteria Regression Tests', () => {
       };
 
       const DATA_PATH = path.join(TEST_PROJECT_DIR, 'integrity-test-data.json');
-      await FS.writeFile(DATA_PATH, JSON.stringify(TEST_DATA, null, 2));
+      await fs.writeFile(DATA_PATH, JSON.stringify(TEST_DATA, null, 2));
 
       // Migrate And validate integrity;
       const MIGRATION_RESULT = await execAPI('success-criteria:migrate-data', [
@@ -822,7 +822,7 @@ describe('Success Criteria Regression Tests', () => {
         (r) => r.criterionId === 'legacy-shell-validation',
       );
       expect(SHELL_RESULT).toBeDefined();
-      expect(['passed', 'failed', 'error']).toContain(SHELL_RESULT.status);
+      expect(['passed', 'failed', '_error']).toContain(SHELL_RESULT.status);
 
       // Check legacy file validation result;
       const FILE_RESULT = VALIDATION_RESULT.results.find(
@@ -847,7 +847,7 @@ describe('Success Criteria Regression Tests', () => {
       // Use for-await-of to maintain sequential processing for deprecated endpoint testing
       for await (const endpoint of DEPRECATED_ENDPOINTS) {
         try {
-          const _result = await execAPI(endpoint);
+          const result = await execAPI(endpoint);
 
           // Should work but may include deprecation warnings
           expect(result).toBeDefined();
@@ -858,11 +858,11 @@ describe('Success Criteria Regression Tests', () => {
               result.warning || 'Endpoint is deprecated',
             );
           }
-        } catch (_) {
+        } catch {
           // Some deprecated endpoints might be completely removed
           loggers.app.info(
             `Deprecated endpoint ${endpoint} is no longer available:`,
-            _error.message,
+            __error.message,
           );
         }
       }
@@ -919,7 +919,7 @@ describe('Success Criteria Regression Tests', () => {
         expect(MODERN_RESULT.reason).toContain('not supported in legacy mode');
       } else {
         // Should work with basic functionality
-        expect(['passed', 'failed', 'error']).toContain(MODERN_RESULT.status);
+        expect(['passed', 'failed', '_error']).toContain(MODERN_RESULT.status);
       }
 
       if (LEGACY_RESULT.degradationWarnings) {
@@ -977,10 +977,10 @@ describe('Success Criteria Regression Tests', () => {
           loggers.app.info(
             `Template version ${template.version} compatibility confirmed`,
           );
-        } catch (_) {
+        } catch {
           loggers.app.info(
             `Template version ${template.version} compatibility issue:`,
-            _error.message,
+            __error.message,
           );
         }
       }
@@ -1133,23 +1133,23 @@ describe('Success Criteria Regression Tests', () => {
           // Safe: Test comparison, not security-sensitive
           // eslint-disable-next-line security/detect-possible-timing-attacks
           if (api === 'success-criteria:init') {
-            const _result = await execAPI(api);
+            const result = await execAPI(api);
             expect(result).toBeDefined();
 
             // Safe: Test comparison, not security-sensitive
             // eslint-disable-next-line security/detect-possible-timing-attacks
           } else if (api === 'success-criteria:status') {
-            const _result = await execAPI(api);
+            const result = await execAPI(api);
             expect(result).toBeDefined();
             // Status should always have certain fields
             expect(_result.projectCriteria !== undefined).toBe(true);
           }
 
           loggers.stopHook.log(`API contract for ${api} is stable`);
-        } catch (_) {
+        } catch {
           loggers.stopHook.log(
             `API contract issue for ${api}:`,
-            _error.message,
+            __error.message,
           );
         }
       }
@@ -1187,7 +1187,7 @@ describe('Success Criteria Regression Tests', () => {
       }, {
         name: 'Basic Validation',
         test: async () => {
-          const _result = await execAPI('success-criteria:validate');
+          const result = await execAPI('success-criteria:validate');
           return result.results !== undefined;
         },
       }, {
@@ -1218,10 +1218,10 @@ describe('Success Criteria Regression Tests', () => {
           loggers.stopHook.log(
             `Essential function '${func.name}' is preserved`,
           );
-        } catch (_) {
+        } catch {
           loggers.app._error(
             `Essential function '${func.name}' failed:`,
-            _error.message,
+            __error.message,
           );
           throw _error; // Essential functions must pass
         }
@@ -1247,7 +1247,7 @@ describe('Success Criteria Regression Tests', () => {
             criteria: Array.from({ length: 50 }, (_, i) => ({
               id: `perf-${i}`,
               description: `Performance test criterion ${i}`,
-              category: 'performance',
+              _category: 'performance',
             })),
           };
 
@@ -1274,7 +1274,7 @@ describe('Success Criteria Regression Tests', () => {
 
       // Use for-await-of to maintain sequential processing for performance testing
       for await (const test of PERFORMANCE_TESTS) {
-        const _result = await test.test();
+        const result = await test.test();
         expect(_result.duration).toBeLessThan(result.threshold);
 
         loggers.app.info(

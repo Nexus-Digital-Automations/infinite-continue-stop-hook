@@ -1,4 +1,4 @@
-const FS = require('fs');
+const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
@@ -14,23 +14,23 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
   beforeEach(() => {
     // Create mock directory if it doesn't exist
-    if (!FS.existsSync(mockProjectRoot)) {
-      FS.mkdirSync(mockProjectRoot, { recursive: true });
+    if (!fs.existsSync(mockProjectRoot)) {
+      fs.mkdirSync(mockProjectRoot, { recursive: true });
     }
 
     // Clean up previous test data
-    if (FS.existsSync(mockMetricsFile)) {
-      FS.unlinkSync(mockMetricsFile);
+    if (fs.existsSync(mockMetricsFile)) {
+      fs.unlinkSync(mockMetricsFile);
     }
   });
 
   afterEach(() => {
     // Clean up test directory
-    if (FS.existsSync(mockMetricsFile)) {
-      FS.unlinkSync(mockMetricsFile);
+    if (fs.existsSync(mockMetricsFile)) {
+      fs.unlinkSync(mockMetricsFile);
     }
-    if (FS.existsSync(mockProjectRoot)) {
-      FS.rmSync(mockProjectRoot, { recursive: true, force: true });
+    if (fs.existsSync(mockProjectRoot)) {
+      fs.rmSync(mockProjectRoot, { recursive: true, force: true });
     }
   });
 
@@ -92,7 +92,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       },
     };
 
-    FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
+    fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
     return mockMetrics;
   }
 
@@ -107,13 +107,13 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
         ...options,
       });
 
-      return JSON.parse(result.trim());
-    } catch (_) {
-      if (error.stdout) {
+      return JSON.parse(_result.trim());
+    } catch {
+      if (_error.stdout) {
         try {
-          return JSON.parse(error.stdout.trim());
-        } catch (_) {
-          return { success: false, error: error.message, stdout: error.stdout };
+          return JSON.parse(_error.stdout.trim());
+        } catch {
+          return { success: false, _error: _error.message, stdout: error.stdout };
         }
       }
       return { success: false, error: error.message };
@@ -254,7 +254,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       expect(_result.thresholds.slowThreshold).toBe(2000);
       expect(_result.thresholds.criticalThreshold).toBe(6000);
 
-      const criticalBottlenecks = result.bottlenecks.filter(
+      const criticalBottlenecks = _result.bottlenecks.filter(
         (b) => b.severity === 'critical',
       );
       expect(criticalBottlenecks).toHaveLength(2); // build and test > 6000ms
@@ -270,12 +270,12 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       expect(_result.success).toBe(true);
       expect(_result.recommendations).toBeDefined();
 
-      const buildRecommendation = result.recommendations.find(
+      const buildRecommendation = _result.recommendations.find(
         (r) => r.includes('build') && r.includes('incremental builds'),
       );
       expect(buildRecommendation).toBeDefined();
 
-      const testRecommendation = result.recommendations.find(
+      const testRecommendation = _result.recommendations.find(
         (r) => r.includes('test') && r.includes('parallel execution'),
       );
       expect(testRecommendation).toBeDefined();
@@ -325,7 +325,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       expect(_result.success).toBe(true);
       expect(_result.insights).toBeDefined();
-      expect(Array.isArray(result.insights)).toBe(true);
+      expect(Array.isArray(_result.insights)).toBe(true);
     });
   });
 
@@ -354,7 +354,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       expect(_result.report.criteriaBreakdown).toBeDefined();
       expect(_result.report.criteriaBreakdown).toHaveLength(5);
 
-      const buildCriteria = result.report.criteriaBreakdown.find(
+      const buildCriteria = _result.report.criteriaBreakdown.find(
         (c) => c.criterion === 'build-validation',
       );
       expect(buildCriteria).toBeDefined();
@@ -384,9 +384,9 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       expect(_result.success).toBe(true);
       expect(_result.report.performanceDistribution).toBeDefined();
-      expect(Array.isArray(result.report.performanceDistribution)).toBe(true);
+      expect(Array.isArray(_result.report.performanceDistribution)).toBe(true);
 
-      const distribution = result.report.performanceDistribution;
+      const distribution = _result.report.performanceDistribution;
       const totalCount = distribution.reduce(
         (sum, range) => sum + range.count,
         0,
@@ -430,7 +430,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       expect(_result.success).toBe(true);
       expect(_result.resourceAnalysis.recommendations).toBeDefined();
-      expect(Array.isArray(result.resourceAnalysis.recommendations)).toBe(true);
+      expect(Array.isArray(_result.resourceAnalysis.recommendations)).toBe(true);
     });
 
     test('should support different analysis types', () => {
@@ -481,12 +481,12 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       expect(_result.success).toBe(true);
 
-      const buildBenchmark = result.benchmarks.by_criterion.find(
+      const buildBenchmark = _result.benchmarks.by_criterion.find(
         (c) => c.criterion === 'build-validation',
       );
       expect(buildBenchmark).toBeDefined();
       expect(buildBenchmark.meets_target).toBe(true); // 15000ms < 30000ms target;
-      const testBenchmark = result.benchmarks.by_criterion.find(
+      const testBenchmark = _result.benchmarks.by_criterion.find(
         (c) => c.criterion === 'test-validation',
       );
       expect(testBenchmark).toBeDefined();
@@ -500,11 +500,11 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       expect(_result.success).toBe(true);
       expect(_result.recommendations).toBeDefined();
-      expect(Array.isArray(result.recommendations)).toBe(true);
+      expect(Array.isArray(_result.recommendations)).toBe(true);
 
       // Should have recommendations for criteria that don't meet targets
-      if (result.recommendations.length > 0) {
-        const recommendation = result.recommendations[0];
+      if (_result.recommendations.length > 0) {
+        const recommendation = _result.recommendations[0];
         expect(recommendation.criterion).toBeDefined();
         expect(recommendation.current).toBeDefined();
         expect(recommendation.target).toBeDefined();
@@ -541,7 +541,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
     test('should handle corrupted metrics file', () => {
       // Create corrupted metrics file
-      FS.writeFileSync(mockMetricsFile, 'invalid json content');
+      fs.writeFileSync(mockMetricsFile, 'invalid json content');
 
       const _result = executeTaskManagerCommand(
         'get-validation-performance-metrics',

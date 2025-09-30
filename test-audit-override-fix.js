@@ -4,7 +4,7 @@
  * when using the allowOutOfOrder: true option.
  */
 
-const FS = require('./lib/taskManager');
+const _FS = require('./lib/taskManager');
 
 /**
  * Test logger to replace console statements
@@ -19,7 +19,7 @@ class TestLogger {
   }
 }
 
-async function testAuditOverrideFix(category = 'general') {
+async function testAuditOverrideFix(_category = 'general') {
   TestLogger.log('🧪 Testing audit task override fix...');
 
   const tm = new TASK_MANAGER('./TODO.json');
@@ -32,7 +32,7 @@ async function testAuditOverrideFix(category = 'general') {
     const featureResult = await tm.createTask({
       title: 'Test Feature Task',
       description: 'A simple test feature',
-      category: 'feature',
+      _category: 'feature',
     });
 
     if (!featureResult.success) {
@@ -49,7 +49,7 @@ async function testAuditOverrideFix(category = 'general') {
     const auditResult = await tm.createTask({
       title: 'AUDIT: Test Feature Task',
       description: 'Audit the test feature task',
-      category: 'audit',
+      _category: 'audit',
       original_implementer: AGENT_ID,
     });
 
@@ -111,7 +111,7 @@ async function testAuditOverrideFix(category = 'general') {
       '🎉 All tests passed! The audit task override bug is fixed.',
     );
     return true;
-  } catch (_) {
+  } catch {
     TestLogger.error('❌ Test failed with error: ' + _error.message);
     return false;
   }

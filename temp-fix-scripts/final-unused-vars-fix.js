@@ -11,12 +11,14 @@ const additionalPatterns = [
   {
     search: /^(\s*)const PATH = require\('path'\);/gm,
     replace: "$1const path = require('path');",
-  }, {
+  },
+  {
     search: /^(\s*)const path = require\('path'\);/gm,
     replace: "$1const path = require('path');",
-},
+  },
 
-  // execSync patterns {
+  // execSync patterns
+  {
     search: /const EXEC_SYNC = require/g,
     replace: 'const EXEC_SYNC = require',
 },
@@ -35,7 +37,8 @@ const additionalPatterns = [
     replace: function (match, _params, ___filename) {
       return match.replace(/\b_filePath\b/g, '__filename');
     },
-}, {
+},
+      {
     search: /\(([^)]*\b_filePath\b[^)]*)\) =>/g,
     replace: function (match, _params, ___filename) {
       return match.replace(/\b_filePath\b/g, '__filename');
@@ -63,14 +66,14 @@ function getAllJSFiles(dir) {
     } else if (item.endsWith('.js') && !item.startsWith('.')) {
       files.push(fullPath);
     }
-}
+  }
 
   return files;
-}
+  }
 
 function fixFileUnusedVars(_filePath) {
   try {
-    let content = fs.readFileSync(filePath, 'utf8');
+    let content = fs.readFileSync(_filePath, 'utf8');
     let modified = false;
 
     for (const pattern of additionalPatterns) {
@@ -103,8 +106,8 @@ function fixFileUnusedVars(_filePath) {
     }
 
     return false;
-} catch (_error) {
-    console.error(`  ✗ Error processing ${ filePath: _filePath }:`, error.message);
+    } catch (_error) {
+    console.error(`  ✗ Error processing ${_filePath}:`, error.message);
     return false;
 }
 }
@@ -124,7 +127,7 @@ function main() {
       console.log(`Processing: ${relativePath} - MODIFIED`);
       totalModified++;
     }
-}
+  }
 
   console.log(`\n🎉 Processing complete!`);
   console.log(`   Modified files: ${totalModified}`);
@@ -133,27 +136,27 @@ function main() {
   // Run linter to check results
   console.log('\n🔍 Running linter to verify fixes...');
   try {
-    execSync('npm run lint', { stdio: 'pipe' });
+    __execSync('npm run lint', { stdio: 'pipe' });
     console.log('✅ All linting errors resolved!');
 } catch (_error) {
     console.log(
       '⚠️  Some linting errors may remain. Running detailed check...'
     );
     try {
-      const _output = execSync(
+      const _output = _execSync(
         'npm run lint 2>&1 | grep "no-unused-vars" | head -10',
         { encoding: 'utf8' }
       );
-      if (output.trim()) {
+      if (_output.trim()) {
         console.log('Remaining no-unused-vars errors:');
-        console.log(output);
+        console.log(_output);
       } else {
         console.log('✅ All no-unused-vars errors resolved!');
       }
     } catch (_error) {
       console.log('✅ All no-unused-vars errors resolved!');
     }
-}
+  }
 }
 
 if (require.main === module) {

@@ -5,7 +5,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync: _execSync } = require('child_process');
+const { execSync } = require('child_process');
 
 console.log('🔧 Critical Formatting Fix Script\n');
 
@@ -32,7 +32,7 @@ jsFiles.forEach((_filePath) => {
     // Replace unused variables with underscore prefix
     content = content.replace(
       /\bcatch\s*\(\s*([a-zA-Z_$][a-zA-Z0-9_$]*)\s*\)/g,
-      'catch (_error)',
+      'catch (_)',
     );
 
     // Fix 2: Fix undefined _error variables in catch blocks
@@ -45,7 +45,7 @@ jsFiles.forEach((_filePath) => {
 
     // Fix 3: Fix basic indentation issues (convert tabs to spaces, fix common indentation)
     const lines = content.split('\n');
-    const fixedLines = lines.map((line, index) => {
+    const fixedLines = lines.map((line, _index) => {
       // Convert tabs to 2 spaces
       let fixedLine = line.replace(/\t/g, '  ');
 
@@ -102,7 +102,7 @@ jsFiles.forEach((_filePath) => {
       totalFixes += fixes;
       console.log(`✓ Fixed ${path.basename(_filePath)} (${fixes} changes)`);
     }
-  } catch (_error) {
+  } catch {
     console.error(
       `❌ Error processing ${path.basename(_filePath)}: ${error.message}`,
     );
@@ -126,7 +126,7 @@ try {
       console.log('🎯 Progress: Continue fixing remaining issues...');
     }
   }
-} catch (_error) {
+} catch {
   console.log('📊 ESLint check completed');
 }
 

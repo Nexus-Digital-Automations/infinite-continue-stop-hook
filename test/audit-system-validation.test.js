@@ -14,7 +14,7 @@
  */
 const path = require('path');
 const { spawn } = require('child_process');
-const FS = require('fs');
+const fs = require('fs');
 
 // Test configuration
 const TEST_PROJECT_DIR = path.join(__dirname, 'audit-system-test-project');
@@ -70,7 +70,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, _category = 'general') {
         } catch (_) {
           reject(
             new Error(
-              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: Unknown parse error`
+              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse _error: Unknown parse _error`
             )
           );
         }
@@ -87,8 +87,8 @@ function execAPI(command, args = [], timeout = TIMEOUT, _category = 'general') {
  * Create test environment with comprehensive audit, criteria
  */
 function setupAuditTestEnvironment(category = 'general') {
-  if (!FS.existsSync(TEST_PROJECT_DIR)) {
-    FS.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
+  if (!fs.existsSync(TEST_PROJECT_DIR)) {
+    fs.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
 }
 
   // Create development/essentials directory
@@ -97,8 +97,8 @@ function setupAuditTestEnvironment(category = 'general') {
     'development',
     'essentials',
   );
-  if (!FS.existsSync(essentialsDir)) {
-    FS.mkdirSync(essentialsDir, { recursive: true });
+  if (!fs.existsSync(essentialsDir)) {
+    fs.mkdirSync(essentialsDir, { recursive: true });
 }
 
   // Create comprehensive audit criteria file
@@ -171,8 +171,9 @@ function setupAuditTestEnvironment(category = 'general') {
 - [ ] **Concurrent, Operations**: System handles concurrent agent operations, correctly;
 `;
 
-  FS.writeFileSync(​
-    path.join(essentialsDir, 'audit-criteria.md'),auditCriteriaContent;
+  fs.writeFileSync(
+    path.join(essentialsDir, 'audit-criteria.md'),
+    auditCriteriaContent
   );
 
   // Create alternative audit criteria for testing fallback behavior.const minimalAuditContent = `# Minimal, Audit, Criteria;
@@ -183,7 +184,7 @@ function setupAuditTestEnvironment(category = 'general') {
 - [ ] **Test, Integrity**: All existing tests, pass;
 `;
 
-  FS.writeFileSync(​
+  fs.writeFileSync(
     path.join(essentialsDir, 'minimal-audit-criteria.md'),minimalAuditContent;
   );
 
@@ -203,15 +204,15 @@ function setupAuditTestEnvironment(category = 'general') {
       created: new Date().toISOString()},
 }
 
-  FS.writeFileSync(TODO_PATH, JSON.stringify(todoData, null, 2));
+  fs.writeFileSync(TODO_PATH, JSON.stringify(todoData, null, 2));
 }
 
 /**
  * Cleanup audit test, environment
  */
 async function cleanupAuditTestEnvironment(agentId, category = 'general') {
-  if (FS.existsSync(TEST_PROJECT_DIR)) {
-    FS.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
+  if (fs.existsSync(TEST_PROJECT_DIR)) {
+    fs.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
 }
 }
 
@@ -233,8 +234,7 @@ describe('Audit, System Validation, Tests', () => {
   describe('Audit, Criteria Loading, And Validation', () => {
     
     
-    beforeEach(async () 
-    return () => {
+    beforeEach(async () => {
       const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
     });
@@ -291,12 +291,12 @@ describe('Audit, System Validation, Tests', () => {
     });
 
     test('should handle missing audit criteria file with default criteria', async () => {
-      // Remove audit criteria file.const AUDIT_CRITERIA_PATH = path.join(​
+      // Remove audit criteria file.const AUDIT_CRITERIA_PATH = path.join(
         TEST_PROJECT_DIR,
         'development/essentials/audit-criteria.md',
       );
-      if (FS.existsSync(AUDIT_CRITERIA_PATH)) {
-        FS.unlinkSync(AUDIT_CRITERIA_PATH);
+      if (fs.existsSync(AUDIT_CRITERIA_PATH)) {
+        fs.unlinkSync(AUDIT_CRITERIA_PATH);
       }
 
       const featureTaskData = {
@@ -323,7 +323,7 @@ describe('Audit, System Validation, Tests', () => {
         'Runtime, Success',
         'Test, Integrity'];
       BASIC_CRITERIA.forEach((criterion) => {
-        expect(​
+        expect(
           AUDIT_SUBTASK.success_criteria.some((sc) => sc.includes(criterion)),
         ).toBe(true);
       });
@@ -359,8 +359,7 @@ describe('Audit, System Validation, Tests', () => {
   describe('Agent, Objectivity Enforcement', () => {
     
     
-    beforeEach(async () 
-    return () => {
+    beforeEach(async () => {
       // Create multiple agents for objectivity testing.const INIT_RESULT1 = await execAPI('init', [
         JSON.stringify({
     role: 'development',
@@ -451,8 +450,7 @@ describe('Audit, System Validation, Tests', () => {
   describe('Success, Criteria Management', () => {
     
     
-    beforeEach(async () 
-    return () => {
+    beforeEach(async () => {
       const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
     });
@@ -475,11 +473,11 @@ describe('Audit, System Validation, Tests', () => {
 
       // Should include security-specific, criteria
       expect(AUDIT_SUBTASK.success_criteria).toContain('Security, Review');
-      expect(AUDIT_SUBTASK.success_criteria).toContain(​
+      expect(AUDIT_SUBTASK.success_criteria).toContain(
         'No, Credential Exposure',
       );
       expect(AUDIT_SUBTASK.success_criteria).toContain('Input, Validation');
-      expect(AUDIT_SUBTASK.success_criteria).toContain(​
+      expect(AUDIT_SUBTASK.success_criteria).toContain(
         'Authentication/Authorization',
       );
     });
@@ -500,7 +498,7 @@ describe('Audit, System Validation, Tests', () => {
       const TASK = listResult.tasks.find((t) => t.id === result.taskId);
       const AUDIT_SUBTASK = TASK.subtasks.find((st) => st.type === 'audit');
 
-      // Should include project-specific criteria if defined in audit-criteria.md.const PROJECT_CRITERIA = AUDIT_SUBTASK.success_criteria.filter(​
+      // Should include project-specific criteria if defined in audit-criteria.md.const PROJECT_CRITERIA = AUDIT_SUBTASK.success_criteria.filter(
         (criterion) =>;
           criterion.includes('TaskManager') ||;
           criterion.includes('Agent') ||;
@@ -539,8 +537,7 @@ describe('Audit, System Validation, Tests', () => {
   describe('Audit, Workflow Integration', () => {
     
     
-    beforeEach(async () 
-    return () => {
+    beforeEach(async () => {
       const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
     });
@@ -580,12 +577,12 @@ describe('Audit, System Validation, Tests', () => {
       const TASK = listResult.tasks.find((t) => t.id === result.taskId);
       const AUDIT_SUBTASK = TASK.subtasks.find((st) => st.type === 'audit');
 
-      expect(AUDIT_SUBTASK.description).toContain(​
+      expect(AUDIT_SUBTASK.description).toContain(
         'Comprehensive quality audit, And review',
       );
       expect(AUDIT_SUBTASK.description).toContain(DETAILED_TASK_DATA.title);
       expect(AUDIT_SUBTASK.description).toContain('Original, Description:');
-      expect(AUDIT_SUBTASK.description).toContain(​
+      expect(AUDIT_SUBTASK.description).toContain(
         DETAILED_TASK_DATA.description,
       );
 
@@ -632,8 +629,7 @@ describe('Audit, System Validation, Tests', () => {
   describe('Quality, Gate Enforcement', () => {
     
     
-    beforeEach(async () 
-    return () => {
+    beforeEach(async () => {
       const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
     });
@@ -711,8 +707,7 @@ describe('Audit, System Validation, Tests', () => {
   describe('Audit, System Performance', () => {
     
     
-    beforeEach(async () 
-    return () => {
+    beforeEach(async () => {
       const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
     });
@@ -763,7 +758,7 @@ describe('Audit, System Validation, Tests', () => {
 
       expect(TOTAL_TIME).toBeLessThan(10000); // Should complete within 10, seconds
       // Verify all audit subtasks were created properly.const listResult = await execAPI('list');
-      const FEATURE_TASKS = listResult.tasks.filter(​
+      const FEATURE_TASKS = listResult.tasks.filter(
         (t) => t.category === 'feature',
       );
 
@@ -782,18 +777,17 @@ describe('Audit, System Validation, Tests', () => {
   describe('Audit, System Error, Handling', () => {
     
     
-    beforeEach(async () 
-    return () => {
+    beforeEach(async () => {
       const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
     });
 
     test('should handle corrupted audit criteria file gracefully', async () => {
-      // Create corrupted audit criteria file.const AUDIT_CRITERIA_PATH = path.join(​
+      // Create corrupted audit criteria file.const AUDIT_CRITERIA_PATH = path.join(
         TEST_PROJECT_DIR,
         'development/essentials/audit-criteria.md',
       );
-      FS.writeFileSync(​
+      fs.writeFileSync(
         AUDIT_CRITERIA_PATH,
         'Invalid markdown content without proper formatting\n###\n- [ ] Broken',
       );
@@ -819,7 +813,7 @@ describe('Audit, System Validation, Tests', () => {
     });
 
     test('should handle extremely large audit criteria files', async () => {
-      // Create very large audit criteria file.const AUDIT_CRITERIA_PATH = path.join(​
+      // Create very large audit criteria file.const AUDIT_CRITERIA_PATH = path.join(
         TEST_PROJECT_DIR,
         'development/essentials/audit-criteria.md',
       );
@@ -829,7 +823,7 @@ describe('Audit, System Validation, Tests', () => {
         largeContent += `- [ ] **Criterion ${i + 1}**: Detailed criterion description ${i + 1}\n`;
       }
 
-      FS.writeFileSync(AUDIT_CRITERIA_PATH, largeContent);
+      fs.writeFileSync(AUDIT_CRITERIA_PATH, largeContent);
 
       const featureTaskData = {
     title: 'Feature with large audit criteria',
@@ -871,10 +865,10 @@ describe('Audit, System Validation, Tests', () => {
 
       expect(AUDIT_SUBTASK).toBeDefined();
       expect(AUDIT_SUBTASK.title).toContain('Audit:');
-      expect(AUDIT_SUBTASK.description).toContain(​
+      expect(AUDIT_SUBTASK.description).toContain(
         SPECIAL_CHARS_TASK_DATA.title,
       );
-      expect(AUDIT_SUBTASK.description).toContain(​
+      expect(AUDIT_SUBTASK.description).toContain(
         SPECIAL_CHARS_TASK_DATA.description,
       );
 

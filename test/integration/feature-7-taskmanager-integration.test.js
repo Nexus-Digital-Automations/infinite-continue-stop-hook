@@ -1,4 +1,5 @@
-const FS = require('fs');
+const fs = require('fs');
+const fsPromises = require('fs').promises;
 const path = require('path');
 
 // Integration tests for Feature 7: Custom Validation Rules with TaskManager API
@@ -8,14 +9,14 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
   const mockConfigPath = path.join(mockProjectRoot, '.claude-validation.json');
 
   beforeEach(() => {
-    if (!FS.existsSync(mockProjectRoot)) {
-      FS.mkdirSync(mockProjectRoot, { recursive: true });
+    if (!fs.existsSync(mockProjectRoot)) {
+      fs.mkdirSync(mockProjectRoot, { recursive: true });
     }
   });
 
   afterEach(() => {
-    if (FS.existsSync(mockConfigPath)) {
-      FS.unlinkSync(mockConfigPath);
+    if (fs.existsSync(mockConfigPath)) {
+      fs.unlinkSync(mockConfigPath);
     }
   });
 
@@ -34,12 +35,12 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         ],
       };
 
-      FS.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
+      fs.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
 
       // Mock TaskManager _loadCustomValidationRules method;
       const mockTaskManager = {
         _fileExists(filePath) {
-          return FS.existsSync(filePath);
+          return fs.existsSync(filePath);
         },
 
         async _loadCustomValidationRules() {
@@ -66,7 +67,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 );
               }
             }
-          } catch (_) {
+          } catch {
             // Silently fail for missing or invalid custom rules
           }
 
@@ -84,7 +85,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
     test('should return empty array for missing config file', async () => {
       const mockTaskManager = {
         _fileExists(filePath) {
-          return FS.existsSync(filePath);
+          return fs.existsSync(filePath);
         },
 
         async _loadCustomValidationRules() {
@@ -110,7 +111,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 );
               }
             }
-          } catch (_) {
+          } catch {
             // Silently fail for missing or invalid custom rules
           }
 
@@ -142,12 +143,12 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         ],
       };
 
-      FS.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
+      fs.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
 
       // Mock TaskManager validation method;
       const mockTaskManager = {
         _fileExists(filePath) {
-          return FS.existsSync(filePath);
+          return fs.existsSync(filePath);
         },
 
         async _loadCustomValidationRules() {
@@ -173,7 +174,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 );
               }
             }
-          } catch (_) {
+          } catch {
             // Silently fail
           }
 
@@ -200,7 +201,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 if (customRule) {
                   try {
                     const timeout = customRule.timeout || 60000;
-                    const RESULT = execSync(customRule.command, {
+                    const _RESULT = execSync(customRule.command, {
                       cwd: mockProjectRoot,
                       timeout,
                       encoding: 'utf8',
@@ -214,7 +215,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                       if (outputContains && !result.includes(outputContains)) {
                         return {
                           success: false,
-                          error: `Custom validation '${customRule.name}' failed: expected output not found`,
+                          _error: `Custom validation '${customRule.name}' failed: expected output not found`,
                         };
                       }
 
@@ -233,10 +234,10 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                       success: true,
                       details: `Custom validation '${customRule.name}' passed: ${customRule.description || 'No description'}`,
                     };
-                  } catch (_) {
+                  } catch {
                     return {
                       success: false,
-                      error: `Custom validation '${customRule.name}' failed: ${error.message}`,
+                      _error: `Custom validation '${customRule.name}' failed: ${_error.message}`,
                     };
                   }
                 }
@@ -247,8 +248,8 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 };
               }
             }
-          } catch (_) {
-            return { success: false, error: error.message };
+          } catch {
+            return { success: false, _error: _error.message };
           }
         },
       };
@@ -292,8 +293,8 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 };
               }
             }
-          } catch (_) {
-            return { success: false, error: error.message };
+          } catch {
+            return { success: false, _error: _error.message };
           }
         },
       };
@@ -321,11 +322,11 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         ],
       };
 
-      FS.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
+      fs.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
 
       const mockTaskManager = {
         _fileExists(filePath) {
-          return FS.existsSync(filePath);
+          return fs.existsSync(filePath);
         },
 
         async _loadCustomValidationRules() {
@@ -351,7 +352,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 );
               }
             }
-          } catch (_) {
+          } catch {
             // Silently fail
           }
 
@@ -370,7 +371,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
             if (customRule) {
               try {
                 const timeout = customRule.timeout || 60000;
-                const RESULT = execSync(customRule.command, {
+                const _RESULT = execSync(customRule.command, {
                   cwd: mockProjectRoot,
                   timeout,
                   encoding: 'utf8',
@@ -380,10 +381,10 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                   success: true,
                   details: `Custom validation '${customRule.name}' passed`,
                 };
-              } catch (_) {
+              } catch {
                 return {
                   success: false,
-                  error: `Custom validation '${customRule.name}' failed: ${error.message}`,
+                  _error: `Custom validation '${customRule.name}' failed: ${_error.message}`,
                 };
               }
             }
@@ -392,8 +393,8 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
               success: false,
               error: `Unknown validation criterion: ${criterion}`,
             };
-          } catch (_) {
-            return { success: false, error: error.message };
+          } catch {
+            return { success: false, _error: _error.message };
           }
         },
       };
@@ -427,11 +428,11 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         ],
       };
 
-      FS.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
+      fs.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
 
       const mockTaskManager = {
         _fileExists(filePath) {
-          return FS.existsSync(filePath);
+          return fs.existsSync(filePath);
         },
 
         async _loadCustomValidationRules() {
@@ -457,7 +458,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 );
               }
             }
-          } catch (_) {
+          } catch {
             // Silently fail
           }
 
@@ -484,7 +485,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                   });
                 }
 
-                const RESULT = execSync(customRule.command, {
+                const _RESULT = execSync(customRule.command, {
                   cwd: mockProjectRoot,
                   timeout,
                   encoding: 'utf8',
@@ -498,7 +499,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                   if (outputContains && !result.includes(outputContains)) {
                     return {
                       success: false,
-                      error: `Custom validation '${customRule.name}' failed: expected output not found`,
+                      _error: `Custom validation '${customRule.name}' failed: expected output not found`,
                     };
                   }
 
@@ -514,10 +515,10 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                   success: true,
                   details: `Custom validation '${customRule.name}' passed: ${customRule.description || 'No description'}`,
                 };
-              } catch (_) {
+              } catch {
                 return {
                   success: false,
-                  error: `Custom validation '${customRule.name}' failed: ${error.message}`,
+                  _error: `Custom validation '${customRule.name}' failed: ${_error.message}`,
                 };
               }
             }
@@ -526,8 +527,8 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
               success: false,
               error: `Unknown validation criterion: ${criterion}`,
             };
-          } catch (_) {
-            return { success: false, error: error.message };
+          } catch {
+            return { success: false, _error: _error.message };
           }
         },
       };
@@ -557,11 +558,11 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         ],
       };
 
-      FS.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
+      fs.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
 
       const mockTaskManager = {
         _fileExists(filePath) {
-          return FS.existsSync(filePath);
+          return fs.existsSync(filePath);
         },
 
         async _loadCustomValidationRules() {
@@ -587,7 +588,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 );
               }
             }
-          } catch (_) {
+          } catch {
             // Silently fail
           }
 
@@ -606,7 +607,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
             if (customRule) {
               try {
                 const timeout = customRule.timeout || 60000;
-                const RESULT = execSync(customRule.command, {
+                const _RESULT = execSync(customRule.command, {
                   cwd: mockProjectRoot,
                   timeout,
                   encoding: 'utf8',
@@ -620,7 +621,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                   if (exitCode !== undefined && exitCode !== 0) {
                     return {
                       success: false,
-                      error: `Custom validation '${customRule.name}' failed: non-zero exit code`,
+                      _error: `Custom validation '${customRule.name}' failed: non-zero exit code`,
                     };
                   }
 
@@ -643,10 +644,10 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                   success: true,
                   details: `Custom validation '${customRule.name}' passed: ${customRule.description || 'No description'}`,
                 };
-              } catch (_) {
+              } catch {
                 return {
                   success: false,
-                  error: `Custom validation '${customRule.name}' failed: ${error.message}`,
+                  _error: `Custom validation '${customRule.name}' failed: ${_error.message}`,
                 };
               }
             }
@@ -655,8 +656,8 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
               success: false,
               error: `Unknown validation criterion: ${criterion}`,
             };
-          } catch (_) {
-            return { success: false, error: error.message };
+          } catch {
+            return { success: false, _error: _error.message };
           }
         },
       };
@@ -686,11 +687,11 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         ],
       };
 
-      FS.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
+      fs.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
 
       const mockTaskManager = {
         _fileExists(filePath) {
-          return FS.existsSync(filePath);
+          return fs.existsSync(filePath);
         },
 
         async _loadCustomValidationRules() {
@@ -716,7 +717,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 );
               }
             }
-          } catch (_) {
+          } catch {
             // Silently fail
           }
 
@@ -735,7 +736,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
             if (customRule) {
               try {
                 const timeout = customRule.timeout || 60000;
-                const RESULT = execSync(customRule.command, {
+                const _RESULT = execSync(customRule.command, {
                   cwd: mockProjectRoot,
                   timeout,
                   encoding: 'utf8',
@@ -749,7 +750,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                   if (exitCode !== undefined && exitCode !== 0) {
                     return {
                       success: false,
-                      error: `Custom validation '${customRule.name}' failed: non-zero exit code`,
+                      _error: `Custom validation '${customRule.name}' failed: non-zero exit code`,
                     };
                   }
 
@@ -772,10 +773,10 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                   success: true,
                   details: `Custom validation '${customRule.name}' passed: ${customRule.description || 'No description'}`,
                 };
-              } catch (_) {
+              } catch {
                 return {
                   success: false,
-                  error: `Custom validation '${customRule.name}' failed: ${error.message}`,
+                  _error: `Custom validation '${customRule.name}' failed: ${_error.message}`,
                 };
               }
             }
@@ -784,8 +785,8 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
               success: false,
               error: `Unknown validation criterion: ${criterion}`,
             };
-          } catch (_) {
-            return { success: false, error: error.message };
+          } catch {
+            return { success: false, _error: _error.message };
           }
         },
       };
@@ -806,11 +807,11 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         customValidationRules: [],
       };
 
-      FS.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
+      fs.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
 
       const mockTaskManager = {
         _fileExists(filePath) {
-          return FS.existsSync(filePath);
+          return fs.existsSync(filePath);
         },
 
         async _loadCustomValidationRules() {
@@ -836,7 +837,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 );
               }
             }
-          } catch (_) {
+          } catch {
             // Silently fail
           }
 
@@ -853,11 +854,11 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         someOtherProperty: 'value',
       };
 
-      FS.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
+      fs.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
 
       const mockTaskManager = {
         _fileExists(filePath) {
-          return FS.existsSync(filePath);
+          return fs.existsSync(filePath);
         },
 
         async _loadCustomValidationRules() {
@@ -883,7 +884,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 );
               }
             }
-          } catch (_) {
+          } catch {
             // Silently fail
           }
 

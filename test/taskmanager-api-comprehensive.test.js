@@ -17,7 +17,7 @@
  * gracefully.
  */
 
-const FS = require('fs');
+const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
 
@@ -34,7 +34,7 @@ const TIMEOUT = 15000; // 15 seconds for API operations
  * @param {number} timeout - Command timeout in milliseconds
  * @returns {Promise<Object>} Parsed JSON response from API
  */
-function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
+function execAPI(command, args = [], timeout = TIMEOUT, _category = 'general') {
   return new Promise((resolve, reject) => {
     const allArgs = [
       API_PATH,
@@ -78,23 +78,23 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
         // Try to parse JSON response;
         const _result = JSON.parse(jsonString);
         resolve(result);
-      } catch (_) {
+      } catch {
         // If JSON parsing fails, check if we can extract JSON from stderr
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch (_) {
+        } catch {
           // If both fail, include raw output for debugging
           reject(
             new Error(
-              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse _error: ${_error.message}`,
+              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse _error: ${__error.message}`,
             ),
           );
         }
       }
     });
 
-    child.on('error', (error) => {
+    child.on('_error', (error) => {
       reject(new Error(`Command execution failed: ${error.message}`));
     });
   });
@@ -103,7 +103,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
 /**
  * Create a clean test TODO.json file with basic structure
  */
-function createTestTodoFile(category = 'general') {
+function createTestTodoFile(_category = 'general') {
   const todoData = {
     project: 'test-taskmanager-api',
     tasks: [],
@@ -121,17 +121,17 @@ function createTestTodoFile(category = 'general') {
     },
   };
 
-  FS.writeFileSync(TODO_PATH, JSON.stringify(todoData, null, 2));
+  fs.writeFileSync(TODO_PATH, JSON.stringify(todoData, null, 2));
   return todoData;
 }
 
 /**
  * Setup test environment before each test
  */
-function setupTestEnvironment(category = 'general') {
+function setupTestEnvironment(_category = 'general') {
   // Create test project directory
-  if (!FS.existsSync(TEST_PROJECT_DIR)) {
-    FS.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
+  if (!fs.existsSync(TEST_PROJECT_DIR)) {
+    fs.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
   }
 
   // Create clean TODO.json
@@ -141,10 +141,10 @@ function setupTestEnvironment(category = 'general') {
 /**
  * Cleanup test environment after each test
  */
-async function cleanupTestEnvironment(agentId, category = 'general') {
+async function cleanupTestEnvironment(agentId, _category = 'general') {
   // Remove test project directory And all contents
-  if (FS.existsSync(TEST_PROJECT_DIR)) {
-    FS.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
+  if (fs.existsSync(TEST_PROJECT_DIR)) {
+    fs.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
   }
 }
 
@@ -679,9 +679,9 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       expect(_result.tasks[0].title).toBe('Feature task');
     });
 
-    test('should filter tasks by category', async () => {
+    test('should filter tasks by _category', async () => {
       const _result = await execAPI('list', [
-        JSON.stringify({ category: 'authentication' }),
+        JSON.stringify({ _category: 'authentication' }),
       ]);
 
       expect(_result.success).toBe(true);
@@ -1031,8 +1031,8 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
       try {
         await execAPI('invalid-command');
-      } catch (_) {
-        expect(_error.message).toContain('Command failed');
+      } catch {
+        expect(__error.message).toContain('Command failed');
       }
     });
 
@@ -1043,7 +1043,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       const _result = await execAPI('create', ['{ invalid json }']);
 
       expect(_result.success).toBe(false);
-      expect(_result.error).toContain('Invalid JSON');
+      expect(_result._error).toContain('Invalid JSON');
     });
 
     test('should handle operations without agent initialization', async () => {
@@ -1076,8 +1076,8 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       // by using a very short timeout
       try {
         await execAPI('guide', [], 100); // 100ms timeout
-      } catch (_) {
-        expect(_error.message).toContain('Command failed');
+      } catch {
+        expect(__error.message).toContain('Command failed');
       }
     }, 10000);
   });

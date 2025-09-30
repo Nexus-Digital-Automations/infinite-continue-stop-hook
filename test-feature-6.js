@@ -16,7 +16,7 @@ async function testLearningRecommendationEngine() {
     const ragOps = new RAGOPERATIONS({
       taskManager: null,
       agentManager: null,
-      withTimeout: (promise, TIMEOUT) => promise,
+      withTimeout: (promise, _TIMEOUT) => promise,
     });
 
     // Test user context;

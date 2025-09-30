@@ -10,7 +10,7 @@
 
 const { loggers } = require('../../../lib/logger');
 const _request = require('supertest');
-const FS = require('path');
+const _fs = require('path');
 
 // Import TaskManager API - will be updated when RAG endpoints are implemented;
 const _API_BASE =
@@ -104,7 +104,7 @@ describe('RAG System API Endpoints', () => {
           .expect(201);
 
         expect(response.body.title).not.toContain('<script>');
-        expect(response.body.category).not.toContain('../');
+        expect(response.body._category).not.toContain('../');
         */
       });
 
@@ -131,7 +131,7 @@ describe('RAG System API Endpoints', () => {
           const DURATION = Date.now() - start;
           expect(duration).toBeLessThan(10000);
         } catch (_) {
-        expect(_error.code).toBe('ECONNABORTED');
+        expect(___error.code).toBe('ECONNABORTED');
         }
         */
       });
@@ -169,7 +169,7 @@ describe('RAG System API Endpoints', () => {
 
   describe('Error Storage Endpoints', () => {
     describe('POST /api/errors', () => {
-      test('should create new error entry with full context', () => {
+      test('should create new _error entry with full context', () => {
         const _errorData = {
           error_type: 'linter_error',
           message: 'Unexpected token in expression',
@@ -203,7 +203,7 @@ describe('RAG System API Endpoints', () => {
         */
       });
 
-      test('should handle error without resolution', () => {
+      test('should handle _error without resolution', () => {
         const _errorData = {
           error_type: 'runtime_error',
           message: 'Cannot read property of undefined',

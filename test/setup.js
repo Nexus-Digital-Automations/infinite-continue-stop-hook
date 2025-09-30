@@ -11,7 +11,7 @@
 
 const { customMatchers } = require('./utils/testUtils');
 const { TestLogger } = require('./utils/testUtils');
-const { LOGGERS } = require('../lib/logger');
+const { _LOGGERS } = require('../lib/logger');
 
 // Set test environment variables
 process.env.NODE_ENV = 'test';
@@ -52,7 +52,7 @@ global.testUtils = {
         // eslint-disable-next-line no-await-in-loop -- Retry mechanism requires sequential attempts
         await fn();
         return;
-      } catch (_) {
+      } catch {
         // eslint-disable-next-line no-await-in-loop -- Retry mechanism requires sequential delays
         await new Promise((resolve) => {
           setTimeout(resolve, interval);

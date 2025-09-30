@@ -69,7 +69,7 @@ class QuickPerfTest {
       if (arg.startsWith('{') || arg.startsWith('[')) {
         try {
           JSON.parse(arg);
-        } catch (_error) {
+        } catch {
           throw new Error(`Invalid JSON argument: ${arg}`);
         }
       } else {
@@ -95,7 +95,7 @@ class QuickPerfTest {
       try {
         const startTime = process.hrtime.bigint();
         const cmd = `timeout 10s node ${this.apiPath} ${command} ${args.join(' ')}`;
-        const result = execSync(cmd, { encoding: 'utf8', timeout: 15000 });
+        const result = _execSync(cmd, { encoding: 'utf8', timeout: 15000 });
         const endTime = process.hrtime.bigint();
 
         const responseTime = Number(endTime - startTime) / 1000000; // Convert to ms

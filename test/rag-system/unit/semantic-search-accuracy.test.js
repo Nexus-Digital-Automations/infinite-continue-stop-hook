@@ -9,7 +9,7 @@
  */
 
 const { loggers } = require('../../../lib/logger');
-const path = require('path');
+const _path = require('path');
 
 describe('Semantic Search Accuracy Validation', () => {
   let _ragSystem;
@@ -233,7 +233,7 @@ const _languageResults = results.results.filter(r =>
                 }
                 return await response.json();
               } catch (_) {
-        loggers.stopHook.error('Failed to fetch user:', error);
+        loggers.stopHook._error('Failed to fetch user:', _error);
                 throw _error;
               }
             }

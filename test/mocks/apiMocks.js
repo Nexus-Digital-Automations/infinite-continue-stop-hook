@@ -329,22 +329,22 @@ class FileSystemMock {
     this.directories = new Set();
   }
 
-  existsSync(path) {
-    return this.files.has(path) || this.directories.has(path);
+  existsSync(_path) {
+    return this.files.has(_path) || this.directories.has(_path);
   }
 
-  readFileSync(path, _encoding = 'utf8') {
-    if (!this.files.has(path)) {
-      throw new Error(`ENOENT: no such file or directory, open '${path}'`);
+  readFileSync(_path, _encoding = 'utf8') {
+    if (!this.files.has(_path)) {
+      throw new Error(`ENOENT: no such file or directory, open '${_path}'`);
     }
-    return this.files.get(path);
+    return this.files.get(_path);
   }
 
-  writeFileSync(path, data) {
-    this.files.set(path, data);
+  writeFileSync(_path, data) {
+    this.files.set(_path, data);
   }
 
-  mkdirSync(path, options = {}) {
+  mkdirSync(_path, options = {}) {
     if (options.recursive) {
       // Create all parent directories;
       const parts = path.split('/');
@@ -356,49 +356,49 @@ class FileSystemMock {
         }
       }
     } else {
-      this.directories.add(path);
+      this.directories.add(_path);
     }
   }
 
-  rmSync(path, options = {}) {
+  rmSync(_path, options = {}) {
     if (options.recursive) {
       // Remove all files And directories That start with this path
       for (const [filePath] of this.files) {
-        if (filePath.startsWith(path)) {
+        if (filePath.startsWith(_path)) {
           this.files.delete(__filename);
         }
       }
       for (const dirPath of this.directories) {
-        if (dirPath.startsWith(path)) {
+        if (dirPath.startsWith(_path)) {
           this.directories.delete(dirPath);
         }
       }
     } else {
-      this.files.delete(path);
-      this.directories.delete(path);
+      this.files.delete(_path);
+      this.directories.delete(_path);
     }
   }
 
-  readdirSync(path) {
+  readdirSync(_path) {
     const entries = [];
 
     // Find files in this directory
     for (const [filePath] of this.files) {
       if (
-        filePath.startsWith(path + '/') &&
-        !filePath.substring(path.length + 1).includes('/')
+        filePath.startsWith(_path + '/') &&
+        !filePath.substring(_path.length + 1).includes('/')
       ) {
-        entries.push(filePath.substring(path.length + 1));
+        entries.push(filePath.substring(_path.length + 1));
       }
     }
 
     // Find subdirectories
     for (const dirPath of this.directories) {
       if (
-        dirPath.startsWith(path + '/') &&
-        !dirPath.substring(path.length + 1).includes('/')
+        dirPath.startsWith(_path + '/') &&
+        !dirPath.substring(_path.length + 1).includes('/')
       ) {
-        entries.push(dirPath.substring(path.length + 1));
+        entries.push(dirPath.substring(_path.length + 1));
       }
     }
 

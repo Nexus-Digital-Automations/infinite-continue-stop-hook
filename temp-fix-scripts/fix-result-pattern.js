@@ -1,5 +1,5 @@
 const fs = require('fs');
-const path = require('path');
+const _path = require('path');
 const { execSync } = require('child_process');
 
 /**
@@ -10,7 +10,7 @@ function getAllTestFiles() {
   try {
     const output = execSync('find test/ -name "*.js" -type f', { encoding: 'utf8' });
     return output.trim().split('\n').filter(f => f.length > 0);
-  } catch (error) {
+  } catch {
     console.error('Error finding test files:', error.message);
     return [];
   }
@@ -32,7 +32,7 @@ function fixResultPattern(filePath) {
     }
 
     return false;
-  } catch (error) {
+  } catch {
     console.error(`Error processing ${filePath}:`, error.message);
     return false;
   }
@@ -59,7 +59,7 @@ function main() {
   try {
     execSync('npm run lint', { stdio: 'inherit' });
     console.log('🎉 ALL LINTING ERRORS RESOLVED!');
-  } catch (error) {
+  } catch {
     console.log('⚠️ Some linting issues remain - checking count...');
     try {
       const output = execSync('npm run lint 2>&1', { encoding: 'utf8' });
@@ -67,7 +67,7 @@ function main() {
       if (errorMatch) {
         console.log(`📊 Remaining: ${errorMatch[1]} problems`);
       }
-    } catch (_) {
+    } catch {
       // Ignore
     }
   }

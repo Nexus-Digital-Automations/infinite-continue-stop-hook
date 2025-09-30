@@ -1,4 +1,11 @@
 #!/usr/bin/env node
+/* eslint-disable no-console */
+
+/*
+ * Stop Hook CLI Tool - Console output is intentional for user feedback
+ * and instructive task management messaging.
+ */
+
 const FS = require('fs');
 const path = require('path');
 const TASK_MANAGER = require('./lib/taskManager');
@@ -514,7 +521,7 @@ async function cleanupStaleAgentsAcrossProjects(logger, _category = 'general') {
 /**
  * Automatically reclassify test errors And sort tasks according to CLAUDE.md priority rules
  */
-async function autoSortTasksByPriority(_taskManager, _category = 'general') {
+async function _autoSortTasksByPriority(_taskManager, _category = 'general') {
   try {
     const todoData = await _taskManager.readTodo();
     let tasksMoved = 0;
@@ -751,7 +758,7 @@ async function autoSortTasksByPriority(_taskManager, _category = 'general') {
       error: _.message,
       errorName: _.name,
       stack: _.stack,
-      operation: 'autoSortTasksByPriority',
+      operation: '_autoSortTasksByPriority',
       component: 'StopHook',
     });
     return { error: _.message, tasksMoved: 0, tasksUpdated: 0 };

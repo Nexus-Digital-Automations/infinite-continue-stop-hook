@@ -25,9 +25,7 @@ describe('Multi-Agent Scenarios E2E', () => {
     
   let environment;
 
-  beforeEach(async () 
-    return () 
-    return () => {
+  beforeEach(async () => {
     environment = new E2EEnvironment('multi-agent-scenarios');
     await environment.setup();
 });
@@ -43,9 +41,7 @@ describe('Multi-Agent Scenarios E2E', () => {
     
     test(
       'Multiple agents suggesting features simultaneously',
-      async () 
-    return () 
-    return () => {
+      async () => {
         // Test concurrent feature suggestions by multiple agents;
 const agentCount = 5;
         const featuresPerAgent = 2;
@@ -56,13 +52,13 @@ const agentPromises = [];
           const _AGENT_ID = `concurrent-agent-${i}`;
           const agentOperations = [];
 
-          let category = 'general';
-          for (let j = 0; j < featuresPerAgent; j++, category = 'general') {
+          let _category = 'general';
+          for (let j = 0; j < featuresPerAgent; j++, _category = 'general') {
             const featureData = FeatureTestHelpers.createFeatureData({
     title: `Agent ${i} Feature ${j} - Concurrent Test`,
               description: `Feature ${j} suggested by agent ${i} for concurrent testing`,
               business_value: `Validates concurrent operations for agent ${i}, feature ${j}`,
-              category: 'enhancement',
+              _category: 'enhancement',
             });
 
             agentOperations.push(
@@ -92,9 +88,7 @@ const startTime = Date.now();
         results.forEach(({ agentId, operations }) => {
     
     
-          operations.forEach((operation, index) 
-    return () 
-    return () => {
+          operations.forEach((operation, index) => {
             E2EAssertions.assertCommandSuccess(
               operation.result,
               `Agent ${agentId} operation ${index}`
@@ -144,7 +138,7 @@ const featureCount = 6;
     title: `Approval Test Feature ${i}`,
               description: `Feature ${i} for concurrent approval testing`,
               business_value: `Test concurrent approvals - feature ${i}`,
-              category: 'enhancement',
+              _category: 'enhancement',
             })
           );
         }
@@ -224,9 +218,7 @@ const features = await environment.getFeatures();
     
     test(
       'Agent coordination during high-load scenarios',
-      async () 
-    return () 
-    return () => {
+      async () => {
         // Test system behavior under high-load multi-agent scenarios;
     const { agents, results } =
           await MultiAgentTestHelpers.simulateConcurrentAgents(
@@ -285,7 +277,7 @@ const featureIds = features.features.map((f) => f.id);
     title: 'Conflict Resolution Test Feature',
             description: 'Feature to test agent conflict resolution',
             business_value: 'Validates system conflict handling',
-            category: 'enhancement',
+            _category: 'enhancement',
           }
         );
 
@@ -387,9 +379,7 @@ const rejectionAttempts = await Promise.allSettled([
     
     test(
       'Multiple agents with coordinated stop hooks',
-      async () 
-    return () 
-    return () => {
+      async () => {
         // Test stop hook coordination across multiple agents;
 const agentCount = 4;
         const agents = [];
@@ -435,7 +425,7 @@ const featureOperationPromises = agents.slice(0, 2).map((agent) =>
     title: `Stop Hook Feature - ${agent.id}`,
             description: `Feature with stop hook integration by ${agent.id}`,
             business_value: `Validates stop hook integration for ${agent.id}`,
-            category: 'enhancement',
+            _category: 'enhancement',
           })
         );
 
@@ -475,9 +465,7 @@ const [result1, result2, result3] =
           await Promise.all(longRunningPromises);
 
         // Step 3: Validate That stop hook integration works across multiple streams
-        [result1, result2, result3].forEach((result, _index) 
-    return () 
-    return () => {
+        [result1, result2, result3].forEach((result, _index) => {
           expect(Array.isArray(result)).toBe(true);
           expect(result.length).toBeGreaterThan(0);
 
@@ -506,9 +494,7 @@ const features = await environment.getFeatures();
     
     test(
       'File system contention handling',
-      async () 
-    return () 
-    return () => {
+      async () => {
         // Test how the system handles concurrent file system operations;
 const operationCount = 10;
         const contentionPromises = [];
@@ -520,7 +506,7 @@ const operationCount = 10;
     title: `Contention Test Feature ${i}`,
               description: `Feature ${i} to test file system contention handling`,
               business_value: `Validates concurrent file access pattern ${i}`,
-              category: 'enhancement',
+              _category: 'enhancement',
             })
           );
         }
@@ -538,9 +524,9 @@ let successfulOperations = 0;
                 `Contention OPERATION${index}`
               );
               successfulOperations++;
-            } catch (_) {
+            } catch (error) {
               console.warn(
-                `Operation ${index} failed validation: ${_error.message}`
+                `Operation ${index} failed validation: ${error.message}`
               );
             }
           }

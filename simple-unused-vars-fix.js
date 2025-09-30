@@ -20,8 +20,8 @@ const replacements = [
   // Catch block patterns
   { search: /catch \(error\)/g, replace: 'catch (_)' },
   { search: /catch\(error\)/g, replace: 'catch(_)' },
-  { search: /} catch \(error\) \{/g, replace: '} catch (_) {' },
-  { search: /} catch\(error\) \{/g, replace: '} catch(_) {' },
+  { search: /} catch \(error\) \{/g, replace: '} catch {' },
+  { search: /} catch\(error\) \{/g, replace: '} catch {' },
   { search: /catch \(parseError\)/g, replace: 'catch (_)' },
   { search: /catch\(parseError\)/g, replace: 'catch(_)' },
   { search: /catch \(err\)/g, replace: 'catch (_)' },
@@ -75,7 +75,7 @@ function getAllJSFiles(dir) {
 
 function fixFile(_filePath) {
   try {
-    let content = fs.readFileSync(filePath, 'utf8');
+    let content = fs.readFileSync(_filePath, 'utf8');
     let modified = false;
 
     for (const replacement of replacements) {
@@ -87,13 +87,13 @@ function fixFile(_filePath) {
     }
 
     if (modified) {
-      fs.writeFileSync(filePath, content, 'utf8');
+      fs.writeFileSync(_filePath, content, 'utf8');
       return true;
     }
 
     return false;
-  } catch (_) {
-    console.error(`  ✗ Error processing ${filePath}:`, error.message);
+  } catch {
+    console.error(`  ✗ Error processing ${_filePath}:`, error.message);
     return false;
   }
 }
@@ -106,7 +106,7 @@ function main() {
 
   let totalModified = 0;
 
-  for (const filePath of jsFiles) {
+  for (const _filePath of jsFiles) {
     const relativePath = path.relative(projectRoot, _filePath);
 
     if (fixFile(_filePath)) {
@@ -131,7 +131,7 @@ function main() {
     if (parseInt(beforeCount) === 0) {
       console.log('✅ All no-unused-vars violations resolved!');
     }
-  } catch (_) {
+  } catch {
     console.log('⚠️  Could not verify lint results');
   }
 

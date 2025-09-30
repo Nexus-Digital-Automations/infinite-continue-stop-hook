@@ -45,7 +45,7 @@ function findUtilityFiles() {
         .split('\n')
         .filter((f) => f && f.endsWith('.js'));
       files.push(...foundFiles);
-    } catch (_) {
+    } catch {
       // Continue if pattern doesn't match anything
     }
   }
@@ -55,7 +55,7 @@ function findUtilityFiles() {
 
 function addSecurityExemption(_filePath) {
   try {
-    const content = fs.readFileSync(filePath, 'utf8');
+    const content = fs.readFileSync(_filePath, 'utf8');
 
     // Check if already has disable comment
     if (
@@ -78,11 +78,11 @@ function addSecurityExemption(_filePath) {
     lines.splice(insertIndex, 0, disableComment);
     const newContent = lines.join('\n');
 
-    fs.writeFileSync(filePath, newContent);
+    fs.writeFileSync(_filePath, newContent);
     console.log(`  ✓ Added exemption: ${path.basename(_filePath)}`);
     return true;
-  } catch (_) {
-    console.error(`  ❌ Error processing ${filePath}: ${error.message}`);
+  } catch {
+    console.error(`  ❌ Error processing ${_filePath}: ${error.message}`);
     return false;
   }
 }
@@ -97,7 +97,7 @@ function main() {
   let processed = 0;
   let exempted = 0;
 
-  for (const filePath of utilityFiles) {
+  for (const _filePath of utilityFiles) {
     processed++;
     if (addSecurityExemption(_filePath)) {
       exempted++;
@@ -133,7 +133,7 @@ function main() {
         console.log(sampleOutput);
       }
     }
-  } catch (_) {
+  } catch {
     console.log('⚠️  Unable to verify warning count');
   }
 

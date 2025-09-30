@@ -141,7 +141,7 @@ global.RAG_TEST_UTILS = {
    */
   measureTime: async (fn) => {
     const start = process.hrtime.bigint();
-    const RESULT = await fn();
+    const _RESULT = await fn();
     const end = process.hrtime.bigint();
     const duration = Number(end - start) / 1000000; // Convert to milliseconds,
     return { result, duration };
@@ -196,7 +196,7 @@ global.RAG_TEST_UTILS = {
   cleanupTestDirectory: async (dirPath) => {
     try {
       await FS.rm(dirPath, { recursive: true, force: true });
-    } catch (_) {
+    } catch {
       loggers.stopHook.warn(`Cleanup warning for ${dirPath}:`, _error.message);
     }
   },
@@ -260,7 +260,7 @@ afterEach(async () => {
         }),
       ),
     );
-  } catch (_) {
+  } catch {
     // Ignore cleanup errors
   }
 });

@@ -9,8 +9,8 @@
  */
 
 const path = require('path');
-const FS = require('fs').promises;
-const CRYPTO = require('crypto');
+const fs = require('fs').promises;
+const _CRYPTO = require('crypto');
 const { loggers } = require('../../../lib/logger');
 
 describe('RAG System Data Migration And Integrity', () => {
@@ -23,7 +23,7 @@ describe('RAG System Data Migration And Integrity', () => {
 
     // Setup test migration directory
     _testMigrationPath = path.join(__dirname, '../../test-data/migration-test');
-    await FS.mkdir(_testMigrationPath, { recursive: true });
+    await fs.mkdir(_testMigrationPath, { recursive: true });
 
     // Create test development/lessons structure
     await setupTestLessonsStructure();
@@ -32,9 +32,9 @@ describe('RAG System Data Migration And Integrity', () => {
   afterAll(async () => {
     loggers.stopHook.log('Cleaning up data integrity test environment...');
     try {
-      await FS.rm(_testMigrationPath, { recursive: true, force: true });
-    } catch (_) {
-      loggers.stopHook.warn('Cleanup warning:', _error.message);
+      await fs.rm(_testMigrationPath, { recursive: true, force: true });
+    } catch {
+      loggers.stopHook.warn('Cleanup warning:', __error.message);
     }
   });
 
@@ -57,7 +57,7 @@ const _originalFiles = await getAllLessonFiles(_testMigrationPath);
       // Create checksums for original content;
 const _originalChecksums = new Map();
       for (const file of originalFiles) {
-        const _content = await FS.readFile(file.fullPath, 'utf8');
+        const _content = await fs.readFile(file.fullPath, 'utf8');
         const _checksum = CRYPTO.createHash('sha256').update(content).digest('hex');
         originalChecksums.set(file.relativePath, {
           checksum,
@@ -96,7 +96,7 @@ const _migratedLessons = await ragSystem.getLessonsByMigrationId(
 
         // Metadata should be extracted correctly
         expect(lesson.title).toBeDefined();
-        expect(lesson.category).toBeDefined();
+        expect(lesson._category).toBeDefined();
         expect(lesson.migrated_from_file).toBe(true);
         expect(lesson.source_file_path).toBeDefined();
         expect(lesson.migration_timestamp).toBeDefined();
@@ -114,14 +114,13 @@ const _migratedLessons = await ragSystem.getLessonsByMigrationId(
           content: `# API Error Handling
 
 ## Overview
-This lesson covers proper API error handling techniques.
+This lesson covers proper API _error handling techniques.
 
 ## Implementation
 \`\`\`javascript,
     try {
   const https = require('https');
   const response = await new Promise((resolve, reject) 
-    return () 
     return () => {
     const req = https.get('/api/data', (res) => {
       let data = '';
@@ -131,8 +130,8 @@ This lesson covers proper API error handling techniques.
     req.on('error', reject);
 });
   if (!response.ok) throw new Error('API Error');
-} catch (_) {
-        loggers.stopHook._error(error);
+} catch {
+        loggers.stopHook._error(_error);
 }
 \`\`\`
 
@@ -158,7 +157,7 @@ Category: database-optimization,
               title: 'React Hook Optimization',
               content:
                 'Use useMemo And useCallback to optimize React hook performance',
-              category: 'frontend-optimization',
+              _category: 'frontend-optimization',
               tags: ['react', 'hooks', 'performance'],
               examples: [
                 'const memoizedValue = useMemo(() => expensiveCalculation(a, b), [a, b]);',
@@ -176,10 +175,10 @@ Category: database-optimization,
       /* Future implementation:
       // Create test files;
 const _formatTestPath = path.join(_testMigrationPath, 'format-test');
-      await FS.mkdir(_formatTestPath, { recursive: true });
+      await fs.mkdir(_formatTestPath, { recursive: true });
 
       for (const testFile of testFileFormats) {
-        await FS.writeFile(
+        await fs.writeFile(
           path.join(_formatTestPath, testFile.filename),
           testFile.content
         );
@@ -221,7 +220,7 @@ const _textLesson = migratedFormatLessons.lessons.find(l =>
         l.source_file_path.includes('text_lesson.txt')
       );
       expect(textLesson.title).toBe('Database Connection Pooling');
-      expect(textLesson.category).toBe('database-optimization');
+      expect(textLesson._category).toBe('database-optimization');
       */
     });
 
@@ -251,11 +250,11 @@ const _textLesson = migratedFormatLessons.lessons.find(l =>
 
       /* Future implementation:
       const _errorTestPath = path.join(_testMigrationPath, 'error-test');
-      await FS.mkdir(_errorTestPath, { recursive: true });
+      await fs.mkdir(_errorTestPath, { recursive: true });
 
       // Create problematic files
       for (const problemFile of problematicFiles) {
-        await FS.writeFile(
+        await fs.writeFile(
           path.join(_errorTestPath, problemFile.filename),
           problemFile.content
         );
@@ -292,7 +291,7 @@ const ERRORS = errorMigrationResult.errors;
       expect(binaryFileError.error_type).toBe('unsupported_format');
 
       expect(hugeFilerror).toBeDefined();
-      expect(hugeFilerror.error_type).toBe('file_too_large');
+      expect(hugeFil_error.error_type).toBe('file_too_large');
 
       loggers.stopHook.log(`Migration completed with ${errorMigrationResult.errors.length} errors handled gracefully`);
       */
@@ -493,7 +492,7 @@ const _postRepairCheck = await ragSystem.detectDataCorruption();
 const _backupTestData = Array.from({ length: 100 }, (_, i) => ({
     title: `Backup Test Lesson ${i}`,
         content: `Content for backup testing lesson ${i}. This includes various technical details And code examples.`,
-        category: i % 2 === 0 ? 'testing' : 'backup',
+        _category: i % 2 === 0 ? 'testing' : 'backup',
         tags: ['backup', 'testing', `lesson-${i}`],
         metadata: { backup_test: true, index: i },
 }));
@@ -583,7 +582,7 @@ const _originalIds = [];
 const _newLesson = await ragSystem.storeLesson({
     title: 'New Lesson After Backup',
         content: 'This should not exist after restoration',
-        category: 'post-backup',
+        _category: 'post-backup',
       });
 
       // Verify changes were made;
@@ -714,7 +713,7 @@ const _nonExistentLesson = await ragSystem.getLessonById(anotherNewLesson.lesson
   });
 
   // Helper function to setup test lessons structure
-  async function setupTestLessonsStructure(category = 'general') {
+  async function setupTestLessonsStructure(_category = 'general') {
     const lessonsStructure = {
       errors: {
         'api_errors.md': `# API Error Handling
@@ -799,34 +798,34 @@ Category: api-design,
 
     // Create directories And files in parallel for each category
     await Promise.all(
-      Object.entries(lessonsStructure).map(async ([category, files]) => {
+      Object.entries(lessonsStructure).map(async ([_category, files]) => {
         const _categoryPath = path.join(
           _testMigrationPath,
           'development',
           'lessons',
-          category,
+          _category,
         );
-        await FS.mkdir(_categoryPath, { recursive: true });
+        await fs.mkdir(_categoryPath, { recursive: true });
 
         // Create all files in this category in parallel
         await Promise.all(
           Object.entries(files).map(([filename, content]) =>
-            FS.writeFile(path.join(_categoryPath, filename), content),
+            fs.writeFile(path.join(_categoryPath, filename), content),
           ),
         );
       }),
     );
   }
 
-  async function _getAllLessonFiles(_basePath, category = 'general') {
+  async function _getAllLessonFiles(_basePath, _category = 'general') {
     const files = [];
 
     async function scanDirectory(
       dirPath,
       relativePath = '',
-      category = 'general',
+      _category = 'general',
     ) {
-      const _entries = await FS.readdir(dirPath, { withFileTypes: true });
+      const _entries = await fs.readdir(dirPath, { withFileTypes: true });
 
       // Use for-await-of pattern for sequential directory scanning
       for await (const _entry of _entries) {

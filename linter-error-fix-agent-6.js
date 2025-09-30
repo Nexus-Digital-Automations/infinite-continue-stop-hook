@@ -25,7 +25,7 @@ class LinterErrorFixAgent6 {
   fixFile(_filePath) {
     console.log(`🔧 Fixing linter errors in: ${path.basename(_filePath)}`);
 
-    let content = fs.readFileSync(filePath, 'utf8');
+    let content = fs.readFileSync(_filePath, 'utf8');
     let modified = false;
     let fileFixCount = 0;
 
@@ -61,7 +61,7 @@ class LinterErrorFixAgent6 {
     // Pattern 3: Fix catch (_) => catch (_) and _error references
     content = content.replace(
       /catch\s*\(\s*_\s*\)\s*{([^}]*?)(_error[^}]*?)}/g,
-      (match, beforeError, afterError) => {
+      (match, _beforeError, _afterError) => {
         modified = true;
         fileFixCount++;
         return match.replace('catch (_)', 'catch (_)');
@@ -152,7 +152,7 @@ class LinterErrorFixAgent6 {
 
     // Write back if modified
     if (modified) {
-      fs.writeFileSync(filePath, content);
+      fs.writeFileSync(_filePath, content);
       console.log(`  ✅ Applied ${fileFixCount} fixes`);
       this.fixesApplied += fileFixCount;
       return true;
@@ -172,7 +172,7 @@ class LinterErrorFixAgent6 {
 
     let filesFixed = 0;
 
-    for (const filePath of this.targetFiles) {
+    for (const _filePath of this.targetFiles) {
       if (fs.existsSync(_filePath)) {
         if (this.fixFile(_filePath)) {
           filesFixed++;

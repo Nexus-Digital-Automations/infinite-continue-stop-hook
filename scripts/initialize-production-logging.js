@@ -192,7 +192,7 @@ async function initializeLogging() {
     console.log('   3. Configure log aggregation and retention policies');
     console.log('   4. Test alerting workflows');
     console.log('   5. Deploy with NODE_ENV=production');
-  } catch (_) {
+  } catch {
     console.error('\n❌ Production logging initialization failed:');
     console.error(`   Error: ${error.message}`);
     console.error(`   Stack: ${error.stack}`);

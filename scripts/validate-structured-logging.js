@@ -11,7 +11,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const { _execSync } = require('child_process');
 
 class StructuredLoggingValidator {
   constructor() {
@@ -559,7 +559,7 @@ class StructuredLoggingValidator {
       if (passed) {
         this.passedCriteria++;
       }
-    } catch (_) {
+    } catch {
       console.log(
         `${number.toString().padStart(2, '0')}. ❌ ERROR - ${description}`,
       );

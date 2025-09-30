@@ -2,7 +2,7 @@
  * Test Feature 7: Adaptive Learning Paths System
  */
 
-const FS = require('./lib/api-modules/rag/ragOperations');
+const RAGOPERATIONS = require('./lib/api-modules/rag/ragOperations');
 const { loggers } = require('./lib/logger');
 
 async function testAdaptiveLearningPaths() {
@@ -12,7 +12,7 @@ async function testAdaptiveLearningPaths() {
     );
 
     // Create RAG operations instance;
-const ragOps = new RAGOPERATIONS({,
+const ragOps = new RAGOPERATIONS({
     taskManager: null,
       agentManager: null,
       withTimeout: (promise, TIMEOUT) => promise,

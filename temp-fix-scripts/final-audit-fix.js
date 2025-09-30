@@ -29,7 +29,7 @@ function finalAuditFix() {
     // Ensure proper catch parameter naming
     content = content.replace(
       /} catch \{([^}]+)\$\{error\.message\}/g,
-      '} catch (_) {$1${err.message}',
+      '} catch {$1${err.message}',
     );
 
     // Clean up any remaining unused variable assignments
@@ -37,7 +37,7 @@ function finalAuditFix() {
 
     fs.writeFileSync(filePath, content);
     console.log('Applied final comprehensive audit test fixes successfully');
-  } catch (_) {
+  } catch {
     console.error('Error applying final fixes:', _error.message);
     throw _error;
   }

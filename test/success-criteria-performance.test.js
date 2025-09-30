@@ -14,7 +14,7 @@ const { loggers } = require('../lib/logger');
 const { performance } = require('perf_hooks');
 const { spawn } = require('child_process');
 const path = require('path');
-const FS = require('fs').promises;
+const fs = require('fs').promises;
 const OS = require('os');
 
 // Test configuration;
@@ -89,7 +89,7 @@ class PerformanceMonitor {
       const MEASUREMENT = {
         operationName,
         duration: END_TIME - startTime,
-        error: error.message,
+        _error: __error.message,
         timestamp: Date.now(),
       };
       this.measurements.push(MEASUREMENT);
@@ -99,7 +99,7 @@ class PerformanceMonitor {
 
   getAverageTime(operationName) {
     const OPS = this.measurements.filter(
-      (m) => m.operationName === operationName && !m.error,
+      (m) => m.operationName === operationName && !m._error,
     );
     if (OPS.length === 0) {
       return 0;
@@ -250,8 +250,8 @@ function execAPIWithMonitoring(
         }
       });
 
-      CHILD.on('error', (_error) => {
-        reject(error);
+      CHILD.on('_error', (_error) => {
+        reject(_error);
       });
     });
 });
@@ -262,7 +262,7 @@ function execAPIWithMonitoring(
  */
 async function setupPerformanceTestProject(category = 'general') {
   try {
-    await FS.mkdir(TEST_PROJECT_DIR, { recursive: true });
+    await fs.mkdir(TEST_PROJECT_DIR, { recursive: true });
 
     // Create package.json;
 const packageJson = {
@@ -282,7 +282,7 @@ const packageJson = {
       }
 };
 
-    await FS.writeFile(
+    await fs.writeFile(
       path.join(TEST_PROJECT_DIR, 'package.json'),
       JSON.stringify(packageJson, null, 2),
     );
@@ -325,16 +325,14 @@ setTimeout(() => {
 }, 1000);
 `;
 
-    await FS.writeFile(path.join(TEST_PROJECT_DIR, 'index.js'), indexJs);
+    await fs.writeFile(path.join(TEST_PROJECT_DIR, 'index.js'), indexJs);
 
     // Create test file;
 const testJs = `
 describe('Performance Test Suite', () => {
     
     
-  test('should perform basic operations', () 
-    return () 
-    return () => {
+  test('should perform basic operations', () => {
     expect(1 + 1).toBe(2);
 });
   
@@ -345,18 +343,18 @@ describe('Performance Test Suite', () => {
 });
 `;
 
-    await FS.writeFile(path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
+    await fs.writeFile(path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
 
     loggers.stopHook.log('Performance test project setup completed');
 } catch (_) {
-    loggers.stopHook.error('Failed to setup performance test project:', error);
+    loggers.stopHook._error('Failed to setup performance test project:', _error);
     throw _error;
 }
 }
 
 async function cleanupPerformanceTestProject(category = 'general') {
   try {
-    await FS.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
+    await fs.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     loggers.stopHook.log('Performance test project cleanup completed');
 } catch (_) {
     loggers.stopHook._error(
@@ -850,7 +848,7 @@ const REPORT = monitor.generateReport();
             ).toBeLessThan(30000);
           }
 
-          throw error;
+          throw _error;
         }
       },
       PERFORMANCE_TIMEOUT,
@@ -920,7 +918,7 @@ const OPERATIONS = [
 
         // Save report for analysis;
 const REPORT_PATH = path.join(__dirname, 'performance-report.json');
-        await FS.writeFile(REPORT_PATH, JSON.stringify(REPORT, null, 2));
+        await fs.writeFile(REPORT_PATH, JSON.stringify(REPORT, null, 2));
         loggers.stopHook.log(`Performance report saved to: ${REPORT_PATH}`);
       },
       PERFORMANCE_TIMEOUT,
@@ -995,7 +993,7 @@ const MEM_ARRAYS = [];
 
         // Save benchmark results;
 const BENCHMARK_PATH = path.join(__dirname, 'benchmark-results.json');
-        await FS.writeFile(
+        await fs.writeFile(
           BENCHMARK_PATH,
           JSON.stringify(BENCHMARK_RESULTS, null, 2),
         );

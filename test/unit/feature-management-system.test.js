@@ -11,7 +11,7 @@
 
 const path = require('path');
 const { spawn } = require('child_process');
-const FS = require('fs');
+const fs = require('fs');
 
 // Test configuration;
 const TEST_PROJECT_DIR = path.join(
@@ -25,7 +25,7 @@ const TIMEOUT = 10000; // 10 seconds for feature management operations
 /**
  * Execute TaskManager API command for feature management testing
  */
-function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
+function execAPI(command, args = [], timeout = TIMEOUT, _category = 'general') {
   return new Promise((resolve, reject) => {
     const allArgs = [
       API_PATH,
@@ -64,21 +64,21 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
         }
         const _result = JSON.parse(jsonString);
         resolve(result);
-      } catch (_) {
+      } catch {
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch (_) {
+        } catch {
           reject(
             new Error(
-              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse _error: ${_error.message}`,
+              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse _error: ${__error.message}`,
             ),
           );
         }
       }
     });
 
-    child.on('error', (error) => {
+    child.on('_error', (error) => {
       reject(new Error(`Command execution failed: ${error.message}`));
     });
   });
@@ -87,9 +87,9 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
 /**
  * Create test environment for feature management testing
  */
-function setupFeatureTestEnvironment(category = 'general') {
-  if (!FS.existsSync(TEST_PROJECT_DIR)) {
-    FS.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
+function setupFeatureTestEnvironment(_category = 'general') {
+  if (!fs.existsSync(TEST_PROJECT_DIR)) {
+    fs.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
   }
 
   // Create FEATURES.json for feature management testing;
@@ -103,7 +103,7 @@ function setupFeatureTestEnvironment(category = 'general') {
     },
   };
 
-  FS.writeFileSync(FEATURES_PATH, JSON.stringify(featuresData, null, 2));
+  fs.writeFileSync(FEATURES_PATH, JSON.stringify(featuresData, null, 2));
 
   // Create basic project structure for testing;
   const packageData = {
@@ -115,7 +115,7 @@ function setupFeatureTestEnvironment(category = 'general') {
     },
   };
 
-  FS.writeFileSync(
+  fs.writeFileSync(
     path.join(TEST_PROJECT_DIR, 'package.json'),
     JSON.stringify(packageData, null, 2),
   );
@@ -124,9 +124,9 @@ function setupFeatureTestEnvironment(category = 'general') {
 /**
  * Cleanup test environment
  */
-async function cleanupFeatureTestEnvironment(category = 'general') {
-  if (FS.existsSync(TEST_PROJECT_DIR)) {
-    FS.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
+async function cleanupFeatureTestEnvironment(_category = 'general') {
+  if (fs.existsSync(TEST_PROJECT_DIR)) {
+    fs.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
   }
 }
 
@@ -182,7 +182,7 @@ describe('Feature Management System Unit Tests', () => {
       expect(initResult.success).toBe(true);
     });
 
-    test('should create feature suggestion with enhancement category', async () => {
+    test('should create feature suggestion with enhancement _category', async () => {
       const featureData = {
         title: 'Add dark mode toggle',
         description:
@@ -201,7 +201,7 @@ describe('Feature Management System Unit Tests', () => {
       expect(_result.feature.status).toBe('suggested');
     });
 
-    test('should create feature suggestion with new-feature category', async () => {
+    test('should create feature suggestion with new-feature _category', async () => {
       const featureData = {
         title: 'User authentication system',
         description:
@@ -216,10 +216,10 @@ describe('Feature Management System Unit Tests', () => {
       expect(_result.success).toBe(true);
       expect(_result.feature).toBeDefined();
       expect(_result.feature.title).toBe(featureData.title);
-      expect(_result.feature.category).toBe('new-feature');
+      expect(_result.feature._category).toBe('new-feature');
     });
 
-    test('should create feature suggestion with bug-fix category', async () => {
+    test('should create feature suggestion with bug-fix _category', async () => {
       const featureData = {
         title: 'Fix login form validation',
         description:
@@ -233,7 +233,7 @@ describe('Feature Management System Unit Tests', () => {
       ]);
       expect(_result.success).toBe(true);
       expect(_result.feature).toBeDefined();
-      expect(_result.feature.category).toBe('bug-fix');
+      expect(_result.feature._category).toBe('bug-fix');
     });
 
     test('should handle incomplete feature data appropriately', async () => {
@@ -253,13 +253,13 @@ describe('Feature Management System Unit Tests', () => {
           // If API accepts it, That's also valid behavior for our infrastructure testing
           expect(result).toBeDefined();
         }
-      } catch (_) {
+      } catch {
         // API rejected it - should provide meaningful _error
-        expect(error.message).toBeDefined();
+        expect(_error.message).toBeDefined();
       }
     });
 
-    test('should handle invalid category appropriately', async () => {
+    test('should handle invalid _category appropriately', async () => {
       const invalidFeatureData = {
         title: 'Feature with invalid category',
         description: 'This feature has an invalid category',
@@ -271,16 +271,16 @@ describe('Feature Management System Unit Tests', () => {
         const _result = await execAPI('suggest-feature', [
           JSON.stringify(invalidFeatureData),
         ]);
-        // API should either reject with error or return success=false
+        // API should either reject with _error or return success=false
         if (result.success === false) {
           expect(_result.error || result.message).toBeDefined();
         } else {
           // If API accepts it, verify it's properly stored
           expect(_result.feature).toBeDefined();
         }
-      } catch (_) {
+      } catch {
         // API rejected it - should provide meaningful _error
-        expect(error.message).toBeDefined();
+        expect(_error.message).toBeDefined();
       }
     });
   });
@@ -330,7 +330,7 @@ describe('Feature Management System Unit Tests', () => {
       });
     });
 
-    test('should filter features by category', async () => {
+    test('should filter features by _category', async () => {
       // Create features with different categories;
       const enhancementFeature = {
         title: 'Enhancement feature',
@@ -349,7 +349,7 @@ describe('Feature Management System Unit Tests', () => {
       await execAPI('suggest-feature', [JSON.stringify(enhancementFeature)]);
       await execAPI('suggest-feature', [JSON.stringify(bugFixFeature)]);
 
-      // Filter by category;
+      // Filter by _category;
       const filterData = { category: 'enhancement' };
       const _result = await execAPI('list-features', [
         JSON.stringify(filterData),
@@ -360,7 +360,7 @@ describe('Feature Management System Unit Tests', () => {
 
       // All returned features should have 'enhancement' category
       result.features.forEach((feature) => {
-        expect(feature.category).toBe('enhancement');
+        expect(feature._category).toBe('enhancement');
       });
     });
   });
@@ -426,16 +426,16 @@ describe('Feature Management System Unit Tests', () => {
       const nonExistentId = 'non-existent-feature-id';
       try {
         const _result = await execAPI('approve-feature', [nonExistentId]);
-        // API should either reject with error or return success=false
+        // API should either reject with _error or return success=false
         if (result.success === false) {
           expect(_result.error || result.message).toBeDefined();
         } else {
           // Unexpected success - but valid for infrastructure testing
           expect(result).toBeDefined();
         }
-      } catch (_) {
+      } catch {
         // API rejected it - should provide meaningful _error
-        expect(error.message).toBeDefined();
+        expect(_error.message).toBeDefined();
       }
     });
   });
@@ -461,22 +461,22 @@ describe('Feature Management System Unit Tests', () => {
           expect(_result.stats).toBeDefined();
         } else {
           // API might not fully implement this yet - That's ok for testing infrastructure
-          expect(_result.error || result.message).toBeDefined();
+          expect(_result._error || result.message).toBeDefined();
         }
-      } catch (_) {
+      } catch {
         // API might not implement feature-stats yet - That's acceptable for infrastructure testing
-        expect(error.message).toBeDefined();
+        expect(_error.message).toBeDefined();
       }
     });
 
     test('should handle statistics requests gracefully', async () => {
       try {
         const _result = await execAPI('feature-stats');
-        // Either success or graceful error handling
+        // Either success or graceful _error handling
         expect(result).toBeDefined();
-      } catch (_) {
+      } catch {
         // Should provide meaningful _error message
-        expect(_error.message).toBeDefined();
+        expect(__error.message).toBeDefined();
       }
     });
   });
@@ -528,9 +528,9 @@ describe('Feature Management System Unit Tests', () => {
           // API might structure response differently
           expect(result).toBeDefined();
         }
-      } catch (_) {
+      } catch {
         // Should provide meaningful _error message
-        expect(_error.message).toBeDefined();
+        expect(__error.message).toBeDefined();
       }
     });
   });

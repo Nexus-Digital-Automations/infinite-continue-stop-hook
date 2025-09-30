@@ -20,7 +20,7 @@
  */
 
 const path = require('path');
-const FS = require('fs').promises;
+const fs = require('fs').promises;
 const { loggers } = require('../../../lib/logger');
 
 // Import RAG system components;
@@ -49,8 +49,8 @@ describe('RAG System End-to-End Integration Tests', () => {
 
   beforeAll(async () => {
     // Create test environment
-    await FS.mkdir(ragTestPath, { recursive: true });
-    await FS.mkdir(path.join(ragTestPath, 'rag'), { recursive: true });
+    await fs.mkdir(ragTestPath, { recursive: true });
+    await fs.mkdir(path.join(ragTestPath, 'rag'), { recursive: true });
 
     // Initialize test utilities
     testDataGenerator = new _TestDataGenerator();
@@ -130,9 +130,9 @@ describe('RAG System End-to-End Integration Tests', () => {
 
     // Clean up test files
     try {
-      await FS.rm(testDataPath, { recursive: true, force: true });
-    } catch (_) {
-      loggers.stopHook.warn('Failed to clean up test data:', _error.message);
+      await fs.rm(testDataPath, { recursive: true, force: true });
+    } catch {
+      loggers.stopHook.warn('Failed to clean up test data:', __error.message);
     }
   });
 
@@ -193,7 +193,7 @@ describe('RAG System End-to-End Integration Tests', () => {
     });
 
     test('should retrieve lessons using semantic search', async () => {
-      const _query = 'JavaScript function error handling best practices';
+      const _query = 'JavaScript function _error handling best practices';
       const RESULTS = await ragOperations.searchLessons(_query, {
         maxResults: 3,
       });
@@ -312,7 +312,7 @@ describe('RAG System End-to-End Integration Tests', () => {
         tags: ['system', 'memory', 'distributed', 'cascade'],
       };
 
-      const RESULT = await ragOperations.storeError(_complexError);
+      const _RESULT = await ragOperations.storeError(_complexError);
       expect(result.success).toBe(true);
 
       // Search for the stored error;
@@ -501,10 +501,10 @@ describe('RAG System End-to-End Integration Tests', () => {
     test('should create test content for migration', async () => {
       // Create test lesson files;
       const testLessonsPath = path.join(ragTestPath, 'development', 'lessons');
-      await FS.mkdir(path.join(testLessonsPath, 'features'), {
+      await fs.mkdir(path.join(testLessonsPath, 'features'), {
         recursive: true,
       });
-      await FS.mkdir(path.join(testLessonsPath, 'errors'), {
+      await fs.mkdir(path.join(testLessonsPath, 'errors'), {
         recursive: true,
       });
 
@@ -524,14 +524,14 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // Write all sample lesson files in parallel
       await Promise.all(
-        sampleLessons.map((lesson) => FS.writeFile(lesson.path, lesson.content)),
+        sampleLessons.map((lesson) => fs.writeFile(lesson.path, lesson.content)),
       );
 
       // Verify files were created;
-      const featuresFiles = await FS.readdir(
+      const featuresFiles = await fs.readdir(
         path.join(testLessonsPath, 'features'),
       );
-      const errorsFiles = await FS.readdir(
+      const errorsFiles = await fs.readdir(
         path.join(testLessonsPath, 'errors'),
       );
 
@@ -641,7 +641,7 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // System should continue to function;
       const lesson = testDataGenerator.generateLessons(1)[0];
-      const RESULT = await ragOperations.storeLesson(lesson);
+      const _RESULT = await ragOperations.storeLesson(lesson);
       expect(result.success).toBe(true);
 
       const searchResults = await ragOperations.searchLessons(lesson.title);

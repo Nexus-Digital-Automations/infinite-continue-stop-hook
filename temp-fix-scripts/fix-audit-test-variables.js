@@ -4,7 +4,7 @@
  */
 
 const fs = require('fs');
-const PATH = require('path');
+const _PATH = require('path');
 
 function fixAuditTestVariables(_filePath, _filePath) {
   const filePath =
@@ -43,7 +43,7 @@ function fixAuditTestVariables(_filePath, _filePath) {
 
     fs.writeFileSync(filePath, content);
     console.log('Fixed audit test file variables successfully');
-  } catch (_) {
+  } catch {
     console.error('Error fixing audit test file:', _error.message);
     throw _error;
   }

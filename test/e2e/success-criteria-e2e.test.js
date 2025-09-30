@@ -13,7 +13,7 @@
  * @version 1.0.0
  */
 
-const FS = require('fs').promises;
+const fs = require('fs').promises;
 const path = require('path');
 const { spawn } = require('child_process');
 const { loggers } = require('../../lib/logger');
@@ -22,7 +22,7 @@ const { loggers } = require('../../lib/logger');
 const E2E_PROJECT_DIR = path.join(__dirname, 'success-criteria-e2e-project');
 const TASKS_PATH = path.join(E2E_PROJECT_DIR, 'TASKS.json');
 const API_PATH = path.join(__dirname, '..', '..', 'taskmanager-api.js');
-const TIMEOUT = 60000; // 60 seconds for E2E operations
+const _TIMEOUT = 60000; // 60 seconds for E2E operations
 
 /**
  * Execute command And return result
@@ -31,7 +31,7 @@ const TIMEOUT = 60000; // 60 seconds for E2E operations
  * @param {Object} options - Execution options
  * @returns {Promise<Object>} Command result
  */
-function execCommand(command, args = [], options = {}, category = 'general') {
+function execCommand(command, args = [], options = {}, _category = 'general') {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, {
       stdio: ['pipe', 'pipe', 'pipe'],
@@ -72,7 +72,7 @@ function execCommand(command, args = [], options = {}, category = 'general') {
  * @param {string[]} args - Command arguments
  * @returns {Promise<Object>} Parsed API response
  */
-async function execAPI(command, args = [], category = 'general') {
+async function execAPI(command, args = [], _category = 'general') {
   const allArgs = [API_PATH, command, ...args];
 
   const result = await execCommand('timeout', [`60s`, 'node', ...allArgs]);
@@ -84,12 +84,12 @@ async function execAPI(command, args = [], category = 'general') {
 
   try {
     return JSON.parse(result.stdout);
-  } catch (_error) {
+  } catch (error) {
     loggers.app.error(
       'Failed to parse API response:',
       result.stdout,
       'Error:',
-      _error.message,
+      error.message,
     );
     // Some commands return plain text, not JSON
     return { success: true, output: result.stdout, raw: true };
@@ -99,16 +99,16 @@ async function execAPI(command, args = [], category = 'general') {
 /**
  * Setup comprehensive E2E test project
  */
-async function setupE2EProject(category = 'general') {
+async function setupE2EProject(_category = 'general') {
   try {
     // Create project directory
-    await FS.mkdir(E2E_PROJECT_DIR, { recursive: true });
-    await FS.mkdir(path.join(E2E_PROJECT_DIR, 'src'), { recursive: true });
-    await FS.mkdir(path.join(E2E_PROJECT_DIR, 'test'), { recursive: true });
-    await FS.mkdir(path.join(E2E_PROJECT_DIR, 'development'), {
+    await fs.mkdir(E2E_PROJECT_DIR, { recursive: true });
+    await fs.mkdir(path.join(E2E_PROJECT_DIR, 'src'), { recursive: true });
+    await fs.mkdir(path.join(E2E_PROJECT_DIR, 'test'), { recursive: true });
+    await fs.mkdir(path.join(E2E_PROJECT_DIR, 'development'), {
       recursive: true,
     });
-    await FS.mkdir(path.join(E2E_PROJECT_DIR, 'development', 'evidence'), {
+    await fs.mkdir(path.join(E2E_PROJECT_DIR, 'development', 'evidence'), {
       recursive: true,
     });
 
@@ -135,7 +135,7 @@ async function setupE2EProject(category = 'general') {
       },
     };
 
-    await FS.writeFile(
+    await fs.writeFile(
       path.join(E2E_PROJECT_DIR, 'package.json'),
       JSON.stringify(packageJson, null, 2),
     );
@@ -146,7 +146,7 @@ async function setupE2EProject(category = 'general') {
  * @param {string} message - Message to process
  * @returns {string} Processed message
  */
-function processMessage(_message, category = 'general') {
+function processMessage(_message, _category = 'general') {
   if (!message) {
     throw new Error('Message is required');
 }
@@ -156,7 +156,7 @@ function processMessage(_message, category = 'general') {
 module.exports = { processMessage };
 `;
 
-    await FS.writeFile(path.join(E2E_PROJECT_DIR, 'src', 'app.js'), sampleCode);
+    await fs.writeFile(path.join(E2E_PROJECT_DIR, 'src', 'app.js'), sampleCode);
 
     // Create test files;
     const testCode = `const { processMessage } = require('../src/app');
@@ -174,7 +174,7 @@ describe('Application Tests', () => {
 });
 `;
 
-    await FS.writeFile(
+    await fs.writeFile(
       path.join(E2E_PROJECT_DIR, 'test', 'app.test.js'),
       testCode,
     );
@@ -243,7 +243,7 @@ describe('Application Tests', () => {
       },
     };
 
-    await FS.writeFile(TASKS_PATH, JSON.stringify(initialTasksData, null, 2));
+    await fs.writeFile(TASKS_PATH, JSON.stringify(initialTasksData, null, 2));
 
     // Create success criteria configuration;
     const successCriteriaConfig = {
@@ -257,12 +257,12 @@ describe('Application Tests', () => {
       },
     };
 
-    await FS.writeFile(
+    await fs.writeFile(
       path.join(E2E_PROJECT_DIR, 'development', 'success-criteria-config.json'),
       JSON.stringify(successCriteriaConfig, null, 2),
     );
-  } catch (_) {
-    loggers.stopHook.error('Failed to setup E2E project:', error);
+  } catch {
+    loggers.stopHook._error('Failed to setup E2E project:', error);
     throw error;
   }
 }
@@ -270,10 +270,10 @@ describe('Application Tests', () => {
 /**
  * Cleanup E2E test project
  */
-async function cleanupE2EProject(category = 'general') {
+async function cleanupE2EProject(_category = 'general') {
   try {
-    await FS.rm(E2E_PROJECT_DIR, { recursive: true, force: true });
-  } catch (_) {
+    await fs.rm(E2E_PROJECT_DIR, { recursive: true, force: true });
+  } catch {
     // Ignore cleanup errors
   }
 }
@@ -318,7 +318,7 @@ describe('Success Criteria End-to-End Tests', () => {
             'Complete E2E test for feature validation workflow with comprehensive success criteria including linter perfection, build success, runtime success, test integrity, And performance metrics',
           business_value:
             'Validates the complete feature workflow system with comprehensive testing And quality assurance',
-          category: 'enhancement',
+          _category: 'enhancement',
         }),
       ]);
 
@@ -341,12 +341,12 @@ describe('Success Criteria End-to-End Tests', () => {
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (_) {
-        loggers.stopHook.warn(`Feature approval warning: ${error.message}`);
+      } catch {
+        loggers.stopHook.warn(`Feature approval warning: ${_error.message}`);
       }
 
       // 3. Execute validation steps (simulated implementation)
-      const validationResults = {};
+      const _validationResults = {};
 
       // Linter validation;
       const lintResult = await execCommand('npm', ['run', 'lint']);
@@ -361,7 +361,7 @@ describe('Success Criteria End-to-End Tests', () => {
       validationResults.runtime = startResult.success ? 'passed' : 'failed';
 
       // Test validation;
-      const testResult = await execCommand('npm', ['run', 'test']);
+      const _testResult = await execCommand('npm', ['run', 'test']);
       validationResults.test = testResult.success ? 'passed' : 'failed';
 
       // 4. Verify feature approval And validation results
@@ -383,13 +383,13 @@ describe('Success Criteria End-to-End Tests', () => {
             }
           }
         }
-      } catch (_) {
-        loggers.stopHook.warn(`Feature listing warning: ${error.message}`);
+      } catch {
+        loggers.stopHook.warn(`Feature listing warning: ${_error.message}`);
       }
 
       // Validation results should show successful workflow
-      expect(validationResults.linter).toBe('passed');
-      expect(validationResults.build).toBe('passed');
+      expect(_validationResults.linter).toBe('passed');
+      expect(_validationResults.build).toBe('passed');
     }, 45000);
 
     test('should handle validation failures gracefully', async () => {
@@ -400,8 +400,8 @@ describe('Success Criteria End-to-End Tests', () => {
           description:
             'Test feature for handling validation failures in the approval And implementation workflow',
           business_value:
-            'Ensures robust error handling And validation failure reporting in the feature management system',
-          category: 'enhancement',
+            'Ensures robust _error handling And validation failure reporting in the feature management system',
+          _category: 'enhancement',
         }),
       ]);
 
@@ -422,8 +422,8 @@ describe('Success Criteria End-to-End Tests', () => {
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (_) {
-        loggers.stopHook.warn(`Feature approval warning: ${error.message}`);
+      } catch {
+        loggers.stopHook.warn(`Feature approval warning: ${_error.message}`);
       }
 
       // Simulate validation failures during implementation;
@@ -431,7 +431,7 @@ describe('Success Criteria End-to-End Tests', () => {
       const buildFailResult = await execCommand('npm', ['run', 'build:fail']);
       const testPassResult = await execCommand('npm', ['run', 'test']);
 
-      const validationResults = {
+      const _validationResults = {
         linter: lintFailResult.success ? 'passed' : 'failed',
         build: buildFailResult.success ? 'passed' : 'failed',
         test: testPassResult.success ? 'passed' : 'failed',
@@ -454,14 +454,14 @@ describe('Success Criteria End-to-End Tests', () => {
             }
           }
         }
-      } catch (_) {
-        loggers.stopHook.warn(`Feature verification warning: ${error.message}`);
+      } catch {
+        loggers.stopHook.warn(`Feature verification warning: ${_error.message}`);
       }
 
       // Expected validation failures should be detected
-      expect(validationResults.linter).toBe('failed');
-      expect(validationResults.build).toBe('failed');
-      expect(validationResults.test).toBe('passed');
+      expect(_validationResults.linter).toBe('failed');
+      expect(_validationResults.build).toBe('failed');
+      expect(_validationResults.test).toBe('passed');
     }, 30000);
 
     test('should validate feature categorization workflow', async () => {
@@ -473,7 +473,7 @@ describe('Success Criteria End-to-End Tests', () => {
             'Test feature with enterprise-level requirements including security review, architecture documentation, And comprehensive testing',
           business_value:
             'Provides enterprise-grade reliability And maintainability for production systems',
-          category: 'enhancement',
+          _category: 'enhancement',
         }),
       ]);
       expect(createResult.success).toBe(true);
@@ -493,13 +493,13 @@ describe('Success Criteria End-to-End Tests', () => {
           if (listResult.features && listResult.features.length > 0) {
             const feature = listResult.features.find((f) => f.id === featureId);
             if (feature) {
-              expect(feature.category).toBe('enhancement');
+              expect(feature._category).toBe('enhancement');
             }
           }
         }
-      } catch (_) {
+      } catch {
         loggers.stopHook.warn(
-          `Feature metadata verification warning: ${error.message}`,
+          `Feature metadata verification warning: ${_error.message}`,
         );
       }
 
@@ -511,14 +511,14 @@ describe('Success Criteria End-to-End Tests', () => {
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (_) {
+      } catch {
         loggers.stopHook.warn(
-          `Enterprise feature approval warning: ${error.message}`,
+          `Enterprise feature approval warning: ${_error.message}`,
         );
       }
 
       // Execute comprehensive validations for enterprise feature;
-      const validationResults = {
+      const _validationResults = {
         linter: 'passed',
         build: 'passed',
         runtime: 'passed',
@@ -547,9 +547,9 @@ describe('Success Criteria End-to-End Tests', () => {
             }
           }
         }
-      } catch (_) {
+      } catch {
         loggers.app.warn(
-          `Enhanced validation verification warning: ${error.message}`,
+          `Enhanced validation verification warning: ${_error.message}`,
         );
       }
     }, 30000);
@@ -567,7 +567,7 @@ describe('Success Criteria End-to-End Tests', () => {
             'Add user login And registration functionality with comprehensive security measures, input validation, And JWT token management',
           business_value:
             'Enables secure user access control, supports user-specific features, And provides foundation for role-based permissions',
-          category: 'new-feature',
+          _category: 'new-feature',
         }),
       ]);
       expect(featureResult.success).toBe(true);
@@ -582,15 +582,15 @@ describe('Success Criteria End-to-End Tests', () => {
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (_) {
-        loggers.stopHook.warn(`Feature approval warning: ${error.message}`);
+      } catch {
+        loggers.stopHook.warn(`Feature approval warning: ${_error.message}`);
       }
 
       // 3. Implement feature (simulate code changes)
-      await FS.writeFile(
+      await fs.writeFile(
         path.join(E2E_PROJECT_DIR, 'src', 'auth.js'),
         `// User authentication module;
-function authenticate(username, password, category = 'general') {
+function authenticate(username, password, _category = 'general') {
   if (!username || !password) {
     throw new Error('Username And password required');
 }
@@ -605,7 +605,7 @@ module.exports = { authenticate };
       // 4. Run validation checks;
       const lintResult = await execCommand('npm', ['run', 'lint']);
       const buildResult = await execCommand('npm', ['run', 'build']);
-      const testResult = await execCommand('npm', ['run', 'test']);
+      const _testResult = await execCommand('npm', ['run', 'test']);
 
       // 5. Verify feature workflow completion
       try {
@@ -626,9 +626,9 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch (_) {
+      } catch {
         loggers.app.warn(
-          `Feature workflow completion verification warning: ${error.message}`,
+          `Feature workflow completion verification warning: ${_error.message}`,
         );
       }
 
@@ -638,7 +638,7 @@ module.exports = { authenticate };
     }, 30000);
 
     test('should handle bug fix workflow with criteria', async () => {
-      // Test bug fix workflow with error-specific criteria;
+      // Test bug fix workflow with _error-specific criteria;
       const bugFixResult = await execAPI('suggest-feature', [
         JSON.stringify({
           title: 'Fix authentication timeout issue',
@@ -646,7 +646,7 @@ module.exports = { authenticate };
             'Resolve critical issue where login requests timeout after 30 seconds, implement proper timeout handling And error recovery mechanisms',
           business_value:
             'Improves user experience by resolving login failures, reduces support tickets, And ensures reliable authentication system',
-          category: 'bug-fix',
+          _category: 'bug-fix',
         }),
       ]);
       expect(bugFixResult.success).toBe(true);
@@ -661,21 +661,19 @@ module.exports = { authenticate };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (_) {
-        loggers.stopHook.warn(`Bug fix approval warning: ${error.message}`);
+      } catch {
+        loggers.stopHook.warn(`Bug fix approval warning: ${_error.message}`);
       }
 
       // Implement bug fix
-      await FS.writeFile(
+      await fs.writeFile(
         path.join(E2E_PROJECT_DIR, 'src', 'auth-fix.js'),
         `// Bug fix for authentication timeout
-async function authenticateWithTimeout(username, password, timeout = 10000, category = 'general') {
+async function authenticateWithTimeout(username, password, timeout = 10000, _category = 'general') {
   return new Promise((resolve, reject) => {
     
     
-    const timer = setTimeout(() 
-    return () 
-    return () => {
+    const timer = setTimeout(() => {
       reject(new Error('Authentication timeout'));
     }, timeout);
 
@@ -694,7 +692,7 @@ module.exports = { authenticateWithTimeout };
       // Verify bug fix workflow completion
       try {
         const listResult = await execAPI('list-features', [
-          JSON.stringify({ category: 'bug-fix' }),
+          JSON.stringify({ _category: 'bug-fix' }),
         ]);
 
         if (listResult.raw) {
@@ -707,13 +705,13 @@ module.exports = { authenticateWithTimeout };
             );
             if (bugFixFeature) {
               expect(bugFixFeature.status).toBe('approved');
-              expect(bugFixFeature.category).toBe('bug-fix');
+              expect(bugFixFeature._category).toBe('bug-fix');
             }
           }
         }
-      } catch (_) {
+      } catch {
         loggers.stopHook.warn(
-          `Bug fix workflow verification warning: ${error.message}`,
+          `Bug fix workflow verification warning: ${_error.message}`,
         );
       }
 
@@ -730,10 +728,10 @@ module.exports = { authenticateWithTimeout };
         JSON.stringify({
           title: 'Refactor authentication module for better maintainability',
           description:
-            'Improve code structure, add comprehensive JSDoc documentation, implement proper error handling patterns, And enhance maintainability with consistent coding standards',
+            'Improve code structure, add comprehensive JSDoc documentation, implement proper _error handling patterns, And enhance maintainability with consistent coding standards',
           business_value:
             'Reduces technical debt, improves code maintainability, enables faster feature development, And reduces bugs through better code structure',
-          category: 'enhancement',
+          _category: 'enhancement',
         }),
       ]);
       expect(refactorResult.success).toBe(true);
@@ -748,19 +746,19 @@ module.exports = { authenticateWithTimeout };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (_) {
+      } catch {
         loggers.stopHook.warn(
-          `Refactoring feature approval warning: ${error.message}`,
+          `Refactoring feature approval warning: ${_error.message}`,
         );
       }
 
       // Perform refactoring
-      await FS.writeFile(
+      await fs.writeFile(
         path.join(E2E_PROJECT_DIR, 'src', 'auth-refactored.js'),
         `/**
  * Refactored Authentication Module
  *
- * Provides secure user authentication with improved error handling
+ * Provides secure user authentication with improved _error handling
  * And comprehensive documentation.
  *
  * @module Authentication
@@ -776,7 +774,7 @@ module.exports = { authenticateWithTimeout };
  * @returns {Promise<Object>} Authentication result
  * @throws {Error} When credentials are missing or invalid
  */
-async function authenticate(username, password, options = {}, category = 'general') {
+async function authenticate(username, password, options = {}, _category = 'general') {
   const { timeout = 10000 } = options;
 
   if (!username || !password) {
@@ -787,9 +785,7 @@ async function authenticate(username, password, options = {}, category = 'genera
   return new Promise((resolve, reject) => {
     
     
-    const timer = setTimeout(() 
-    return () 
-    return () => {
+    const timer = setTimeout(() => {
       reject(new Error('Authentication timeout'));
     }, timeout);
 
@@ -812,7 +808,7 @@ module.exports = { authenticate };
       // Verify refactoring workflow completion
       try {
         const listResult = await execAPI('list-features', [
-          JSON.stringify({ category: 'enhancement' }),
+          JSON.stringify({ _category: 'enhancement' }),
         ]);
 
         if (listResult.raw) {
@@ -825,24 +821,24 @@ module.exports = { authenticate };
             );
             if (refactorFeature) {
               expect(refactorFeature.status).toBe('approved');
-              expect(refactorFeature.category).toBe('enhancement');
+              expect(refactorFeature._category).toBe('enhancement');
             }
           }
         }
-      } catch (_) {
+      } catch {
         loggers.app.warn(
-          `Refactoring workflow verification warning: ${error.message}`,
+          `Refactoring workflow verification warning: ${_error.message}`,
         );
       }
 
       // Quality gate validations;
       const lintResult = await execCommand('npm', ['run', 'lint']);
       const buildResult = await execCommand('npm', ['run', 'build']);
-      const testResult = await execCommand('npm', ['run', 'test']);
+      const _testResult = await execCommand('npm', ['run', 'test']);
 
       expect(lintResult.success).toBe(true);
       expect(buildResult.success).toBe(true);
-      expect(testResult.success).toBe(true);
+      expect(_testResult.success).toBe(true);
     }, 30000);
   });
 
@@ -856,7 +852,7 @@ module.exports = { authenticate };
             'Complex feature requiring coordination between multiple specialized agents for development, security review, performance optimization, And architecture documentation',
           business_value:
             'Demonstrates multi-agent coordination capabilities for complex feature development with distributed validation responsibilities',
-          category: 'enhancement',
+          _category: 'enhancement',
         }),
       ]);
       expect(createResult.success).toBe(true);
@@ -888,14 +884,14 @@ module.exports = { authenticate };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (_) {
+      } catch {
         loggers.stopHook.warn(
-          `Multi-agent feature approval warning: ${error.message}`,
+          `Multi-agent feature approval warning: ${_error.message}`,
         );
       }
 
       // Simulate coordination between agents for different validation aspects;
-      const validationResults = {
+      const _validationResults = {
         linter: 'passed',
         build: 'passed',
         test: 'passed',
@@ -923,16 +919,16 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch (_) {
+      } catch {
         loggers.app.warn(
-          `Multi-agent coordination verification warning: ${error.message}`,
+          `Multi-agent coordination verification warning: ${_error.message}`,
         );
       }
 
       // Verify agent initialization And coordination
-      expect(validationResults.linter).toBe('passed');
-      expect(validationResults.security).toContain('security_agent');
-      expect(validationResults.performance).toContain('performance_agent');
+      expect(_validationResults.linter).toBe('passed');
+      expect(_validationResults.security).toContain('security_agent');
+      expect(_validationResults.performance).toContain('performance_agent');
     }, 30000);
   });
 
@@ -946,7 +942,7 @@ module.exports = { authenticate };
             'Comprehensive application performance optimization with response time improvements, memory usage reduction, And CPU efficiency enhancements including benchmarking And metrics collection',
           business_value:
             'Improves user experience through faster response times, reduces infrastructure costs through efficient resource usage, And provides measurable performance improvements',
-          category: 'performance',
+          _category: 'performance',
         }),
       ]);
       expect(createResult.success).toBe(true);
@@ -961,9 +957,9 @@ module.exports = { authenticate };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (_) {
+      } catch {
         loggers.stopHook.warn(
-          `Performance feature approval warning: ${error.message}`,
+          `Performance feature approval warning: ${_error.message}`,
         );
       }
 
@@ -982,7 +978,7 @@ module.exports = { authenticate };
       // Verify performance feature workflow
       try {
         const listResult = await execAPI('list-features', [
-          JSON.stringify({ category: 'performance' }),
+          JSON.stringify({ _category: 'performance' }),
         ]);
 
         if (listResult.raw) {
@@ -995,13 +991,13 @@ module.exports = { authenticate };
             );
             if (performanceFeature) {
               expect(performanceFeature.status).toBe('approved');
-              expect(performanceFeature.category).toBe('performance');
+              expect(performanceFeature._category).toBe('performance');
             }
           }
         }
-      } catch (_) {
+      } catch {
         loggers.app.warn(
-          `Performance feature verification warning: ${error.message}`,
+          `Performance feature verification warning: ${_error.message}`,
         );
       }
 
@@ -1023,7 +1019,7 @@ module.exports = { authenticate };
             'Implement automated performance regression detection with baseline comparison, threshold monitoring, And alerting for response time And memory usage degradation',
           business_value:
             'Prevents performance degradation in production, maintains user experience quality, And enables proactive performance issue resolution',
-          category: 'performance',
+          _category: 'performance',
         }),
       ]);
       expect(createResult.success).toBe(true);
@@ -1038,9 +1034,9 @@ module.exports = { authenticate };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (_) {
+      } catch {
         loggers.stopHook.warn(
-          `Regression detection approval warning: ${error.message}`,
+          `Regression detection approval warning: ${_error.message}`,
         );
       }
 
@@ -1056,7 +1052,7 @@ module.exports = { authenticate };
       // Verify regression detection feature workflow
       try {
         const listResult = await execAPI('list-features', [
-          JSON.stringify({ category: 'performance' }),
+          JSON.stringify({ _category: 'performance' }),
         ]);
 
         if (listResult.raw) {
@@ -1072,9 +1068,9 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch (_) {
+      } catch {
         loggers.app.warn(
-          `Regression detection verification warning: ${error.message}`,
+          `Regression detection verification warning: ${_error.message}`,
         );
       }
 
@@ -1103,7 +1099,7 @@ module.exports = { authenticate };
             'Comprehensive feature requiring evidence collection during validation including linter output, build logs, test results, And quality metrics with organized storage And reporting',
           business_value:
             'Provides audit trail for quality assurance, enables compliance reporting, And supports debugging And continuous improvement processes',
-          category: 'enhancement',
+          _category: 'enhancement',
         }),
       ]);
       expect(createResult.success).toBe(true);
@@ -1118,16 +1114,16 @@ module.exports = { authenticate };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (_) {
+      } catch {
         loggers.stopHook.warn(
-          `Evidence collection approval warning: ${error.message}`,
+          `Evidence collection approval warning: ${_error.message}`,
         );
       }
 
       // Collect evidence during validation;
       const lintResult = await execCommand('npm', ['run', 'lint']);
       const buildResult = await execCommand('npm', ['run', 'build']);
-      const testResult = await execCommand('npm', ['run', 'test']);
+      const _testResult = await execCommand('npm', ['run', 'test']);
 
       // Store evidence;
       const evidenceDir = path.join(
@@ -1136,17 +1132,17 @@ module.exports = { authenticate };
         'evidence',
         featureId,
       );
-      await FS.mkdir(evidenceDir, { recursive: true });
+      await fs.mkdir(evidenceDir, { recursive: true });
 
-      await FS.writeFile(
+      await fs.writeFile(
         path.join(evidenceDir, 'lint-output.txt'),
         lintResult.stdout || 'Linting passed - no errors found',
       );
-      await FS.writeFile(
+      await fs.writeFile(
         path.join(evidenceDir, 'build-output.txt'),
         buildResult.stdout || 'Build completed successfully',
       );
-      await FS.writeFile(
+      await fs.writeFile(
         path.join(evidenceDir, 'test-output.txt'),
         testResult.stdout || 'All tests passed',
       );
@@ -1154,7 +1150,7 @@ module.exports = { authenticate };
       // Verify evidence collection workflow
       try {
         const listResult = await execAPI('list-features', [
-          JSON.stringify({ category: 'enhancement' }),
+          JSON.stringify({ _category: 'enhancement' }),
         ]);
 
         if (listResult.raw) {
@@ -1170,20 +1166,20 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch (_) {
+      } catch {
         loggers.app.warn(
-          `Evidence collection verification warning: ${error.message}`,
+          `Evidence collection verification warning: ${_error.message}`,
         );
       }
 
       // Verify evidence files exist;
-      const lintEvidence = await FS.readFile(
+      const lintEvidence = await fs.readFile(
         path.join(evidenceDir, 'lint-output.txt'),
         'utf8',
       );
       expect(lintEvidence).toContain('Linting passed');
 
-      const buildEvidence = await FS.readFile(
+      const buildEvidence = await fs.readFile(
         path.join(evidenceDir, 'build-output.txt'),
         'utf8',
       );

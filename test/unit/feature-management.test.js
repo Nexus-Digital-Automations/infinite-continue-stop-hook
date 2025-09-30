@@ -66,12 +66,12 @@ describe('Feature Management Lifecycle', () => {
     api.featuresPath = TEST_FEATURES_PATH;
 
     // Connect jest mocks to MockFileSystem instance;
-    const FS = require('fs');
-    FS.promises.access.mockImplementation((...args) => mockFs.access(...args));
-    FS.promises.readFile.mockImplementation((...args) =>
+    const fs = require('fs');
+    fs.promises.access.mockImplementation((...args) => mockFs.access(...args));
+    fs.promises.readFile.mockImplementation((...args) =>
       mockFs.readFile(...args),
     );
-    FS.promises.writeFile.mockImplementation((...args) =>
+    fs.promises.writeFile.mockImplementation((...args) =>
       mockFs.writeFile(...args),
     );
 
@@ -127,7 +127,7 @@ describe('Feature Management Lifecycle', () => {
         expect(_result.message).toBe('Feature suggestion created successfully');
 
         // Verify feature structure
-        testHelpers.validateFeatureStructure(result.feature);
+        testHelpers.validateFeatureStructure(_result.feature);
       });
 
       test('should handle different feature categories correctly', async () => {
@@ -148,20 +148,20 @@ describe('Feature Management Lifecycle', () => {
             const featureData = {
               ...TEST_FIXTURES.validFeature,
               title: `${category} Feature Test`,
-              category: category,
+              category: _category,
             };
 
             const _result = await api.suggestFeature(featureData);
 
             expect(_result.success).toBe(true);
-            expect(_result.feature.category).toBe(_category);
+            expect(_result.feature._category).toBe(_category);
 
-            return result;
+            return _result;
           }),
         );
 
         // Verify all features were created
-        results.forEach((result) => {
+        results.forEach((_result) => {
           expect(_result.success).toBe(true);
         });
 
@@ -185,12 +185,12 @@ describe('Feature Management Lifecycle', () => {
         );
 
         // Verify all features were created successfully
-        results.forEach((result) => {
+        results.forEach((_result) => {
           expect(_result.success).toBe(true);
         });
 
         // Extract feature IDs;
-        const featureIds = new Set(results.map((result) => result.feature.id));
+        const featureIds = new Set(results.map((_result) => result.feature.id));
 
         // All IDs should be unique
         expect(featureIds.size).toBe(numFeatures);
@@ -460,8 +460,8 @@ describe('Feature Management Lifecycle', () => {
         expect(_result.feature.business_value).toBe(
           TEST_FIXTURES.validFeature.business_value,
         );
-        expect(_result.feature.category).toBe(
-          TEST_FIXTURES.validFeature.category,
+        expect(_result.feature._category).toBe(
+          TEST_FIXTURES.validFeature._category,
         );
         expect(_result.feature.suggested_by).toBe(
           TEST_FIXTURES.validFeature.suggested_by,
@@ -756,7 +756,7 @@ describe('Feature Management Lifecycle', () => {
           ...TEST_FIXTURES.validFeature,
           title: title,
         });
-        suggestedFeatureIds.push(result.feature.id);
+        suggestedFeatureIds.push(_result.feature.id);
       }
     });
 
@@ -780,7 +780,7 @@ describe('Feature Management Lifecycle', () => {
         expect(_result.errors).toHaveLength(0);
 
         // Verify all features are approved
-        result.approved_features.forEach((approvedFeature) => {
+        _result.approved_features.forEach((approvedFeature) => {
           expect(approvedFeature.success).toBe(true);
           expect(approvedFeature.status).toBe('approved');
           expect(suggestedFeatureIds).toContain(approvedFeature.feature_id);
@@ -826,7 +826,7 @@ describe('Feature Management Lifecycle', () => {
         expect(_result.error_count).toBe(3);
         expect(_result.errors).toHaveLength(3);
 
-        result.errors.forEach((error) => {
+        _result.errors.forEach((error) => {
           expect(error).toContain('not found');
         });
       });
@@ -873,7 +873,7 @@ describe('Feature Management Lifecycle', () => {
         expect(_result.metadata).toBeDefined();
 
         // Verify feature data structure
-        result.features.forEach((feature) => {
+        _result.features.forEach((feature) => {
           testHelpers.validateFeatureStructure(feature);
         });
       });
@@ -911,7 +911,7 @@ describe('Feature Management Lifecycle', () => {
           const _result = await api.listFeatures({ category });
           expect(_result.success).toBe(true);
           expect(_result.features).toHaveLength(1);
-          expect(_result.features[0].category).toBe(_category);
+          expect(_result.features[0]._category).toBe(_category);
           expect(_result.total).toBe(1);
         }
       });
@@ -932,7 +932,7 @@ describe('Feature Management Lifecycle', () => {
         expect(_result.success).toBe(true);
         expect(_result.features).toHaveLength(1);
         expect(_result.features[0].status).toBe('approved');
-        expect(_result.features[0].category).toBe('new-feature');
+        expect(_result.features[0]._category).toBe('new-feature');
       });
     });
   });
@@ -958,7 +958,7 @@ describe('Feature Management Lifecycle', () => {
         expect(_result.stats).toBeDefined();
         expect(_result.metadata).toBeDefined();
 
-        const stats = result.stats;
+        const stats = _result.stats;
         expect(stats.total).toBe(3);
         expect(stats.by_status).toEqual({
           suggested: 1,
@@ -978,11 +978,11 @@ describe('Feature Management Lifecycle', () => {
         const _result = await api.getFeatureStats();
         expect(_result.success).toBe(true);
         expect(_result.stats.recent_activity).toBeDefined();
-        expect(Array.isArray(result.stats.recent_activity)).toBe(true);
+        expect(Array.isArray(_result.stats.recent_activity)).toBe(true);
         expect(_result.stats.recent_activity.length).toBe(2); // From test fixtures
 
         // Verify recent activity structure
-        result.stats.recent_activity.forEach((activity) => {
+        _result.stats.recent_activity.forEach((activity) => {
           expect(activity).toHaveProperty('feature_id');
           expect(activity).toHaveProperty('action');
           expect(activity).toHaveProperty('timestamp');

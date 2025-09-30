@@ -11,7 +11,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync: _execSync } = require('child_process');
+const { execSync } = require('child_process');
 
 const rootDir = process.cwd();
 
@@ -207,8 +207,8 @@ function fixUnusedVariablesInFile(filePath, violations) {
     }
 
     return false;
-  } catch (_error) {
-    console.error(`Error fixing file ${ filePath: _filePath }:`, error.message);
+  } catch (error) {
+    console.error(`Error fixing file ${filePath}:`, error.message);
     return false;
   }
 }
@@ -289,17 +289,17 @@ function main() {
 
   for (const [filePath, fileViolations] of Object.entries(violationsByFile)) {
     console.log(
-      `🔍 Processing: ${path.relative(rootDir, _filePath)} (${fileViolations.length} violations)`,
+      `🔍 Processing: ${path.relative(rootDir, filePath)} (${fileViolations.length} violations)`,
     );
 
     if (fixUnusedVariablesInFile(filePath, fileViolations)) {
       totalFixed++;
       console.log(
-        `✅ Fixed unused variables in: ${path.relative(rootDir, _filePath)}\n`,
+        `✅ Fixed unused variables in: ${path.relative(rootDir, filePath)}\n`,
       );
     } else {
       console.log(
-        `⚠️  No changes made to: ${path.relative(rootDir, _filePath)}\n`,
+        `⚠️  No changes made to: ${path.relative(rootDir, filePath)}\n`,
       );
     }
   }
@@ -316,7 +316,7 @@ function main() {
       stdio: 'inherit',
     });
     console.log('✅ Autofix completed successfully');
-  } catch (_error) {
+  } catch {
     console.log('⚠️  Autofix completed with some remaining issues');
   }
 
@@ -345,7 +345,7 @@ function main() {
         console.log(`  ... and ${finalViolations.length - 10} more`);
       }
     }
-  } catch (_error) {
+  } catch {
     console.log('⚠️  Could not run final verification');
   }
 

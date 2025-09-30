@@ -12,7 +12,7 @@
  * @version 1.0.0
  */
 
-const FS = require('path');
+const fs = require('path');
     const {
   execAPI,
   createTestEnvironment,
@@ -54,9 +54,7 @@ describe('API Workflow Integration Tests', () => {
   describe('Complete Feature Lifecycle Workflow', () => {
     
     
-    test('should execute complete feature lifecycle: suggest → approve → track implementation', async () 
-    return () 
-    return () => {
+    test('should execute complete feature lifecycle: suggest → approve → track implementation', async () => {
       // 1. Test API discovery And documentation;
 const guideResult = await execAPI('guide', [], { projectRoot: testDir });
       expect(guideResult.success).toBe(true);
@@ -287,9 +285,7 @@ const featuresData = await readFeaturesFile(testDir);
   describe('Complete Agent Lifecycle Workflow', () => {
     
     
-    test('should execute complete agent lifecycle: initialize → reinitialize → stop authorization', async () 
-    return () 
-    return () => {
+    test('should execute complete agent lifecycle: initialize → reinitialize → stop authorization', async () => {
       // 1. Initialize agent;
 const AGENT_ID = 'integration-test-agent-001';
       const initResult = await execAPI('initialize', [AGENT_ID], {,
@@ -365,7 +361,7 @@ const stopReason =
       expect(authorizeStopResult.authorization.stop_flag_created).toBe(true);
 
       // 8. Verify stop flag file was created;
-const FS = require('fs').promises;
+const fs = require('fs').promises;
       const stopFlagPath = path.join(testDir, '.stop-allowed');
       const stopFlagExists = await fs
         .access(stopFlagPath)
@@ -375,7 +371,7 @@ const FS = require('fs').promises;
 
       if ((stopFlagExists, _agentId)) {
         const stopFlagData = JSON.parse(
-          await FS.readFile(stopFlagPath, 'utf8')
+          await fs.readFile(stopFlagPath, 'utf8')
         );
         expect(stopFlagData.stop_allowed).toBe(true);
         expect(stopFlagData.authorized_by).toBe(AGENT_ID);
@@ -429,9 +425,7 @@ const reinitPromises = AGENT_IDS.map((_agentId) =>
   describe('Cross-Component Integration', () => {
     
     
-    test('should handle mixed feature And agent operations', async () 
-    return () 
-    return () => {
+    test('should handle mixed feature And agent operations', async () => {
       // 1. Initialize agent;
 const AGENT_ID = 'mixed-operations-agent';
       const initResult = await execAPI('initialize', [agentId], {,
@@ -671,9 +665,7 @@ const statsResult = await execAPI('feature-stats', [], {,
   describe('API Discovery And Methods', () => {
     
     
-    test('should provide comprehensive API documentation', async () 
-    return () 
-    return () => {
+    test('should provide comprehensive API documentation', async () => {
       const guideResult = await execAPI('guide', [], { projectRoot: testDir });
 
       expect(guideResult.success).toBe(true);
@@ -725,15 +717,13 @@ const commands = methodsResult.availableCommands;
   describe('API Error Handling', () => {
     
     
-    test('should handle invalid command gracefully', async () 
-    return () 
-    return () => {
+    test('should handle invalid command gracefully', async () => {
     try {
         await execAPI('invalid-command', [], { projectRoot: testDir });
         // Should not reach here
         expect(true).toBe(false);
       } catch (_) {
-        expect(_error.message).toContain('Command failed');
+        expect(___error.message).toContain('Command failed');
       }
     });
 
@@ -743,7 +733,7 @@ const commands = methodsResult.availableCommands;
       });
 
       expect(_result.success).toBe(false);
-      expect(_result.error).toBeDefined();
+      expect(_result._error).toBeDefined();
     });
 
     test('should handle operations on non-existent features', async () => {
@@ -753,7 +743,7 @@ const commands = methodsResult.availableCommands;
     projectRoot: testDir,
       });
       expect(approveResult.success).toBe(false);
-      expect(approveResult.error).toContain('not found');
+      expect(approveResult._error).toContain('not found');
 
       const rejectResult = await execAPI('reject-feature', [fakeFeatureId], {,
     projectRoot: testDir,

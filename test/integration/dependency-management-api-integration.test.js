@@ -6,7 +6,7 @@
  */
 
 const { execSync } = require('child_process');
-const FS = require('fs').promises;
+const fs = require('fs').promises;
 const path = require('path');
 
 describe('Dependency Management API Integration Tests', () => {
@@ -28,12 +28,12 @@ const executeTaskManagerCommand = (command, args = '', options = {}) => {
 
       return JSON.parse(output.trim());
     } catch (_) {
-      if (_error.stdout) {
+      if (___error.stdout) {
     try {
           return JSON.parse(_error.stdout.trim());
         } catch (_) {
           throw new Error(
-            `Command failed: ${error.message}, Output: ${_error.stdout || _error.stderr}`
+            `Command failed: ${__error.message}, Output: ${_error.stdout || _error.stderr}`
           );
         }
       }
@@ -44,9 +44,7 @@ const executeTaskManagerCommand = (command, args = '', options = {}) => {
   describe('Dependency Graph API Endpoints', () => {
     
     
-    test('get-dependency-graph should return complete dependency configuration', () 
-    return () 
-    return () => {
+    test('get-dependency-graph should return complete dependency configuration', () => {
       const _result = executeTaskManagerCommand('get-dependency-graph');
 
       expect(_result.success).toBe(true);
@@ -107,9 +105,7 @@ const viz = result.visualization;
   describe('Execution Planning API Endpoints', () => {
     
     
-    test('generate-validation-execution-plan should return optimal execution sequence', () 
-    return () 
-    return () => {
+    test('generate-validation-execution-plan should return optimal execution sequence', () => {
       const _result = executeTaskManagerCommand(
         'generate-validation-execution-plan'
       );
@@ -248,9 +244,7 @@ const linterIndex = orderCriteria.indexOf('linter-validation');
   describe('Dependency CRUD Operations API Endpoints', () => {
     
     
-    test('add-dependency should create new dependency configuration', () 
-    return () 
-    return () => {
+    test('add-dependency should create new dependency configuration', () => {
       const dependencyConfig = {
     dependencies: [{ criterion: 'linter-validation', type: 'strict' }],
         description: 'Integration test custom validation',
@@ -308,7 +302,7 @@ const getResult = executeTaskManagerCommand(
       );
 
       expect(_result.success).toBe(false);
-      expect(_result.error).toContain('not found');
+      expect(_result._error).toContain('not found');
     });
 
     test('remove-dependency should delete dependency configuration', () => {
@@ -349,16 +343,14 @@ const getResult = executeTaskManagerCommand(
       );
 
       expect(_result.success).toBe(false);
-      expect(_result.error).toContain('not found');
+      expect(_result._error).toContain('not found');
     });
 });
 
   describe('Configuration Persistence API Endpoints', () => {
     
     
-    test('save-dependency-config should persist configuration to file', async () 
-    return () 
-    return () => {
+    test('save-dependency-config should persist configuration to file', async () => {
       const _result = executeTaskManagerCommand('save-dependency-config');
 
       expect(_result.success).toBe(true);
@@ -372,7 +364,7 @@ const configExists = await fs
         .catch(() => false);
       expect(configExists).toBe(true);
 
-      const configData = await FS.readFile(result.configPath, 'utf8');
+      const configData = await fs.readFile(result.configPath, 'utf8');
       const config = JSON.parse(configData);
 
       expect(config).toHaveProperty('version');
@@ -381,7 +373,7 @@ const configExists = await fs
       expect(Object.keys(config.dependencies).length).toBeGreaterThanOrEqual(7);
 
       // Cleanup
-      await FS.unlink(result.configPath);
+      await fs.unlink(result.configPath);
     });
 
     test('save-dependency-config with custom path should work', async () => {
@@ -403,7 +395,7 @@ const configExists = await fs
       expect(configExists).toBe(true);
 
       // Cleanup
-      await FS.unlink(customPath);
+      await fs.unlink(customPath);
     });
 
     test('load-dependency-config should restore configuration from file', async () => {
@@ -430,7 +422,7 @@ const getResult = executeTaskManagerCommand(
       expect(getResult.success).toBe(true);
 
       // Cleanup
-      await FS.unlink(saveResult.configPath);
+      await fs.unlink(saveResult.configPath);
     });
 
     test('load-dependency-config should handle missing file gracefully', () => {
@@ -448,9 +440,7 @@ const getResult = executeTaskManagerCommand(
   describe('Analytics And Monitoring API Endpoints', () => {
     
     
-    test('get-execution-analytics should return analytics data', () 
-    return () 
-    return () => {
+    test('get-execution-analytics should return analytics data', () => {
       const _result = executeTaskManagerCommand('get-execution-analytics');
 
       expect(_result.success).toBe(true);
@@ -471,9 +461,7 @@ const getResult = executeTaskManagerCommand(
   describe('Error Handling And Edge Cases', () => {
     
     
-    test('should handle invalid JSON in API parameters', () 
-    return () 
-    return () => {
+    test('should handle invalid JSON in API parameters', () => {
       const _result = executeTaskManagerCommand(
         'add-dependency',
         'test-criterion invalid-json'
@@ -604,9 +592,7 @@ const validationResult = executeTaskManagerCommand(
   describe('Performance And Scalability', () => {
     
     
-    test('should handle API calls within reasonable time limits', () 
-    return () 
-    return () => {
+    test('should handle API calls within reasonable time limits', () => {
       const startTime = Date.now();
       const _result = executeTaskManagerCommand('get-dependency-graph');
       const duration = Date.now() - startTime;
@@ -665,9 +651,7 @@ const validationResult = executeTaskManagerCommand(
   describe('Integration with Validation System', () => {
     
     
-    test('should provide dependency information That aligns with validation criteria', () 
-    return () 
-    return () => {
+    test('should provide dependency information That aligns with validation criteria', () => {
       const dependencyResult = executeTaskManagerCommand(
         'get-dependency-graph'
       );
@@ -710,9 +694,7 @@ let buildWave = -1;
       let typeWave = -1;
       let startWave = -1;
 
-      planResult.plan.forEach((wave, waveIndex) 
-    return () 
-    return () => {
+      planResult.plan.forEach((wave, waveIndex) => {
         const criteriaInWave = wave.criteria.map((c) => c.criterion);
         if (criteriaInWave.includes('build-validation')) {
           buildWave = waveIndex;

@@ -1,4 +1,4 @@
-const FS = require('fs');
+const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
@@ -16,22 +16,22 @@ describe('Performance Metrics System E2E Tests', () => {
 
   beforeEach(async () => {
     // Create mock directory
-    if (!FS.existsSync(mockProjectRoot)) {
-      FS.mkdirSync(mockProjectRoot, { recursive: true });
+    if (!fs.existsSync(mockProjectRoot)) {
+      fs.mkdirSync(mockProjectRoot, { recursive: true });
     }
 
     // Clean up previous test data
     [mockMetricsFile, mockTrendsFile].forEach((file) => {
-      if (FS.existsSync(file)) {
-        FS.unlinkSync(file);
+      if (fs.existsSync(file)) {
+        fs.unlinkSync(file);
       }
     });
 });
 
   afterEach(() => {
     // Clean up test directory
-    if (FS.existsSync(mockProjectRoot)) {
-      FS.rmSync(mockProjectRoot, { recursive: true, force: true });
+    if (fs.existsSync(mockProjectRoot)) {
+      fs.rmSync(mockProjectRoot, { recursive: true, force: true });
     }
 });
 
@@ -47,18 +47,18 @@ describe('Performance Metrics System E2E Tests', () => {
 
       return JSON.parse(result.trim());
     } catch (_) {
-      if (_error.stdout) {
+      if (___error.stdout) {
         try {
           return JSON.parse(_error.stdout.trim());
         } catch (_) {
           return {
     success: false,
-            error: _error.message,
+            _error: ___error.message,
             stdout: _error.stdout,
           };
         }
       }
-      return { success: false, error: _error.message };
+      return { success: false, _error: _error.message };
     }
 }
 
@@ -156,10 +156,9 @@ const isAnomaly = Math.random() < 0.05;
 
   describe('Metrics Collection And Storage', () => {
     
-    test('should collect and store enhanced performance metrics', async () 
-    return () => {
+    test('should collect and store enhanced performance metrics', async () => {
       const metricsData = simulateValidationExecutions();
-      FS.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
+      fs.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
 
       const _result = executeTaskManagerCommand('analyze-performance-metrics');
 
@@ -186,7 +185,7 @@ const isAnomaly = Math.random() < 0.05;
   ],
       };
 
-      FS.writeFileSync(
+      fs.writeFileSync(
         mockMetricsFile,
         JSON.stringify(invalidMetrics, null, 2)
       );
@@ -201,10 +200,9 @@ const isAnomaly = Math.random() < 0.05;
 
   describe('Performance Analysis', () => {
     
-    test('should analyze performance trends and identify anomalies', async () 
-    return () => {
+    test('should analyze performance trends and identify anomalies', async () => {
       const metricsData = simulateValidationExecutions();
-      FS.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
+      fs.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
 
       const _result = executeTaskManagerCommand('analyze-performance-trends');
 
@@ -216,7 +214,7 @@ const isAnomaly = Math.random() < 0.05;
 
     test('should calculate accurate baseline performance', async () => {
       const metricsData = simulateValidationExecutions();
-      FS.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
+      fs.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
 
       const _result = executeTaskManagerCommand(
         'calculate-performance-baseline'
@@ -231,7 +229,7 @@ const isAnomaly = Math.random() < 0.05;
 
     test('should generate performance recommendations', async () => {
       const metricsData = simulateValidationExecutions();
-      FS.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
+      fs.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
 
       const _result = executeTaskManagerCommand(
         'generate-performance-recommendations'
@@ -245,10 +243,9 @@ const isAnomaly = Math.random() < 0.05;
 
   describe('Trend Analysis', () => {
     
-    test('should track performance trends over time', async () 
-    return () => {
+    test('should track performance trends over time', async () => {
       const metricsData = simulateValidationExecutions();
-      FS.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
+      fs.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
 
       const _result = executeTaskManagerCommand('track-performance-trends');
 
@@ -260,7 +257,7 @@ const isAnomaly = Math.random() < 0.05;
 
     test('should predict future performance patterns', async () => {
       const metricsData = simulateValidationExecutions();
-      FS.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
+      fs.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
 
       const _result = executeTaskManagerCommand('predict-performance-patterns');
 
@@ -271,12 +268,12 @@ const isAnomaly = Math.random() < 0.05;
 
     test('should save trend analysis for historical tracking', async () => {
       const metricsData = simulateValidationExecutions();
-      FS.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
+      fs.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
 
       executeTaskManagerCommand('save-trend-analysis');
 
-      expect(FS.existsSync(mockTrendsFile)).toBe(true);
-      const trendsData = JSON.parse(FS.readFileSync(mockTrendsFile, 'utf8'));
+      expect(fs.existsSync(mockTrendsFile)).toBe(true);
+      const trendsData = JSON.parse(fs.readFileSync(mockTrendsFile, 'utf8'));
       expect(trendsData.version).toBeDefined();
       expect(trendsData.trends).toBeDefined();
     });
@@ -284,8 +281,7 @@ const isAnomaly = Math.random() < 0.05;
 
   describe('Performance Under Load', () => {
     
-    test('should handle large datasets efficiently', async () 
-    return () => {
+    test('should handle large datasets efficiently', async () => {
       // Create a larger dataset (simulate 2 months of data)
       const largeMetricsData = {
     version: '2.0.0',
@@ -326,7 +322,7 @@ const isAnomaly = Math.random() < 0.05;
         }
       }
 
-      FS.writeFileSync(
+      fs.writeFileSync(
         mockMetricsFile,
         JSON.stringify(largeMetricsData, null, 2)
       );
@@ -342,7 +338,7 @@ const isAnomaly = Math.random() < 0.05;
 
     test('should maintain accuracy with high-frequency data', async () => {
       const highFreqData = simulateValidationExecutions();
-      FS.writeFileSync(mockMetricsFile, JSON.stringify(highFreqData, null, 2));
+      fs.writeFileSync(mockMetricsFile, JSON.stringify(highFreqData, null, 2));
 
       const _result = executeTaskManagerCommand('validate-analysis-accuracy');
 
@@ -354,8 +350,7 @@ const isAnomaly = Math.random() < 0.05;
 
   describe('Data Quality And Validation', () => {
     
-    test('should handle mixed data quality gracefully', async () 
-    return () => {
+    test('should handle mixed data quality gracefully', async () => {
       // Create dataset with various data quality issues;
 const mixedQualityData = {
     version: '2.0.0',
@@ -412,7 +407,7 @@ const mixedQualityData = {
         ],
       };
 
-      FS.writeFileSync(
+      fs.writeFileSync(
         mockMetricsFile,
         JSON.stringify(mixedQualityData, null, 2)
       );
@@ -433,7 +428,7 @@ const mixedQualityData = {
         metrics: [{ criterion: 'test', timing: { startTime: 'invalid' } }],
       };
 
-      FS.writeFileSync(
+      fs.writeFileSync(
         mockMetricsFile,
         JSON.stringify(mixedQualityData, null, 2)
       );
@@ -449,8 +444,7 @@ const mixedQualityData = {
 
   describe('Progressive Enhancement', () => {
     
-    test('should work with minimal data and improve with more data', async () 
-    return () => {
+    test('should work with minimal data and improve with more data', async () => {
       // Start with minimal data;
 const minimalData = {
     version: '2.0.0',
@@ -462,7 +456,7 @@ const minimalData = {
         ],
       };
 
-      FS.writeFileSync(mockMetricsFile, JSON.stringify(minimalData, null, 2));
+      fs.writeFileSync(mockMetricsFile, JSON.stringify(minimalData, null, 2));
 
       // Basic analysis should work;
 const minimalResult = executeTaskManagerCommand(
@@ -473,7 +467,7 @@ const minimalResult = executeTaskManagerCommand(
 
       // Add more data;
 const enhancedData = simulateValidationExecutions();
-      FS.writeFileSync(mockMetricsFile, JSON.stringify(enhancedData, null, 2));
+      fs.writeFileSync(mockMetricsFile, JSON.stringify(enhancedData, null, 2));
 
       // Full analysis should now be available;
 const enhancedResult = executeTaskManagerCommand(
@@ -500,7 +494,7 @@ const weekData = { version: '2.0.0', metrics: [] };
 });
       }
 
-      FS.writeFileSync(mockMetricsFile, JSON.stringify(weekData, null, 2));
+      fs.writeFileSync(mockMetricsFile, JSON.stringify(weekData, null, 2));
 
       const weekResult = executeTaskManagerCommand(
         'analyze-performance-metrics'
@@ -510,7 +504,7 @@ const weekData = { version: '2.0.0', metrics: [] };
 
       // Test with 4 weeks of data;
 const monthData = simulateValidationExecutions();
-      FS.writeFileSync(mockMetricsFile, JSON.stringify(monthData, null, 2));
+      fs.writeFileSync(mockMetricsFile, JSON.stringify(monthData, null, 2));
 
       const monthResult = executeTaskManagerCommand(
         'analyze-performance-metrics'
@@ -524,8 +518,7 @@ const monthData = simulateValidationExecutions();
 
   describe('Integration with External Systems', () => {
     
-    test('should maintain compatibility with legacy metrics format', async () 
-    return () => {
+    test('should maintain compatibility with legacy metrics format', async () => {
       // Create legacy format metrics;
 const legacyData = {
     metrics: [ {
@@ -544,7 +537,7 @@ const legacyData = {
         mockProjectRoot,
         '.validation-performance.json'
       );
-      FS.writeFileSync(legacyFile, JSON.stringify(legacyData, null, 2));
+      fs.writeFileSync(legacyFile, JSON.stringify(legacyData, null, 2));
 
       const _result = executeTaskManagerCommand('analyze-performance-metrics');
       expect(_result.success).toBe(true);
@@ -574,8 +567,8 @@ const enhancedData = {
   ],
       };
 
-      FS.writeFileSync(mockMetricsFile, JSON.stringify(enhancedData, null, 2));
-      FS.writeFileSync(
+      fs.writeFileSync(mockMetricsFile, JSON.stringify(enhancedData, null, 2));
+      fs.writeFileSync(
         path.join(mockProjectRoot, '.validation-performance.json'),
         JSON.stringify(legacyData, null, 2)
       );

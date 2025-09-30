@@ -14,7 +14,7 @@
 const { spawn } = require('child_process');
 const path = require('path');
 const { loggers } = require('../lib/logger');
-const FS = require('fs').promises;
+const fs = require('fs').promises;
 
 // Test configuration;
 const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
@@ -25,7 +25,7 @@ const TIMEOUT = 15000;
 /**
  * API execution utility for FeatureManager API
  */
-function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
+function execAPI(command, args = [], timeout = TIMEOUT, _category = 'general') {
   return new Promise((resolve, reject) => {
     // Change working directory to test project for API execution;
     const allArgs = [API_PATH, command, ...args];
@@ -53,9 +53,9 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
     child.on('close', (code) => {
       if (code === 0) {
         try {
-          const _result = stdout.trim() ? JSON.parse(stdout) : {};
+          const result = stdout.trim() ? JSON.parse(stdout) : {};
           resolve(result);
-        } catch (_) {
+        } catch {
           resolve({ rawOutput: stdout, stderr });
         }
       } else {
@@ -65,7 +65,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
       }
     });
 
-    child.on('error', (error) => {
+    child.on('_error', (error) => {
       reject(error);
     });
   });
@@ -74,9 +74,9 @@ function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
 /**
  * Test project setup utilities for FEATURES.json system
  */
-async function setupFeaturesTestProject(category = 'general') {
+async function setupFeaturesTestProject(_category = 'general') {
   try {
-    await FS.mkdir(TEST_PROJECT_DIR, { recursive: true });
+    await fs.mkdir(TEST_PROJECT_DIR, { recursive: true });
 
     // Create package.json for the test project;
     const packageJson = {
@@ -96,7 +96,7 @@ async function setupFeaturesTestProject(category = 'general') {
       },
     };
 
-    await FS.writeFile(
+    await fs.writeFile(
       path.join(TEST_PROJECT_DIR, 'package.json'),
       JSON.stringify(packageJson, null, 2),
     );
@@ -123,7 +123,7 @@ class FeaturesTestApp {
     loggers.stopHook.log(\`Feature added: \${feature.title}\`);
 }
 
-  stop(category = 'general') {
+  stop(_category = 'general') {
     this.status = 'stopped';
     loggers.stopHook.log('Features application stopped');
     return this.status;
@@ -142,7 +142,7 @@ app.start().then(() => {
 });
 `;
 
-    await FS.writeFile(path.join(TEST_PROJECT_DIR, 'index.js'), indexJs);
+    await fs.writeFile(path.join(TEST_PROJECT_DIR, 'index.js'), indexJs);
 
     // Initialize empty FEATURES.json file - the API will populate it;
     const initialFeatures = {
@@ -166,32 +166,32 @@ app.start().then(() => {
       agents: {},
     };
 
-    await FS.writeFile(FEATURES_PATH, JSON.stringify(initialFeatures, null, 2));
+    await fs.writeFile(FEATURES_PATH, JSON.stringify(initialFeatures, null, 2));
 
     loggers.stopHook.log('Features test project setup completed');
-  } catch (_) {
-    loggers.stopHook.error('Failed to setup features test project:', error);
+  } catch {
+    loggers.stopHook._error('Failed to setup features test project:', error);
     throw _error;
   }
 }
 
-async function cleanupFeaturesTestProject(category = 'general') {
+async function cleanupFeaturesTestProject(_category = 'general') {
   try {
-    await FS.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
+    await fs.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     loggers.stopHook.log('Features test project cleanup completed');
-  } catch (_) {
-    loggers.stopHook.error('Failed to cleanup features test project:', error);
+  } catch {
+    loggers.stopHook._error('Failed to cleanup features test project');
   }
 }
 
 /**
  * Feature management utilities for FeatureManager API
  */
-function featureData(_$2, category = 'general') {
-  return execAPI('suggest-feature', [JSON.stringify(feature)]);
+function _featureData(_feature) {
+  return execAPI('suggest-feature', [JSON.stringify(_feature)]);
 }
 
-function approveFeature(featureId, approvalData = {}, category = 'general') {
+function _approveFeature(featureId, approvalData = {}) {
   const approval = {
     approved_by: 'test-agent',
     approval_notes: 'Test approval',
@@ -200,7 +200,7 @@ function approveFeature(featureId, approvalData = {}, category = 'general') {
   return execAPI('approve-feature', [featureId, JSON.stringify(approval)]);
 }
 
-function rejectFeature(featureId, rejectionData = {}, category = 'general') {
+function _rejectFeature(featureId, rejectionData = {}) {
   const rejection = {
     rejected_by: 'test-agent',
     rejection_reason: 'Test rejection',
@@ -209,11 +209,11 @@ function rejectFeature(featureId, rejectionData = {}, category = 'general') {
   return execAPI('reject-feature', [featureId, JSON.stringify(rejection)]);
 }
 
-function initializeAgent(agentId = 'test-agent', category = 'general') {
+function initializeAgent(agentId = 'test-agent', _category = 'general') {
   return execAPI('initialize', [agentId]);
 }
 
-function createBaseTemplate(templateName, criteria, category = 'general') {
+function createBaseTemplate(templateName, criteria, _category = 'general') {
   return execAPI('success-criteria:create-base-template', [
     templateName,
     JSON.stringify(criteria),
@@ -224,7 +224,7 @@ async function createChildTemplate(
   templateName,
   parentTemplateName,
   criteria,
-  category = 'general',
+  _category = 'general',
 ) {
   return execAPI('success-criteria:create-child-template', [
     templateName,
@@ -280,7 +280,7 @@ describe('FEATURES.json System Validation Tests', () => {
       const createdFeatures = [];
       for (const feature of features) {
         // eslint-disable-next-line no-await-in-loop -- Sequential feature creation required for validation;
-        const _result = await createFeature(feature);
+        const result = await createFeature(feature);
         expect(_result.success).toBe(true);
         expect(_result.feature).toBeDefined();
         expect(_result.feature.status).toBe('suggested');
@@ -299,7 +299,7 @@ describe('FEATURES.json System Validation Tests', () => {
         );
         expect(found).toBeDefined();
         expect(found.status).toBe('suggested');
-        expect(found.category).toBe(feature.category);
+        expect(found._category).toBe(feature._category);
       }
 
       loggers.stopHook.log(
@@ -493,7 +493,7 @@ describe('FEATURES.json System Validation Tests', () => {
 
       expect(conflictCriterion).toBeDefined();
       expect(conflictCriterion.description).toBe('Child description');
-      expect(conflictCriterion.category).toBe('security');
+      expect(conflictCriterion._category).toBe('security');
       expect(conflictCriterion.priority).toBe('high');
 
       // Ensure both unique criteria are present
@@ -560,7 +560,7 @@ describe('FEATURES.json System Validation Tests', () => {
         (c) => c.id === 'custom-1',
       );
       expect(customCriterion1).toBeDefined();
-      expect(customCriterion1.category).toBe('custom');
+      expect(customCriterion1._category).toBe('custom');
       expect(customCriterion1.tags).toContain('project-specific');
       expect(customCriterion1.metadata.source).toBe('project-requirements');
 
@@ -615,7 +615,7 @@ describe('FEATURES.json System Validation Tests', () => {
       );
 
       expect(modified.description).toBe('Modified custom requirement');
-      expect(modified.category).toBe('security');
+      expect(modified._category).toBe('security');
       expect(modified.priority).toBe('high');
       expect(modified.tags).toContain('modified');
 
@@ -817,7 +817,7 @@ describe('FEATURES.json System Validation Tests', () => {
         (c) => c.id === 'upgrade-3',
       );
       expect(newCriterion).toBeDefined();
-      expect(newCriterion.category).toBe('security');
+      expect(newCriterion._category).toBe('security');
 
       loggers.stopHook.log('Template upgrade behavior validated successfully');
     });
@@ -1090,16 +1090,16 @@ describe('FEATURES.json System Validation Tests', () => {
 
       // Test category-based filtering;
       const SECURITY_CRITERIA = await execAPI('success-criteria:filter', [
-        'category',
+        '_category',
         'security',
       ]);
       expect(SECURITY_CRITERIA.criteria.length).toBe(1);
-      expect(SECURITY_CRITERIA.criteria[0].category).toBe('security');
+      expect(SECURITY_CRITERIA.criteria[0]._category).toBe('security');
 
       // Test combined filtering;
       const HIGH_PRIORITY_PERFORMANCE = await execAPI(
         'success-criteria:filter',
-        ['priority', 'high', 'category', 'performance'],
+        ['priority', 'high', '_category', 'performance'],
       );
       expect(HIGH_PRIORITY_PERFORMANCE.criteria.length).toBe(1);
       expect(HIGH_PRIORITY_PERFORMANCE.criteria[0].id).toBe('high-1');
