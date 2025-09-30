@@ -1,8 +1,8 @@
 {
-  "project": "e2e-test-performance-validation",
+  "project": "e2e-test-performance-validation-scalability",
   "schema_version": "2.0.0",
   "migrated_from": "test-initialization",
-  "migration_date": "2025-09-30T01:48:58.232Z",
+  "migration_date": "2025-09-30T01:49:09.484Z",
   "features": [],
   "completed_features": [],
   "feature_relationships": {},
@@ -34,8 +34,8 @@
   },
   "metadata": {
     "version": "2.0.0",
-    "created": "2025-09-30T01:48:58.232Z",
-    "updated": "2025-09-30T01:48:58.232Z",
+    "created": "2025-09-30T01:49:09.484Z",
+    "updated": "2025-09-30T01:49:09.484Z",
     "total_features": 0,
     "features_by_type": {
       "error": 0,

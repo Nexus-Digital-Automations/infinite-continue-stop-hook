@@ -1,7 +1,7 @@
 {
-  "name": "e2e-test-performance-validation",
+  "name": "e2e-test-performance-validation-scalability",
   "version": "1.0.0",
-  "description": "E2E test environment for performance-validation",
+  "description": "E2E test environment for performance-validation-scalability",
   "scripts": {
     "start": "echo \"Test project started\"",
     "build": "echo \"Test project built\"",
