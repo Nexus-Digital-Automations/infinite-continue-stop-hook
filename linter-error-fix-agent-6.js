@@ -30,7 +30,7 @@ class LinterErrorFixAgent6 {
     let fileFixCount = 0;
 
     // Pattern 1: Fix unused parameters in constructors and functions
-    content = content.replace(/constructor\(([^)]*)\)/g, (match, _params) => {
+    content = content.replace(/constructor\(([^)]*)\)/g, (match, params) => {
       if (params.trim()) {
         const fixedParams = params
           .split(',')
@@ -86,9 +86,6 @@ class LinterErrorFixAgent6 {
         for (let j = i - 1; j >= Math.max(0, i - 20); j--) {
           if (lines[j].includes('catch (_)')) {
             // We found a catch (_) block, this _error should exist
-            break;
-          } else if (lines[j].includes('catch (_)')) {
-            // This is fine, _error is defined
             break;
           }
         }

@@ -139,13 +139,15 @@ const statsResult = await execAPI('feature-stats', [], {
     });
 
     test('should validate feature data requirements', async () => {
-      // 1. Test missing required fields;
-const incompleteFeatures = [ {,
-    description: 'Missing title',
+      // 1. Test missing required fields
+      const incompleteFeatures = [
+        {
+          description: 'Missing title',
           business_value: 'Test',
           category: 'enhancement',
-        }, {
-    title: 'Missing description',
+        },
+        {
+          title: 'Missing description',
           business_value: 'Test',
           category: 'enhancement',
         }, {

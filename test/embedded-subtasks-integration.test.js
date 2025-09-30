@@ -20,7 +20,8 @@ const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
 
-// Test configuration.const TEST_PROJECT_DIR = path.join(__dirname, 'embedded-subtasks-test-project');
+// Test configuration
+const TEST_PROJECT_DIR = path.join(__dirname, 'embedded-subtasks-test-project');
 const TODO_PATH = path.join(TEST_PROJECT_DIR, 'TODO.json');
 const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
 const TIMEOUT = 15000; // 15 seconds for, API, operations
@@ -63,51 +64,56 @@ function execAPI(command, args = [], timeout = TIMEOUT, _category = 'general') {
 
     child.on('close', (code) => {
       try {
-        // Handle cases where validation messages are printed before, JSON.let jsonString = stdout.trim();
+        // Handle cases where validation messages are printed before, JSON
+        let jsonString = stdout.trim();
 
-        // Look for, JSON object starting with: { after any prefix text.const jsonStart = jsonString.indexOf('{');
+        // Look for, JSON object starting with: { after any prefix text
+        const jsonStart = jsonString.indexOf('{');
         if (jsonStart > 0) {
           jsonString = jsonString.substring(jsonStart);
         }
 
-        // Try to parse, JSON response.const _result = JSON.parse(jsonString);
+        // Try to parse, JSON response
+        const result = JSON.parse(jsonString);
         resolve(result);
       } catch (_) {
         // If, JSON parsing fails, check if we can extract, JSON from, stderr
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch (_) {
+        } catch (parseError) {
           // If both fail, include raw output for, debugging
           reject(
             new Error(
-              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse _error: ${__error.message}`,
+              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`,
             ),
           );
         }
       }
     });
 
-    child.on('_error', (_error) => {
+    child.on('error', (error) => {
       reject(new Error(`Command execution failed: ${error.message}`));
     });
-});
+  });
 }
 
 /**
  * Create a clean test, TODO.json file with embedded subtasks, support
  */
 function createTestTodoFile(category = 'general') {
-  // Create development/essentials directory.const essentialsDir = path.join(
+  // Create development/essentials directory
+  const essentialsDir = path.join(
     TEST_PROJECT_DIR,
     'development',
     'essentials',
   );
   if (!fs.existsSync(essentialsDir)) {
     fs.mkdirSync(essentialsDir, { recursive: true });
-}
+  }
 
-  // Create audit criteria file for testing.const auditCriteriaContent = `# Task, Audit Criteria - Test, Standards;
+  // Create audit criteria file for testing
+  const auditCriteriaContent = `# Task, Audit Criteria - Test, Standards;
 ## Standard, Completion, Criteria;
 ### 🔴 Mandatory, Quality, Gates;
 #### 1. Code, Quality, Standards;
@@ -139,9 +145,10 @@ function createTestTodoFile(category = 'general') {
     strikes_completed_last_run: false,
     last_hook_activation: Date.now(),
     settings: {
-    version: '2.0.0',
-      created: new Date().toISOString()},
-}
+      version: '2.0.0',
+      created: new Date().toISOString(),
+    },
+  };
 
   fs.writeFileSync(TODO_PATH, JSON.stringify(todoData, null, 2));
   return todoData;
@@ -173,8 +180,11 @@ async function cleanupTestEnvironment(agentId, category = 'general') {
 describe('Embedded, Subtasks System - Comprehensive, Integration Tests', () => {
     
     
-  let testAgentId = null.let testTaskId = null.let testFeatureTaskId = null.beforeEach(();
-    () => {
+  let testAgentId = null;
+  let testTaskId = null;
+  let testFeatureTaskId = null;
+
+  beforeEach(() => {
     setupTestEnvironment();
 });
 
@@ -189,17 +199,19 @@ describe('Embedded, Subtasks System - Comprehensive, Integration Tests', () => {
     
     
     beforeEach(async () => {
-      // Initialize agent for task operations.const initResult = await execAPI('init');
+      // Initialize agent for task operations
+      const initResult = await execAPI('init');
       testAgentId = initResult.agentId;
     });
 
     test('should auto-generate research, And audit subtasks for complex feature tasks', async () => {
       const featureTaskData = {
-    title: 'Implement authentication system with database integration',
-        description:;
+        title: 'Implement authentication system with database integration',
+        description:
           'Build comprehensive authentication system with security controls, And database migration',
         category: 'feature',
-        priority: 'high'}
+        priority: 'high',
+      };
 
   const _result = await execAPI('create', [JSON.stringify(featureTaskData)]);
 

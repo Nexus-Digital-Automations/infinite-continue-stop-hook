@@ -13,14 +13,14 @@ describe('Dependency Management API Integration Tests', () => {
   const PROJECT_ROOT = process.cwd();
   const API_TIMEOUT = 10000;
 
-  // Helper function to execute TaskManager API commands;
-const executeTaskManagerCommand = (command, args = '', options = {}) => {
+  // Helper function to execute TaskManager API commands
+  const executeTaskManagerCommand = (command, args = '', options = {}) => {
     const timeout = options.timeout || API_TIMEOUT;
     const fullCommand = `timeout ${timeout / 1000}s node "${PROJECT_ROOT}/taskmanager-api.js" ${command} ${args}`;
 
     try {
-      const _output = execSync(fullCommand, {,
-    cwd: PROJECT_ROOT,
+      const output = execSync(fullCommand, {
+        cwd: PROJECT_ROOT,
         encoding: 'utf8',
         timeout: timeout,
         ...options,

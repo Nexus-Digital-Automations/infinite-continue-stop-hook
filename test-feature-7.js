@@ -6,23 +6,23 @@ const RAGOPERATIONS = require('./lib/api-modules/rag/ragOperations');
 const { loggers } = require('./lib/logger');
 
 async function testAdaptiveLearningPaths() {
-    try {
+  try {
     loggers.stopHook.log(
-      'Testing Feature 7: Adaptive Learning Paths System...'
+      'Testing Feature 7: Adaptive Learning Paths System...',
     );
 
     // Create RAG operations instance;
-const ragOps = new RAGOPERATIONS({
-    taskManager: null,
+    const ragOps = new RAGOPERATIONS({
+      taskManager: null,
       agentManager: null,
-      withTimeout: (promise, TIMEOUT) => promise,
+      withTimeout: (promise, _TIMEOUT) => promise,
     });
 
     // Test user profile;
-const userProfile = {
-    userId: 'test_user',
+    const userProfile = {
+      userId: 'test_user',
       skillLevels: {
-    javascript: 'intermediate',
+        javascript: 'intermediate',
         nodejs: 'beginner',
       },
       strengthAreas: ['javascript', 'frontend'],
@@ -34,8 +34,8 @@ const userProfile = {
     };
 
     // Test learning goals;
-const learningGoals = {
-    skills: ['nodejs', 'express', 'database', 'api'],
+    const learningGoals = {
+      skills: ['nodejs', 'express', 'database', 'api'],
       timeline: '30 days',
       priorities: ['backend development', 'api design'],
       objectives: ['Build REST API', 'Understand database integration'],
@@ -51,7 +51,7 @@ const learningGoals = {
         maxLength: 10,
         includeBranching: true,
         includeAssessments: true,
-      }
+      },
     );
     loggers.app.info('Learning path result:', {
       success: learningPath.success,
@@ -69,7 +69,7 @@ const learningGoals = {
       {
         includeAlternatives: true,
         maxRecommendations: 3,
-      }
+      },
     );
     loggers.app.info('Path recommendations result:', {
       success: pathRecommendations.success,
@@ -81,7 +81,7 @@ const learningGoals = {
     // Test 3: Track learning path progress
     loggers.stopHook.log('\n3. Testing trackLearningPathProgress...');
     const userProgress = {
-    completionRate: 0.6,
+      completionRate: 0.6,
       averageScore: 0.8,
       timeSpent: 120, // minutes
       strugglingAreas: ['databases'],
@@ -93,7 +93,7 @@ const learningGoals = {
       {
         includeDetailedAnalysis: true,
         checkAdaptationTriggers: true,
-      }
+      },
     );
     loggers.app.info('Progress tracking result:', {
       success: progressTracking.success,
@@ -121,7 +121,7 @@ const learningGoals = {
       {
         adaptationTrigger: 'performance_drop',
         preserveProgress: true,
-      }
+      },
     );
     loggers.app.info('Path adaptation result:', {
       success: pathAdaptation.success,
@@ -129,7 +129,7 @@ const learningGoals = {
     });
 
     loggers.app.info(
-      '\n✅ Feature 7: Adaptive Learning Paths System integration test completed successfully!'
+      '\n✅ Feature 7: Adaptive Learning Paths System integration test completed successfully!',
     );
   } catch (error) {
     loggers.stopHook.error('❌ Feature 7 test failed:', error.message);

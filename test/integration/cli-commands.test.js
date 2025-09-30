@@ -59,10 +59,10 @@ describe('CLI Commands Integration Tests', () => {
 
     return new Promise((resolve, reject) => {
       const child = spawn('node', [API_PATH, ...args], {
-        cwd,,,
-    stdio: ['pipe', 'pipe', 'pipe'],
+        cwd,
+        stdio: ['pipe', 'pipe', 'pipe'],
         env: { ...process.env, NODE_ENV: 'test' },
-});
+      });
 
       let stdout = '';
       let stderr = '';

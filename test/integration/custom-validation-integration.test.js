@@ -42,12 +42,12 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
 });
 
   beforeEach(async () => {
-    // Clean up test files before each test,
+    // Clean up test files before each test
     try {
       const files = await fs.readdir(testProjectRoot);
       for (const file of files) {
-        await fs.rm(path.join(testProjectRoot, file), {,
-    recursive: true,
+        await fs.rm(path.join(testProjectRoot, file), {
+          recursive: true,
           force: true,
         });
       }

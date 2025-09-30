@@ -61,9 +61,9 @@ const guideResult = await execAPI('guide', [], { projectRoot: testDir });
       expect(guideResult.featureManager).toBeDefined();
       expect(guideResult.featureWorkflow).toBeDefined();
 
-      // 2. Suggest a new feature;
-const featureData = generateTestFeature({,
-    title: 'Complete Workflow Test Feature',
+      // 2. Suggest a new feature
+      const featureData = generateTestFeature({
+        title: 'Complete Workflow Test Feature',
         description:
           'Feature to test the complete workflow from suggestion to implementation tracking',
         business_value:
