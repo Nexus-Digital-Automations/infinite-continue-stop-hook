@@ -14,7 +14,7 @@
  * @version 1.0.0
  */
 
-const fs = require('../lib/api-modules/core/successCriteriaManager');
+const { SuccessCriteriaManager: SUCCESS_CRITERIA_MANAGER } = require('../lib/api-modules/core/successCriteriaManager');
 
 describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
 
@@ -37,8 +37,8 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
     };
 
     mockWithTimeout = jest.fn((OPERATION) => {
-      if (typeof operation === 'function') {
-        return operation();
+      if (typeof OPERATION === 'function') {
+        return OPERATION();
       }
       return Promise.resolve(OPERATION);
     });
@@ -719,14 +719,14 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
 
       test('should validate correct criteria array', () => {
         const VALID_CRITERIA = ['Criterion 1', 'Criterion 2'];
-        const result =
+        const _result =
           successCriteriaManager._defaultCriteriaValidator(VALID_CRITERIA);
         expect(_result.valid).toBe(true);
         expect(_result.errors).toHaveLength(0);
       });
 
       test('should reject non-array input', () => {
-        const result =
+        const _result =
           successCriteriaManager._defaultCriteriaValidator('not an array');
         expect(_result.valid).toBe(false);
         expect(_result.errors).toContain('Success criteria must be an array');
@@ -795,7 +795,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
         const TEST_TASK = { id: 'test_123', title: 'Test Task' };
         mockTaskManager.getTask.mockResolvedValue(TEST_TASK);
 
-        const result =
+        const _result =
           await successCriteriaManager._defaultTaskExistsValidator('test_123');
         expect(_result.valid).toBe(true);
         expect(_result.task).toBe(TEST_TASK);
@@ -804,7 +804,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
       test('should invalidate non-existent task', async () => {
         mockTaskManager.getTask.mockResolvedValue(null);
 
-        const result =
+        const _result =
           await successCriteriaManager._defaultTaskExistsValidator('test_123');
         expect(_result.valid).toBe(false);
       });
@@ -814,7 +814,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
           new Error('Database connection failed'),
         );
 
-        const result =
+        const _result =
           await successCriteriaManager._defaultTaskExistsValidator('test_123');
         expect(_result.valid).toBe(false);
         expect(_result.error).toBe('Database connection failed');
@@ -845,7 +845,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
       }
 
       const RESULTS = await Promise.all(OPERATIONS);
-      RESULTS.forEach((result) => {
+      RESULTS.forEach((_result) => {
         expect(_result.success).toBe(true);
       });
     });

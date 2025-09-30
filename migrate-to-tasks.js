@@ -19,13 +19,13 @@ class TaskMigrator {
       projectRoot,
       `FEATURES.json.backup.${Date.now()}`,
     );
-}
+  }
 
   /**
    * Execute the complete migration process
    */
-  migrate() {
-      try {
+  async migrate() {
+    try {
       loggers.stopHook.log(
         '🚀 Starting FEATURES.json → TASKS.json migration...',
       );
@@ -37,10 +37,10 @@ class TaskMigrator {
       await this.createBackup();
 
       // Step 3: Load And parse existing data;
-const featuresData = await this.loadFeaturesData();
+      const featuresData = await this.loadFeaturesData();
 
       // Step 4: Transform to new schema;
-const tasksData = await this.transformToTasksSchema(featuresData);
+      const tasksData = await this.transformToTasksSchema(featuresData);
 
       // Step 5: Validate transformed data
       await this.validateTransformedData(tasksData);
@@ -56,7 +56,7 @@ const tasksData = await this.transformToTasksSchema(featuresData);
       loggers.stopHook.log(`📁 New file created: ${this.tasksPath}`);
 
       return {
-    success: true,
+        success: true,
         backup: this.backupPath,
         newFile: this.tasksPath,
         stats: await this.getMigrationStats(tasksData),
@@ -65,45 +65,45 @@ const tasksData = await this.transformToTasksSchema(featuresData);
       loggers.stopHook.error('❌ Migration failed:', _error.message);
       throw _error;
     }
-}
+  }
 
   /**
    * Validate That FEATURES.json exists And is readable
    */
-  validateSourceFile() {
-      try {
+  async validateSourceFile() {
+    try {
       await FS.access(this.featuresPath);
       loggers.stopHook.log('✓ Source FEATURES.json found');
-    } catch (_) {
+    } catch (_error) {
       throw new Error(`FEATURES.json not found at ${this.featuresPath}`);
     }
-}
+  }
 
   /**
    * Create backup of existing FEATURES.json
    */
-  createBackup() {
-      try {
+  async createBackup() {
+    try {
       await FS.copyFile(this.featuresPath, this.backupPath);
       loggers.stopHook.log(`✓ Backup created: ${this.backupPath}`);
-    } catch (_) {
+    } catch (_error) {
       throw new Error(`Failed to create backup: ${_error.message}`);
     }
-}
+  }
 
   /**
    * Load And parse existing FEATURES.json data
    */
-  loadFeaturesData() {
-      try {
+  async loadFeaturesData() {
+    try {
       const data = await FS.readFile(this.featuresPath, 'utf8');
       const parsedData = JSON.parse(data);
       loggers.stopHook.log('✓ Features data loaded And parsed');
       return parsedData;
-    } catch (_) {
+    } catch (_error) {
       throw new Error(`Failed to load features data: ${_error.message}`);
     }
-}
+  }
 
   /**
    * Transform FEATURES.json data to new TASKS.json schema
@@ -115,8 +115,8 @@ const tasksData = await this.transformToTasksSchema(featuresData);
     const taskIdCounter = Date.now();
 
     // Create base TASKS.json structure;
-const tasksData = {
-    project: featuresData.project || path.basename(this.projectRoot),
+    const tasksData = {
+      project: featuresData.project || path.basename(this.projectRoot),
       schema_version: '2.0.0',
       migrated_from: 'FEATURES.json',
       migration_date: migrationDate,
@@ -127,7 +127,7 @@ const tasksData = {
       task_relationships: {},
 
       workflow_config: {
-    require_approval:
+        require_approval:
           featuresData.workflow_config?.require_approval ?? true,
         auto_reject_timeout_hours:
           featuresData.workflow_config?.auto_reject_timeout_hours ?? 168,
@@ -153,35 +153,35 @@ const tasksData = {
       },
 
       auto_generation_config: {
-    test_task_template: {
-    title_pattern: 'Implement comprehensive tests for: {feature_title}',
+        test_task_template: {
+          title_pattern: 'Implement comprehensive tests for: {feature_title}',
           description_pattern:
             'Create unit tests, integration tests, And E2E tests to achieve >{coverage}% coverage for: {feature_title}. Must validate all functionality, edge cases, And error conditions.',
           priority: 'high',
           required_capabilities: ['testing'],
           validation_requirements: {
-    test_coverage: true,
+            test_coverage: true,
             linter_pass: true,
-          }
-},
+          },
+        },
         audit_task_template: {
-    title_pattern: 'Security And quality audit for: {feature_title}',
+          title_pattern: 'Security And quality audit for: {feature_title}',
           description_pattern:
             'Run semgrep security scan, dependency vulnerability check, code quality analysis, And compliance validation for: {feature_title}. Zero tolerance for security vulnerabilities.',
           priority: 'high',
           required_capabilities: ['security', 'analysis'],
           validation_requirements: {
-    security_scan: true,
+            security_scan: true,
             linter_pass: true,
             type_check: true,
-          }
-}
-},
+          },
+        },
+      },
 
       priority_system: {
-    order: ['USER_REQUESTS', 'ERROR', 'AUDIT', 'FEATURE', 'TEST'],
+        order: ['USER_REQUESTS', 'ERROR', 'AUDIT', 'FEATURE', 'TEST'],
         error_priorities: {
-    critical: [
+          critical: [
             'build-breaking',
             'security-vulnerability',
             'production-down',
@@ -189,23 +189,23 @@ const tasksData = {
           high: ['linter-errors', 'type-errors', 'test-failures'],
           normal: ['warnings', 'optimization-opportunities'],
           low: ['documentation-improvements', 'code-style'],
-        }
-},
+        },
+      },
 
       metadata: {
-    version: '2.0.0',
+        version: '2.0.0',
         created: featuresData.metadata?.created || migrationDate,
         updated: migrationDate,
         total_tasks: 0,
         tasks_by_type: {
-    error: 0,
+          error: 0,
           feature: 0,
           test: 0,
           audit: 0,
         },
         approval_history: featuresData.metadata?.approval_history || [],
         migration_stats: {
-    features_migrated: 0,
+          features_migrated: 0,
           tasks_created: 0,
           auto_generated_tasks: 0,
         },
@@ -221,7 +221,7 @@ const tasksData = {
         const taskId = `task_${taskIdCounter + index}_${this.generateHash()}`;
 
         const featureTask = {
-    id: taskId,
+          id: taskId,
           type: 'feature',
           parent_id: null,
           linked_tasks: [],
@@ -233,7 +233,7 @@ const tasksData = {
           priority: this.mapPriorityFromCategory(feature.category),
           auto_generated: false,
           auto_generation_rules: {
-    generate_test_task: true,
+            generate_test_task: true,
             generate_audit_task: true,
             test_coverage_requirement: 80,
           },
@@ -250,7 +250,7 @@ const tasksData = {
           completed_at:
             feature.status === 'implemented' ? feature.updated_at : null,
           validation_requirements: {
-    security_scan: true,
+            security_scan: true,
             test_coverage: true,
             linter_pass: true,
             type_check: true,
@@ -265,7 +265,7 @@ const tasksData = {
         // Store for auto-generation later
         if (feature.status === 'approved') {
           tasksData.task_relationships[taskId] = {
-    auto_generated_test: null,
+            auto_generated_test: null,
             auto_generated_audit: null,
             dependencies: [],
             dependents: [],
@@ -285,7 +285,7 @@ const tasksData = {
           `task_${taskIdCounter + 1000 + _index}_${this.generateHash()}`;
 
         const migratedTask = {
-    id: taskId,
+          id: taskId,
           type: this.inferTaskTypeFromExisting(task),
           parent_id: task.feature_id || null,
           linked_tasks: [],
@@ -294,12 +294,12 @@ const tasksData = {
           business_value:
             task.metadata?.business_value ||
             'Implementation of approved feature',
-          task.category: task.metadata?.feature_category || 'enhancement',
+          category: task.metadata?.feature_category || 'enhancement',
           status: this.mapTaskStatus(task.status),
           priority: task.priority || 'normal',
           auto_generated: task.metadata?.auto_generated || false,
           auto_generation_rules: {
-    generate_test_task: false,
+            generate_test_task: false,
             generate_audit_task: false,
             test_coverage_requirement: 80,
           },
@@ -313,7 +313,7 @@ const tasksData = {
           assigned_at: task.assigned_at || null,
           completed_at: task.status === 'completed' ? task.updated_at : null,
           validation_requirements: {
-    security_scan: false,
+            security_scan: false,
             test_coverage: false,
             linter_pass: true,
             type_check: true,
@@ -335,7 +335,7 @@ const tasksData = {
 
     loggers.stopHook.log(`✓ Transformed ${tasksData.tasks.length} tasks`);
     return tasksData;
-}
+  }
 
   /**
    * Generate auto-tasks for approved features
@@ -352,20 +352,20 @@ const tasksData = {
         const auditTaskId = `task_${autoTaskIdCounter + autoTasksGenerated * 2 + 1}_${this.generateHash()}`;
 
         // Generate test task;
-const testTask = {
-    id: testTaskId,
+        const testTask = {
+          id: testTaskId,
           type: 'test',
           parent_id: task.id,
           linked_tasks: [task.id],
           title: `Implement comprehensive tests for ${task.title}`,
           description: `Create unit tests, integration tests, And E2E tests to achieve >80% coverage for ${task.title}. Must validate all functionality, edge cases, And error conditions.`,
           business_value: `Ensures reliability And quality of ${task.title} feature`,
-          task.category: task.task.category,
+          category: task.category,
           status: 'suggested',
           priority: 'high',
           auto_generated: true,
           auto_generation_rules: {
-    generate_test_task: false,
+            generate_test_task: false,
             generate_audit_task: false,
             test_coverage_requirement: 80,
           },
@@ -379,33 +379,33 @@ const testTask = {
           assigned_at: null,
           completed_at: null,
           validation_requirements: {
-    security_scan: false,
+            security_scan: false,
             test_coverage: true,
             linter_pass: true,
             type_check: true,
             build_success: true,
           },
           metadata: {
-    auto_generated_for: task.id,
+            auto_generated_for: task.id,
             generation_rule: 'mandatory_test_gate',
-          }
-};
+          },
+        };
 
         // Generate audit task;
-const auditTask = {
-    id: auditTaskId,
+        const auditTask = {
+          id: auditTaskId,
           type: 'audit',
           parent_id: task.id,
           linked_tasks: [task.id],
           title: `Security And quality audit for ${task.title}`,
           description: `Run semgrep security scan, dependency vulnerability check, code quality analysis, And compliance validation for ${task.title}. Zero tolerance for security vulnerabilities.`,
           business_value: `Ensures security And quality compliance of ${task.title} feature`,
-          task.category: 'security',
+          category: 'security',
           status: 'suggested',
           priority: 'high',
           auto_generated: true,
           auto_generation_rules: {
-    generate_test_task: false,
+            generate_test_task: false,
             generate_audit_task: false,
             test_coverage_requirement: 80,
           },
@@ -419,17 +419,17 @@ const auditTask = {
           assigned_at: null,
           completed_at: null,
           validation_requirements: {
-    security_scan: true,
+            security_scan: true,
             test_coverage: false,
             linter_pass: true,
             type_check: true,
             build_success: true,
           },
           metadata: {
-    auto_generated_for: task.id,
+            auto_generated_for: task.id,
             generation_rule: 'mandatory_security_audit',
-          }
-};
+          },
+        };
 
         // Add to tasks array
         tasksData.tasks.push(testTask, auditTask);
@@ -437,7 +437,7 @@ const auditTask = {
         // Update relationships
         if (!tasksData.task_relationships[task.id]) {
           tasksData.task_relationships[task.id] = {
-    auto_generated_test: null,
+            auto_generated_test: null,
             auto_generated_audit: null,
             dependencies: [],
             dependents: [],
@@ -469,7 +469,7 @@ const auditTask = {
     console.log(
       `✓ Generated ${autoTasksGenerated * 2} auto-tasks (${autoTasksGenerated} test + ${autoTasksGenerated} audit)`,
     );
-}
+  }
 
   /**
    * Validate the transformed data structure
@@ -508,41 +508,41 @@ const auditTask = {
     }
 
     loggers.stopHook.log('✓ Data validation passed');
-}
+  }
 
   /**
    * Write the new TASKS.json file
    */
-  writeTasksFile(tasksData) {
-      try {
+  async writeTasksFile(tasksData) {
+    try {
       await FS.writeFile(this.tasksPath, JSON.stringify(tasksData, null, 2));
       loggers.stopHook.log(`✓ TASKS.json written to ${this.tasksPath}`);
-    } catch (_) {
+    } catch (_error) {
       throw new Error(`Failed to write TASKS.json: ${_error.message}`);
     }
-}
+  }
 
   /**
    * Get migration statistics
    */
   getMigrationStats(tasksData) {
     return {
-    totalTasks: tasksData.metadata.total_tasks,
+      totalTasks: tasksData.metadata.total_tasks,
       tasksByType: tasksData.metadata.tasks_by_type,
       migrationStats: tasksData.metadata.migration_stats,
       autoGenerationEnabled: tasksData.workflow_config.auto_generation_enabled,
       mandatoryTestGate: tasksData.workflow_config.mandatory_test_gate,
     };
-}
+  }
 
   // Helper methods
   generateHash() {
     return Math.random().toString(36).substring(2, 10);
-}
+  }
 
-  mapPriorityFromCategory(_category) {
+  mapPriorityFromCategory(category) {
     const priorityMap = {
-    security: 'high',
+      security: 'high',
       'bug-fix': 'high',
       performance: 'normal',
       enhancement: 'normal',
@@ -550,11 +550,11 @@ const auditTask = {
       documentation: 'low',
     };
     return priorityMap[category] || 'normal';
-}
+  }
 
-  inferCapabilitiesFromCategory(_category) {
+  inferCapabilitiesFromCategory(category) {
     const capabilityMap = {
-    security: ['security', 'backend'],
+      security: ['security', 'backend'],
       'bug-fix': ['general'],
       performance: ['performance', 'analysis'],
       enhancement: ['general'],
@@ -562,7 +562,7 @@ const auditTask = {
       documentation: ['documentation'],
     };
     return capabilityMap[category] || ['general'];
-}
+  }
 
   inferTaskTypeFromExisting(task) {
     if (task.type === 'testing') {
@@ -575,11 +575,11 @@ const auditTask = {
       return 'audit';
     }
     return 'feature'; // Default for implementation tasks
-}
+  }
 
   mapTaskStatus(status) {
     const statusMap = {
-    queued: 'suggested',
+      queued: 'suggested',
       assigned: 'approved',
       in_progress: 'in-progress',
       blocked: 'blocked',
@@ -588,7 +588,7 @@ const auditTask = {
       cancelled: 'rejected',
     };
     return statusMap[status] || status;
-}
+  }
 }
 
 // CLI execution
@@ -606,9 +606,9 @@ if (require.main === module) {
       );
       throw new Error('Migration completed successfully');
     })
-    .catch((error) => {
+    .catch((_error) => {
       loggers.stopHook.error('\n❌ Migration failed:', _error.message);
-      throw error;
+      throw _error;
     });
 }
 

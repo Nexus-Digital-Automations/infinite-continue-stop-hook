@@ -5,16 +5,16 @@ const { execSync } = require('child_process');
 // End-to-End tests for complete Performance Metrics system workflow
 // Tests the full lifecycle: metrics collection → storage → analysis → trend analysis
 describe('Performance Metrics System E2E Tests', () => {
-    
+
   const mockProjectRoot = '/tmp/test-performance-e2e';
   const taskManagerPath = path.resolve(__dirname, '../../taskmanager-api.js');
   const mockMetricsFile = path.join(
     mockProjectRoot,
-    '.validation-performance-enhanced.json'
+    '.validation-performance-enhanced.json',
   );
   const mockTrendsFile = path.join(mockProjectRoot, '.validation-trends.json');
 
-  beforeEach(async () => {
+  beforeEach(() => {
     // Create mock directory
     if (!fs.existsSync(mockProjectRoot)) {
       fs.mkdirSync(mockProjectRoot, { recursive: true });
@@ -26,45 +26,45 @@ describe('Performance Metrics System E2E Tests', () => {
         fs.unlinkSync(file);
       }
     });
-});
+  });
 
   afterEach(() => {
     // Clean up test directory
     if (fs.existsSync(mockProjectRoot)) {
       fs.rmSync(mockProjectRoot, { recursive: true, force: true });
     }
-});
+  });
 
   function executeTaskManagerCommand(command, args = '', options = {}) {
     try {
       const fullCommand = `timeout 10s node "${taskManagerPath}" --project-root "${mockProjectRoot}" ${command} ${args}`;
 
       const _result = execSync(fullCommand, {
-    encoding: 'utf8',
+        encoding: 'utf8',
         timeout: 10000,
         ...options,
       });
 
-      return JSON.parse(result.trim());
-    } catch (_) {
-      if (___error.stdout) {
+      return JSON.parse(_result.trim());
+    } catch (_error) {
+      if (_error.stdout) {
         try {
           return JSON.parse(_error.stdout.trim());
-        } catch (_) {
+        } catch {
           return {
-    success: false,
-            _error: ___error.message,
+            success: false,
+            error: _error.message,
             stdout: _error.stdout,
           };
         }
       }
-      return { success: false, _error: _error.message };
+      return { success: false, error: _error.message };
     }
-}
+  }
 
   function simulateValidationExecutions() {
     const metricsData = {
-    version: '2.0.0',
+      version: '2.0.0',
       generatedAt: new Date().toISOString(),
       metrics: [],
     };
@@ -97,7 +97,7 @@ describe('Performance Metrics System E2E Tests', () => {
             }[criterion];
 
             // Simulate anomalies;
-const isAnomaly = Math.random() < 0.05;
+            const isAnomaly = Math.random() < 0.05;
             const anomalyDuration = isAnomaly
               ? baseLineDuration * (2 + Math.random() * 3)
               : baseLineDuration + (Math.random() - 0.5) * 200;
@@ -113,37 +113,37 @@ const isAnomaly = Math.random() < 0.05;
             const success = Math.random() < successRate;
 
             metricsData.metrics.push({
-    criterion: criterion,
+              criterion: criterion,
               timing: {
-    startTime: new Date(timestamp).toISOString(),
+                startTime: new Date(timestamp).toISOString(),
                 endTime: new Date(timestamp + anomalyDuration).toISOString(),
                 durationMs: anomalyDuration,
               },
               execution: {
-    success: success,
+                success: success,
                 exitCode: success ? 0 : 1,
               },
               resources: {
-    memoryUsageBefore: {
-    rss: 45000000 + week * 100000,
+                memoryUsageBefore: {
+                  rss: 45000000 + week * 100000,
                   heapUsed: 28000000 + week * 50000,
                 },
                 memoryUsageAfter: {
-    rss: 48000000 + week * 1000000 + anomalyDuration / 10,
+                  rss: 48000000 + week * 1000000 + anomalyDuration / 10,
                   heapUsed: 30000000 + week * 500000 + anomalyDuration / 20,
                 },
                 cpuUsage: {
-    user: Math.round(anomalyDuration * 800),
+                  user: Math.round(anomalyDuration * 800),
                   system: Math.round(anomalyDuration * 200),
-                }
-},
+                },
+              },
               environment: {
-    nodeVersion: '18.17.0',
+                nodeVersion: '18.17.0',
                 platform: 'darwin',
                 cpuCount: 8,
               },
               ...(isAnomaly && {
-    tags: ['anomaly', 'performance_spike'],
+                tags: ['anomaly', 'performance_spike'],
               }),
             });
           });
@@ -152,10 +152,10 @@ const isAnomaly = Math.random() < 0.05;
     }
 
     return metricsData;
-}
+  }
 
   describe('Metrics Collection And Storage', () => {
-    
+
     test('should collect and store enhanced performance metrics', async () => {
       const metricsData = simulateValidationExecutions();
       fs.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
@@ -177,17 +177,17 @@ const isAnomaly = Math.random() < 0.05;
 
     test('should validate metrics data format', async () => {
       const invalidMetrics = {
-    version: '1.0.0',
-        metrics: [ {
-    criterion: 'invalid-criterion',
-            startTime: 'invalid-timestamp',
-          },
-  ],
+        version: '1.0.0',
+        metrics: [{
+          criterion: 'invalid-criterion',
+          startTime: 'invalid-timestamp',
+        },
+        ],
       };
 
       fs.writeFileSync(
         mockMetricsFile,
-        JSON.stringify(invalidMetrics, null, 2)
+        JSON.stringify(invalidMetrics, null, 2),
       );
 
       const _result = executeTaskManagerCommand('analyze-performance-metrics');
@@ -196,10 +196,10 @@ const isAnomaly = Math.random() < 0.05;
       expect(_result.validMetrics).toBeDefined();
       expect(_result.invalidMetrics).toBeDefined();
     });
-});
+  });
 
   describe('Performance Analysis', () => {
-    
+
     test('should analyze performance trends and identify anomalies', async () => {
       const metricsData = simulateValidationExecutions();
       fs.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
@@ -217,7 +217,7 @@ const isAnomaly = Math.random() < 0.05;
       fs.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
 
       const _result = executeTaskManagerCommand(
-        'calculate-performance-baseline'
+        'calculate-performance-baseline',
       );
 
       expect(_result.success).toBe(true);
@@ -232,17 +232,17 @@ const isAnomaly = Math.random() < 0.05;
       fs.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
 
       const _result = executeTaskManagerCommand(
-        'generate-performance-recommendations'
+        'generate-performance-recommendations',
       );
 
       expect(_result.success).toBe(true);
       expect(_result.recommendations).toBeDefined();
-      expect(Array.isArray(result.recommendations)).toBe(true);
+      expect(Array.isArray(_result.recommendations)).toBe(true);
     });
-});
+  });
 
   describe('Trend Analysis', () => {
-    
+
     test('should track performance trends over time', async () => {
       const metricsData = simulateValidationExecutions();
       fs.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
@@ -277,14 +277,14 @@ const isAnomaly = Math.random() < 0.05;
       expect(trendsData.version).toBeDefined();
       expect(trendsData.trends).toBeDefined();
     });
-});
+  });
 
   describe('Performance Under Load', () => {
-    
+
     test('should handle large datasets efficiently', async () => {
       // Create a larger dataset (simulate 2 months of data)
       const largeMetricsData = {
-    version: '2.0.0',
+        version: '2.0.0',
         generatedAt: new Date().toISOString(),
         metrics: [],
       };
@@ -306,17 +306,17 @@ const isAnomaly = Math.random() < 0.05;
 
           criteria.forEach((criterion) => {
             largeMetricsData.metrics.push({
-    criterion: criterion,
+              criterion: criterion,
               timing: {
-    startTime: new Date(timestamp).toISOString(),
+                startTime: new Date(timestamp).toISOString(),
                 endTime: new Date(timestamp + 2000).toISOString(),
                 durationMs: 1500 + Math.random() * 1000,
               },
               execution: { success: Math.random() > 0.1 },
               resources: {
-    memoryUsageBefore: { rss: 50000000, heapUsed: 30000000 },
+                memoryUsageBefore: { rss: 50000000, heapUsed: 30000000 },
                 memoryUsageAfter: { rss: 52000000, heapUsed: 31000000 },
-},
+              },
             });
           });
         }
@@ -324,7 +324,7 @@ const isAnomaly = Math.random() < 0.05;
 
       fs.writeFileSync(
         mockMetricsFile,
-        JSON.stringify(largeMetricsData, null, 2)
+        JSON.stringify(largeMetricsData, null, 2),
       );
 
       const startTime = Date.now();
@@ -346,70 +346,71 @@ const isAnomaly = Math.random() < 0.05;
       expect(_result.accuracyScore).toBeGreaterThan(0.9);
       expect(_result.dataQualityScore).toBeGreaterThan(0.8);
     });
-});
+  });
 
   describe('Data Quality And Validation', () => {
-    
+
     test('should handle mixed data quality gracefully', async () => {
       // Create dataset with various data quality issues;
-const mixedQualityData = {
-    version: '2.0.0',
+      const mixedQualityData = {
+        version: '2.0.0',
         generatedAt: new Date().toISOString(),
         metrics: [
           // Perfect metric
           {
-    criterion: 'linter-validation',
+            criterion: 'linter-validation',
             timing: {
-    startTime: '2025-09-27T10:00:00.000Z',
+              startTime: '2025-09-27T10:00:00.000Z',
               endTime: '2025-09-27T10:00:01.500Z',
               durationMs: 1500,
             },
             execution: { success: true },
             resources: {
-    memoryUsageBefore: { rss: 50000000, heapUsed: 30000000 },
+              memoryUsageBefore: { rss: 50000000, heapUsed: 30000000 },
               memoryUsageAfter: { rss: 52000000, heapUsed: 31000000 },
-},
+            },
           },
           // Missing end time
           {
-    criterion: 'type-validation',
+            criterion: 'type-validation',
             timing: {
-    startTime: '2025-09-27T10:05:00.000Z',
+              startTime: '2025-09-27T10:05:00.000Z',
               durationMs: 2000,
             },
             execution: { success: true },
-},
+          },
           // Invalid timestamp
           {
-    criterion: 'build-validation',
+            criterion: 'build-validation',
             timing: {
-    startTime: 'invalid-timestamp',
+              startTime: 'invalid-timestamp',
               durationMs: 15000,
             },
             execution: { success: false },
-},
+          },
           // Missing execution data
           {
-    criterion: 'test-validation',
+            criterion: 'test-validation',
             timing: {
-    startTime: '2025-09-27T10:15:00.000Z',
+              startTime: '2025-09-27T10:15:00.000Z',
               durationMs: 8000,
-            }
-},
-          // Negative duration (impossible) {
-    criterion: 'security-validation',
+            },
+          },
+          // Negative duration (impossible)
+          {
+            criterion: 'security-validation',
             timing: {
-    startTime: '2025-09-27T10:20:00.000Z',
+              startTime: '2025-09-27T10:20:00.000Z',
               durationMs: -1000, // Invalid
             },
             execution: { success: true },
-},
+          },
         ],
       };
 
       fs.writeFileSync(
         mockMetricsFile,
-        JSON.stringify(mixedQualityData, null, 2)
+        JSON.stringify(mixedQualityData, null, 2),
       );
 
       const _result = executeTaskManagerCommand('analyze-performance-metrics');
@@ -424,13 +425,13 @@ const mixedQualityData = {
 
     test('should provide data quality insights and suggestions', async () => {
       const mixedQualityData = {
-    version: '2.0.0',
+        version: '2.0.0',
         metrics: [{ criterion: 'test', timing: { startTime: 'invalid' } }],
       };
 
       fs.writeFileSync(
         mockMetricsFile,
-        JSON.stringify(mixedQualityData, null, 2)
+        JSON.stringify(mixedQualityData, null, 2),
       );
 
       const _result = executeTaskManagerCommand('assess-data-quality');
@@ -438,40 +439,40 @@ const mixedQualityData = {
       expect(_result.success).toBe(true);
       expect(_result.qualityScore).toBeDefined();
       expect(_result.suggestions).toBeDefined();
-      expect(Array.isArray(result.suggestions)).toBe(true);
+      expect(Array.isArray(_result.suggestions)).toBe(true);
     });
-});
+  });
 
   describe('Progressive Enhancement', () => {
-    
+
     test('should work with minimal data and improve with more data', async () => {
       // Start with minimal data;
-const minimalData = {
-    version: '2.0.0',
-        metrics: [ {
-    criterion: 'linter-validation',
-            timing: { startTime: '2025-09-27T10:00:00.000Z', durationMs: 1500 },
-            execution: { success: true },
-},
+      const minimalData = {
+        version: '2.0.0',
+        metrics: [{
+          criterion: 'linter-validation',
+          timing: { startTime: '2025-09-27T10:00:00.000Z', durationMs: 1500 },
+          execution: { success: true },
+        },
         ],
       };
 
       fs.writeFileSync(mockMetricsFile, JSON.stringify(minimalData, null, 2));
 
       // Basic analysis should work;
-const minimalResult = executeTaskManagerCommand(
-        'analyze-performance-metrics'
+      const minimalResult = executeTaskManagerCommand(
+        'analyze-performance-metrics',
       );
       expect(minimalResult.success).toBe(true);
       expect(minimalResult.limitedAnalysis).toBe(true);
 
       // Add more data;
-const enhancedData = simulateValidationExecutions();
+      const enhancedData = simulateValidationExecutions();
       fs.writeFileSync(mockMetricsFile, JSON.stringify(enhancedData, null, 2));
 
       // Full analysis should now be available;
-const enhancedResult = executeTaskManagerCommand(
-        'analyze-performance-metrics'
+      const enhancedResult = executeTaskManagerCommand(
+        'analyze-performance-metrics',
       );
       expect(enhancedResult.success).toBe(true);
       expect(enhancedResult.limitedAnalysis).toBeFalsy();
@@ -480,62 +481,62 @@ const enhancedResult = executeTaskManagerCommand(
 
     test('should provide increasingly detailed insights with more data', async () => {
       // Test with 1 week of data;
-const weekData = { version: '2.0.0', metrics: [] };
+      const weekData = { version: '2.0.0', metrics: [] };
       const now = Date.now();
 
       for (let day = 0; day < 7; day++) {
         weekData.metrics.push({
-    criterion: 'build-validation',
+          criterion: 'build-validation',
           timing: {
-    startTime: new Date(now - day * 24 * 60 * 60 * 1000).toISOString(),
+            startTime: new Date(now - day * 24 * 60 * 60 * 1000).toISOString(),
             durationMs: 15000 + day * 1000, // Linear increase
           },
           execution: { success: true },
-});
+        });
       }
 
       fs.writeFileSync(mockMetricsFile, JSON.stringify(weekData, null, 2));
 
       const weekResult = executeTaskManagerCommand(
-        'analyze-performance-metrics'
+        'analyze-performance-metrics',
       );
       expect(weekResult.success).toBe(true);
       expect(weekResult.trendAnalysis).toBeDefined();
 
       // Test with 4 weeks of data;
-const monthData = simulateValidationExecutions();
+      const monthData = simulateValidationExecutions();
       fs.writeFileSync(mockMetricsFile, JSON.stringify(monthData, null, 2));
 
       const monthResult = executeTaskManagerCommand(
-        'analyze-performance-metrics'
+        'analyze-performance-metrics',
       );
       expect(monthResult.success).toBe(true);
       expect(monthResult.trendAnalysis).toBeDefined();
       expect(monthResult.anomalyDetection).toBeDefined();
       expect(monthResult.seasonalPatterns).toBeDefined();
     });
-});
+  });
 
   describe('Integration with External Systems', () => {
-    
+
     test('should maintain compatibility with legacy metrics format', async () => {
       // Create legacy format metrics;
-const legacyData = {
-    metrics: [ {
-    criterion: 'linter-validation',
-            startTime: '2025-09-27T10:00:00.000Z',
-            endTime: '2025-09-27T10:00:01.500Z',
-            durationMs: 1500,
-            success: true,
-            memoryUsageBefore: { rss: 50000000, heapUsed: 30000000 },
-            memoryUsageAfter: { rss: 52000000, heapUsed: 31000000 },
-},
+      const legacyData = {
+        metrics: [{
+          criterion: 'linter-validation',
+          startTime: '2025-09-27T10:00:00.000Z',
+          endTime: '2025-09-27T10:00:01.500Z',
+          durationMs: 1500,
+          success: true,
+          memoryUsageBefore: { rss: 50000000, heapUsed: 30000000 },
+          memoryUsageAfter: { rss: 52000000, heapUsed: 31000000 },
+        },
         ],
       };
 
       const legacyFile = path.join(
         mockProjectRoot,
-        '.validation-performance.json'
+        '.validation-performance.json',
       );
       fs.writeFileSync(legacyFile, JSON.stringify(legacyData, null, 2));
 
@@ -547,30 +548,30 @@ const legacyData = {
 
     test('should handle version migration scenarios', async () => {
       // Test mixing enhanced and legacy formats;
-const enhancedData = {
-    version: '2.0.0',
-        metrics: [ {
-    criterion: 'type-validation',
-            timing: { startTime: '2025-09-27T11:00:00.000Z', durationMs: 2000 },
-            execution: { success: true },
-},
+      const enhancedData = {
+        version: '2.0.0',
+        metrics: [{
+          criterion: 'type-validation',
+          timing: { startTime: '2025-09-27T11:00:00.000Z', durationMs: 2000 },
+          execution: { success: true },
+        },
         ],
       };
 
       const legacyData = {
-    metrics: [ {
-    criterion: 'build-validation',
-            startTime: '2025-09-27T12:00:00.000Z',
-            durationMs: 15000,
-            success: false,
-          },
-  ],
+        metrics: [{
+          criterion: 'build-validation',
+          startTime: '2025-09-27T12:00:00.000Z',
+          durationMs: 15000,
+          success: false,
+        },
+        ],
       };
 
       fs.writeFileSync(mockMetricsFile, JSON.stringify(enhancedData, null, 2));
       fs.writeFileSync(
         path.join(mockProjectRoot, '.validation-performance.json'),
-        JSON.stringify(legacyData, null, 2)
+        JSON.stringify(legacyData, null, 2),
       );
 
       const _result = executeTaskManagerCommand('analyze-performance-metrics');
@@ -578,5 +579,5 @@ const enhancedData = {
       expect(_result.metrics.length).toBe(2);
       expect(_result.formatMigration).toBeDefined();
     });
-});
+  });
 });

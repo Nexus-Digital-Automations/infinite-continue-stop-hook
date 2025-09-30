@@ -10,7 +10,6 @@
 
 const path = require('path');
 const fs = require('fs').promises;
-const _CRYPTO = require('crypto');
 const { loggers } = require('../../../lib/logger');
 
 describe('RAG System Data Migration And Integrity', () => {
@@ -33,8 +32,8 @@ describe('RAG System Data Migration And Integrity', () => {
     loggers.stopHook.log('Cleaning up data integrity test environment...');
     try {
       await fs.rm(_testMigrationPath, { recursive: true, force: true });
-    } catch {
-      loggers.stopHook.warn('Cleanup warning:', __error.message);
+    } catch (_error) {
+      loggers.stopHook.warn('Cleanup warning:', _error.message);
     }
   });
 
@@ -43,7 +42,7 @@ describe('RAG System Data Migration And Integrity', () => {
   });
 
   describe('Existing Lessons Migration', () => {
-    test('should migrate all existing lesson files accurately', async () => {
+    test('should migrate all existing lesson files accurately', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
@@ -299,7 +298,7 @@ const ERRORS = errorMigrationResult.errors;
   });
 
   describe('Data Integrity Validation', () => {
-    test('should validate data consistency across system components', async () => {
+    test('should validate data consistency across system components', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
@@ -483,7 +482,7 @@ const _postRepairCheck = await ragSystem.detectDataCorruption();
   });
 
   describe('Backup And Recovery', () => {
-    test('should create comprehensive system backups', async () => {
+    test('should create comprehensive system backups', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
@@ -713,7 +712,7 @@ const _nonExistentLesson = await ragSystem.getLessonById(anotherNewLesson.lesson
   });
 
   // Helper function to setup test lessons structure
-  async function setupTestLessonsStructure(_category = 'general') {
+  async function setupTestLessonsStructure() {
     const lessonsStructure = {
       errors: {
         'api_errors.md': `# API Error Handling
@@ -798,50 +797,46 @@ Category: api-design,
 
     // Create directories And files in parallel for each category
     await Promise.all(
-      Object.entries(lessonsStructure).map(async ([_category, files]) => {
-        const _categoryPath = path.join(
+      Object.entries(lessonsStructure).map(async ([category, files]) => {
+        const categoryPath = path.join(
           _testMigrationPath,
           'development',
           'lessons',
-          _category,
+          category,
         );
-        await fs.mkdir(_categoryPath, { recursive: true });
+        await fs.mkdir(categoryPath, { recursive: true });
 
         // Create all files in this category in parallel
         await Promise.all(
           Object.entries(files).map(([filename, content]) =>
-            fs.writeFile(path.join(_categoryPath, filename), content),
+            fs.writeFile(path.join(categoryPath, filename), content),
           ),
         );
       }),
     );
   }
 
-  async function _getAllLessonFiles(_basePath, _category = 'general') {
+  async function _getAllLessonFiles(_basePath) {
     const files = [];
 
-    async function scanDirectory(
-      dirPath,
-      relativePath = '',
-      _category = 'general',
-    ) {
-      const _entries = await fs.readdir(dirPath, { withFileTypes: true });
+    async function scanDirectory(dirPath, relativePath = '') {
+      const entries = await fs.readdir(dirPath, { withFileTypes: true });
 
       // Use for-await-of pattern for sequential directory scanning
-      for await (const _entry of _entries) {
-        const _fullPath = path.join(dirPath, _entry.name);
-        const _relPath = path.join(relativePath, _entry.name);
+      for await (const entry of entries) {
+        const fullPath = path.join(dirPath, entry.name);
+        const relPath = path.join(relativePath, entry.name);
 
-        if (_entry.isDirectory()) {
-          await scanDirectory(_fullPath, _relPath);
+        if (entry.isDirectory()) {
+          await scanDirectory(fullPath, relPath);
         } else if (
-          _entry.isFile() &&
-          (_entry.name.endsWith('.md') || _entry.name.endsWith('.txt'))
+          entry.isFile() &&
+          (entry.name.endsWith('.md') || entry.name.endsWith('.txt'))
         ) {
           files.push({
-            filename: _entry.name,
-            fullPath: _fullPath,
-            relativePath: _relPath,
+            filename: entry.name,
+            fullPath: fullPath,
+            relativePath: relPath,
           });
         }
       }

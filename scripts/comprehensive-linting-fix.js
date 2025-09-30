@@ -15,7 +15,7 @@ class ComprehensiveLintingFix {
   constructor() {
     this.fixedFiles = [];
     this.errorCount = 0;
-}
+  }
 
   /**
    * Fix undefined error variable references
@@ -29,11 +29,11 @@ class ComprehensiveLintingFix {
 
       // Pattern 1: catch: { ... error.message }
       // Fix: Change error.message to error.message;
-const errorRefPattern = /catch\s*\(\s*error\s*\)\s*\{[^}]*?error\./g;
+      const errorRefPattern = /catch\s*\(\s*error\s*\)\s*\{[^}]*?error\./g;
       if (errorRefPattern.test(content)) {
         newContent = newContent.replace(
           /(catch\s*\(\s*error\s*\)\s*\{[^}]*?)error\./g,
-          '$1_error.'
+          '$1_error.',
         );
         hasChanges = true;
       }
@@ -45,13 +45,13 @@ const errorRefPattern = /catch\s*\(\s*error\s*\)\s*\{[^}]*?error\./g;
       if (errorTemplatePattern.test(content)) {
         newContent = newContent.replace(
           /(catch\s*\(\s*error\s*\)\s*\{[^}]*?)\$\{error\./g,
-          '$1${error.'
+          '$1${error.',
         );
         hasChanges = true;
       }
 
       // Pattern 3: Simple error references in catch blocks;
-const lines = newContent.split('\n');
+      const lines = newContent.split('\n');
       const newLines = [];
       let inCatchBlock = false;
       let catchErrorVar = null;
@@ -60,7 +60,7 @@ const lines = newContent.split('\n');
         let line = lines[i];
 
         // Detect catch block start;
-const catchMatch = line.match(/catch\s*\(\s*(_?\w+)\s*\)/);
+        const catchMatch = line.match(/catch\s*\(\s*(_?\w+)\s*\)/);
         if (catchMatch) {
           inCatchBlock = true;
           catchErrorVar = catchMatch[1];
@@ -96,7 +96,7 @@ const catchMatch = line.match(/catch\s*\(\s*(_?\w+)\s*\)/);
       loggers.app._error(`Error processing ${filePath}:`, _error.message);
       return { content: null, hasChanges: false };
     }
-}
+  }
 
   /**
    * Fix unused error variables by removing them
@@ -108,7 +108,7 @@ const catchMatch = line.match(/catch\s*\(\s*(_?\w+)\s*\)/);
       let hasChanges = false;
 
       // Pattern: } catch (_) { with no usage of error;
-const catchBlockPattern = /}\s*catch\s*\(\s*_error\s*\)\s*\{([^}]*)\}/g;
+      const catchBlockPattern = /}\s*catch\s*\(\s*_error\s*\)\s*\{([^}]*)\}/g;
 
       let match;
       while ((match = catchBlockPattern.exec(content)) !== null) {
@@ -127,7 +127,7 @@ const catchBlockPattern = /}\s*catch\s*\(\s*_error\s*\)\s*\{([^}]*)\}/g;
       loggers.app._error(`Error processing ${filePath}:`, _error.message);
       return { content: null, hasChanges: false };
     }
-}
+  }
 
   /**
    * Fix unused function parameters by prefixing with underscore
@@ -141,26 +141,26 @@ const catchBlockPattern = /}\s*catch\s*\(\s*_error\s*\)\s*\{([^}]*)\}/g;
       let hasChanges = false;
 
       // Parse lint errors for unused parameters;
-const unusedParamErrors = lintOutput.filter(
+      const unusedParamErrors = lintOutput.filter(
         (error) =>
           error.includes('is defined but never used') &&
-          error.includes('Allowed unused args must match')
+          error.includes('Allowed unused args must match'),
       );
 
       for (const errorLine of unusedParamErrors) {
         // Extract parameter name and line number;
-const lineMatch = errorLine.match(/(\d+):/);
+        const lineMatch = errorLine.match(/(\d+):/);
         const paramMatch = errorLine.match(/'(\w+)' is defined but never used/);
 
         if (lineMatch && paramMatch) {
           const lineNumber = parseInt(lineMatch[1]) - 1; // Convert to 0-based;
-const paramName = paramMatch[1];
+          const paramName = paramMatch[1];
 
           if (lines[lineNumber] && lines[lineNumber].includes(paramName)) {
             // Replace parameter name with _paramName
             lines[lineNumber] = lines[lineNumber].replace(
               new RegExp(`\\b${paramName}\\b`, 'g'),
-              `_${paramName}`
+              `_${paramName}`,
             );
             hasChanges = true;
           }
@@ -171,11 +171,11 @@ const paramName = paramMatch[1];
     } catch (_) {
       loggers.app._error(
         `Error processing unused parameters in ${filePath}:`,
-        _error.message
+        _error.message,
       );
       return { content: null, hasChanges: false };
     }
-}
+  }
 
   /**
    * Get lint errors for a specific file
@@ -191,26 +191,26 @@ const paramName = paramMatch[1];
         ? _error.stdout.split('\n').filter((line) => line.includes('error'))
         : [];
     }
-}
+  }
 
   /**
    * Process a single file with all fixes
    */
-  processFile(__filePath, _targetFile, _projectRoot, _options, _metadata) {
-    loggers.app.info(`Processing: ${PATH.relative('.')}`);
+  processFile(filePath) {
+    loggers.app.info(`Processing: ${PATH.relative('.', filePath)}`);
 
     let currentContent = FS.readFileSync(filePath, 'utf8');
     let totalChanges = false;
 
-    // Apply all fixes in sequence;
-const fixes = [
-      () => this.fixUndefinedErrorReferences(__filename),
-      () => this.fixUnusedErrorVariables(__filename),
-      () => this.fixUnusedParameters(__filename),
+    // Apply all fixes in sequence
+    const fixes = [
+      () => this.fixUndefinedErrorReferences(filePath),
+      () => this.fixUnusedErrorVariables(filePath),
+      () => this.fixUnusedParameters(filePath),
     ];
 
     for (const fix of fixes) {
-      const _result = fix();
+      const result = fix();
       if (result.hasChanges && result.content) {
         FS.writeFileSync(filePath, result.content);
         currentContent = result.content;
@@ -219,10 +219,10 @@ const fixes = [
     }
 
     if (totalChanges) {
-      this.fixedFiles.push(__filename);
-      loggers.app.info(`  ✅ Fixed errors in ${PATH.relative('.', _filePath)}`);
+      this.fixedFiles.push(filePath);
+      loggers.app.info(`  ✅ Fixed errors in ${PATH.relative('.', filePath)}`);
     }
-}
+  }
 
   /**
    * Find all JavaScript files to process
@@ -231,7 +231,15 @@ const fixes = [
     const files = [];
     const excludeDirs = ['node_modules', 'coverage', '.git', 'dist', 'build'];
 
-    function dir(_$2) {
+    function walkDir(dir) {
+      const entries = FS.readdirSync(dir);
+
+      for (const entry of entries) {
+        const fullPath = PATH.join(dir, entry);
+        const stat = FS.statSync(fullPath);
+
+        if (stat.isDirectory() && !excludeDirs.includes(entry)) {
+          walkDir(fullPath);
         } else if (stat.isFile() && entry.endsWith('.js')) {
           files.push(fullPath);
         }
@@ -240,7 +248,7 @@ const fixes = [
 
     walkDir('.');
     return files;
-}
+  }
 
   /**
    * Run comprehensive fix process
@@ -249,15 +257,15 @@ const fixes = [
     loggers.app.info('🚀 Starting comprehensive linting error fix...\n');
 
     // Get current error count;
-const initialErrors = this.getCurrentErrorCount();
+    const initialErrors = this.getCurrentErrorCount();
     loggers.app.info(`📊 Initial error count: ${initialErrors}\n`);
 
     // Find and process all files;
-const files = this.findJavaScriptFiles();
+    const files = this.findJavaScriptFiles();
     loggers.app.info(`📁 Found ${files.length} JavaScript files to process\n`);
 
     // Process files in batches to avoid overwhelming the system;
-const batchSize = 10;
+    const batchSize = 10;
     for (let i = 0; i < files.length; i += batchSize) {
       const batch = files.slice(i, i + batchSize);
 
@@ -269,13 +277,13 @@ const batchSize = 10;
       if ((i + batchSize) % 50 === 0) {
         const currentErrors = this.getCurrentErrorCount();
         loggers.app.info(
-          `\n📊 Progress: ${i + batchSize}/${files.length} files, ${currentErrors} errors remaining\n`
+          `\n📊 Progress: ${i + batchSize}/${files.length} files, ${currentErrors} errors remaining\n`,
         );
       }
     }
 
     // Final error count;
-const finalErrors = this.getCurrentErrorCount();
+    const finalErrors = this.getCurrentErrorCount();
     const errorsFixed = initialErrors - finalErrors;
 
     loggers.app.info('\n🎉 Comprehensive fix completed!');
@@ -290,11 +298,11 @@ const finalErrors = this.getCurrentErrorCount();
         execSync('npm run lint -- --quiet', { stdio: 'inherit' });
       } catch (_) {
         loggers.app.info(
-          '⚠️  Some errors remain and may need manual intervention.'
+          '⚠️  Some errors remain and may need manual intervention.',
         );
       }
     }
-}
+  }
 
   /**
    * Get current error count from linting
@@ -303,13 +311,13 @@ const finalErrors = this.getCurrentErrorCount();
     try {
       const _result = execSync(
         'npm run lint 2>&1 | grep -E "(error|warning)" | wc -l',
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       );
       return parseInt(result.trim());
     } catch (_) {
       return 0;
     }
-}
+  }
 }
 
 // Run the comprehensive fix

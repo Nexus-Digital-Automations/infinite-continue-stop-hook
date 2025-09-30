@@ -656,10 +656,10 @@ ${stackLines.join('\n')}`;
   }
 
   interpolateTemplate(template, variables) {
-    const _result = template;
+    let result = template;
 
     for (const [key, value] of Object.entries(variables)) {
-      // eslint-disable-next-line security/detect-non-literal-regexp;
+      // eslint-disable-next-line security/detect-non-literal-regexp
       const regex = new RegExp(`\\{${key}\\}`, 'g');
       result = result.replace(regex, value);
     }

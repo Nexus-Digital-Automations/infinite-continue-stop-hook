@@ -68,7 +68,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, _category = 'general') {
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch (stderrError) {
+        } catch (_parseError) {
           reject(
             new Error(
               `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`,
@@ -124,7 +124,7 @@ function setupFeatureTestEnvironment(_category = 'general') {
 /**
  * Cleanup test environment
  */
-async function cleanupFeatureTestEnvironment(_category = 'general') {
+function cleanupFeatureTestEnvironment(_category = 'general') {
   if (fs.existsSync(TEST_PROJECT_DIR)) {
     fs.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
   }

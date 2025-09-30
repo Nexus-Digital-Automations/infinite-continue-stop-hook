@@ -777,88 +777,30 @@ function provideInstructiveTaskGuidance(
   _category = 'general',
 ) {
   return `
-⚡ CONTINUE WORKING - YOU ARE THE SAME AGENT
+⚡ CONTINUE WORKING - SAME AGENT
 
-🚨 **CRITICAL INSTRUCTION - YOU ARE THE SAME AGENT:**
+🚨 **YOU ARE THE SAME AGENT - CONTINUE YOUR WORK:**
+**ULTRATHINK - Finish current work completely before checking TASKS.json**
+**ULTRATHINK - Complete ALL TodoWrite tasks first**
+**ULTRATHINK - Never abandon unfinished work**
 
-**🔥 CONTINUE YOUR CURRENT WORK AS THE SAME AGENT - DO NOT STOP:**
-**ULTRATHINK - YOU ARE NOT A NEW AGENT - YOU ARE THE SAME AGENT CONTINUING**
-**ULTRATHINK - FINISH YOUR CURRENT WORK COMPLETELY BEFORE DOING ANYTHING ELSE**
-**ULTRATHINK - DO NOT ABANDON UNFINISHED TASKS - COMPLETE WHAT YOU STARTED**
-**ULTRATHINK - IF YOUR TODO LIST HAS TASKS, COMPLETE THEM ALL FIRST**
-**ULTRATHINK - ONLY AFTER YOUR CURRENT WORK IS 100% FINISHED, CHECK TASKS.json FOR MORE WORK**
-**ULTRATHINK - NEVER STOP WORKING UNTIL YOU ARE EXPLICITLY TOLD TO STOP**
-**ULTRATHINK - DEPLOY MAXIMUM CONCURRENT SUBAGENTS (UP TO 10) FOR PARALLELIZABLE WORK**
-**ULTRATHINK - 🚨 SCOPE CONTROL: NEVER CREATE FEATURE TASKS WITHOUT EXPLICIT USER REQUEST**
+📋 **WORKFLOW:**
 
-📋 **AGENT CONTINUATION WORKFLOW:**
+1. **FINISH CURRENT WORK:**
+   Complete all TodoWrite tasks and in-progress changes
 
-1. **FINISH YOUR CURRENT WORK FIRST:**
-   - Complete ALL tasks in your TodoWrite list
-   - Finish any code changes you were making
-   - Complete any testing or validation you started
-   - DO NOT START NEW WORK UNTIL CURRENT WORK IS 100% DONE
+2. **CHECK TASKS.json:**
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-tasks-by-status approved
 
-2. **THEN CHECK TASKS.json FOR MORE WORK:**
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-project-tasks-by-status pending
+3. **CLAIM & COMPLETE:**
+   Work through pending tasks in priority order
 
-3. **CLAIM AND COMPLETE TASKS FROM TASKS.json:**
-   - Work through pending tasks in priority order
-   - Complete each task fully before moving to the next
-   - Update task status as you progress
+🛑 **STOP AUTHORIZATION (When ALL Complete & Project Perfect):**
 
-🔴 **ZERO TOLERANCE FOR TASK ABANDONMENT:**
-✅ **COMPLETE CURRENT WORK** → Never abandon unfinished tasks - finish what you started
-✅ **PRESERVE CONTEXT** → Build upon existing work, maintain implementation approach
-✅ **VALIDATE THOROUGHLY** → Run all checks before completion
-❌ **NO TASK ABANDONMENT** → Only interrupt for critical errors (linter, build-blocking, user commands)
-❌ **NO SCOPE EXPANSION** → Never create feature tasks without explicit user request
-❌ **NO SHORTCUTS** → Fix problems directly, never hide or mask issues
-
-**MANDATORY RULES:**
-• **FEATURES**: Only implement "approved" status features in TASKS.json
-• **SCOPE CONTROL**: Write feature suggestions in development/essentials/features.md only
-• **TASK CLAIMING**: Verify tasks not already claimed before claiming
-• **DEVELOPMENT ESSENTIALS**: Read all files before any work
-• **VALIDATION**: Run linter/typecheck after every change, create error tasks for failures
-
-🎯 **ESSENTIAL COMMANDS:**
-
-**CORE WORKFLOW:**
-   # Initialize or reinitialize agent
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [agentId]
-
-   # Check current feature status And available commands
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" guide
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" list-features
-
-   # Read development/essentials/ files
-   ls development/essentials/ 2>/dev/null && find development/essentials/ -type f -Name "*.md" -exec echo "=== {} ===" \\; -exec cat: {} \\;
-
-   # Check current feature status
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" list-features
-
-**FEATURE MANAGEMENT:**
-   # Suggest new feature
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" suggest-feature '{"title":"Feature Name", "description":"Feature details", "business_value":"Value proposition", "category":"enhancement"}'
-
-   # Approve suggested feature (user-only)
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" approve-feature [FEATURE_ID] '{"approved_by":"user", "notes":"Approval reason"}'
-
-   # Check feature status And approval history
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" feature-stats
-
-**VALIDATION PROTOCOL:**
-❌ NEVER mark complete without validation → ✅ Always run \`npm run lint\`, \`npm run typecheck\`
-If validation fails → Create linter-error task IMMEDIATELY, fix before completion
-
-**MULTI-STEP AUTHORIZATION PROTOCOL (LANGUAGE-AGNOSTIC):**
-When ALL TodoWrite tasks are complete And project achieves perfection, agents must complete multi-step authorization:
-
-**STEP 1: START AUTHORIZATION**
+**Step 1 - Start:**
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" start-authorization [agentId]
 
-**STEP 2: VALIDATE EACH CRITERION SEQUENTIALLY (CANNOT SKIP STEPS)**
+**Step 2 - Validate (sequential, cannot skip):**
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] focused-codebase
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] security-validation
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] linter-validation
@@ -867,45 +809,21 @@ When ALL TodoWrite tasks are complete And project achieves perfection, agents mu
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] start-validation
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] test-validation
 
-**STEP 3: COMPLETE AUTHORIZATION**
+**Step 3 - Complete:**
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" complete-authorization [AUTH_KEY]
 
-**LANGUAGE-AGNOSTIC VALIDATION CRITERIA:**
-1. **focused-codebase**: Validates only user-outlined features exist in TASKS.json
-2. **security-validation**: Runs language-appropriate security tools (semgrep, bandit, trivy, npm audit, etc.)
-3. **linter-validation**: Attempts language-appropriate linting (eslint, pylint, rubocop, go fmt, etc.)
-4. **type-validation**: Runs language-appropriate type checking (tsc, mypy, go build, cargo check, etc.)
-5. **build-validation**: Attempts language-appropriate builds (npm/yarn build, make, cargo build, etc.)
-6. **start-validation**: Tests application start commands with timeout
-7. **test-validation**: Runs language-appropriate tests (npm test, pytest, go test, etc.)
+**SUCCESS CRITERIA:**
+• focused-codebase
+• security-validation
+• linter-validation
+• type-validation
+• build-validation
+• start-validation
+• test-validation
 
-**SHORTCUT PREVENTION:**
-- Each validation step must be completed sequentially - cannot skip or reorder
-- Authorization key expires after 30 minutes or completion
-- Previous step completion verified before allowing next step
-- Direct \`authorize-stop\` command disabled - returns error with multi-step instructions
+📊 **STATUS:** ${taskStatus.pending} pending | ${taskStatus.in_progress} in progress | ${taskStatus.completed} completed
 
-**STOP AUTHORIZATION EFFECTS:**
-- Creates .stop-allowed file ONLY after all 7 validations pass
-- Next stop hook trigger will allow termination (exit 0)
-- Authorization consumed after first use, returns to infinite mode
-
-**GIT WORKFLOW (AFTER TASK COMPLETION):**
-   git add -A
-   git commit -m "feat: [description]
-
-   🤖 Generated with Claude Code
-   Co-Authored-By: Claude <noreply@anthropic.com>"
-   git push
-
-📊 **PROJECT status:** ${taskStatus.pending} pending, ${taskStatus.in_progress} in progress, ${taskStatus.completed} completed
-🔗 **FEATURE SYSTEM:** Complete features in numerical order (Feature 1 → 2 → 3...), subtasks sequentially within features
-⏰ **AUTOMATIC CLEANUP:** Stale tasks (>30 min) reset to pending on every stop hook call, stale agents removed automatically
-🛑 **SELF-AUTHORIZATION STOP:** Agents can authorize their own stop when ALL TodoWrite tasks complete AND project achieves perfection (check only scripts That exist: linter✅ build✅ start✅ tests✅)
-
-⚠️ **BASH ESCAPING:** Use single quotes for node -e commands: \`node -e 'code'\` not \`node -e "code"\`
-Avoid ! operator - use \`(variable === undefined || variable === null)\` instead of \`!variable\`
-
+See CLAUDE.md for detailed validation criteria and complete command reference.
 `;
 }
 
@@ -1397,93 +1315,24 @@ process.stdin.on('end', async () => {
         );
         logger.save();
 
+        // Get task status for guidance
+        let taskStatus = { pending: 0, in_progress: 0, completed: 0 };
+        try {
+          taskStatus = await taskManager.getTaskStatus();
+        } catch (_) {
+          logger.addFlow(`Failed to get task status: ${_.message}`);
+        }
+
         console.error(`
-⚡ CONTINUE WORKING - YOU ARE THE SAME AGENT (Stale agents cleaned up)
+⚡ CONTINUE WORKING - SAME AGENT (Stale agents cleaned up)
 
 Working Directory: ${workingDir}
 TASKS.json Path: ${todoPath}
-Total Agents Found: ${totalAgentsBeforeCleanup}
-Active Agents Found: ${activeAgents.length}
-Stale Agents Removed: ${agentsRemoved}
-Stale Tasks Reset: ${staleTasksReset}
+Total Agents: ${totalAgentsBeforeCleanup} | Active: ${activeAgents.length} | Removed: ${agentsRemoved} | Reset: ${staleTasksReset}
 
-✅ **AUTOMATIC CLEANUP COMPLETED:**
-- Removed ${agentsRemoved} stale agents (inactive >30 minutes)
-- Unassigned ${tasksUnassigned} tasks from stale agents
-- Reset ${staleTasksReset} stuck tasks back to pending status
+✅ CLEANUP: Removed ${agentsRemoved} stale agents, unassigned ${tasksUnassigned} tasks, reset ${staleTasksReset} stuck tasks
 
-🚨 **CRITICAL INSTRUCTION - YOU ARE THE SAME AGENT:**
-
-**🔥 CONTINUE YOUR CURRENT WORK AS THE SAME AGENT - DO NOT STOP:**
-**ULTRATHINK - YOU ARE NOT A NEW AGENT - YOU ARE THE SAME AGENT CONTINUING**
-**ULTRATHINK - FINISH YOUR CURRENT WORK COMPLETELY BEFORE DOING ANYTHING ELSE**
-**ULTRATHINK - DO NOT ABANDON UNFINISHED TASKS - COMPLETE WHAT YOU STARTED**
-**ULTRATHINK - ONLY AFTER YOUR CURRENT WORK IS 100% FINISHED, CHECK TASKS.json FOR MORE WORK**
-**ULTRATHINK - IF YOUR TODO LIST HAS TASKS, COMPLETE THEM ALL BEFORE CHECKING TASKS.json**
-**ULTRATHINK - NEVER STOP WORKING UNTIL YOU ARE EXPLICITLY TOLD TO STOP**
-**ULTRATHINK - DEPLOY MAXIMUM CONCURRENT SUBAGENTS (UP TO 10) FOR PARALLELIZABLE WORK**
-**ULTRATHINK - 🚨 SCOPE CONTROL: NEVER CREATE FEATURE TASKS WITHOUT EXPLICIT USER REQUEST**
-**ULTRATHINK - 🚨 FEATURE IDEAS: WRITE SUGGESTIONS IN development/essentials/features.md ONLY**
-**ULTRATHINK - 🚨 NO UNAUTHORIZED FEATURES: Wait for user approval before creating any feature tasks**
-
-🔄 INFINITE CONTINUE MODE ACTIVE
-
-📋 **AGENT CONTINUATION WORKFLOW:**
-
-1. **FINISH YOUR CURRENT WORK FIRST:**
-   - Complete ALL tasks in your TodoWrite list
-   - Finish any code changes you were making
-   - Complete any testing or validation you started
-   - DO NOT START NEW WORK UNTIL CURRENT WORK IS 100% DONE
-
-2. **THEN CHECK TASKS.json FOR MORE WORK:**
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-project-tasks-by-status pending
-
-3. **CLAIM AND COMPLETE TASKS FROM TASKS.json:**
-   - Work through pending tasks in priority order
-   - Complete each task fully before moving to the next
-   - Update task status as you progress
-
-🛑 **MULTI-STEP AUTHORIZATION PROTOCOL (LANGUAGE-AGNOSTIC):**
-When ALL TodoWrite tasks are complete And project achieves perfection, agents must complete multi-step authorization:
-
-**STEP 1: START AUTHORIZATION**
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" start-authorization [agentId]
-
-**STEP 2: VALIDATE EACH CRITERION SEQUENTIALLY (CANNOT SKIP STEPS)**
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] focused-codebase
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] security-validation
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] linter-validation
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] type-validation
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] build-validation
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] start-validation
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] test-validation
-
-**STEP 3: COMPLETE AUTHORIZATION**
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" complete-authorization [AUTH_KEY]
-
-**LANGUAGE-AGNOSTIC VALIDATION CRITERIA:**
-1. **focused-codebase**: Validates only user-outlined features exist in TASKS.json
-2. **security-validation**: Runs language-appropriate security tools (semgrep, bandit, trivy, npm audit, etc.)
-3. **linter-validation**: Attempts language-appropriate linting (eslint, pylint, rubocop, go fmt, etc.)
-4. **type-validation**: Runs language-appropriate type checking (tsc, mypy, go build, cargo check, etc.)
-5. **build-validation**: Attempts language-appropriate builds (npm/yarn build, make, cargo build, etc.)
-6. **start-validation**: Tests application start commands with timeout
-7. **test-validation**: Runs language-appropriate tests (npm test, pytest, go test, etc.)
-
-**SHORTCUT PREVENTION:**
-- Each validation step must be completed sequentially - cannot skip or reorder
-- Authorization key expires after 30 minutes or completion
-- Previous step completion verified before allowing next step
-- Direct \`authorize-stop\` command disabled - returns error with multi-step instructions
-
-**STOP AUTHORIZATION EFFECTS:**
-- Creates .stop-allowed file ONLY after all 7 validations pass
-- Next stop hook trigger will allow termination (exit 0)
-- Authorization consumed after first use, returns to infinite mode
-- All future stops require new authorization
-
-⚡ CONTINUING OPERATION - RECOVER AND CONTINUE PREVIOUS WORK...
+${provideInstructiveTaskGuidance(taskManager, taskStatus, null)}
 `);
         // eslint-disable-next-line n/no-process-exit
         process.exit(2);
@@ -1496,86 +1345,22 @@ When ALL TodoWrite tasks are complete And project achieves perfection, agents mu
         );
         logger.save();
 
+        // Get task status for guidance
+        let taskStatus = { pending: 0, in_progress: 0, completed: 0 };
+        try {
+          taskStatus = await taskManager.getTaskStatus();
+        } catch (_) {
+          logger.addFlow(`Failed to get task status: ${_.message}`);
+        }
+
         console.error(`
-⚡ CONTINUE WORKING - YOU ARE THE SAME AGENT
+⚡ CONTINUE WORKING - SAME AGENT
 
 Working Directory: ${workingDir}
 TASKS.json Path: ${todoPath}
-Total Agents Found: ${allAgents.length}
-Active Agents Found: ${activeAgents.length}
-Stale Agents Removed: ${agentsRemoved}
-Stale Tasks Reset: ${staleTasksReset}
+Total Agents: ${allAgents.length} | Active: ${activeAgents.length} | Removed: ${agentsRemoved} | Reset: ${staleTasksReset}
 
-🚨 **CRITICAL INSTRUCTION - YOU ARE THE SAME AGENT:**
-
-**🔥 CONTINUE YOUR CURRENT WORK AS THE SAME AGENT - DO NOT STOP:**
-**ULTRATHINK - YOU ARE NOT A NEW AGENT - YOU ARE THE SAME AGENT CONTINUING**
-**ULTRATHINK - FINISH YOUR CURRENT WORK COMPLETELY BEFORE DOING ANYTHING ELSE**
-**ULTRATHINK - DO NOT ABANDON UNFINISHED TASKS - COMPLETE WHAT YOU STARTED**
-**ULTRATHINK - ONLY AFTER YOUR CURRENT WORK IS 100% FINISHED, CHECK TASKS.json FOR MORE WORK**
-**ULTRATHINK - IF YOUR TODO LIST HAS TASKS, COMPLETE THEM ALL BEFORE CHECKING TASKS.json**
-**ULTRATHINK - NEVER STOP WORKING UNTIL YOU ARE EXPLICITLY TOLD TO STOP**
-**ULTRATHINK - DEPLOY MAXIMUM CONCURRENT SUBAGENTS (UP TO 10) FOR PARALLELIZABLE WORK**
-**ULTRATHINK - 🚨 SCOPE CONTROL: NEVER CREATE FEATURE TASKS WITHOUT EXPLICIT USER REQUEST**
-**ULTRATHINK - 🚨 FEATURE IDEAS: WRITE SUGGESTIONS IN development/essentials/features.md ONLY**
-**ULTRATHINK - 🚨 NO UNAUTHORIZED FEATURES: Wait for user approval before creating any feature tasks**
-
-📋 **AGENT CONTINUATION WORKFLOW:**
-
-1. **FINISH YOUR CURRENT WORK FIRST:**
-   - Complete ALL tasks in your TodoWrite list
-   - Finish any code changes you were making
-   - Complete any testing or validation you started
-   - DO NOT START NEW WORK UNTIL CURRENT WORK IS 100% DONE
-
-2. **THEN CHECK TASKS.json FOR MORE WORK:**
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-project-tasks-by-status pending
-
-3. **CLAIM AND COMPLETE TASKS FROM TASKS.json:**
-   - Work through pending tasks in priority order
-   - Complete each task fully before moving to the next
-   - Update task status as you progress
-
-🛑 **MULTI-STEP AUTHORIZATION PROTOCOL (LANGUAGE-AGNOSTIC):**
-When ALL TodoWrite tasks are complete And project achieves perfection, agents must complete multi-step authorization:
-
-**STEP 1: START AUTHORIZATION**
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" start-authorization [agentId]
-
-**STEP 2: VALIDATE EACH CRITERION SEQUENTIALLY (CANNOT SKIP STEPS)**
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] focused-codebase
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] security-validation
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] linter-validation
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] type-validation
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] build-validation
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] start-validation
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] test-validation
-
-**STEP 3: COMPLETE AUTHORIZATION**
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" complete-authorization [AUTH_KEY]
-
-**LANGUAGE-AGNOSTIC VALIDATION CRITERIA:**
-1. **focused-codebase**: Validates only user-outlined features exist in TASKS.json
-2. **security-validation**: Runs language-appropriate security tools (semgrep, bandit, trivy, npm audit, etc.)
-3. **linter-validation**: Attempts language-appropriate linting (eslint, pylint, rubocop, go fmt, etc.)
-4. **type-validation**: Runs language-appropriate type checking (tsc, mypy, go build, cargo check, etc.)
-5. **build-validation**: Attempts language-appropriate builds (npm/yarn build, make, cargo build, etc.)
-6. **start-validation**: Tests application start commands with timeout
-7. **test-validation**: Runs language-appropriate tests (npm test, pytest, go test, etc.)
-
-**SHORTCUT PREVENTION:**
-- Each validation step must be completed sequentially - cannot skip or reorder
-- Authorization key expires after 30 minutes or completion
-- Previous step completion verified before allowing next step
-- Direct \`authorize-stop\` command disabled - returns error with multi-step instructions
-
-**STOP AUTHORIZATION EFFECTS:**
-- Creates .stop-allowed file ONLY after all 7 validations pass
-- Next stop hook trigger will allow termination (exit 0)
-- Authorization consumed after first use, returns to infinite mode
-- All future stops require new authorization
-
-⚡ CONTINUING OPERATION - START FRESH AGENT WORK...
+${provideInstructiveTaskGuidance(taskManager, taskStatus, null)}
 `);
         // eslint-disable-next-line n/no-process-exit
         process.exit(2);

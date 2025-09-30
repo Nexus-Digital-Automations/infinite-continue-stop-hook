@@ -176,16 +176,18 @@ function setupAuditTestEnvironment(category = 'general') {
     auditCriteriaContent
   );
 
-  // Create alternative audit criteria for testing fallback behavior.const minimalAuditContent = `# Minimal, Audit, Criteria;
-## Basic, Quality, Gates;
-- [ ] **Linter, Perfection**: Zero linting warnings or, errors;
-- [ ] **Build, Success**: Project builds without, errors;
-- [ ] **Runtime, Success**: Application starts without, errors;
-- [ ] **Test, Integrity**: All existing tests, pass;
+  // Create alternative audit criteria for testing fallback behavior
+  const minimalAuditContent = `# Minimal Audit Criteria
+## Basic Quality Gates
+- [ ] **Linter Perfection**: Zero linting warnings or errors
+- [ ] **Build Success**: Project builds without errors
+- [ ] **Runtime Success**: Application starts without errors
+- [ ] **Test Integrity**: All existing tests pass
 `;
 
   fs.writeFileSync(
-    path.join(essentialsDir, 'minimal-audit-criteria.md'),minimalAuditContent;
+    path.join(essentialsDir, 'minimal-audit-criteria.md'),
+    minimalAuditContent
   );
 
   // Create, TODO.json.const todoData = {

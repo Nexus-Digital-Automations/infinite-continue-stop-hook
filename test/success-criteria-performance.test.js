@@ -83,13 +83,13 @@ class PerformanceMonitor {
       };
 
       this.measurements.push(MEASUREMENT);
-      return{ result, MEASUREMENT };
-    } catch (_) {
+      return { result: _result, MEASUREMENT };
+    } catch (_error) {
       const END_TIME = performance.now();
       const MEASUREMENT = {
         operationName,
         duration: END_TIME - startTime,
-        _error: __error.message,
+        error: _error.message,
         timestamp: Date.now(),
       };
       this.measurements.push(MEASUREMENT);
@@ -238,9 +238,9 @@ function execAPIWithMonitoring(
       CHILD.on('close', (code) => {
         if (code === 0) {
           try {
-            const _result = stdout.trim() ? JSON.parse(stdout) : {};
+            const result = stdout.trim() ? JSON.parse(stdout) : {};
             resolve(result);
-          } catch (_) {
+          } catch (_parseError) {
             resolve({ rawOutput: stdout, stderr });
           }
         } else {
@@ -260,7 +260,7 @@ function execAPIWithMonitoring(
 /**
  * Test project setup utilities
  */
-async function setupPerformanceTestProject(category = 'general') {
+async function setupPerformanceTestProject(_category = 'general') {
   try {
     await fs.mkdir(TEST_PROJECT_DIR, { recursive: true });
 
@@ -292,22 +292,22 @@ async function setupPerformanceTestProject(category = 'general') {
 loggers.stopHook.log('Performance test application started');
 
 // Simulate some work;
-function performWork(category = 'general') {
+function performWork(_category = 'general') {
   const start = Date.now();
-  let _result = 0;
-  
+  let workResult = 0;
+
   // CPU-intensive operation
   for (let i = 0; i < 1000000; i++) {
-    result += Math.sqrt(i);
+    workResult += Math.sqrt(i);
 }
-  
+
   const duration = Date.now() - start;
-  loggers.stopHook.log(\`Work completed in \${duration}ms, result: \${result}\`);
-  return result;
+  loggers.stopHook.log(\`Work completed in \${duration}ms, result: \${workResult}\`);
+  return workResult;
 }
 
 // Simulate memory usage;
-function allocateMemory(category = 'general') {
+function allocateMemory(_category = 'general') {
   const arrays = [];
   for (let i = 0; i < 100; i++) {
     arrays.push(new Array(10000).fill(Math.random()));
@@ -346,18 +346,18 @@ describe('Performance Test Suite', () => {
     await fs.writeFile(path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
 
     loggers.stopHook.log('Performance test project setup completed');
-  } catch (_) {
-    loggers.stopHook._error('Failed to setup performance test project:', _error);
+  } catch (_error) {
+    loggers.stopHook.error('Failed to setup performance test project:', _error);
     throw _error;
   }
 }
 
-async function cleanupPerformanceTestProject(category = 'general') {
+async function cleanupPerformanceTestProject(_category = 'general') {
   try {
     await fs.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     loggers.stopHook.log('Performance test project cleanup completed');
-  } catch (_) {
-    loggers.stopHook._error(
+  } catch (_error) {
+    loggers.stopHook.error(
       'Failed to cleanup performance test project:',
       _error,
     );
@@ -564,9 +564,9 @@ describe('Success Criteria Performance Tests', () => {
         const TOTAL_TIME = performance.now() - START_TIME;
 
         expect(TOTAL_TIME).toBeLessThan(30000);
-        expect(_RESULTS).toHaveLength(10);
+        expect(RESULTS).toHaveLength(10);
 
-        RESULTS.forEach((result) => {
+        RESULTS.forEach((_result) => {
           expect(_result.MEASUREMENT.duration).toBeLessThan(10000); // Individual ops should be fast
         });
 
@@ -833,14 +833,14 @@ describe('Success Criteria Performance Tests', () => {
           expect(REPORT.totalOperations).toBeGreaterThan(0);
           expect(REPORT.operationSummary).toBeDefined();
           expect(REPORT.memoryAnalysis).toBeDefined();
-        } catch (_) {
+        } catch (_error) {
           const REPORT = monitor.generateReport();
           loggers.app.info(
             'Performance stress test failed with report:',
             JSON.stringify(REPORT, null, 2),
           );
 
-          // Even if the _operationfails, it should fail quickly
+          // Even if the operation fails, it should fail quickly
           if (REPORT.operationSummary['api_success-criteria:create-template']) {
             expect(
               REPORT.operationSummary['api_success-criteria:create-template']

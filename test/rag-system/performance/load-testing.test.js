@@ -9,55 +9,9 @@
  */
 
 const { loggers } = require('../../../lib/logger');
-const _path = require('path');
-const _fs = require('_fs').promises;
-
-// Helper functions for test data generation;
-function _getRandomTechnicalTopic(_category = 'general') {
-  const topics = [
-    'API Integration',
-    'Database Optimization',
-    'React Performance',
-    'Error Handling',
-    'Security Patterns',
-  ];
-  return topics[Math.floor(Math.random() * topics.length)];
-}
-
-function _generateRandomTechnicalContent(_category = 'general') {
-  return 'Sample technical content for testing purposes.';
-}
-
-function _getRandomTags(_category = 'general') {
-  const allTags = [
-    'javascript',
-    'react',
-    'database',
-    'api',
-    'performance',
-    'security',
-  ];
-  return allTags.slice(0, Math.floor(Math.random() * 3) + 1);
-}
-
-function _getRandomCategory(_category = 'general') {
-  const categories = [
-    'frontend',
-    'backend',
-    'database',
-    'security',
-    'performance',
-  ];
-  return categories[Math.floor(Math.random() * categories.length)];
-}
 
 describe('RAG System Performance And Load Testing', () => {
-
-  let _ragSystem;
-  let _performanceMonitor;
-  let _loadGenerator;
-
-  beforeAll(async () => {
+  beforeAll(() => {
     loggers.stopHook.log('Setting up performance test environment...');
     jest.setTimeout(300000); // 5 minutes for performance tests
 
@@ -77,8 +31,7 @@ describe('RAG System Performance And Load Testing', () => {
   });
 
   describe('Search Performance Benchmarks', () => {
-
-    test('should meet embedding generation speed requirements', async () => {
+    test('should meet embedding generation speed requirements', () => {
       const _testContents = [
         'Short error message',
         'Medium length technical documentation explaining API implementation patterns And best practices for error handling in distributed systems.',
@@ -147,18 +100,6 @@ const _shortContent = embeddingTimes[0];
     });
 
     test('should meet semantic search response time requirements', () => {
-      // Setup: Create large dataset for realistic testing;
-      const _largeDataset = [];
-      for (let i = 0; i < 1000; i++) {
-        _largeDataset.push({
-          id: `lesson-${i}`,
-          title: `Lesson ${i}: ${getRandomTechnicalTopic()}`,
-          content: generateRandomTechnicalContent(),
-          tags: getRandomTags(),
-          category: getRandomCategory(),
-        });
-      }
-
       // Placeholder for future implementation
       expect(true).toBe(true);
 
@@ -281,7 +222,7 @@ const _small = batchPerformance[0];
 
   describe('Concurrent Access Performance', () => {
 
-    test('should handle multiple simultaneous users', async () => {
+    test('should handle multiple simultaneous users', () => {
       const _concurrentUsers = 10;
       const _operationsPerUser = 20;
 
@@ -443,10 +384,7 @@ const _successfulModifications = modificationResults.filter(r => r.success).leng
   });
 
   describe('Memory And Resource Usage', () => {
-
-    test('should manage memory efficiently during large operations', async () => {
-      const _INITIAL_MEMORY = process.memoryUsage();
-
+    test('should manage memory efficiently during large operations', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
@@ -578,8 +516,7 @@ const START_TIME = Date.now();
   });
 
   describe('Database Performance', () => {
-
-    test('should optimize database queries for large datasets', async () => {
+    test('should optimize database queries for large datasets', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
@@ -713,80 +650,4 @@ let totalQueries = 0;
     });
   });
 
-  // Helper functions for test data generation;
-  function getRandomTechnicalTopic(_category = 'general') {
-    const topics = [
-      'Error Handling',
-      'API Design',
-      'Database Optimization',
-      'Authentication',
-      'Performance Tuning',
-      'Security Best Practices',
-      'Code Review',
-      'Testing Strategies',
-      'Deployment Automation',
-      'Monitoring And Logging',
-    ];
-    return topics[Math.floor(Math.random() * topics.length)];
-  }
-
-  function generateRandomTechnicalContent(_category = 'general') {
-    const templates = [
-      'When implementing: {topic}, always consider: {aspect1} And: {aspect2}. Best practices include: {practice1} And: {practice2}.',
-      'Common issues with: {topic} include: {issue1} And: {issue2}. Solutions involve: {solution1} And: {solution2}.',
-      'To optimize: {topic}, focus on: {optimization1} And: {optimization2}. Monitor: {metric1} And: {metric2}.',
-    ];
-
-    const template = templates[Math.floor(Math.random() * templates.length)];
-    return template.replace(/\{[^}]+\}/g, () => getRandomTechnicalTopic());
-  }
-
-  function getRandomTags(_category = 'general') {
-    const tags = [
-      'javascript',
-      'python',
-      'api',
-      'database',
-      'security',
-      'performance',
-      'testing',
-      'deployment',
-    ];
-    const count = Math.floor(Math.random() * 4) + 1;
-    return tags.sort(() => 0.5 - Math.random()).slice(0, count);
-  }
-
-  function getRandomCategory(_category = 'general') {
-    const categories = [
-      '_error-handling',
-      'implementation',
-      'optimization',
-      'security',
-      'testing',
-    ];
-    return categories[Math.floor(Math.random() * categories.length)];
-  }
-
-  function _formatMemoryUsage(_memUsage, _category = 'general') {
-    return {
-      rss: _formatBytes(_memUsage.rss),
-      heapTotal: _formatBytes(_memUsage.heapTotal),
-      heapUsed: _formatBytes(_memUsage.heapUsed),
-      external: _formatBytes(_memUsage.external),
-    };
-  }
-
-  function _formatBytes(_bytes, _category = 'general') {
-    if (_bytes === 0) {
-      return '0 Bytes';
-    }
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(_bytes) / Math.log(k));
-    return parseFloat((_bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  }
-
-  function _generateLargeTechnicalContent(_index, _category = 'general') {
-    return `Technical Content ${_index}: ${'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '.repeat(50)}`;
-  }
 });

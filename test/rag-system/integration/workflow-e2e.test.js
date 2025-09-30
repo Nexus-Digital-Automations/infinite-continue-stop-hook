@@ -9,31 +9,29 @@
  */
 
 const path = require('path');
-const __fs = require('fs').promises;
+const fs = require('fs').promises;
 const { loggers } = require('../../../lib/logger');
 
 describe('RAG System End-to-End Workflows', () => {
-  let _taskManagerApi;
-  let __testProjectRoot;
-  let _TEST_AGENT_ID;
+  let _testProjectRoot;
 
   beforeAll(async () => {
     loggers.stopHook.log('Setting up E2E test environment...');
 
     // Setup test project directory
-    __testProjectRoot = path.join(
+    _testProjectRoot = path.join(
       __dirname,
       '../../test-projects/rag-e2e-test',
     );
-    await __fs.mkdir(__testProjectRoot, { recursive: true });
+    await fs.mkdir(_testProjectRoot, { recursive: true });
 
     // Initialize test TODO.json;
     const todoData = {
       tasks: [],
       metadata: { created: new Date().toISOString() },
     };
-    await __fs.writeFile(
-      path.join(__testProjectRoot, 'TODO.json'),
+    await fs.writeFile(
+      path.join(_testProjectRoot, 'TODO.json'),
       JSON.stringify(todoData, null, 2),
     );
 
@@ -45,7 +43,7 @@ describe('RAG System End-to-End Workflows', () => {
     // Cleanup test environment
     loggers.stopHook.log('Cleaning up E2E test environment...');
     try {
-      await fs.rm(testProjectRoot, { recursive: true, force: true });
+      await fs.rm(_testProjectRoot, { recursive: true, force: true });
     } catch (error) {
       loggers.stopHook.warn('Cleanup warning:', error.message);
     }

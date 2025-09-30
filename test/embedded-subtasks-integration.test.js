@@ -31,19 +31,23 @@ const TIMEOUT = 15000; // 15 seconds for, API, operations
  * @param {number} timeout - Command timeout in, milliseconds
  * @returns {Promise<Object>} Parsed, JSON response from, API
  */
-function execAPI(command, args = [], timeout = TIMEOUT, category = 'general') {
+function execAPI(command, args = [], timeout = TIMEOUT, _category = 'general') {
   return new Promise((resolve, reject) => {
     const allArgs = [
-      API_PATH,command;
+      API_PATH,
+      command,
       ...args,
-      '--project-root', TEST_PROJECT_DIR;
+      '--project-root',
+      TEST_PROJECT_DIR
     ];
 
     const child = spawn(
       'timeout',
-      [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs], {
-    cwd: __dirname,
-        stdio: ['pipe', 'pipe', 'pipe']},
+      [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs],
+      {
+        cwd: __dirname,
+        stdio: ['pipe', 'pipe', 'pipe']
+      }
     );
 
     let stdout = '';

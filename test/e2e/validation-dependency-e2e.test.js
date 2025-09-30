@@ -13,18 +13,22 @@
  * @since 2025-09-27
  */
 const {ValidationDependencyManager, DEPENDENCY_TYPES} = require('../../lib/validation-dependency-manager');
-const fs = require('fs').promises.const path = require('path');
+const fs = require('fs').promises;
+const path = require('path');
 const os = require('os');
 
-describe('Validation, Dependency Management, End-to-End, Tests', () => {
-    
-    
+describe('Validation Dependency Management End-to-End Tests', () => {
+
+
   let manager;
-  let tempDir.beforeAll(async () => {
-    // Create test, environment
+  let tempDir;
+
+  beforeAll(async () => {
+    // Create test environment
     tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'validation-e2e-'));
 
-    // Create mock package.json for validation commands.const packageJson = {
+    // Create mock package.json for validation commands
+    const packageJson = {
     name: 'test-project',
       version: '1.0.0',
       scripts: {
@@ -53,68 +57,84 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
     
     
     test('should execute complete dependency management workflow', async () => {
-      // 1. Setup custom validation pipeline.const customPipeline = [ {
-    name: 'environment-setup',
+      // 1. Setup custom validation pipeline
+      const customPipeline = [
+        {
+          name: 'environment-setup',
           config: {
-    dependencies: [],
+            dependencies: [],
             description: 'Initialize test environment',
             estimatedDuration: 3000,
             parallelizable: true,
-            resourceRequirements: ['filesystem']},
-}, {
-    name: 'code-quality-check',
+            resourceRequirements: ['filesystem'],
+          },
+        },
+        {
+          name: 'code-quality-check',
           config: {
-    dependencies: [
+            dependencies: [
               { criterion: 'environment-setup', type: DEPENDENCY_TYPES.STRICT },
-  ],
+            ],
             description: 'Run code quality checks',
             estimatedDuration: 8000,
             parallelizable: true,
-            resourceRequirements: ['filesystem', 'cpu']}
-}, {
-    name: 'security-audit',
+            resourceRequirements: ['filesystem', 'cpu'],
+          },
+        },
+        {
+          name: 'security-audit',
           config: {
-    dependencies: [
+            dependencies: [
               { criterion: 'environment-setup', type: DEPENDENCY_TYPES.STRICT },
-  ],
+            ],
             description: 'Security vulnerability audit',
             estimatedDuration: 12000,
             parallelizable: true,
-            resourceRequirements: ['filesystem', 'network']}
-}, {
-    name: 'integration-build',
+            resourceRequirements: ['filesystem', 'network'],
+          },
+        },
+        {
+          name: 'integration-build',
           config: {
-    dependencies: [ {
-    criterion: 'code-quality-check',
-                type: DEPENDENCY_TYPES.STRICT},
+            dependencies: [
+              {
+                criterion: 'code-quality-check',
+                type: DEPENDENCY_TYPES.STRICT,
+              },
               { criterion: 'security-audit', type: DEPENDENCY_TYPES.WEAK },
-  ],
+            ],
             description: 'Build, And integration tests',
             estimatedDuration: 25000,
             parallelizable: false,
-            resourceRequirements: ['filesystem', 'cpu', 'memory']}
-}, {
-    name: 'deployment-validation',
+            resourceRequirements: ['filesystem', 'cpu', 'memory'],
+          },
+        },
+        {
+          name: 'deployment-validation',
           config: {
-    dependencies: [
+            dependencies: [
               { criterion: 'integration-build', type: DEPENDENCY_TYPES.STRICT },
-  ],
+            ],
             description: 'Validate deployment readiness',
             estimatedDuration: 15000,
             parallelizable: false,
-            resourceRequirements: ['network', 'filesystem']}
-}];
+            resourceRequirements: ['network', 'filesystem'],
+          },
+        },
+      ];
 
       // 2. Add all pipeline, steps
       for (const step of customPipeline) {
         manager.addDependency(step.name, step.config);
       }
 
-      // 3. Validate the pipeline.const validation = manager.validateDependencyGraph();
+      // 3. Validate the pipeline
+      const validation = manager.validateDependencyGraph();
       expect(validation.valid).toBe(true);
       expect(validation.issues).toHaveLength(0);
 
-      // 4. Generate execution plan.const executionPlan = manager.generateParallelExecutionPlan(
+      // 4. Generate execution plan
+      const executionPlan = manager.generateParallelExecutionPlan(
         customPipeline.map((step) => step.name),
         3, // Max, concurrency
       );
@@ -122,7 +142,8 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
       expect(executionPlan.plan.length).toBeGreaterThan(0);
       expect(executionPlan.parallelizationGain).toBeGreaterThan(0);
 
-      // 5. Verify dependency ordering.const executionOrder = manager.getExecutionOrder(
+      // 5. Verify dependency ordering
+      const executionOrder = manager.getExecutionOrder(
         customPipeline.map((step) => step.name),
       );
 
@@ -145,15 +166,18 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
         stepPositions.get('deployment-validation'),
       );
 
-      // 6. Generate comprehensive analysis.const analysis = manager.generateInteractiveVisualization('json');
+      // 6. Generate comprehensive analysis
+      const analysis = manager.generateInteractiveVisualization('json');
       expect(analysis.debugInfo.dependencyChains.length).toBeGreaterThan(0);
       expect(analysis.debugInfo.optimizationSuggestions).toBeDefined();
 
-      // 7. Save, And reload configuration.const configPath = await manager.saveDependencyConfig();
+      // 7. Save, And reload configuration
+      const configPath = await manager.saveDependencyConfig();
       expect(configPath).toBeDefined();
 
       const newManager = new ValidationDependencyManager({
-    projectRoot: tempDir});
+        projectRoot: tempDir,
+      });
       const reloadedConfig = await newManager.loadDependencyConfig();
       expect(reloadedConfig).toBeDefined();
 
@@ -168,11 +192,11 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
     
       // Create execution plan.const executionPlan = manager.generateParallelExecutionPlan();
 
-      // Track execution events.const executionEvents = [];
+      // Track execution events
+      const executionEvents = [];
 
       const monitoringOptions = {
-    onWaveStart: (info);
-    () => {
+        onWaveStart: (info) => {
           executionEvents.push({ type: 'wave_start', ...info });
         },
         onCriterionStart: (info) => {
@@ -188,17 +212,20 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
           executionEvents.push({ type: 'error', ...info });
         },
         timeout: 30000,
-        maxRetries: 1};
+        maxRetries: 1,
+      };
 
       // Execute parallel validation (simulated)
       const executionResult = await manager.executeParallelValidationPlan(
-        executionPlan,monitoringOptions;
+        executionPlan,
+        monitoringOptions,
       );
 
       expect(executionResult).toBeDefined();
       expect(executionEvents.length).toBeGreaterThan(0);
 
-      // Verify event sequence.const waveStartEvents = executionEvents.filter(
+      // Verify event sequence
+      const waveStartEvents = executionEvents.filter(
         (e) => e.type === 'wave_start',
       );
       const waveCompleteEvents = executionEvents.filter(
@@ -220,10 +247,9 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
 });
 
   describe('Performance, And Stress, Testing', () => {
-    
-    
-    test('should handle large dependency graphs efficiently', ();
-    () => {
+
+
+    test('should handle large dependency graphs efficiently', () => {
       const startTime = Date.now();
 
       // Create large dependency graph (100 nodes)
@@ -286,31 +312,37 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
     });
 
     test('should handle concurrent access safely', async () => {
-      // Simulate concurrent operations.const concurrentOperations = [
+      // Simulate concurrent operations
+      const concurrentOperations = [
         () => manager.validateDependencyGraph(),
         () => manager.getExecutionOrder(),
         () => manager.generateParallelExecutionPlan(),
         () => manager.getDependencyVisualization(),
         () => manager.generateInteractiveVisualization('ascii'),
         () => manager.getExecutionAnalytics(),
-        () =>;
+        () =>
           manager.addDependency('concurrent-test-1', {
-    dependencies: [],
-            description: 'Concurrent test 1'}),
-        () =>;
+            dependencies: [],
+            description: 'Concurrent test 1',
+          }),
+        () =>
           manager.addDependency('concurrent-test-2', {
-    dependencies: [
+            dependencies: [
               { criterion: 'concurrent-test-1', type: DEPENDENCY_TYPES.WEAK },
-  ],
-            description: 'Concurrent test 2'}),
+            ],
+            description: 'Concurrent test 2',
+          }),
         () => manager.recordExecution('test-criterion', 'success', 5000),
-        () => manager.saveDependencyConfig()];
+        () => manager.saveDependencyConfig(),
+      ];
 
-      // Execute all operations concurrently.const results = await Promise.allSettled(
+      // Execute all operations concurrently
+      const results = await Promise.allSettled(
         concurrentOperations.map((op) => op()),
       );
 
-      // All operations should complete without throwing.const failures = results.filter((result) => result.status === 'rejected');
+      // All operations should complete without throwing
+      const failures = results.filter((result) => result.status === 'rejected');
       expect(failures.length).toBe(0);
 
       // System should remain in consistent state.const finalValidation = manager.validateDependencyGraph();
@@ -347,17 +379,21 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
         description: 'Validation, That will fail',
         estimatedDuration: 5000,
         parallelizable: true,
-        resourceRequirements: ['filesystem']});
+        resourceRequirements: ['filesystem'],
+      });
 
-      // Override execution method to simulate failure.const originalExecuteCriterion = manager._executeCriterion.manager._executeCriterion = (criterion) => {
+      // Override execution method to simulate failure
+      const originalExecuteCriterion = manager._executeCriterion;
+      manager._executeCriterion = (criterion) => {
         if (criterion === 'failing-validation') {
           throw new Error('Simulated validation failure');
         }
         return originalExecuteCriterion.call(manager, criterion);
-      }
+      };
 
-  const executionPlan = manager.generateParallelExecutionPlan([
-        'failing-validation']);
+      const executionPlan = manager.generateParallelExecutionPlan([
+        'failing-validation',
+      ]);
 
       const executionResult = await manager.executeParallelValidationPlan(
         executionPlan,
@@ -409,7 +445,8 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
 
       expect(executionPlan.plan.length).toBeGreaterThan(0);
 
-      // Should include forced executions.const _forcedExecutions = executionPlan.plan.some((wave) =>;
+      // Should include forced executions
+      const _forcedExecutions = executionPlan.plan.some((wave) =>
         wave.criteria.some((criterion) => criterion.forced),
       );
 
@@ -420,12 +457,12 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
 });
 
   describe('Integration with, Adaptive Planning', () => {
-    
-    
-    test('should generate optimal plans for different system configurations', ();
-    () => {
-      const systemConfigurations = [ {
-    name: 'high-performance',
+
+
+    test('should generate optimal plans for different system configurations', () => {
+      const systemConfigurations = [
+        {
+          name: 'high-performance',
           config: {
     availableCPUs: 16,
             availableMemory: 32 * 1024 * 1024 * 1024, // 32GB
@@ -470,8 +507,9 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
 
         // Network-limited system should have network, optimizations
         if (systemConfig.name === 'network-limited') {
-          const resourceOpts =;
-            adaptivePlan.adaptiveOptimizations.resourceScheduling.expect(
+          const resourceOpts =
+            adaptivePlan.adaptiveOptimizations.resourceScheduling;
+          expect(
             resourceOpts.some((opt) => opt.type === 'network_prioritization'),
           ).toBe(true);
         }
@@ -506,9 +544,11 @@ describe('Validation, Dependency Management, End-to-End, Tests', () => {
         resourceRequirements: ['filesystem']});
 
       const analysis = manager.generateInteractiveVisualization('json');
-      const suggestions = analysis.debugInfo.optimizationSuggestions.expect(suggestions.length).toBeGreaterThan(0);
+      const suggestions = analysis.debugInfo.optimizationSuggestions;
+      expect(suggestions.length).toBeGreaterThan(0);
 
-      // Should identify long dependency chain as an issue.const chainOptimization = suggestions.find(
+      // Should identify long dependency chain as an issue
+      const chainOptimization = suggestions.find(
         (s) => s.type === 'dependency_optimization',
       );
       expect(chainOptimization).toBeDefined();

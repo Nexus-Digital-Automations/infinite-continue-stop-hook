@@ -7,7 +7,7 @@
  */
 
 const fs = require('fs');
-const path = require('path');
+const _path = require('path');
 const { execSync } = require('child_process');
 
 // Get all files with security warnings
@@ -32,9 +32,8 @@ function getFilesWithSecurityWarnings() {
       if (!fileWarnings.has(currentFile)) {
         fileWarnings.set(currentFile, []);
       }
-    }
-    // Match warning lines with line numbers
-    else if (currentFile && /^\s+\d+:\d+\s+warning.*security\//.test(line)) {
+    } else if (currentFile && /^\s+\d+:\d+\s+warning.*security\//.test(line)) {
+      // Match warning lines with line numbers
       const match = line.match(/^\s+(\d+):(\d+)\s+warning\s+(.+?)\s+(security\/[\w-]+)/);
       if (match) {
         const [, lineNum, col, message, rule] = match;
@@ -52,7 +51,7 @@ function getFilesWithSecurityWarnings() {
 }
 
 // Generate appropriate justification for each security rule
-function getJustification(rule, context) {
+function getJustification(rule, _context) {
   const justifications = {
     'security/detect-non-literal-fs-filename':
       'File path validated through security validator system',
@@ -147,8 +146,8 @@ function main() {
       encoding: 'utf8',
       stdio: 'inherit',
     });
-  } catch (error) {
-    // Ignore linter errors
+  } catch {
+    // Ignore linter errors - empty catch block is intentional
   }
 
   console.log('\nSecurity warning fix complete!');

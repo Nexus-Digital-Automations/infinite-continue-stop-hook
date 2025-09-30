@@ -15,7 +15,7 @@ class LoggingContextEnhancer {
     this.enhancedCalls = 0;
     this.patterns = {
       // Match logger calls that don't have context,
-    simpleLogger: /loggers\.(\w+)\.(info|warn|error|debug)\('([^']+)'\);?/g,
+      simpleLogger: /loggers\.(\w+)\.(info|warn|error|debug)\('([^']+)'\);?/g,
       // Match logger calls with basic context
       contextLogger:
         /loggers\.(\w+)\.(info|warn|error|debug)\('([^']+)',\s*(\{[^}]+\})\);?/g,
@@ -31,7 +31,7 @@ class LoggingContextEnhancer {
       'lib/api-modules/core/agentManagement.js',
       'lib/api-modules/core/taskOperations.js',
     ];
-}
+  }
 
   enhance() {
     loggers.app.info('Starting logging context enhancement');
@@ -47,15 +47,15 @@ class LoggingContextEnhancer {
     }
 
     loggers.app.info('Logging context enhancement completed', {
-    processedFiles: this.processedFiles,
+      processedFiles: this.processedFiles,
       enhancedCalls: this.enhancedCalls,
     });
 
     return {
-    processedFiles: this.processedFiles,
+      processedFiles: this.processedFiles,
       enhancedCalls: this.enhancedCalls,
     };
-}
+  }
 
   enhanceFile(filePath) {
     try {
@@ -73,7 +73,7 @@ class LoggingContextEnhancer {
           this.enhancedCalls++;
           enhanced = true;
           return `loggers.${loggerType}.${level}('${message}', ${JSON.stringify(contextInfo)});`;
-        }
+        },
       );
 
       // Enhance existing context logger calls to include standard fields
@@ -93,13 +93,13 @@ class LoggingContextEnhancer {
             // If we can't parse the context, leave it as is
             return match;
           }
-        }
+        },
       );
 
       if ((enhanced, __filename)) {
         FS.writeFileSync(__filename, newContent, 'utf8');
         loggers.app.info('Enhanced logging context in file', {
-    __filename: path.relative(process.cwd(), __filename),
+          __filename: path.relative(process.cwd(), __filename),
           enhancedCalls: this.enhancedCalls,
         });
         this.processedFiles++;
@@ -107,40 +107,40 @@ class LoggingContextEnhancer {
     } catch (_) {
       loggers.app.error('Failed to enhance file', {
         __filename,
-    error: _error.message,
+        error: _error.message,
       });
     }
-}
+  }
 
-  getFileContext(__filename, __filename, __filename) {
-    const fileName = path.basename(__filename);
+  getFileContext(filePath) {
+    const fileName = path.basename(filePath);
 
     // Determine context based on file purpose
     if (fileName.includes('agent')) {
       return {
-    agentId: 'process.env.agentId || "unknown"',
+        agentId: 'process.env.agentId || "unknown"',
         operationId: 'crypto.randomUUID()',
         module: fileName.replace('.js', ''),
       };
     } else if (fileName.includes('task')) {
       return {
-    taskId: 'process.env.TASK_ID || null',
+        taskId: 'process.env.TASK_ID || null',
         operationId: 'crypto.randomUUID()',
         module: fileName.replace('.js', ''),
       };
     } else if (fileName === 'stop-hook.js') {
       return {
-    agentId: 'hookInput?.agent_id || "stop-hook"',
+        agentId: 'hookInput?.agent_id || "stop-hook"',
         operationId: 'crypto.randomUUID()',
         module: 'stop-hook',
       };
     } else {
       return {
-    operationId: 'crypto.randomUUID()',
+        operationId: 'crypto.randomUUID()',
         module: fileName.replace('.js', ''),
       };
     }
-}
+  }
 
   // Create enhanced logging utility functions
   createLoggingUtilities() {
@@ -221,13 +221,13 @@ module.exports = {
     FS.writeFileSync(
       path.join(process.cwd(), 'lib/logging-utilities.js'),
       utilityCode,
-      'utf8'
+      'utf8',
     );
 
     loggers.app.info('Created enhanced logging utilities', {
-    filePath: 'lib/logging-utilities.js',
+      filePath: 'lib/logging-utilities.js',
     });
-}
+  }
 }
 
 // Execute enhancement if run directly
@@ -239,7 +239,7 @@ if (require.main === module) {
     .then((result) => {
       if (result && result.enhancedCalls === 0) {
         loggers.app.warn(
-          'No logging calls were enhanced - may need manual review'
+          'No logging calls were enhanced - may need manual review',
         );
       }
     })

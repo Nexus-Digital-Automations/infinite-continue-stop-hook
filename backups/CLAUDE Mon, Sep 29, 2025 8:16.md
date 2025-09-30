@@ -9,54 +9,7 @@
 4.  **IMMEDIATE TASK EXECUTION**: Plan → Execute → Document. No delays.
 5.  **ONE FEATURE AT A TIME**: Work on EXACTLY ONE feature from `FEATURES.json`, complete it fully, then move to the next.
 6.  **USER FEEDBACK SUPREMACY**: User requests TRUMP EVERYTHING. Implement them immediately, but do so within the quality framework.
-7.  **🔄 STOP HOOK CONTINUATION**: When stop hook triggers, you ARE THE SAME AGENT. Finish current work OR check TASKS.json for new work. NEVER sit idle.
 </law>
-
-## 🔄 STOP HOOK RESPONSE PROTOCOL
-
-**WHEN STOP HOOK TRIGGERS - YOU MUST TAKE ACTION:**
-
-### Immediate Actions (Choose One):
-
-**OPTION 1: Continue Current Work**
-- ✅ If you have TodoWrite tasks → Complete them ALL
-- ✅ If you have in-progress code changes → Finish them
-- ✅ If you were in the middle of something → Complete it
-
-**OPTION 2: Start New Work**
-```bash
-# Check for approved tasks in TASKS.json (approved = ready to work on)
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-tasks-by-status approved
-
-# Claim and work on highest priority task
-# Update task status as you progress
-```
-
-**OPTION 3: When Nothing Approved**
-- Review codebase for improvements
-- Check for linting/security issues
-- Verify all tests pass
-- Ensure documentation is current
-
-### Task Status Guide:
-- **approved**: Ready to work on (claim these!)
-- **suggested**: Awaiting user approval
-- **completed**: Already finished
-- **assigned**: Already claimed by another agent
-
-### ❌ FORBIDDEN RESPONSES:
-- Sitting idle waiting for instructions
-- Asking "what should I do?"
-- Saying "I'm ready for the next task"
-- Doing nothing
-
-### ✅ CORRECT RESPONSES:
-- "Continuing my previous work on [specific task]..."
-- "Checking TASKS.json for approved work..."
-- "Found 10 approved tasks. Starting with highest priority: [task title]..."
-- "All tasks complete. Running validation checks..."
-
-**YOU ARE THE SAME AGENT. STAY ACTIVE. KEEP WORKING.**
 
 # 🎯 CORE PERSONA: LEAD PRINCIPAL ENGINEER
 

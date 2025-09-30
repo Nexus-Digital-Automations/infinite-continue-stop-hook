@@ -28,13 +28,15 @@ describe('CustomValidationRulesManager', () => {
     
   let manager;
   let testProjectRoot;
-  let originalCwd.beforeAll(async () => {
+  let originalCwd;
+
+  beforeAll(async () => {
     originalCwd = process.cwd();
-    // Create temporary test, directory
+    // Create temporary test directory
     testProjectRoot = path.join(
       __dirname,
       'test-data',
-      'custom-validation-test',
+      'custom-validation-test'
     );
     await fs.mkdir(testProjectRoot, { recursive: true });
 });

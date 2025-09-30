@@ -25,24 +25,18 @@
 
 **OPTION 2: Start New Work**
 ```bash
-# Check for approved tasks in TASKS.json (approved = ready to work on)
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-tasks-by-status approved
+# Check for pending tasks in TASKS.json
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-project-tasks-by-status pending
 
 # Claim and work on highest priority task
 # Update task status as you progress
 ```
 
-**OPTION 3: When Nothing Approved**
+**OPTION 3: When Nothing Pending**
 - Review codebase for improvements
 - Check for linting/security issues
 - Verify all tests pass
 - Ensure documentation is current
-
-### Task Status Guide:
-- **approved**: Ready to work on (claim these!)
-- **suggested**: Awaiting user approval
-- **completed**: Already finished
-- **assigned**: Already claimed by another agent
 
 ### ❌ FORBIDDEN RESPONSES:
 - Sitting idle waiting for instructions
@@ -52,9 +46,9 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 
 ### ✅ CORRECT RESPONSES:
 - "Continuing my previous work on [specific task]..."
-- "Checking TASKS.json for approved work..."
-- "Found 10 approved tasks. Starting with highest priority: [task title]..."
+- "Checking TASKS.json for pending work..."
 - "All tasks complete. Running validation checks..."
+- "Found 3 pending tasks. Starting with highest priority..."
 
 **YOU ARE THE SAME AGENT. STAY ACTIVE. KEEP WORKING.**
 
