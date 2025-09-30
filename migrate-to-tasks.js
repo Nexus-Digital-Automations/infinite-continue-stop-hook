@@ -74,7 +74,7 @@ class TaskMigrator {
     try {
       await FS.access(this.featuresPath);
       loggers.stopHook.log('✓ Source FEATURES.json found');
-    } catch (_error) {
+    } catch {
       throw new Error(`FEATURES.json not found at ${this.featuresPath}`);
     }
   }

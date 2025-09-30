@@ -141,7 +141,7 @@ class TaskManagerPerformanceBenchmark {
   /**
    * Test embedded subtasks performance
    */
-  benchmarkSubtaskOperations() {
+  async benchmarkSubtaskOperations() {
     loggers.stopHook.log('🔧 Benchmarking embedded subtask operations...');
     try {
       // Initialize agent first
