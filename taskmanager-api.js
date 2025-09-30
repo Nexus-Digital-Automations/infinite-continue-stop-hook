@@ -2105,6 +2105,147 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
+   * Verify Stop Readiness - Check if agent can authorize stopping
+   * Verifies that:
+   * 1. User request was fulfilled
+   * 2. No pending or in-progress tasks remain
+   * 3. System is in a stable state
+   *
+   * @param {string} agentId - The agent requesting stop verification
+   * @returns {Promise<Object>} Verification result with detailed status
+   */
+  async verifyStopReadiness(agentId) {
+    try {
+      const todoData = await this._loadTasks();
+
+      // Get task statistics
+      const tasks = todoData.tasks || todoData.features || [];
+      const pendingTasks = tasks.filter(t => t && t.status === 'pending' || t.status === 'suggested');
+      const inProgressTasks = tasks.filter(t => t && t.status === 'in_progress' || t.status === 'in-progress');
+      const completedTasks = tasks.filter(t => t && t.status === 'completed');
+      const approvedTasks = tasks.filter(t => t && t.status === 'approved');
+
+      // Calculate readiness
+      const totalActiveTasks = pendingTasks.length + inProgressTasks.length + approvedTasks.length;
+      const isReady = totalActiveTasks === 0;
+
+      // Prepare detailed status
+      const readinessStatus = {
+        success: true,
+        ready: isReady,
+        agentId,
+        timestamp: new Date().toISOString(),
+        taskStatus: {
+          pending: pendingTasks.length,
+          approved: approvedTasks.length,
+          inProgress: inProgressTasks.length,
+          completed: completedTasks.length,
+          total: tasks.length,
+          activeTasks: totalActiveTasks,
+        },
+        blockers: [],
+        recommendations: [],
+      };
+
+      // Identify blockers
+      if (pendingTasks.length > 0) {
+        readinessStatus.blockers.push({
+          type: 'pending_tasks',
+          count: pendingTasks.length,
+          message: `${pendingTasks.length} pending task(s) require completion`,
+          tasks: pendingTasks.slice(0, 5).map(t => ({ id: t.id, title: t.title })),
+        });
+      }
+
+      if (inProgressTasks.length > 0) {
+        readinessStatus.blockers.push({
+          type: 'in_progress_tasks',
+          count: inProgressTasks.length,
+          message: `${inProgressTasks.length} task(s) currently in progress`,
+          tasks: inProgressTasks.slice(0, 5).map(t => ({ id: t.id, title: t.title })),
+        });
+      }
+
+      if (approvedTasks.length > 0) {
+        readinessStatus.blockers.push({
+          type: 'approved_tasks',
+          count: approvedTasks.length,
+          message: `${approvedTasks.length} approved task(s) awaiting work`,
+          tasks: approvedTasks.slice(0, 5).map(t => ({ id: t.id, title: t.title })),
+        });
+      }
+
+      // Add recommendations
+      if (isReady) {
+        readinessStatus.recommendations.push({
+          action: 'Proceed with stop authorization',
+          command: `timeout 10s node "${__filename}" start-authorization ${agentId}`,
+        });
+        readinessStatus.message = '✅ System ready for stop authorization - all tasks complete';
+      } else {
+        readinessStatus.recommendations.push({
+          action: 'Complete remaining tasks before stopping',
+          details: 'Finish all pending, approved, and in-progress tasks',
+        });
+        readinessStatus.message = `❌ System NOT ready - ${totalActiveTasks} active task(s) remaining`;
+      }
+
+      return readinessStatus;
+
+    } catch (error) {
+      return {
+        success: false,
+        ready: false,
+        error: `Failed to verify stop readiness: ${error.message}`,
+        timestamp: new Date().toISOString(),
+      };
+    }
+  }
+
+  /**
+   * Emergency Stop - Bypass all validation and authorize stop immediately
+   * WARNING: Only use if stop hook triggers multiple times with no work to do
+   *
+   * @param {string} agentId - The agent requesting emergency stop
+   * @param {string} reason - Reason for emergency stop
+   * @returns {Promise<Object>} Stop authorization result
+   */
+  async emergencyStop(agentId, reason) {
+    try {
+      // Create stop authorization flag immediately without validation
+      const stopFlagPath = path.join(PROJECT_ROOT, '.stop-allowed');
+      const stopData = {
+        stop_allowed: true,
+        authorized_by: agentId,
+        reason: reason || 'Emergency stop: Stop hook triggered multiple times with no work remaining',
+        timestamp: new Date().toISOString(),
+        session_type: 'emergency_stop',
+        validation_bypassed: true,
+      };
+
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
+      await FS.writeFile(stopFlagPath, JSON.stringify(stopData, null, 2));
+
+      return {
+        success: true,
+        emergency: true,
+        authorized_by: agentId,
+        reason: stopData.reason,
+        timestamp: stopData.timestamp,
+        message: '⚠️ EMERGENCY STOP AUTHORIZED - All validation bypassed',
+        warning: 'This should only be used if stop hook triggered multiple times with no work to do',
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: `Failed to authorize emergency stop: ${error.message}`,
+        timestamp: new Date().toISOString(),
+      };
+    }
+  }
+
+  /**
    * 🚨 FEATURE TEST GATE VALIDATION METHODS (CLAUDE.md Enforcement)
    * These methods enforce the mandatory test requirements before feature advancement
    */
@@ -10986,6 +11127,25 @@ async function main(category = 'general') {
           args[2] ||
           'Agent authorized stop after completing all tasks And achieving project perfection';
         result = await api.authorizeStop(args[1], stopReason);
+        break;
+      }
+      case 'verify-stop-readiness': {
+        if (!args[1]) {
+          throw new Error(
+            'Agent ID required. Usage: verify-stop-readiness <agentId>',
+          );
+        }
+        result = await api.verifyStopReadiness(args[1]);
+        break;
+      }
+      case 'emergency-stop': {
+        if (!args[1]) {
+          throw new Error(
+            'Agent ID required. Usage: emergency-stop <agentId> <reason>',
+          );
+        }
+        const reason = args[2] || 'Emergency stop: Stop hook triggered multiple times with no work remaining';
+        result = await api.emergencyStop(args[1], reason);
         break;
       }
 

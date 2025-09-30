@@ -515,6 +515,9 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 
 ### Stop Authorization Commands
 ```bash
+# Verify readiness (checks user request fulfilled and no tasks remain)
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" verify-stop-readiness [AGENT_ID]
+
 # Multi-step Authorization Process
 timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" start-authorization [AGENT_ID]
 timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] focused-codebase
@@ -525,6 +528,9 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] start-validation
 timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] test-validation
 timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" complete-authorization [AUTH_KEY]
+
+# Emergency Stop (NO VALIDATION - only if stop hook triggers 2+ times with nothing to do)
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" emergency-stop [AGENT_ID] "reason"
 ```
 
 ## ESSENTIAL COMMANDS

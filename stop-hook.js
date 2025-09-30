@@ -229,7 +229,21 @@ function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script reading validated stop flag file;
       const flagData = JSON.parse(FS.readFileSync(stopFlagPath, 'utf8'));
 
-      // Generate comprehensive validation progress report;
+      // Check if this is an emergency stop (bypasses validation reporting)
+      if (flagData.session_type === 'emergency_stop' && flagData.validation_bypassed === true) {
+        loggers.stopHook.info('EMERGENCY STOP DETECTED', {
+          authorized_by: flagData.authorized_by,
+          reason: flagData.reason,
+          timestamp: flagData.timestamp,
+          validation_bypassed: true,
+          session_type: 'emergency_stop',
+        });
+        // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
+        FS.unlinkSync(stopFlagPath); // Remove flag after reading
+        return flagData.stop_allowed === true;
+      }
+
+      // Generate comprehensive validation progress report for normal stops;
       const logger = new LOGGER.LOGGER(workingDir);
       const progressReport = generateValidationProgressReport(
         flagData,
@@ -797,10 +811,13 @@ function provideInstructiveTaskGuidance(
 
 🛑 **STOP AUTHORIZATION (When ALL Complete & Project Perfect):**
 
-**Step 1 - Start:**
+**Verify Readiness:**
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" verify-stop-readiness [agentId]
+
+**Start Authorization:**
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" start-authorization [agentId]
 
-**Step 2 - Validate (sequential, cannot skip):**
+**Validate (sequential):**
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] focused-codebase
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] security-validation
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] linter-validation
@@ -809,8 +826,11 @@ function provideInstructiveTaskGuidance(
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] start-validation
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] test-validation
 
-**Step 3 - Complete:**
+**Complete:**
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" complete-authorization [AUTH_KEY]
+
+**⚠️ EMERGENCY STOP (Only if stop hook triggers 2+ times with nothing to do):**
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" emergency-stop [agentId] "reason"
 
 **SUCCESS CRITERIA:**
 • focused-codebase
@@ -1295,6 +1315,32 @@ process.stdin.on('end', async () => {
       `Active agents found: ${activeAgents.length}, Stale agents removed: ${agentsRemoved}, Tasks unassigned: ${tasksUnassigned}, Stale tasks reset: ${staleTasksReset}`,
     );
 
+    // ========================================================================
+    // CHECK FOR STOP AUTHORIZATION BEFORE AGENT CHECKS
+    // ========================================================================
+    const stopAllowed = checkStopAllowed(workingDir);
+    if (stopAllowed) {
+      logger.addFlow(
+        'Stop endpoint triggered - allowing ONE stop, then returning to infinite mode',
+      );
+      logger.logExit(0, 'Endpoint-triggered stop (single use)');
+      logger.save();
+
+      loggers.stopHook.info('ENDPOINT-TRIGGERED STOP AUTHORIZED', {
+        status: 'ENDPOINT-TRIGGERED STOP AUTHORIZED',
+        authorization: 'A stop request was authorized via the stop endpoint',
+        authorizationType: 'single-use authorization',
+        action: 'Allowing stop now',
+        futureStopBehavior:
+          'Future stop hook triggers will return to infinite continue mode',
+        component: 'StopHook',
+        operation: 'endpointTriggeredStopAuthorization',
+        exitCode: 0,
+      });
+      // eslint-disable-next-line n/no-process-exit
+      process.exit(0); // Allow stop when endpoint triggered
+    }
+
     // Enhanced agent status analysis for better messaging;
     const hadStaleAgents = staleAgents.length > 0;
     const totalAgentsBeforeCleanup = allAgents.length;
@@ -1365,38 +1411,6 @@ ${provideInstructiveTaskGuidance(taskManager, taskStatus, null)}
         // eslint-disable-next-line n/no-process-exit
         process.exit(2);
       }
-    }
-
-    // ========================================================================
-    // NEVER-STOP PROTOCOL: CHECK ENDPOINT STOP TRIGGER
-    // ========================================================================
-
-    const stopAllowed = checkStopAllowed(workingDir);
-    if (stopAllowed) {
-      logger.addFlow(
-        'Stop endpoint triggered - allowing ONE stop, then returning to infinite mode',
-      );
-      logger.logExit(0, 'Endpoint-triggered stop (single use)');
-      logger.save();
-
-      loggers.stopHook.info('ENDPOINT-TRIGGERED STOP AUTHORIZED', {
-        status: 'ENDPOINT-TRIGGERED STOP AUTHORIZED',
-        authorization: 'A stop request was authorized via the stop endpoint',
-        authorizationType: 'single-use authorization',
-        action: 'Allowing stop now',
-        futureStopBehavior:
-          'Future stop hook triggers will return to infinite continue mode',
-        triggerNextStopInstructions: {
-          method: 'Use the TaskManager API',
-          command:
-            "node -e \"const TASK_MANAGER = require('/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TASKS.json'); tm.authorizeStopHook('agent_id', 'Reason for stopping').then(result => console.log(JSON.stringify(result, null, 2)));\"",
-        },
-        component: 'StopHook',
-        operation: 'endpointTriggeredStopAuthorization',
-        exitCode: 0,
-      });
-      // eslint-disable-next-line n/no-process-exit
-      process.exit(0); // Allow stop only when endpoint triggered
     }
 
     // ========================================================================

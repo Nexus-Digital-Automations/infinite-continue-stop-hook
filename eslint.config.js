@@ -195,6 +195,7 @@ module.exports = [
       'logs/**', // Log files And directories
       '**/*.log', // Individual log files
       '**/*.json.backup*', // Backup JSON files
+      'temp-fix-scripts/**', // Temporary fix scripts directory (old cleanup scripts)
       // Temporary utility scripts with linting issues
       'comprehensive-variable-fix.js',
       'emergency-syntax-fix.js',

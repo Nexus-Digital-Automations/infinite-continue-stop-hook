@@ -401,12 +401,12 @@ const AGENT_ID = 'stop-auth-agent';
       expect(initResult.success).toBe(true);
 
       // 2. Authorize stop;
-const stopReason =
+      const stopReason =
         'Integration test completed - all tasks finished And project perfect';
       const stopResult = await execAPI(
         'authorize-stop',
-        [AGENT_ID, stopReason], {,
-    projectRoot: testDir,
+        [AGENT_ID, stopReason], {
+          projectRoot: testDir,
         },
       );
 
@@ -437,30 +437,34 @@ const stopFlagContent = await fs.readFile(stopFlagPath, 'utf8');
 
     test('should handle stop authorization with different reasons', async () => {
       // 1. Test multiple stop authorizations with different reasons;
-const testCases = [ {,
-    agentId: 'stop-agent-1',
+      const testCases = [
+        {
+          agentId: 'stop-agent-1',
           reason: 'All TodoWrite tasks completed successfully',
-        }, {,
-    agentId: 'stop-agent-2',
+        },
+        {
+          agentId: 'stop-agent-2',
           reason: 'Project achieved perfection: linter✅ build✅ tests✅',
-        }, {,
-    agentId: 'stop-agent-3',
+        },
+        {
+          agentId: 'stop-agent-3',
           reason: 'Emergency stop requested by user',
         },
-  ];
+      ];
 
       for (const testCase of testCases) {
         // Initialize agent;
-const initResult = await execAPI('initialize', [testCase.agentId], {,
-    projectRoot: testDir,
+        const initResult = await execAPI('initialize', [testCase.agentId], {
+          projectRoot: testDir,
         });
         expect(initResult.success).toBe(true);
 
         // Authorize stop;
-const stopResult = await execAPI(
+        const stopResult = await execAPI(
           'authorize-stop',
-          [testCase.agentId, testCase.reason], {,
-    projectRoot: testDir,
+          [testCase.agentId, testCase.reason],
+          {
+            projectRoot: testDir,
           },
         );
 
