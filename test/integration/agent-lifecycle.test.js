@@ -122,11 +122,11 @@ const AGENT_IDS = [
 
       const initResults = [];
       for (const agentId of AGENT_IDS) {
-        // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup with ordered agent initialization;
-const _result = await execAPI('initialize', [agentId], {,
-    projectRoot: testDir,
+        // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup with ordered agent initialization
+        const result = await execAPI('initialize', [agentId], {
+          projectRoot: testDir,
         });
-        expect(_result.success).toBe(true);
+        expect(result.success).toBe(true);
         initResults.push(result);
       }
 

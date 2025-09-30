@@ -86,9 +86,9 @@ const guideResult = await execAPI('guide', [], { projectRoot: testDir });
 
       const featureId = suggestResult.feature.id;
 
-      // 3. Verify feature appears in list;
-const listResult = await execAPI('list-features', [], {,
-    projectRoot: testDir,
+      // 3. Verify feature appears in list
+      const listResult = await execAPI('list-features', [], {
+        projectRoot: testDir,
       });
       expect(listResult.success).toBe(true);
       expect(listResult.features).toHaveLength(1);

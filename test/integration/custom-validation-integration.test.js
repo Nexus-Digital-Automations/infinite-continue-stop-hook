@@ -519,19 +519,21 @@ const config = {
 
     test('should execute composite rules', async () => {
       const config = {
-    custom_rules: {
-    composite_test: {
-    type: 'composite',
+        custom_rules: {
+          composite_test: {
+            type: 'composite',
             description: 'Composite rule test',
             operator: 'And',
-            rules: [ {,
-    type: 'command',
+            rules: [
+              {
+                type: 'command',
                 command: 'echo "First command"',
-              }, {,
-    type: 'command',
+              },
+              {
+                type: 'command',
                 command: 'echo "Second command"',
               },
-  ],
+            ],
           }
 }
 };

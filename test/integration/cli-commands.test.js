@@ -352,10 +352,10 @@ const stopResult = await execCLIDirect([
     });
 
     test('should execute bulk operations', async () => {
-      // 1. Create multiple features first;
-const features = Array.from({ length: 3 }, (_, i) =>
-        generateTestFeature({,
-    title: `Bulk CLI Feature ${i + 1}`,
+      // 1. Create multiple features first
+      const features = Array.from({ length: 3 }, (_, i) =>
+        generateTestFeature({
+          title: `Bulk CLI Feature ${i + 1}`,
           category: 'enhancement',
         })
       );

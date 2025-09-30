@@ -192,9 +192,9 @@ const statsResult = await execAPI('feature-stats', [], {
       expect(invalidResult.error).toContain('Invalid category') ||
         expect(invalidResult.error).toContain('category');
 
-      // 3. Test field length validation;
-const tooShortFeature = generateTestFeature({,
-    title: 'Short', // Too short
+      // 3. Test field length validation
+      const tooShortFeature = generateTestFeature({
+        title: 'Short', // Too short
         description: 'Too short desc', // Too short
         business_value: 'Short', // Too short
         category: 'enhancement',
