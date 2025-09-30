@@ -901,12 +901,27 @@ Avoid ! operator - use \`(variable === undefined || variable === null)\` instead
 `;
 }
 
+// Immediate output to ensure Claude Code sees feedback
+console.error('🔄 STOP HOOK ACTIVATED - Analyzing project state...\n');
+
 // Read input from Claude Code;
 let inputData = '';
 process.stdin.setEncoding('utf8');
-process.stdin.on('data', (chunk) => (inputData += chunk));
+
+// Add timeout to prevent hanging
+const stdinTimeout = setTimeout(() => {
+  console.error('⚠️  Stop hook stdin timeout - proceeding with empty input');
+  process.stdin.pause();
+  process.stdin.emit('end');
+}, 5000);
+
+process.stdin.on('data', (chunk) => {
+  inputData += chunk;
+  clearTimeout(stdinTimeout);
+});
 
 process.stdin.on('end', async () => {
+  clearTimeout(stdinTimeout);
   const workingDir = findClaudeProjectRoot();
   const logger = new LOGGER.LOGGER(workingDir);
   try {
