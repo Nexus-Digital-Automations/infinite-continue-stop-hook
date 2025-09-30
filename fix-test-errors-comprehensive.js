@@ -43,7 +43,7 @@ const getLintErrors = () => {
 };
 
 // Fix patterns
-const fixFile = (filePath, content) => {
+const fixFile = (_filePath, content) => {
   let modified = content;
   let changesMade = 0;
 
@@ -95,7 +95,7 @@ const fixFile = (filePath, content) => {
     { pattern: /testAgent\.([a-z]+)\(agentId/g, replacement: 'testAgent.$1(testAgent.agentId' },
   ];
 
-  fixes.forEach(({ pattern, replacement }, _index) => {
+  fixes.forEach(({ pattern, replacement }) => {
     const beforeFix = modified;
     if (typeof replacement === 'function') {
       modified = modified.replace(pattern, replacement);

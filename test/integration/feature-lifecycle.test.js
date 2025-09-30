@@ -29,36 +29,36 @@ const {
 } = require('./test-utils');
 
 describe('Feature Lifecycle Integration Tests', () => {
-    
-    
+
+
   let testDir;
 
   beforeAll(async () => {
     await setupGlobalCleanup();
-});
+  });
 
   afterAll(async () => {
     await teardownGlobalCleanup();
-});
+  });
 
   beforeEach(async () => {
     testDir = await createTestEnvironment('feature-lifecycle');
-});
+  });
 
   afterEach(async () => {
     await cleanupTestEnvironment(testDir);
-});
+  });
 
   // ========================================
   // FEATURE SUGGESTION WORKFLOW
   // ========================================
 
   describe('Feature Suggestion Workflow', () => {
-    
-    
+
+
     test('should handle complete feature suggestion process', async () => {
       // 1. Test feature suggestion with all categories;
-const categories = [
+      const categories = [
         'enhancement',
         'bug-fix',
         'new-feature',
@@ -66,39 +66,39 @@ const categories = [
         'security',
         'documentation',
       ];
-      const features = categories.map((_category, index) =>
+      const features = categories.map((category, index) =>
         generateTestFeature({
-    title: `${category.charAt(0).toUpperCase() + category.slice(1)} Feature ${index + 1}`,
+          title: `${category.charAt(0).toUpperCase() + category.slice(1)} Feature ${index + 1}`,
           description: `Comprehensive test for ${category} category feature lifecycle`,
           business_value: `Validates ${category} workflow functionality`,
-          _category,
+          category,
         }),
       );
 
       // 2. Suggest all features;
-const suggestResults = [];
+      const suggestResults = [];
       for (const featureData of features) {
         // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup;
-const _result = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)], {
-    projectRoot: testDir,
+            projectRoot: testDir,
           },
         );
 
-        expect(_result.success).toBe(true);
-        expect(_result.feature.status).toBe('suggested');
-        expect(_result.feature._category).toBe(featureData._category);
-        expect(_result.feature.id).toMatch(/^feature_\d+_\w+$/);
-        expect(_result.feature.created_at).toBeDefined();
-        expect(_result.feature.updated_at).toBeDefined();
+        expect(result.success).toBe(true);
+        expect(result.feature.status).toBe('suggested');
+        expect(result.feature.category).toBe(featureData.category);
+        expect(result.feature.id).toMatch(/^feature_\d+_\w+$/);
+        expect(result.feature.created_at).toBeDefined();
+        expect(result.feature.updated_at).toBeDefined();
 
         suggestResults.push(result);
       }
 
       // 3. Verify all features are suggested;
-const listResult = await execAPI('list-features', [], {
-    projectRoot: testDir,
+      const listResult = await execAPI('list-features', [], {
+        projectRoot: testDir,
       });
       expect(listResult.success).toBe(true);
       expect(listResult.features).toHaveLength(6);
@@ -109,7 +109,7 @@ const listResult = await execAPI('list-features', [], {
       // 4. Test filtering by category
       for (const category of categories) {
         // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation;
-const categoryResult = await execAPI(
+        const categoryResult = await execAPI(
           'list-features',
           [JSON.stringify({ category })],
           { projectRoot: testDir },
@@ -117,12 +117,12 @@ const categoryResult = await execAPI(
 
         expect(categoryResult.success).toBe(true);
         expect(categoryResult.features).toHaveLength(1);
-        expect(categoryResult.features[0]._category).toBe(_category);
+        expect(categoryResult.features[0].category).toBe(category);
       }
 
       // 5. Verify statistics;
-const statsResult = await execAPI('feature-stats', [], {
-    projectRoot: testDir,
+      const statsResult = await execAPI('feature-stats', [], {
+        projectRoot: testDir,
       });
       expect(statsResult.success).toBe(true);
       expect(statsResult.stats.total).toBe(6);
@@ -151,21 +151,21 @@ const statsResult = await execAPI('feature-stats', [], {
           business_value: 'Test',
           category: 'enhancement',
         }, {
-    title: 'Missing business value',
+          title: 'Missing business value',
           description: 'Test',
           category: 'enhancement',
         }, {
-    title: 'Missing task.category',
+          title: 'Missing task.category',
           description: 'Test',
           business_value: 'Test',
         },
-  ];
+      ];
 
       for (const incompleteFeature of incompleteFeatures) {
         const _result = await execAPI(
           'suggest-feature',
           [JSON.stringify(incompleteFeature)], {
-    projectRoot: testDir,
+            projectRoot: testDir,
           },
         );
 
@@ -184,7 +184,7 @@ const statsResult = await execAPI('feature-stats', [], {
       const invalidResult = await execAPI(
         'suggest-feature',
         [JSON.stringify(invalidCategoryFeature)], {
-    projectRoot: testDir,
+          projectRoot: testDir,
         },
       );
 
@@ -203,7 +203,7 @@ const statsResult = await execAPI('feature-stats', [], {
       const shortResult = await execAPI(
         'suggest-feature',
         [JSON.stringify(tooShortFeature)], {
-    projectRoot: testDir,
+          projectRoot: testDir,
         },
       );
 
@@ -221,7 +221,7 @@ const statsResult = await execAPI('feature-stats', [], {
       const longResult = await execAPI(
         'suggest-feature',
         [JSON.stringify(tooLongFeature)], {
-    projectRoot: testDir,
+          projectRoot: testDir,
         },
       );
 
@@ -231,10 +231,10 @@ const statsResult = await execAPI('feature-stats', [], {
 
     test('should handle concurrent feature suggestions', async () => {
       // 1. Create many features concurrently;
-const featureCount = 20;
+      const featureCount = 20;
       const features = Array.from({ length: featureCount }, (_, i) =>
         generateTestFeature({
-    title: `Concurrent Feature ${i + 1}`,
+          title: `Concurrent Feature ${i + 1}`,
           description: `Testing concurrent suggestion number ${i + 1}`,
           business_value: `Validates concurrent processing capability ${i + 1}`,
           category: ['enhancement', 'bug-fix', 'new-feature', 'performance'][
@@ -247,78 +247,78 @@ const featureCount = 20;
         command: 'suggest-feature',
         args: [JSON.stringify(featureData)],
         options: { projectRoot: testDir },
-}));
+      }));
 
       // 2. Execute all suggestions concurrently;
-const results = await execAPIConcurrently(commands);
+      const results = await execAPIConcurrently(commands);
 
       // 3. Verify all succeeded
       expect(results.every((result) => result.success)).toBe(true);
 
       // 4. Verify unique IDs;
-const featureIds = results.map((result) => result.feature.id);
+      const featureIds = results.map((result) => result.feature.id);
       const uniqueIds = new Set(featureIds);
       expect(uniqueIds.size).toBe(featureCount);
 
       // 5. Verify final state;
-const finalListResult = await execAPI('list-features', [], {
-    projectRoot: testDir,
+      const finalListResult = await execAPI('list-features', [], {
+        projectRoot: testDir,
       });
       expect(finalListResult.success).toBe(true);
       expect(finalListResult.features).toHaveLength(featureCount);
 
       // 6. Verify file integrity;
-const featuresData = await readFeaturesFile(testDir);
+      const featuresData = await readFeaturesFile(testDir);
       validateFeaturesStructure(featuresData);
       expect(featuresData.features).toHaveLength(featureCount);
     });
-});
+  });
 
   // ========================================
   // FEATURE APPROVAL WORKFLOW
   // ========================================
 
   describe('Feature Approval Workflow', () => {
-    
-    
+
+
     test('should handle individual feature approval process', async () => {
       // 1. Create features for approval testing;
-const testFeatures = [
+      const testFeatures = [
         generateTestFeature({
-    title: 'High Priority Feature',
+          title: 'High Priority Feature',
           category: 'enhancement',
         }),
         generateTestFeature({ title: 'Critical Bug Fix', category: 'bug-fix' }),
         generateTestFeature({
-    title: 'Security Enhancement',
+          title: 'Security Enhancement',
           category: 'security',
         }),
       ];
 
       const featureIds = [];
       for (const featureData of testFeatures) {
-        const _result = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)], {
-    projectRoot: testDir,
+            projectRoot: testDir,
           },
         );
-        expect(_result.success).toBe(true);
+        expect(result.success).toBe(true);
         featureIds.push(result.feature.id);
       }
 
       // 2. Approve features with different approval data;
-const approvalData = [ {
-    approved_by: 'product-manager',
-          notes: 'High business value, approved for next sprint',
-        }, {
-    approved_by: 'technical-lead',
-          notes: 'Critical issue affecting users',
-        }, {
-    approved_by: 'security-team',
-          notes: 'Essential security improvement',
-        },
-  ];
+      const approvalData = [{
+        approved_by: 'product-manager',
+        notes: 'High business value, approved for next sprint',
+      }, {
+        approved_by: 'technical-lead',
+        notes: 'Critical issue affecting users',
+      }, {
+        approved_by: 'security-team',
+        notes: 'Essential security improvement',
+      },
+      ];
 
       for (let i = 0; i < featureIds.length; i++) {
         const approveResult = await execAPI(
@@ -339,7 +339,7 @@ const approvalData = [ {
       }
 
       // 3. Verify approval history;
-const featuresData = await readFeaturesFile(testDir);
+      const featuresData = await readFeaturesFile(testDir);
       expect(featuresData.metadata.approval_history).toHaveLength(3);
 
       featuresData.metadata.approval_history.forEach((entry, index) => {
@@ -350,7 +350,7 @@ const featuresData = await readFeaturesFile(testDir);
       });
 
       // 4. Test filtering approved features;
-const approvedResult = await execAPI(
+      const approvedResult = await execAPI(
         'list-features',
         [JSON.stringify({ status: 'approved' })],
         { projectRoot: testDir },
@@ -372,30 +372,30 @@ const approvedResult = await execAPI(
 
     test('should handle bulk feature approval process', async () => {
       // 1. Create multiple features for bulk approval;
-const featureCount = 15;
+      const featureCount = 15;
       const features = Array.from({ length: featureCount }, (_, i) =>
         generateTestFeature({
-    title: `Bulk Approval Feature ${i + 1}`,
+          title: `Bulk Approval Feature ${i + 1}`,
           category: ['enhancement', 'bug-fix', 'performance'][i % 3],
         }),
       );
 
       const featureIds = [];
       for (const featureData of features) {
-        const _result = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)], {
-    projectRoot: testDir,
+            projectRoot: testDir,
           },
         );
-        expect(_result.success).toBe(true);
+        expect(result.success).toBe(true);
         featureIds.push(result.feature.id);
       }
 
       // 2. Bulk approve first 10 features;
-const bulkIds = featureIds.slice(0, 10);
+      const bulkIds = featureIds.slice(0, 10);
       const bulkApprovalData = {
-    approved_by: 'bulk-approval-system',
+        approved_by: 'bulk-approval-system',
         notes: 'Batch approved for Sprint 2024-Q1',
       };
 
@@ -411,7 +411,7 @@ const bulkIds = featureIds.slice(0, 10);
       expect(bulkResult.approved_features).toHaveLength(10);
 
       // 3. Verify individual approvals from bulk operation;
-const listApprovedResult = await execAPI(
+      const listApprovedResult = await execAPI(
         'list-features',
         [JSON.stringify({ status: 'approved' })],
         { projectRoot: testDir },
@@ -438,7 +438,7 @@ const listApprovedResult = await execAPI(
       }
 
       // 5. Verify all features are now approved;
-const finalListResult = await execAPI(
+      const finalListResult = await execAPI(
         'list-features',
         [JSON.stringify({ status: 'approved' })],
         { projectRoot: testDir },
@@ -448,7 +448,7 @@ const finalListResult = await execAPI(
       expect(finalListResult.features).toHaveLength(15);
 
       // 6. Verify approval history contains all approvals;
-const featuresData = await readFeaturesFile(testDir);
+      const featuresData = await readFeaturesFile(testDir);
       expect(featuresData.metadata.approval_history).toHaveLength(15);
     });
 
@@ -462,7 +462,7 @@ const featuresData = await readFeaturesFile(testDir);
       const suggestResult = await execAPI(
         'suggest-feature',
         [JSON.stringify(featureData)], {
-    projectRoot: testDir,
+          projectRoot: testDir,
         },
       );
       expect(suggestResult.success).toBe(true);
@@ -470,66 +470,66 @@ const featuresData = await readFeaturesFile(testDir);
       const approveResult = await execAPI(
         'approve-feature',
         [suggestResult.feature.id], {
-    projectRoot: testDir,
+          projectRoot: testDir,
         },
       );
       expect(approveResult.success).toBe(true);
 
       // 2. Try to approve already approved feature;
-const secondApproveResult = await execAPI(
+      const secondApproveResult = await execAPI(
         'approve-feature',
         [suggestResult.feature.id], {
-    projectRoot: testDir,
+          projectRoot: testDir,
         },
       );
       expect(secondApproveResult.success).toBe(false);
       expect(secondApproveResult.error).toContain('suggested');
 
       // 3. Try to reject already approved feature;
-const rejectResult = await execAPI(
+      const rejectResult = await execAPI(
         'reject-feature',
         [suggestResult.feature.id], {
-    projectRoot: testDir,
+          projectRoot: testDir,
         },
       );
       expect(rejectResult.success).toBe(false);
       expect(rejectResult.error).toContain('suggested');
     });
-});
+  });
 
   // ========================================
   // FEATURE REJECTION WORKFLOW
   // ========================================
 
   describe('Feature Rejection Workflow', () => {
-    
-    
+
+
     test('should handle feature rejection process', async () => {
       // 1. Create features for rejection testing;
-const testFeatures = [
+      const testFeatures = [
         generateTestFeature({
-    title: 'Low Priority Feature',
+          title: 'Low Priority Feature',
           category: 'enhancement',
         }),
         generateTestFeature({
-    title: 'Out of Scope Feature',
+          title: 'Out of Scope Feature',
           category: 'new-feature',
         }),
         generateTestFeature({
-    title: 'Duplicate Feature',
+          title: 'Duplicate Feature',
           category: 'bug-fix',
         }),
       ];
 
       const featureIds = [];
       for (const featureData of testFeatures) {
-        const _result = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)], {
-    projectRoot: testDir,
+            projectRoot: testDir,
           },
         );
-        expect(_result.success).toBe(true);
+        expect(result.success).toBe(true);
         featureIds.push(result.feature.id);
       }
 
@@ -544,7 +544,7 @@ const testFeatures = [
           rejected_by: 'team-lead',
           reason: 'Duplicate of existing feature #123',
         },
-  ];
+      ];
 
       for (let i = 0; i < featureIds.length; i++) {
         const rejectResult = await execAPI(
@@ -565,7 +565,7 @@ const testFeatures = [
       }
 
       // 3. Verify rejection history;
-const featuresData = await readFeaturesFile(testDir);
+      const featuresData = await readFeaturesFile(testDir);
       expect(featuresData.metadata.approval_history).toHaveLength(3);
 
       featuresData.metadata.approval_history.forEach((entry, index) => {
@@ -576,7 +576,7 @@ const featuresData = await readFeaturesFile(testDir);
       });
 
       // 4. Test filtering rejected features;
-const rejectedResult = await execAPI(
+      const rejectedResult = await execAPI(
         'list-features',
         [JSON.stringify({ status: 'rejected' })],
         { projectRoot: testDir },
@@ -606,7 +606,7 @@ const rejectedResult = await execAPI(
       const suggestResult = await execAPI(
         'suggest-feature',
         [JSON.stringify(featureData)], {
-    projectRoot: testDir,
+          projectRoot: testDir,
         },
       );
       expect(suggestResult.success).toBe(true);
@@ -622,74 +622,74 @@ const rejectedResult = await execAPI(
       expect(rejectResult.success).toBe(true);
 
       // 2. Try to approve rejected feature;
-const approveResult = await execAPI(
+      const approveResult = await execAPI(
         'approve-feature',
         [suggestResult.feature.id], {
-    projectRoot: testDir,
+          projectRoot: testDir,
         },
       );
       expect(approveResult.success).toBe(false);
       expect(approveResult.error).toContain('suggested');
 
       // 3. Try to reject already rejected feature;
-const secondRejectResult = await execAPI(
+      const secondRejectResult = await execAPI(
         'reject-feature',
         [suggestResult.feature.id], {
-    projectRoot: testDir,
+          projectRoot: testDir,
         },
       );
       expect(secondRejectResult.success).toBe(false);
       expect(secondRejectResult.error).toContain('suggested');
     });
-});
+  });
 
   // ========================================
   // FEATURE FILTERING AND SEARCH
   // ========================================
 
   describe('Feature Filtering And Search', () => {
-    
-    
+
+
     beforeEach(async () => {
       // Setup diverse feature set for filtering tests;
-const testFeatures = [ {
-    title: 'Authentication System',
-          category: 'enhancement',
-          status: 'suggested',
-        },
-        { title: 'Login Bug Fix', category: 'bug-fix', status: 'suggested' }, {
-    title: 'Performance Optimization',
-          category: 'performance',
-          status: 'suggested',
-        },
-        { title: 'Security Audit', category: 'security', status: 'suggested' }, {,
-    title: 'Documentation Update',
-          category: 'documentation',
-          status: 'suggested',
-        }, {
-    title: 'New Dashboard',
-          category: 'new-feature',
-          status: 'suggested',
-        },
-  ];
+      const testFeatures = [{
+        title: 'Authentication System',
+        category: 'enhancement',
+        status: 'suggested',
+      },
+      { title: 'Login Bug Fix', category: 'bug-fix', status: 'suggested' }, {
+        title: 'Performance Optimization',
+        category: 'performance',
+        status: 'suggested',
+      },
+      { title: 'Security Audit', category: 'security', status: 'suggested' }, {
+        title: 'Documentation Update',
+        category: 'documentation',
+        status: 'suggested',
+      }, {
+        title: 'New Dashboard',
+        category: 'new-feature',
+        status: 'suggested',
+      },
+      ];
 
       for (const feature of testFeatures) {
         const featureData = generateTestFeature(feature);
         await execAPI('suggest-feature', [JSON.stringify(featureData)], {
-    projectRoot: testDir,
+          projectRoot: testDir,
         });
       }
 
       // Approve some features;
-const listResult = await execAPI('list-features', [], {
-    projectRoot: testDir,
+      const listResult = await execAPI('list-features', [], {
+        projectRoot: testDir,
       });
       const features = listResult.features;
 
       // Approve first 3 features
       for (let i = 0; i < 3; i++) {
         await execAPI('approve-feature', [features[i].id], {
-    projectRoot: testDir,
+          projectRoot: testDir,
         });
       }
 
@@ -705,7 +705,7 @@ const listResult = await execAPI('list-features', [], {
 
     test('should filter features by status', async () => {
       // 1. Test suggested filter;
-const suggestedResult = await execAPI(
+      const suggestedResult = await execAPI(
         'list-features',
         [JSON.stringify({ status: 'suggested' })],
         { projectRoot: testDir },
@@ -718,7 +718,7 @@ const suggestedResult = await execAPI(
       ).toBe(true);
 
       // 2. Test approved filter;
-const approvedResult = await execAPI(
+      const approvedResult = await execAPI(
         'list-features',
         [JSON.stringify({ status: 'approved' })],
         { projectRoot: testDir },
@@ -731,7 +731,7 @@ const approvedResult = await execAPI(
       ).toBe(true);
 
       // 3. Test rejected filter;
-const rejectedResult = await execAPI(
+      const rejectedResult = await execAPI(
         'list-features',
         [JSON.stringify({ status: 'rejected' })],
         { projectRoot: testDir },
@@ -763,13 +763,13 @@ const rejectedResult = await execAPI(
 
         expect(categoryResult.success).toBe(true);
         expect(categoryResult.features).toHaveLength(1);
-        expect(categoryResult.features[0]._category).toBe(_category);
+        expect(categoryResult.features[0].category).toBe(category);
       }
     });
 
     test('should handle combined filters', async () => {
       // 1. Test status + category combination;
-const enhancementApprovedResult = await execAPI(
+      const enhancementApprovedResult = await execAPI(
         'list-features',
         [JSON.stringify({ status: 'approved', category: 'enhancement' })],
         { projectRoot: testDir },
@@ -785,7 +785,7 @@ const enhancementApprovedResult = await execAPI(
       }
 
       // 2. Test empty result filters;
-const nonExistentResult = await execAPI(
+      const nonExistentResult = await execAPI(
         'list-features',
         [JSON.stringify({ status: 'implemented', category: 'non-existent' })],
         { projectRoot: testDir },
@@ -794,64 +794,64 @@ const nonExistentResult = await execAPI(
       expect(nonExistentResult.success).toBe(true);
       expect(nonExistentResult.features).toHaveLength(0);
     });
-});
+  });
 
   // ========================================
   // COMPLETE LIFECYCLE SCENARIOS
   // ========================================
 
   describe('Complete Lifecycle Scenarios', () => {
-    
-    
+
+
     test('should handle realistic product development workflow', async () => {
       // 1. Sprint planning - suggest multiple features;
-const sprintFeatures = [
+      const sprintFeatures = [
         generateTestFeature({
-    title: 'User Profile Page',
+          title: 'User Profile Page',
           category: 'new-feature',
         }),
         generateTestFeature({
-    title: 'Fix Login Validation',
+          title: 'Fix Login Validation',
           category: 'bug-fix',
         }),
         generateTestFeature({
-    title: 'Optimize Database Queries',
+          title: 'Optimize Database Queries',
           category: 'performance',
         }),
         generateTestFeature({
-    title: 'Add Input Sanitization',
+          title: 'Add Input Sanitization',
           category: 'security',
         }),
         generateTestFeature({
-    title: 'Update API Documentation',
+          title: 'Update API Documentation',
           category: 'documentation',
         }),
         generateTestFeature({
-    title: 'Improve Button Styling',
+          title: 'Improve Button Styling',
           category: 'enhancement',
         }),
       ];
 
       const featureIds = [];
       for (const featureData of sprintFeatures) {
-        const _result = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)], {
-    projectRoot: testDir,
+            projectRoot: testDir,
           },
         );
-        expect(_result.success).toBe(true);
+        expect(result.success).toBe(true);
         featureIds.push(result.feature.id);
       }
 
       // 2. Product review - approve high priority features;
-const highPriorityIds = featureIds.slice(0, 4); // First 4 are high priority;
-const bulkApproveResult = await execAPI(
+      const highPriorityIds = featureIds.slice(0, 4); // First 4 are high priority;
+      const bulkApproveResult = await execAPI(
         'bulk-approve-features',
         [
           JSON.stringify(highPriorityIds),
-          JSON.stringify({,
-    approved_by: 'product-team',
+          JSON.stringify({
+            approved_by: 'product-team',
             notes: 'Sprint 2024-Q1 approved',
           }),
         ],
@@ -868,7 +868,7 @@ const bulkApproveResult = await execAPI(
           [
             featureId,
             JSON.stringify({
-    rejected_by: 'product-team',
+              rejected_by: 'product-team',
               reason: 'Deferred to next sprint',
             }),
           ],
@@ -879,8 +879,8 @@ const bulkApproveResult = await execAPI(
       }
 
       // 4. Generate sprint report;
-const statsResult = await execAPI('feature-stats', [], {
-    projectRoot: testDir,
+      const statsResult = await execAPI('feature-stats', [], {
+        projectRoot: testDir,
       });
       expect(statsResult.success).toBe(true);
       expect(statsResult.stats.total).toBe(6);
@@ -888,7 +888,7 @@ const statsResult = await execAPI('feature-stats', [], {
       expect(statsResult.stats.by_status.rejected).toBe(2);
 
       // 5. Filter approved features for development;
-const approvedResult = await execAPI(
+      const approvedResult = await execAPI(
         'list-features',
         [JSON.stringify({ status: 'approved' })],
         { projectRoot: testDir },
@@ -898,11 +898,11 @@ const approvedResult = await execAPI(
       expect(approvedResult.features).toHaveLength(4);
 
       // 6. Verify approval history for audit;
-const featuresData = await readFeaturesFile(testDir);
+      const featuresData = await readFeaturesFile(testDir);
       expect(featuresData.metadata.approval_history).toHaveLength(6);
 
       // Check That all high priority features have approval entries;
-const approvalEntries = featuresData.metadata.approval_history.filter(
+      const approvalEntries = featuresData.metadata.approval_history.filter(
         (h) => h.action === 'approved',
       );
       expect(approvalEntries).toHaveLength(4);
@@ -911,7 +911,7 @@ const approvalEntries = featuresData.metadata.approval_history.filter(
       ).toBe(true);
 
       // Check That low priority features have rejection entries;
-const rejectionEntries = featuresData.metadata.approval_history.filter(
+      const rejectionEntries = featuresData.metadata.approval_history.filter(
         (h) => h.action === 'rejected',
       );
       expect(rejectionEntries).toHaveLength(2);
@@ -922,10 +922,10 @@ const rejectionEntries = featuresData.metadata.approval_history.filter(
 
     test('should maintain data integrity throughout complex workflows', async () => {
       // 1. Create a large number of features with complex operations;
-const featureCount = 50;
+      const featureCount = 50;
       const features = Array.from({ length: featureCount }, (_, i) =>
         generateTestFeature({
-    title: `Complex Workflow Feature ${i + 1}`,
+          title: `Complex Workflow Feature ${i + 1}`,
           category: [
             'enhancement',
             'bug-fix',
@@ -937,15 +937,15 @@ const featureCount = 50;
       );
 
       // 2. Suggest all features;
-const featureIds = [];
+      const featureIds = [];
       for (const featureData of features) {
-        const _result = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)], {
-    projectRoot: testDir,
+            projectRoot: testDir,
           },
         );
-        expect(_result.success).toBe(true);
+        expect(result.success).toBe(true);
         featureIds.push(result.feature.id);
       }
 
@@ -968,7 +968,7 @@ const featureIds = [];
             [
               featureIds[i],
               JSON.stringify({
-    rejected_by: 'complex-workflow-test',
+                rejected_by: 'complex-workflow-test',
                 reason: 'Complex test rejection',
               }),
             ],
@@ -979,8 +979,8 @@ const featureIds = [];
       }
 
       // 4. Verify final state integrity;
-const finalStatsResult = await execAPI('feature-stats', [], {
-    projectRoot: testDir,
+      const finalStatsResult = await execAPI('feature-stats', [], {
+        projectRoot: testDir,
       });
       expect(finalStatsResult.success).toBe(true);
       expect(finalStatsResult.stats.total).toBe(featureCount);
@@ -992,20 +992,20 @@ const finalStatsResult = await execAPI('feature-stats', [], {
       expect(approvedCount + rejectedCount + suggestedCount).toBe(featureCount);
 
       // 5. Verify file structure integrity;
-const featuresData = await readFeaturesFile(testDir);
+      const featuresData = await readFeaturesFile(testDir);
       validateFeaturesStructure(featuresData);
       expect(featuresData.features).toHaveLength(featureCount);
       expect(featuresData.metadata.total_features).toBe(featureCount);
 
       // 6. Verify all feature IDs are unique;
-const allIds = featuresData.features.map((f) => f.id);
+      const allIds = featuresData.features.map((f) => f.id);
       const uniqueIds = new Set(allIds);
       expect(uniqueIds.size).toBe(featureCount);
 
       // 7. Verify approval history accuracy;
-const approvalHistoryCount =
+      const approvalHistoryCount =
         featuresData.metadata.approval_history.length;
       expect(approvalHistoryCount).toBe(approvedCount + rejectedCount);
     });
-});
+  });
 });

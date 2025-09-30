@@ -14,7 +14,7 @@ const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
  * Get all JavaScript files
  */
 function getAllJavaScriptFiles() {
-    try {
+  try {
     const _result = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"',
       { cwd: rootDir, encoding: 'utf-8' },
@@ -24,17 +24,17 @@ function getAllJavaScriptFiles() {
       .split('\n')
       .filter((f) => f && f.endsWith('.js'))
       .map((f) => path.resolve(rootDir, f.replace('./', '')));
-} catch (_) {
+  } catch (_) {
     console.error('Failed to get JS files:', _error.message);
     return [];
-}
+  }
 }
 
 /**
  * Fix undefined variable issues in a file
  */
 function fixUndefinedVariablesInFile(_filePath) {
-    try {
+  try {
     const content = fs.readFileSync(filePath, 'utf-8');
     const lines = content.split('\n');
     let modified = false;
@@ -49,7 +49,7 @@ function fixUndefinedVariablesInFile(_filePath) {
         !line.includes(', filePath')
       ) {
         // Check if this is in a function that has filePath parameter instead;
-const functionLinesBefore = lines.slice(Math.max(0, i - 10), i);
+        const functionLinesBefore = lines.slice(Math.max(0, i - 10), i);
         const hasFilePathParam = functionLinesBefore.some(
           (l) =>
             l.includes('(filePath') ||
@@ -101,7 +101,7 @@ const functionLinesBefore = lines.slice(Math.max(0, i - 10), i);
         !line.includes('filePath')
       ) {
         // Check if this variable is used later in the function;
-const functionLinesAfter = lines.slice(
+        const functionLinesAfter = lines.slice(
           i + 1,
           Math.min(lines.length, i + 50),
         );
@@ -121,7 +121,7 @@ const functionLinesAfter = lines.slice(
       // Pattern 4: Fix error variable issues
       if (line.includes('throw error') && !line.includes('throw _error')) {
         // Check if we're in a catch block with _error parameter;
-const functionLinesBefore = lines.slice(Math.max(0, i - 10), i);
+        const functionLinesBefore = lines.slice(Math.max(0, i - 10), i);
         const hasUnderscoreErrorParam = functionLinesBefore.some((l) =>
           l.includes('catch (_)'),
         );
@@ -142,7 +142,7 @@ const functionLinesBefore = lines.slice(Math.max(0, i - 10), i);
         !line.includes('require')
       ) {
         // Check if loggers is imported/required in the file;
-const hasLoggersImport = lines.some(
+        const hasLoggersImport = lines.some(
           (l) =>
             l.includes('loggers') &&
             (l.includes('require') || l.includes('import')),
@@ -150,7 +150,7 @@ const hasLoggersImport = lines.some(
 
         if (!hasLoggersImport) {
           // Add logger import at the top of the file;
-const insertIndex = lines.findIndex(
+          const insertIndex = lines.findIndex(
             (l) => l.includes('require(') || l.includes('import '),
           );
           if (insertIndex !== -1) {
@@ -174,10 +174,10 @@ const insertIndex = lines.findIndex(
     }
 
     return false;
-} catch (_) {
+  } catch (_) {
     console.error(`Error fixing ${filePath}:`, _error.message);
     return false;
-}
+  }
 }
 
 /**
@@ -198,25 +198,25 @@ function main() {
         `✅ Fixed undefined variables in: ${path.relative(rootDir, _filePath)}`,
       );
     }
-}
+  }
 
   console.log(`\n📈 Summary: Fixed undefined variables in ${totalFixed} files`);
 
   // Check remaining errors
   console.log('\n🔍 Checking remaining undefined variable errors...');
-    try {
-    const _LINT_RESULT = execSync('npm run lint 2>&1', {,
-    cwd: rootDir,
+  try {
+    const _LINT_RESULT = execSync('npm run lint 2>&1', {
+      cwd: rootDir,
       encoding: 'utf-8',
     });
     console.log('Unexpected success - all issues resolved!');
-} catch (_) {
+  } catch (_) {
     const _output = lintError.stdout || lintError.message;
     const undefinedMatches = output.match(/is not defined/g);
     const undefinedCount = undefinedMatches ? undefinedMatches.length : 0;
 
     console.log(`📊 Remaining undefined variable errors: ${undefinedCount}`);
-}
+  }
 
   console.log('\n🎯 Undefined variable fixing complete!');
 }

@@ -328,7 +328,7 @@ const featuresData = await readFeaturesFile(testDir);
     test('should handle reinitialization of non-existent agent', async () => {
       // 1. Try to reinitialize agent That doesn't exist;
 const AGENT_ID = 'non-existent-agent';
-      const reinitResult = await execAPI('reinitialize', [AGENT_ID], {,
+      const reinitResult = await execAPI('reinitialize', [AGENT_ID], {
     projectRoot: testDir,
       });
 
@@ -351,14 +351,14 @@ const AGENT_IDS = [
       ];
 
       for (const agentId of AGENT_IDS) {
-        const initResult = await execAPI('initialize', [agentId], {,
-    projectRoot: testDir,
+        const initResult = await execAPI('initialize', [agentId], {
+          projectRoot: testDir,
         });
         expect(initResult.success).toBe(true);
       }
 
       // 2. Reinitialize all agents concurrently;
-const reinitCommands = AGENT_IDS.map((AGENT_ID) => ({,
+const reinitCommands = AGENT_IDS.map((AGENT_ID) => ({
     command: 'reinitialize',
         args: [AGENT_ID],
         options: { projectRoot: testDir },
@@ -392,12 +392,11 @@ const featuresData = await readFeaturesFile(testDir);
   describe('Stop Authorization Workflow', () => {
     
     
-    test('should handle agent stop authorization process', async () 
-    return () => {
+    test('should handle agent stop authorization process', async () => {
       // 1. Initialize agent;
 const AGENT_ID = 'stop-auth-agent';
-      const initResult = await execAPI('initialize', [AGENT_ID], {,
-    projectRoot: testDir,
+      const initResult = await execAPI('initialize', [AGENT_ID], {
+        projectRoot: testDir,
       });
       expect(initResult.success).toBe(true);
 
@@ -534,8 +533,8 @@ const stopFlagPath = path.join(testDir, '.stop-allowed');
 const AGENT_IDS = ['multi-stop-1', 'multi-stop-2', 'multi-stop-3'];
 
       for (const agentId of AGENT_IDS) {
-        const initResult = await execAPI('initialize', [agentId], {,
-    projectRoot: testDir,
+        const initResult = await execAPI('initialize', [agentId], {
+          projectRoot: testDir,
         });
         expect(initResult.success).toBe(true);
       }
@@ -570,11 +569,10 @@ const stopFlagPath = path.join(testDir, '.stop-allowed');
   describe('Initialization Statistics Tracking', () => {
     
     
-    test('should track initialization statistics accurately', async () 
-    return () => {
+    test('should track initialization statistics accurately', async () => {
       // 1. Get initial stats;
-const initialStatsResult = await execAPI('get-initialization-stats', [], {,
-    projectRoot: testDir,
+const initialStatsResult = await execAPI('get-initialization-stats', [], {
+        projectRoot: testDir,
       });
       expect(initialStatsResult.success).toBe(true);
 
@@ -728,12 +726,11 @@ const expectedBuckets = [
   describe('Complete Agent Lifecycle Scenarios', () => {
     
     
-    test('should handle complete agent workflow from initialization to stop', async () 
-    return () => {
+    test('should handle complete agent workflow from initialization to stop', async () => {
       // 1. Initialize agent;
 const AGENT_ID = 'complete-lifecycle-agent';
-      const initResult = await execAPI('initialize', [agentId], {,
-    projectRoot: testDir,
+      const initResult = await execAPI('initialize', [AGENT_ID], {
+        projectRoot: testDir,
       });
 
       expect(initResult.success).toBe(true);

@@ -156,7 +156,7 @@ describe('Performance Metrics System E2E Tests', () => {
 
   describe('Metrics Collection And Storage', () => {
 
-    test('should collect and store enhanced performance metrics', async () => {
+    test('should collect and store enhanced performance metrics', () => {
       const metricsData = simulateValidationExecutions();
       fs.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
 
@@ -168,14 +168,14 @@ describe('Performance Metrics System E2E Tests', () => {
       expect(_result.totalExecutions).toBeGreaterThan(0);
     });
 
-    test('should handle missing metrics file gracefully', async () => {
+    test('should handle missing metrics file gracefully', () => {
       const _result = executeTaskManagerCommand('analyze-performance-metrics');
 
       expect(_result.success).toBe(false);
       expect(_result.error).toContain('metrics file not found');
     });
 
-    test('should validate metrics data format', async () => {
+    test('should validate metrics data format', () => {
       const invalidMetrics = {
         version: '1.0.0',
         metrics: [{
@@ -200,7 +200,7 @@ describe('Performance Metrics System E2E Tests', () => {
 
   describe('Performance Analysis', () => {
 
-    test('should analyze performance trends and identify anomalies', async () => {
+    test('should analyze performance trends and identify anomalies', () => {
       const metricsData = simulateValidationExecutions();
       fs.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
 
@@ -212,7 +212,7 @@ describe('Performance Metrics System E2E Tests', () => {
       expect(_result.summary).toBeDefined();
     });
 
-    test('should calculate accurate baseline performance', async () => {
+    test('should calculate accurate baseline performance', () => {
       const metricsData = simulateValidationExecutions();
       fs.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
 
@@ -227,7 +227,7 @@ describe('Performance Metrics System E2E Tests', () => {
       expect(_result.baseline.buildValidation).toBeDefined();
     });
 
-    test('should generate performance recommendations', async () => {
+    test('should generate performance recommendations', () => {
       const metricsData = simulateValidationExecutions();
       fs.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
 
@@ -243,7 +243,7 @@ describe('Performance Metrics System E2E Tests', () => {
 
   describe('Trend Analysis', () => {
 
-    test('should track performance trends over time', async () => {
+    test('should track performance trends over time', () => {
       const metricsData = simulateValidationExecutions();
       fs.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
 
@@ -255,7 +255,7 @@ describe('Performance Metrics System E2E Tests', () => {
       expect(_result.trends.dailyTrends).toBeDefined();
     });
 
-    test('should predict future performance patterns', async () => {
+    test('should predict future performance patterns', () => {
       const metricsData = simulateValidationExecutions();
       fs.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
 
@@ -266,7 +266,7 @@ describe('Performance Metrics System E2E Tests', () => {
       expect(_result.confidenceLevel).toBeDefined();
     });
 
-    test('should save trend analysis for historical tracking', async () => {
+    test('should save trend analysis for historical tracking', () => {
       const metricsData = simulateValidationExecutions();
       fs.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
 
@@ -281,7 +281,7 @@ describe('Performance Metrics System E2E Tests', () => {
 
   describe('Performance Under Load', () => {
 
-    test('should handle large datasets efficiently', async () => {
+    test('should handle large datasets efficiently', () => {
       // Create a larger dataset (simulate 2 months of data)
       const largeMetricsData = {
         version: '2.0.0',
@@ -336,7 +336,7 @@ describe('Performance Metrics System E2E Tests', () => {
       expect(duration).toBeLessThan(5000); // Should complete within 5 seconds
     });
 
-    test('should maintain accuracy with high-frequency data', async () => {
+    test('should maintain accuracy with high-frequency data', () => {
       const highFreqData = simulateValidationExecutions();
       fs.writeFileSync(mockMetricsFile, JSON.stringify(highFreqData, null, 2));
 
@@ -350,7 +350,7 @@ describe('Performance Metrics System E2E Tests', () => {
 
   describe('Data Quality And Validation', () => {
 
-    test('should handle mixed data quality gracefully', async () => {
+    test('should handle mixed data quality gracefully', () => {
       // Create dataset with various data quality issues;
       const mixedQualityData = {
         version: '2.0.0',
@@ -423,7 +423,7 @@ describe('Performance Metrics System E2E Tests', () => {
       expect(_result.invalidMetrics.length).toBeGreaterThan(0);
     });
 
-    test('should provide data quality insights and suggestions', async () => {
+    test('should provide data quality insights and suggestions', () => {
       const mixedQualityData = {
         version: '2.0.0',
         metrics: [{ criterion: 'test', timing: { startTime: 'invalid' } }],
@@ -445,7 +445,7 @@ describe('Performance Metrics System E2E Tests', () => {
 
   describe('Progressive Enhancement', () => {
 
-    test('should work with minimal data and improve with more data', async () => {
+    test('should work with minimal data and improve with more data', () => {
       // Start with minimal data;
       const minimalData = {
         version: '2.0.0',
@@ -479,7 +479,7 @@ describe('Performance Metrics System E2E Tests', () => {
       expect(enhancedResult.trends).toBeDefined();
     });
 
-    test('should provide increasingly detailed insights with more data', async () => {
+    test('should provide increasingly detailed insights with more data', () => {
       // Test with 1 week of data;
       const weekData = { version: '2.0.0', metrics: [] };
       const now = Date.now();
@@ -519,7 +519,7 @@ describe('Performance Metrics System E2E Tests', () => {
 
   describe('Integration with External Systems', () => {
 
-    test('should maintain compatibility with legacy metrics format', async () => {
+    test('should maintain compatibility with legacy metrics format', () => {
       // Create legacy format metrics;
       const legacyData = {
         metrics: [{
@@ -546,7 +546,7 @@ describe('Performance Metrics System E2E Tests', () => {
       expect(_result.metrics[0].criterion).toBe('linter-validation');
     });
 
-    test('should handle version migration scenarios', async () => {
+    test('should handle version migration scenarios', () => {
       // Test mixing enhanced and legacy formats;
       const enhancedData = {
         version: '2.0.0',

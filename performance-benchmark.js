@@ -100,7 +100,7 @@ class TaskManagerPerformanceBenchmark {
   /**
    * Benchmark API endpoint response times
    */
-  benchmarkApiEndpoints() {
+  async benchmarkApiEndpoints() {
     loggers.stopHook.log('📊 Benchmarking API endpoint response times...');
 
     const endpoints = [

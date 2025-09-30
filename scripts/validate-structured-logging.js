@@ -51,7 +51,7 @@ class StructuredLoggingValidator {
   /**
    * Validate core structured logging implementation (Criteria 1-10)
    */
-  async validateCoreImplementation() {
+  validateCoreImplementation() {
     console.log('📋 Core Implementation Validation (Criteria 1-10)');
     console.log('================================================\n');
 
@@ -228,7 +228,7 @@ class StructuredLoggingValidator {
   /**
    * Validate production readiness (Criteria 11-15)
    */
-  async validateProductionReadiness() {
+  validateProductionReadiness() {
     console.log('\n🏭 Production Readiness Validation (Criteria 11-15)');
     console.log('==================================================\n');
 
@@ -342,7 +342,7 @@ class StructuredLoggingValidator {
   /**
    * Validate observability and monitoring features (Criteria 16-20)
    */
-  async validateObservabilityFeatures() {
+  validateObservabilityFeatures() {
     console.log(
       '\n📊 Observability and Monitoring Validation (Criteria 16-20)',
     );
@@ -438,7 +438,7 @@ class StructuredLoggingValidator {
   /**
    * Validate security and compliance (Criteria 21-25)
    */
-  async validateSecurityCompliance() {
+  validateSecurityCompliance() {
     console.log('\n🔒 Security and Compliance Validation (Criteria 21-25)');
     console.log('====================================================\n');
 

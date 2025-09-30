@@ -85,7 +85,7 @@
 const FS = require('fs');
 const path = require('path');
 const readline = require('readline');
-    const { loggers } = require('./lib/logger');
+const { loggers } = require('./lib/logger');
 
 // Parse command line arguments;
 const args = process.argv.slice(2);
@@ -100,7 +100,7 @@ function getArgValue(flag) {
 
 // Check for command line flags;
 const flags = {
-    noInteractive: args.includes('--no-interactive') || args.includes('--batch'),
+  noInteractive: args.includes('--no-interactive') || args.includes('--batch'),
   projectName: getArgValue('--project-Name'),
   task: getArgValue('--task'),
   mode: getArgValue('--mode') || 'DEVELOPMENT',
@@ -124,7 +124,7 @@ const rl = readline.createInterface({
 function question(prompt, category = 'general') {
   return new Promise((resolve) => {
     rl.question(prompt, resolve);
-});
+  });
 }
 
 async function getProjectInfo(targetPath, category = 'general') {
@@ -142,11 +142,11 @@ async function getProjectInfo(targetPath, category = 'general') {
     } catch (_) {
       // Ignore And use directory Name
     }
-}
+  }
 
   if (flags.noInteractive) {
     return {
-    projectName: flags.projectName || detectedName,
+      projectName: flags.projectName || detectedName,
       taskDescription: flags.task || 'Initial project setup',
       taskMode: flags.mode.toUpperCase(),
       taskPrompt:
@@ -161,7 +161,7 @@ async function getProjectInfo(targetPath, category = 'general') {
         : [],
       requiresResearch: flags.requiresResearch,
     };
-}
+  }
 
   // Interactive mode
 
@@ -199,7 +199,7 @@ async function getProjectInfo(targetPath, category = 'general') {
   };
 }
 
-async function createProjectDirectories(targetPath, category = 'general') {
+function createProjectDirectories(targetPath, _category = 'general') {
   // Create /development directory
   const developmentPath = path.join(targetPath, 'development');
 
@@ -207,7 +207,7 @@ async function createProjectDirectories(targetPath, category = 'general') {
     FS.mkdirSync(developmentPath, { recursive: true });
 
     loggers.stopHook.log(`✓ Created /development directory`);
-}
+  }
 
   // Create /development/tasks directory
   const tasksPath = path.join(developmentPath, 'tasks');
@@ -216,7 +216,7 @@ async function createProjectDirectories(targetPath, category = 'general') {
     FS.mkdirSync(tasksPath, { recursive: true });
 
     loggers.stopHook.log(`✓ Created /development/tasks directory`);
-}
+  }
 
   // Create /development/reports directory
   const reportsPath = path.join(developmentPath, 'reports');
@@ -225,7 +225,7 @@ async function createProjectDirectories(targetPath, category = 'general') {
     FS.mkdirSync(reportsPath, { recursive: true });
 
     loggers.stopHook.log(`✓ Created /development/reports directory`);
-}
+  }
 
   // Create /development/logs directory
   const logsPath = path.join(developmentPath, 'logs');
@@ -234,7 +234,7 @@ async function createProjectDirectories(targetPath, category = 'general') {
     FS.mkdirSync(logsPath, { recursive: true });
 
     loggers.stopHook.log(`✓ Created /development/logs directory`);
-}
+  }
 
   return { developmentPath, tasksPath, reportsPath, logsPath };
 }
@@ -243,7 +243,7 @@ async function createProjectDirectories(targetPath, category = 'general') {
 function needsTodoUpdate(todoPath, category = 'general') {
   if (!FS.existsSync(todoPath)) {
     return true;
-}
+  }
 
   try {
     const existing = JSON.parse(FS.readFileSync(todoPath, 'utf8'));
@@ -268,21 +268,21 @@ function needsTodoUpdate(todoPath, category = 'general') {
       `✓ ${path.basename(path.dirname(todoPath))} - FEATURES.json already up to date`,
     );
     return false;
-} catch (_) {
+  } catch (_) {
     loggers.app.info(
       `⚠️  ${path.basename(path.dirname(todoPath))} - FEATURES.json corrupted, will recreate`,
     );
     return true;
-}
+  }
 }
 
-async function createTodoJson(targetPath, projectInfo, category = 'general') {
+function createTodoJson(targetPath, projectInfo, _category = 'general') {
   const todoPath = path.join(targetPath, 'FEATURES.json');
 
   // Smart update logic - only update if schema is old or missing
   if (!needsTodoUpdate(todoPath)) {
     return true; // Already up to date, skip
-}
+  }
 
   // Generate timestamp for schema
   const timestamp = Date.now();
@@ -301,7 +301,7 @@ async function createTodoJson(targetPath, projectInfo, category = 'general') {
     agents: {}, // Empty agent registry
     features: [], // Feature-based system integration
     current_task_index: 0,
-};
+  };
 
   // Add comprehensive validation tasks for professional development
   const reviewTasks = [
@@ -395,7 +395,7 @@ This validation ensures professional-grade delivery quality.`,
       is_optional_validation: true,
       validation_type: index + 1,
     });
-});
+  });
 
   // Write FEATURES.json
 
@@ -410,7 +410,7 @@ This validation ensures professional-grade delivery quality.`,
 function getProjectDirectories(basePath, category = 'general') {
   if (!FS.existsSync(basePath) || !FS.statSync(basePath).isDirectory()) {
     return [];
-}
+  }
 
   return FS.readdirSync(basePath)
     .map((item) => path.join(basePath, item))
@@ -468,10 +468,10 @@ async function processProject(targetPath, category = 'general') {
     }
 
     return { success: true, project: projectName };
-} catch (_) {
+  } catch (_) {
     loggers.stopHook.error(`❌ ${projectName} - Error:`, _error.message);
     return { success: false, project: projectName, error: _error.message };
-}
+  }
 }
 
 /**
@@ -534,10 +534,10 @@ function migrateToFeatureBasedSystem(targetPath, category = 'general') {
         `   🗑️  Removed features.json (dual system eliminated)`,
       );
     }
-} catch (_) {
+  } catch (_) {
     loggers.stopHook.log(`   ❌ Feature migration failed: ${_error.message}`);
     // Don't fail the entire setup for migration issues
-}
+  }
 }
 
 /**
@@ -550,7 +550,7 @@ function analyzeTasksForFeatures(tasks, category = 'general') {
     phaseGroups: {},
     nonPhasedTasks: [],
     summary: {
-    total_tasks: tasks.length,
+      total_tasks: tasks.length,
       phased_tasks: 0,
       non_phased_tasks: 0,
       unique_phases: 0,
@@ -566,7 +566,7 @@ function analyzeTasksForFeatures(tasks, category = 'general') {
       if (!analysis.phaseGroups[phaseKey]) {
         // eslint-disable-next-line security/detect-object-injection -- phaseKey is validated string from phase parsing
         analysis.phaseGroups[phaseKey] = {
-    phase: phase,
+          phase: phase,
           tasks: [],
           feature_title: generateFeatureTitle(phaseKey, task.title),
         };
@@ -578,7 +578,7 @@ function analyzeTasksForFeatures(tasks, category = 'general') {
       analysis.nonPhasedTasks.push(task);
       analysis.summary.non_phased_tasks++;
     }
-});
+  });
 
   analysis.summary.unique_phases = Object.keys(analysis.phaseGroups).length;
   return analysis;
@@ -592,13 +592,13 @@ function analyzeTasksForFeatures(tasks, category = 'general') {
 function extractPhaseFromTitle(title, category = 'general') {
   if (!title) {
     return null;
-}
+  }
 
   // Use string parsing instead of regex to avoid security warnings
   const cleanTitle = title.replace(/^Research:\s*/i, '').trim();
   if (!cleanTitle.toLowerCase().startsWith('phase ')) {
     return null;
-}
+  }
 
   const phaseNumberPart = cleanTitle.slice(6).trim(); // Remove "Phase " prefix
   const versionParts = phaseNumberPart.split('.');
@@ -609,7 +609,7 @@ function extractPhaseFromTitle(title, category = 'general') {
 
   if (isNaN(major)) {
     return null;
-}
+  }
 
   return {
     major: major,
@@ -644,7 +644,7 @@ function generateFeatureTitle(phaseKey, sampleTitle, category = 'general') {
     if (featureName) {
       return featureName;
     }
-}
+  }
 
   // Fallback to phase-based title
   return `Phase ${phaseKey} Feature`;
@@ -681,7 +681,7 @@ function convertToFeatureBasedSchema(todoData, analysis, category = 'general') {
       };
       migrated.tasks.push(subtask);
     });
-}
+  }
 
   // Handle non-phased tasks (keep as regular tasks)
   analysis.nonPhasedTasks.forEach((task) => {
@@ -711,7 +711,7 @@ function createFeatureFromPhaseGroup(group, category = 'general') {
     3: 'opendia',
     4: 'huginn',
     5: 'orchestrator',
-};
+  };
   const CATEGORY = categoryMap[group.phase.major] || 'uncategorized';
 
   // Calculate status based on subtask statuses
@@ -719,22 +719,22 @@ function createFeatureFromPhaseGroup(group, category = 'general') {
   let status = 'planned';
   if (statuses.every((s) => s === 'completed')) {
     status = 'implemented';
-} else if (statuses.some((s) => s === 'in_progress')) {
+  } else if (statuses.some((s) => s === 'in_progress')) {
     status = 'in_progress';
-} else if (statuses.some((s) => s === 'completed')) {
+  } else if (statuses.some((s) => s === 'completed')) {
     status = 'in_progress';
-}
+  }
 
   // Calculate priority from subtask priorities
   const priorities = group.tasks.map((t) => t.priority || 'medium');
   let priority = 'medium';
   if (priorities.includes('critical')) {
     priority = 'critical';
-} else if (priorities.includes('high')) {
+  } else if (priorities.includes('high')) {
     priority = 'high';
-} else if (priorities.includes('low')) {
+  } else if (priorities.includes('low')) {
     priority = 'low';
-}
+  }
 
   return {
     id: featureId,
@@ -748,7 +748,7 @@ function createFeatureFromPhaseGroup(group, category = 'general') {
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     metadata: {
-    migrated_from_phase: `${group.phase.major}.${group.phase.minor}`,
+      migrated_from_phase: `${group.phase.major}.${group.phase.minor}`,
       original_task_count: group.tasks.length,
       completion_percentage: calculateCompletionPercentage(group.tasks),
     },
@@ -763,7 +763,7 @@ function createFeatureFromPhaseGroup(group, category = 'general') {
 function generateFeatureDescription(group, category = 'general') {
   if (group.tasks.length === 1) {
     return group.tasks[0].description || 'Feature description';
-}
+  }
 
   // Aggregate description from multiple tasks
   const descriptions = group.tasks
@@ -772,7 +772,7 @@ function generateFeatureDescription(group, category = 'general') {
 
   if (descriptions.length > 0) {
     return descriptions[0]; // Use first task's description
-}
+  }
 
   return `Feature comprising ${group.tasks.length} implementation tasks`;
 }
@@ -800,14 +800,14 @@ async function main(category = 'general') {
   if (!FS.existsSync(targetPath)) {
     loggers.stopHook.error(`Error: Path does not exist: ${targetPath}`);
     throw new Error(`Invalid path: ${targetPath}`);
-}
+  }
 
   // Verify it's a directory
 
   if (!FS.statSync(targetPath).isDirectory()) {
     loggers.stopHook.error(`Error: Path is not a directory: ${targetPath}`);
     throw new Error(`Path is not a directory: ${targetPath}`);
-}
+  }
 
   loggers.stopHook.log(`Processing directories in: ${targetPath}`);
 
@@ -910,7 +910,6 @@ async function main(category = 'general') {
   } finally {
     rl.close();
   }
-}
 }
 
 // Run main function

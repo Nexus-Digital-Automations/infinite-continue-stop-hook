@@ -274,7 +274,7 @@ class SuccessCriteriaValidator {
 const criteria = this.config.project_wide_criteria[criteriaSet];
       if (criteria) {
         inheritedCriteria.push(
-          ...criteria.criteria.map((c) => ({,
+          ...criteria.criteria.map((c) => ({
     Name: c,
             category: criteriaSet,
             mandatory: criteria.mandatory,
@@ -370,7 +370,7 @@ const criteria = this.config.project_wide_criteria[criteriaSet];
   validateLinting() {
     try {
       // Try npm run lint first;
-const _LINT_OUTPUT = execSync('npm run lint', {,
+const _LINT_OUTPUT = execSync('npm run lint', {
     encoding: 'utf8',
         timeout: 30000,
         cwd: __dirname,
@@ -419,7 +419,7 @@ const _LINT_OUTPUT = execSync('npm run lint', {,
    */
   validateBuild() {
     try {
-      const buildOutput = execSync('npm run build', {,
+      const buildOutput = execSync('npm run build', {
     encoding: 'utf8',
         timeout: 60000,
         cwd: __dirname,
@@ -472,7 +472,7 @@ const _LINT_OUTPUT = execSync('npm run lint', {,
    */
   validateTests() {
     try {
-      const testOutput = execSync('npm test', {,
+      const testOutput = execSync('npm test', {
     encoding: 'utf8',
         timeout: 60000,
         cwd: __dirname,

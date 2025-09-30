@@ -13,13 +13,14 @@ function filePath(_$2, _filePath) {
     let content = FS.readFileSync(filePath, 'utf8');
     let modified = false;
 
-    // Common unused variable patterns to fix;
-const fixes = [
+    // Common unused variable patterns to fix
+    const fixes = [
       // Fix unused variable declarations by adding underscore prefix: { pattern: /const CRYPTO = /g, replacement: 'const CRYPTO = ' },
       { pattern: /const FS = /g, replacement: 'const FS = ' },
       { pattern: /const PATH = /g, replacement: 'const PATH = ' },
-      { pattern: /const EXEC_SYNC = /g, replacement: 'const EXEC_SYNC = ' }, {,
-    pattern: /const CONFIG_PATH = /g,
+      { pattern: /const EXEC_SYNC = /g, replacement: 'const EXEC_SYNC = ' },
+      {
+        pattern: /const CONFIG_PATH = /g,
         replacement: 'const CONFIG_PATH = ',
       },
       { pattern: /const RESULTS = /g, replacement: 'const RESULTS = ' },

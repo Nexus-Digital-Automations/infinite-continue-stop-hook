@@ -15,10 +15,10 @@ function getFilesWithSecurityWarnings() {
   let output;
   try {
     output = execSync('npm run lint 2>&1', { encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 });
-  } catch (error) {
+  } catch (_error) {
     // npm run lint exits with non-zero when there are linting errors
-    // but we still get the output in error.stdout
-    output = error.stdout || error.output?.join('') || '';
+    // but we still get the output in _error.stdout
+    output = _error.stdout || _error.output?.join('') || '';
   }
 
   const lines = output.split('\n');

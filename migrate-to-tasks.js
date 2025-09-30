@@ -61,7 +61,7 @@ class TaskMigrator {
         newFile: this.tasksPath,
         stats: await this.getMigrationStats(tasksData),
       };
-    } catch (_) {
+    } catch (_error) {
       loggers.stopHook.error('❌ Migration failed:', _error.message);
       throw _error;
     }

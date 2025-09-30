@@ -8,7 +8,7 @@
 class TasksApiAdapter {
   constructor() {
     this.taskIdCounter = Date.now();
-}
+  }
 
   /**
    * Convert TASKS.json data to legacy features format for backward compatibility
@@ -18,7 +18,7 @@ class TasksApiAdapter {
       project: tasksData.project,
       features: [],
       metadata: {
-    version: tasksData.metadata?.version || '2.0.0',
+        version: tasksData.metadata?.version || '2.0.0',
         created: tasksData.metadata?.created || new Date().toISOString(),
         updated: tasksData.metadata?.updated || new Date().toISOString(),
         total_features: 0,
@@ -40,7 +40,7 @@ class TasksApiAdapter {
             title: task.title,
             description: task.description,
             business_value: task.business_value,
-            task.category: task.task.category,
+            category: task.task.category,
             status: task.status,
             created_at: task.created_at,
             updated_at: task.updated_at,
@@ -71,7 +71,7 @@ class TasksApiAdapter {
 
     adapted.metadata.total_features = adapted.features.length;
     return adapted;
-}
+  }
 
   /**
    * Convert feature data to new task format
@@ -92,14 +92,14 @@ class TasksApiAdapter {
       priority: this.mapPriorityFromCategory(featureData.category),
       auto_generated: false,
       auto_generation_rules: {
-    generate_test_task: taskType === 'feature',
+        generate_test_task: taskType === 'feature',
         generate_audit_task: taskType === 'feature',
         test_coverage_requirement: 80,
       },
       dependencies: [],
       estimated_effort: 5,
       required_capabilities: this.inferCapabilitiesFromCategory(
-        featureData.category
+        featureData.category,
       ),
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
@@ -108,7 +108,7 @@ class TasksApiAdapter {
       assigned_at: null,
       completed_at: null,
       validation_requirements: {
-    security_scan: true,
+        security_scan: true,
         test_coverage: true,
         linter_pass: true,
         type_check: true,
@@ -116,7 +116,7 @@ class TasksApiAdapter {
       },
       metadata: {},
     };
-}
+  }
 
   /**
    * Generate auto-tasks for a feature task
@@ -140,7 +140,7 @@ class TasksApiAdapter {
       priority: 'high',
       auto_generated: true,
       auto_generation_rules: {
-    generate_test_task: false,
+        generate_test_task: false,
         generate_audit_task: false,
         test_coverage_requirement: 80,
       },
@@ -154,7 +154,7 @@ class TasksApiAdapter {
       assigned_at: null,
       completed_at: null,
       validation_requirements: {
-    security_scan: false,
+        security_scan: false,
         test_coverage: true,
         linter_pass: true,
         type_check: true,
@@ -180,7 +180,7 @@ class TasksApiAdapter {
       priority: 'high',
       auto_generated: true,
       auto_generation_rules: {
-    generate_test_task: false,
+        generate_test_task: false,
         generate_audit_task: false,
         test_coverage_requirement: 80,
       },
@@ -194,7 +194,7 @@ class TasksApiAdapter {
       assigned_at: null,
       completed_at: null,
       validation_requirements: {
-    security_scan: true,
+        security_scan: true,
         test_coverage: false,
         linter_pass: true,
         type_check: true,
@@ -236,7 +236,7 @@ class TasksApiAdapter {
     }
 
     return autoTasks;
-}
+  }
 
   /**
    * Sort tasks by priority order (CLAUDE.md compliant)
@@ -277,16 +277,16 @@ class TasksApiAdapter {
       // Finally sort by creation date (newest first)
       return new Date(b.created_at) - new Date(a.created_at);
     });
-}
+  }
 
   // Helper methods
   generateHash() {
     return Math.random().toString(36).substring(2, 10);
-}
+  }
 
   mapPriorityFromCategory(_category) {
     const priorityMap = {
-    security: 'high',
+      security: 'high',
       'bug-fix': 'high',
       performance: 'normal',
       enhancement: 'normal',
@@ -294,11 +294,11 @@ class TasksApiAdapter {
       documentation: 'low',
     };
     return priorityMap[category] || 'normal';
-}
+  }
 
   inferCapabilitiesFromCategory(_category) {
     const capabilityMap = {
-    security: ['security', 'backend'],
+      security: ['security', 'backend'],
       'bug-fix': ['general'],
       performance: ['performance', 'analysis'],
       enhancement: ['general'],
@@ -306,7 +306,7 @@ class TasksApiAdapter {
       documentation: ['documentation'],
     };
     return capabilityMap[category] || ['general'];
-}
+  }
 }
 
 module.exports = TasksApiAdapter;

@@ -159,7 +159,7 @@ class NodeVersionPerformanceBenchmark {
     const RESULTS = await Promise.all(promises);
 
     // Async/await operations;
-    const asyncOperations = async (count) => {
+    const asyncOperations = (count) => {
       const promises = Array.from(
         { length: count },
         (_, i) =>

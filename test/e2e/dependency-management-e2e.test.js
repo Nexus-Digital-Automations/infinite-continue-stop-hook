@@ -32,7 +32,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
       if (error.stdout) {
         try {
           return JSON.parse(error.stdout.trim());
-        } catch (_parseError) {
+        } catch {
           throw new Error(
             `Command failed: ${error.message}, Output: ${error.stdout || error.stderr}`,
           );
@@ -73,7 +73,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
     dependencies.forEach((criterion) => {
       try {
         executeTaskManagerCommand('remove-dependency', criterion);
-      } catch (_) {
+      } catch {
         // Ignore cleanup errors
       }
     });
@@ -115,11 +115,11 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
         };
 
         // Add dependencies;
-        const _result = executeTaskManagerCommand(
+        const result = executeTaskManagerCommand(
           'add-dependency',
           `'microservice-validation' '${JSON.stringify(microserviceConfig)}'`,
         );
-        expect(_result.success).toBe(true);
+        expect(result.success).toBe(true);
         testDependencies.push('microservice-validation');
         const databaseResult = executeTaskManagerCommand(
           'add-dependency',
@@ -333,11 +333,11 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
 
         // Add dependencies
         cpuIntensiveConfigs.forEach(({ name, config }) => {
-          const _result = executeTaskManagerCommand(
+          const result = executeTaskManagerCommand(
             'add-dependency',
             `'${name}' '${JSON.stringify(config)}'`,
           );
-          expect(_result.success).toBe(true);
+          expect(result.success).toBe(true);
           testDependencies.push(name);
         });
 
@@ -412,11 +412,11 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
 
         // Add dependencies
         networkConfigs.forEach(({ name, config }) => {
-          const _result = executeTaskManagerCommand(
+          const result = executeTaskManagerCommand(
             'add-dependency',
             `'${name}' '${JSON.stringify(config)}'`,
           );
-          expect(_result.success).toBe(true);
+          expect(result.success).toBe(true);
           testDependencies.push(name);
         });
 
@@ -492,11 +492,11 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
 
         // Add dependencies
         contentionConfigs.forEach(({ name, config }) => {
-          const _result = executeTaskManagerCommand(
+          const result = executeTaskManagerCommand(
             'add-dependency',
             `'${name}' '${JSON.stringify(config)}'`,
           );
-          expect(_result.success).toBe(true);
+          expect(result.success).toBe(true);
           testDependencies.push(name);
         });
 
@@ -604,11 +604,11 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
         // Add all configurations
         [...microserviceConfigs, ...integrationConfigs].forEach(
           ({ name, config }) => {
-            const _result = executeTaskManagerCommand(
+            const result = executeTaskManagerCommand(
               'add-dependency',
               `'${name}' '${JSON.stringify(config)}'`,
             );
-            expect(_result.success).toBe(true);
+            expect(result.success).toBe(true);
             testDependencies.push(name);
           },
         );
@@ -702,11 +702,11 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
 
         // Add circular dependencies
         complexConfigs.forEach(({ name, config }) => {
-          const _result = executeTaskManagerCommand(
+          const result = executeTaskManagerCommand(
             'add-dependency',
             `'${name}' '${JSON.stringify(config)}'`,
           );
-          expect(_result.success).toBe(true);
+          expect(result.success).toBe(true);
           testDependencies.push(name);
         });
 
@@ -763,11 +763,11 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
           resourceRequirements: ['filesystem'],
         };
 
-        const _result = executeTaskManagerCommand(
+        const result = executeTaskManagerCommand(
           'add-dependency',
           `'incomplete-dependency' '${JSON.stringify(incompleteConfig)}'`,
         );
-        expect(_result.success).toBe(true);
+        expect(result.success).toBe(true);
         testDependencies.push('incomplete-dependency');
 
         // Validation should detect missing dependency;
@@ -844,11 +844,11 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
               i % 4 === 0 ? ['network', 'cpu'] : ['filesystem'],
           };
 
-          const _result = executeTaskManagerCommand(
+          const result = executeTaskManagerCommand(
             'add-dependency',
             `'scale-test-${i}' '${JSON.stringify(config)}'`,
           );
-          expect(_result.success).toBe(true);
+          expect(result.success).toBe(true);
           testDependencies.push(`scale-test-${i}`);
         }
 
@@ -968,11 +968,11 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
 
         // Add all configurations
         highConcurrencyConfigs.forEach(({ name, config }) => {
-          const _result = executeTaskManagerCommand(
+          const result = executeTaskManagerCommand(
             'add-dependency',
             `'${name}' '${JSON.stringify(config)}'`,
           );
-          expect(_result.success).toBe(true);
+          expect(result.success).toBe(true);
           testDependencies.push(name);
         });
 
@@ -1016,8 +1016,8 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
 
     test('should integrate seamlessly with existing validation system', () => {
       // Test integration with standard validation criteria;
-      const _result = executeTaskManagerCommand('get-dependency-graph');
-      expect(_result.success).toBe(true);
+      const result = executeTaskManagerCommand('get-dependency-graph');
+      expect(result.success).toBe(true);
 
       const standardCriteria = [
         'focused-codebase',
@@ -1099,11 +1099,11 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
 
         // Add optimization scenario
         optimizationConfigs.forEach(({ name, config }) => {
-          const _result = executeTaskManagerCommand(
+          const result = executeTaskManagerCommand(
             'add-dependency',
             `'${name}' '${JSON.stringify(config)}'`,
           );
-          expect(_result.success).toBe(true);
+          expect(result.success).toBe(true);
           testDependencies.push(name);
         });
 

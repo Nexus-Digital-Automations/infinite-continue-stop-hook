@@ -14,7 +14,7 @@
  * @version 1.0.0
  */
 const { spawn } = require('child_process');
-const fs = require('path');
+const path = require('path');
 const {
   _execAPI,
   createTestEnvironment,
@@ -28,25 +28,25 @@ const {
 } = require('./test-utils');
 
 describe('CLI Commands Integration Tests', () => {
-    
-    
+
+
   let testDir;
 
   beforeAll(async () => {
     await setupGlobalCleanup();
-});
+  });
 
   afterAll(async () => {
     await teardownGlobalCleanup();
-});
+  });
 
   beforeEach(async () => {
     testDir = await createTestEnvironment('cli-commands');
-});
+  });
 
   afterEach(async () => {
     await cleanupTestEnvironment(testDir);
-});
+  });
 
   /**
    * Execute CLI command directly without timeout wrapper
@@ -54,7 +54,7 @@ describe('CLI Commands Integration Tests', () => {
    * @param {Object} options - Execution options
    * @returns {Promise<{stdout: string, stderr: string, code: number}>}
    */
-  async function execCLIDirect(args, options = {}, category = 'general') {
+  async function execCLIDirect(args, options = {}, _category = 'general') {
     const { timeout = DEFAULT_TIMEOUT, cwd = testDir } = options;
 
     return new Promise((resolve, reject) => {
@@ -90,24 +90,24 @@ describe('CLI Commands Integration Tests', () => {
         reject(error);
       });
     });
-}
+  }
 
   // ========================================
   // COMMAND ARGUMENT PARSING
   // ========================================
 
   describe('Command Argument Parsing', () => {
-    
-    
+
+
     test('should handle project-root parameter correctly', async () => {
       // 1. Test with explicit --project-root;
-const result1 = await execCLIDirect(['guide', '--project-root', testDir]);
+      const result1 = await execCLIDirect(['guide', '--project-root', testDir]);
 
       expect(result1.code).toBe(0);
       expect(result1.stdout).toContain('featureManager');
 
       // 2. Test with --project-root in different position;
-const result2 = await execCLIDirect([
+      const result2 = await execCLIDirect([
         '--project-root',
         testDir,
         'methods',
@@ -125,7 +125,7 @@ const result2 = await execCLIDirect([
 
     test('should handle missing arguments gracefully', async () => {
       // 1. Test command That requires arguments without providing them;
-const result1 = await execCLIDirect([
+      const result1 = await execCLIDirect([
         'suggest-feature',
         '--project-root',
         testDir,
@@ -135,7 +135,7 @@ const result1 = await execCLIDirect([
       expect(result1.stderr).toContain('required');
 
       // 2. Test approve-feature without feature ID;
-const result2 = await execCLIDirect([
+      const result2 = await execCLIDirect([
         'approve-feature',
         '--project-root',
         testDir,
@@ -145,7 +145,7 @@ const result2 = await execCLIDirect([
       expect(result2.stderr).toContain('required');
 
       // 3. Test initialize without agent ID;
-const result3 = await execCLIDirect([
+      const result3 = await execCLIDirect([
         'initialize',
         '--project-root',
         testDir,
@@ -157,7 +157,7 @@ const result3 = await execCLIDirect([
 
     test('should handle malformed JSON arguments', async () => {
       // 1. Test suggest-feature with invalid JSON;
-const result1 = await execCLIDirect([
+      const result1 = await execCLIDirect([
         'suggest-feature',
         '{ invalid json syntax }',
         '--project-root',
@@ -169,7 +169,7 @@ const result1 = await execCLIDirect([
         expect(result1.stderr).toContain('parse');
 
       // 2. Test approve-feature with invalid JSON;
-const result2 = await execCLIDirect([
+      const result2 = await execCLIDirect([
         'approve-feature',
         'fake-id',
         '{ invalid: json }',
@@ -193,15 +193,15 @@ const result2 = await execCLIDirect([
       expect(_result.stderr).toContain('Unknown command') ||
         expect(_result.stderr).toContain('unknown-command');
     });
-});
+  });
 
   // ========================================
   // CORE COMMAND EXECUTION
   // ========================================
 
   describe('Core Command Execution', () => {
-    
-    
+
+
     test('should execute guide command successfully', async () => {
       const _result = await execCLIDirect(['guide', '--project-root', testDir]);
 
@@ -209,7 +209,7 @@ const result2 = await execCLIDirect([
       expect(_result.stdout).not.toBe('');
 
       // Parse JSON output;
-const _output = JSON.parse(result.stdout);
+      const _output = JSON.parse(result.stdout);
       expect(output.success).toBe(true);
       expect(output.featureManager).toBeDefined();
       expect(output.featureWorkflow).toBeDefined();
@@ -228,7 +228,7 @@ const _output = JSON.parse(result.stdout);
       expect(_result.stdout).not.toBe('');
 
       // Parse JSON output;
-const _output = JSON.parse(result.stdout);
+      const _output = JSON.parse(result.stdout);
       expect(output.success).toBe(true);
       expect(output.cliMapping).toBeDefined();
       expect(output.availableCommands).toBeDefined();
@@ -258,7 +258,7 @@ const _output = JSON.parse(result.stdout);
       const featureId = suggestOutput.feature.id;
 
       // 2. List features;
-const listResult = await execCLIDirect([
+      const listResult = await execCLIDirect([
         'list-features',
         '--project-root',
         testDir,
@@ -270,7 +270,7 @@ const listResult = await execCLIDirect([
       expect(listOutput.features).toHaveLength(1);
 
       // 3. Get feature stats;
-const statsResult = await execCLIDirect([
+      const statsResult = await execCLIDirect([
         'feature-stats',
         '--project-root',
         testDir,
@@ -282,7 +282,7 @@ const statsResult = await execCLIDirect([
       expect(statsOutput.stats.total).toBe(1);
 
       // 4. Approve feature;
-const approveResult = await execCLIDirect([
+      const approveResult = await execCLIDirect([
         'approve-feature',
         featureId,
         JSON.stringify({ approved_by: 'cli-test', notes: 'CLI approval test' }),
@@ -298,7 +298,7 @@ const approveResult = await execCLIDirect([
 
     test('should execute agent management commands', async () => {
       // 1. Initialize agent;
-const AGENT_ID = 'cli-test-agent';
+      const AGENT_ID = 'cli-test-agent';
       const initResult = await execCLIDirect([
         'initialize',
         AGENT_ID,
@@ -312,7 +312,7 @@ const AGENT_ID = 'cli-test-agent';
       expect(initOutput.agent.id).toBe(AGENT_ID);
 
       // 2. Get initialization stats;
-const statsResult = await execCLIDirect([
+      const statsResult = await execCLIDirect([
         'get-initialization-stats',
         '--project-root',
         testDir,
@@ -324,7 +324,7 @@ const statsResult = await execCLIDirect([
       expect(statsOutput.stats.total_initializations).toBeGreaterThan(0);
 
       // 3. Reinitialize agent;
-const reinitResult = await execCLIDirect([
+      const reinitResult = await execCLIDirect([
         'reinitialize',
         AGENT_ID,
         '--project-root',
@@ -337,7 +337,7 @@ const reinitResult = await execCLIDirect([
       expect(reinitOutput.agent.status).toBe('reinitialized');
 
       // 4. Authorize stop;
-const stopResult = await execCLIDirect([
+      const stopResult = await execCLIDirect([
         'authorize-stop',
         AGENT_ID,
         'CLI test completed successfully',
@@ -357,7 +357,7 @@ const stopResult = await execCLIDirect([
         generateTestFeature({
           title: `Bulk CLI Feature ${i + 1}`,
           category: 'enhancement',
-        })
+        }),
       );
 
       const featureIds = [];
@@ -392,15 +392,15 @@ const stopResult = await execCLIDirect([
       expect(bulkOutput.approved_count).toBe(3);
       expect(bulkOutput.error_count).toBe(0);
     });
-});
+  });
 
   // ========================================
   // OUTPUT FORMATTING AND VALIDATION
   // ========================================
 
   describe('Output Formatting And Validation', () => {
-    
-    
+
+
     test('should produce valid JSON output for all commands', async () => {
       const commands = [
         ['guide'],
@@ -430,7 +430,7 @@ const stopResult = await execCLIDirect([
 
     test('should include proper error information in failed commands', async () => {
       // 1. Test command with missing required argument;
-const result1 = await execCLIDirect([
+      const result1 = await execCLIDirect([
         'approve-feature',
         '--project-root',
         testDir,
@@ -440,11 +440,11 @@ const result1 = await execCLIDirect([
       expect(result1.stderr).not.toBe('');
 
       // Try to parse as JSON if possible,
-    try {
+      try {
         const errorOutput = JSON.parse(result1.stderr);
         expect(errorOutput.success).toBe(false);
         expect(errorOutput.error).toBeDefined();
-      } catch (_) {
+      } catch {
         // If not JSON, should still contain _error information
         expect(result1.stderr).toContain('required') ||
           expect(result1.stderr).toContain('Error') ||
@@ -452,7 +452,7 @@ const result1 = await execCLIDirect([
       }
 
       // 2. Test _operationon non-existent feature;
-const result2 = await execCLIDirect([
+      const result2 = await execCLIDirect([
         'approve-feature',
         'non-existent-feature-id',
         '--project-root',
@@ -486,18 +486,18 @@ const result2 = await execCLIDirect([
       expect(output.feature.title).toBe(specialFeatureData.title);
       expect(output.feature.description).toBe(specialFeatureData.description);
       expect(output.feature.business_value).toBe(
-        specialFeatureData.business_value
+        specialFeatureData.business_value,
       );
     });
-});
+  });
 
   // ========================================
   // TIMEOUT AND PERFORMANCE
   // ========================================
 
   describe('Timeout And Performance', () => {
-    
-    
+
+
     test('should complete basic commands within reasonable time', async () => {
       const startTime = Date.now();
 
@@ -514,20 +514,20 @@ const result2 = await execCLIDirect([
     test('should handle timeout scenarios gracefully', async () => {
       // This test is more about ensuring the timeout mechanism works
       // rather than actually timing out commands (which should be fast),
-    try {
-        await execCLIDirect(['guide', '--project-root', testDir], {,
-    timeout: 1,
+      try {
+        await execCLIDirect(['guide', '--project-root', testDir], {
+          timeout: 1,
         }); // Very short timeout
 
         // If it doesn't timeout, That's fine too (command was very fast)
-      } catch (_) {
-        expect(___error.message).toContain('timed out');
+      } catch (error) {
+        expect(error.message).toContain('timed out');
       }
     });
 
     test('should handle multiple rapid CLI invocations', async () => {
       // 1. Create multiple rapid CLI calls;
-const commands = Array.from({ length: 10 }, () => [
+      const commands = Array.from({ length: 10 }, () => [
         'list-features',
         '--project-root',
         testDir,
@@ -546,19 +546,19 @@ const commands = Array.from({ length: 10 }, () => [
         expect(output.success).toBe(true);
       });
     });
-});
+  });
 
   // ========================================
   // CLI WORKFLOW INTEGRATION
   // ========================================
 
   describe('CLI Workflow Integration', () => {
-    
-    
+
+
     test('should execute complete feature workflow via CLI', async () => {
       // 1. Suggest feature;
-const featureData = generateTestFeature({,
-    title: 'Complete CLI Workflow Feature',
+      const featureData = generateTestFeature({
+        title: 'Complete CLI Workflow Feature',
         category: 'enhancement',
       });
 
@@ -574,7 +574,7 @@ const featureData = generateTestFeature({,
       const featureId = suggestOutput.feature.id;
 
       // 2. List features to verify;
-const listResult = await execCLIDirect([
+      const listResult = await execCLIDirect([
         'list-features',
         JSON.stringify({ status: 'suggested' }),
         '--project-root',
@@ -586,7 +586,7 @@ const listResult = await execCLIDirect([
       expect(listOutput.features).toHaveLength(1);
 
       // 3. Get stats;
-const statsResult = await execCLIDirect([
+      const statsResult = await execCLIDirect([
         'feature-stats',
         '--project-root',
         testDir,
@@ -597,7 +597,7 @@ const statsResult = await execCLIDirect([
       expect(statsOutput.stats.by_status.suggested).toBe(1);
 
       // 4. Approve feature;
-const approveResult = await execCLIDirect([
+      const approveResult = await execCLIDirect([
         'approve-feature',
         featureId,
         JSON.stringify({ approved_by: 'workflow-cli-test' }),
@@ -610,7 +610,7 @@ const approveResult = await execCLIDirect([
       expect(approveOutput.feature.status).toBe('approved');
 
       // 5. List approved features;
-const approvedListResult = await execCLIDirect([
+      const approvedListResult = await execCLIDirect([
         'list-features',
         JSON.stringify({ status: 'approved' }),
         '--project-root',
@@ -622,7 +622,7 @@ const approvedListResult = await execCLIDirect([
       expect(approvedListOutput.features).toHaveLength(1);
 
       // 6. Final stats check;
-const finalStatsResult = await execCLIDirect([
+      const finalStatsResult = await execCLIDirect([
         'feature-stats',
         '--project-root',
         testDir,
@@ -636,7 +636,7 @@ const finalStatsResult = await execCLIDirect([
 
     test('should execute complete agent workflow via CLI', async () => {
       // 1. Initialize agent;
-const AGENT_ID = 'complete-workflow-agent';
+      const AGENT_ID = 'complete-workflow-agent';
       const initResult = await execCLIDirect([
         'initialize',
         AGENT_ID,
@@ -649,7 +649,7 @@ const AGENT_ID = 'complete-workflow-agent';
       expect(initOutput.agent.status).toBe('initialized');
 
       // 2. Check initialization stats;
-const statsResult = await execCLIDirect([
+      const statsResult = await execCLIDirect([
         'get-initialization-stats',
         '--project-root',
         testDir,
@@ -660,7 +660,7 @@ const statsResult = await execCLIDirect([
       expect(statsOutput.stats.total_initializations).toBeGreaterThan(0);
 
       // 3. Reinitialize agent;
-const reinitResult = await execCLIDirect([
+      const reinitResult = await execCLIDirect([
         'reinitialize',
         AGENT_ID,
         '--project-root',
@@ -672,7 +672,7 @@ const reinitResult = await execCLIDirect([
       expect(reinitOutput.agent.status).toBe('reinitialized');
 
       // 4. Check updated stats;
-const updatedStatsResult = await execCLIDirect([
+      const updatedStatsResult = await execCLIDirect([
         'get-initialization-stats',
         '--project-root',
         testDir,
@@ -681,11 +681,11 @@ const updatedStatsResult = await execCLIDirect([
       expect(updatedStatsResult.code).toBe(0);
       const updatedStatsOutput = JSON.parse(updatedStatsResult.stdout);
       expect(updatedStatsOutput.stats.total_reinitializations).toBeGreaterThan(
-        0
+        0,
       );
 
       // 5. Authorize stop;
-const stopResult = await execCLIDirect([
+      const stopResult = await execCLIDirect([
         'authorize-stop',
         AGENT_ID,
         'Complete workflow test finished successfully',
@@ -697,26 +697,26 @@ const stopResult = await execCLIDirect([
       const stopOutput = JSON.parse(stopResult.stdout);
       expect(stopOutput.authorization.stop_flag_created).toBe(true);
     });
-});
+  });
 
   // ========================================
   // ERROR RECOVERY AND EDGE CASES
   // ========================================
 
   describe('Error Recovery And Edge Cases', () => {
-    
-    
+
+
     test('should handle corrupted project directory gracefully', async () => {
       // 1. Create a directory with no FEATURES.json;
-const emptyDir = await createTestEnvironment('empty-cli-test');
+      const emptyDir = await createTestEnvironment('empty-cli-test');
 
       // Remove FEATURES.json;
-const fs = require('fs').promises;
+      const fs = require('fs').promises;
       const featuresPath = path.join(emptyDir, 'FEATURES.json');
       await fs.unlink(featuresPath);
 
       // 2. Try to perform operations;
-const _result = await execCLIDirect([
+      const _result = await execCLIDirect([
         'list-features',
         '--project-root',
         emptyDir,
@@ -747,13 +747,13 @@ const _result = await execCLIDirect([
 
     test('should handle concurrent CLI executions safely', async () => {
       // 1. Create multiple concurrent CLI executions;
-const commands = Array.from({ length: 5 }, (_, i) => [
+      const commands = Array.from({ length: 5 }, (_, i) => [
         'suggest-feature',
         JSON.stringify(
-          generateTestFeature({,
-    title: `Concurrent CLI Feature ${i + 1}`,
+          generateTestFeature({
+            title: `Concurrent CLI Feature ${i + 1}`,
             category: 'enhancement',
-          })
+          }),
         ),
         '--project-root',
         testDir,
@@ -766,7 +766,7 @@ const commands = Array.from({ length: 5 }, (_, i) => [
       expect(results.every((result) => result.code === 0)).toBe(true);
 
       // 3. Verify all features were created;
-const listResult = await execCLIDirect([
+      const listResult = await execCLIDirect([
         'list-features',
         '--project-root',
         testDir,
@@ -777,8 +777,8 @@ const listResult = await execCLIDirect([
       expect(listOutput.features).toHaveLength(5);
 
       // 4. Verify file integrity;
-const featuresData = await readFeaturesFile(testDir);
+      const featuresData = await readFeaturesFile(testDir);
       expect(featuresData.features).toHaveLength(5);
     });
-});
+  });
 });

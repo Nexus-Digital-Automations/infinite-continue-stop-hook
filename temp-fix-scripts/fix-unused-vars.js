@@ -20,10 +20,12 @@ const patterns = [
   { search: /const FAISS = /g, replace: 'const FAISS = ' },
   { search: /const UNUSED = /g, replace: 'const UNUSED = ' },
   { search: /const TIMEOUT = /g, replace: 'const TIMEOUT = ' },
-  { search: /const REGRESSION_TIME = /g, replace: 'const REGRESSION_TIME = ' }, {,
+  { search: /const REGRESSION_TIME = /g, replace: 'const REGRESSION_TIME = ' },
+  {
     search: /const RESOURCE_ALLOCATION = /g,
     replace: 'const RESOURCE_ALLOCATION = ',
-}, {,
+  },
+  {
     search: /const TOTAL_DUPLICATION = /g,
     replace: 'const TOTAL_DUPLICATION = ',
 },
