@@ -10,7 +10,13 @@
 5.  **ONE FEATURE AT A TIME**: Work on EXACTLY ONE feature from `FEATURES.json`, complete it fully, then move to the next.
 6.  **USER FEEDBACK SUPREMACY**: User requests TRUMP EVERYTHING. Implement them immediately, but do so within the quality framework.
 7.  **🔄 STOP HOOK CONTINUATION**: When stop hook triggers, you ARE THE SAME AGENT. Finish current work OR check TASKS.json for new work. NEVER sit idle.
+8.  **🔒 CLAUDE.md PROTECTION**: NEVER edit CLAUDE.md without EXPLICIT user permission.
 </law>
+
+## 🔒 CLAUDE.md PROTECTION
+
+❌ NEVER edit, modify, or change CLAUDE.md without explicit user permission
+✅ ONLY edit when user explicitly requests specific changes to CLAUDE.md
 
 ## 🔄 STOP HOOK RESPONSE PROTOCOL
 
@@ -43,6 +49,19 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 - **suggested**: Awaiting user approval
 - **completed**: Already finished
 - **assigned**: Already claimed by another agent
+
+### 🐛 ERROR/BUG TASK EXCEPTION:
+**ERRORS AND BUGS DO NOT REQUIRE USER APPROVAL:**
+- ✅ **ERROR tasks** (type: "error") can be worked on IMMEDIATELY without waiting for "approved" status
+- ✅ **BUG tasks** can be fixed IMMEDIATELY without user approval
+- ✅ **LINTING ERRORS** can be fixed IMMEDIATELY without user approval
+- ✅ **BUILD ERRORS** can be fixed IMMEDIATELY without user approval
+- ✅ **TEST FAILURES** can be fixed IMMEDIATELY without user approval
+- ✅ **SECURITY VULNERABILITIES** can be fixed IMMEDIATELY without user approval
+- ⚠️ **FEATURE tasks** still require "approved" status before implementation
+- ⚠️ **REFACTORING** still requires "approved" status unless fixing errors
+
+**RATIONALE**: Errors, bugs, and failures are always unwanted and should be fixed immediately. Features require approval because they add new functionality that may not be desired.
 
 ### ❌ FORBIDDEN RESPONSES:
 - Sitting idle waiting for instructions
@@ -274,15 +293,6 @@ function processData(id, data) {
 - **❌ NEVER LOG**: Sensitive information (passwords, tokens, PII)
 - **✅ ALWAYS**: JSON structured logging with timestamps, function names, error context
 - **✅ QUALITY GATES**: Logging verified in pre-commit hooks and CI/CD pipeline
-
-## CLAUDE.md PROTECTION
-
-**ABSOLUTE PROHIBITION - NEVER EDIT CLAUDE.md WITHOUT USER PERMISSION:**
-
-- ❌ NEVER edit, modify, or change CLAUDE.md without explicit user permission
-- ❌ NEVER suggest changes to CLAUDE.md unless specifically asked
-- ❌ NEVER make "improvements" to CLAUDE.md on your own initiative
-- ✅ EDIT CLAUDE.md ONLY when user explicitly requests specific changes
 
 ## 🧠 INTELLIGENT SELF-LEARNING SYSTEM
 
