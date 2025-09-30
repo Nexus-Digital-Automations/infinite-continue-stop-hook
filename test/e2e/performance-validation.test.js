@@ -532,23 +532,25 @@ describe('Performance Validation E2E', () => {
           expect(true).toBe(true);
         }
 
-        console.log(
-          `✅ Memory usage validation test: avg=${memoryMetrics.avg}ms for intensive operations`;
+                console.log(
+          `✅ Memory usage validation test: avg=${memoryMetrics.avg}ms for intensive operations`,
         );
       },
-      E2E_TIMEOUT * 3
+      E2E_TIMEOUT * 3,
     );
 });
 
   describe('Performance, Regression Detection', () => {
     
     
-    test('Baseline performance regression checks', async () => {
-        // Establish baseline performance metrics, And detect regressions.const baselineTests = [ {
-    name: 'Feature, Suggestion',
-            test: () =>;
+        test('Baseline performance regression checks', async () => {
+        // Establish baseline performance metrics, And detect regressions
+        const baselineTests = [
+          {
+            name: 'Feature, Suggestion',
+            test: () =>
               FeatureTestHelpers.suggestFeature(environment, {
-    title: 'Baseline, Suggestion Test',
+                title: 'Baseline, Suggestion Test',
                 description: 'Feature for baseline performance measurement',
                 business_value: 'Establishes performance baseline',
                 category: 'enhancement'}),

@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "timestamp": "2025-09-29T23:54:01.904Z",
+    "timestamp": "2025-09-30T01:28:16.413Z",
     "reporter": "jest-json-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System"
@@ -10,30 +10,26 @@
     "numPassedTestSuites": 0,
     "numFailedTestSuites": 1,
     "numPendingTestSuites": 0,
-    "numTotalTests": 10,
+    "numTotalTests": 0,
     "numPassedTests": 0,
-    "numFailedTests": 10,
+    "numFailedTests": 0,
     "numPendingTests": 0,
     "numTodoTests": 0,
-    "startTime": 1759189923419,
-    "endTime": 1759190041904,
-    "duration": 118485,
+    "startTime": 1759195695656,
+    "endTime": 1759195696413,
+    "duration": 757,
     "success": false
   },
   "testResults": [
     {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js",
-      "displayName": {
-        "color": "white",
-        "name": "e2e"
-      },
-      "status": "failed",
-      "startTime": 1759189924220,
-      "endTime": 1759190041805,
-      "duration": 117585,
-      "numTests": 10,
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/validation-dependency-e2e.test.js",
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
       "numPassingTests": 0,
-      "numFailingTests": 10,
+      "numFailingTests": 0,
       "numPendingTests": 0,
       "snapshot": {
         "added": 0,
@@ -42,230 +38,8 @@
         "updated": 0,
         "unchecked": 0
       },
-      "testCases": [
-        {
-          "ancestorTitles": [
-            "Success Criteria End-to-End Tests",
-            "Complete Validation Workflows"
-          ],
-          "title": "should execute full feature validation workflow",
-          "fullName": "Success Criteria End-to-End Tests Complete Validation Workflows should execute full feature validation workflow",
-          "status": "failed",
-          "duration": 12176,
-          "numPassingAsserts": 2,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Success Criteria End-to-End Tests",
-            "Complete Validation Workflows"
-          ],
-          "title": "should handle validation failures gracefully",
-          "fullName": "Success Criteria End-to-End Tests Complete Validation Workflows should handle validation failures gracefully",
-          "status": "failed",
-          "duration": 12029,
-          "numPassingAsserts": 2,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Success Criteria End-to-End Tests",
-            "Complete Validation Workflows"
-          ],
-          "title": "should validate feature categorization workflow",
-          "fullName": "Success Criteria End-to-End Tests Complete Validation Workflows should validate feature categorization workflow",
-          "status": "failed",
-          "duration": 11759,
-          "numPassingAsserts": 2,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Success Criteria End-to-End Tests",
-            "Real-World Usage Scenarios"
-          ],
-          "title": "should handle typical development workflow",
-          "fullName": "Success Criteria End-to-End Tests Real-World Usage Scenarios should handle typical development workflow",
-          "status": "failed",
-          "duration": 11589,
-          "numPassingAsserts": 2,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Success Criteria End-to-End Tests",
-            "Real-World Usage Scenarios"
-          ],
-          "title": "should handle bug fix workflow with criteria",
-          "fullName": "Success Criteria End-to-End Tests Real-World Usage Scenarios should handle bug fix workflow with criteria",
-          "status": "failed",
-          "duration": 11268,
-          "numPassingAsserts": 2,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Success Criteria End-to-End Tests",
-            "Real-World Usage Scenarios"
-          ],
-          "title": "should handle refactoring workflow with quality gates",
-          "fullName": "Success Criteria End-to-End Tests Real-World Usage Scenarios should handle refactoring workflow with quality gates",
-          "status": "failed",
-          "duration": 11565,
-          "numPassingAsserts": 2,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Success Criteria End-to-End Tests",
-            "Multi-Agent Coordination"
-          ],
-          "title": "should coordinate feature validation across multiple agents",
-          "fullName": "Success Criteria End-to-End Tests Multi-Agent Coordination should coordinate feature validation across multiple agents",
-          "status": "failed",
-          "duration": 11468,
-          "numPassingAsserts": 2,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Success Criteria End-to-End Tests",
-            "Performance Validation And Benchmarking"
-          ],
-          "title": "should validate performance criteria with actual benchmarks",
-          "fullName": "Success Criteria End-to-End Tests Performance Validation And Benchmarking should validate performance criteria with actual benchmarks",
-          "status": "failed",
-          "duration": 11475,
-          "numPassingAsserts": 2,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Success Criteria End-to-End Tests",
-            "Performance Validation And Benchmarking"
-          ],
-          "title": "should handle performance regression detection",
-          "fullName": "Success Criteria End-to-End Tests Performance Validation And Benchmarking should handle performance regression detection",
-          "status": "failed",
-          "duration": 11115,
-          "numPassingAsserts": 2,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Success Criteria End-to-End Tests",
-            "Evidence Collection And Reporting"
-          ],
-          "title": "should collect And store validation evidence",
-          "fullName": "Success Criteria End-to-End Tests Evidence Collection And Reporting should collect And store validation evidence",
-          "status": "failed",
-          "duration": 11497,
-          "numPassingAsserts": 2,
-          "location": null
-        }
-      ],
-      "failureDetails": [
-        {
-          "title": "should execute full feature validation workflow",
-          "fullName": "Success Criteria End-to-End Tests Complete Validation Workflows should execute full feature validation workflow",
-          "failureMessages": [
-            "ReferenceError: error is not defined\n    at Object.error (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:345:60)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "should handle validation failures gracefully",
-          "fullName": "Success Criteria End-to-End Tests Complete Validation Workflows should handle validation failures gracefully",
-          "failureMessages": [
-            "ReferenceError: error is not defined\n    at Object.error (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:426:60)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "should validate feature categorization workflow",
-          "fullName": "Success Criteria End-to-End Tests Complete Validation Workflows should validate feature categorization workflow",
-          "failureMessages": [
-            "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:481:46)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "should handle typical development workflow",
-          "fullName": "Success Criteria End-to-End Tests Real-World Usage Scenarios should handle typical development workflow",
-          "failureMessages": [
-            "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:575:47)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "should handle bug fix workflow with criteria",
-          "fullName": "Success Criteria End-to-End Tests Real-World Usage Scenarios should handle bug fix workflow with criteria",
-          "failureMessages": [
-            "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:654:46)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "should handle refactoring workflow with quality gates",
-          "fullName": "Success Criteria End-to-End Tests Real-World Usage Scenarios should handle refactoring workflow with quality gates",
-          "failureMessages": [
-            "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:741:48)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "should coordinate feature validation across multiple agents",
-          "fullName": "Success Criteria End-to-End Tests Multi-Agent Coordination should coordinate feature validation across multiple agents",
-          "failureMessages": [
-            "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:864:46)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "should validate performance criteria with actual benchmarks",
-          "fullName": "Success Criteria End-to-End Tests Performance Validation And Benchmarking should validate performance criteria with actual benchmarks",
-          "failureMessages": [
-            "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:954:46)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "should handle performance regression detection",
-          "fullName": "Success Criteria End-to-End Tests Performance Validation And Benchmarking should handle performance regression detection",
-          "failureMessages": [
-            "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:1031:46)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "should collect And store validation evidence",
-          "fullName": "Success Criteria End-to-End Tests Evidence Collection And Reporting should collect And store validation evidence",
-          "failureMessages": [
-            "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e.test.js:1111:46)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        }
-      ]
+      "testCases": [],
+      "failureDetails": []
     }
   ],
   "coverageMap": null,

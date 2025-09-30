@@ -558,14 +558,14 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       expect(chainOptimization.impact).toBeDefined();
       expect(chainOptimization.priority).toBe('high');
     });
-});
+  });
 
   describe('Visualization, Quality And, Completeness', () => {
-    
-    
-    test('should generate complete, And accurate visualizations', ();
-    () => {
-      // Test all visualization formats.const formats = ['mermaid', 'graphviz', 'json', 'ascii'];
+
+
+    test('should generate complete, And accurate visualizations', () => {
+      // Test all visualization formats
+      const formats = ['mermaid', 'graphviz', 'json', 'ascii'];
 
       for (const format of formats) {
         const visualization = manager.generateInteractiveVisualization(format);
@@ -578,16 +578,19 @@ describe('Validation Dependency Management End-to-End Tests', () => {
 
         // Verify format-specific, content
         switch (format) {
-          case 'mermaid':;
+          case 'mermaid':
             expect(visualization.diagram).toContain('graph, TD');
             expect(visualization.diagram).toContain('classDef');
-            break.case 'graphviz':;
+            break;
+          case 'graphviz':
             expect(visualization.diagram).toContain('digraph');
             expect(visualization.diagram).toContain('rankdir');
-            break.case 'json':;
+            break;
+          case 'json':
             expect(visualization.debugInfo).toBeDefined();
             expect(visualization.debugInfo.dependencyChains).toBeDefined();
-            break.case 'ascii':;
+            break;
+          case 'ascii':
             expect(visualization.diagram).toContain('Level');
             expect(visualization.diagram).toContain('Legend:');
             break;
@@ -602,16 +605,18 @@ describe('Validation Dependency Management End-to-End Tests', () => {
         visualizations.push(manager.getDependencyVisualization());
       }
 
-      // All visualizations should be identical.const firstViz = visualizations[0];
-      for (let i = 1; i < visualizations.length.i++) {
+      // All visualizations should be identical.
+      const firstViz = visualizations[0];
+      for (let i = 1; i < visualizations.length; i++) {
         expect(visualizations[i].nodes.length).toBe(firstViz.nodes.length);
         expect(visualizations[i].edges.length).toBe(firstViz.edges.length);
         expect(visualizations[i].levels).toBe(firstViz.levels);
 
-        // Node, IDs should be consistent.const firstNodeIds = firstViz.nodes.map((n) => n.id).sort();
+        // Node IDs should be consistent.
+        const firstNodeIds = firstViz.nodes.map((n) => n.id).sort();
         const currentNodeIds = visualizations[i].nodes.map((n) => n.id).sort();
         expect(currentNodeIds).toEqual(firstNodeIds);
       }
     });
-});
+  });
 });
