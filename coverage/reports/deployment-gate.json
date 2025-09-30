@@ -1,12 +1,12 @@
 {
   "can_deploy": false,
   "quality_gate_passed": false,
-  "timestamp": "2025-09-30T01:45:18.421Z",
+  "timestamp": "2025-09-30T01:47:31.148Z",
   "blocking_issues": [
     {
       "type": "test_failures",
       "severity": "critical",
-      "message": "7 test(s) failed",
+      "message": "4 test(s) failed",
       "action": "Fix failing tests before deployment"
     },
     {

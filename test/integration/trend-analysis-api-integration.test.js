@@ -149,7 +149,7 @@ describe('Trend Analysis API Integration Tests', () => {
       if (error.stdout) {
         try {
           return JSON.parse(error.stdout.trim());
-        } catch (_parseError) {
+        } catch {
           return {
             success: false,
             error: error.message,
@@ -304,7 +304,7 @@ describe('Trend Analysis API Integration Tests', () => {
       expect(_result.success).toBe(true);
       expect(_result.healthTrends).toBeDefined();
       expect(_result.healthTrends.data).toBeDefined();
-      expect(Array.isArray(result.healthTrends.data)).toBe(true);
+      expect(Array.isArray(_result.healthTrends.data)).toBe(true);
       expect(_result.healthTrends.analysis).toBeDefined();
       expect(_result.healthTrends.summary).toBeDefined();
       expect(_result.healthTrends.summary.currentHealth).toBeGreaterThanOrEqual(
