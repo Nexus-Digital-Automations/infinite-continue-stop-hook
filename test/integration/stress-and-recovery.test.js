@@ -35,39 +35,39 @@ const {
 } = require('./test-utils');
 
 describe('Stress Testing And Error Recovery Integration Tests', () => {
-    
-    
+
+
   let testDir;
 
   beforeAll(async () => {
     await setupGlobalCleanup();
-});
+  });
 
   afterAll(async () => {
     await teardownGlobalCleanup();
-});
+  });
 
   beforeEach(async () => {
     testDir = await createTestEnvironment('stress-recovery');
-});
+  });
 
   afterEach(async () => {
     await cleanupTestEnvironment(testDir);
-});
+  });
 
   // ========================================
   // CONCURRENT OPERATIONS TESTING
   // ========================================
 
   describe('Concurrent Operations Testing', () => {
-    
-    
+
+
     test('should handle massive concurrent feature suggestions', async () => {
       // 1. Create a large number of concurrent feature suggestions;
-const concurrentCount = 50;
+      const concurrentCount = 50;
       const features = Array.from({ length: concurrentCount }, (_, i) =>
         generateTestFeature({
-    title: `Concurrent Feature ${i + 1}`,
+          title: `Concurrent Feature ${i + 1}`,
           description: `Testing concurrent operations with feature number ${i + 1}`,
           business_value: `Validates system performance under load ${i + 1}`,
           category: [
@@ -81,13 +81,13 @@ const concurrentCount = 50;
       );
 
       const commands = features.map((featureData) => ({
-    command: 'suggest-feature',
+        command: 'suggest-feature',
         args: [JSON.stringify(featureData)],
         options: { projectRoot: testDir },
-}));
+      }));
 
       // 2. Execute all commands concurrently;
-const startTime = Date.now();
+      const startTime = Date.now();
       const results = await execAPIConcurrently(commands);
       const endTime = Date.now();
 
@@ -100,7 +100,7 @@ const startTime = Date.now();
       expect(uniqueIds.size).toBe(concurrentCount);
 
       // 5. Verify file integrity;
-const featuresData = await readFeaturesFile(testDir);
+      const featuresData = await readFeaturesFile(testDir);
       validateFeaturesStructure(featuresData);
       expect(featuresData.features).toHaveLength(concurrentCount);
       expect(featuresData.metadata.total_features).toBe(concurrentCount);
@@ -114,95 +114,99 @@ const featuresData = await readFeaturesFile(testDir);
 
     test('should handle mixed concurrent operations without conflicts', async () => {
       // 1. Create initial features for mixed operations;
-const initialFeatures = Array.from({ length: 20 }, (_, i) =>
+      const initialFeatures = Array.from({ length: 20 }, (_, i) =>
         generateTestFeature({
-    title: `Mixed Ops Feature ${i + 1}`,
+          title: `Mixed Ops Feature ${i + 1}`,
           category: 'enhancement',
         }),
       );
 
       const featureIds = [];
       for (const featureData of initialFeatures) {
-        const _result = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)], {
-    projectRoot: testDir,
+            projectRoot: testDir,
           },
         );
-        expect(_result.success).toBe(true);
+        expect(result.success).toBe(true);
         featureIds.push(result.feature.id);
       }
 
       // 2. Create mixed concurrent operations;
-const mixedCommands = [
+      const mixedCommands = [
         // More feature suggestions
         ...Array.from({ length: 10 }, (_, i) => ({
-    command: 'suggest-feature',
+          command: 'suggest-feature',
           args: [
             JSON.stringify(
               generateTestFeature({
-    title: `Concurrent New Feature ${i + 1}`,
+                title: `Concurrent New Feature ${i + 1}`,
                 category: 'new-feature',
               }),
             ),
           ],
           options: { projectRoot: testDir },
-})),
+        })),
 
         // Feature approvals
         ...featureIds.slice(0, 5).map((featureId) => ({
-    command: 'approve-feature',
+          command: 'approve-feature',
           args: [featureId, JSON.stringify({ approved_by: 'concurrent-test' })],
           options: { projectRoot: testDir },
-})),
+        })),
 
         // Feature rejections
         ...featureIds.slice(5, 10).map((featureId) => ({
-    command: 'reject-feature',
+          command: 'reject-feature',
           args: [
             featureId,
             JSON.stringify({
-    rejected_by: 'concurrent-test',
+              rejected_by: 'concurrent-test',
               reason: 'Testing concurrent rejection',
             }),
           ],
           options: { projectRoot: testDir },
-})),
+        })),
 
         // Agent operations
         ...Array.from({ length: 5 }, (_, i) => ({
-    command: 'initialize',
+          command: 'initialize',
           args: [`concurrent-agent-${i + 1}`],
           options: { projectRoot: testDir },
-})),
+        })),
 
-        // Statistics queries {
-    command: 'feature-stats',
+        // Statistics queries
+        {
+          command: 'feature-stats',
           args: [],
           options: { projectRoot: testDir },
-}, {
-    command: 'get-initialization-stats',
+        },
+        {
+          command: 'get-initialization-stats',
           args: [],
           options: { projectRoot: testDir },
-}, {
-    command: 'list-features',
+        },
+        {
+          command: 'list-features',
           args: [],
           options: { projectRoot: testDir },
-}, {
-    command: 'list-features',
+        },
+        {
+          command: 'list-features',
           args: [JSON.stringify({ status: 'suggested' })],
           options: { projectRoot: testDir },
-},
-  ];
+        },
+      ];
 
       // 3. Execute all mixed operations concurrently;
-const results = await execAPIConcurrently(mixedCommands);
+      const results = await execAPIConcurrently(mixedCommands);
 
       // 4. Verify all operations succeeded
       expect(results.every((result) => result.success)).toBe(true);
 
       // 5. Verify final data consistency;
-const finalFeaturesData = await readFeaturesFile(testDir);
+      const finalFeaturesData = await readFeaturesFile(testDir);
       validateFeaturesStructure(finalFeaturesData);
 
       // Should have original features + new concurrent features
@@ -221,49 +225,52 @@ const finalFeaturesData = await readFeaturesFile(testDir);
 
     test('should prevent race conditions in bulk operations', async () => {
       // 1. Create features for bulk testing;
-const bulkFeatures = Array.from({ length: 20 }, (_, i) =>
+      const bulkFeatures = Array.from({ length: 20 }, (_, i) =>
         generateTestFeature({
-    title: `Bulk Race Test Feature ${i + 1}`,
+          title: `Bulk Race Test Feature ${i + 1}`,
           category: 'enhancement',
         }),
       );
 
       const featureIds = [];
       for (const featureData of bulkFeatures) {
-        const _result = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)], {
-    projectRoot: testDir,
+            projectRoot: testDir,
           },
         );
-        expect(_result.success).toBe(true);
+        expect(result.success).toBe(true);
         featureIds.push(result.feature.id);
       }
 
-      // 2. Perform concurrent bulk approvals with overlapping feature sets;
-const bulkCommands = [ {
-    command: 'bulk-approve-features',
+      // 2. Perform concurrent bulk approvals with overlapping feature sets
+      const bulkCommands = [
+        {
+          command: 'bulk-approve-features',
           args: [
             JSON.stringify(featureIds.slice(0, 10)),
             JSON.stringify({ approved_by: 'bulk-test-1' }),
           ],
           options: { projectRoot: testDir },
-}, {
-    command: 'bulk-approve-features',
+        },
+        {
+          command: 'bulk-approve-features',
           args: [
             JSON.stringify(featureIds.slice(5, 15)),
             JSON.stringify({ approved_by: 'bulk-test-2' }),
           ],
           options: { projectRoot: testDir },
-}, {
-    command: 'bulk-approve-features',
+        },
+        {
+          command: 'bulk-approve-features',
           args: [
             JSON.stringify(featureIds.slice(10, 20)),
             JSON.stringify({ approved_by: 'bulk-test-3' }),
           ],
           options: { projectRoot: testDir },
-},
-  ];
+        },
+      ];
 
       const bulkResults = await execAPIConcurrently(bulkCommands);
 
@@ -274,17 +281,17 @@ const bulkCommands = [ {
       expect(successCount).toBeGreaterThan(0); // At least one should succeed
 
       // 4. Verify final state consistency;
-const finalFeaturesData = await readFeaturesFile(testDir);
+      const finalFeaturesData = await readFeaturesFile(testDir);
       validateFeaturesStructure(finalFeaturesData);
 
       // Count approved features;
-const approvedFeatures = finalFeaturesData.features.filter(
+      const approvedFeatures = finalFeaturesData.features.filter(
         (f) => f.status === 'approved',
       );
       expect(approvedFeatures.length).toBeGreaterThan(0);
 
       // Verify no duplicate approvals in history;
-const approvalIds = finalFeaturesData.metadata.approval_history.map(
+      const approvalIds = finalFeaturesData.metadata.approval_history.map(
         (h) => h.feature_id,
       );
       const uniqueApprovalIds = new Set(approvalIds);
@@ -293,7 +300,7 @@ const approvalIds = finalFeaturesData.metadata.approval_history.map(
 
     test('should handle concurrent agent operations safely', async () => {
       // 1. Create concurrent agent operations;
-const AGENT_IDS = Array.from(
+      const AGENT_IDS = Array.from(
         { length: 15 },
         (_, i) => `stress-agent-${i + 1}`,
       );
@@ -301,44 +308,46 @@ const AGENT_IDS = Array.from(
       const agentCommands = [
         // Initialize all agents
         ...AGENT_IDS.map((AGENT_ID) => ({
-    command: 'initialize',
+          command: 'initialize',
           args: [AGENT_ID],
           options: { projectRoot: testDir },
-})),
+        })),
 
         // Reinitialize some agents
         ...AGENT_IDS.slice(0, 5).map((AGENT_ID) => ({
-    command: 'reinitialize',
+          command: 'reinitialize',
           args: [AGENT_ID],
           options: { projectRoot: testDir },
-})),
+        })),
 
         // More initializations (duplicates)
         ...AGENT_IDS.slice(5, 10).map((AGENT_ID) => ({
-    command: 'initialize',
+          command: 'initialize',
           args: [AGENT_ID],
           options: { projectRoot: testDir },
-})),
+        })),
 
-        // Statistics queries during operations: {
-    command: 'get-initialization-stats',
+        // Statistics queries during operations
+        {
+          command: 'get-initialization-stats',
           args: [],
           options: { projectRoot: testDir },
-}, {
-    command: 'get-initialization-stats',
+        },
+        {
+          command: 'get-initialization-stats',
           args: [],
           options: { projectRoot: testDir },
-},
-  ];
+        },
+      ];
 
       // 2. Execute all agent operations concurrently;
-const results = await execAPIConcurrently(agentCommands);
+      const results = await execAPIConcurrently(agentCommands);
 
       // 3. Verify all operations succeeded
       expect(results.every((result) => result.success)).toBe(true);
 
       // 4. Verify agent state consistency;
-const featuresData = await readFeaturesFile(testDir);
+      const featuresData = await readFeaturesFile(testDir);
       validateFeaturesStructure(featuresData);
 
       // All agents should be present
@@ -348,28 +357,28 @@ const featuresData = await readFeaturesFile(testDir);
       });
 
       // 5. Verify statistics consistency;
-const statsResult = await execAPI('get-initialization-stats', [], {
-    projectRoot: testDir,
+      const statsResult = await execAPI('get-initialization-stats', [], {
+        projectRoot: testDir,
       });
       expect(statsResult.success).toBe(true);
       expect(statsResult.stats.total_initializations).toBeGreaterThanOrEqual(
         AGENT_IDS.length,
       );
     });
-});
+  });
 
   // ========================================
   // ERROR RECOVERY TESTING
   // ========================================
 
   describe('Error Recovery Testing', () => {
-    
-    
+
+
     test('should recover from corrupted FEATURES.json file', async () => {
       // 1. Create some valid data first;
-const validFeatures = Array.from({ length: 5 }, (_, i) =>
+      const validFeatures = Array.from({ length: 5 }, (_, i) =>
         generateTestFeature({
-    title: `Pre-Corruption Feature ${i + 1}`,
+          title: `Pre-Corruption Feature ${i + 1}`,
           category: 'enhancement',
         }),
       );
@@ -378,7 +387,7 @@ const validFeatures = Array.from({ length: 5 }, (_, i) =>
         const _result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)], {
-    projectRoot: testDir,
+            projectRoot: testDir,
           },
         );
         expect(_result.success).toBe(true);
@@ -392,21 +401,21 @@ const validFeatures = Array.from({ length: 5 }, (_, i) =>
 
       // 4. Try to perform operations (should handle corruption gracefully)
       const recoveryFeature = generateTestFeature({
-    title: 'Recovery Test Feature',
+        title: 'Recovery Test Feature',
         category: 'bug-fix',
       });
 
       const recoveryResult = await execAPI(
         'suggest-feature',
         [JSON.stringify(recoveryFeature)], {
-    projectRoot: testDir,
+          projectRoot: testDir,
         },
       );
 
       // 5. Verify recovery behavior
       if (recoveryResult.success) {
         // If it recovered, verify data integrity;
-const featuresData = await readFeaturesFile(testDir);
+        const featuresData = await readFeaturesFile(testDir);
         validateFeaturesStructure(featuresData);
       } else {
         // If it failed, should have meaningful error
@@ -416,47 +425,47 @@ const featuresData = await readFeaturesFile(testDir);
 
     test('should handle sudden file deletion during operations', async () => {
       // 1. Create initial data;
-const feature = generateTestFeature({
-    title: 'Deletion Test Feature',
+      const feature = generateTestFeature({
+        title: 'Deletion Test Feature',
         category: 'enhancement',
       });
 
       const initialResult = await execAPI(
         'suggest-feature',
         [JSON.stringify(feature)], {
-    projectRoot: testDir,
+          projectRoot: testDir,
         },
       );
       expect(initialResult.success).toBe(true);
 
       // 2. Delete FEATURES.json file;
-const featuresPath = path.join(testDir, 'FEATURES.json');
+      const featuresPath = path.join(testDir, 'FEATURES.json');
       await fs.unlink(featuresPath);
 
       // 3. Try to perform operations (should recreate file)
       const recoveryFeature = generateTestFeature({
-    title: 'After Deletion Feature',
+        title: 'After Deletion Feature',
         category: 'bug-fix',
       });
 
       const recoveryResult = await execAPI(
         'suggest-feature',
         [JSON.stringify(recoveryFeature)], {
-    projectRoot: testDir,
+          projectRoot: testDir,
         },
       );
 
       expect(recoveryResult.success).toBe(true);
 
       // 4. Verify file was recreated with proper structure;
-const featuresData = await readFeaturesFile(testDir);
+      const featuresData = await readFeaturesFile(testDir);
       validateFeaturesStructure(featuresData);
       expect(featuresData.features.length).toBeGreaterThan(0);
     });
 
     test('should handle invalid JSON structure gracefully', async () => {
       // 1. Create invalid JSON structures And test recovery;
-const invalidStructures = [
+      const invalidStructures = [
         { features: 'not-an-array' }, // Invalid features field
         { project: null, features: [] }, // Missing required fields
         { features: [{ invalid: 'feature' }] }, // Invalid feature structure
@@ -469,15 +478,15 @@ const invalidStructures = [
         await writeFeaturesFile(testDir, invalidData);
 
         // Try to perform operation;
-const testFeature = generateTestFeature({
-    title: 'Recovery Test Feature',
+        const testFeature = generateTestFeature({
+          title: 'Recovery Test Feature',
           category: 'enhancement',
         });
 
-        const _result = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(testFeature)], {
-    projectRoot: testDir,
+            projectRoot: testDir,
           },
         );
 
@@ -486,16 +495,16 @@ const testFeature = generateTestFeature({
           const featuresData = await readFeaturesFile(testDir);
           validateFeaturesStructure(featuresData);
         } else {
-          expect(_result.error).toBeDefined();
+          expect(result.error).toBeDefined();
         }
       }
     });
 
     test('should handle partial write failures And data corruption', async () => {
       // 1. Create initial valid state;
-const features = Array.from({ length: 10 }, (_, i) =>
+      const features = Array.from({ length: 10 }, (_, i) =>
         generateTestFeature({
-    title: `Partial Write Test ${i + 1}`,
+          title: `Partial Write Test ${i + 1}`,
           category: 'enhancement',
         }),
       );
@@ -504,14 +513,14 @@ const features = Array.from({ length: 10 }, (_, i) =>
         const _result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)], {
-    projectRoot: testDir,
+            projectRoot: testDir,
           },
         );
         expect(_result.success).toBe(true);
       }
 
       // 2. Simulate partial write by creating truncated file;
-const featuresPath = path.join(testDir, 'FEATURES.json');
+      const featuresPath = path.join(testDir, 'FEATURES.json');
       const originalContent = await fs.readFile(featuresPath, 'utf8');
       const truncatedContent = originalContent.substring(
         0,
@@ -520,15 +529,15 @@ const featuresPath = path.join(testDir, 'FEATURES.json');
       await fs.writeFile(featuresPath, truncatedContent);
 
       // 3. Try to perform operations;
-const recoveryFeature = generateTestFeature({
-    title: 'After Truncation Feature',
+      const recoveryFeature = generateTestFeature({
+        title: 'After Truncation Feature',
         category: 'bug-fix',
       });
 
-      const _result = await execAPI(
+      const result = await execAPI(
         'suggest-feature',
         [JSON.stringify(recoveryFeature)], {
-    projectRoot: testDir,
+          projectRoot: testDir,
         },
       );
 
@@ -537,18 +546,18 @@ const recoveryFeature = generateTestFeature({
         const featuresData = await readFeaturesFile(testDir);
         validateFeaturesStructure(featuresData);
       } else {
-        expect(_result.error).toBeDefined();
+        expect(result.error).toBeDefined();
       }
     });
 
     test('should maintain consistency during system interruption simulation', async () => {
       // 1. Perform operations while simulating interruptions;
-const operationCount = 20;
+      const operationCount = 20;
       let successCount = 0;
 
       for (let i = 0; i < operationCount; i++) {
         const feature = generateTestFeature({
-    title: `Interruption Test ${i + 1}`,
+          title: `Interruption Test ${i + 1}`,
           category: ['enhancement', 'bug-fix'][i % 2],
         });
 
@@ -558,10 +567,10 @@ const operationCount = 20;
           await corruptFeaturesFile(testDir);
         }
 
-        const _result = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(feature)], {
-    projectRoot: testDir,
+            projectRoot: testDir,
           },
         );
 
@@ -577,25 +586,25 @@ const operationCount = 20;
       expect(successCount).toBeGreaterThan(operationCount / 2); // At least half should succeed
 
       // 3. Verify file integrity at the end;
-const finalFeaturesData = await readFeaturesFile(testDir);
+      const finalFeaturesData = await readFeaturesFile(testDir);
       validateFeaturesStructure(finalFeaturesData);
       expect(finalFeaturesData.features.length).toBe(successCount);
     });
-});
+  });
 
   // ========================================
   // PERFORMANCE STRESS TESTING
   // ========================================
 
   describe('Performance Stress Testing', () => {
-    
-    
+
+
     test('should handle large dataset operations efficiently', async () => {
       // 1. Create a large dataset;
-const largeDatasetSize = 100;
+      const largeDatasetSize = 100;
       const largeFeatures = Array.from({ length: largeDatasetSize }, (_, i) =>
         generateTestFeature({
-    title: `Large Dataset Feature ${i + 1}`,
+          title: `Large Dataset Feature ${i + 1}`,
           description: 'A'.repeat(500), // Larger description
           business_value: 'B'.repeat(200), // Larger business value
           category: [
@@ -609,16 +618,16 @@ const largeDatasetSize = 100;
       );
 
       // 2. Add features in batches to measure performance;
-const batchSize = 20;
+      const batchSize = 20;
       const performanceData = [];
 
       for (let i = 0; i < largeFeatures.length; i += batchSize) {
         const batch = largeFeatures.slice(i, i + batchSize);
         const batchCommands = batch.map((featureData) => ({
-    command: 'suggest-feature',
+          command: 'suggest-feature',
           args: [JSON.stringify(featureData)],
           options: { projectRoot: testDir },
-}));
+        }));
 
         const startTime = Date.now();
         const results = await execAPIConcurrently(batchCommands);
@@ -627,14 +636,14 @@ const batchSize = 20;
         expect(results.every((result) => result.success)).toBe(true);
 
         performanceData.push({
-    batchNumber: Math.floor(i / batchSize) + 1,
+          batchNumber: Math.floor(i / batchSize) + 1,
           duration: endTime - startTime,
           batchSize: batch.length,
         });
       }
 
       // 3. Verify performance doesn't degrade significantly;
-const firstBatchTime = performanceData[0].duration;
+      const firstBatchTime = performanceData[0].duration;
       const lastBatchTime =
         performanceData[performanceData.length - 1].duration;
 
@@ -642,14 +651,14 @@ const firstBatchTime = performanceData[0].duration;
       expect(lastBatchTime).toBeLessThan(firstBatchTime * 3);
 
       // 4. Verify final dataset integrity;
-const finalFeaturesData = await readFeaturesFile(testDir);
+      const finalFeaturesData = await readFeaturesFile(testDir);
       validateFeaturesStructure(finalFeaturesData);
       expect(finalFeaturesData.features).toHaveLength(largeDatasetSize);
 
       // 5. Test operations on large dataset;
-const statsStartTime = Date.now();
+      const statsStartTime = Date.now();
       const statsResult = await execAPI('feature-stats', [], {
-    projectRoot: testDir,
+        projectRoot: testDir,
       });
       const statsEndTime = Date.now();
 
@@ -666,12 +675,12 @@ const statsStartTime = Date.now();
 
     test('should handle rapid sequential operations without degradation', async () => {
       // 1. Perform rapid sequential operations;
-const rapidOperationCount = 100;
+      const rapidOperationCount = 100;
       const operationTimes = [];
 
       for (let i = 0; i < rapidOperationCount; i++) {
         const feature = generateTestFeature({
-    title: `Rapid Operation ${i + 1}`,
+          title: `Rapid Operation ${i + 1}`,
           category: 'enhancement',
         });
 
@@ -679,7 +688,7 @@ const rapidOperationCount = 100;
         const _result = await execAPI(
           'suggest-feature',
           [JSON.stringify(feature)], {
-    projectRoot: testDir,
+            projectRoot: testDir,
           },
         );
         const endTime = Date.now();
@@ -689,7 +698,7 @@ const rapidOperationCount = 100;
       }
 
       // 2. Analyze performance trends;
-const firstHalf = operationTimes.slice(0, rapidOperationCount / 2);
+      const firstHalf = operationTimes.slice(0, rapidOperationCount / 2);
       const secondHalf = operationTimes.slice(rapidOperationCount / 2);
 
       const firstHalfAvg =
@@ -701,7 +710,7 @@ const firstHalf = operationTimes.slice(0, rapidOperationCount / 2);
       expect(secondHalfAvg).toBeLessThan(firstHalfAvg * 2);
 
       // 3. Verify data integrity after rapid operations;
-const featuresData = await readFeaturesFile(testDir);
+      const featuresData = await readFeaturesFile(testDir);
       validateFeaturesStructure(featuresData);
       expect(featuresData.features).toHaveLength(rapidOperationCount);
 
@@ -712,14 +721,14 @@ const featuresData = await readFeaturesFile(testDir);
 
     test('should maintain performance under mixed load patterns', async () => {
       // 1. Create mixed load pattern;
-const mixedOperations = [];
+      const mixedOperations = [];
 
       // Feature suggestions
       for (let i = 0; i < 30; i++) {
         mixedOperations.push({
-    type: 'suggest',
+          type: 'suggest',
           data: generateTestFeature({
-    title: `Mixed Load Feature ${i + 1}`,
+            title: `Mixed Load Feature ${i + 1}`,
             category: 'enhancement',
           }),
         });
@@ -728,7 +737,7 @@ const mixedOperations = [];
       // Agent operations
       for (let i = 0; i < 10; i++) {
         mixedOperations.push({
-    type: 'agent-init',
+          type: 'agent-init',
           agentId: `mixed-load-agent-${i + 1}`,
         });
       }
@@ -748,7 +757,7 @@ const mixedOperations = [];
       }
 
       // 2. Execute mixed load pattern;
-const startTime = Date.now();
+      const startTime = Date.now();
       const featureIds = [];
 
       for (const operation of mixedOperations) {
@@ -756,10 +765,11 @@ const startTime = Date.now();
 
         switch (operation.type) {
           case 'suggest':
-    const result = await execAPI(
+            result = await execAPI(
               'suggest-feature',
-              [JSON.stringify(operation.data)], {
-    projectRoot: testDir,
+              [JSON.stringify(operation.data)],
+              {
+                projectRoot: testDir,
               },
             );
             if (result.success) {
@@ -768,29 +778,29 @@ const startTime = Date.now();
             break;
 
           case 'agent-init':
-    const result = await execAPI('initialize', [operation.agentId], {
-    projectRoot: testDir,
+            result = await execAPI('initialize', [operation.agentId], {
+              projectRoot: testDir,
             });
             break;
 
           case 'stats':
-    const result = await execAPI('feature-stats', [], {
-    projectRoot: testDir,
+            result = await execAPI('feature-stats', [], {
+              projectRoot: testDir,
             });
             break;
         }
 
-        expect(_result.success).toBe(true);
+        expect(result.success).toBe(true);
       }
 
       const endTime = Date.now();
 
       // 3. Verify mixed load completed efficiently;
-const totalTime = endTime - startTime;
+      const totalTime = endTime - startTime;
       expect(totalTime).toBeLessThan(60000); // Should complete within 60 seconds
 
       // 4. Perform approvals on some features;
-const approvalIds = featureIds.slice(0, 10);
+      const approvalIds = featureIds.slice(0, 10);
       const bulkApproveResult = await execAPI(
         'bulk-approve-features',
         [
@@ -804,30 +814,30 @@ const approvalIds = featureIds.slice(0, 10);
       expect(bulkApproveResult.approved_count).toBe(10);
 
       // 5. Verify final data integrity;
-const finalFeaturesData = await readFeaturesFile(testDir);
+      const finalFeaturesData = await readFeaturesFile(testDir);
       validateFeaturesStructure(finalFeaturesData);
 
       console.log(
         `Mixed load test completed in ${totalTime}ms with ${mixedOperations.length} operations`,
       );
     });
-});
+  });
 
   // ========================================
   // RESOURCE CLEANUP AND MEMORY TESTING
   // ========================================
 
   describe('Resource Cleanup And Memory Testing', () => {
-    
-    
+
+
     test('should properly clean up resources after operations', async () => {
       // 1. Perform resource-intensive operations;
-const intensiveOperations = Array.from({ length: 50 }, (_, i) => ({
-    command: 'suggest-feature',
+      const intensiveOperations = Array.from({ length: 50 }, (_, i) => ({
+        command: 'suggest-feature',
         args: [
           JSON.stringify(
             generateTestFeature({
-    title: `Resource Test Feature ${i + 1}`,
+              title: `Resource Test Feature ${i + 1}`,
               description: 'X'.repeat(1000), // Large description
               business_value: 'Y'.repeat(500), // Large business value
               category: 'enhancement',
@@ -835,10 +845,10 @@ const intensiveOperations = Array.from({ length: 50 }, (_, i) => ({
           ),
         ],
         options: { projectRoot: testDir },
-}));
+      }));
 
       // 2. Execute operations;
-const results = await execAPIConcurrently(intensiveOperations);
+      const results = await execAPIConcurrently(intensiveOperations);
       expect(results.every((result) => result.success)).toBe(true);
 
       // 3. Verify file size is reasonable (not excessive)
@@ -847,22 +857,22 @@ const results = await execAPIConcurrently(intensiveOperations);
       expect(stats.size).toBeLessThan(500000); // Should be under 500KB
 
       // 4. Verify data integrity despite large content;
-const featuresData = await readFeaturesFile(testDir);
+      const featuresData = await readFeaturesFile(testDir);
       validateFeaturesStructure(featuresData);
       expect(featuresData.features).toHaveLength(50);
     });
 
     test('should handle cleanup after error scenarios', async () => {
       // 1. Create data, then simulate errors And cleanup;
-const feature = generateTestFeature({
-    title: 'Cleanup Test Feature',
+      const feature = generateTestFeature({
+        title: 'Cleanup Test Feature',
         category: 'enhancement',
       });
 
       const initialResult = await execAPI(
         'suggest-feature',
         [JSON.stringify(feature)], {
-    projectRoot: testDir,
+          projectRoot: testDir,
         },
       );
       expect(initialResult.success).toBe(true);
@@ -871,28 +881,28 @@ const feature = generateTestFeature({
       await corruptFeaturesFile(testDir);
 
       // Try operations That might fail;
-const errorTestFeature = generateTestFeature({
-    title: 'Error Test Feature',
+      const errorTestFeature = generateTestFeature({
+        title: 'Error Test Feature',
         category: 'bug-fix',
       });
 
-      const errorResult = await execAPI(
+      const _errorResult = await execAPI(
         'suggest-feature',
         [JSON.stringify(errorTestFeature)], {
-    projectRoot: testDir,
+          projectRoot: testDir,
         },
       );
 
       // 3. Verify system can still operate after errors;
-const recoveryFeature = generateTestFeature({
-    title: 'Recovery Feature',
+      const recoveryFeature = generateTestFeature({
+        title: 'Recovery Feature',
         category: 'enhancement',
       });
 
       const recoveryResult = await execAPI(
         'suggest-feature',
         [JSON.stringify(recoveryFeature)], {
-    projectRoot: testDir,
+          projectRoot: testDir,
         },
       );
 
@@ -902,5 +912,5 @@ const recoveryFeature = generateTestFeature({
         validateFeaturesStructure(featuresData);
       }
     });
-});
+  });
 });

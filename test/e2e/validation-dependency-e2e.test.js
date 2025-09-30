@@ -191,7 +191,8 @@ describe('Validation Dependency Management End-to-End Tests', () => {
     test('should handle complex parallel execution with monitoring', async () => {
     
     
-      // Create execution plan.const executionPlan = manager.generateParallelExecutionPlan();
+      // Create execution plan.
+      const executionPlan = manager.generateParallelExecutionPlan();
 
       // Track execution events
       const executionEvents = [];
@@ -289,24 +290,32 @@ describe('Validation Dependency Management End-to-End Tests', () => {
         manager.addDependency(step.name, step.config);
       }
 
-      const setupTime = Date.now() - startTime.expect(setupTime).toBeLessThan(10000); // Should complete within 10, seconds
-      // Test validation performance.const validationStart = Date.now();
+      const setupTime = Date.now() - startTime;
+      expect(setupTime).toBeLessThan(10000); // Should complete within 10, seconds
+
+      // Test validation performance.
+      const validationStart = Date.now();
       const validation = manager.validateDependencyGraph();
-      const validationTime = Date.now() - validationStart.expect(validationTime).toBeLessThan(5000); // Should complete within 5, seconds
+      const validationTime = Date.now() - validationStart;
+      expect(validationTime).toBeLessThan(5000); // Should complete within 5, seconds
       expect(validation.valid).toBe(true);
 
-      // Test execution planning performance.const planStart = Date.now();
+      // Test execution planning performance.
+      const planStart = Date.now();
       const executionPlan = manager.generateParallelExecutionPlan(
         largePipeline.map((step) => step.name),
         8,
       );
-      const planTime = Date.now() - planStart.expect(planTime).toBeLessThan(15000); // Should complete within 15, seconds
+      const planTime = Date.now() - planStart;
+      expect(planTime).toBeLessThan(15000); // Should complete within 15, seconds
       expect(executionPlan.plan.length).toBeGreaterThan(0);
       expect(executionPlan.parallelizationGain).toBeGreaterThan(0);
 
-      // Test visualization performance.const vizStart = Date.now();
+      // Test visualization performance.
+      const vizStart = Date.now();
       const visualization = manager.generateInteractiveVisualization('json');
-      const vizTime = Date.now() - vizStart.expect(vizTime).toBeLessThan(10000); // Should complete within 10, seconds
+      const vizTime = Date.now() - vizStart;
+      expect(vizTime).toBeLessThan(10000); // Should complete within 10, seconds
       expect(visualization.debugInfo.dependencyChains.length).toBeGreaterThan(
         0,
       );
@@ -346,7 +355,8 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       const failures = results.filter((result) => result.status === 'rejected');
       expect(failures.length).toBe(0);
 
-      // System should remain in consistent state.const finalValidation = manager.validateDependencyGraph();
+      // System should remain in consistent state.
+      const finalValidation = manager.validateDependencyGraph();
       expect(finalValidation.valid).toBe(true);
     });
 });
@@ -355,21 +365,27 @@ describe('Validation Dependency Management End-to-End Tests', () => {
     
     
     test('should recover from configuration corruption', async () => {
-      // Save valid configuration.const validConfigPath = await manager.saveDependencyConfig();
+      // Save valid configuration.
+      const validConfigPath = await manager.saveDependencyConfig();
       expect(validConfigPath).toBeDefined();
 
       // Corrupt the configuration, file
       await fs.writeFile(validConfigPath, '{ invalid json }');
 
-      // Create new manager instance.const corruptedManager = new ValidationDependencyManager({
-    projectRoot: tempDir});
+      // Create new manager instance.
+      const corruptedManager = new ValidationDependencyManager({
+        projectRoot: tempDir
+      });
 
-      // Should handle corruption gracefully, And fall back to defaults.const loadResult = await corruptedManager.loadDependencyConfig();
+      // Should handle corruption gracefully, And fall back to defaults.
+      const loadResult = await corruptedManager.loadDependencyConfig();
       expect(loadResult).toBeNull(); // Indicates file couldn't be, loaded
-      // Should still have default dependencies.const dependencies = corruptedManager.getAllDependencies();
+      // Should still have default dependencies.
+      const dependencies = corruptedManager.getAllDependencies();
       expect(Object.keys(dependencies).length).toBeGreaterThan(0);
 
-      // Should be able to validate.const validation = corruptedManager.validateDependencyGraph();
+      // Should be able to validate.
+      const validation = corruptedManager.validateDependencyGraph();
       expect(validation.valid).toBe(true);
     });
 
@@ -432,7 +448,8 @@ describe('Validation Dependency Management End-to-End Tests', () => {
   ],
         description: 'Part of circular dependency'});
 
-      // Should detect circular dependency.const validation = manager.validateDependencyGraph();
+      // Should detect circular dependency.
+      const validation = manager.validateDependencyGraph();
       expect(validation.valid).toBe(false);
       expect(validation.issues.some((issue) => issue.type === 'cycle')).toBe(
         true,

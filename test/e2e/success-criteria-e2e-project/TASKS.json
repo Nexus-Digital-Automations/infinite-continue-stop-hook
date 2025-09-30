@@ -1,0 +1,110 @@
+{
+  "project": "success-criteria-e2e-test",
+  "schema_version": "2.0.0",
+  "migrated_from": "FEATURES.json",
+  "migration_date": "2025-09-30T01:46:24.386Z",
+  "tasks": [],
+  "completed_tasks": [],
+  "task_relationships": {},
+  "workflow_config": {
+    "require_approval": true,
+    "auto_reject_timeout_hours": 168,
+    "allowed_statuses": [
+      "suggested",
+      "approved",
+      "in-progress",
+      "completed",
+      "blocked",
+      "rejected"
+    ],
+    "allowed_task_types": [
+      "error",
+      "feature",
+      "test",
+      "audit"
+    ],
+    "required_fields": [
+      "title",
+      "description",
+      "business_value",
+      "category",
+      "type"
+    ],
+    "auto_generation_enabled": true,
+    "mandatory_test_gate": true,
+    "security_validation_required": true
+  },
+  "metadata": {
+    "version": "2.0.0",
+    "created": "2025-09-30T01:46:24.386Z",
+    "updated": "2025-09-30T01:46:24.386Z",
+    "total_tasks": 0,
+    "tasks_by_type": {
+      "error": 0,
+      "feature": 0,
+      "test": 0,
+      "audit": 0
+    },
+    "approval_history": [],
+    "total_features": 0,
+    "initialization_stats": {
+      "total_initializations": 2,
+      "total_reinitializations": 0,
+      "current_day": "2025-09-30",
+      "time_buckets": {
+        "13:00-17:59": {
+          "init": 0,
+          "reinit": 0
+        },
+        "18:00-22:59": {
+          "init": 2,
+          "reinit": 0
+        },
+        "23:00-03:59": {
+          "init": 0,
+          "reinit": 0
+        },
+        "04:00-08:59": {
+          "init": 0,
+          "reinit": 0
+        },
+        "09:00-13:59": {
+          "init": 0,
+          "reinit": 0
+        }
+      },
+      "daily_history": [],
+      "last_reset": "2025-09-30T01:46:24.956Z",
+      "last_updated": "2025-09-30T01:46:35.918Z"
+    }
+  },
+  "agents": {
+    "test-agent-1759196784389": {
+      "lastHeartbeat": "2025-09-30T01:46:24.954Z",
+      "status": "active",
+      "initialized": "2025-09-30T01:46:24.954Z",
+      "sessionId": "96346932a28e566e"
+    },
+    "test-agent-1759196795643": {
+      "lastHeartbeat": "2025-09-30T01:46:35.917Z",
+      "status": "active",
+      "initialized": "2025-09-30T01:46:35.917Z",
+      "sessionId": "b82e2230f3f6e056"
+    }
+  },
+  "features": [],
+  "settings": {
+    "id_based_classification": true,
+    "auto_sort_enabled": true,
+    "sort_criteria": {
+      "primary": "id_prefix",
+      "secondary": "created_at"
+    },
+    "id_priority_order": {
+      "error_": 1,
+      "feature_": 2,
+      "subtask_": 3,
+      "test_": 4
+    }
+  }
+}

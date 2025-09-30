@@ -240,7 +240,7 @@ function execAPIWithMonitoring(
           try {
             const result = stdout.trim() ? JSON.parse(stdout) : {};
             resolve(result);
-          } catch (_parseError) {
+          } catch {
             resolve({ rawOutput: stdout, stderr });
           }
         } else {

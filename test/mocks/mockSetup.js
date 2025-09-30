@@ -1,5 +1,3 @@
-const { loggers } = require('../lib/logger');
-const path = require('path');
 /**
  * Mock Setup Helper
  *
@@ -34,7 +32,7 @@ class MockManager {
     this.httpClient = new HTTPClientMock();
     this.database = new DatabaseMock();
     this.originalModules = new Map();
-}
+  }
 
   /**
    * Setup all mocks
@@ -45,14 +43,14 @@ class MockManager {
     this.setupHTTPClientMock();
     this.setupDatabaseMock();
     this.seedTestData();
-}
+  }
 
   /**
    * Setup TaskManager API mock
    */
   setupTaskManagerAPIMock() {
     // Mock the child_process spawn function used by API executor;
-const originalSpawn = require('child_process').spawn;
+    const originalSpawn = require('child_process').spawn;
     this.originalModules.set('child_process.spawn', originalSpawn);
 
     require('child_process').spawn = jest.fn((command, args, options) => {
@@ -61,7 +59,7 @@ const originalSpawn = require('child_process').spawn;
       }
       return originalSpawn(command, args, options);
     });
-}
+  }
 
   /**
    * Create mock child process for API calls
@@ -135,21 +133,21 @@ const originalSpawn = require('child_process').spawn;
         default:
           result = { success: false, error: `Unknown command: ${apiCommand}` };
       }
-    } catch (_) {
-      result = { success: false, error: _error.message };
+    } catch (err) {
+      result = { success: false, error: err.message };
     }
 
     // Create mock EventEmitter-like object;
-const mockProcess = {
-    stdout: {
-    on: jest.fn((event, callback) => {
+    const mockProcess = {
+      stdout: {
+        on: jest.fn((event, callback) => {
           if (event === 'data') {
             setTimeout(() => callback(JSON.stringify(result)), 10);
           }
         }),
       },
       stderr: {
-    on: jest.fn(),
+        on: jest.fn(),
       },
       on: jest.fn((event, callback) => {
         if (event === 'close') {
@@ -161,7 +159,7 @@ const mockProcess = {
     };
 
     return mockProcess;
-}
+  }
 
   /**
    * Setup file system mock (selective - only for test paths)
@@ -181,7 +179,7 @@ const mockProcess = {
     const originalRmSync = FS.rmSync;
 
     // Only mock test-related paths;
-const isTestPath = (path) => {
+    const isTestPath = (path) => {
       return (
         path &&
         (path.includes('/test/') ||
@@ -225,7 +223,7 @@ const isTestPath = (path) => {
       }
       return originalRmSync(path, options);
     });
-}
+  }
 
   /**
    * Setup HTTP client mock
@@ -243,8 +241,8 @@ const isTestPath = (path) => {
 
           if (this.httpClient.responses.has(url)) {
             const response = this.httpClient.responses.get(url);
-    return {
-    ok: response.status < 400,
+            return {
+              ok: response.status < 400,
               status: response.status,
               json: () => Promise.resolve(response.data),
               text: () => Promise.resolve(JSON.stringify(response.data)),
@@ -252,18 +250,18 @@ const isTestPath = (path) => {
           }
 
           return {
-    ok: true,
+            ok: true,
             status: 200,
             json: () => Promise.resolve({ message: 'Mock response' }),
             text: () => Promise.resolve('{"message":"Mock response"}'),
           };
         });
       }
-    } catch (_) {
+    } catch (err) {
       // Fetch not available in this Node.js version, skip mocking
-      loggers.stopHook.log('Fetch not available for mocking:', error.message);
+      loggers.stopHook.log('Fetch not available for mocking:', err.message);
     }
-}
+  }
 
   /**
    * Setup database mock
@@ -271,7 +269,7 @@ const isTestPath = (path) => {
   setupDatabaseMock() {
     // This would be implemented based on the actual database libraries used
     // for now, it's a placeholder for future database mocking needs
-}
+  }
 
   /**
    * Seed test data
@@ -291,19 +289,19 @@ const isTestPath = (path) => {
     this.fileSystem.mkdirSync('/test-project', { recursive: true });
     this.fileSystem.writeFileSync(
       '/test-project/package.json',
-      JSON.stringify({,
-    name: 'test-project',
+      JSON.stringify({
+        name: 'test-project',
         version: '1.0.0',
       }),
     );
     this.fileSystem.writeFileSync(
       '/test-project/FEATURES.json',
-      JSON.stringify({,
-    features: [],
+      JSON.stringify({
+        features: [],
         metadata: { version: '3.0.0' },
-}),
+      }),
     );
-}
+  }
 
   /**
    * Reset all mocks
@@ -314,7 +312,7 @@ const isTestPath = (path) => {
     this.httpClient.reset();
     this.database.reset();
     this.seedTestData();
-}
+  }
 
   /**
    * Restore original modules
@@ -329,6 +327,7 @@ const isTestPath = (path) => {
 
     // Restore fs methods
     // Use existing FS declaration from line 168
+    const FS = require('fs');
     [
       'existsSync',
       'readFileSync',
@@ -337,7 +336,7 @@ const isTestPath = (path) => {
       'rmSync',
     ].forEach((method) => {
       if (this.originalModules.has(`FS.${method}`)) {
-        fs[method] = this.originalModules.get(`FS.${method}`);
+        FS[method] = this.originalModules.get(`FS.${method}`);
       }
     });
 
@@ -347,28 +346,28 @@ const isTestPath = (path) => {
       if (this.originalModules.has('global.fetch')) {
         global[fetchProp] = this.originalModules.get('global.fetch');
       }
-    } catch (_) {
+    } catch (err) {
       // Fetch not available, skip restoration
       loggers.stopHook.log(
         'Fetch not available for restoration:',
-        error.message,
+        err.message,
       );
     }
 
     this.originalModules.clear();
-}
+  }
 
   /**
    * Get mock instances for direct access
    */
   getMocks() {
     return {
-    taskManagerAPI: this.taskManagerAPI,
+      taskManagerAPI: this.taskManagerAPI,
       fileSystem: this.fileSystem,
       httpClient: this.httpClient,
       database: this.database,
     };
-}
+  }
 }
 
 // Global mock manager instance;
@@ -380,7 +379,7 @@ let globalMockManager;
 function setupMocks() {
   if (!globalMockManager) {
     globalMockManager = new MockManager();
-}
+  }
   globalMockManager.setupAll();
   return globalMockManager;
 }
@@ -388,14 +387,14 @@ function setupMocks() {
 function resetMocks() {
   if (globalMockManager) {
     globalMockManager.resetAll();
-}
+  }
 }
 
 function restoreMocks() {
   if (globalMockManager) {
     globalMockManager.restoreAll();
     globalMockManager = null;
-}
+  }
 }
 
 function getMockManager() {
@@ -410,7 +409,7 @@ function mockSuccessfulFeatureCreation(overrides = {}) {
   if (mockManager) {
     const feature = { ...SAMPLE_FEATURES.enhancement, ...overrides };
     return mockManager.taskManagerAPI.suggestFeature(feature);
-}
+  }
   return null;
 }
 
@@ -419,19 +418,19 @@ function mockAPIError(command, error) {
   if (mockManager) {
     // This would be implemented to inject specific errors for testing
     loggers.stopHook.warn(`Mock API error for ${command}: ${error}`);
-}
+  }
 }
 
 function getAPICallHistory() {
   const mockManager = getMockManager();
   if (mockManager) {
     return {
-    features: Array.from(mockManager.taskManagerAPI.features.values()),
+      features: Array.from(mockManager.taskManagerAPI.features.values()),
       agents: Array.from(mockManager.taskManagerAPI.agents.values()),
       httpRequests: mockManager.httpClient.getRequests(),
       dbQueries: mockManager.database.getQueries(),
     };
-}
+  }
   return null;
 }
 
@@ -444,7 +443,7 @@ function expectAPICall(command, _args = []) {
   expect(history).toBeDefined();
 }
 
-function featureData(_$2) {
+function expectFeatureCreated(_featureData) {
   return null;
 }
 
@@ -455,7 +454,7 @@ function expectAgentInitialized(AGENT_ID) {
     expect(agent).toBeDefined();
     expect(agent.status).toBe('active');
     return agent;
-}
+  }
   return null;
 }
 

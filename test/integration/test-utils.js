@@ -79,11 +79,11 @@ function execAPI(command, args = [], options = {}, _category = 'general') {
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch (parseError) {
+        } catch (secondParseError) {
           // If both fail, include raw output for debugging
           reject(
             new Error(
-              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`,
+              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${secondParseError.message}`,
             ),
           );
         }

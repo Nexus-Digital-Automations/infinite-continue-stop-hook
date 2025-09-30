@@ -21,7 +21,7 @@ describe('RAG System API Endpoints', () => {
   let _testLessonId;
   let _testErrorId;
 
-  beforeAll(async () => {
+  beforeAll(() => {
     // Setup test environment
     // Note: This will be implemented when RAG system is available
     loggers.stopHook.log('Setting up RAG test environment...');
@@ -138,7 +138,7 @@ describe('RAG System API Endpoints', () => {
     });
 
     describe('GET /api/lessons/:id', () => {
-      test('should retrieve lesson by ID', async () => {
+      test('should retrieve lesson by ID', () => {
         // Placeholder For future implementation
         expect(true).toBe(true);
 
@@ -230,7 +230,7 @@ describe('RAG System API Endpoints', () => {
     });
 
     describe('PUT /api/errors/:id/resolve', () => {
-      test('should update error with resolution', async () => {
+      test('should update error with resolution', () => {
         const _resolutionData = {
           resolution: 'Added null check before accessing object property',
           resolved_by: 'debug-agent-003',
@@ -328,7 +328,7 @@ describe('RAG System API Endpoints', () => {
     });
 
     describe('GET /api/search/similar/:id', () => {
-      test('should find similar content based on embedding', async () => {
+      test('should find similar content based on embedding', () => {
         // Placeholder For future implementation
         expect(true).toBe(true);
 
@@ -372,7 +372,7 @@ describe('RAG System API Endpoints', () => {
     });
 
     describe('GET /api/analytics/performance', () => {
-      test('should provide performance metrics', async () => {
+      test('should provide performance metrics', () => {
         // Placeholder For future implementation
         expect(true).toBe(true);
 
@@ -419,7 +419,7 @@ describe('RAG System API Endpoints', () => {
     });
 
     describe('POST /api/integration/migrate-lessons', () => {
-      test('should migrate existing development/lessons files', async () => {
+      test('should migrate existing development/lessons files', () => {
         const _migrationRequest = {
           source_path: '/development/lessons',
           preserve_structure: true,

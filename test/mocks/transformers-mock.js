@@ -7,8 +7,6 @@
 
 // Mock pipeline function;
 const mockPipeline = jest.fn().mockImplementation((task, _model) => {
-    
-    
   return jest.fn().mockImplementation((_input) => {
     // Return mock results based on task type
     switch (task) {
@@ -29,18 +27,18 @@ const mockPipeline = jest.fn().mockImplementation((task, _model) => {
       default:
         return { output: 'Mock transformer output' };
     }
-});
+  });
 });
 
 // Mock environment configuration;
 const mockEnv = {
-    backends: {
+  backends: {
     onnx: {
-    wasm: {
-    numThreads: 1,
-      }
-}
-},
+      wasm: {
+        numThreads: 1,
+      },
+    },
+  },
   allowLocalModels: false,
   allowRemoteModels: true,
   localModelPath: './models/',
@@ -48,19 +46,19 @@ const mockEnv = {
 };
 
 module.exports = {
-    pipeline: mockPipeline,
+  pipeline: mockPipeline,
   env: mockEnv,
   AutoTokenizer: {
-    from_pretrained: jest.fn().mockResolvedValue({,
-    encode: jest.fn().mockReturnValue([1, 2, 3]),
+    from_pretrained: jest.fn().mockResolvedValue({
+      encode: jest.fn().mockReturnValue([1, 2, 3]),
       decode: jest.fn().mockReturnValue('mock decoded text'),
     }),
-},
+  },
   AutoModel: {
-    from_pretrained: jest.fn().mockResolvedValue({,
-    forward: jest.fn().mockResolvedValue({,
-    logits: [[0.1, 0.2, 0.7]],
+    from_pretrained: jest.fn().mockResolvedValue({
+      forward: jest.fn().mockResolvedValue({
+        logits: [[0.1, 0.2, 0.7]],
       }),
     }),
-}
+  },
 };

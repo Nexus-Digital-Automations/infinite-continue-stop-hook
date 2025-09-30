@@ -1,0 +1,17 @@
+{
+  "default_template": "25_point_standard",
+  "validation_timeout": 300,
+  "evidence_storage": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e-project/development/evidence",
+  "report_storage": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/success-criteria-e2e-project/development/reports",
+  "validation_agents": {
+    "automated": [
+      "linter",
+      "build",
+      "test"
+    ],
+    "manual": [
+      "documentation",
+      "architecture"
+    ]
+  }
+}

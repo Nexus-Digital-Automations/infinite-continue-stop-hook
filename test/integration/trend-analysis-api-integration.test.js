@@ -5,8 +5,8 @@ const { execSync } = require('child_process');
 // Integration tests for Historical Trend Analysis API endpoints
 // Tests the new trend analysis endpoints added to Feature 8
 describe('Trend Analysis API Integration Tests', () => {
-    
-    
+
+
   const mockProjectRoot = '/tmp/test-trend-analysis-api';
   const mockEnhancedMetricsFile = path.join(
     mockProjectRoot,
@@ -30,14 +30,14 @@ describe('Trend Analysis API Integration Tests', () => {
         fs.unlinkSync(file);
       }
     });
-});
+  });
 
   afterEach(() => {
     // Clean up test directory
     if (fs.existsSync(mockProjectRoot)) {
       fs.rmSync(mockProjectRoot, { recursive: true, force: true });
     }
-});
+  });
 
   function createComprehensiveMockData(daysBack = 30) {
     const now = Date.now();
@@ -98,15 +98,15 @@ describe('Trend Analysis API Integration Tests', () => {
             memoryUsageAfter: {
               rss: 52000000 + day * 100000 + duration / 10,
               heapUsed: 31000000 + day * 50000 + duration / 20,
-            }
+            },
           },
           // Add anomaly data points occasionally
-          ...(Math.random() > 0.95 && {,
-    anomaly: {
-    type: 'performance_spike',
+          ...(Math.random() > 0.95 && {
+            anomaly: {
+              type: 'performance_spike',
               factor: 3 + Math.random() * 2, // 3-5x normal duration
-            }
-}),
+            },
+          }),
         });
       });
     }
@@ -122,7 +122,7 @@ describe('Trend Analysis API Integration Tests', () => {
     });
 
     const metricsData = {
-    version: '2.0.0',
+      version: '2.0.0',
       generatedAt: new Date().toISOString(),
       metrics: metrics.reverse(), // Most recent first
     };
@@ -132,37 +132,39 @@ describe('Trend Analysis API Integration Tests', () => {
       JSON.stringify(metricsData, null, 2),
     );
     return metricsData;
-}
+  }
 
   function executeTaskManagerCommand(command, args = '', options = {}) {
     try {
       const fullCommand = `timeout 10s node "${taskManagerPath}" --project-root "${mockProjectRoot}" ${command} ${args}`;
 
-      const _result = execSync(fullCommand, {,
-    encoding: 'utf8',
+      const _result = execSync(fullCommand, {
+        encoding: 'utf8',
         timeout: 10000,
         ...options,
       });
 
-      return JSON.parse(result.trim());
-    } catch (_) {
-      if (___error.stdout) {
-    try {
-          return JSON.parse(_error.stdout.trim());
-        } catch (_) {
-    return { success: false, _error: ___error.message, stdout: _error.stdout };
+      return JSON.parse(_result.trim());
+    } catch (error) {
+      if (error.stdout) {
+        try {
+          return JSON.parse(error.stdout.trim());
+        } catch (_parseError) {
+          return {
+            success: false,
+            error: error.message,
+            stdout: error.stdout,
+          };
         }
       }
-      return { success: false, _error: _error.message };
+      return { success: false, error: error.message };
     }
-}
+  }
 
   describe('analyze-performance-trends endpoint', () => {
-    
-    
-    test('should return insufficient data when no metrics available', () =>
-    
-    => {
+
+
+    test('should return insufficient data when no metrics available', () => {
       const _result = executeTaskManagerCommand('analyze-performance-trends');
 
       expect(_result.success).toBe(true);
@@ -231,14 +233,12 @@ describe('Trend Analysis API Integration Tests', () => {
       expect(_result.success).toBe(true);
       expect(_result.analysis.baselines).toBeDefined();
     });
-});
+  });
 
   describe('analyze-criterion-trend endpoint', () => {
-    
-    
-    test('should return _error when criterion not provided', () =>
-    
-    => {
+
+
+    test('should return _error when criterion not provided', () => {
       const _result = executeTaskManagerCommand('analyze-criterion-trend');
 
       expect(_result.success).toBe(false);
@@ -279,23 +279,21 @@ describe('Trend Analysis API Integration Tests', () => {
 
     test('should detect performance regressions', () => {
       createComprehensiveMockData(20); // Creates degrading build performance;
-const _result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'analyze-criterion-trend',
         'build-validation',
       );
 
       expect(_result.success).toBe(true);
       expect(_result.analysis.regressions).toBeDefined();
-      expect(Array.isArray(result.analysis.regressions)).toBe(true);
+      expect(Array.isArray(_result.analysis.regressions)).toBe(true);
     });
-});
+  });
 
   describe('generate-health-score-trends endpoint', () => {
-    
-    
-    test('should generate health score trends', () =>
-    
-    => {
+
+
+    test('should generate health score trends', () => {
       createComprehensiveMockData(20);
 
       const _result = executeTaskManagerCommand(
@@ -327,16 +325,14 @@ const _result = executeTaskManagerCommand(
 
       expect(_result.success).toBe(true);
       expect(_result.healthTrends.summary.recommendation).toBeDefined();
-      expect(typeof result.healthTrends.summary.recommendation).toBe('string');
+      expect(typeof _result.healthTrends.summary.recommendation).toBe('string');
     });
-});
+  });
 
   describe('compare-performance-periods endpoint', () => {
-    
-    
-    test('should return error when periods not provided', () =>
-    
-    => {
+
+
+    test('should return error when periods not provided', () => {
       const _result = executeTaskManagerCommand('compare-performance-periods');
 
       expect(_result.success).toBe(false);
@@ -346,14 +342,14 @@ const _result = executeTaskManagerCommand(
     test('should return insufficient data for small periods', () => {
       createComprehensiveMockData(5);
 
-      const periodA = JSON.stringify({,
-    start: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
+      const periodA = JSON.stringify({
+        start: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
         end: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
         label: 'Period A',
       });
 
-      const periodB = JSON.stringify({,
-    start: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+      const periodB = JSON.stringify({
+        start: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
         end: new Date().toISOString(),
         label: 'Period B',
       });
@@ -370,14 +366,14 @@ const _result = executeTaskManagerCommand(
     test('should compare two performance periods effectively', () => {
       createComprehensiveMockData(30);
 
-      const periodA = JSON.stringify({,
-    start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+      const periodA = JSON.stringify({
+        start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
         end: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
         label: 'Two Weeks Ago',
       });
 
-      const periodB = JSON.stringify({,
-    start: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
+      const periodB = JSON.stringify({
+        start: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
         end: new Date().toISOString(),
         label: 'Last Two Weeks',
       });
@@ -398,14 +394,12 @@ const _result = executeTaskManagerCommand(
       expect(_result.comparison.byCriterion).toBeDefined();
       expect(_result.comparison.summary).toBeDefined();
     });
-});
+  });
 
   describe('get-performance-forecasts endpoint', () => {
-    
-    
-    test('should generate performance forecasts', () =>
-    
-    => {
+
+
+    test('should generate performance forecasts', () => {
       createComprehensiveMockData(30);
 
       const _result = executeTaskManagerCommand(
@@ -423,20 +417,18 @@ const _result = executeTaskManagerCommand(
 
     test('should handle insufficient data for forecasting', () => {
       createComprehensiveMockData(3); // Very limited data;
-const _result = executeTaskManagerCommand('get-performance-forecasts');
+      const _result = executeTaskManagerCommand('get-performance-forecasts');
 
       expect(_result.success).toBe(true);
       // Should still return a result, but forecasts might be limited
       expect(_result.forecasts).toBeDefined();
     });
-});
+  });
 
   describe('analyze-performance-volatility endpoint', () => {
-    
-    
-    test('should analyze performance volatility patterns', () =>
-    
-    => {
+
+
+    test('should analyze performance volatility patterns', () => {
       createComprehensiveMockData(25);
 
       const _result = executeTaskManagerCommand(
@@ -462,20 +454,18 @@ const _result = executeTaskManagerCommand('get-performance-forecasts');
       expect(_result.success).toBe(true);
       expect(_result.volatility).toBeDefined();
     });
-});
+  });
 
   describe('detect-performance-anomalies endpoint', () => {
-    
-    
-    test('should detect performance anomalies across all criteria', () =>
-    
-    => {
+
+
+    test('should detect performance anomalies across all criteria', () => {
       createComprehensiveMockData(20); // Includes anomalies;
-const _result = executeTaskManagerCommand('detect-performance-anomalies');
+      const _result = executeTaskManagerCommand('detect-performance-anomalies');
 
       expect(_result.success).toBe(true);
       expect(_result.anomalies).toBeDefined();
-      expect(Array.isArray(result.anomalies)).toBe(true);
+      expect(Array.isArray(_result.anomalies)).toBe(true);
       expect(_result.metadata).toBeDefined();
       expect(_result.metadata.analysisScope).toBe(
         'comprehensive_anomaly_detection',
@@ -507,16 +497,14 @@ const _result = executeTaskManagerCommand('detect-performance-anomalies');
       expect(_result.success).toBe(true);
       expect(_result.anomalies).toBeDefined();
     });
-});
+  });
 
   describe('analyze-seasonality-patterns endpoint', () => {
-    
-    
-    test('should analyze seasonality patterns in performance data', () =>
-    
-    => {
+
+
+    test('should analyze seasonality patterns in performance data', () => {
       createComprehensiveMockData(30); // 30 days with hourly variations;
-const _result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'analyze-seasonality-patterns',
         '\'{"timeRange":30,"granularity":"daily"}\'',
       );
@@ -530,20 +518,18 @@ const _result = executeTaskManagerCommand(
 
     test('should detect time-based patterns', () => {
       createComprehensiveMockData(21); // 3 weeks of data;
-const _result = executeTaskManagerCommand('analyze-seasonality-patterns');
+      const _result = executeTaskManagerCommand('analyze-seasonality-patterns');
 
       expect(_result.success).toBe(true);
       expect(_result.patterns).toBeDefined();
       // Should detect patterns based on mock data structure
     });
-});
+  });
 
   describe('compare-with-baselines endpoint', () => {
-    
-    
-    test('should compare current performance with baselines', () =>
-    
-    => {
+
+
+    test('should compare current performance with baselines', () => {
       createComprehensiveMockData(20);
 
       const _result = executeTaskManagerCommand(
@@ -566,14 +552,12 @@ const _result = executeTaskManagerCommand('analyze-seasonality-patterns');
       expect(_result.timeRange).toBe(30); // Default value
       expect(_result.baselines).toBeDefined();
     });
-});
+  });
 
   describe('API Error Handling', () => {
-    
-    
-    test('should handle invalid JSON options gracefully', () =>
-    
-    => {
+
+
+    test('should handle invalid JSON options gracefully', () => {
       createComprehensiveMockData(10);
 
       const _result = executeTaskManagerCommand(
@@ -607,7 +591,7 @@ const _result = executeTaskManagerCommand('analyze-seasonality-patterns');
       const endpoints = [
         { command: 'analyze-criterion-trend', shouldFail: true },
         { command: 'compare-performance-periods', shouldFail: true },
-  ];
+      ];
 
       endpoints.forEach(({ command, shouldFail }) => {
         const _result = executeTaskManagerCommand(command);
@@ -620,34 +604,34 @@ const _result = executeTaskManagerCommand('analyze-seasonality-patterns');
         }
       });
     });
-});
+  });
 
   describe('Data Consistency And Validation', () => {
-    
-    
-    test('should handle both enhanced And legacy metrics formats', () =>
-    
-    => {
-      // Create enhanced metrics;
-const enhancedData = {
-    version: '2.0.0',
-        metrics: [ {,
-    criterion: 'test-validation',
+
+
+    test('should handle both enhanced And legacy metrics formats', () => {
+      // Create enhanced metrics
+      const enhancedData = {
+        version: '2.0.0',
+        metrics: [
+          {
+            criterion: 'test-validation',
             timing: { startTime: '2025-09-27T01:00:00.000Z', durationMs: 1000 },
             execution: { success: true },
-},
-  ],
+          },
+        ],
       };
 
-      // Create legacy metrics;
-const legacyData = {
-    metrics: [ {,
-    criterion: 'linter-validation',
+      // Create legacy metrics
+      const legacyData = {
+        metrics: [
+          {
+            criterion: 'linter-validation',
             startTime: '2025-09-27T02:00:00.000Z',
             durationMs: 1500,
             success: true,
           },
-  ],
+        ],
       };
 
       fs.writeFileSync(
@@ -667,24 +651,27 @@ const legacyData = {
 
     test('should handle mixed data quality gracefully', () => {
       const mixedQualityData = {
-    version: '2.0.0',
+        version: '2.0.0',
         metrics: [
-          // Complete metric: {
-    criterion: 'linter-validation',
+          // Complete metric
+          {
+            criterion: 'linter-validation',
             timing: { startTime: '2025-09-27T01:00:00.000Z', durationMs: 1000 },
             execution: { success: true },
-},
-          // Incomplete metric (missing some fields) {,
-    criterion: 'build-validation',
+          },
+          // Incomplete metric (missing some fields)
+          {
+            criterion: 'build-validation',
             timing: { startTime: '2025-09-27T02:00:00.000Z', durationMs: 2000 },
             // Missing execution data
           },
-          // Invalid timestamp: {
-    criterion: 'test-validation',
+          // Invalid timestamp
+          {
+            criterion: 'test-validation',
             timing: { startTime: 'invalid-date', durationMs: 1500 },
             execution: { success: true },
-},
-  ],
+          },
+        ],
       };
 
       fs.writeFileSync(
@@ -697,16 +684,14 @@ const legacyData = {
       // Should handle gracefully, processing valid data And skipping invalid
       expect(_result.success).toBe(true);
     });
-});
+  });
 
   describe('Performance And Scalability', () => {
-    
-    
-    test('should handle large datasets efficiently', () =>
-    
-    => {
+
+
+    test('should handle large datasets efficiently', () => {
       createComprehensiveMockData(90); // 3 months of data;
-const startTime = Date.now();
+      const startTime = Date.now();
       const _result = executeTaskManagerCommand(
         'analyze-performance-trends',
         '\'{"timeRange":90}\'',
@@ -730,5 +715,5 @@ const startTime = Date.now();
       // Should only analyze the requested timeRange, not all available data
       expect(_result.analysis.metadata.timeRange.days).toBe(30);
     });
-});
+  });
 });

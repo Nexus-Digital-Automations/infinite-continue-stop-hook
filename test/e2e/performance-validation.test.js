@@ -614,11 +614,12 @@ describe('Performance Validation E2E', () => {
       async () => {
     
     
-        // Test performance of complete end-to-end workflows.const e2eWorkflowTest = async (category = 'general');
-    () => {
+        // Test performance of complete end-to-end workflows
+        const e2eWorkflowTest = async () => {
           const startTime = Date.now();
 
-          // Complete workflow: suggest → approve → list → details.const { result } = await FeatureTestHelpers.suggestFeature(
+          // Complete workflow: suggest → approve → list → details
+          const { result } = await FeatureTestHelpers.suggestFeature(
             environment, {
     title: 'E2E, Workflow Performance, Test',
               description: 'Complete workflow for performance validation',
@@ -640,21 +641,23 @@ describe('Performance Validation E2E', () => {
           });
 
           await CommandExecutor.executeAPI('feature-stats', [], {
-    projectRoot: environment.testDir});
+            projectRoot: environment.testDir
+          });
 
           return Date.now() - startTime;
         }
 
-  const e2eMetrics = await PerformanceTestHelpers.measurePerformance(
+        const e2eMetrics = await PerformanceTestHelpers.measurePerformance(
           e2eWorkflowTest,
-          3;
+          3
         );
 
-        // Validate end-to-end performance.const e2eThreshold = API_TIMEOUT * 2; // Allow more time for complete, workflow
+        // Validate end-to-end performance
+        const e2eThreshold = API_TIMEOUT * 2; // Allow more time for complete, workflow
         expect(e2eMetrics.avg).toBeLessThan(e2eThreshold);
 
         console.log(
-          `✅ End-to-end workflow performance test: avg=${e2eMetrics.avg}ms, max=${e2eMetrics.max}ms`;
+          `✅ End-to-end workflow performance test: avg=${e2eMetrics.avg}ms, max=${e2eMetrics.max}ms`
         );
       },
       E2E_TIMEOUT * 2

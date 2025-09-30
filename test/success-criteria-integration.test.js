@@ -64,11 +64,11 @@ function execAPI(command, args = [], timeout = TIMEOUT, _category = 'general') {
     child.on('close', (code) => {
       if (code === 0) {
         try {
-          const _result = JSON.parse(stdout);
+          const result = JSON.parse(stdout);
           resolve(result);
-        } catch (_) {
+        } catch (error) {
           reject(
-            new Error(`JSON parse _error: ${__error.message}\nOutput: ${stdout}`),
+            new Error(`JSON parse error: ${error.message}\nOutput: ${stdout}`),
           );
         }
       } else {
@@ -80,7 +80,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, _category = 'general') {
       }
     });
 
-    child.on('_error', (_error) => {
+    child.on('error', (error) => {
       reject(new Error(`Spawn error: ${error.message}`));
     });
   });
@@ -89,7 +89,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, _category = 'general') {
 /**
  * Create test project structure
  */
-async function setupTestProject(category = 'general') {
+async function setupTestProject(_category = 'general') {
   try {
     await fs.mkdir(TEST_PROJECT_DIR, { recursive: true });
 
@@ -130,19 +130,19 @@ async function setupTestProject(category = 'general') {
       path.join(TEST_PROJECT_DIR, 'package.json'),
       JSON.stringify(packageJson, null, 2),
     );
-  } catch (_) {
-    loggers.stopHook._error('Failed to setup test project:', _error);
-    throw _error;
+  } catch (error) {
+    loggers.stopHook.error('Failed to setup test project:', error);
+    throw error;
   }
 }
 
 /**
  * Cleanup test project
  */
-async function cleanupTestProject(category = 'general') {
+async function cleanupTestProject(_category = 'general') {
   try {
     await fs.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
-  } catch (_error) {
+  } catch {
     // Ignore cleanup errors
   }
 }
@@ -188,16 +188,16 @@ describe('Success Criteria Integration Tests', () => {
 
     test('should successfully add success criteria to task', async () => {
       // Test adding basic criteria;
-      const CRITERIA = ['Linter Perfection', 'Build Success', 'Test Integrity'];
+      const _CRITERIA = ['Linter Perfection', 'Build Success', 'Test Integrity'];
 
       // Note: Success criteria endpoints would be added to TaskManager API
       // for now, we test the underlying functionality through task updates;
-      const _result = await execAPI('list', [
+      const listResult = await execAPI('list', [
         JSON.stringify({ status: 'pending' }),
       ]);
-      expect(_result.success).toBe(true);
-      expect(_result.tasks).toHaveLength(1);
-      expect(_result.tasks[0].id).toBe(taskId);
+      expect(listResult.success).toBe(true);
+      expect(listResult.tasks).toHaveLength(1);
+      expect(listResult.tasks[0].id).toBe(taskId);
     });
 
     test('should retrieve success criteria for existing task', async () => {
@@ -213,8 +213,8 @@ describe('Success Criteria Integration Tests', () => {
     test('should apply template to task success criteria', async () => {
       // Test template application
       // This would use POST /api/success-criteria/task/:taskId with template option;
-      const _result = await execAPI('list', [JSON.stringify({ id: taskId })]);
-      expect(_result.success).toBe(true);
+      const listResult = await execAPI('list', [JSON.stringify({ id: taskId })]);
+      expect(listResult.success).toBe(true);
     });
 
     test('should handle success criteria validation workflow', async () => {
@@ -236,9 +236,9 @@ describe('Success Criteria Integration Tests', () => {
     test('should handle project-wide criteria templates', async () => {
       // Test project-wide template management
       // This would use GET /api/success-criteria/project-wide endpoint;
-      const _result = await execAPI('status', [agentId]);
-      expect(_result.success).toBe(true);
-      expect(_result.agent).toBeDefined();
+      const statusResult = await execAPI('status', [agentId]);
+      expect(statusResult.success).toBe(true);
+      expect(statusResult.agent).toBeDefined();
     });
   });
 
@@ -325,7 +325,7 @@ describe('Success Criteria Integration Tests', () => {
 
       const TASK = listResult.tasks.find((t) => t.id === TASK_ID);
       expect(TASK).toBeDefined();
-      expect(TASK._category).toBe('feature');
+      expect(TASK.category).toBe('feature');
     });
   });
 
@@ -348,8 +348,8 @@ describe('Success Criteria Integration Tests', () => {
 
       // Verify all tasks were created successfully
       createResults.forEach((result) => {
-        expect(_result.success).toBe(true);
-        expect(_result.task.id).toBeDefined();
+        expect(result.success).toBe(true);
+        expect(result.task.id).toBeDefined();
       });
 
       // Verify tasks exist in the system;
@@ -431,11 +431,11 @@ describe('Success Criteria Integration Tests', () => {
     test('should handle missing task for criteria operations', async () => {
       // Test operations on non-existent task
       try {
-        const _result = await execAPI('complete', ['non_existent_task_id']);
-        expect(_result.success).toBe(false);
-      } catch (_error) {
+        const completeResult = await execAPI('complete', ['non_existent_task_id']);
+        expect(completeResult.success).toBe(false);
+      } catch (error) {
         // Expected to fail
-        expect(_error).toBeDefined();
+        expect(error).toBeDefined();
       }
     });
 
@@ -549,7 +549,7 @@ describe('Success Criteria Integration Tests', () => {
 
       // All should succeed
       RESULTS.forEach((result) => {
-        expect(_result.success).toBe(true);
+        expect(result.success).toBe(true);
       });
     });
 
@@ -608,7 +608,7 @@ describe('Success Criteria Integration Tests', () => {
       const TASK = listResult.tasks.find((t) => t.id === TASK_ID);
       expect(TASK).toBeDefined();
       expect(TASK.status).toBe('in_progress');
-      expect(TASK.assigned_agent).toBe(AGENT_ID);
+      expect(TASK.assigned_agent).toBe(agentId);
     });
 
     test('should validate criteria format consistency', async () => {

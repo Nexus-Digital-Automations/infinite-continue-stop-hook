@@ -42,13 +42,13 @@ class TaskManagerAPIMock {
       status: 'active',
     };
 
-    this.agents.set(agentId, agent);
+    this.agents.set(AGENT_ID, agent);
     this.initializationStats.total_initializations++;
 
     return {
       success: true,
       agent,
-      message: `Agent ${agentId} initialized successfully`,
+      message: `Agent ${AGENT_ID} initialized successfully`,
     };
   }
 
@@ -69,7 +69,7 @@ class TaskManagerAPIMock {
 
     return {
       success: false,
-      error: `Agent ${agentId} not found`,
+      error: `Agent ${AGENT_ID} not found`,
       message: 'Cannot reinitialize non-existent agent',
     };
   }

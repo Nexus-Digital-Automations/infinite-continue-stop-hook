@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "timestamp": "2025-09-30T01:30:08.547Z",
+    "timestamp": "2025-09-30T01:45:18.421Z",
     "reporter": "jest-json-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System"
@@ -10,26 +10,30 @@
     "numPassedTestSuites": 0,
     "numFailedTestSuites": 1,
     "numPendingTestSuites": 0,
-    "numTotalTests": 0,
-    "numPassedTests": 0,
-    "numFailedTests": 0,
+    "numTotalTests": 11,
+    "numPassedTests": 4,
+    "numFailedTests": 7,
     "numPendingTests": 0,
     "numTodoTests": 0,
-    "startTime": 1759195807817,
-    "endTime": 1759195808547,
-    "duration": 730,
+    "startTime": 1759196684507,
+    "endTime": 1759196718421,
+    "duration": 33914,
     "success": false
   },
   "testResults": [
     {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/validation-dependency-e2e.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-validation.test.js",
+      "displayName": {
+        "color": "white",
+        "name": "e2e"
+      },
+      "status": "failed",
+      "startTime": 1759196685271,
+      "endTime": 1759196718388,
+      "duration": 33117,
+      "numTests": 11,
+      "numPassingTests": 4,
+      "numFailingTests": 7,
       "numPendingTests": 0,
       "snapshot": {
         "added": 0,
@@ -38,8 +42,212 @@
         "updated": 0,
         "unchecked": 0
       },
-      "testCases": [],
-      "failureDetails": []
+      "testCases": [
+        {
+          "ancestorTitles": [
+            "Performance Validation E2E",
+            "API, Performance Benchmarks"
+          ],
+          "title": "Feature suggestion performance under load",
+          "fullName": "Performance Validation E2E API, Performance Benchmarks Feature suggestion performance under load",
+          "status": "failed",
+          "duration": 3613,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Performance Validation E2E",
+            "API, Performance Benchmarks"
+          ],
+          "title": "Feature approval performance benchmarks",
+          "fullName": "Performance Validation E2E API, Performance Benchmarks Feature approval performance benchmarks",
+          "status": "failed",
+          "duration": 608,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Performance Validation E2E",
+            "API, Performance Benchmarks"
+          ],
+          "title": "Bulk operationperformance validation",
+          "fullName": "Performance Validation E2E API, Performance Benchmarks Bulk operationperformance validation",
+          "status": "failed",
+          "duration": 1077,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Performance Validation E2E",
+            "Concurrent, Load Performance"
+          ],
+          "title": "High concurrency performance validation",
+          "fullName": "Performance Validation E2E Concurrent, Load Performance High concurrency performance validation",
+          "status": "failed",
+          "duration": 2580,
+          "numPassingAsserts": 2,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Performance Validation E2E",
+            "Concurrent, Load Performance"
+          ],
+          "title": "Resource contention performance impact",
+          "fullName": "Performance Validation E2E Concurrent, Load Performance Resource contention performance impact",
+          "status": "failed",
+          "duration": 1448,
+          "numPassingAsserts": 2,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Performance Validation E2E",
+            "TaskManager, API Performance"
+          ],
+          "title": "TaskManager, API response time benchmarks",
+          "fullName": "Performance Validation E2E TaskManager, API Performance TaskManager, API response time benchmarks",
+          "status": "passed",
+          "duration": 1899,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Performance Validation E2E",
+            "TaskManager, API Performance"
+          ],
+          "title": "Multi-step authorization performance validation",
+          "fullName": "Performance Validation E2E TaskManager, API Performance Multi-step authorization performance validation",
+          "status": "passed",
+          "duration": 1236,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Performance Validation E2E",
+            "Scalability, Performance"
+          ],
+          "title": "Feature storage scalability validation",
+          "fullName": "Performance Validation E2E Scalability, Performance Feature storage scalability validation",
+          "status": "passed",
+          "duration": 11731,
+          "numPassingAsserts": 3,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Performance Validation E2E",
+            "Scalability, Performance"
+          ],
+          "title": "Memory usage validation under load",
+          "fullName": "Performance Validation E2E Scalability, Performance Memory usage validation under load",
+          "status": "passed",
+          "duration": 6120,
+          "numPassingAsserts": 2,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Performance Validation E2E",
+            "Performance, Regression Detection"
+          ],
+          "title": "Baseline performance regression checks",
+          "fullName": "Performance Validation E2E Performance, Regression Detection Baseline performance regression checks",
+          "status": "failed",
+          "duration": 1320,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Performance Validation E2E",
+            "Performance, Regression Detection"
+          ],
+          "title": "End-to-end workflow performance validation",
+          "fullName": "Performance Validation E2E Performance, Regression Detection End-to-end workflow performance validation",
+          "status": "failed",
+          "duration": 301,
+          "numPassingAsserts": 0,
+          "location": null
+        }
+      ],
+      "failureDetails": [
+        {
+          "title": "Feature suggestion performance under load",
+          "fullName": "Performance Validation E2E API, Performance Benchmarks Feature suggestion performance under load",
+          "failureMessages": [
+            "Error: Failed to get features from TaskManager API: Unexpected token 'd', \"[dotenv@17.\"... is not valid JSON\n    at E2EEnvironment.getFeatures (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:192:13)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-validation.test.js:77:26)"
+          ],
+          "failureDetails": [
+            {}
+          ]
+        },
+        {
+          "title": "Feature approval performance benchmarks",
+          "fullName": "Performance Validation E2E API, Performance Benchmarks Feature approval performance benchmarks",
+          "failureMessages": [
+            "SyntaxError: Unexpected token 'd', \"[dotenv@17.\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at parse (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-validation.test.js:119:35)\n    at Array.map (<anonymous>)\n    at Object.map (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-validation.test.js:117:46)"
+          ],
+          "failureDetails": [
+            {}
+          ]
+        },
+        {
+          "title": "Bulk operationperformance validation",
+          "fullName": "Performance Validation E2E API, Performance Benchmarks Bulk operationperformance validation",
+          "failureMessages": [
+            "SyntaxError: Unexpected token 'd', \"[dotenv@17.\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at parse (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-validation.test.js:196:35)\n    at Array.map (<anonymous>)\n    at Object.map (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-validation.test.js:194:44)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+          ],
+          "failureDetails": [
+            {}
+          ]
+        },
+        {
+          "title": "High concurrency performance validation",
+          "fullName": "Performance Validation E2E Concurrent, Load Performance High concurrency performance validation",
+          "failureMessages": [
+            "Error: Failed to get features from TaskManager API: Unexpected token 'd', \"[dotenv@17.\"... is not valid JSON\n    at E2EEnvironment.getFeatures (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:192:13)\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-validation.test.js:275:26)"
+          ],
+          "failureDetails": [
+            {}
+          ]
+        },
+        {
+          "title": "Resource contention performance impact",
+          "fullName": "Performance Validation E2E Concurrent, Load Performance Resource contention performance impact",
+          "failureMessages": [
+            "TypeError: loggers.stopHook.log is not a function\n    at Object.log (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-validation.test.js:336:26)"
+          ],
+          "failureDetails": [
+            {}
+          ]
+        },
+        {
+          "title": "Baseline performance regression checks",
+          "fullName": "Performance Validation E2E Performance, Regression Detection Baseline performance regression checks",
+          "failureMessages": [
+            "SyntaxError: Unexpected token 'd', \"[dotenv@17.\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at parse (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-validation.test.js:567:37)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at Function.measurePerformance (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:599:7)\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-validation.test.js:590:27)"
+          ],
+          "failureDetails": [
+            {}
+          ]
+        },
+        {
+          "title": "End-to-end workflow performance validation",
+          "fullName": "Performance Validation E2E Performance, Regression Detection End-to-end workflow performance validation",
+          "failureMessages": [
+            "SyntaxError: Unexpected token 'd', \"[dotenv@17.\"... is not valid JSON\n    at JSON.parse (<anonymous>)\n    at parse (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-validation.test.js:630:33)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at Function.measurePerformance (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:599:7)\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-validation.test.js:650:28)"
+          ],
+          "failureDetails": [
+            {}
+          ]
+        }
+      ]
     }
   ],
   "coverageMap": null,

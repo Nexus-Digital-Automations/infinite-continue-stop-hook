@@ -355,7 +355,7 @@
       "description": "Examine and fix failing E2E tests in test/ directory (success-criteria-e2e.test.js, etc.) - Update test configuration for FEATURES.json structure - Fix timeout issues and API connection problems - Ensure tests work with new FeatureManagerAPI instead of old TaskManager - Update test data and mock structures for new schema - Verify all E2E tests pass with new system",
       "business_value": "Ensures test suite reliability and prevents regression bugs in the new FEATURES.json system",
       "category": "bug-fix",
-      "status": "approved",
+      "status": "in-progress",
       "priority": "high",
       "auto_generated": false,
       "auto_generation_rules": {
@@ -369,7 +369,7 @@
         "general"
       ],
       "created_at": "2025-09-22T08:00:05.044Z",
-      "updated_at": "2025-09-22T08:00:09.598Z",
+      "updated_at": "2025-09-30T01:43:14.939Z",
       "created_by": "system",
       "assigned_to": null,
       "assigned_at": null,
@@ -381,7 +381,8 @@
         "type_check": true,
         "build_success": true
       },
-      "metadata": {}
+      "metadata": {},
+      "progress_percentage": 30
     },
     {
       "id": "test_1758946224547_c3xqxoxt9",
@@ -1020,6 +1021,116 @@
       },
       "progress_percentage": 100,
       "completed_at": "2025-09-29T15:29:12.589Z"
+    },
+    {
+      "id": "task_1759196376794_5129e9825275",
+      "feature_id": null,
+      "title": "Test endpoint verification task",
+      "description": "Testing create-task endpoint",
+      "type": "test",
+      "priority": "low",
+      "status": "completed",
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-30T01:39:36.794Z",
+      "updated_at": "2025-09-30T01:39:52.903Z",
+      "created_by": "manual_creation",
+      "verificationGate": {
+        "status": "pending",
+        "requirements": [],
+        "evidence": null,
+        "verifiedAt": null,
+        "verifiedBy": null
+      },
+      "metadata": {
+        "auto_generated": false
+      },
+      "progress_percentage": 100,
+      "completed_at": "2025-09-30T01:39:52.903Z"
+    },
+    {
+      "id": "task_1759196571936_d6440df73bd2",
+      "feature_id": null,
+      "title": "Fix syntax errors in test/e2e/performance-validation.test.js",
+      "description": "Systematically fix all malformed syntax: .await/.return patterns, semicolons instead of commas in function parameters, incorrect closing brackets. Pattern: response.feature.id.await should be response.feature.id; followed by await statement",
+      "type": "error",
+      "priority": "high",
+      "status": "queued",
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-30T01:42:51.936Z",
+      "updated_at": "2025-09-30T01:42:51.936Z",
+      "created_by": "manual_creation",
+      "verificationGate": {
+        "status": "pending",
+        "requirements": [],
+        "evidence": null,
+        "verifiedAt": null,
+        "verifiedBy": null
+      },
+      "metadata": {
+        "auto_generated": false
+      }
+    },
+    {
+      "id": "task_1759196574508_8f760f8aa916",
+      "feature_id": null,
+      "title": "Fix syntax errors in test/e2e/validation-dependency-e2e.test.js",
+      "description": "Systematically fix all malformed syntax causing parse errors. Review entire file for corruption patterns similar to performance-validation.test.js",
+      "type": "error",
+      "priority": "high",
+      "status": "queued",
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-30T01:42:54.509Z",
+      "updated_at": "2025-09-30T01:42:54.509Z",
+      "created_by": "manual_creation",
+      "verificationGate": {
+        "status": "pending",
+        "requirements": [],
+        "evidence": null,
+        "verifiedAt": null,
+        "verifiedBy": null
+      },
+      "metadata": {
+        "auto_generated": false
+      }
+    },
+    {
+      "id": "task_1759196576186_f1306693c3fa",
+      "feature_id": null,
+      "title": "Audit remaining E2E test files for syntax corruption",
+      "description": "Check all 9 E2E test files for similar syntax corruption patterns and create fix tasks as needed",
+      "type": "audit",
+      "priority": "normal",
+      "status": "queued",
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-30T01:42:56.186Z",
+      "updated_at": "2025-09-30T01:42:56.186Z",
+      "created_by": "manual_creation",
+      "verificationGate": {
+        "status": "pending",
+        "requirements": [],
+        "evidence": null,
+        "verifiedAt": null,
+        "verifiedBy": null
+      },
+      "metadata": {
+        "auto_generated": false
+      }
     }
   ],
   "completed_tasks": [
@@ -1532,7 +1643,7 @@
   "metadata": {
     "version": "2.0.0",
     "created": "2025-09-22T06:19:00.000Z",
-    "updated": "2025-09-29T23:51:37.858Z",
+    "updated": "2025-09-30T01:43:14.939Z",
     "total_tasks": 21,
     "tasks_by_type": {
       "error": 0,

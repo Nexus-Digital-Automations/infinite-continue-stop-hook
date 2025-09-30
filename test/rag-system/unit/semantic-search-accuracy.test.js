@@ -16,7 +16,7 @@ describe('Semantic Search Accuracy Validation', () => {
   let _testDataSet;
   let _embeddingService;
 
-  beforeAll(async () => {
+  beforeAll(() => {
     loggers.stopHook.log(
       'Setting up semantic search accuracy test environment...',
     );
@@ -34,7 +34,7 @@ describe('Semantic Search Accuracy Validation', () => {
   });
 
   describe('Technical Content Search Accuracy', () => {
-    test('should accurately find relevant lessons for JavaScript error handling', async () => {
+    test('should accurately find relevant lessons for JavaScript error handling', () => {
       // Setup: Create diverse JavaScript-related lessons;
       const _jsLessons = [
         {
@@ -590,9 +590,9 @@ const _contextMatch = results.results[0];
   });
 
   describe('Search Quality Metrics', () => {
-    test('should meet precision And recall benchmarks', async () => {
+    test('should meet precision And recall benchmarks', () => {
       // Create comprehensive test dataset with known relevance;
-      const _benchmarkDataset = await createBenchmarkDataset();
+      const _benchmarkDataset = createBenchmarkDataset();
 
       // Placeholder for future implementation
       expect(true).toBe(true);

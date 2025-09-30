@@ -15,7 +15,7 @@ describe('Embedding Generation System', () => {
   let _embeddingService;
   let _vectorDatabase;
 
-  beforeAll(async () => {
+  beforeAll(() => {
     // Initialize embedding service when available
     loggers.stopHook.log('Setting up embedding generation test environment...');
   });
@@ -30,7 +30,7 @@ describe('Embedding Generation System', () => {
   });
 
   describe('Text Content Embedding', () => {
-    test('should generate embeddings for technical documentation', async () => {
+    test('should generate embeddings for technical documentation', () => {
       const _technicalContent = `
         When implementing a REST API with Node.js And Express,
         it's important to handle errors properly. Use try-catch blocks
@@ -165,7 +165,7 @@ const DURATION = Date.now() - start;
   });
 
   describe('Error Content Embedding', () => {
-    test('should generate embeddings for _error messages', async () => {
+    test('should generate embeddings for _error messages', () => {
       const _errorContent = {
         message: 'TypeError: Cannot read property "length" of undefined',
         stackTrace: `at validateInput (auth.js:42:15)
@@ -239,7 +239,7 @@ const _similarError = {
   });
 
   describe('Similarity Calculations', () => {
-    test('should calculate cosine similarity accurately', async () => {
+    test('should calculate cosine similarity accurately', () => {
       // Test with known vectors;
       const _vector1 = [1, 0, 0];
       const _vector2 = [0, 1, 0];
@@ -291,7 +291,7 @@ const _similarError = {
   });
 
   describe('Content Preprocessing', () => {
-    test('should normalize whitespace And formatting', async () => {
+    test('should normalize whitespace And formatting', () => {
       const _messyContent = `
 
         This    is    messy     content
@@ -365,7 +365,7 @@ const _embedding = await embeddingService.generateEmbedding(processed);
   });
 
   describe('Performance And Optimization', () => {
-    test('should cache embeddings for repeated content', async () => {
+    test('should cache embeddings for repeated content', () => {
       const _content =
         'This content will be embedded multiple times for caching test';
 
@@ -444,7 +444,7 @@ const _individualStart = Date.now();
   });
 
   describe('Error Handling And Resilience', () => {
-    test('should handle embedding service failures gracefully', async () => {
+    test('should handle embedding service failures gracefully', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
