@@ -70,12 +70,12 @@ function fixCatchBlocks(_filePath) {
   }
 }
 
-// Fix the TaskManager API file;
+// Fix the TaskManager API file
 const filePath =
   '/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js';
 console.log(`Checking ${filePath} for catch block issues...`);
 
-if (fixCatchBlocks(_filePath)) {
+if (fixCatchBlocks(filePath)) {
   console.log('Successfully fixed TaskManager API catch blocks.');
 } else {
   console.log('No catch block fixes needed in TaskManager API.');

@@ -264,12 +264,12 @@ class EnhancedCoverageSystem {
       if (hasFailures) {
         throw new Error('Coverage validation failed with blocking failures');
       }
-    } catch (_) {
+    } catch (error) {
       this.logger.error('Coverage pipeline failed', {
-        error: _error.message,
-        stack: _error.stack,
+        error: error.message,
+        stack: error.stack,
       });
-      throw _error;
+      throw error;
     }
   }
 
@@ -333,7 +333,7 @@ class EnhancedCoverageSystem {
       return;
     }
 
-    const archives = fs
+    const archives = FS
       .readdirSync(this.config.paths.archive)
       .filter((name) => /^\d{4}-\d{2}-\d{2}$/.test(name))
       .sort()
@@ -402,7 +402,7 @@ class EnhancedCoverageSystem {
         'Coverage analysis completed',
         this.results.performance,
       );
-    } catch (_) {
+    } catch (error) {
       // Check if coverage data was generated despite test failures
       if (
         FS.existsSync(
@@ -411,7 +411,7 @@ class EnhancedCoverageSystem {
       ) {
         this.logger.warning('Tests failed but coverage data was generated');
       } else {
-        throw new Error(`Coverage analysis failed: ${_error.message}`);
+        throw new Error(`Coverage analysis failed: ${error.message}`);
       }
     }
   }
@@ -447,8 +447,8 @@ class EnhancedCoverageSystem {
 
       this.logger.success('Coverage data loaded successfully');
       this.logger.debug('Coverage summary', this.results.coverage.summary);
-    } catch (_) {
-      throw new Error(`Failed to load coverage data: ${_error.message}`);
+    } catch (error) {
+      throw new Error(`Failed to load coverage data: ${error.message}`);
     }
   }
 
@@ -468,7 +468,7 @@ class EnhancedCoverageSystem {
     if (FS.existsSync(trendsPath)) {
       try {
         trends = JSON.parse(FS.readFileSync(trendsPath, 'utf8'));
-      } catch (_) {
+      } catch (error) {
         this.logger.warning('Could not load existing trends');
       }
     }
@@ -1137,8 +1137,8 @@ Last updated: ${new Date().toISOString()}
       }
 
       this.logger.success('Integrations updated');
-    } catch (_) {
-      this.logger.warning(`Integration update failed: ${_error.message}`);
+    } catch (error) {
+      this.logger.warning(`Integration update failed: ${error.message}`);
     }
   }
 
@@ -1456,9 +1456,9 @@ Last updated: ${new Date().toISOString()}
           encoding: 'utf8',
         }).trim(),
       };
-    } catch (_) {
+    } catch (error) {
       this.logger.debug('Could not get Git information', {
-        error: _error.message,
+        error: error.message,
       });
       return {
         commit: 'unknown',
@@ -1528,9 +1528,9 @@ Environment Variables:
     try {
       const customConfig = JSON.parse(FS.readFileSync(configPath, 'utf8'));
       Object.assign(options, customConfig);
-    } catch (_) {
-      loggers.stopHook.error(`❌ Failed to load config: ${_error.message}`);
-      throw _error;
+    } catch (error) {
+      loggers.stopHook.error(`❌ Failed to load config: ${error.message}`);
+      throw error;
     }
   }
 
@@ -1567,12 +1567,12 @@ Environment Variables:
   const system = new EnhancedCoverageSystem(options);
   try {
     system.run();
-  } catch (_) {
-    loggers.stopHook._error(
+  } catch (error) {
+    loggers.stopHook.error(
       '❌ Enhanced coverage system failed:',
-      _error.message,
+      error.message,
     );
-    throw _error;
+    throw error;
   }
 }
 

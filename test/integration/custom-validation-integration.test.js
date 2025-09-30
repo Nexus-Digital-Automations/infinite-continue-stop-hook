@@ -714,11 +714,11 @@ const config = {
       // Create realistic project structure
       await fs.writeFile(
         path.join(testProjectRoot, 'package.json'),
-        JSON.stringify( {,
-    name: 'test-project',
-            version: '1.0.0',
-            scripts: {
-    test: 'jest',
+        JSON.stringify({
+          name: 'test-project',
+          version: '1.0.0',
+          scripts: {
+            test: 'jest',
               lint: 'eslint .',
             },
             dependencies: {

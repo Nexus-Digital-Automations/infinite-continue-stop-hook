@@ -210,9 +210,9 @@ const statsResult = await execAPI('feature-stats', [], {
       expect(shortResult.success).toBe(false);
       expect(shortResult.error).toBeDefined();
 
-      // 4. Test extremely long content;
-const tooLongFeature = generateTestFeature({,
-    title: 'A'.repeat(250), // Too long
+      // 4. Test extremely long content
+      const tooLongFeature = generateTestFeature({
+        title: 'A'.repeat(250), // Too long
         description: 'B'.repeat(2500), // Too long
         business_value: 'C'.repeat(1500), // Too long
         category: 'enhancement',
@@ -238,13 +238,13 @@ const featureCount = 20;
           description: `Testing concurrent suggestion number ${i + 1}`,
           business_value: `Validates concurrent processing capability ${i + 1}`,
           category: ['enhancement', 'bug-fix', 'new-feature', 'performance'][
-            i % 4,
+            i % 4
           ],
         }),
       );
 
-      const commands = features.map((featureData) => ({,
-    command: 'suggest-feature',
+      const commands = features.map((featureData) => ({
+        command: 'suggest-feature',
         args: [JSON.stringify(featureData)],
         options: { projectRoot: testDir },
 }));

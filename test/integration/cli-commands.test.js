@@ -374,12 +374,12 @@ const stopResult = await execCLIDirect([
         featureIds.push(output.feature.id);
       }
 
-      // 2. Bulk approve features;
-const bulkApproveResult = await execCLIDirect([
+      // 2. Bulk approve features
+      const bulkApproveResult = await execCLIDirect([
         'bulk-approve-features',
         JSON.stringify(featureIds),
-        JSON.stringify({,
-    approved_by: 'bulk-cli-test',
+        JSON.stringify({
+          approved_by: 'bulk-cli-test',
           notes: 'Bulk CLI test',
         }),
         '--project-root',

@@ -95,9 +95,9 @@ const guideResult = await execAPI('guide', [], { projectRoot: testDir });
       expect(listResult.features[0].id).toBe(featureId);
       expect(listResult.features[0].status).toBe('suggested');
 
-      // 4. Get feature statistics;
-const statsResult = await execAPI('feature-stats', [], {,
-    projectRoot: testDir,
+      // 4. Get feature statistics
+      const statsResult = await execAPI('feature-stats', [], {
+        projectRoot: testDir,
       });
       expect(statsResult.success).toBe(true);
       expect(statsResult.stats.total).toBe(1);

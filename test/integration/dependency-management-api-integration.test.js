@@ -27,17 +27,17 @@ describe('Dependency Management API Integration Tests', () => {
       });
 
       return JSON.parse(output.trim());
-    } catch (_) {
-      if (___error.stdout) {
+    } catch (error) {
+      if (error.stdout) {
         try {
-          return JSON.parse(_error.stdout.trim());
-        } catch (_) {
+          return JSON.parse(error.stdout.trim());
+        } catch {
           throw new Error(
-            `Command failed: ${__error.message}, Output: ${_error.stdout || _error.stderr}`,
+            `Command failed: ${error.message}, Output: ${error.stdout || error.stderr}`,
           );
         }
       }
-      throw _error;
+      throw error;
     }
   };
 

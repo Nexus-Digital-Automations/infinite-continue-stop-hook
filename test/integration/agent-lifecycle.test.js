@@ -142,9 +142,9 @@ const featuresData = await readFeaturesFile(testDir);
         expect(featuresData.agents[agentId].status).toBe('active');
       });
 
-      // 4. Verify initialization statistics reflect multiple agents;
-const statsResult = await execAPI('get-initialization-stats', [], {,
-    projectRoot: testDir,
+      // 4. Verify initialization statistics reflect multiple agents
+      const statsResult = await execAPI('get-initialization-stats', [], {
+        projectRoot: testDir,
       });
       expect(statsResult.success).toBe(true);
       expect(statsResult.stats.total_initializations).toBeGreaterThanOrEqual(

@@ -89,7 +89,7 @@ class LoggingContextEnhancer {
             this.enhancedCalls++;
             enhanced = true;
             return `loggers.${loggerType}.${level}('${message}', ${JSON.stringify(enhancedContext)});`;
-          } catch (_) {
+          } catch (error) {
             // If we can't parse the context, leave it as is
             return match;
           }
@@ -104,10 +104,10 @@ class LoggingContextEnhancer {
         });
         this.processedFiles++;
       }
-    } catch (_) {
+    } catch (error) {
       loggers.app.error('Failed to enhance file', {
         __filename,
-        error: _error.message,
+        error: error.message,
       });
     }
   }
@@ -243,8 +243,8 @@ if (require.main === module) {
         );
       }
     })
-    .catch((_error) => {
-      loggers.app.error('Enhancement failed', { error: _error.message });
+    .catch((error) => {
+      loggers.app.error('Enhancement failed', { error: error.message });
       throw new Error(`Enhancement failed: ${error.message}`);
     });
 }

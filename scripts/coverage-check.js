@@ -133,12 +133,12 @@ class CoverageThresholdChecker {
       if (shouldFail) {
         throw new Error('Coverage validation failed');
       }
-    } catch (_) {
-      CoverageLogger.error(`Coverage validation failed: ${_error.message}`);
+    } catch (error) {
+      CoverageLogger.error(`Coverage validation failed: ${error.message}`);
       if (process.env.DEBUG) {
-        loggers.stopHook.error(_error.stack);
+        loggers.stopHook.error(error.stack);
       }
-      throw _error;
+      throw error;
     }
   }
 
@@ -155,7 +155,7 @@ class CoverageThresholdChecker {
       CoverageLogger.info('Coverage data not found, attempting to generate...');
       try {
         execSync('npm run coverage:ci', { stdio: 'inherit', timeout: 120000 });
-      } catch (_) {
+      } catch {
         throw new Error(
           'Failed to generate coverage data. Run tests with coverage first.',
         );
@@ -180,9 +180,9 @@ class CoverageThresholdChecker {
       );
 
       return coverageData;
-    } catch (_) {
-      if (_error.message.includes('Invalid coverage')) {
-        throw _error;
+    } catch (error) {
+      if (error.message.includes('Invalid coverage')) {
+        throw error;
       }
       throw new Error(`Failed to parse coverage data: ${error.message}`);
     }
@@ -456,7 +456,7 @@ class CoverageThresholdChecker {
           encoding: 'utf8',
         }).trim(),
       };
-    } catch (_) {
+    } catch {
       return { commit: 'unknown', branch: 'unknown' };
     }
   }
@@ -514,18 +514,18 @@ Environment Variables:
     try {
       const customThresholds = JSON.parse(thresholdArg.split('=')[1]);
       config.thresholds = { ...config.thresholds, ...customThresholds };
-    } catch (_) {
-      loggers.stopHook.error('❌ Invalid thresholds JSON:', _error.message);
-      throw _error;
+    } catch (error) {
+      loggers.stopHook.error('❌ Invalid thresholds JSON:', error.message);
+      throw error;
     }
   }
 
   const checker = new CoverageThresholdChecker(config);
   try {
     checker.run();
-  } catch (_) {
-    loggers.stopHook.error('❌ Fatal error:', _error.message);
-    throw _error;
+  } catch (error) {
+    loggers.stopHook.error('❌ Fatal error:', error.message);
+    throw error;
   }
 }
 
