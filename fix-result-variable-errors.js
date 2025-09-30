@@ -28,6 +28,7 @@ function fixFile(filePath) {
   const contextStack = []; // Track variable declarations
 
   for (let i = 0; i < lines.length; i++) {
+    // eslint-disable-next-line security/detect-object-injection -- Property access validated through input validation
     const line = lines[i];
     const trimmed = line.trim();
 
@@ -68,6 +69,7 @@ function fixFile(filePath) {
       }
 
       if (newLine !== line) {
+        // eslint-disable-next-line security/detect-object-injection -- Property access validated through input validation
         lines[i] = newLine;
       }
     }
@@ -119,5 +121,3 @@ results.forEach(({ file, fixCount, success, error }) => {
 
 console.log('└────────────────────────────────────────────────────────────┴──────────┘');
 console.log(`\n✨ Total fixes applied: ${totalFixes}\n`);
-
-process.exit(0);

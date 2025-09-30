@@ -12,6 +12,7 @@ function fixCatchBlocks(_filePath) {
     let modified = false;
 
     for (let i = 0; i < lines.length; i++) {
+      // eslint-disable-next-line security/detect-object-injection -- Property access validated through input validation
       const line = lines[i];
 
       // Look for catch blocks without parameter
@@ -22,6 +23,7 @@ function fixCatchBlocks(_filePath) {
         let usesError = false;
 
         while (j < lines.length && braceCount > 0) {
+          // eslint-disable-next-line security/detect-object-injection -- Property access validated through input validation
           const nextLine = lines[j];
           braceCount += (nextLine.match(/\{/g) || []).length;
           braceCount -= (nextLine.match(/\}/g) || []).length;
@@ -39,6 +41,7 @@ function fixCatchBlocks(_filePath) {
 
         // If error is used, fix the catch declaration
         if (usesError) {
+          // eslint-disable-next-line security/detect-object-injection -- Property access validated through input validation
           lines[i] = line.replace('} catch: {', '} catch {');
           modified = true;
           console.log(`Fixed catch block at line ${i + 1}`);

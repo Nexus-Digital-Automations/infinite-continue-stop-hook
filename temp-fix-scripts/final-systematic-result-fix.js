@@ -19,7 +19,7 @@ class FinalSystematicResultFix {
     this.fixedFiles = 0;
     this.totalReplacements = 0;
     this.projectRoot = process.cwd();
-    }
+  }
 
   /**
    * Apply systematic result variable fixes

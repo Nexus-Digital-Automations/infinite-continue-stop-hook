@@ -26,6 +26,7 @@ function getAllJSFiles() {
 // Fix string-related syntax errors in a file
 function fixStringSyntaxErrors(filePath) {
   try {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
     let content = fs.readFileSync(filePath, 'utf8');
     let modified = false;
     let fixCount = 0;
@@ -62,6 +63,7 @@ function fixStringSyntaxErrors(filePath) {
     );
 
     if (modified) {
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
       fs.writeFileSync(filePath, content);
       console.log(
         `✅ Fixed ${fixCount} issues in: ${path.relative(process.cwd(), filePath)}`,

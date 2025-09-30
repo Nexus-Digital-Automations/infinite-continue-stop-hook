@@ -106,7 +106,7 @@ function fixFileUnusedVars(_filePath) {
     }
 
     return false;
-    } catch (_error) {
+      } catch (_error) {
     console.error(`  ✗ Error processing ${_filePath}:`, error.message);
     return false;
 }
@@ -136,7 +136,7 @@ function main() {
   // Run linter to check results
   console.log('\n🔍 Running linter to verify fixes...');
   try {
-    __execSync('npm run lint', { stdio: 'pipe' });
+    ___execSync('npm run lint', { stdio: 'pipe' });
     console.log('✅ All linting errors resolved!');
 } catch (_error) {
     console.log(

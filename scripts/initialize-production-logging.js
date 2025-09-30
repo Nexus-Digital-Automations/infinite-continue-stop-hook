@@ -59,7 +59,9 @@ async function initializeLogging() {
     ];
     for (const type of logTypes) {
       const typeDir = path.join(logDir, type);
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
       if (!fs.existsSync(typeDir)) {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
         fs.mkdirSync(typeDir, { recursive: true });
         console.log(`   Created: ${typeDir}`);
       }

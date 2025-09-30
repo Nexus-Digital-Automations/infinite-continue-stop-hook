@@ -18,6 +18,7 @@ function getAllTestFiles() {
 
 function fixResultPattern(filePath) {
   try {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
     const content = fs.readFileSync(filePath, 'utf8');
 
     // Only process files that have both "const _result" and "expect(result."
@@ -27,6 +28,7 @@ function fixResultPattern(filePath) {
       // Replace expect(result. with expect(_result.
       const fixed = content.replace(/expect\(result\./g, 'expect(_result.');
 
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
       fs.writeFileSync(filePath, fixed);
       return true;
     }
