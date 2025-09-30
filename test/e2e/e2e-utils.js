@@ -223,7 +223,7 @@ class CommandExecutor {
       expectSuccess = true,
     } = options;
 
-    return new Promise((resolve, reject) => {
+    return await new Promise((resolve, reject) => {
       const startTime = Date.now();
       let isResolved = false;
 
@@ -354,7 +354,7 @@ class CommandExecutor {
       apiArgs.push('--project-root', options.projectRoot);
     }
 
-    return this.execute(
+    return await this.execute(
       'timeout',
       [`${API_TIMEOUT / 1000}s`, 'node', ...apiArgs],
       {
@@ -373,7 +373,7 @@ class CommandExecutor {
   static async executeStopHook(args = [], options = {}) {
     const hookArgs = [PROJECT_ROOT + '/stop-hook.js', ...args];
 
-    return this.execute('node', hookArgs, {
+    return await this.execute('node', hookArgs, {
       ...options,
       timeout: options.timeout || API_TIMEOUT,
     });
@@ -442,7 +442,7 @@ class FeatureTestHelpers {
       notes: notes,
     });
 
-    return CommandExecutor.executeAPI(
+    return await CommandExecutor.executeAPI(
       'approve-feature',
       [featureId, approvalData],
       { projectRoot: environment.testDir },
@@ -468,7 +468,7 @@ class FeatureTestHelpers {
       reason: reason,
     });
 
-    return CommandExecutor.executeAPI(
+    return await CommandExecutor.executeAPI(
       'reject-feature',
       [featureId, rejectionData],
       { projectRoot: environment.testDir },
@@ -484,7 +484,7 @@ class FeatureTestHelpers {
   static async listFeatures(environment, filter = {}) {
     const args = Object.keys(filter).length > 0 ? [JSON.stringify(filter)] : [];
 
-    return CommandExecutor.executeAPI('list-features', args, {
+    return await CommandExecutor.executeAPI('list-features', args, {
       projectRoot: environment.testDir,
     });
   }
@@ -495,7 +495,7 @@ class FeatureTestHelpers {
    * @returns {Promise<Object>} Feature statistics result
    */
   static async getFeatureStats(environment) {
-    return CommandExecutor.executeAPI('feature-stats', [], {
+    return await CommandExecutor.executeAPI('feature-stats', [], {
       projectRoot: environment.testDir,
     });
   }

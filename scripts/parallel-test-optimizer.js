@@ -1,6 +1,5 @@
 /* eslint-disable security/detect-non-literal-fs-filename, security/detect-object-injection */
 /**
-const { loggers } = require('../lib/logger');
  * Parallel Test Execution Optimizer
  *
  * Optimizes test execution across multiple Node.js versions And platforms
@@ -13,19 +12,20 @@ const { loggers } = require('../lib/logger');
 
 const FS = require('fs');
 const path = require('path');
-const { EXEC_SYNC, _spawn } = require('child_process');
+const { execSync, spawn } = require('child_process');
 const os = require('os');
 const { createLogger } = require('../lib/utils/logger');
+const { loggers } = require('../lib/logger');
 
 class ParallelTestOptimizer {
   constructor() {
     this.logger = createLogger('ParallelTestOptimizer', {
-    component: 'test-optimizer',
+      component: 'test-optimizer',
       logToFile: true,
     });
 
     this.config = {
-    maxParallelJobs: this.calculateOptimalParallelism(),
+      maxParallelJobs: this.calculateOptimalParallelism(),
       testSuites: this.discoverTestSuites(),
       nodeVersions: ['18.x', '20.x', '22.x'],
       platforms: ['ubuntu-latest', 'windows-latest', 'macos-latest'],
@@ -33,7 +33,7 @@ class ParallelTestOptimizer {
     };
 
     this.executionPlan = {
-    critical_path: [],
+      critical_path: [],
       parallel_groups: [],
       optimization_metrics: {},
       estimated_time_savings: 0,
@@ -41,13 +41,13 @@ class ParallelTestOptimizer {
 
     this.outputDir = path.join(process.cwd(), 'test-performance');
     this.ensureOutputDirectory();
-}
+  }
 
   ensureOutputDirectory() {
     if (!FS.existsSync(this.outputDir)) {
       FS.mkdirSync(this.outputDir, { recursive: true });
     }
-}
+  }
 
   /**
    * Calculate optimal parallelism based on system resources
@@ -56,13 +56,13 @@ class ParallelTestOptimizer {
     const cpuCount = os.cpus().length;
     const totalMemoryGB = os.totalmem() / (1024 * 1024 * 1024);
 
-    // Conservative approach: use 50-75% of available resources;
-const cpuBasedLimit = Math.max(2, Math.floor(cpuCount * 0.75));
-    const memoryBasedLimit = Math.max(2, Math.floor(totalMemoryGB / 2)); // 2GB per job;
-const optimalLimit = Math.min(cpuBasedLimit, memoryBasedLimit, 8); // Cap at 8
+    // Conservative approach: use 50-75% of available resources
+    const cpuBasedLimit = Math.max(2, Math.floor(cpuCount * 0.75));
+    const memoryBasedLimit = Math.max(2, Math.floor(totalMemoryGB / 2)); // 2GB per job
+    const optimalLimit = Math.min(cpuBasedLimit, memoryBasedLimit, 8); // Cap at 8
 
     this.logger.info('System analysis for optimal parallelism', {
-    cpuCores: cpuCount,
+      cpuCores: cpuCount,
       totalMemoryGB: totalMemoryGB.toFixed(1),
       cpuBasedLimit,
       memoryBasedLimit,
@@ -71,7 +71,7 @@ const optimalLimit = Math.min(cpuBasedLimit, memoryBasedLimit, 8); // Cap at 8
     });
 
     return optimalLimit;
-}
+  }
 
   /**
    * Discover available test suites in the project
@@ -94,13 +94,13 @@ const optimalLimit = Math.min(cpuBasedLimit, memoryBasedLimit, 8); // Cap at 8
       });
     } catch (_) {
       this.logger.warn('Could not read package.json', {
-    _error: _error.message,
+        _error: _error.message,
         operation: 'discover-test-suites',
       });
     }
 
     return testSuites;
-}
+  }
 
   /**
    * Analyze individual test suite characteristics
@@ -117,7 +117,7 @@ const optimalLimit = Math.min(cpuBasedLimit, memoryBasedLimit, 8); // Cap at 8
     };
 
     return suite;
-}
+  }
 
   /**
    * Classify test suite type based on name patterns
@@ -142,15 +142,15 @@ const optimalLimit = Math.min(cpuBasedLimit, memoryBasedLimit, 8); // Cap at 8
       return 'api';
     }
     return 'general';
-}
+  }
 
   /**
    * Estimate test execution duration based on historical data or heuristics
    */
   estimateTestDuration(testName) {
-    // Duration estimates in seconds;
-const durationMap = {
-    unit: 30,
+    // Duration estimates in seconds
+    const durationMap = {
+      unit: 30,
       integration: 90,
       e2e: 180,
       performance: 120,
@@ -174,7 +174,7 @@ const durationMap = {
     }
 
     return baseDuration;
-}
+  }
 
   /**
    * Estimate resource requirements for test suite
@@ -183,17 +183,17 @@ const durationMap = {
     const type = this.classifyTestSuite(testName);
 
     const resourceMap = {
-    unit: { memory: 512, cpu: 0.5, io: 'low' },
+      unit: { memory: 512, cpu: 0.5, io: 'low' },
       integration: { memory: 1024, cpu: 1.0, io: 'medium' },
       e2e: { memory: 2048, cpu: 1.5, io: 'high' },
       performance: { memory: 1536, cpu: 2.0, io: 'medium' },
       rag: { memory: 2048, cpu: 1.5, io: 'high' },
       api: { memory: 1024, cpu: 1.0, io: 'medium' },
       general: { memory: 1024, cpu: 1.0, io: 'medium' },
-};
+    };
 
     return resourceMap[type] || resourceMap['general'];
-}
+  }
 
   /**
    * Identify test dependencies That might affect parallelization
@@ -222,14 +222,14 @@ const durationMap = {
     }
 
     return dependencies;
-}
+  }
 
   /**
    * Determine if test suite can run in parallel
    */
   isParallelizable(testName, command) {
-    // Tests That typically can't run in parallel;
-const nonParallelizable = [
+    // Tests That typically can't run in parallel
+    const nonParallelizable = [
       'stress',
       'performance',
       'server',
@@ -249,22 +249,22 @@ const nonParallelizable = [
     }
 
     return true;
-}
+  }
 
   /**
    * Generate optimized execution plan
    */
   generateExecutionPlan() {
     this.logger.info('Generating optimized execution plan', {
-    operation: 'plan-generation',
+      operation: 'plan-generation',
     });
 
-    // Separate parallelizable And non-parallelizable tests;
-const parallelizable = this.config.testSuites.filter(
-      (suite) => suite.parallelizable
+    // Separate parallelizable And non-parallelizable tests
+    const parallelizable = this.config.testSuites.filter(
+      (suite) => suite.parallelizable,
     );
     const sequential = this.config.testSuites.filter(
-      (suite) => !suite.parallelizable
+      (suite) => !suite.parallelizable,
     );
 
     // Sort by estimated duration (longest first for better load balancing)
@@ -283,12 +283,12 @@ const parallelizable = this.config.testSuites.filter(
     this.executionPlan.estimated_time_savings = this.calculateTimeSavings();
 
     this.logger.info('Execution plan generated', {
-    parallelGroups: this.executionPlan.parallel_groups.length,
+      parallelGroups: this.executionPlan.parallel_groups.length,
       sequentialTests: this.executionPlan.sequential_tests.length,
       estimatedTimeSavings: this.executionPlan.estimated_time_savings,
       operation: 'plan-generation',
     });
-}
+  }
 
   /**
    * Create optimal parallel execution groups
@@ -297,17 +297,17 @@ const parallelizable = this.config.testSuites.filter(
     const groups = [];
     const maxGroupSize = this.config.maxParallelJobs;
 
-    // Group tests by resource requirements And dependencies;
-const resourceGroups =
+    // Group tests by resource requirements And dependencies
+    const resourceGroups =
       this.groupByResourceRequirements(parallelizableTests);
 
     Object.values(resourceGroups).forEach((tests) => {
       // Split large groups into manageable chunks
       for (let i = 0; i < tests.length; i += maxGroupSize) {
         const group = {
-    tests: tests.slice(i, i + maxGroupSize),
+          tests: tests.slice(i, i + maxGroupSize),
           estimated_duration: Math.max(
-            ...tests.slice(i, i + maxGroupSize).map((t) => t.estimatedDuration)
+            ...tests.slice(i, i + maxGroupSize).map((t) => t.estimatedDuration),
           ),
           resource_profile: tests[0].resourceRequirements,
         };
@@ -316,14 +316,14 @@ const resourceGroups =
     });
 
     return groups;
-}
+  }
 
   /**
    * Group tests by similar resource requirements
    */
   groupByResourceRequirements(tests) {
     const groups = {
-    low_resource: [],
+      low_resource: [],
       medium_resource: [],
       high_resource: [],
     };
@@ -340,7 +340,7 @@ const resourceGroups =
     });
 
     return groups;
-}
+  }
 
   /**
    * Calculate critical path through test execution
@@ -363,11 +363,11 @@ const resourceGroups =
     });
 
     return {
-    total_estimated_duration: totalDuration,
+      total_estimated_duration: totalDuration,
       bottlenecks: this.identifyBottlenecks(),
       optimization_opportunities: this.identifyOptimizationOpportunities(),
     };
-}
+  }
 
   /**
    * Identify execution bottlenecks
@@ -379,7 +379,7 @@ const resourceGroups =
     this.executionPlan.sequential_tests.forEach((test) => {
       if (test.estimatedDuration > 120) {
         bottlenecks.push({
-    type: 'long_sequential_test',
+          type: 'long_sequential_test',
           test: test.name,
           duration: test.estimatedDuration,
           suggestion: 'Consider splitting into smaller, parallelizable tests',
@@ -391,7 +391,7 @@ const resourceGroups =
     this.executionPlan.parallel_groups.forEach((group, index) => {
       if (group.tests.length === 1 && group.estimated_duration > 60) {
         bottlenecks.push({
-    type: 'isolated_long_test',
+          type: 'isolated_long_test',
           group: index,
           test: group.tests[0].name,
           duration: group.estimated_duration,
@@ -401,7 +401,7 @@ const resourceGroups =
     });
 
     return bottlenecks;
-}
+  }
 
   /**
    * Identify optimization opportunities
@@ -409,15 +409,15 @@ const resourceGroups =
   identifyOptimizationOpportunities() {
     const opportunities = [];
 
-    // Check for underutilized parallel capacity;
-const avgGroupSize =
+    // Check for underutilized parallel capacity
+    const avgGroupSize =
       this.executionPlan.parallel_groups.reduce(
         (sum, group) => sum + group.tests.length,
-        0
+        0,
       ) / this.executionPlan.parallel_groups.length;
     if (avgGroupSize < this.config.maxParallelJobs * 0.7) {
       opportunities.push({
-    type: 'underutilized_parallelism',
+        type: 'underutilized_parallelism',
         current_avg: avgGroupSize.toFixed(1),
         potential: this.config.maxParallelJobs,
         suggestion:
@@ -425,11 +425,11 @@ const avgGroupSize =
       });
     }
 
-    // Check for resource optimization;
-const totalResourceRequirement = this.calculateTotalResourceRequirement();
+    // Check for resource optimization
+    const totalResourceRequirement = this.calculateTotalResourceRequirement();
     if (totalResourceRequirement.memory > os.totalmem() * 0.8) {
       opportunities.push({
-    type: 'memory_optimization',
+        type: 'memory_optimization',
         current_requirement: `${(totalResourceRequirement.memory / 1024).toFixed(1)}GB`,
         available: `${(os.totalmem() / 1024 / 1024 / 1024).toFixed(1)}GB`,
         suggestion: 'Consider memory-efficient test execution patterns',
@@ -437,7 +437,7 @@ const totalResourceRequirement = this.calculateTotalResourceRequirement();
     }
 
     return opportunities;
-}
+  }
 
   /**
    * Calculate total resource requirements
@@ -450,16 +450,16 @@ const totalResourceRequirement = this.calculateTotalResourceRequirement();
       // for parallel groups, sum all tests in the group
       totalMemory += group.tests.reduce(
         (sum, test) => sum + test.resourceRequirements.memory,
-        0
+        0,
       );
       totalCPU += group.tests.reduce(
         (sum, test) => sum + test.resourceRequirements.cpu,
-        0
+        0,
       );
     });
 
     return { memory: totalMemory, cpu: totalCPU };
-}
+  }
 
   /**
    * Calculate estimated time savings from parallel execution
@@ -467,7 +467,7 @@ const totalResourceRequirement = this.calculateTotalResourceRequirement();
   calculateTimeSavings() {
     const sequentialTime = this.config.testSuites.reduce(
       (sum, test) => sum + test.estimatedDuration,
-      0
+      0,
     );
     const parallelTime =
       this.executionPlan.critical_path.total_estimated_duration;
@@ -478,36 +478,34 @@ const totalResourceRequirement = this.calculateTotalResourceRequirement();
 
     const savings = ((sequentialTime - parallelTime) / sequentialTime) * 100;
     return Math.max(0, Math.round(savings));
-}
+  }
 
   /**
    * Generate GitHub Actions matrix configuration
    */
   generateGitHubActionsMatrix() {
     const matrix = {
-    strategy: {
-        'fail-fast': false,,
-    matrix: {
-    include: [],
-        }
-},
+      strategy: {
+        'fail-fast': false,
+        matrix: {
+          include: [],
+        },
+      },
       optimization: {
-    parallel_groups: this.executionPlan.parallel_groups.length,
+        parallel_groups: this.executionPlan.parallel_groups.length,
         max_parallelism: this.config.maxParallelJobs,
         estimated_savings: this.executionPlan.estimated_time_savings,
-      }
-};
+      },
+    };
 
     // Generate matrix combinations based on optimization strategy
     this.config.nodeVersions.forEach((nodeVersion) => {
-    
-      this.config.platforms.forEach((platform) 
-    return () => {
+      this.config.platforms.forEach((platform) => {
         // Skip some combinations for optimization unless full testing requested
         if (this.shouldIncludeCombination(nodeVersion, platform)) {
           matrix.strategy.matrix.include.push({
-            'node-version': nodeVersion,,
-    os: platform,
+            'node-version': nodeVersion,
+            os: platform,
             'test-strategy': this.determineTestStrategy(nodeVersion, platform),
             'parallel-jobs': this.determineParallelJobs(platform),
             'resource-class': this.determineResourceClass(platform),
@@ -517,7 +515,7 @@ const totalResourceRequirement = this.calculateTotalResourceRequirement();
     });
 
     return matrix;
-}
+  }
 
   /**
    * Determine if node/platform combination should be included
@@ -534,7 +532,7 @@ const totalResourceRequirement = this.calculateTotalResourceRequirement();
     }
 
     return true;
-}
+  }
 
   /**
    * Determine test strategy for specific combination
@@ -549,7 +547,7 @@ const totalResourceRequirement = this.calculateTotalResourceRequirement();
     }
 
     return 'essential'; // Core tests only
-}
+  }
 
   /**
    * Determine parallel job count for platform
@@ -559,16 +557,16 @@ const totalResourceRequirement = this.calculateTotalResourceRequirement();
       'ubuntu-latest': this.config.maxParallelJobs,
       'windows-latest': Math.max(
         2,
-        Math.floor(this.config.maxParallelJobs * 0.75)
+        Math.floor(this.config.maxParallelJobs * 0.75),
       ),
       'macos-latest': Math.max(
         2,
-        Math.floor(this.config.maxParallelJobs * 0.5)
+        Math.floor(this.config.maxParallelJobs * 0.5),
       ),
     };
 
     return platformLimits[platform] || 2;
-}
+  }
 
   /**
    * Determine resource class for platform
@@ -581,7 +579,7 @@ const totalResourceRequirement = this.calculateTotalResourceRequirement();
     };
 
     return resourceClasses[platform] || 'standard';
-}
+  }
 
   /**
    * Save optimization analysis
@@ -590,15 +588,15 @@ const totalResourceRequirement = this.calculateTotalResourceRequirement();
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const analysisFile = path.join(
       this.outputDir,
-      `parallel-optimization-${timestamp}.json`
+      `parallel-optimization-${timestamp}.json`,
     );
     const latestFile = path.join(
       this.outputDir,
-      'latest-parallel-optimization.json'
+      'latest-parallel-optimization.json',
     );
 
     const analysis = {
-    config: this.config,
+      config: this.config,
       execution_plan: this.executionPlan,
       github_actions_matrix: this.generateGitHubActionsMatrix(),
       timestamp: new Date().toISOString(),
@@ -607,10 +605,10 @@ const totalResourceRequirement = this.calculateTotalResourceRequirement();
     FS.writeFileSync(analysisFile, JSON.stringify(analysis, null, 2));
     FS.writeFileSync(latestFile, JSON.stringify(analysis, null, 2));
 
-    // Generate human-readable report;
-const reportFile = path.join(
+    // Generate human-readable report
+    const reportFile = path.join(
       this.outputDir,
-      'parallel-optimization-report.md'
+      'parallel-optimization-report.md',
     );
     const report = this.generateMarkdownReport(analysis);
     FS.writeFileSync(reportFile, report);
@@ -618,12 +616,12 @@ const reportFile = path.join(
     this.logger.info('Performance analysis files generated', {
       analysisFile,
       latestFile,
-      reportFile,,
-    operation: 'file-generation',
+      reportFile,
+      operation: 'file-generation',
     });
 
     return analysis;
-}
+  }
 
   /**
    * Generate markdown report
@@ -646,21 +644,21 @@ const reportFile = path.join(
 
 ### Parallelizable Tests
 ${analysis.execution_plan.parallel_groups
-  .map(
-    (group, i) =>
-      `#### Group ${i + 1}
+    .map(
+      (group, i) =>
+        `#### Group ${i + 1}
   - **Tests**: ${group.tests.map((t) => t.name).join(', ')}
   - **Estimated Duration**: ${group.estimated_duration}s
-  - **Resource Profile**: ${group.resource_profile.memory}MB RAM, ${group.resource_profile.cpu} CPU cores`
-  )
-  .join('\n\n')}
+  - **Resource Profile**: ${group.resource_profile.memory}MB RAM, ${group.resource_profile.cpu} CPU cores`,
+    )
+    .join('\n\n')}
 
 ### Sequential Tests
 ${
   analysis.execution_plan.sequential_tests
     ?.map(
       (test) =>
-        `- **${test.name}**: ${test.estimatedDuration}s (${test.dependencies.join(', ')})`
+        `- **${test.name}**: ${test.estimatedDuration}s (${test.dependencies.join(', ')})`,
     )
     .join('\n') || 'None'
 }
@@ -670,7 +668,7 @@ ${
   analysis.execution_plan.critical_path.bottlenecks
     ?.map(
       (b) =>
-        `- **${b.type}**: ${b.test || 'N/A'} (${b.duration}s) - ${b.suggestion}`
+        `- **${b.type}**: ${b.test || 'N/A'} (${b.duration}s) - ${b.suggestion}`,
     )
     .join('\n') || 'None identified'
 }
@@ -687,17 +685,17 @@ ${
 \`\`\`yaml
 strategy:
   fail-fast: false
-  matrix:,
+  matrix:
     include:
 ${analysis.github_actions_matrix.strategy.matrix.include
-  .map(
-    (item) =>
-      `      - node-version: "${item['node-version']}"
+    .map(
+      (item) =>
+        `      - node-version: "${item['node-version']}"
         os: ${item.os}
         test-strategy: ${item['test-strategy']}
-        parallel-jobs: ${item['parallel-jobs']}`
-  )
-  .join('\n')}
+        parallel-jobs: ${item['parallel-jobs']}`,
+    )
+    .join('\n')}
 \`\`\`
 
 ## Recommendations
@@ -710,18 +708,18 @@ ${analysis.github_actions_matrix.strategy.matrix.include
 ---
 *Generated by Parallel Test Optimizer v2.0.0*
 `;
-}
+  }
 
   /**
    * Display optimization summary
    */
   displaySummary() {
     this.logger.info('Parallel Test Optimization Summary', {
-    systemParallelism: this.config.maxParallelJobs,
+      systemParallelism: this.config.maxParallelJobs,
       operation: 'summary-header',
     });
     this.logger.info('Test optimization summary', {
-    testSuitesFound: this.config.testSuites.length,
+      testSuitesFound: this.config.testSuites.length,
       parallelGroups: this.executionPlan.parallel_groups.length,
       sequentialTests: this.executionPlan.sequential_tests?.length || 0,
       estimatedTimeSavings: this.executionPlan.estimated_time_savings,
@@ -733,7 +731,7 @@ ${analysis.github_actions_matrix.strategy.matrix.include
       loggers.stopHook.log('\n⚠️ Bottlenecks Identified:');
       this.executionPlan.critical_path.bottlenecks.forEach((bottleneck) => {
         loggers.stopHook.log(
-          `  ${bottleneck.type}: ${bottleneck.test || 'N/A'}`
+          `  ${bottleneck.type}: ${bottleneck.test || 'N/A'}`,
         );
       });
     }
@@ -745,19 +743,19 @@ ${analysis.github_actions_matrix.strategy.matrix.include
       this.executionPlan.critical_path.optimization_opportunities.forEach(
         (opportunity) => {
           loggers.stopHook.log(
-            `  ${opportunity.type}: ${opportunity.suggestion}`
+            `  ${opportunity.type}: ${opportunity.suggestion}`,
           );
-        }
+        },
       );
     }
-}
+  }
 
   /**
    * Run complete optimization analysis
    */
   run() {
     loggers.stopHook.log(
-      '🚀 Starting Parallel Test Optimization Analysis...\n'
+      '🚀 Starting Parallel Test Optimization Analysis...\n',
     );
 
     try {
@@ -766,14 +764,14 @@ ${analysis.github_actions_matrix.strategy.matrix.include
       this.displaySummary();
 
       loggers.stopHook.log(
-        '\n✅ Optimization analysis completed successfully!'
+        '\n✅ Optimization analysis completed successfully!',
       );
       return analysis;
-    } catch (_) {
+    } catch (error) {
       loggers.stopHook.error('❌ Optimization analysis failed:', error.message);
       throw error;
     }
-}
+  }
 }
 
 // Run optimization if called directly

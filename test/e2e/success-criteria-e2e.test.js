@@ -270,10 +270,10 @@ describe('Application Tests', () => {
 /**
  * Cleanup E2E test project
  */
-async function cleanupE2EProject(_category = 'general') {
+async function cleanupE2EProject() {
   try {
     await fs.rm(E2E_PROJECT_DIR, { recursive: true, force: true });
-  } catch (_error) {
+  } catch {
     // Ignore cleanup errors
   }
 }
@@ -603,9 +603,9 @@ module.exports = { authenticate };
       );
 
       // 4. Run validation checks
-      const _lintResult = await execCommand('npm', ['run', 'lint']);
-      const _buildResult = await execCommand('npm', ['run', 'build']);
-      const _testResult = await execCommand('npm', ['run', 'test']);
+      const lintResult = await execCommand('npm', ['run', 'lint']);
+      const buildResult = await execCommand('npm', ['run', 'build']);
+      await execCommand('npm', ['run', 'test']);
 
       // 5. Verify feature workflow completion
       try {

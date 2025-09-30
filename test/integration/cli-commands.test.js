@@ -464,9 +464,9 @@ const result2 = await execCLIDirect([
     });
 
     test('should handle output with special characters correctly', async () => {
-      // 1. Create feature with special characters;
-const specialFeatureData = generateTestFeature({,
-    title: 'Feature with "quotes" And \\ backslashes & ampersands',
+      // 1. Create feature with special characters
+      const specialFeatureData = generateTestFeature({
+        title: 'Feature with "quotes" And \\ backslashes & ampersands',
         description: 'Testing special characters: <>&"\'\n\t',
         business_value:
           'Ensures CLI handles special characters correctly: 中文 😀',
@@ -501,10 +501,10 @@ const specialFeatureData = generateTestFeature({,
     test('should complete basic commands within reasonable time', async () => {
       const startTime = Date.now();
 
-      const _result = await execCLIDirect(['guide', '--project-root', testDir], {,
-    timeout: 5000,
-      }); // 5 second timeout;
-const endTime = Date.now();
+      const _result = await execCLIDirect(['guide', '--project-root', testDir], {
+        timeout: 5000,
+      }); // 5 second timeout
+      const endTime = Date.now();
       const duration = endTime - startTime;
 
       expect(_result.code).toBe(0);

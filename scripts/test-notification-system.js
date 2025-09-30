@@ -19,7 +19,7 @@ const { loggers } = require('../lib/logger');
 class TestNotificationSystem {
   constructor(options = {}) {
     this.options = {
-    enableSlack: process.env.SLACK_WEBHOOK_URL || options.slackWebhook,
+      enableSlack: process.env.SLACK_WEBHOOK_URL || options.slackWebhook,
       enableTeams: process.env.TEAMS_WEBHOOK_URL || options.teamsWebhook,
       enableDiscord: process.env.DISCORD_WEBHOOK_URL || options.discordWebhook,
       enableEmail: process.env.EMAIL_NOTIFICATIONS === 'true',
@@ -36,7 +36,7 @@ class TestNotificationSystem {
 
     this.notificationHistory = this.loadNotificationHistory();
     this.lastRun = this.getLastRunData();
-}
+  }
 
   /**
    * Main notification processing method
@@ -66,17 +66,17 @@ class TestNotificationSystem {
       await this.updateNotificationHistory(notifications);
 
       loggers.stopHook.log(`📤 Sent ${notifications.length} notification(s)`);
-    } catch (_) {
-      loggers.stopHook._error(
+    } catch (error) {
+      loggers.stopHook.error(
         '❌ Failed to process notifications:',
-        _error.message,
+        error.message,
       );
       if (process.env.DEBUG) {
-        loggers.stopHook.error(_error.stack);
+        loggers.stopHook.error(error.stack);
       }
       throw new Error(`Failed to process notifications: ${error.message}`);
     }
-}
+  }
 
   /**
    * Analyze test results And generate appropriate notifications
@@ -128,7 +128,7 @@ class TestNotificationSystem {
     }
 
     return notifications.filter((n) => n !== null);
-}
+  }
 
   /**
    * Create test failure notification
@@ -139,12 +139,12 @@ class TestNotificationSystem {
     const failureRate = ((failedTests / totalTests) * 100).toFixed(1);
 
     return {
-    type: 'test_failure',
+      type: 'test_failure',
       priority: failedTests > 5 ? 'critical' : 'high',
       title: `${failedTests} Test Failure${failedTests > 1 ? 's' : ''} Detected`,
       message: `${failedTests} out of ${totalTests} tests failed (${failureRate}% failure rate)`,
       details: {
-    failed_tests: failedTests,
+        failed_tests: failedTests,
         total_tests: totalTests,
         failure_rate: failureRate,
         failed_suites: testResults.summary.numFailedTestSuites,
@@ -157,7 +157,7 @@ class TestNotificationSystem {
       channels: ['slack', 'teams', 'discord'],
       color: '#FF0000',
     };
-}
+  }
 
   /**
    * Create coverage threshold notification
@@ -168,12 +168,12 @@ class TestNotificationSystem {
     const gap = (threshold - currentCoverage).toFixed(1);
 
     return {
-    type: 'coverage_threshold',
+      type: 'coverage_threshold',
       priority: currentCoverage < threshold - 10 ? 'critical' : 'medium',
       title: 'Coverage Below Threshold',
       message: `Code coverage is ${currentCoverage.toFixed(1)}%, which is ${gap}% below the ${threshold}% threshold`,
       details: {
-    current_coverage: currentCoverage,
+        current_coverage: currentCoverage,
         threshold: threshold,
         gap: gap,
         statements: coverageData.total.statements.pct,
@@ -188,7 +188,7 @@ class TestNotificationSystem {
       channels: ['slack', 'teams'],
       color: '#FFA500',
     };
-}
+  }
 
   /**
    * Create coverage drop notification
@@ -199,12 +199,12 @@ class TestNotificationSystem {
     const drop = (previousCoverage - currentCoverage).toFixed(1);
 
     return {
-    type: 'coverage_drop',
+      type: 'coverage_drop',
       priority: drop > 10 ? 'high' : 'medium',
       title: 'Significant Coverage Drop Detected',
       message: `Coverage dropped by ${drop}% from ${previousCoverage.toFixed(1)}% to ${currentCoverage.toFixed(1)}%`,
       details: {
-    current_coverage: currentCoverage,
+        current_coverage: currentCoverage,
         previous_coverage: previousCoverage,
         drop_percentage: drop,
       },
@@ -216,7 +216,7 @@ class TestNotificationSystem {
       channels: ['slack', 'teams'],
       color: '#FF4500',
     };
-}
+  }
 
   /**
    * Create quality gate notification
@@ -226,12 +226,12 @@ class TestNotificationSystem {
     const blockingIssues = qualityGate.blocking_issues || [];
 
     return {
-    type: 'quality_gate',
+      type: 'quality_gate',
       priority: 'critical',
       title: 'Quality Gate Failed - Deployment Blocked',
       message: `Quality gate failed with ${blockingIssues.length} blocking issue(s)`,
       details: {
-    status: qualityGate.status,
+        status: qualityGate.status,
         health_score: cicdData.cicd_summary.test_health_score,
         blocking_issues: blockingIssues.map((issue) => issue.message),
       },
@@ -243,7 +243,7 @@ class TestNotificationSystem {
       channels: ['slack', 'teams', 'discord'],
       color: '#DC143C',
     };
-}
+  }
 
   /**
    * Create performance notification
@@ -251,15 +251,15 @@ class TestNotificationSystem {
   createPerformanceNotification(testResults) {
     const duration = testResults.summary.duration;
     const threshold = 300000; // 5 minutes;
-const overTime = ((duration - threshold) / 1000).toFixed(0);
+    const overTime = ((duration - threshold) / 1000).toFixed(0);
 
     return {
-    type: 'performance',
+      type: 'performance',
       priority: 'medium',
       title: 'Test Performance Degradation',
       message: `Test execution took ${Math.round(duration / 1000)}s, which is ${overTime}s over the ${threshold / 1000}s threshold`,
       details: {
-    duration_seconds: Math.round(duration / 1000),
+        duration_seconds: Math.round(duration / 1000),
         threshold_seconds: threshold / 1000,
         over_threshold_seconds: overTime,
       },
@@ -271,7 +271,7 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
       channels: ['slack'],
       color: '#FFD700',
     };
-}
+  }
 
   /**
    * Create flaky test notification
@@ -285,12 +285,12 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
     }
 
     return {
-    type: 'flaky_tests',
+      type: 'flaky_tests',
       priority: 'medium',
       title: 'Potentially Flaky Tests Detected',
       message: `${flakyTests.length} potentially flaky test(s) detected`,
       details: {
-    flaky_count: flakyTests.length,
+        flaky_count: flakyTests.length,
         tests: flakyTests.slice(0, 3), // Show first 3
       },
       actions: [
@@ -301,7 +301,7 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
       channels: ['slack'],
       color: '#9370DB',
     };
-}
+  }
 
   /**
    * Send notifications to configured channels
@@ -336,45 +336,48 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
 
     const results = await Promise.allSettled(promises);
     this.logNotificationResults(results);
-}
+  }
 
   /**
    * Send Slack notification
    */
   sendSlackNotification(notification) {
     const payload = {
-    text: notification.title,
-      attachments: [ {
-    color: notification.color,
+      text: notification.title,
+      attachments: [
+        {
+          color: notification.color,
           title: notification.title,
           text: notification.message,
-          fields: [ {
-    title: 'Priority',
+          fields: [
+            {
+              title: 'Priority',
               value: notification.priority.toUpperCase(),
               short: true,
-            }, {
-    title: 'Type',
+            },
+            {
+              title: 'Type',
               value: notification.type.replace('_', ' '),
               short: true,
             },
-  ],
+          ],
           footer: 'Test Notification System',
           ts: Math.floor(Date.now() / 1000),
         },
-  ],
+      ],
     };
 
     // Add actions as fields
     if (notification.actions && notification.actions.length > 0) {
       payload.attachments[0].fields.push({
-    title: 'Recommended Actions',
+        title: 'Recommended Actions',
         value: notification.actions.map((action) => `• ${action}`).join('\n'),
         short: false,
       });
     }
 
     return this.sendWebhook(this.options.enableSlack, payload);
-}
+  }
 
   /**
    * Send Teams notification
@@ -385,15 +388,16 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
       '@context': 'http://schema.org/extensions',
       summary: notification.title,
       themeColor: notification.color.replace('#', ''),
-      sections: [{
-        activityTitle: notification.title,
+      sections: [
+        {
+          activityTitle: notification.title,
           activitySubtitle: notification.message,
           facts: [
             { name: 'Priority', value: notification.priority.toUpperCase() },
             { name: 'Type', value: notification.type.replace('_', ' ') },
-  ],
+          ],
         },
-  ],
+      ],
     };
 
     // Add actions
@@ -404,44 +408,47 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
     }
 
     return this.sendWebhook(this.options.enableTeams, payload);
-}
+  }
 
   /**
    * Send Discord notification
    */
   sendDiscordNotification(notification) {
     const payload = {
-    embeds: [ {
-    title: notification.title,
+      embeds: [
+        {
+          title: notification.title,
           description: notification.message,
           color: parseInt(notification.color.replace('#', ''), 16),
-          fields: [ {
-    name: 'Priority',
+          fields: [
+            {
+              name: 'Priority',
               value: notification.priority.toUpperCase(),
               inline: true,
-            }, {
-    name: 'Type',
+            },
+            {
+              name: 'Type',
               value: notification.type.replace('_', ' '),
               inline: true,
             },
-  ],
+          ],
           footer: { text: 'Test Notification System' },
           timestamp: new Date().toISOString(),
         },
-  ],
+      ],
     };
 
     // Add actions
     if (notification.actions && notification.actions.length > 0) {
       payload.embeds[0].fields.push({
-    name: 'Recommended Actions',
+        name: 'Recommended Actions',
         value: notification.actions.map((action) => `• ${action}`).join('\n'),
         inline: false,
       });
     }
 
     return this.sendWebhook(this.options.enableDiscord, payload);
-}
+  }
 
   /**
    * Send webhook request
@@ -450,12 +457,12 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
     return new Promise((resolve, reject) => {
       const data = JSON.stringify(payload);
       const options = {
-    method: 'POST',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Content-Length': Buffer.byteLength(data),
-        }
-};
+        },
+      };
 
       const req = https.request(url, options, (res) => {
         if (res.statusCode >= 200 && res.statusCode < 300) {
@@ -469,7 +476,7 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
       req.write(data);
       req.end();
     });
-}
+  }
 
   /**
    * Helper methods
@@ -480,15 +487,15 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
         return notification.priority === 'critical';
       case 'failures-only':
         return ['critical', 'high'].includes(notification.priority);
-      case 'all':,
-    default:
+      case 'all':
+      default:
         return true;
     }
-}
+  }
 
   isCoverageBelowThreshold(coverageData) {
     return coverageData.total.lines.pct < this.options.coverageThreshold;
-}
+  }
 
   isCoverageDropSignificant(coverageData) {
     if (!this.lastRun || !this.lastRun.coverage_percentage) {
@@ -497,69 +504,69 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
     const drop =
       this.lastRun.coverage_percentage - coverageData.total.lines.pct;
     return drop >= this.options.coverageDropThreshold;
-}
+  }
 
   isPerformanceDegraded(testResults) {
     const duration = testResults.summary.duration;
     return duration > 300000; // 5 minutes
-}
+  }
 
   hasFlakyTests(cicdData) {
     return (
       cicdData.test_execution?.flaky_test_detection?.potentially_flaky?.length >
       0
     );
-}
+  }
 
   loadTestResults() {
     try {
-      const PATH = './coverage/reports/test-results.json';
-      if (FS.existsSync(path)) {
-        return JSON.parse(FS.readFileSync(path, 'utf8'));
+      const filePath = './coverage/reports/test-results.json';
+      if (FS.existsSync(filePath)) {
+        return JSON.parse(FS.readFileSync(filePath, 'utf8'));
       }
-    } catch (_) {
-      loggers.stopHook.warn('⚠️ Could not load test results:', _error.message);
+    } catch (error) {
+      loggers.stopHook.warn('⚠️ Could not load test results:', error.message);
     }
     return null;
-}
+  }
 
   loadCoverageData() {
     try {
-      const PATH = './coverage/coverage-summary.json';
-      if (FS.existsSync(path)) {
-        return JSON.parse(FS.readFileSync(path, 'utf8'));
+      const filePath = './coverage/coverage-summary.json';
+      if (FS.existsSync(filePath)) {
+        return JSON.parse(FS.readFileSync(filePath, 'utf8'));
       }
-    } catch (_) {
-      loggers.stopHook.warn('⚠️ Could not load coverage data:', _error.message);
+    } catch (error) {
+      loggers.stopHook.warn('⚠️ Could not load coverage data:', error.message);
     }
     return null;
-}
+  }
 
   loadCICDData() {
     try {
-      const PATH = './coverage/reports/ci-cd-results.json';
-      if (FS.existsSync(path)) {
-        return JSON.parse(FS.readFileSync(path, 'utf8'));
+      const filePath = './coverage/reports/ci-cd-results.json';
+      if (FS.existsSync(filePath)) {
+        return JSON.parse(FS.readFileSync(filePath, 'utf8'));
       }
-    } catch (_) {
-      loggers.stopHook.warn('⚠️ Could not load CI/CD data:', _error.message);
+    } catch (error) {
+      loggers.stopHook.warn('⚠️ Could not load CI/CD data:', error.message);
     }
     return null;
-}
+  }
 
   loadNotificationHistory() {
     try {
       if (FS.existsSync(this.options.historyFile)) {
         return JSON.parse(FS.readFileSync(this.options.historyFile, 'utf8'));
       }
-    } catch (_) {
+    } catch (error) {
       loggers.stopHook.warn(
         '⚠️ Could not load notification history:',
-        _error.message,
+        error.message,
       );
     }
     return [];
-}
+  }
 
   getLastRunData() {
     const history = this.notificationHistory;
@@ -567,12 +574,12 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
       return history[history.length - 1];
     }
     return null;
-}
+  }
 
   async updateNotificationHistory(notifications) {
     try {
       const entry = {
-    timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString(),
         git_commit: this.getGitCommit(),
         notifications_sent: notifications.length,
         notification_types: notifications.map((n) => n.type),
@@ -587,8 +594,8 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
         this.notificationHistory = this.notificationHistory.slice(-50);
       }
 
-      // Ensure directory exists;
-const dir = path.dirname(this.options.historyFile);
+      // Ensure directory exists
+      const dir = path.dirname(this.options.historyFile);
       if (!FS.existsSync(dir)) {
         FS.mkdirSync(dir, { recursive: true });
       }
@@ -597,21 +604,21 @@ const dir = path.dirname(this.options.historyFile);
         this.options.historyFile,
         JSON.stringify(this.notificationHistory, null, 2),
       );
-    } catch (_) {
+    } catch (error) {
       loggers.stopHook.warn(
         '⚠️ Could not update notification history:',
-        _error.message,
+        error.message,
       );
     }
-}
+  }
 
   getGitCommit() {
     try {
       return execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim();
-    } catch (_) {
+    } catch (error) {
       return 'unknown';
     }
-}
+  }
 
   logNotificationResults(results) {
     results.forEach((result, index) => {
@@ -624,7 +631,7 @@ const dir = path.dirname(this.options.historyFile);
         );
       }
     });
-}
+  }
 }
 
 // CLI interface
@@ -633,10 +640,10 @@ if (require.main === module) {
 
   if (args.includes('--help') || args.includes('-h')) {
     loggers.app.info(`
-Test Notification System,
-    Usage: node test-notification-system.js [options]
-,
-    Options:
+Test Notification System
+Usage: node test-notification-system.js [options]
+
+Options:
   --level=LEVEL       Notification level: all, failures-only, critical-only
   --coverage=NUM      Coverage threshold (default: 80)
   --drop=NUM          Coverage drop threshold (default: 5)
@@ -650,14 +657,14 @@ Environment Variables:
   NOTIFICATION_LEVEL         Notification level
   COVERAGE_THRESHOLD         Coverage threshold percentage
   COVERAGE_DROP_THRESHOLD    Coverage drop threshold percentage
-,
-    Examples:
+
+Examples:
   node test-notification-system.js
   node test-notification-system.js --level=critical-only
   node test-notification-system.js --coverage=85 --drop=3
     `);
     return;
-}
+  }
 
   const options = {};
 
@@ -670,13 +677,13 @@ Environment Variables:
     } else if (arg.startsWith('--drop=')) {
       options.coverageDropThreshold = parseFloat(arg.split('=')[1]);
     }
-});
+  });
 
   const notificationSystem = new TestNotificationSystem(options);
-  notificationSystem.processNotifications().catch((_error) => {
-    loggers.stopHook.error('❌ Fatal error:', _error.message);
+  notificationSystem.processNotifications().catch((error) => {
+    loggers.stopHook.error('❌ Fatal error:', error.message);
     throw new Error(`Fatal error: ${error.message}`);
-});
+  });
 }
 
 module.exports = TestNotificationSystem;

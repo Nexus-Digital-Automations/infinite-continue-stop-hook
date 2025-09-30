@@ -453,9 +453,9 @@ const featuresData = await readFeaturesFile(testDir);
     });
 
     test('should prevent invalid approval transitions', async () => {
-      // 1. Create And approve a feature;
-const featureData = generateTestFeature({,
-    title: 'Transition Test Feature',
+      // 1. Create And approve a feature
+      const featureData = generateTestFeature({
+        title: 'Transition Test Feature',
         category: 'enhancement',
       });
 
@@ -533,13 +533,15 @@ const testFeatures = [
         featureIds.push(result.feature.id);
       }
 
-      // 2. Reject features with different reasons;
-const rejectionReasons = [ {,
-    rejected_by: 'product-manager',
+      // 2. Reject features with different reasons
+      const rejectionReasons = [
+        {
+          rejected_by: 'product-manager',
           reason: 'Low business value, not aligned with roadmap',
         },
-        { rejected_by: 'architect', reason: 'Out of current project scope' }, {
-    rejected_by: 'team-lead',
+        { rejected_by: 'architect', reason: 'Out of current project scope' },
+        {
+          rejected_by: 'team-lead',
           reason: 'Duplicate of existing feature #123',
         },
   ];
@@ -595,9 +597,9 @@ const rejectedResult = await execAPI(
     });
 
     test('should prevent operations on rejected features', async () => {
-      // 1. Create And reject a feature;
-const featureData = generateTestFeature({,
-    title: 'Feature to Reject',
+      // 1. Create And reject a feature
+      const featureData = generateTestFeature({
+        title: 'Feature to Reject',
         category: 'enhancement',
       });
 

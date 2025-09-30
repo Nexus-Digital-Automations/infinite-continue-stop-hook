@@ -15,7 +15,7 @@ class TasksApiAdapter {
    */
   adaptTasksToFeaturesFormat(tasksData) {
     const adapted = {
-    project: tasksData.project,
+      project: tasksData.project,
       features: [],
       metadata: {
     version: tasksData.metadata?.version || '2.0.0',
@@ -36,7 +36,7 @@ class TasksApiAdapter {
       for (const task of tasksData.tasks) {
         if (task.type === 'feature') {
           const feature = {
-    id: task.id,
+            id: task.id,
             title: task.title,
             description: task.description,
             business_value: task.business_value,
@@ -80,7 +80,7 @@ class TasksApiAdapter {
     const taskId = `task_${this.taskIdCounter++}_${this.generateHash()}`;
 
     return {
-    id: taskId,
+      id: taskId,
       type: taskType,
       parent_id: null,
       linked_tasks: [],
@@ -126,9 +126,9 @@ class TasksApiAdapter {
     const testTaskId = `task_${this.taskIdCounter++}_${this.generateHash()}`;
     const auditTaskId = `task_${this.taskIdCounter++}_${this.generateHash()}`;
 
-    // Generate test task;
-const testTask = {
-    id: testTaskId,
+    // Generate test task
+    const testTask = {
+      id: testTaskId,
       type: 'test',
       parent_id: featureTask.id,
       linked_tasks: [featureTask.id],
@@ -161,14 +161,14 @@ const testTask = {
         build_success: true,
       },
       metadata: {
-    auto_generated_for: featureTask.id,
+        auto_generated_for: featureTask.id,
         generation_rule: 'mandatory_test_gate',
-      }
-};
+      },
+    };
 
-    // Generate audit task;
-const auditTask = {
-    id: auditTaskId,
+    // Generate audit task
+    const auditTask = {
+      id: auditTaskId,
       type: 'audit',
       parent_id: featureTask.id,
       linked_tasks: [featureTask.id],
@@ -201,10 +201,10 @@ const auditTask = {
         build_success: true,
       },
       metadata: {
-    auto_generated_for: featureTask.id,
+        auto_generated_for: featureTask.id,
         generation_rule: 'mandatory_security_audit',
-      }
-};
+      },
+    };
 
     autoTasks.push(testTask, auditTask);
 
@@ -214,7 +214,7 @@ const auditTask = {
     }
 
     tasksData.task_relationships[featureTask.id] = {
-    auto_generated_test: testTaskId,
+      auto_generated_test: testTaskId,
       auto_generated_audit: auditTaskId,
       dependencies: [],
       dependents: [testTaskId, auditTaskId],
@@ -243,7 +243,7 @@ const auditTask = {
    */
   sortTasksByPriority(tasks) {
     const priorityOrder = {
-    USER_REQUESTS: 0,
+      USER_REQUESTS: 0,
       error: 1,
       audit: 2,
       feature: 3,
@@ -251,23 +251,23 @@ const auditTask = {
     };
 
     const priorityWeight = {
-    critical: 0,
+      critical: 0,
       high: 1,
       normal: 2,
       low: 3,
     };
 
     return tasks.sort((a, b) => {
-      // First sort by task type;
-const typeA = priorityOrder[a.type] || 999;
+      // First sort by task type
+      const typeA = priorityOrder[a.type] || 999;
       const typeB = priorityOrder[b.type] || 999;
 
       if (typeA !== typeB) {
         return typeA - typeB;
       }
 
-      // Then sort by priority within same type;
-const priorityA = priorityWeight[a.priority] || 999;
+      // Then sort by priority within same type
+      const priorityA = priorityWeight[a.priority] || 999;
       const priorityB = priorityWeight[b.priority] || 999;
 
       if (priorityA !== priorityB) {

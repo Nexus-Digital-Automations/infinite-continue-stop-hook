@@ -122,9 +122,9 @@ const approvalData = {
         'Approved for workflow integration testing'
       );
 
-      // 6. Verify approval is reflected in statistics;
-const updatedStatsResult = await execAPI('feature-stats', [], {,
-    projectRoot: testDir,
+      // 6. Verify approval is reflected in statistics
+      const updatedStatsResult = await execAPI('feature-stats', [], {
+        projectRoot: testDir,
       });
       expect(updatedStatsResult.success).toBe(true);
       expect(updatedStatsResult.stats.total).toBe(1);
@@ -202,9 +202,9 @@ const featuresData = await readFeaturesFile(testDir);
         'Not aligned with current testing priorities'
       );
 
-      // 4. Verify statistics reflect rejection;
-const statsResult = await execAPI('feature-stats', [], {,
-    projectRoot: testDir,
+      // 4. Verify statistics reflect rejection
+      const statsResult = await execAPI('feature-stats', [], {
+        projectRoot: testDir,
       });
       expect(statsResult.success).toBe(true);
       expect(statsResult.stats.by_status.rejected).toBe(1);

@@ -98,112 +98,133 @@ class SuccessCriteriaValidator {
    * Get 25-point standard criteria template
    */
   getStandardCriteria(category = 'general') {
-    return [ {,
-    id: 1,
+    return [
+      {
+        id: 1,
         Name: 'Linter Perfection',
         category: 'quality',
         automated: true,
       },
       { id: 2, Name: 'Build Success', category: 'quality', automated: true },
       { id: 3, Name: 'Runtime Success', category: 'quality', automated: true },
-      { id: 4, Name: 'Test Integrity', category: 'quality', automated: true }, {,
-    id: 5,
+      { id: 4, Name: 'Test Integrity', category: 'quality', automated: true },
+      {
+        id: 5,
         Name: 'Function Documentation',
         category: 'documentation',
         automated: false,
-      }, {,
-    id: 6,
+      },
+      {
+        id: 6,
         Name: 'API Documentation',
         category: 'documentation',
         automated: false,
-      }, {,
-    id: 7,
+      },
+      {
+        id: 7,
         Name: 'Architecture Documentation',
         category: 'documentation',
         automated: false,
-      }, {,
-    id: 8,
+      },
+      {
+        id: 8,
         Name: 'Decision Rationale',
         category: 'documentation',
         automated: false,
-      }, {,
-    id: 9,
+      },
+      {
+        id: 9,
         Name: 'Error Handling',
         category: 'implementation',
         automated: false,
-      }, {,
-    id: 10,
+      },
+      {
+        id: 10,
         Name: 'Performance Metrics',
         category: 'performance',
         automated: true,
-      }, {,
-    id: 11,
+      },
+      {
+        id: 11,
         Name: 'Security Review',
         category: 'security',
         automated: true,
-      }, {,
-    id: 12,
+      },
+      {
+        id: 12,
         Name: 'Architectural Consistency',
         category: 'architecture',
         automated: false,
-      }, {,
-    id: 13,
+      },
+      {
+        id: 13,
         Name: 'Dependency Validation',
         category: 'dependencies',
         automated: true,
-      }, {,
-    id: 14,
+      },
+      {
+        id: 14,
         Name: 'Version Compatibility',
         category: 'compatibility',
         automated: true,
       },
-      { id: 15, Name: 'Security Audit', category: 'security', automated: true }, {,
-    id: 16,
+      { id: 15, Name: 'Security Audit', category: 'security', automated: true },
+      {
+        id: 16,
         Name: 'Cross-Platform',
         category: 'compatibility',
         automated: true,
-      }, {,
-    id: 17,
+      },
+      {
+        id: 17,
         Name: 'Environment Variables',
         category: 'configuration',
         automated: false,
-      }, {,
-    id: 18,
+      },
+      {
+        id: 18,
         Name: 'Configuration',
         category: 'configuration',
         automated: false,
-      }, {,
-    id: 19,
+      },
+      {
+        id: 19,
         Name: 'No Credential Exposure',
         category: 'security',
         automated: true,
-      }, {,
-    id: 20,
+      },
+      {
+        id: 20,
         Name: 'Input Validation',
         category: 'security',
         automated: true,
-      }, {,
-    id: 21,
+      },
+      {
+        id: 21,
         Name: 'Output Encoding',
         category: 'security',
         automated: true,
-      }, {,
-    id: 22,
+      },
+      {
+        id: 22,
         Name: 'Authentication/Authorization',
         category: 'security',
         automated: false,
-      }, {,
-    id: 23,
+      },
+      {
+        id: 23,
         Name: 'License Compliance',
         category: 'compliance',
         automated: true,
-      }, {,
-    id: 24,
+      },
+      {
+        id: 24,
         Name: 'Data Privacy',
         category: 'compliance',
         automated: false,
-      }, {,
-    id: 25,
+      },
+      {
+        id: 25,
         Name: 'Regulatory Compliance',
         category: 'compliance',
         automated: false,
@@ -226,9 +247,9 @@ class SuccessCriteriaValidator {
       }
 
       return {
-    task: task,
+        task: task,
         criteria: task.success_criteria || [],
-        category: task.task.category || 'feature',
+        category: task.category || 'feature',
       };
     } catch (_) {
       ValidationLogger._error(
@@ -526,20 +547,20 @@ const passMatch = testOutput.match(/(\\d+) passing/);
    * Validate security checks
    */
   async validateSecurity() {
-    // Basic security validation - check for obvious security issues;
-const securityIssues = [];
+    // Basic security validation - check for obvious security issues
+    const securityIssues = [];
     try {
-      // Check for potential credential exposure;
-const files = await this.getAllSourceFiles();
+      // Check for potential credential exposure
+      const files = await this.getAllSourceFiles();
 
-      // Parallel file reading for performance optimization;
-const fileContentPromises = files.map(async (file) => {
-    try {
+      // Parallel file reading for performance optimization
+      const fileContentPromises = files.map(async (file) => {
+        try {
           const content = await FS.readFile(file, 'utf8');
-    return { file, content };
+          return { file, content };
         } catch (_) {
-          // Skip files That can't be read,
-    return { file, content: null, _error };
+          // Skip files that can't be read
+          return { file, content: null, error: _ };
         }
       });
 
@@ -555,27 +576,27 @@ const fileContentPromises = files.map(async (file) => {
       }
 
       if (securityIssues.length === 0) {
-    return {
-    status: 'passed',
+        return {
+          status: 'passed',
           message: 'Basic security validation passed',
           evidence: {
-    vulnerabilities_found: {
-    critical: 0,
+            vulnerabilities_found: {
+              critical: 0,
               high: 0,
               medium: 0,
               low: 0,
             },
             scan_timestamp: new Date().toISOString(),
             tools_used: ['credential_scanner'],
-          }
-};
+          },
+        };
       } else {
-    return {
-    status: 'failed',
+        return {
+          status: 'failed',
           message: `Security issues found: ${securityIssues.join(', ')}`,
           evidence: {
-    vulnerabilities_found: {
-    critical: securityIssues.length,
+            vulnerabilities_found: {
+              critical: securityIssues.length,
               high: 0,
               medium: 0,
               low: 0,
@@ -583,12 +604,12 @@ const fileContentPromises = files.map(async (file) => {
             issues: securityIssues,
             scan_timestamp: new Date().toISOString(),
             tools_used: ['credential_scanner'],
-          }
-};
+          },
+        };
       }
     } catch (_) {
-    return {
-    status: 'error',
+      return {
+        status: 'error',
         message: `Security validation failed: ${_error.message}`,
         evidence: null,
       };
@@ -631,7 +652,7 @@ const fileContentPromises = files.map(async (file) => {
    */
   validateCompatibility() {
     return {
-    status: 'passed',
+      status: 'passed',
       message: 'Version compatibility validated',
       evidence: null,
     };
@@ -639,7 +660,7 @@ const fileContentPromises = files.map(async (file) => {
 
   validateSecurityAudit() {
     return {
-    status: 'passed',
+      status: 'passed',
       message: 'Security audit completed',
       evidence: null,
     };
@@ -647,7 +668,7 @@ const fileContentPromises = files.map(async (file) => {
 
   validateCrossPlatform() {
     return {
-    status: 'passed',
+      status: 'passed',
       message: 'Cross-platform compatibility verified',
       evidence: null,
     };
@@ -655,7 +676,7 @@ const fileContentPromises = files.map(async (file) => {
 
   validateCredentialExposure() {
     return {
-    status: 'passed',
+      status: 'passed',
       message: 'No credential exposure detected',
       evidence: null,
     };
@@ -663,7 +684,7 @@ const fileContentPromises = files.map(async (file) => {
 
   validateInputValidation() {
     return {
-    status: 'passed',
+      status: 'passed',
       message: 'Input validation implemented',
       evidence: null,
     };
@@ -671,7 +692,7 @@ const fileContentPromises = files.map(async (file) => {
 
   validateOutputEncoding() {
     return {
-    status: 'passed',
+      status: 'passed',
       message: 'Output encoding validated',
       evidence: null,
     };
@@ -679,7 +700,7 @@ const fileContentPromises = files.map(async (file) => {
 
   validateLicenseCompliance() {
     return {
-    status: 'passed',
+      status: 'passed',
       message: 'License compliance verified',
       evidence: null,
     };
@@ -693,8 +714,8 @@ const fileContentPromises = files.map(async (file) => {
     const walkDir = async (dir) => {
       const files = await FS.readdir(dir, { withFileTypes: true });
 
-      // Separate directories And files for parallel processing;
-const directories = [];
+      // Separate directories and files for parallel processing
+      const directories = [];
       const jsFiles = [];
 
       for (const file of files) {
@@ -751,8 +772,8 @@ const directories = [];
       validator_agent: 'Success Criteria Agent #6',
     };
 
-    // Save report to file;
-const reportPath = path.join(
+    // Save report to file
+    const reportPath = path.join(
       this.reportDir,
       `${taskId}_validation_report.json`,
     );
@@ -798,7 +819,7 @@ const reportPath = path.join(
       error: error,
       success_rate: total > 0 ? Math.round((passed / total) * 100) : 0,
     };
-}
+  }
 
   /**
    * Main validation function
@@ -807,20 +828,20 @@ const reportPath = path.join(
     ValidationLogger.log(`🚀 Starting validation for task: ${taskId}`);
 
     try {
-      // Get task criteria;
-const taskInfo = await this.getTaskCriteria(taskId);
+      // Get task criteria
+      const taskInfo = await this.getTaskCriteria(taskId);
       ValidationLogger.log(`📋 Task task.category: ${taskInfo.task.category}`);
 
-      // Get all applicable criteria;
-let allCriteria = [];
+      // Get all applicable criteria
+      let allCriteria = [];
 
       // Add standard 25-point criteria
       if (this.config.default_template === '25_point_standard') {
         allCriteria.push(...this.getStandardCriteria());
       }
 
-      // Add inherited project-wide criteria;
-const inherited = this.getInheritedCriteria(taskInfo.category);
+      // Add inherited project-wide criteria
+      const inherited = this.getInheritedCriteria(taskInfo.category);
       allCriteria.push(...inherited);
 
       // Add task-specific criteria
@@ -840,11 +861,11 @@ const inherited = this.getInheritedCriteria(taskInfo.category);
         `📊 Total criteria to validate: ${allCriteria.length}`,
       );
 
-      // Run automated validation;
-const results = await this.runAutomatedValidation(allCriteria);
+      // Run automated validation
+      const results = await this.runAutomatedValidation(allCriteria);
 
-      // Generate report if requested;
-let report = null;
+      // Generate report if requested
+      let report = null;
       if (options.report) {
         report = await this.generateReport(taskId, results);
         ValidationLogger.log(
@@ -876,7 +897,7 @@ let report = null;
 
     for (const [criterion, result] of Object.entries(results)) {
       const statusEmoji = {
-    passed: '✅',
+        passed: '✅',
           failed: '❌',
           pending: '⏳',
           error: '💥',
@@ -930,16 +951,17 @@ async function main(category = 'general') {
 
   if (args.length === 0) {
     ValidationLogger.log(`
-Success Criteria Validator v1.0.0,,
+Success Criteria Validator v1.0.0
+
     Usage:
   node success-criteria-validator.js --task-id <taskId> [options]
-,
+
     Options:
   --task-id <id>     Task ID to validate (required)
   --category <cat>   Filter by criteria category (optional)
   --report          Generate detailed validation report (optional)
   --help            Show this help message
-,
+
     Examples:
   node success-criteria-validator.js --task-id feature_12345_abcdef
   node success-criteria-validator.js --task-id feature_12345_abcdef --category security

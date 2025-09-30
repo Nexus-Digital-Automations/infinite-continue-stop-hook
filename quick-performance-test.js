@@ -22,7 +22,7 @@ class QuickPerformanceTest {
     return new Promise((resolve) => {
       const cmdArgs = [this.taskManagerPath, command, ...args];
       const childProcess = spawn('node', cmdArgs, {
-    stdio: ['pipe', 'pipe', 'pipe'],
+        stdio: ['pipe', 'pipe', 'pipe'],
       });
 
       let stdout = '';
@@ -33,8 +33,8 @@ class QuickPerformanceTest {
         if (!completed) {
           childProcess.kill('SIGTERM');
           resolve({
-            command,,
-    duration: performance.now() - startTime,
+            command,
+            duration: performance.now() - startTime,
             success: false,
             error: 'timeout',
             timeout: true,
@@ -71,8 +71,8 @@ class QuickPerformanceTest {
           resolve({
             command,
             args,
-            duration,,
-    success: code === 0,
+            duration,
+            success: code === 0,
             response,
             stdout:
               stdout.length > 500 ? stdout.substring(0, 500) + '...' : stdout,
@@ -101,11 +101,11 @@ class QuickPerformanceTest {
 
     for (const test of tests) {
       loggers.stopHook.log(`📊 Testing: ${test.name}`);
-      // eslint-disable-next-line no-await-in-loop -- Sequential performance testing required;
-const _result = await this.executeCommand(test.command);
+      // eslint-disable-next-line no-await-in-loop -- Sequential performance testing required
+      const result = await this.executeCommand(test.command);
 
-      this.results.push({,
-    testName: test.name,
+      this.results.push({
+        testName: test.name,
         ...result,
       });
 
@@ -151,8 +151,8 @@ const _result = await this.executeCommand(test.command);
       });
     }
 
-    // Performance analysis;
-const slowOperations = successful.filter((r) => r.duration > 2000);
+    // Performance analysis
+    const slowOperations = successful.filter((r) => r.duration > 2000);
     if (slowOperations.length > 0) {
       loggers.stopHook.log(`\n⚠️  Slow Operations (>2s):`);
       slowOperations.forEach((op) => {
@@ -172,8 +172,8 @@ const slowOperations = successful.filter((r) => r.duration > 2000);
       });
     }
 
-    // Memory analysis;
-const totalMemoryUsed = this.results.reduce(
+    // Memory analysis
+    const totalMemoryUsed = this.results.reduce(
       (sum, r) => sum + (r.memoryUsed || 0),
       0
     );
@@ -205,7 +205,7 @@ const totalMemoryUsed = this.results.reduce(
     if (avgMemoryPerOp > 10 * 1024 * 1024) {
       // 10MB per operation
       loggers.app.info(
-        `   • Review memory usage patterns - average ${(avgMemoryPerOp / (1024 * 1024)).toFixed(2)}MB per operation,
+        `   • Review memory usage patterns - average ${(avgMemoryPerOp / (1024 * 1024)).toFixed(2)}MB per operation`
       );
     }
 
@@ -216,9 +216,9 @@ const totalMemoryUsed = this.results.reduce(
     }
 
     const report = {
-    timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString(),
       summary: {
-    totalTests: this.results.length,
+        totalTests: this.results.length,
         successful: successful.length,
         failed: failed.length,
         avgResponseTime:
@@ -231,20 +231,20 @@ const totalMemoryUsed = this.results.reduce(
       },
       details: this.results,
       performance: {
-    fastOperations: fastOperations.map((op) => ({,
-    name: op.testName,
+        fastOperations: fastOperations.map((op) => ({
+          name: op.testName,
           time: op.duration,
         })),
-        slowOperations: slowOperations.map((op) => ({,
-    name: op.testName,
+        slowOperations: slowOperations.map((op) => ({
+          name: op.testName,
           time: op.duration,
         })),
-        failedOperations: failed.map((op) => ({,
-    name: op.testName,
+        failedOperations: failed.map((op) => ({
+          name: op.testName,
           error: op.error || 'Unknown',
         })),
-      }
-};
+      },
+    };
 
     loggers.app.info(
       `\n🎯 Performance Score: ${this.calculatePerformanceScore(report)}/100`
@@ -259,8 +259,8 @@ const totalMemoryUsed = this.results.reduce(
     // Deduct points for failed operations
     score -= report.summary.failed * 15;
 
-    // Deduct points for slow operations;
-const slowOps = report.performance.slowOperations.length;
+    // Deduct points for slow operations
+    const slowOps = report.performance.slowOperations.length;
     score -= slowOps * 10;
 
     // Deduct points for high average response time

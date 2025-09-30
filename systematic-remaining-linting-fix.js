@@ -11,19 +11,19 @@ class SystematicLintingFixer {
   constructor() {
     this.fixedFiles = [];
     this.errors = [];
-}
+  }
 
   /**
    * Main execution function
    */
   run() {
-      try {
+    try {
       console.log(
         '🔧 Starting systematic linting fix for remaining 2437 issues...',
       );
 
-      // Get all JavaScript files;
-const jsFiles = this.findJavaScriptFiles('.');
+      // Get all JavaScript files
+      const jsFiles = this.findJavaScriptFiles('.');
       console.log(`📁 Found ${jsFiles.length} JavaScript files to process`);
 
       // Apply systematic fixes
@@ -42,7 +42,7 @@ const jsFiles = this.findJavaScriptFiles('.');
       console.error('❌ Systematic fix failed:', error.message);
       throw error;
     }
-}
+  }
 
   /**
    * Find all JavaScript files recursively
@@ -72,13 +72,13 @@ const jsFiles = this.findJavaScriptFiles('.');
     }
 
     return files;
-}
+  }
 
   /**
    * Process a single file with systematic fixes
    */
-  processFile(_filePath) {
-      try {
+  processFile(filePath) {
+    try {
       const content = FS.readFileSync(filePath, 'utf8');
       let fixedContent = content;
       let hasChanges = false;
@@ -90,29 +90,29 @@ const jsFiles = this.findJavaScriptFiles('.');
         hasChanges = true;
       }
 
-      // Fix 2: Unused variables that need underscore prefixes;
-const unusedVarFixes = this.fixUnusedVariables(fixedContent);
+      // Fix 2: Unused variables that need underscore prefixes
+      const unusedVarFixes = this.fixUnusedVariables(fixedContent);
       if (unusedVarFixes.content !== fixedContent) {
         fixedContent = unusedVarFixes.content;
         hasChanges = true;
       }
 
-      // Fix 3: Common no-undef patterns;
-const undefFixes = this.fixUndefinedVariables(fixedContent);
+      // Fix 3: Common no-undef patterns
+      const undefFixes = this.fixUndefinedVariables(fixedContent);
       if (undefFixes.content !== fixedContent) {
         fixedContent = undefFixes.content;
         hasChanges = true;
       }
 
-      // Fix 4: FS/PATH import consistency;
-const importFixes = this.fixImportConsistency(fixedContent);
+      // Fix 4: FS/PATH import consistency
+      const importFixes = this.fixImportConsistency(fixedContent);
       if (importFixes.content !== fixedContent) {
         fixedContent = importFixes.content;
         hasChanges = true;
       }
 
-      // Fix 5: Catch block parameter issues;
-const catchFixes = this.fixCatchBlocks(fixedContent);
+      // Fix 5: Catch block parameter issues
+      const catchFixes = this.fixCatchBlocks(fixedContent);
       if (catchFixes.content !== fixedContent) {
         fixedContent = catchFixes.content;
         hasChanges = true;
@@ -126,7 +126,7 @@ const catchFixes = this.fixCatchBlocks(fixedContent);
     } catch (_) {
       this.errors.push(`${filePath}: ${error.message}`);
     }
-}
+  }
 
   /**
    * Fix result vs result naming issues
@@ -148,7 +148,7 @@ const catchFixes = this.fixCatchBlocks(fixedContent);
     }
 
     return { content: fixedContent };
-}
+  }
 
   /**
    * Fix unused variables by adding underscore prefix
@@ -156,21 +156,24 @@ const catchFixes = this.fixCatchBlocks(fixedContent);
   fixUnusedVariables(content) {
     let fixedContent = content;
 
-    // Common patterns for unused variables that need underscore prefix;
-const unusedPatterns = [
-      // Function parameters that are unused: {
-    pattern: /function\s+(\w+)\s*\(\s*([a-zA-Z_$][\w$]*)\s*\)\s*{/,,
-    replacement: 'function $1(_$2) {',
+    // Common patterns for unused variables that need underscore prefix
+    const unusedPatterns = [
+      // Function parameters that are unused
+      {
+        pattern: /function\s+(\w+)\s*\(\s*([a-zA-Z_$][\w$]*)\s*\)\s*{/,
+        replacement: 'function $1(_$2) {',
       },
-      // Catch blocks: {
-    pattern: /catch\s*\(\s*([a-zA-Z_$][\w$]*)\s*\)\s*{/,,
-    replacement: 'catch (_) {',
+      // Catch blocks
+      {
+        pattern: /catch\s*\(\s*([a-zA-Z_$][\w$]*)\s*\)\s*{/,
+        replacement: 'catch (_) {',
       },
-      // Variable declarations that aren't used: {
-    pattern: /const\s+([A-Z_][A-Z_0-9]*)\s*=/,
-        replacement: 'const 1 =',
+      // Variable declarations that aren't used
+      {
+        pattern: /const\s+([A-Z_][A-Z_0-9]*)\s*=/,
+        replacement: 'const _$1 =',
       },
-  ];
+    ];
 
     for (const { pattern, replacement } of unusedPatterns) {
       const beforeFix = fixedContent;
@@ -189,7 +192,7 @@ const unusedPatterns = [
     }
 
     return { content: fixedContent };
-}
+  }
 
   /**
    * Fix undefined variables
@@ -197,25 +200,35 @@ const unusedPatterns = [
   fixUndefinedVariables(content) {
     let fixedContent = content;
 
-    // Fix common undefined variable patterns;
-const fixes = [
-      // error not defined in catch blocks - define it: {
-    pattern: /catch\s*\(\s*\)\s*{([^}]*?)(error|error)([^}]*?)}/g,
+    // Fix common undefined variable patterns
+    const fixes = [
+      // error not defined in catch blocks - define it
+      {
+        pattern: /catch\s*\(\s*\)\s*{([^}]*?)(error|error)([^}]*?)}/g,
         replacement: 'catch (_) {$1_error$3}',
       },
-
-      // result not defined when result exists: { pattern: /(?<!['"`])(\s+)result(?=\.)/g, replacement: '$1RESULT' },
-
-      // Common variable Name mismatches: { pattern: /([^a-zA-Z_$])fs\./g, replacement: '$1FS.' },
-      { pattern: /([^a-zA-Z_$])path\./g, replacement: '$1PATH.' },
-  ];
+      // result not defined when result exists
+      {
+        pattern: /(?<!['"`])(\s+)result(?=\.)/g,
+        replacement: '$1RESULT',
+      },
+      // Common variable name mismatches
+      {
+        pattern: /([^a-zA-Z_$])fs\./g,
+        replacement: '$1FS.',
+      },
+      {
+        pattern: /([^a-zA-Z_$])path\./g,
+        replacement: '$1PATH.',
+      },
+    ];
 
     for (const { pattern, replacement } of fixes) {
       fixedContent = fixedContent.replace(pattern, replacement);
     }
 
     return { content: fixedContent };
-}
+  }
 
   /**
    * Fix import consistency (FS vs fs, PATH vs path)
@@ -234,7 +247,7 @@ const fixes = [
     }
 
     return { content: fixedContent };
-}
+  }
 
   /**
    * Fix catch block issues
@@ -249,7 +262,7 @@ const fixes = [
     );
 
     return { content: fixedContent };
-}
+  }
 }
 
 // Run the fixer

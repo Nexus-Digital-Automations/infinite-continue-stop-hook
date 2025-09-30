@@ -16,86 +16,86 @@ function quickFixUnusedVars() {
 
   // Pattern 1: Replace unused catch block parameters with _
   console.log('📋 Fixing catch blocks with unused parameters...');
-    try {
+  try {
     execSync(
-      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/} catch: {/} catch: {/g' {} \\;`,
+      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/} catch (error) {/} catch (_) {/g' {} \\;`,
       { cwd: process.cwd() },
     );
     console.log('✅ Fixed catch blocks');
-} catch (_) {
+  } catch (_) {
     console.log('⚠️ Some catch blocks may need manual review');
-}
+  }
 
-  // Pattern 2: Fix RESULT variables
-  console.log('📋 Fixing RESULT variables...');
-    try {
+  // Pattern 2: Fix result variables
+  console.log('📋 Fixing result variables...');
+  try {
     execSync(
-      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/const _RESULT =/const _RESULT =/g' {} \\;`,
+      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/const result =/const _result =/g' {} \\;`,
       { cwd: process.cwd() },
     );
-    console.log('✅ Fixed RESULT variables');
-} catch (_) {
-    console.log('⚠️ Some RESULT variables may need manual review');
-}
+    console.log('✅ Fixed result variables');
+  } catch (_) {
+    console.log('⚠️ Some result variables may need manual review');
+  }
 
-  // Pattern 3: Fix LINT_RESULT variables
-  console.log('📋 Fixing LINT_RESULT variables...');
-    try {
+  // Pattern 3: Fix lintResult variables
+  console.log('📋 Fixing lintResult variables...');
+  try {
     execSync(
-      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/const _LINT_RESULT =/const _LINT_RESULT =/g' {} \\;`,
+      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/const lintResult =/const _lintResult =/g' {} \\;`,
       { cwd: process.cwd() },
     );
-    console.log('✅ Fixed LINT_RESULT variables');
-} catch (_) {
-    console.log('⚠️ Some LINT_RESULT variables may need manual review');
-}
+    console.log('✅ Fixed lintResult variables');
+  } catch (_) {
+    console.log('⚠️ Some lintResult variables may need manual review');
+  }
 
   // Pattern 4: Fix common unused function parameters
   console.log('📋 Fixing common unused parameters...');
-    try {
+  try {
     execSync(
-      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/, _params)/, _params)/g; s/(_params)/(_params)/g; s/filePath/__filePath/g; s/, _category)/, _category)/g' {} \\;`,
+      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/function (params)/function (_params)/g' {} \\;`,
       { cwd: process.cwd() },
     );
     console.log('✅ Fixed common parameters');
-} catch (_) {
+  } catch (_) {
     console.log('⚠️ Some parameters may need manual review');
-}
+  }
 
   // Pattern 5: Fix unused assignments
   console.log('📋 Fixing unused assignments...');
-    try {
+  try {
     execSync(
-      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/const REPLACEMENTS =/const REPLACEMENTS =/g; s/const CHECK_ERROR =/const CHECK_ERROR =/g; s/const _LINT_RESULT =/const _LINT_RESULT =/g' {} \\;`,
+      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/const replacements =/const _replacements =/g' {} \\;`,
       { cwd: process.cwd() },
     );
     console.log('✅ Fixed unused assignments');
-} catch (_) {
+  } catch (_) {
     console.log('⚠️ Some assignments may need manual review');
-}
+  }
 
   // Pattern 6: Fix loggers variable
   console.log('📋 Fixing loggers variables...');
-    try {
+  try {
     execSync(
-      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/const LOGGERS =/const LOGGERS =/g; s/const FS =/const FS =/g' {} \\;`,
+      `find . -name "*.js" -not -path "./node_modules/*" -not -path "./coverage/*" -exec sed -i '' 's/const loggers =/const _loggers =/g' {} \\;`,
       { cwd: process.cwd() },
     );
     console.log('✅ Fixed logger variables');
-} catch (_) {
+  } catch (_) {
     console.log('⚠️ Some logger variables may need manual review');
-}
+  }
 
   console.log('\n🔧 Running final autofix...');
-    try {
-    execSync('npx eslint . --fix --fix-type layout', {,
-    cwd: process.cwd(),
+  try {
+    execSync('npx eslint . --fix --fix-type layout', {
+      cwd: process.cwd(),
       stdio: 'inherit',
     });
     console.log('✅ Layout autofix completed');
-} catch (_) {
+  } catch (_) {
     console.log('⚠️ Layout autofix completed with some issues');
-}
+  }
 }
 
 // Execute if run directly
@@ -104,8 +104,8 @@ if (require.main === module) {
 
   // Final verification
   console.log('\n🔍 Checking remaining unused variables...');
-    try {
-    const _result = execSync(
+  try {
+    const result = execSync(
       'npm run lint 2>&1 | grep -E "(is defined but never used|is assigned a value but never used)" | wc -l',
       { encoding: 'utf-8' },
     );
@@ -122,9 +122,9 @@ if (require.main === module) {
       );
       console.log(violations);
     }
-} catch (_) {
+  } catch (_) {
     console.log('⚠️ Could not check final status');
-}
+  }
 
   console.log('\n🎯 Quick unused variables fix complete!');
 }

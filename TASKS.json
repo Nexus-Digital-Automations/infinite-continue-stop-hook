@@ -1058,14 +1058,14 @@
       "description": "Systematically fix all malformed syntax: .await/.return patterns, semicolons instead of commas in function parameters, incorrect closing brackets. Pattern: response.feature.id.await should be response.feature.id; followed by await statement",
       "type": "error",
       "priority": "high",
-      "status": "queued",
+      "status": "completed",
       "dependencies": [],
       "estimated_effort": 5,
       "required_capabilities": [
         "general"
       ],
       "created_at": "2025-09-30T01:42:51.936Z",
-      "updated_at": "2025-09-30T01:42:51.936Z",
+      "updated_at": "2025-09-30T02:09:26.341Z",
       "created_by": "manual_creation",
       "verificationGate": {
         "status": "pending",
@@ -1076,7 +1076,9 @@
       },
       "metadata": {
         "auto_generated": false
-      }
+      },
+      "progress_percentage": 100,
+      "completed_at": "2025-09-30T02:09:26.341Z"
     },
     {
       "id": "task_1759196574508_8f760f8aa916",
@@ -1085,14 +1087,14 @@
       "description": "Systematically fix all malformed syntax causing parse errors. Review entire file for corruption patterns similar to performance-validation.test.js",
       "type": "error",
       "priority": "high",
-      "status": "queued",
+      "status": "in-progress",
       "dependencies": [],
       "estimated_effort": 5,
       "required_capabilities": [
         "general"
       ],
       "created_at": "2025-09-30T01:42:54.509Z",
-      "updated_at": "2025-09-30T01:42:54.509Z",
+      "updated_at": "2025-09-30T02:09:37.432Z",
       "created_by": "manual_creation",
       "verificationGate": {
         "status": "pending",
@@ -1780,7 +1782,7 @@
   "metadata": {
     "version": "2.0.0",
     "created": "2025-09-22T06:19:00.000Z",
-    "updated": "2025-09-30T02:06:07.340Z",
+    "updated": "2025-09-30T02:09:37.432Z",
     "total_tasks": 21,
     "tasks_by_type": {
       "error": 0,

@@ -45,8 +45,8 @@ class TaskManagerPerformanceBenchmark {
 
     return new Promise((resolve) => {
       const cmdArgs = [this.taskManagerPath, command, ...args];
-      const childProcess = spawn('timeout', ['10s', 'node', ...cmdArgs], {,
-    stdio: ['pipe', 'pipe', 'pipe'],
+      const childProcess = spawn('timeout', ['10s', 'node', ...cmdArgs], {
+        stdio: ['pipe', 'pipe', 'pipe'],
       });
 
       let stdout = '';
@@ -80,8 +80,8 @@ class TaskManagerPerformanceBenchmark {
         resolve({
           command,
           args,
-          duration,,,
-    exitCode: code,
+          duration,
+          exitCode: code,
           success: code === 0,
           response,
           stdout,
@@ -120,13 +120,13 @@ class TaskManagerPerformanceBenchmark {
 
       // Run each endpoint multiple times for statistical significance
       for (let i = 0; i < 5; i++) {
-        // eslint-disable-next-line no-await-in-loop -- Sequential timing measurements required;
-const _result = await this.executeTimedCommand(
+        // eslint-disable-next-line no-await-in-loop -- Sequential timing measurements required
+        const result = await this.executeTimedCommand(
           endpoint[0],
           endpoint.slice(1)
         );
-        this.results.apiResponses.push({,
-    endpoint: endpoint[0],
+        this.results.apiResponses.push({
+          endpoint: endpoint[0],
           iteration: i + 1,
           ...result,
         });
@@ -154,7 +154,7 @@ const _result = await this.executeTimedCommand(
         return;
       }
 
-      const AGENT_ID = initResult.response?.agentId;
+      const agentId = initResult.response?.agentId;
       if (!agentId) {
         loggers.stopHook.log('   ❌ No agent ID returned from init');
         return;
@@ -163,16 +163,16 @@ const _result = await this.executeTimedCommand(
       // Create a test task
       loggers.stopHook.log('   Creating test task...');
       const taskData = {
-    title: 'Performance Test Task',
+        title: 'Performance Test Task',
         description: 'Task for performance testing embedded subtasks',
-        task.category: 'feature',
+        category: 'feature',
       };
 
       const createResult = await this.executeTimedCommand('create', [
         JSON.stringify(taskData),
       ]);
       this.results.subtaskOperations.push({
-        OPERATION 'create_task',
+        operation: 'create_task',
         ...createResult,
       });
 
@@ -195,16 +195,16 @@ const _result = await this.executeTimedCommand(
           prevents_implementation: false,
         };
 
-        // eslint-disable-next-line no-await-in-loop -- Sequential subtask creation required for timing;
-const _result = await this.executeTimedCommand('create-subtask', [
+        // eslint-disable-next-line no-await-in-loop -- Sequential subtask creation required for timing
+        const result = await this.executeTimedCommand('create-subtask', [
           taskId,
           JSON.stringify(subtaskData),
           agentId,
         ]);
 
         this.results.subtaskOperations.push({
-          OPERATION 'create_subtask',,,
-    iteration: i + 1,
+          operation: 'create_subtask',
+          iteration: i + 1,
           taskId,
           ...result,
         });
@@ -216,7 +216,7 @@ const _result = await this.executeTimedCommand('create-subtask', [
         taskId,
       ]);
       this.results.subtaskOperations.push({
-        OPERATION 'list_subtasks',
+        operation: 'list_subtasks',
         taskId,
         ...listResult,
       });
@@ -233,22 +233,22 @@ const _result = await this.executeTimedCommand('create-subtask', [
   benchmarkSuccessCriteria() {
     loggers.stopHook.log('✅ Benchmarking success criteria validation...');
     try {
-      // Test basic criteria operations;
-const operations = [
+      // Test basic criteria operations
+      const operations = [
         [
           'set-project-criteria',
-          JSON.stringify({,
-    buildSucceeds: {
-    weight: 0.3,
+          JSON.stringify({
+            buildSucceeds: {
+              weight: 0.3,
               description: 'Project builds successfully',
             },
             testsPass: { weight: 0.3, description: 'All tests pass' },
             lintPasses: { weight: 0.2, description: 'Linting passes' },
             startSucceeds: {
-    weight: 0.2,
+              weight: 0.2,
               description: 'Application starts successfully',
-            }
-}),
+            },
+          }),
         ],
         ['criteria-report'],
         ['validate-criteria', 'feature_test_criteria'],
@@ -256,10 +256,10 @@ const operations = [
 
       for (const [command, ...args] of operations) {
         loggers.stopHook.log(`   Testing ${command}...`);
-        // eslint-disable-next-line no-await-in-loop -- Sequential command testing required for timing;
-const _result = await this.executeTimedCommand(command, args);
+        // eslint-disable-next-line no-await-in-loop -- Sequential command testing required for timing
+        const result = await this.executeTimedCommand(command, args);
         this.results.successCriteriaValidation.push({
-          operation, command,
+          operation: command,
           ...result,
         });
       }
@@ -282,9 +282,9 @@ const _result = await this.executeTimedCommand(command, args);
     // Create multiple concurrent init operations
     for (let i = 0; i < numConcurrentAgents; i++) {
       concurrentOperations.push(
-        this.executeTimedCommand('init').then((result) => ({,
-    agentIndex: i,
-          OPERATION 'concurrent_init',
+        this.executeTimedCommand('init').then((result) => ({
+          agentIndex: i,
+          operation: 'concurrent_init',
           ...result,
         }))
       );
@@ -294,13 +294,13 @@ const _result = await this.executeTimedCommand(command, args);
       const concurrentResults = await Promise.all(concurrentOperations);
       this.results.concurrentAccess.push(...concurrentResults);
 
-      // Test concurrent list operations;
-const listOperations = [];
+      // Test concurrent list operations
+      const listOperations = [];
       for (let i = 0; i < numConcurrentAgents; i++) {
         listOperations.push(
-          this.executeTimedCommand('list').then((result) => ({,
-    agentIndex: i,
-            OPERATION 'concurrent_list',
+          this.executeTimedCommand('list').then((result) => ({
+            agentIndex: i,
+            operation: 'concurrent_list',
             ...result,
           }))
         );
@@ -344,8 +344,8 @@ const listOperations = [];
     }
 
     this.results.memoryUsage = {
-      startMemory,,,
-    snapshots: memorySnapshots,
+      startMemory,
+      snapshots: memorySnapshots,
       endMemory: process.memoryUsage(),
     };
 }
@@ -358,8 +358,8 @@ const listOperations = [];
 
     const bottlenecks = [];
 
-    // Analyze API response times;
-const apiTimes = this.results.apiResponses.reduce((acc, result) => {
+    // Analyze API response times
+    const apiTimes = this.results.apiResponses.reduce((acc, result) => {
       if (!acc[result.endpoint]) {
         acc[result.endpoint] = [];
       }
@@ -373,8 +373,8 @@ const apiTimes = this.results.apiResponses.reduce((acc, result) => {
 
       if (avgTime > 1000) {
         // Slower than 1 second
-        bottlenecks.push({,
-    type: 'slow_api_endpoint',
+        bottlenecks.push({
+          type: 'slow_api_endpoint',
           endpoint,
           avgTime: avgTime.toFixed(2),
           maxTime: maxTime.toFixed(2),
@@ -399,25 +399,25 @@ const apiTimes = this.results.apiResponses.reduce((acc, result) => {
       const maxMemoryGrowth = Math.max(...memoryGrowth);
       if (maxMemoryGrowth > 50 * 1024 * 1024) {
         // 50MB growth
-        bottlenecks.push({,
-    type: 'memory_growth',
+        bottlenecks.push({
+          type: 'memory_growth',
           maxGrowthMB: (maxMemoryGrowth / (1024 * 1024)).toFixed(2),
           severity: maxMemoryGrowth > 100 * 1024 * 1024 ? 'high' : 'medium',
         });
       }
     }
 
-    // Analyze concurrent access performance;
-const concurrentInits = this.results.concurrentAccess.filter(
-      (r) => r.OPERATION=== 'concurrent_init'
+    // Analyze concurrent access performance
+    const concurrentInits = this.results.concurrentAccess.filter(
+      (r) => r.operation === 'concurrent_init'
     );
     if (concurrentInits.length > 0) {
       const avgConcurrentTime =
         concurrentInits.reduce((sum, r) => sum + r.duration, 0) /
         concurrentInits.length;
       if (avgConcurrentTime > 2000) {
-        bottlenecks.push({,
-    type: 'slow_concurrent_access',
+        bottlenecks.push({
+          type: 'slow_concurrent_access',
           avgTime: avgConcurrentTime.toFixed(2),
           severity: 'medium',
         });
@@ -438,8 +438,8 @@ const concurrentInits = this.results.concurrentAccess.filter(
     this.results.systemBottlenecks.forEach((bottleneck) => {
       switch (bottleneck.type) {
         case 'slow_api_endpoint':
-          recommendations.push({,
-    category: 'API Performance',
+          recommendations.push({
+            category: 'API Performance',
             priority: bottleneck.severity,
             issue: `${bottleneck.endpoint} endpoint averaging ${bottleneck.avgTime}ms`,
             recommendation: `Optimize ${bottleneck.endpoint} endpoint with caching, database indexing, or query optimization`,
@@ -448,8 +448,8 @@ const concurrentInits = this.results.concurrentAccess.filter(
           break;
 
         case 'memory_growth':
-          recommendations.push({,
-    category: 'Memory Management',
+          recommendations.push({
+            category: 'Memory Management',
             priority: bottleneck.severity,
             issue: `Memory growth of ${bottleneck.maxGrowthMB}MB during operations`,
             recommendation:
@@ -459,8 +459,8 @@ const concurrentInits = this.results.concurrentAccess.filter(
           break;
 
         case 'slow_concurrent_access':
-          recommendations.push({,
-    category: 'Concurrency',
+          recommendations.push({
+            category: 'Concurrency',
             priority: bottleneck.severity,
             issue: `Concurrent operations averaging ${bottleneck.avgTime}ms`,
             recommendation:
@@ -472,8 +472,8 @@ const concurrentInits = this.results.concurrentAccess.filter(
     });
 
     // General performance recommendations
-    recommendations.push({,
-    category: 'System Architecture',
+    recommendations.push({
+      category: 'System Architecture',
       priority: 'low',
       issue: 'TaskManager system analysis complete',
       recommendation:
@@ -491,35 +491,35 @@ const concurrentInits = this.results.concurrentAccess.filter(
     loggers.stopHook.log('📋 Generating comprehensive performance report...');
 
     const report = {
-    metadata: {
-    testDate: new Date().toISOString(),
+      metadata: {
+        testDate: new Date().toISOString(),
         testDuration: Date.now() - this.testStartTime,
         nodeVersion: process.version,
         platform: process.platform,
         arch: process.arch,
       },
       summary: {
-    totalApiTests: this.results.apiResponses.length,
+        totalApiTests: this.results.apiResponses.length,
         totalSubtaskTests: this.results.subtaskOperations.length,
         totalConcurrentTests: this.results.concurrentAccess.length,
         totalBottlenecks: this.results.systemBottlenecks.length,
         totalRecommendations: this.results.recommendations.length,
       },
       performance: {
-    apiEndpoints: this.summarizeApiPerformance(),
+        apiEndpoints: this.summarizeApiPerformance(),
         subtaskOperations: this.summarizeSubtaskPerformance(),
         concurrentAccess: this.summarizeConcurrentPerformance(),
         memoryUsage: this.summarizeMemoryUsage(),
       },
       analysis: {
-    bottlenecks: this.results.systemBottlenecks,
+        bottlenecks: this.results.systemBottlenecks,
         recommendations: this.results.recommendations,
       },
       rawData: this.results,
     };
 
-    // Save report to file;
-const reportPath = `/Users/jeremyparker/infinite-continue-stop-hook/performance-report-${Date.now()}.json`;
+    // Save report to file
+    const reportPath = `/Users/jeremyparker/infinite-continue-stop-hook/performance-report-${Date.now()}.json`;
     await FS.writeFile(reportPath, JSON.stringify(report, null, 2));
 
     loggers.stopHook.log(`\n📊 Performance Report Generated: ${reportPath}`);
@@ -532,7 +532,7 @@ const reportPath = `/Users/jeremyparker/infinite-continue-stop-hook/performance-
     this.results.apiResponses.forEach((result) => {
       if (!endpoints[result.endpoint]) {
         endpoints[result.endpoint] = {
-    count: 0,
+          count: 0,
           totalTime: 0,
           minTime: Infinity,
           maxTime: 0,
@@ -564,9 +564,9 @@ const reportPath = `/Users/jeremyparker/infinite-continue-stop-hook/performance-
     const operations = {};
 
     this.results.subtaskOperations.forEach((result) => {
-      if (!operations[result.OPERATION) {
-        operations[result.OPERATION = {
-    count: 0,
+      if (!operations[result.operation]) {
+        operations[result.operation] = {
+          count: 0,
           totalTime: 0,
           minTime: Infinity,
           maxTime: 0,
@@ -574,7 +574,7 @@ const reportPath = `/Users/jeremyparker/infinite-continue-stop-hook/performance-
         };
       }
 
-      const op = operations[result.OPERATION;
+      const op = operations[result.operation];
       op.count++;
       op.totalTime += result.duration;
       op.minTime = Math.min(op.minTime, result.duration);
@@ -597,11 +597,11 @@ const reportPath = `/Users/jeremyparker/infinite-continue-stop-hook/performance-
 
   summarizeConcurrentPerformance() {
     const concurrent = {
-    init: this.results.concurrentAccess.filter(
-        (r) => r.OPERATION=== 'concurrent_init'
+      init: this.results.concurrentAccess.filter(
+        (r) => r.operation === 'concurrent_init'
       ),
       list: this.results.concurrentAccess.filter(
-        (r) => r.OPERATION=== 'concurrent_list'
+        (r) => r.operation === 'concurrent_list'
       ),
     };
 
@@ -611,7 +611,7 @@ const reportPath = `/Users/jeremyparker/infinite-continue-stop-hook/performance-
       if (results.length > 0) {
         const times = results.map((r) => r.duration);
         summary[op] = {
-    count: results.length,
+          count: results.length,
           avgTime: times.reduce((sum, time) => sum + time, 0) / times.length,
           minTime: Math.min(...times),
           maxTime: Math.max(...times),
@@ -629,14 +629,14 @@ const reportPath = `/Users/jeremyparker/infinite-continue-stop-hook/performance-
       !this.results.memoryUsage.snapshots ||
       this.results.memoryUsage.snapshots.length === 0
     ) {
-    return { noData: true };
+      return { noData: true };
     }
 
     const snapshots = this.results.memoryUsage.snapshots;
     const heapUsages = snapshots.map((s) => s.heapUsed);
 
     return {
-    initial: this.results.memoryUsage.startMemory,
+      initial: this.results.memoryUsage.startMemory,
       final: this.results.memoryUsage.endMemory,
       peak: Math.max(...heapUsages),
       average:
