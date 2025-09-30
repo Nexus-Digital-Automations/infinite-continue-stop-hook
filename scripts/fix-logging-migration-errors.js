@@ -53,7 +53,7 @@ function fixImportPaths() {
         }
       }
     }
-}
+  }
 
   console.log(`📊 Fixed ${fixedCount} import paths`);
 }
@@ -104,7 +104,7 @@ function fixSyntaxErrors() {
       console.log(`  ✅ Fixed syntax in ${PATH.relative('.', file)}`);
       fixedCount++;
     }
-}
+  }
 
   console.log(`📊 Fixed syntax in ${fixedCount} files`);
 }
@@ -164,14 +164,14 @@ function addMissingImports() {
       lines.splice(
         insertIndex,
         0,
-        `const { loggers } = require('${importPath}');`
+        `const { loggers } = require('${importPath}');`,
       );
 
       FS.writeFileSync(file, lines.join('\n'));
       console.log(`  ✅ Added import to ${relativePath}`);
       fixedCount++;
     }
-}
+  }
 
   console.log(`📊 Added imports to ${fixedCount} files`);
 }
@@ -213,11 +213,11 @@ function fixSpecificFiles() {
     // Fix the log calls
     content = content.replace(
       /loggers\.stopHook\.log\(/g,
-      'loggers.stopHook.info('
+      'loggers.stopHook.info(',
     );
     content = content.replace(
       /loggers\.stopHook\.error\(/g,
-      'loggers.stopHook.error('
+      'loggers.stopHook.error(',
     );
 
     FS.writeFileSync(appendHookPath, content);
@@ -259,11 +259,11 @@ function main() {
     const { execSync } = require('child_process');
     execSync('npm run lint -- --quiet', { stdio: 'inherit' });
     console.log('✅ Linter passed! Migration successful.');
-} catch (_) {
+  } catch (_) {
     console.log(
-      '⚠️  Some linting issues remain. You may need to fix them manually.'
+      '⚠️  Some linting issues remain. You may need to fix them manually.',
     );
-}
+  }
 }
 
 if (require.main === module) {

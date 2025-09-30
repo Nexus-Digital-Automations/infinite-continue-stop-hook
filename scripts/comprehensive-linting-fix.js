@@ -21,7 +21,7 @@ class ComprehensiveLintingFix {
    * Fix undefined error variable references
    * Pattern: Variables changed to error but still referenced as error
    */
-  fixUndefinedErrorReferences(inputPath, outputPath) {
+  fixUndefinedErrorReferences(inputPath) {
     try {
       const content = FS.readFileSync(inputPath, 'utf8');
       let newContent = content;

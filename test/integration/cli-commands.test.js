@@ -237,9 +237,9 @@ const _output = JSON.parse(result.stdout);
     });
 
     test('should execute feature management commands', async () => {
-      // 1. Suggest feature;
-const featureData = generateTestFeature({,
-    title: 'CLI Test Feature',
+      // 1. Suggest feature
+      const featureData = generateTestFeature({
+        title: 'CLI Test Feature',
         category: 'enhancement',
       });
 

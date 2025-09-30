@@ -82,9 +82,9 @@ const featuresData = await readFeaturesFile(testDir);
       expect(featuresData.agents[agentId].initialized).toBeDefined();
       expect(featuresData.agents[agentId].lastHeartbeat).toBeDefined();
 
-      // 3. Verify initialization statistics;
-const statsResult = await execAPI('get-initialization-stats', [], {,
-    projectRoot: testDir,
+      // 3. Verify initialization statistics
+      const statsResult = await execAPI('get-initialization-stats', [], {
+        projectRoot: testDir,
       });
       expect(statsResult.success).toBe(true);
       expect(statsResult.stats.total_initializations).toBeGreaterThan(0);

@@ -321,6 +321,7 @@ describe('File Operations Integration Tests', () => {
       );
 
       // 2. Add features in batches to test large file handling
+
       for (let i = 0; i < largeFeatures.length; i += 10) {
         const batch = largeFeatures.slice(i, i + 10);
         const batchCommands = batch.map((featureData) => ({
@@ -329,6 +330,7 @@ describe('File Operations Integration Tests', () => {
           options: { projectRoot: testDir },
         }));
 
+        // eslint-disable-next-line no-await-in-loop -- Sequential batch processing required
         const batchResults = await execAPIConcurrently(batchCommands);
         expect(batchResults.every((result) => result.success)).toBe(true);
       }

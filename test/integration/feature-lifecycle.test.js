@@ -175,9 +175,9 @@ const statsResult = await execAPI('feature-stats', [], {
           expect(_result.error).toContain('missing');
       }
 
-      // 2. Test invalid _category;
-const invalidCategoryFeature = generateTestFeature({,
-    title: 'Invalid Category Feature',
+      // 2. Test invalid category
+      const invalidCategoryFeature = generateTestFeature({
+        title: 'Invalid Category Feature',
         category: 'invalid-category',
       });
 

@@ -59,20 +59,34 @@ function applySystematicFixes(filePath) {
 
     // Fix catch blocks with undefined error variables
     // Pattern: catch (_) { ... error.something ... }
-    // eslint-disable-next-line security/detect-unsafe-regex
-    const catchBlockRegex =
-      /catch\s*\(\s*\)\s*\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/g;
+    // Simplified regex to avoid ReDoS vulnerability
+    const catchBlockRegex = /catch\s*\(\s*\)\s*\{/g;
     let match;
     while ((match = catchBlockRegex.exec(content)) !== null) {
-      const blockContent = match[1];
-      if (blockContent.includes('error') || blockContent.includes('error')) {
-        const errorVar = blockContent.includes('error') ? 'error' : 'error';
-        const replacement = match[0].replace(
+      // Find the corresponding closing brace (simple approach)
+      let braceCount = 1;
+      let endPos = match.index + match[0].length;
+      while (braceCount > 0 && endPos < content.length) {
+        // eslint-disable-next-line security/detect-object-injection
+        if (content[endPos] === '{') {braceCount++;}
+        // eslint-disable-next-line security/detect-object-injection
+        if (content[endPos] === '}') {braceCount--;}
+        endPos++;
+      }
+      const blockContent = content.substring(
+        match.index + match[0].length,
+        endPos - 1,
+      );
+      if (blockContent.includes('error')) {
+        const fullMatch = content.substring(match.index, endPos);
+        const replacement = fullMatch.replace(
           /catch\s*\(\s*\)\s*\{/,
-          `catch (${errorVar}) {`,
+          'catch (error) {',
         );
-        content = content.replace(match[0], replacement);
+        content = content.replace(fullMatch, replacement);
         modified = true;
+        // Reset regex position to continue
+        catchBlockRegex.lastIndex = match.index + replacement.length;
       }
     }
 

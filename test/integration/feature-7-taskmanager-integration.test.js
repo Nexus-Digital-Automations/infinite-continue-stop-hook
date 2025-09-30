@@ -266,8 +266,8 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
     test('should fail unknown custom validation criterion', async () => {
       const mockTaskManager = {
-        async _loadCustomValidationRules() {
-          return []; // No custom rules
+        _loadCustomValidationRules() {
+          return Promise.resolve([]); // No custom rules
         },
 
         async _performLanguageAgnosticValidationCore(criterion) {
@@ -278,7 +278,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
               }
 
               default: {
-                const customRules = this._loadCustomValidationRules();
+                const customRules = await this._loadCustomValidationRules();
                 const customRule = customRules.find(
                   (rule) => rule.id === criterion,
                 );
@@ -294,7 +294,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
               }
             }
           } catch (_error) {
-            return { success: false, _error: _error.message };
+            return { success: false, error: _error.message };
           }
         },
       };

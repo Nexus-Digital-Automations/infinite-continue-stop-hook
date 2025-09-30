@@ -73,9 +73,9 @@ const guideResult = await execAPI('guide', [], { projectRoot: testDir });
 
       const suggestResult = await execAPI(
         'suggest-feature',
-        [JSON.stringify(FEATURE_DATA)],
-        {,
-    projectRoot: testDir,
+        [JSON.stringify(featureData)],
+        {
+          projectRoot: testDir,
         }
       );
 
@@ -156,9 +156,9 @@ const approvedFeaturesResult = await execAPI(
     });
 
     test('should handle feature rejection workflow', async () => {
-      // 1. Suggest a feature to reject;
-const featureData = generateTestFeature({,
-    title: 'Feature to Reject',
+      // 1. Suggest a feature to reject
+      const featureData = generateTestFeature({
+        title: 'Feature to Reject',
         description: 'Feature That will be rejected for testing purposes',
         business_value: 'Tests rejection workflow',
         category: 'enhancement',
@@ -166,9 +166,9 @@ const featureData = generateTestFeature({,
 
       const suggestResult = await execAPI(
         'suggest-feature',
-        [JSON.stringify(FEATURE_DATA)],
-        {,
-    projectRoot: testDir,
+        [JSON.stringify(featureData)],
+        {
+          projectRoot: testDir,
         }
       );
 
@@ -753,17 +753,17 @@ const commands = methodsResult.availableCommands;
     });
 
     test('should handle invalid status transitions', async () => {
-      // 1. Create And approve a feature;
-const featureData = generateTestFeature({,
-    title: 'Feature for Status Test',
+      // 1. Create And approve a feature
+      const featureData = generateTestFeature({
+        title: 'Feature for Status Test',
         category: 'enhancement',
       });
 
       const suggestResult = await execAPI(
         'suggest-feature',
-        [JSON.stringify(FEATURE_DATA)],
-        {,
-    projectRoot: testDir,
+        [JSON.stringify(featureData)],
+        {
+          projectRoot: testDir,
         }
       );
       expect(suggestResult.success).toBe(true);
@@ -771,8 +771,8 @@ const featureData = generateTestFeature({,
       const approveResult = await execAPI(
         'approve-feature',
         [suggestResult.feature.id],
-        {,
-    projectRoot: testDir,
+        {
+          projectRoot: testDir,
         }
       );
       expect(approveResult.success).toBe(true);

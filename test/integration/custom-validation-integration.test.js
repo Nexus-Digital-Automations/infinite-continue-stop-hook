@@ -484,19 +484,20 @@ const config = {
       const config = {
     custom_rules: {
     conditional_test: {
-    type: 'conditional',
-            description: 'Conditional execution test',
-            condition: {
-    type: 'file_exists',
-              file: 'package.json',
-            },
-            rules: [ {,
-    type: 'command',
-                command: 'echo "Package.json exists, running Node.js checks"',
-              },
-  ],
-          }
-}
+      type: 'conditional',
+      description: 'Conditional execution test',
+      condition: {
+        type: 'file_exists',
+        file: 'package.json',
+      },
+      rules: [
+        {
+          type: 'command',
+          command: 'echo "Package.json exists, running Node.js checks"',
+        },
+      ],
+    },
+  },
 };
 
       await fs.writeFile(

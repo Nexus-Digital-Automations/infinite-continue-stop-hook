@@ -21,7 +21,6 @@
 
 const FS = require('fs');
 const path = require('path');
-const { execSync: EXEC_SYNC } = require('child_process');
 const { loggers } = require('../lib/logger');
 
 // Quality metrics configuration;
@@ -256,11 +255,11 @@ class CodeQualityAnalyzer {
         recommendations: this.recommendations,
         detailed_metrics: this.metrics,
       };
-    } catch (_) {
+    } catch (error) {
       this.logger.error('Code quality analysis failed', {
-        error: _error.message,
+        error: error.message,
       });
-      throw _error;
+      throw error;
     }
   }
 
@@ -280,9 +279,9 @@ class CodeQualityAnalyzer {
           absolute: true,
         });
         allFiles.push(...files);
-      } catch (_) {
+      } catch (error) {
         this.logger.warning(`Failed to glob pattern ${pattern}`, {
-          error: _error.message,
+          error: error.message,
         });
       }
     }
@@ -346,9 +345,9 @@ class CodeQualityAnalyzer {
             message: `High cyclomatic complexity: ${fileComplexity.cyclomatic}`,
           });
         }
-      } catch (_) {
+      } catch (error) {
         this.logger.debug(`Failed to analyze complexity for ${filePath}`, {
-          error: _error.message,
+          error: error.message,
         });
       }
     }
@@ -409,7 +408,7 @@ class CodeQualityAnalyzer {
         complex_functions: complexFunctions,
         line_count: lines.length,
       };
-    } catch (_) {
+    } catch {
       return {
         cyclomatic: 0,
         cognitive: 0,
@@ -469,9 +468,9 @@ class CodeQualityAnalyzer {
             message: `Large file: ${lineCount} lines`,
           });
         }
-      } catch (_) {
+      } catch (error) {
         this.logger.debug(`Failed to analyze size for ${filePath}`, {
-          error: _error.message,
+          error: error.message,
         });
       }
     }
@@ -540,9 +539,9 @@ class CodeQualityAnalyzer {
             blockHashes.get(hash).push({ file: filePath, startLine: i + 1 });
           }
         }
-      } catch (_) {
+      } catch (error) {
         this.logger.debug(`Failed to analyze duplication for ${filePath}`, {
-          error: _error.message,
+          error: error.message,
         });
       }
     }
@@ -676,9 +675,9 @@ class CodeQualityAnalyzer {
             }
           }
         }
-      } catch (_) {
+      } catch (error) {
         this.logger.debug(`Failed to analyze security for ${filePath}`, {
-          error: _error.message,
+          error: error.message,
         });
       }
     }
@@ -725,7 +724,6 @@ class CodeQualityAnalyzer {
     // Calculate maintainability index (simplified Halstead-based)
     const totalComplexity = this.metrics.complexity.cyclomatic.total;
     const totalLines = this.metrics.size.total_lines;
-    const TOTAL_DUPLICATION = this.metrics.duplication.duplicate_lines;
 
     // Simplified maintainability index calculation
     if (totalLines > 0) {
@@ -831,9 +829,9 @@ class CodeQualityAnalyzer {
         if (lines.length > this.config.size.lines_per_file.critical) {
           smellsData.god_objects++;
         }
-      } catch (_) {
+      } catch (error) {
         this.logger.debug(`Failed to detect smells for ${filePath}`, {
-          error: _error.message,
+          error: error.message,
         });
       }
     }
@@ -911,9 +909,9 @@ class CodeQualityAnalyzer {
 
         imports.set(filePath, fileImports);
         exports.set(filePath, fileExports);
-      } catch (_) {
+      } catch (error) {
         this.logger.debug(`Failed to analyze architecture for ${filePath}`, {
-          error: _error.message,
+          error: error.message,
         });
       }
     }
@@ -1025,7 +1023,6 @@ class CodeQualityAnalyzer {
 
     // Sort issues by severity And impact;
     const criticalIssues = this.issues.filter((i) => i.severity === 'critical');
-    const WARNING_ISSUES = this.issues.filter((i) => i.severity === 'warning');
 
     // Generate specific recommendations based on analysis
     if (criticalIssues.length > 0) {
@@ -1232,16 +1229,16 @@ Environment Variables:
     try {
       const customConfig = JSON.parse(FS.readFileSync(configPath, 'utf8'));
       options.config = customConfig;
-    } catch (_) {
-      loggers.stopHook.error(`❌ Failed to load config: ${_error.message}`);
-      throw _error;
+    } catch (error) {
+      loggers.stopHook.error(`❌ Failed to load config: ${error.message}`);
+      throw error;
     }
   }
 
   // Run analysis;
   const analyzer = new CodeQualityAnalyzer(options);
   try {
-    const _result = analyzer.analyze();
+    const result = analyzer.analyze();
     loggers.stopHook.log(`\n📊 Code Quality Analysis Complete:`);
     loggers.app.info(
       `   Overall Score: ${result.overall_score}/100 (${result.quality_level})`,
@@ -1254,11 +1251,10 @@ Environment Variables:
     if (result.overall_score < 70) {
       throw new Error('Code quality score below threshold');
     }
-  } catch (_) {
-    loggers.stopHook.error('❌ Code quality analysis failed:', _error.message);
-    throw _error;
+  } catch (error) {
+    loggers.stopHook.error('❌ Code quality analysis failed:', error.message);
+    throw error;
   }
 }
 
 module.exports = CodeQualityAnalyzer;
-s = CodeQualityAnalyzer;
