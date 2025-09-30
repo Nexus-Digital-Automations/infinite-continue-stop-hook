@@ -230,7 +230,7 @@ class TaskManagerPerformanceBenchmark {
   /**
    * Test success criteria validation performance
    */
-  benchmarkSuccessCriteria() {
+  async benchmarkSuccessCriteria() {
     loggers.stopHook.log('✅ Benchmarking success criteria validation...');
     try {
       // Test basic criteria operations
@@ -273,7 +273,7 @@ class TaskManagerPerformanceBenchmark {
   /**
    * Test concurrent agent access performance
    */
-  benchmarkConcurrentAccess() {
+  async benchmarkConcurrentAccess() {
     loggers.stopHook.log('👥 Benchmarking concurrent agent access...');
 
     const concurrentOperations = [];
@@ -318,7 +318,7 @@ class TaskManagerPerformanceBenchmark {
   /**
    * Monitor memory usage during operations
    */
-  monitorMemoryUsage() {
+  async monitorMemoryUsage() {
     loggers.stopHook.log('💾 Monitoring memory usage patterns...');
 
     const memorySnapshots = [];
@@ -487,7 +487,7 @@ class TaskManagerPerformanceBenchmark {
   /**
    * Generate comprehensive performance report
    */
-  generateReport() {
+  async generateReport() {
     loggers.stopHook.log('📋 Generating comprehensive performance report...');
 
     const report = {
@@ -657,7 +657,7 @@ class TaskManagerPerformanceBenchmark {
   /**
    * Run complete performance benchmark suite
    */
-  runCompleteBenchmark() {
+  async runCompleteBenchmark() {
     loggers.stopHook.log('🚀 Starting TaskManager Performance Benchmark Suite');
     loggers.stopHook.log('================================================\n');
     try {

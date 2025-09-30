@@ -85,7 +85,7 @@ class QuickPerformanceTest {
     });
 }
 
-  runQuickTests() {
+  async runQuickTests() {
     loggers.stopHook.log('🚀 Quick TaskManager Performance Test');
     loggers.stopHook.log('=====================================\n');
 

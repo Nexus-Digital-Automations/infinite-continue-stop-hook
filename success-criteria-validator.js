@@ -621,8 +621,8 @@ const passMatch = testOutput.match(/(\\d+) passing/);
    */
   validateDependencies() {
     try {
-      const auditOutput = execSync('npm audit --audit-level=moderate', {,
-    encoding: 'utf8',
+      const auditOutput = execSync('npm audit --audit-level=moderate', {
+        encoding: 'utf8',
         timeout: 30000,
         cwd: __dirname,
       });
