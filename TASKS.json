@@ -1158,6 +1158,114 @@
       "metadata": {
         "auto_generated": false
       }
+    },
+    {
+      "id": "task_1759197073547_6a20d0b642a1",
+      "feature_id": null,
+      "title": "Fix parsing errors in lib/ security modules",
+      "description": "Fix 5 parsing errors in security modules: crossProjectSharing.js, FilePathSecurityValidator.js, index.js, securityMiddleware.js, securityValidator.js. Pattern: Unexpected token errors",
+      "type": "error",
+      "priority": "high",
+      "status": "queued",
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-30T01:51:13.547Z",
+      "updated_at": "2025-09-30T01:51:13.547Z",
+      "created_by": "manual_creation",
+      "verificationGate": {
+        "status": "pending",
+        "requirements": [],
+        "evidence": null,
+        "verifiedAt": null,
+        "verifiedBy": null
+      },
+      "metadata": {
+        "auto_generated": false
+      }
+    },
+    {
+      "id": "task_1759197076298_8cd3658eee19",
+      "feature_id": null,
+      "title": "Fix parsing errors in lib/ core modules",
+      "description": "Fix parsing errors in: validationEngine.js, multiAgentOrchestrator.js, systemHealthMonitor.js, intelligentResearchSystem.js, database/test-rag-system.js, rag/ modules",
+      "type": "error",
+      "priority": "high",
+      "status": "queued",
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-30T01:51:16.299Z",
+      "updated_at": "2025-09-30T01:51:16.299Z",
+      "created_by": "manual_creation",
+      "verificationGate": {
+        "status": "pending",
+        "requirements": [],
+        "evidence": null,
+        "verifiedAt": null,
+        "verifiedBy": null
+      },
+      "metadata": {
+        "auto_generated": false
+      }
+    },
+    {
+      "id": "task_1759197079431_3d31996d847e",
+      "feature_id": null,
+      "title": "Fix no-undef errors in lib/taskCategories.js",
+      "description": "Fix 8 no-undef errors for undefined category variable in taskCategories.js lines 223, 238, 246, 254, 257",
+      "type": "error",
+      "priority": "high",
+      "status": "queued",
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-30T01:51:19.432Z",
+      "updated_at": "2025-09-30T01:51:19.432Z",
+      "created_by": "manual_creation",
+      "verificationGate": {
+        "status": "pending",
+        "requirements": [],
+        "evidence": null,
+        "verifiedAt": null,
+        "verifiedBy": null
+      },
+      "metadata": {
+        "auto_generated": false
+      }
+    },
+    {
+      "id": "task_1759197082756_7f13c80b4ffd",
+      "feature_id": null,
+      "title": "Fix unused variable errors (no-unused-vars)",
+      "description": "Fix 15+ unused variable errors across success-criteria modules, database modules, and test files. Pattern: variables prefixed with _ should be used or properly marked as intentionally unused",
+      "type": "error",
+      "priority": "normal",
+      "status": "queued",
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-30T01:51:22.756Z",
+      "updated_at": "2025-09-30T01:51:22.756Z",
+      "created_by": "manual_creation",
+      "verificationGate": {
+        "status": "pending",
+        "requirements": [],
+        "evidence": null,
+        "verifiedAt": null,
+        "verifiedBy": null
+      },
+      "metadata": {
+        "auto_generated": false
+      }
     }
   ],
   "completed_tasks": [
@@ -1670,7 +1778,7 @@
   "metadata": {
     "version": "2.0.0",
     "created": "2025-09-22T06:19:00.000Z",
-    "updated": "2025-09-30T01:48:17.360Z",
+    "updated": "2025-09-30T01:51:22.756Z",
     "total_tasks": 21,
     "tasks_by_type": {
       "error": 0,
