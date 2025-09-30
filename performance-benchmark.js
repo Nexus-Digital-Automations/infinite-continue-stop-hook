@@ -14,12 +14,12 @@ const { loggers } = require('./lib/logger');
 const { performance } = require('perf_hooks');
 const { spawn } = require('child_process');
 const FS = require('fs').promises;
-const path = require('path');
+const _path = require('path');
 
 class TaskManagerPerformanceBenchmark {
   constructor(_agentId) {
     this.results = {
-    apiResponses: [],
+      apiResponses: [],
       memoryUsage: [],
       concurrentAccess: [],
       subtaskOperations: [],
@@ -31,7 +31,7 @@ class TaskManagerPerformanceBenchmark {
       '/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js';
     this.testStartTime = Date.now();
     this.testAgents = [];
-}
+  }
 
   /**
    * Execute TaskManager API command with timing
@@ -66,13 +66,13 @@ class TaskManagerPerformanceBenchmark {
         const duration = endTime - startTime;
 
         let response = null;
-    try {
+        try {
           // Extract JSON from stdout (may contain error messages)
           const jsonMatch = stdout.match(/\{[\s\S]*\}/);
           if (jsonMatch) {
             response = JSON.parse(jsonMatch[0]);
           }
-        } catch (_) {
+        } catch {
           // Response is not JSON - keep as string
           response = stdout;
         }
@@ -87,15 +87,15 @@ class TaskManagerPerformanceBenchmark {
           stdout,
           stderr,
           memoryDelta: {
-    heapUsed: endMemory.heapUsed - startMemory.heapUsed,
+            heapUsed: endMemory.heapUsed - startMemory.heapUsed,
             heapTotal: endMemory.heapTotal - startMemory.heapTotal,
             external: endMemory.external - startMemory.external,
             rss: endMemory.rss - startMemory.rss,
-          }
-});
+          },
+        });
       });
     });
-}
+  }
 
   /**
    * Benchmark API endpoint response times
@@ -123,7 +123,7 @@ class TaskManagerPerformanceBenchmark {
         // eslint-disable-next-line no-await-in-loop -- Sequential timing measurements required
         const result = await this.executeTimedCommand(
           endpoint[0],
-          endpoint.slice(1)
+          endpoint.slice(1),
         );
         this.results.apiResponses.push({
           endpoint: endpoint[0],
@@ -136,7 +136,7 @@ class TaskManagerPerformanceBenchmark {
         await this.sleep(100);
       }
     }
-}
+  }
 
   /**
    * Test embedded subtasks performance
@@ -149,7 +149,7 @@ class TaskManagerPerformanceBenchmark {
       const initResult = await this.executeTimedCommand('init');
       if (!initResult.success) {
         loggers.stopHook.log(
-          '   ❌ Failed to initialize agent for subtask testing'
+          '   ❌ Failed to initialize agent for subtask testing',
         );
         return;
       }
@@ -188,7 +188,7 @@ class TaskManagerPerformanceBenchmark {
       loggers.stopHook.log('   Testing subtask creation...');
       for (let i = 0; i < 3; i++) {
         const subtaskData = {
-    type: 'research',
+          type: 'research',
           title: `Performance Test Subtask ${i + 1}`,
           description: `Research subtask for performance testing iteration ${i + 1}`,
           estimated_hours: 1,
@@ -220,12 +220,12 @@ class TaskManagerPerformanceBenchmark {
         taskId,
         ...listResult,
       });
-    } catch (_) {
+    } catch (error) {
       loggers.stopHook.log(
-        `   ❌ Error in subtask benchmarking: ${error.message}`
+        `   ❌ Error in subtask benchmarking: ${error.message}`,
       );
     }
-}
+  }
 
   /**
    * Test success criteria validation performance
@@ -263,12 +263,12 @@ class TaskManagerPerformanceBenchmark {
           ...result,
         });
       }
-    } catch (_) {
+    } catch (error) {
       loggers.app.info(
-        `   ❌ Error in success criteria benchmarking: ${error.message}`
+        `   ❌ Error in success criteria benchmarking: ${error.message}`,
       );
     }
-}
+  }
 
   /**
    * Test concurrent agent access performance
@@ -286,7 +286,7 @@ class TaskManagerPerformanceBenchmark {
           agentIndex: i,
           operation: 'concurrent_init',
           ...result,
-        }))
+        })),
       );
     }
 
@@ -302,18 +302,18 @@ class TaskManagerPerformanceBenchmark {
             agentIndex: i,
             operation: 'concurrent_list',
             ...result,
-          }))
+          })),
         );
       }
 
       const listResults = await Promise.all(listOperations);
       this.results.concurrentAccess.push(...listResults);
-    } catch (_) {
+    } catch (error) {
       loggers.app.info(
-        `   ❌ Error in concurrent access benchmarking: ${error.message}`
+        `   ❌ Error in concurrent access benchmarking: ${error.message}`,
       );
     }
-}
+  }
 
   /**
    * Monitor memory usage during operations
@@ -327,7 +327,7 @@ class TaskManagerPerformanceBenchmark {
     // Take memory snapshots during various operations
     for (let i = 0; i < 10; i++) {
       const snapshot = {
-    timestamp: Date.now(),
+        timestamp: Date.now(),
         iteration: i,
         ...process.memoryUsage(),
       };
@@ -348,7 +348,7 @@ class TaskManagerPerformanceBenchmark {
       snapshots: memorySnapshots,
       endMemory: process.memoryUsage(),
     };
-}
+  }
 
   /**
    * Analyze results And identify bottlenecks
@@ -393,7 +393,7 @@ class TaskManagerPerformanceBenchmark {
           return (
             snapshot.heapUsed - this.results.memoryUsage.snapshots[0].heapUsed
           );
-        }
+        },
       );
 
       const maxMemoryGrowth = Math.max(...memoryGrowth);
@@ -409,7 +409,7 @@ class TaskManagerPerformanceBenchmark {
 
     // Analyze concurrent access performance
     const concurrentInits = this.results.concurrentAccess.filter(
-      (r) => r.operation === 'concurrent_init'
+      (r) => r.operation === 'concurrent_init',
     );
     if (concurrentInits.length > 0) {
       const avgConcurrentTime =
@@ -425,7 +425,7 @@ class TaskManagerPerformanceBenchmark {
     }
 
     this.results.systemBottlenecks = bottlenecks;
-}
+  }
 
   /**
    * Generate optimization recommendations
@@ -482,7 +482,7 @@ class TaskManagerPerformanceBenchmark {
     });
 
     this.results.recommendations = recommendations;
-}
+  }
 
   /**
    * Generate comprehensive performance report
@@ -524,7 +524,7 @@ class TaskManagerPerformanceBenchmark {
 
     loggers.stopHook.log(`\n📊 Performance Report Generated: ${reportPath}`);
     return report;
-}
+  }
 
   summarizeApiPerformance() {
     const endpoints = {};
@@ -558,7 +558,7 @@ class TaskManagerPerformanceBenchmark {
     });
 
     return endpoints;
-}
+  }
 
   summarizeSubtaskPerformance() {
     const operations = {};
@@ -593,15 +593,15 @@ class TaskManagerPerformanceBenchmark {
     });
 
     return operations;
-}
+  }
 
   summarizeConcurrentPerformance() {
     const concurrent = {
       init: this.results.concurrentAccess.filter(
-        (r) => r.operation === 'concurrent_init'
+        (r) => r.operation === 'concurrent_init',
       ),
       list: this.results.concurrentAccess.filter(
-        (r) => r.operation === 'concurrent_list'
+        (r) => r.operation === 'concurrent_list',
       ),
     };
 
@@ -622,7 +622,7 @@ class TaskManagerPerformanceBenchmark {
     });
 
     return summary;
-}
+  }
 
   summarizeMemoryUsage() {
     if (
@@ -643,7 +643,7 @@ class TaskManagerPerformanceBenchmark {
         heapUsages.reduce((sum, usage) => sum + usage, 0) / heapUsages.length,
       samples: snapshots.length,
     };
-}
+  }
 
   /**
    * Utility method to sleep for specified milliseconds
@@ -652,7 +652,7 @@ class TaskManagerPerformanceBenchmark {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
     });
-}
+  }
 
   /**
    * Run complete performance benchmark suite
@@ -673,32 +673,32 @@ class TaskManagerPerformanceBenchmark {
       const report = await this.generateReport();
 
       loggers.stopHook.log(
-        '\n✅ Performance Benchmark Suite Completed Successfully!'
+        '\n✅ Performance Benchmark Suite Completed Successfully!',
       );
       loggers.stopHook.log(`\n📈 Summary:`);
       loggers.stopHook.log(
-        `   • API Endpoints Tested: ${report.summary.totalApiTests}`
+        `   • API Endpoints Tested: ${report.summary.totalApiTests}`,
       );
       loggers.app.info(
-        `   • Subtask Operations: ${report.summary.totalSubtaskTests}`
+        `   • Subtask Operations: ${report.summary.totalSubtaskTests}`,
       );
       loggers.app.info(
-        `   • Concurrent Tests: ${report.summary.totalConcurrentTests}`
+        `   • Concurrent Tests: ${report.summary.totalConcurrentTests}`,
       );
       loggers.app.info(
-        `   • Bottlenecks Identified: ${report.summary.totalBottlenecks}`
+        `   • Bottlenecks Identified: ${report.summary.totalBottlenecks}`,
       );
       loggers.app.info(
-        `   • Recommendations Generated: ${report.summary.totalRecommendations}`
+        `   • Recommendations Generated: ${report.summary.totalRecommendations}`,
       );
 
       return report;
-    } catch (_) {
-      loggers.stopHook.error(`❌ Benchmark suite failed: ${_error.message}`);
-      loggers.stopHook.error(_error.stack);
-      throw _error;
+    } catch (error) {
+      loggers.stopHook.error(`❌ Benchmark suite failed: ${error.message}`);
+      loggers.stopHook.error(error.stack);
+      throw error;
     }
-}
+  }
 }
 
 // Run benchmark if this file is executed directly
@@ -711,7 +711,7 @@ if (require.main === module) {
       throw new Error('Benchmark completed successfully');
     })
     .catch((error) => {
-      loggers.stopHook.error('\n❌ Benchmark suite failed:', _error.message);
+      loggers.stopHook.error('\n❌ Benchmark suite failed:', error.message);
       throw error;
     });
 }

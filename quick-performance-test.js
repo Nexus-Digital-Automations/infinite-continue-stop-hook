@@ -1,6 +1,6 @@
-/* eslint-disable no-console */
-/**
 const { loggers } = require('./lib/logger');
+
+/**
  * Quick TaskManager Performance Test
  * Focused performance analysis with faster execution
  */
@@ -13,7 +13,7 @@ class QuickPerformanceTest {
     this.results = [];
     this.taskManagerPath =
       '/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js';
-}
+  }
 
   executeCommand(command, args = [], timeout = 8000) {
     const startTime = performance.now();
@@ -59,12 +59,12 @@ class QuickPerformanceTest {
           const duration = endTime - startTime;
 
           let response = null;
-            try {
+          try {
             const jsonMatch = stdout.match(/\{[\s\S]*\}/);
             if (jsonMatch) {
               response = JSON.parse(jsonMatch[0]);
             }
-          } catch (_) {
+          } catch {
             response = stdout;
           }
 
@@ -83,7 +83,7 @@ class QuickPerformanceTest {
         }
       });
     });
-}
+  }
 
   async runQuickTests() {
     loggers.stopHook.log('🚀 Quick TaskManager Performance Test');
@@ -97,7 +97,7 @@ class QuickPerformanceTest {
       { name: 'RAG Health Check', command: 'rag-health' },
       { name: 'API Guide', command: 'guide' },
       { name: 'Usage Analytics', command: 'usage-analytics' },
-  ];
+    ];
 
     for (const test of tests) {
       loggers.stopHook.log(`📊 Testing: ${test.name}`);
@@ -121,7 +121,7 @@ class QuickPerformanceTest {
     }
 
     return this.generateQuickReport();
-}
+  }
 
   generateQuickReport() {
     loggers.stopHook.log('\n📋 Performance Analysis');
@@ -146,7 +146,7 @@ class QuickPerformanceTest {
       loggers.stopHook.log(`\n❌ Failed Operations: ${failed.length}`);
       failed.forEach((f) => {
         loggers.stopHook.log(
-          `   • ${f.testName}: ${f.error || 'Unknown error'}`
+          `   • ${f.testName}: ${f.error || 'Unknown error'}`,
         );
       });
     }
@@ -157,7 +157,7 @@ class QuickPerformanceTest {
       loggers.stopHook.log(`\n⚠️  Slow Operations (>2s):`);
       slowOperations.forEach((op) => {
         loggers.stopHook.log(
-          `   • ${op.testName}: ${op.duration.toFixed(2)}ms`
+          `   • ${op.testName}: ${op.duration.toFixed(2)}ms`,
         );
       });
     }
@@ -167,7 +167,7 @@ class QuickPerformanceTest {
       loggers.stopHook.log(`\n⚡ Fast Operations (<500ms):`);
       fastOperations.forEach((op) => {
         loggers.stopHook.log(
-          `   • ${op.testName}: ${op.duration.toFixed(2)}ms`
+          `   • ${op.testName}: ${op.duration.toFixed(2)}ms`,
         );
       });
     }
@@ -175,16 +175,16 @@ class QuickPerformanceTest {
     // Memory analysis
     const totalMemoryUsed = this.results.reduce(
       (sum, r) => sum + (r.memoryUsed || 0),
-      0
+      0,
     );
     const avgMemoryPerOp = totalMemoryUsed / this.results.length;
 
     loggers.stopHook.log(`\n💾 Memory Usage:`);
     loggers.stopHook.log(
-      `   Total: ${(totalMemoryUsed / (1024 * 1024)).toFixed(2)}MB`
+      `   Total: ${(totalMemoryUsed / (1024 * 1024)).toFixed(2)}MB`,
     );
     loggers.app.info(
-      `   Average per OPERATION ${(avgMemoryPerOp / (1024 * 1024)).toFixed(2)}MB`
+      `   Average per OPERATION ${(avgMemoryPerOp / (1024 * 1024)).toFixed(2)}MB`,
     );
 
     // Recommendations
@@ -192,26 +192,26 @@ class QuickPerformanceTest {
 
     if (slowOperations.length > 0) {
       loggers.app.info(
-        `   • Investigate And optimize ${slowOperations.length} slow operations`
+        `   • Investigate And optimize ${slowOperations.length} slow operations`,
       );
     }
 
     if (failed.length > 0) {
       loggers.app.info(
-        `   • Address ${failed.length} failing operations for system reliability`
+        `   • Address ${failed.length} failing operations for system reliability`,
       );
     }
 
     if (avgMemoryPerOp > 10 * 1024 * 1024) {
       // 10MB per operation
       loggers.app.info(
-        `   • Review memory usage patterns - average ${(avgMemoryPerOp / (1024 * 1024)).toFixed(2)}MB per operation`
+        `   • Review memory usage patterns - average ${(avgMemoryPerOp / (1024 * 1024)).toFixed(2)}MB per operation`,
       );
     }
 
     if (successful.length === this.results.length) {
       loggers.stopHook.log(
-        `   • System performing well - all operations successful`
+        `   • System performing well - all operations successful`,
       );
     }
 
@@ -247,11 +247,11 @@ class QuickPerformanceTest {
     };
 
     loggers.app.info(
-      `\n🎯 Performance Score: ${this.calculatePerformanceScore(report)}/100`
+      `\n🎯 Performance Score: ${this.calculatePerformanceScore(report)}/100`,
     );
 
     return report;
-}
+  }
 
   calculatePerformanceScore(report) {
     let score = 100;
@@ -280,7 +280,7 @@ class QuickPerformanceTest {
     }
 
     return Math.max(0, score);
-}
+  }
 }
 
 // Run test if executed directly
@@ -293,7 +293,7 @@ if (require.main === module) {
       throw new Error('Performance test completed successfully');
     })
     .catch((error) => {
-      loggers.stopHook.error('❌ Performance test failed:', _error.message);
+      loggers.stopHook.error('❌ Performance test failed:', error.message);
       throw error;
     });
 }

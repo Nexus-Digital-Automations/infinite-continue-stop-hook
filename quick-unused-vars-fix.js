@@ -4,8 +4,8 @@
  * Fixes the most common unused variable patterns efficiently
  */
 
-const FS = require('fs');
-const PATH = require('path');
+const _FS = require('fs');
+const _PATH = require('path');
 const { execSync } = require('child_process');
 
 /**
@@ -22,7 +22,7 @@ function quickFixUnusedVars() {
       { cwd: process.cwd() },
     );
     console.log('✅ Fixed catch blocks');
-  } catch (_) {
+  } catch {
     console.log('⚠️ Some catch blocks may need manual review');
   }
 
@@ -34,7 +34,7 @@ function quickFixUnusedVars() {
       { cwd: process.cwd() },
     );
     console.log('✅ Fixed result variables');
-  } catch (_) {
+  } catch {
     console.log('⚠️ Some result variables may need manual review');
   }
 
@@ -46,7 +46,7 @@ function quickFixUnusedVars() {
       { cwd: process.cwd() },
     );
     console.log('✅ Fixed lintResult variables');
-  } catch (_) {
+  } catch {
     console.log('⚠️ Some lintResult variables may need manual review');
   }
 
@@ -58,7 +58,7 @@ function quickFixUnusedVars() {
       { cwd: process.cwd() },
     );
     console.log('✅ Fixed common parameters');
-  } catch (_) {
+  } catch {
     console.log('⚠️ Some parameters may need manual review');
   }
 
@@ -70,7 +70,7 @@ function quickFixUnusedVars() {
       { cwd: process.cwd() },
     );
     console.log('✅ Fixed unused assignments');
-  } catch (_) {
+  } catch {
     console.log('⚠️ Some assignments may need manual review');
   }
 
@@ -82,7 +82,7 @@ function quickFixUnusedVars() {
       { cwd: process.cwd() },
     );
     console.log('✅ Fixed logger variables');
-  } catch (_) {
+  } catch {
     console.log('⚠️ Some logger variables may need manual review');
   }
 
@@ -93,7 +93,7 @@ function quickFixUnusedVars() {
       stdio: 'inherit',
     });
     console.log('✅ Layout autofix completed');
-  } catch (_) {
+  } catch {
     console.log('⚠️ Layout autofix completed with some issues');
   }
 }
@@ -122,7 +122,7 @@ if (require.main === module) {
       );
       console.log(violations);
     }
-  } catch (_) {
+  } catch {
     console.log('⚠️ Could not check final status');
   }
 
