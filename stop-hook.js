@@ -777,30 +777,38 @@ function provideInstructiveTaskGuidance(
   _category = 'general',
 ) {
   return `
-📋 CLAUDE CODE AGENT TASK CONTINUATION PROTOCOL
+⚡ CONTINUE WORKING - YOU ARE THE SAME AGENT
 
-🚨 **AGENT WORKFLOW MANDATES:**
-**MANDATORY AGENT LIFECYCLE:**
-1. **INITIALIZE AGENT** - Start fresh or reinitialize existing agent for session
-2. **CLAIM FEATURE OR REVIEW** - Either claim approved feature tasks OR focus on codebase review
-3. **TODOWRITE EXECUTION** - Use TodoWrite for task management And infinite continuation
-4. **VALIDATION CYCLE** - Continuously ensure: linter passes, builds succeed, runs/starts properly, unit tests pass with adequate coverage
-5. **STOP ONLY WHEN PERFECT** - Only stop when all validation passes And codebase is perfect
+🚨 **CRITICAL INSTRUCTION - YOU ARE THE SAME AGENT:**
 
-**ULTRATHINK - MANDATORY SEQUENCE:**
-1. **READ/REVIEW development/essentials/** directory - MANDATORY EVERY TIME
-2. **CHECK APPROVED FEATURES** - list features ready for implementation
-3. **WORK ONLY ON APPROVED** - never implement unapproved features
-4. **DEPLOY CONCURRENT SUBAGENTS** - use up to 10 for complex tasks
-5. **VALIDATE BEFORE COMPLETION** - run all checks (lint, typecheck, tests) before marking complete
-6. **MAXIMUM LOGGING & DOCUMENTATION** - comprehensive logging And documentation in all code
+**🔥 CONTINUE YOUR CURRENT WORK AS THE SAME AGENT - DO NOT STOP:**
+**ULTRATHINK - YOU ARE NOT A NEW AGENT - YOU ARE THE SAME AGENT CONTINUING**
+**ULTRATHINK - FINISH YOUR CURRENT WORK COMPLETELY BEFORE DOING ANYTHING ELSE**
+**ULTRATHINK - DO NOT ABANDON UNFINISHED TASKS - COMPLETE WHAT YOU STARTED**
+**ULTRATHINK - IF YOUR TODO LIST HAS TASKS, COMPLETE THEM ALL FIRST**
+**ULTRATHINK - ONLY AFTER YOUR CURRENT WORK IS 100% FINISHED, CHECK TASKS.json FOR MORE WORK**
+**ULTRATHINK - NEVER STOP WORKING UNTIL YOU ARE EXPLICITLY TOLD TO STOP**
+**ULTRATHINK - DEPLOY MAXIMUM CONCURRENT SUBAGENTS (UP TO 10) FOR PARALLELIZABLE WORK**
+**ULTRATHINK - 🚨 SCOPE CONTROL: NEVER CREATE FEATURE TASKS WITHOUT EXPLICIT USER REQUEST**
 
-🔴 **TASK COMPLETION MANDATE - ZERO TOLERANCE FOR ABANDONMENT:**
-**FINISH CURRENT TASKS BEFORE STARTING NEW ONES - PROFESSIONAL DEVELOPERS COMPLETE THEIR WORK**
+📋 **AGENT CONTINUATION WORKFLOW:**
 
-**CONTINUATION PROTOCOL:**
-✅ **CHECK FEATURE status** → Use list-features to check current features And their approval status
-✅ **COMPLETE CURRENT WORK** → Never abandon unfinished tasks - teams depend on you
+1. **FINISH YOUR CURRENT WORK FIRST:**
+   - Complete ALL tasks in your TodoWrite list
+   - Finish any code changes you were making
+   - Complete any testing or validation you started
+   - DO NOT START NEW WORK UNTIL CURRENT WORK IS 100% DONE
+
+2. **THEN CHECK TASKS.json FOR MORE WORK:**
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-project-tasks-by-status pending
+
+3. **CLAIM AND COMPLETE TASKS FROM TASKS.json:**
+   - Work through pending tasks in priority order
+   - Complete each task fully before moving to the next
+   - Update task status as you progress
+
+🔴 **ZERO TOLERANCE FOR TASK ABANDONMENT:**
+✅ **COMPLETE CURRENT WORK** → Never abandon unfinished tasks - finish what you started
 ✅ **PRESERVE CONTEXT** → Build upon existing work, maintain implementation approach
 ✅ **VALIDATE THOROUGHLY** → Run all checks before completion
 ❌ **NO TASK ABANDONMENT** → Only interrupt for critical errors (linter, build-blocking, user commands)
@@ -1390,7 +1398,7 @@ process.stdin.on('end', async () => {
         logger.save();
 
         console.error(`
-🔄 STALE AGENTS DETECTED AND CLEANED UP
+⚡ CONTINUE WORKING - YOU ARE THE SAME AGENT (Stale agents cleaned up)
 
 Working Directory: ${workingDir}
 TASKS.json Path: ${todoPath}
@@ -1403,45 +1411,38 @@ Stale Tasks Reset: ${staleTasksReset}
 - Removed ${agentsRemoved} stale agents (inactive >30 minutes)
 - Unassigned ${tasksUnassigned} tasks from stale agents
 - Reset ${staleTasksReset} stuck tasks back to pending status
-- Project is now ready for fresh agent initialization
 
-🚨 **CLAUDE CODE AGENT - STALE AGENT RECOVERY:**
-**ULTRATHINK - PREVIOUS AGENTS HAVE EXPIRED - INITIALIZE NEW AGENT**
-**ULTRATHINK - CONTINUE ANY UNFINISHED WORK FROM PREVIOUS SESSIONS**
-**ULTRATHINK - CHECK FOR PENDING TASKS THAT NEED COMPLETION**
-**ULTRATHINK - DEPLOY MAXIMUM CONCURRENT SUBAGENTS FOR PARALLELIZABLE WORK**
-**ULTRATHINK - USE UP TO 10 SIMULTANEOUS SUBAGENTS FOR COMPLEX TASKS**
-**ULTRATHINK - ADD COMPREHENSIVE COMMENTS TO ALL SCRIPT FILES**
+🚨 **CRITICAL INSTRUCTION - YOU ARE THE SAME AGENT:**
+
+**🔥 CONTINUE YOUR CURRENT WORK AS THE SAME AGENT - DO NOT STOP:**
+**ULTRATHINK - YOU ARE NOT A NEW AGENT - YOU ARE THE SAME AGENT CONTINUING**
+**ULTRATHINK - FINISH YOUR CURRENT WORK COMPLETELY BEFORE DOING ANYTHING ELSE**
+**ULTRATHINK - DO NOT ABANDON UNFINISHED TASKS - COMPLETE WHAT YOU STARTED**
+**ULTRATHINK - ONLY AFTER YOUR CURRENT WORK IS 100% FINISHED, CHECK TASKS.json FOR MORE WORK**
+**ULTRATHINK - IF YOUR TODO LIST HAS TASKS, COMPLETE THEM ALL BEFORE CHECKING TASKS.json**
+**ULTRATHINK - NEVER STOP WORKING UNTIL YOU ARE EXPLICITLY TOLD TO STOP**
+**ULTRATHINK - DEPLOY MAXIMUM CONCURRENT SUBAGENTS (UP TO 10) FOR PARALLELIZABLE WORK**
 **ULTRATHINK - 🚨 SCOPE CONTROL: NEVER CREATE FEATURE TASKS WITHOUT EXPLICIT USER REQUEST**
 **ULTRATHINK - 🚨 FEATURE IDEAS: WRITE SUGGESTIONS IN development/essentials/features.md ONLY**
 **ULTRATHINK - 🚨 NO UNAUTHORIZED FEATURES: Wait for user approval before creating any feature tasks**
 
-🔄 **AGENT RECOVERY WORKFLOW:**
-This project had ${totalAgentsBeforeCleanup} agent(s) That became stale due to inactivity.
-The system has automatically cleaned them up And is ready for a fresh start.
-
-💡 **RECOVERY ACTIONS TAKEN:**
-- ✅ Removed expired agent sessions from registry
-- ✅ Released any stuck in-progress tasks back to pending
-- ✅ Preserved all task history And progress
-- ✅ Project is ready for immediate agent initialization
-
-⚡ **CONTINUE PREVIOUS WORK:**
-Your previous agents may have been working on important tasks.
-Initialize a new agent And continue where they left off.
-
 🔄 INFINITE CONTINUE MODE ACTIVE
 
-💡 **AGENT REINITIALIZATION FOR STALE PROJECT RECOVERY:**
-To recover And continue work from the previous stale agents:
+📋 **AGENT CONTINUATION WORKFLOW:**
 
-1. **Reinitialize your recovery agent:**
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [agentId]
+1. **FINISH YOUR CURRENT WORK FIRST:**
+   - Complete ALL tasks in your TodoWrite list
+   - Finish any code changes you were making
+   - Complete any testing or validation you started
+   - DO NOT START NEW WORK UNTIL CURRENT WORK IS 100% DONE
 
-2. **Check for unfinished tasks from previous agents:**
-   node -e 'const TASK_MANAGER = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TASKS.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Pending tasks to continue:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
+2. **THEN CHECK TASKS.json FOR MORE WORK:**
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-project-tasks-by-status pending
 
-3. **Continue the most important unfinished work first**
+3. **CLAIM AND COMPLETE TASKS FROM TASKS.json:**
+   - Work through pending tasks in priority order
+   - Complete each task fully before moving to the next
+   - Update task status as you progress
 
 🛑 **MULTI-STEP AUTHORIZATION PROTOCOL (LANGUAGE-AGNOSTIC):**
 When ALL TodoWrite tasks are complete And project achieves perfection, agents must complete multi-step authorization:
@@ -1496,7 +1497,7 @@ When ALL TodoWrite tasks are complete And project achieves perfection, agents mu
         logger.save();
 
         console.error(`
-🤖 NO AGENTS DETECTED - FRESH PROJECT SETUP
+⚡ CONTINUE WORKING - YOU ARE THE SAME AGENT
 
 Working Directory: ${workingDir}
 TASKS.json Path: ${todoPath}
@@ -1505,30 +1506,35 @@ Active Agents Found: ${activeAgents.length}
 Stale Agents Removed: ${agentsRemoved}
 Stale Tasks Reset: ${staleTasksReset}
 
-TaskManager project exists but no agents have been registered yet.
+🚨 **CRITICAL INSTRUCTION - YOU ARE THE SAME AGENT:**
 
-🚨 **CLAUDE CODE AGENT - CRITICAL INSTRUCTION:**
-**ULTRATHINK - IF YOU WERE WORKING ON SOMETHING BEFORE THIS MESSAGE:**
-**ULTRATHINK - CONTINUE YOUR WORK - DO NOT ABANDON UNFINISHED TASKS**
-**ULTRATHINK - ALWAYS USE REINITIALIZE COMMAND - WORKS FOR ALL SCENARIOS**
-**ULTRATHINK - REINITIALIZE HANDLES BOTH FRESH AND EXISTING AGENTS AUTOMATICALLY**
-**ULTRATHINK - DEPLOY MAXIMUM CONCURRENT SUBAGENTS FOR ANY PARALLELIZABLE WORK**
-**ULTRATHINK - USE UP TO 10 SIMULTANEOUS SUBAGENTS FOR COMPLEX MULTI-COMPONENT TASKS**
-**ULTRATHINK - ADD COMPREHENSIVE COMMENTS TO ALL SCRIPT FILES FOR FUTURE DEVELOPERS**
+**🔥 CONTINUE YOUR CURRENT WORK AS THE SAME AGENT - DO NOT STOP:**
+**ULTRATHINK - YOU ARE NOT A NEW AGENT - YOU ARE THE SAME AGENT CONTINUING**
+**ULTRATHINK - FINISH YOUR CURRENT WORK COMPLETELY BEFORE DOING ANYTHING ELSE**
+**ULTRATHINK - DO NOT ABANDON UNFINISHED TASKS - COMPLETE WHAT YOU STARTED**
+**ULTRATHINK - ONLY AFTER YOUR CURRENT WORK IS 100% FINISHED, CHECK TASKS.json FOR MORE WORK**
+**ULTRATHINK - IF YOUR TODO LIST HAS TASKS, COMPLETE THEM ALL BEFORE CHECKING TASKS.json**
+**ULTRATHINK - NEVER STOP WORKING UNTIL YOU ARE EXPLICITLY TOLD TO STOP**
+**ULTRATHINK - DEPLOY MAXIMUM CONCURRENT SUBAGENTS (UP TO 10) FOR PARALLELIZABLE WORK**
 **ULTRATHINK - 🚨 SCOPE CONTROL: NEVER CREATE FEATURE TASKS WITHOUT EXPLICIT USER REQUEST**
 **ULTRATHINK - 🚨 FEATURE IDEAS: WRITE SUGGESTIONS IN development/essentials/features.md ONLY**
 **ULTRATHINK - 🚨 NO UNAUTHORIZED FEATURES: Wait for user approval before creating any feature tasks**
 
-💡 **FRESH PROJECT AGENT SETUP:**
-To start working with this TaskManager project:
+📋 **AGENT CONTINUATION WORKFLOW:**
 
-1. **Initialize agent for fresh start:**
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" initialize [agentId]
+1. **FINISH YOUR CURRENT WORK FIRST:**
+   - Complete ALL tasks in your TodoWrite list
+   - Finish any code changes you were making
+   - Complete any testing or validation you started
+   - DO NOT START NEW WORK UNTIL CURRENT WORK IS 100% DONE
 
-2. **Check for any existing tasks to work on:**
-   node -e 'const TASK_MANAGER = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TASKS.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Available tasks:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
+2. **THEN CHECK TASKS.json FOR MORE WORK:**
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-project-tasks-by-status pending
 
-3. **Begin working on the highest priority tasks**
+3. **CLAIM AND COMPLETE TASKS FROM TASKS.json:**
+   - Work through pending tasks in priority order
+   - Complete each task fully before moving to the next
+   - Update task status as you progress
 
 🛑 **MULTI-STEP AUTHORIZATION PROTOCOL (LANGUAGE-AGNOSTIC):**
 When ALL TodoWrite tasks are complete And project achieves perfection, agents must complete multi-step authorization:
