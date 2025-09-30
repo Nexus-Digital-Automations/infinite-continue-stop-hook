@@ -46,15 +46,15 @@ const learningGoals = {
     const learningPath = await ragOps.generateAdaptiveLearningPath(
       userProfile,
       learningGoals,
-      {,
-    pathType: 'adaptive',
+      {
+        pathType: 'adaptive',
         maxLength: 10,
         includeBranching: true,
         includeAssessments: true,
       }
     );
-    loggers.app.info('Learning path result:', {,
-    success: learningPath.success,
+    loggers.app.info('Learning path result:', {
+      success: learningPath.success,
       pathType: learningPath.pathType,
       totalLessons: learningPath.pathMetrics?.totalLessons || 0,
       estimatedDuration: learningPath.estimatedDuration || 0,
@@ -66,13 +66,13 @@ const learningGoals = {
     const pathRecommendations = await ragOps.getLearningPathRecommendations(
       userProfile,
       ['nodejs', 'express'],
-      {,
-    includeAlternatives: true,
+      {
+        includeAlternatives: true,
         maxRecommendations: 3,
       }
     );
-    loggers.app.info('Path recommendations result:', {,
-    success: pathRecommendations.success,
+    loggers.app.info('Path recommendations result:', {
+      success: pathRecommendations.success,
       count: pathRecommendations.count,
       skillGaps: pathRecommendations.skillGaps,
       message: pathRecommendations.message,
@@ -90,25 +90,25 @@ const learningGoals = {
     const progressTracking = await ragOps.trackLearningPathProgress(
       'path_123',
       userProgress,
-      {,
-    includeDetailedAnalysis: true,
+      {
+        includeDetailedAnalysis: true,
         checkAdaptationTriggers: true,
       }
     );
-    loggers.app.info('Progress tracking result:', {,
-    success: progressTracking.success,
+    loggers.app.info('Progress tracking result:', {
+      success: progressTracking.success,
       completionPercentage: progressTracking.completionPercentage,
       message: progressTracking.message,
     });
 
     // Test 4: Get adaptive learning analytics
     loggers.stopHook.log('\n4. Testing getAdaptiveLearningAnalytics...');
-    const analytics = await ragOps.getAdaptiveLearningAnalytics({,
-    timeRange: 30,
+    const analytics = await ragOps.getAdaptiveLearningAnalytics({
+      timeRange: 30,
       includeUserSegmentation: true,
     });
-    loggers.app.info('Analytics result:', {,
-    success: analytics.success,
+    loggers.app.info('Analytics result:', {
+      success: analytics.success,
       timeRange: analytics.timeRange,
       message: analytics.message,
     });
@@ -118,23 +118,23 @@ const learningGoals = {
     const pathAdaptation = await ragOps.adaptLearningPath(
       'path_123',
       userProgress,
-      {,
-    adaptationTrigger: 'performance_drop',
+      {
+        adaptationTrigger: 'performance_drop',
         preserveProgress: true,
       }
     );
-    loggers.app.info('Path adaptation result:', {,
-    success: pathAdaptation.success,
+    loggers.app.info('Path adaptation result:', {
+      success: pathAdaptation.success,
       message: pathAdaptation.message,
     });
 
     loggers.app.info(
       '\n✅ Feature 7: Adaptive Learning Paths System integration test completed successfully!'
     );
-} catch (_) {
-    loggers.stopHook.error('❌ Feature 7 test failed:', _error.message);
-    loggers.stopHook.error('Stack:', _error.stack);
-}
+  } catch (error) {
+    loggers.stopHook.error('❌ Feature 7 test failed:', error.message);
+    loggers.stopHook.error('Stack:', error.stack);
+  }
 }
 
 // Run the test

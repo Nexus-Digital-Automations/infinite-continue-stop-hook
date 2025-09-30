@@ -27,8 +27,9 @@ function fixImportPaths() {
       findImport: "const { loggers } = require('./lib/logger');",
       replaceImport: "const { loggers } = require('./logger');",
     },
-    // Files in root need ./lib/logger {
-    pattern: /^[^\/]+\.js$/,
+    // Files in root need ./lib/logger
+    {
+      pattern: /^[^\/]+\.js$/,
       findImport: "const { loggers } = require('./lib/logger');",
       replaceImport: "const { loggers } = require('./lib/logger');",
     },
@@ -61,20 +62,24 @@ function fixSyntaxErrors() {
   console.log('🔧 Fixing syntax errors...');
 
   const syntaxFixes = [
-    // Fix malformed loggers calls That lost proper syntax: {
-    pattern: /loggers\.(\w+)\.(\w+)\s+\((.+?)\);?\s*$/gm,
+    // Fix malformed loggers calls That lost proper syntax
+    {
+      pattern: /loggers\.(\w+)\.(\w+)\s+\((.+?)\);?\s*$/gm,
       replacement: 'loggers.$1.$2($3);',
     },
-    // Fix incomplete try-catch blocks: {
-    pattern: /}\s*catch\s*\{\s*$/gm,,
-    replacement: '} catch: {',
+    // Fix incomplete try-catch blocks
+    {
+      pattern: /}\s*catch\s*\{\s*$/gm,
+      replacement: '} catch {',
     },
-    // Fix missing catch blocks: {
-    pattern: /}\s*catch\s*$/gm,
-      replacement: '} catch: {',
+    // Fix missing catch blocks
+    {
+      pattern: /}\s*catch\s*$/gm,
+      replacement: '} catch {',
     },
-    // Fix unexpected tokens in specific patterns: {
-    pattern: /loggers\s+\(/g,
+    // Fix unexpected tokens in specific patterns
+    {
+      pattern: /loggers\s+\(/g,
       replacement: 'loggers.app.info(',
     },
   ];
@@ -129,16 +134,16 @@ function addMissingImports() {
 
     // Check if file uses loggers
     if (content.includes('loggers.')) {
-      // Determine correct import path;
-let importPath = './lib/logger';
+      // Determine correct import path
+      let importPath = './lib/logger';
       if (relativePath.startsWith('lib/api-modules/')) {
         importPath = '../../logger';
       } else if (relativePath.startsWith('lib/')) {
         importPath = './logger';
       }
 
-      // Add import after other requires;
-const lines = content.split('\n');
+      // Add import after other requires
+      const lines = content.split('\n');
       let insertIndex = 0;
 
       // Find where to insert (after existing requires)
@@ -171,13 +176,22 @@ const lines = content.split('\n');
   console.log(`📊 Added imports to ${fixedCount} files`);
 }
 
-function rootDir(_$2) {
+function findJavaScriptFiles(rootDir) {
+  const files = [];
+
+  function walkDir(dir) {
+    const entries = FS.readdirSync(dir);
+    for (const entry of entries) {
+      const fullPath = PATH.join(dir, entry);
+      const stat = FS.statSync(fullPath);
+
+      if (stat.isDirectory() && !entry.startsWith('.') && entry !== 'node_modules') {
         walkDir(fullPath);
       } else if (stat.isFile() && entry.endsWith('.js')) {
         files.push(fullPath);
       }
     }
-}
+  }
 
   walkDir(rootDir);
   return files;
@@ -186,8 +200,8 @@ function rootDir(_$2) {
 function fixSpecificFiles() {
   console.log('🔧 Fixing specific known issues...');
 
-  // Fix append-text-hook.js;
-const appendHookPath = './append-text-hook.js';
+  // Fix append-text-hook.js
+  const appendHookPath = './append-text-hook.js';
   if (FS.existsSync(appendHookPath)) {
     let content = FS.readFileSync(appendHookPath, 'utf8');
 
@@ -208,10 +222,10 @@ const appendHookPath = './append-text-hook.js';
 
     FS.writeFileSync(appendHookPath, content);
     console.log('  ✅ Fixed append-text-hook.js');
-}
+  }
 
-  // Fix lib/utils/logger.js to add missing newline;
-const utilsLoggerPath = './lib/utils/logger.js';
+  // Fix lib/utils/logger.js to add missing newline
+  const utilsLoggerPath = './lib/utils/logger.js';
   if (FS.existsSync(utilsLoggerPath)) {
     let content = FS.readFileSync(utilsLoggerPath, 'utf8');
     if (!content.endsWith('\n')) {
@@ -219,7 +233,7 @@ const utilsLoggerPath = './lib/utils/logger.js';
       FS.writeFileSync(utilsLoggerPath, content);
       console.log('  ✅ Fixed missing newline in lib/utils/logger.js');
     }
-}
+  }
 }
 
 function main() {
