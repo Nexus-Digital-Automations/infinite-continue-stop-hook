@@ -1,4 +1,5 @@
-#!/usr/bin/env node
+
+/* eslint-disable no-console, security/detect-non-literal-fs-filename, no-await-in-loop */
 
 const fs = require('fs').promises;
 
@@ -10,7 +11,6 @@ const FILES_TO_FIX = [
 async function fixFile(filePath) {
   try {
     let content = await fs.readFile(filePath, 'utf8');
-    const originalContent = content;
     let fixCount = 0;
 
     // Pattern: Change "_error: _error.message" to "error: _error.message"

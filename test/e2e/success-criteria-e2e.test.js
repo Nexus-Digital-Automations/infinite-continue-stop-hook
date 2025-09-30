@@ -262,7 +262,7 @@ describe('Application Tests', () => {
       JSON.stringify(successCriteriaConfig, null, 2),
     );
   } catch (error) {
-    loggers.stopHook._error('Failed to setup E2E project:', error);
+    loggers.stopHook.error('Failed to setup E2E project:', error);
     throw error;
   }
 }
@@ -273,7 +273,7 @@ describe('Application Tests', () => {
 async function cleanupE2EProject(_category = 'general') {
   try {
     await fs.rm(E2E_PROJECT_DIR, { recursive: true, force: true });
-  } catch (error) {
+  } catch (_error) {
     // Ignore cleanup errors
   }
 }
@@ -341,12 +341,12 @@ describe('Success Criteria End-to-End Tests', () => {
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (error) {
+      } catch (_error) {
         loggers.stopHook.warn(`Feature approval warning: ${_error.message}`);
       }
 
       // 3. Execute validation steps (simulated implementation)
-      const _validationResults = {};
+      const validationResults = {};
 
       // Linter validation;
       const lintResult = await execCommand('npm', ['run', 'lint']);
@@ -361,7 +361,7 @@ describe('Success Criteria End-to-End Tests', () => {
       validationResults.runtime = startResult.success ? 'passed' : 'failed';
 
       // Test validation;
-      const _testResult = await execCommand('npm', ['run', 'test']);
+      const testResult = await execCommand('npm', ['run', 'test']);
       validationResults.test = testResult.success ? 'passed' : 'failed';
 
       // 4. Verify feature approval And validation results
@@ -383,13 +383,13 @@ describe('Success Criteria End-to-End Tests', () => {
             }
           }
         }
-      } catch (error) {
+      } catch (_error) {
         loggers.stopHook.warn(`Feature listing warning: ${_error.message}`);
       }
 
       // Validation results should show successful workflow
-      expect(_validationResults.linter).toBe('passed');
-      expect(_validationResults.build).toBe('passed');
+      expect(validationResults.linter).toBe('passed');
+      expect(validationResults.build).toBe('passed');
     }, 45000);
 
     test('should handle validation failures gracefully', async () => {
@@ -422,7 +422,7 @@ describe('Success Criteria End-to-End Tests', () => {
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (error) {
+      } catch (_error) {
         loggers.stopHook.warn(`Feature approval warning: ${_error.message}`);
       }
 
@@ -431,7 +431,7 @@ describe('Success Criteria End-to-End Tests', () => {
       const buildFailResult = await execCommand('npm', ['run', 'build:fail']);
       const testPassResult = await execCommand('npm', ['run', 'test']);
 
-      const _validationResults = {
+      const validationResults = {
         linter: lintFailResult.success ? 'passed' : 'failed',
         build: buildFailResult.success ? 'passed' : 'failed',
         test: testPassResult.success ? 'passed' : 'failed',
@@ -454,14 +454,14 @@ describe('Success Criteria End-to-End Tests', () => {
             }
           }
         }
-      } catch (error) {
+      } catch (_error) {
         loggers.stopHook.warn(`Feature verification warning: ${_error.message}`);
       }
 
       // Expected validation failures should be detected
-      expect(_validationResults.linter).toBe('failed');
-      expect(_validationResults.build).toBe('failed');
-      expect(_validationResults.test).toBe('passed');
+      expect(validationResults.linter).toBe('failed');
+      expect(validationResults.build).toBe('failed');
+      expect(validationResults.test).toBe('passed');
     }, 30000);
 
     test('should validate feature categorization workflow', async () => {
@@ -497,7 +497,7 @@ describe('Success Criteria End-to-End Tests', () => {
             }
           }
         }
-      } catch (error) {
+      } catch (_error) {
         loggers.stopHook.warn(
           `Feature metadata verification warning: ${_error.message}`,
         );
@@ -511,14 +511,14 @@ describe('Success Criteria End-to-End Tests', () => {
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (error) {
+      } catch (_error) {
         loggers.stopHook.warn(
           `Enterprise feature approval warning: ${_error.message}`,
         );
       }
 
       // Execute comprehensive validations for enterprise feature;
-      const _validationResults = {
+      const validationResults = {
         linter: 'passed',
         build: 'passed',
         runtime: 'passed',
@@ -547,7 +547,7 @@ describe('Success Criteria End-to-End Tests', () => {
             }
           }
         }
-      } catch (error) {
+      } catch (_error) {
         loggers.app.warn(
           `Enhanced validation verification warning: ${_error.message}`,
         );
@@ -582,7 +582,7 @@ describe('Success Criteria End-to-End Tests', () => {
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (error) {
+      } catch (_error) {
         loggers.stopHook.warn(`Feature approval warning: ${_error.message}`);
       }
 
@@ -605,7 +605,7 @@ module.exports = { authenticate };
       // 4. Run validation checks;
       const lintResult = await execCommand('npm', ['run', 'lint']);
       const buildResult = await execCommand('npm', ['run', 'build']);
-      const _testResult = await execCommand('npm', ['run', 'test']);
+      const testResult = await execCommand('npm', ['run', 'test']);
 
       // 5. Verify feature workflow completion
       try {
@@ -626,7 +626,7 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch (error) {
+      } catch (_error) {
         loggers.app.warn(
           `Feature workflow completion verification warning: ${_error.message}`,
         );
@@ -661,7 +661,7 @@ module.exports = { authenticate };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (error) {
+      } catch (_error) {
         loggers.stopHook.warn(`Bug fix approval warning: ${_error.message}`);
       }
 
@@ -709,7 +709,7 @@ module.exports = { authenticateWithTimeout };
             }
           }
         }
-      } catch (error) {
+      } catch (_error) {
         loggers.stopHook.warn(
           `Bug fix workflow verification warning: ${_error.message}`,
         );
@@ -746,7 +746,7 @@ module.exports = { authenticateWithTimeout };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (error) {
+      } catch (_error) {
         loggers.stopHook.warn(
           `Refactoring feature approval warning: ${_error.message}`,
         );
@@ -825,7 +825,7 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch (error) {
+      } catch (_error) {
         loggers.app.warn(
           `Refactoring workflow verification warning: ${_error.message}`,
         );
@@ -834,11 +834,11 @@ module.exports = { authenticate };
       // Quality gate validations;
       const lintResult = await execCommand('npm', ['run', 'lint']);
       const buildResult = await execCommand('npm', ['run', 'build']);
-      const _testResult = await execCommand('npm', ['run', 'test']);
+      const testResult = await execCommand('npm', ['run', 'test']);
 
       expect(lintResult.success).toBe(true);
       expect(buildResult.success).toBe(true);
-      expect(_testResult.success).toBe(true);
+      expect(testResult.success).toBe(true);
     }, 30000);
   });
 
@@ -884,14 +884,14 @@ module.exports = { authenticate };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (error) {
+      } catch (_error) {
         loggers.stopHook.warn(
           `Multi-agent feature approval warning: ${_error.message}`,
         );
       }
 
       // Simulate coordination between agents for different validation aspects;
-      const _validationResults = {
+      const validationResults = {
         linter: 'passed',
         build: 'passed',
         test: 'passed',
@@ -919,16 +919,16 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch (error) {
+      } catch (_error) {
         loggers.app.warn(
           `Multi-agent coordination verification warning: ${_error.message}`,
         );
       }
 
       // Verify agent initialization And coordination
-      expect(_validationResults.linter).toBe('passed');
-      expect(_validationResults.security).toContain('security_agent');
-      expect(_validationResults.performance).toContain('performance_agent');
+      expect(validationResults.linter).toBe('passed');
+      expect(validationResults.security).toContain('security_agent');
+      expect(validationResults.performance).toContain('performance_agent');
     }, 30000);
   });
 
@@ -957,7 +957,7 @@ module.exports = { authenticate };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (error) {
+      } catch (_error) {
         loggers.stopHook.warn(
           `Performance feature approval warning: ${_error.message}`,
         );
@@ -995,7 +995,7 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch (error) {
+      } catch (_error) {
         loggers.app.warn(
           `Performance feature verification warning: ${_error.message}`,
         );
@@ -1034,7 +1034,7 @@ module.exports = { authenticate };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (error) {
+      } catch (_error) {
         loggers.stopHook.warn(
           `Regression detection approval warning: ${_error.message}`,
         );
@@ -1068,7 +1068,7 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch (error) {
+      } catch (_error) {
         loggers.app.warn(
           `Regression detection verification warning: ${_error.message}`,
         );
@@ -1114,7 +1114,7 @@ module.exports = { authenticate };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch (error) {
+      } catch (_error) {
         loggers.stopHook.warn(
           `Evidence collection approval warning: ${_error.message}`,
         );
@@ -1123,7 +1123,7 @@ module.exports = { authenticate };
       // Collect evidence during validation;
       const lintResult = await execCommand('npm', ['run', 'lint']);
       const buildResult = await execCommand('npm', ['run', 'build']);
-      const _testResult = await execCommand('npm', ['run', 'test']);
+      const testResult = await execCommand('npm', ['run', 'test']);
 
       // Store evidence;
       const evidenceDir = path.join(
@@ -1166,7 +1166,7 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch (error) {
+      } catch (_error) {
         loggers.app.warn(
           `Evidence collection verification warning: ${_error.message}`,
         );

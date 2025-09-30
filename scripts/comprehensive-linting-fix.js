@@ -132,11 +132,11 @@ const catchBlockPattern = /}\s*catch\s*\(\s*_error\s*\)\s*\{([^}]*)\}/g;
   /**
    * Fix unused function parameters by prefixing with underscore
    */
-  fixUnusedParameters(__filename, __filename) {
+  fixUnusedParameters(filePath) {
     try {
       const content = FS.readFileSync(filePath, 'utf8');
       const lines = content.split('\n');
-      const _LINT_OUTPUT = this.getLintErrorsForFile(__filename);
+      const _LINT_OUTPUT = this.getLintErrorsForFile(filePath);
 
       let hasChanges = false;
 

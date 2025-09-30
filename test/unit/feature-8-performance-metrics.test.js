@@ -705,13 +705,13 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       expect(_result.benchmarks).toBeDefined();
       expect(_result.benchmarks.by_criterion).toHaveLength(3);
 
-      const linterBenchmark = result.benchmarks.by_criterion.find(
+      const linterBenchmark = _result.benchmarks.by_criterion.find(
         (c) => c.criterion === 'linter-validation',
       );
       expect(linterBenchmark.benchmark).toBe(1500);
       expect(linterBenchmark.grade).toBe('B'); // 1000ms < duration < 2000ms
       expect(linterBenchmark.meets_target).toBe(true); // < 2000ms target
-      const buildBenchmark = result.benchmarks.by_criterion.find(
+      const buildBenchmark = _result.benchmarks.by_criterion.find(
         (c) => c.criterion === 'build-validation',
       );
       expect(buildBenchmark.benchmark).toBe(25000);
@@ -748,14 +748,14 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       expect(_result.success).toBe(true);
       expect(_result.recommendations).toHaveLength(2);
 
-      const linterRec = result.recommendations.find(
+      const linterRec = _result.recommendations.find(
         (r) => r.criterion === 'linter-validation',
       );
       expect(linterRec.current).toBe('3000ms');
       expect(linterRec.target).toBe('< 2000ms');
       expect(linterRec.suggestion).toContain('Consider using faster linters');
 
-      const testRec = result.recommendations.find(
+      const testRec = _result.recommendations.find(
         (r) => r.criterion === 'test-validation',
       );
       expect(testRec.current).toBe('15000ms');

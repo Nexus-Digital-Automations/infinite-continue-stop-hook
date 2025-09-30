@@ -147,7 +147,7 @@ describe('Feature Management Lifecycle', () => {
           categories.map(async (_category) => {
             const featureData = {
               ...TEST_FIXTURES.validFeature,
-              title: `${category} Feature Test`,
+              title: `${_category} Feature Test`,
               category: _category,
             };
 
@@ -190,7 +190,7 @@ describe('Feature Management Lifecycle', () => {
         });
 
         // Extract feature IDs;
-        const featureIds = new Set(results.map((_result) => result.feature.id));
+        const featureIds = new Set(results.map((_result) => _result.feature.id));
 
         // All IDs should be unique
         expect(featureIds.size).toBe(numFeatures);
@@ -911,7 +911,7 @@ describe('Feature Management Lifecycle', () => {
           const _result = await api.listFeatures({ category });
           expect(_result.success).toBe(true);
           expect(_result.features).toHaveLength(1);
-          expect(_result.features[0]._category).toBe(_category);
+          expect(_result.features[0]._category).toBe(category);
           expect(_result.total).toBe(1);
         }
       });

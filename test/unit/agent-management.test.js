@@ -140,14 +140,14 @@ describe('Agent Management', () => {
         const features = await api._loadFeatures();
         expect(features.agents).toBeDefined();
         expect(features.agents[_AGENT_ID]).toBeDefined();
-        expect(features.agents[_agentId].status).toBe('active');
-        expect(features.agents[_agentId].initialized).toBe(
+        expect(features.agents[_AGENT_ID].status).toBe('active');
+        expect(features.agents[_AGENT_ID].initialized).toBe(
           '2025-09-23T12:00:00.000Z',
         );
-        expect(features.agents[_agentId].lastHeartbeat).toBe(
+        expect(features.agents[_AGENT_ID].lastHeartbeat).toBe(
           '2025-09-23T12:00:00.000Z',
         );
-        expect(features.agents[_agentId].sessionId).toBeDefined();
+        expect(features.agents[_AGENT_ID].sessionId).toBeDefined();
       });
 
       test('should track initialization in time bucket stats', async () => {
@@ -504,7 +504,7 @@ describe('Agent Management', () => {
 
         expect(flagContent).toEqual({
           stop_allowed: true,
-          authorized_by: _agentId,
+          authorized_by: _AGENT_ID,
           reason: reason,
           timestamp: '2025-09-23T12:00:00.000Z',
           session_type: 'self_authorized',
@@ -530,7 +530,7 @@ describe('Agent Management', () => {
         const _AGENT_ID = 'long-reason-agent';
         const longReason = 'A'.repeat(1000);
 
-        const _result = await api.authorizeStop(_agentId, longReason);
+        const _result = await api.authorizeStop(_AGENT_ID, longReason);
 
         expect(_result.success).toBe(true);
         expect(_result.authorization.reason).toBe(longReason);
@@ -605,9 +605,9 @@ describe('Agent Management', () => {
 
           expect(_result.success).toBe(false);
           expect(_result.error).toContain('Failed to authorize stop');
-        } catch {
+        } catch (error) {
           // Expected in this test scenario
-          expect(_error.message).toContain('File system unavailable');
+          expect(error.message).toContain('File system unavailable');
         }
       });
     });
@@ -633,7 +633,7 @@ describe('Agent Management', () => {
 
         // 3. Authorize stop;
         const stopResult = await api.authorizeStop(
-          _agentId,
+          _AGENT_ID,
           'Lifecycle test completed',
         );
         expect(stopResult.success).toBe(true);

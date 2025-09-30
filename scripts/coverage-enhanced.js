@@ -141,8 +141,8 @@ class EnhancedLogger {
         JSON.stringify({
           timestamp,
           level,
-          message,,
-    elapsed_ms: elapsed,
+          message,
+          elapsed_ms: elapsed,
           ...data,
         }),
       );
@@ -545,7 +545,7 @@ const analysis = this.analyzeTrends(trends);
         if (delta < 0) {
           analysis.regression_detected = true;
           analysis.regressions.push({
-            metric,,
+            metric,
     current: currentPct,
             previous: previousPct,
             delta: delta.toFixed(2),
@@ -553,7 +553,7 @@ const analysis = this.analyzeTrends(trends);
         } else {
           analysis.improvement_detected = true;
           analysis.improvements.push({
-            metric,,
+            metric,
     current: currentPct,
             previous: previousPct,
             delta: delta.toFixed(2),
@@ -621,7 +621,7 @@ const blockingThresholds =
 
       if (actual < required) {
         validation.blocking_failures.push({
-          metric,,
+          metric,
     actual: actual.toFixed(2),
           required,
           severity: 'blocking',
@@ -643,7 +643,7 @@ const warningThresholds =
         !validation.blocking_failures.some((f) => f.metric === metric)
       ) {
         validation.warnings.push({
-          metric,,
+          metric,
     actual: actual.toFixed(2),
           required,
           severity: 'warning',
@@ -1544,7 +1544,7 @@ const options = {};
 
   if (args.includes('--no-performance')) {
     options.performance = {
-      ...ENHANCED_CONFIG.performance,,
+      ...ENHANCED_CONFIG.performance,
     generate_performance_report: false,
     };
 }
@@ -1554,7 +1554,7 @@ const options = {};
     const level = thresholdArg.split('=')[1];
     if (ENHANCED_CONFIG.thresholds[level]) {
       options.quality_gates = {
-        ...ENHANCED_CONFIG.quality_gates,,
+        ...ENHANCED_CONFIG.quality_gates,
     target_threshold: level,
       };
     } else {

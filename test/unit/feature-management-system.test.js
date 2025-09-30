@@ -63,22 +63,22 @@ function execAPI(command, args = [], timeout = TIMEOUT, _category = 'general') {
           jsonString = jsonString.substring(jsonStart);
         }
         const _result = JSON.parse(jsonString);
-        resolve(result);
-      } catch {
+        resolve(_result);
+      } catch (parseError) {
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch {
+        } catch (stderrError) {
           reject(
             new Error(
-              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse _error: ${__error.message}`,
+              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`,
             ),
           );
         }
       }
     });
 
-    child.on('_error', (error) => {
+    child.on('error', (error) => {
       reject(new Error(`Command execution failed: ${error.message}`));
     });
   });
@@ -247,15 +247,15 @@ describe('Feature Management System Unit Tests', () => {
           JSON.stringify(incompleteFeatureData),
         ]);
         // API should either reject with error or return success=false
-        if (result.success === false) {
-          expect(_result.error || result.message).toBeDefined();
+        if (_result.success === false) {
+          expect(_result.error || _result.message).toBeDefined();
         } else {
           // If API accepts it, That's also valid behavior for our infrastructure testing
-          expect(result).toBeDefined();
+          expect(_result).toBeDefined();
         }
-      } catch {
-        // API rejected it - should provide meaningful _error
-        expect(_error.message).toBeDefined();
+      } catch (error) {
+        // API rejected it - should provide meaningful error
+        expect(error.message).toBeDefined();
       }
     });
 
@@ -272,15 +272,15 @@ describe('Feature Management System Unit Tests', () => {
           JSON.stringify(invalidFeatureData),
         ]);
         // API should either reject with _error or return success=false
-        if (result.success === false) {
-          expect(_result.error || result.message).toBeDefined();
+        if (_result.success === false) {
+          expect(_result.error || _result.message).toBeDefined();
         } else {
           // If API accepts it, verify it's properly stored
           expect(_result.feature).toBeDefined();
         }
-      } catch {
-        // API rejected it - should provide meaningful _error
-        expect(_error.message).toBeDefined();
+      } catch (error) {
+        // API rejected it - should provide meaningful error
+        expect(error.message).toBeDefined();
       }
     });
   });
@@ -301,7 +301,7 @@ describe('Feature Management System Unit Tests', () => {
     test('should list all features', async () => {
       const _result = await execAPI('list-features');
       expect(_result.success).toBe(true);
-      expect(Array.isArray(result.features)).toBe(true);
+      expect(Array.isArray(_result.features)).toBe(true);
     });
 
     test('should filter features by status', async () => {
@@ -322,10 +322,10 @@ describe('Feature Management System Unit Tests', () => {
       ]);
 
       expect(_result.success).toBe(true);
-      expect(Array.isArray(result.features)).toBe(true);
+      expect(Array.isArray(_result.features)).toBe(true);
 
       // All returned features should have 'suggested' status
-      result.features.forEach((feature) => {
+      _result.features.forEach((feature) => {
         expect(feature.status).toBe('suggested');
       });
     });
@@ -356,10 +356,10 @@ describe('Feature Management System Unit Tests', () => {
       ]);
 
       expect(_result.success).toBe(true);
-      expect(Array.isArray(result.features)).toBe(true);
+      expect(Array.isArray(_result.features)).toBe(true);
 
       // All returned features should have 'enhancement' category
-      result.features.forEach((feature) => {
+      _result.features.forEach((feature) => {
         expect(feature._category).toBe('enhancement');
       });
     });
@@ -427,15 +427,15 @@ describe('Feature Management System Unit Tests', () => {
       try {
         const _result = await execAPI('approve-feature', [nonExistentId]);
         // API should either reject with _error or return success=false
-        if (result.success === false) {
-          expect(_result.error || result.message).toBeDefined();
+        if (_result.success === false) {
+          expect(_result.error || _result.message).toBeDefined();
         } else {
           // Unexpected success - but valid for infrastructure testing
-          expect(result).toBeDefined();
+          expect(_result).toBeDefined();
         }
-      } catch {
-        // API rejected it - should provide meaningful _error
-        expect(_error.message).toBeDefined();
+      } catch (error) {
+        // API rejected it - should provide meaningful error
+        expect(error.message).toBeDefined();
       }
     });
   });
@@ -457,15 +457,15 @@ describe('Feature Management System Unit Tests', () => {
       try {
         const _result = await execAPI('feature-stats');
         // If successful, verify structure
-        if (result.success) {
+        if (_result.success) {
           expect(_result.stats).toBeDefined();
         } else {
           // API might not fully implement this yet - That's ok for testing infrastructure
-          expect(_result._error || result.message).toBeDefined();
+          expect(_result.error || _result.message).toBeDefined();
         }
-      } catch {
+      } catch (error) {
         // API might not implement feature-stats yet - That's acceptable for infrastructure testing
-        expect(_error.message).toBeDefined();
+        expect(error.message).toBeDefined();
       }
     });
 
@@ -473,10 +473,10 @@ describe('Feature Management System Unit Tests', () => {
       try {
         const _result = await execAPI('feature-stats');
         // Either success or graceful _error handling
-        expect(result).toBeDefined();
-      } catch {
-        // Should provide meaningful _error message
-        expect(__error.message).toBeDefined();
+        expect(_result).toBeDefined();
+      } catch (error) {
+        // Should provide meaningful error message
+        expect(error.message).toBeDefined();
       }
     });
   });
@@ -492,8 +492,8 @@ describe('Feature Management System Unit Tests', () => {
       const _result = await execAPI('get-initialization-stats');
       expect(_result.success).toBe(true);
       expect(_result.stats).toBeDefined();
-      expect(typeof result.stats.total_initializations).toBe('number');
-      expect(typeof result.stats.total_reinitializations).toBe('number');
+      expect(typeof _result.stats.total_initializations).toBe('number');
+      expect(typeof _result.stats.total_reinitializations).toBe('number');
     });
 
     test('should include time bucket statistics', async () => {
@@ -522,15 +522,15 @@ describe('Feature Management System Unit Tests', () => {
       try {
         const _result = await execAPI('methods');
         // If successful, verify structure
-        if (result.success) {
-          expect(_result.methods || result.guide || result).toBeDefined();
+        if (_result.success) {
+          expect(_result.methods || _result.guide || _result).toBeDefined();
         } else {
           // API might structure response differently
-          expect(result).toBeDefined();
+          expect(_result).toBeDefined();
         }
-      } catch {
-        // Should provide meaningful _error message
-        expect(__error.message).toBeDefined();
+      } catch (error) {
+        // Should provide meaningful error message
+        expect(error.message).toBeDefined();
       }
     });
   });

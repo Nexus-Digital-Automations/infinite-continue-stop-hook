@@ -16,23 +16,23 @@ const { loggers } = require('../lib/logger');
 
 // Configuration;
 const DEFAULT_CONFIG = {
-    thresholds: {
+  thresholds: {
     statements: 80,
     branches: 75,
     functions: 80,
     lines: 80,
-},
+  },
   critical_thresholds: {
     statements: 60,
     branches: 60,
     functions: 60,
     lines: 60,
-},
+  },
   paths: {
     summary: 'coverage/coverage-summary.json',
     lcov: 'coverage/lcov.info',
     html: 'coverage/lcov-report/index.html',
-},
+  },
   strict_mode: false, // If true, warnings also cause failure
   generate_badge: true,
   update_readme: false,
@@ -46,29 +46,29 @@ class CoverageLogger {
     if (!process.env.QUIET) {
       loggers.stopHook.log(`📊 ${message}`);
     }
-}
+  }
 
   static success(message) {
     loggers.stopHook.log(`✅ ${message}`);
-}
+  }
 
   static warning(message) {
     loggers.stopHook.log(`⚠️  ${message}`);
-}
+  }
 
   static error(message) {
     loggers.stopHook.log(`❌ ${message}`);
-}
+  }
 
   static debug(message) {
     if (process.env.DEBUG) {
       loggers.stopHook.log(`🐛 DEBUG: ${message}`);
     }
-}
+  }
 
   static table(headers, rows) {
     // Simple table formatter;
-const maxLengths = headers.map((header, i) =>
+    const maxLengths = headers.map((header, i) =>
       Math.max(header.length, ...rows.map((row) => String(row[i] || '').length)),
     );
 
@@ -89,7 +89,7 @@ const maxLengths = headers.map((header, i) =>
     });
 
     loggers.stopHook.log(`└${separator}┘`);
-}
+  }
 }
 
 /**
@@ -99,13 +99,13 @@ class CoverageThresholdChecker {
   constructor(config = {}) {
     this.config = { ...DEFAULT_CONFIG, ...config };
     this.results = {
-    passed: true,
+      passed: true,
       failures: [],
       warnings: [],
       summary: null,
       badge_url: null,
     };
-}
+  }
 
   /**
    * Main execution method
@@ -125,7 +125,7 @@ class CoverageThresholdChecker {
       this.displayResults();
 
       // Check for failures;
-const hasFailures = this.results.failures.length > 0;
+      const hasFailures = this.results.failures.length > 0;
       const hasWarnings = this.results.warnings.length > 0;
       const shouldFail =
         hasFailures || (this.config.strict_mode && hasWarnings);
@@ -140,7 +140,7 @@ const hasFailures = this.results.failures.length > 0;
       }
       throw _error;
     }
-}
+  }
 
   /**
    * Load coverage data from Jest output
@@ -186,7 +186,7 @@ const hasFailures = this.results.failures.length > 0;
       }
       throw new Error(`Failed to parse coverage data: ${error.message}`);
     }
-}
+  }
 
   /**
    * Validate coverage against thresholds
@@ -210,16 +210,16 @@ const hasFailures = this.results.failures.length > 0;
       if (actual < critical) {
         failures.push({
           metric,
-          actual,,
-    required: critical,
+          actual,
+          required: critical,
           severity: 'critical',
           message: `${metric} coverage ${actual.toFixed(2)}% is below critical threshold ${critical}%`,
         });
       } else if (actual < threshold) {
         warnings.push({
           metric,
-          actual,,
-    required: threshold,
+          actual,
+          required: threshold,
           severity: 'warning',
           message: `${metric} coverage ${actual.toFixed(2)}% is below target threshold ${threshold}%`,
         });
@@ -235,7 +235,7 @@ const hasFailures = this.results.failures.length > 0;
     CoverageLogger.debug(
       `Validation complete. Failures: ${failures.length}, Warnings: ${warnings.length}`,
     );
-}
+  }
 
   /**
    * Generate coverage badge
@@ -258,8 +258,8 @@ const hasFailures = this.results.failures.length > 0;
     this.results.badge_url = badgeUrl;
 
     // Write badge data to file for CI usage;
-const badgeData = {
-    coverage_percentage: overallCoverage,
+    const badgeData = {
+      coverage_percentage: overallCoverage,
       badge_url: badgeUrl,
       color,
       timestamp: new Date().toISOString(),
@@ -276,7 +276,7 @@ const badgeData = {
     );
 
     CoverageLogger.success(`Coverage badge generated: ${overallCoverage}%`);
-}
+  }
 
   /**
    * Get badge color based on coverage percentage
@@ -298,7 +298,7 @@ const badgeData = {
       return 'orange';
     }
     return 'red';
-}
+  }
 
   /**
    * Generate validation report
@@ -307,9 +307,9 @@ const badgeData = {
     CoverageLogger.info('Generating validation report...');
 
     const report = {
-    timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString(),
       validation: {
-    passed: this.results.passed,
+        passed: this.results.passed,
         strict_mode: this.config.strict_mode,
         failures: this.results.failures,
         warnings: this.results.warnings,
@@ -319,7 +319,7 @@ const badgeData = {
       critical_thresholds: this.config.critical_thresholds,
       badge: this.results.badge_url
         ? {
-    url: this.results.badge_url,
+          url: this.results.badge_url,
           coverage_percentage: Math.round(
             (this.results.summary.statements.pct +
                 this.results.summary.branches.pct +
@@ -331,11 +331,11 @@ const badgeData = {
         : null,
       git: this.getGitInfo(),
       environment: {
-    node_version: process.version,
+        node_version: process.version,
         ci: Boolean(process.env.CI),
         strict_mode: this.config.strict_mode,
-      }
-};
+      },
+    };
 
     // Ensure coverage directory exists
     if (!FS.existsSync('coverage')) {
@@ -348,7 +348,7 @@ const badgeData = {
     );
 
     CoverageLogger.success('Validation report generated');
-}
+  }
 
   /**
    * Display validation results
@@ -359,7 +359,7 @@ const badgeData = {
     loggers.stopHook.log('\n📊 Coverage Threshold Validation Results:');
 
     // Coverage table;
-const tableHeaders = ['Metric', 'Coverage', 'Target', 'Critical', 'Status'];
+    const tableHeaders = ['Metric', 'Coverage', 'Target', 'Critical', 'Status'];
     const tableRows = Object.entries(this.config.thresholds).map(
       ([metric, threshold]) => {
         const actual = summary[metric]?.pct || 0;
@@ -387,7 +387,7 @@ const tableHeaders = ['Metric', 'Coverage', 'Target', 'Critical', 'Status'];
     CoverageLogger.table(tableHeaders, tableRows);
 
     // Overall status;
-const overallStatus = passed ? '✅ PASSED' : '❌ FAILED';
+    const overallStatus = passed ? '✅ PASSED' : '❌ FAILED';
     loggers.stopHook.log(`\nOverall Status: ${overallStatus}`);
 
     // Failures
@@ -443,7 +443,7 @@ const overallStatus = passed ? '✅ PASSED' : '❌ FAILED';
         '   3. Check HTML report: coverage/lcov-report/index.html',
       );
     }
-}
+  }
 
   /**
    * Get Git information
@@ -451,15 +451,15 @@ const overallStatus = passed ? '✅ PASSED' : '❌ FAILED';
   getGitInfo() {
     try {
       return {
-    commit: execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(),
+        commit: execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(),
         branch: execSync('git rev-parse --abbrev-ref HEAD', {
-    encoding: 'utf8',
+          encoding: 'utf8',
         }).trim(),
       };
     } catch (_) {
       return { commit: 'unknown', branch: 'unknown' };
     }
-}
+  }
 }
 
 // CLI interface
@@ -491,25 +491,25 @@ Environment Variables:
   QUIET=true node coverage-check.js
     `);
     return;
-}
+  }
 
   const config = { ...DEFAULT_CONFIG };
 
   // Parse command line arguments
   if (args.includes('--strict')) {
     config.strict_mode = true;
-}
+  }
 
   if (args.includes('--no-badge')) {
     config.generate_badge = false;
-}
+  }
 
   if (process.env.STRICT_MODE === 'true') {
     config.strict_mode = true;
-}
+  }
 
   // Custom thresholds;
-const thresholdArg = args.find((arg) => arg.startsWith('--thresholds='));
+  const thresholdArg = args.find((arg) => arg.startsWith('--thresholds='));
   if (thresholdArg) {
     try {
       const customThresholds = JSON.parse(thresholdArg.split('=')[1]);
@@ -518,15 +518,15 @@ const thresholdArg = args.find((arg) => arg.startsWith('--thresholds='));
       loggers.stopHook.error('❌ Invalid thresholds JSON:', _error.message);
       throw _error;
     }
-}
+  }
 
   const checker = new CoverageThresholdChecker(config);
   try {
     checker.run();
-} catch (_) {
+  } catch (_) {
     loggers.stopHook.error('❌ Fatal error:', _error.message);
     throw _error;
-}
+  }
 }
 
 module.exports = CoverageThresholdChecker;

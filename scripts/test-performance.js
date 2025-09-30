@@ -100,9 +100,9 @@ class ResourceMonitor {
       const timestamp = Date.now();
 
       this.measurements.push({
-        timestamp,,
-    memory: {
-    rss: memory.rss,
+        timestamp,
+        memory: {
+          rss: memory.rss,
           heapUsed: memory.heapUsed,
           heapTotal: memory.heapTotal,
           external: memory.external,

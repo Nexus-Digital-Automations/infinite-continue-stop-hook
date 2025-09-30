@@ -131,8 +131,8 @@ describe('RAG System End-to-End Integration Tests', () => {
     // Clean up test files
     try {
       await fs.rm(testDataPath, { recursive: true, force: true });
-    } catch {
-      loggers.stopHook.warn('Failed to clean up test data:', __error.message);
+    } catch (error) {
+      loggers.stopHook.warn('Failed to clean up test data:', error.message);
     }
   });
 
@@ -193,17 +193,17 @@ describe('RAG System End-to-End Integration Tests', () => {
     });
 
     test('should retrieve lessons using semantic search', async () => {
-      const _query = 'JavaScript function _error handling best practices';
-      const RESULTS = await ragOperations.searchLessons(_query, {
+      const query = 'JavaScript function error handling best practices';
+      const results = await ragOperations.searchLessons(query, {
         maxResults: 3,
       });
 
-      expect(_RESULTS).toBeInstanceOf(Array);
-      expect(RESULTS.length).toBeGreaterThan(0);
-      expect(RESULTS.length).toBeLessThanOrEqual(3);
+      expect(results).toBeInstanceOf(Array);
+      expect(results.length).toBeGreaterThan(0);
+      expect(results.length).toBeLessThanOrEqual(3);
 
       // Verify result structure
-      for (const result of RESULTS) {
+      for (const result of results) {
         testAssertions.assertValidSearchResult(result);
         expect(result).toHaveProperty('relevanceScore');
         expect(result).toHaveProperty('lessonType');
@@ -211,9 +211,9 @@ describe('RAG System End-to-End Integration Tests', () => {
       }
 
       // Verify relevance ordering
-      for (let i = 1; i < RESULTS.length; i++) {
-        expect(RESULTS[i - 1].relevanceScore).toBeGreaterThanOrEqual(
-          RESULTS[i].relevanceScore,
+      for (let i = 1; i < results.length; i++) {
+        expect(results[i - 1].relevanceScore).toBeGreaterThanOrEqual(
+          results[i].relevanceScore,
         );
       }
     });
@@ -339,7 +339,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       const START_TIME = Date.now();
 
       // Store lessons in batch;
-      const RESULTS = await Promise.all(
+      const results = await Promise.all(
         _lessons.map((lesson) => ragOperations.storeLesson(lesson)),
       );
 
@@ -347,8 +347,8 @@ describe('RAG System End-to-End Integration Tests', () => {
       const _processingTime = END_TIME - START_TIME;
 
       // Verify all operations succeeded
-      expect(_RESULTS).toHaveLength(_batchSize);
-      RESULTS.forEach((result) => {
+      expect(results).toHaveLength(_batchSize);
+      results.forEach((result) => {
         expect(result.success).toBe(true);
       });
 

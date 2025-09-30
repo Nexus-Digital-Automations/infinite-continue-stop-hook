@@ -15,13 +15,15 @@ function fixImportPaths() {
   console.log('🔧 Fixing import paths for logger...');
 
   const fixes = [
-    // Files in lib/api-modules/* subdirectories need ../../logger {
-    pattern: /lib\/api-modules\/.*\.js$/,
+    // Files in lib/api-modules/* subdirectories need ../../logger
+    {
+      pattern: /lib\/api-modules\/.*\.js$/,
       findImport: "const { loggers } = require('./lib/logger');",
       replaceImport: "const { loggers } = require('../../logger');",
     },
-    // Files in lib/* need ./logger {
-    pattern: /lib\/[^\/]+\.js$/,
+    // Files in lib/* need ./logger
+    {
+      pattern: /lib\/[^\/]+\.js$/,
       findImport: "const { loggers } = require('./lib/logger');",
       replaceImport: "const { loggers } = require('./logger');",
     },

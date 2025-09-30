@@ -55,7 +55,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, _category = 'general') {
         try {
           const result = stdout.trim() ? JSON.parse(stdout) : {};
           resolve(result);
-        } catch (error) {
+        } catch {
           resolve({ rawOutput: stdout, stderr });
         }
       } else {
@@ -65,7 +65,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, _category = 'general') {
       }
     });
 
-    child.on('_error', (error) => {
+    child.on('error', (error) => {
       reject(error);
     });
   });
@@ -169,9 +169,9 @@ app.start().then(() => {
     await fs.writeFile(FEATURES_PATH, JSON.stringify(initialFeatures, null, 2));
 
     loggers.stopHook.log('Features test project setup completed');
-  } catch (_error) {
-    loggers.stopHook._error('Failed to setup features test project:', error);
-    throw _error;
+  } catch (error) {
+    loggers.stopHook.error('Failed to setup features test project:', error);
+    throw error;
   }
 }
 
@@ -179,8 +179,8 @@ async function cleanupFeaturesTestProject(_category = 'general') {
   try {
     await fs.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     loggers.stopHook.log('Features test project cleanup completed');
-  } catch (_error) {
-    loggers.stopHook._error('Failed to cleanup features test project');
+  } catch (error) {
+    loggers.stopHook.error('Failed to cleanup features test project', error);
   }
 }
 
@@ -220,7 +220,7 @@ function createBaseTemplate(templateName, criteria, _category = 'general') {
   ]);
 }
 
-async function createChildTemplate(
+function createChildTemplate(
   templateName,
   parentTemplateName,
   criteria,
@@ -280,10 +280,10 @@ describe('FEATURES.json System Validation Tests', () => {
       const createdFeatures = [];
       for (const feature of features) {
         // eslint-disable-next-line no-await-in-loop -- Sequential feature creation required for validation;
-        const result = await createFeature(feature);
-        expect(_result.success).toBe(true);
-        expect(_result.feature).toBeDefined();
-        expect(_result.feature.status).toBe('suggested');
+        const result = await _featureData(feature);
+        expect(result.success).toBe(true);
+        expect(result.feature).toBeDefined();
+        expect(result.feature.status).toBe('suggested');
         createdFeatures.push(result.feature);
       }
 
@@ -1260,9 +1260,9 @@ describe('FEATURES.json System Validation Tests', () => {
       expect(lintResult).toBeDefined();
 
       // Validate overall status
-      expect(VALIDATION_RESULT.overallStatus).toBeDefined();
+      expect(validationResult.overallStatus).toBeDefined();
       expect(['passed', 'failed', 'partial']).toContain(
-        VALIDATION_RESULT.overallStatus,
+        validationResult.overallStatus,
       );
 
       loggers.app.info(
@@ -1270,7 +1270,7 @@ describe('FEATURES.json System Validation Tests', () => {
       );
       loggers.app.info(
         'Validation results:',
-        VALIDATION_RESULT.results.map((r) => ({
+        validationResult.results.map((r) => ({
           id: r.criterionId,
           status: r.status,
         })),

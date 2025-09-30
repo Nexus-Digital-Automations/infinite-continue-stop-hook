@@ -45,9 +45,9 @@ describe('RAG System End-to-End Workflows', () => {
     // Cleanup test environment
     loggers.stopHook.log('Cleaning up E2E test environment...');
     try {
-      await __fs.rm(__testProjectRoot, { recursive: true, force: true });
-    } catch {
-      loggers.stopHook.warn('Cleanup warning:', __error.message);
+      await fs.rm(testProjectRoot, { recursive: true, force: true });
+    } catch (error) {
+      loggers.stopHook.warn('Cleanup warning:', error.message);
     }
   });
 

@@ -114,7 +114,7 @@ function main() {
       encoding: 'utf8',
       stdio: 'inherit',
     });
-  } catch (error) {
+  } catch {
     // Ignore linter errors
   }
 

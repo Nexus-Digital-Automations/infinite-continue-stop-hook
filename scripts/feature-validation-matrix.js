@@ -18,7 +18,7 @@ const { loggers } = require('../lib/logger');
 class FeatureValidationMatrix {
   constructor(validationResults = {}) {
     this.environment = {
-    node_version: process.version,
+      node_version: process.version,
       platform: process.platform,
       arch: process.arch,
       timestamp: new Date().toISOString(),
@@ -26,7 +26,7 @@ class FeatureValidationMatrix {
 
     this.features = this.discoverFeatures();
     this.validationResults = {
-    environment: this.environment,
+      environment: this.environment,
       feature_tests: {},
       compatibility_matrix: {},
       issues_found: [],
@@ -35,13 +35,13 @@ class FeatureValidationMatrix {
 
     this.outputDir = path.join(process.cwd(), 'test-performance');
     this.ensureOutputDirectory();
-}
+  }
 
   ensureOutputDirectory() {
     if (!FS.existsSync(this.outputDir)) {
       FS.mkdirSync(this.outputDir, { recursive: true });
     }
-}
+  }
 
   /**
    * Discover features to validate based on project structure
@@ -51,7 +51,7 @@ class FeatureValidationMatrix {
 
     // Core TaskManager API features
     features.push({
-    name: 'TaskManager API',
+      name: 'TaskManager API',
       type: 'api',
       testFunction: this.validateTaskManagerAPI.bind(this),
       critical: true,
@@ -61,7 +61,7 @@ class FeatureValidationMatrix {
     // RAG System features
     if (FS.existsSync(path.join(process.cwd(), 'lib'))) {
       features.push({
-    name: 'RAG System',
+        name: 'RAG System',
         type: 'rag',
         testFunction: this.validateRAGSystem.bind(this),
         critical: true,
@@ -71,7 +71,7 @@ class FeatureValidationMatrix {
 
     // File Operations
     features.push({
-    name: 'File Operations',
+      name: 'File Operations',
       type: 'file',
       testFunction: this.validateFileOperations.bind(this),
       critical: false,
@@ -80,7 +80,7 @@ class FeatureValidationMatrix {
 
     // Agent Management
     features.push({
-    name: 'Agent Management',
+      name: 'Agent Management',
       type: 'agent',
       testFunction: this.validateAgentManagement.bind(this),
       critical: true,
@@ -89,7 +89,7 @@ class FeatureValidationMatrix {
 
     // Performance Monitoring
     features.push({
-    name: 'Performance Monitoring',
+      name: 'Performance Monitoring',
       type: 'performance',
       testFunction: this.validatePerformanceMonitoring.bind(this),
       critical: false,
@@ -98,7 +98,7 @@ class FeatureValidationMatrix {
 
     // Native Dependencies
     features.push({
-    name: 'Native Dependencies',
+      name: 'Native Dependencies',
       type: 'native',
       testFunction: this.validateNativeDependencies.bind(this),
       critical: true,
@@ -106,14 +106,14 @@ class FeatureValidationMatrix {
     });
 
     return features;
-}
+  }
 
   /**
    * Validate TaskManager API functionality
    */
   async validateTaskManagerAPI() {
     const _result = {
-    name: 'TaskManager API',
+      name: 'TaskManager API',
       status: 'unknown',
       details: {},
       errors: [],
@@ -123,12 +123,12 @@ class FeatureValidationMatrix {
       loggers.stopHook.log('🔌 Testing TaskManager API...');
 
       // Test basic API startup;
-const startTest = await this.testCommand(
+      const startTest = await this.testCommand(
         'node taskmanager-api.js guide',
         10000,
       );
       result.details.startup = {
-    success: startTest.success,
+        success: startTest.success,
         output: startTest.output.substring(0, 200) + '...',
         duration: startTest.duration,
       };
@@ -152,14 +152,14 @@ const startTest = await this.testCommand(
     }
 
     return result;
-}
+  }
 
   /**
    * Validate RAG System functionality
    */
   async validateRAGSystem() {
     const _result = {
-    name: 'RAG System',
+      name: 'RAG System',
       status: 'unknown',
       details: {},
       errors: [],
@@ -169,7 +169,7 @@ const startTest = await this.testCommand(
       loggers.stopHook.log('🤖 Testing RAG System...');
 
       // Test RAG dependencies;
-const ragDeps = ['@xenova/transformers', 'faiss-node', 'natural'];
+      const ragDeps = ['@xenova/transformers', 'faiss-node', 'natural'];
       for (const dep of ragDeps) {
         try {
           require(dep);
@@ -184,7 +184,7 @@ const ragDeps = ['@xenova/transformers', 'faiss-node', 'natural'];
       if (FS.existsSync('test/rag-system')) {
         const ragTest = await this.testCommand('npm run test:rag:unit', 30000);
         result.details.unit_tests = {
-    success: ragTest.success,
+          success: ragTest.success,
           duration: ragTest.duration,
         };
 
@@ -212,14 +212,14 @@ const ragDeps = ['@xenova/transformers', 'faiss-node', 'natural'];
     }
 
     return result;
-}
+  }
 
   /**
    * Validate File Operations functionality
    */
   async validateFileOperations() {
     const _result = {
-    name: 'File Operations',
+      name: 'File Operations',
       status: 'unknown',
       details: {},
       errors: [],
@@ -229,20 +229,20 @@ const ragDeps = ['@xenova/transformers', 'faiss-node', 'natural'];
       loggers.stopHook.log('📁 Testing File Operations...');
 
       // Create temporary test directory;
-const testDir = path.join(this.outputDir, 'feature-test-temp');
+      const testDir = path.join(this.outputDir, 'feature-test-temp');
       if (!FS.existsSync(testDir)) {
         FS.mkdirSync(testDir, { recursive: true });
       }
 
       // Test file creation;
-const testFile = path.join(testDir, 'test-file.json');
+      const testFile = path.join(testDir, 'test-file.json');
       const testData = { test: 'data', timestamp: Date.now() };
 
       FS.writeFileSync(testFile, JSON.stringify(testData, null, 2));
       result.details.file_write = FS.existsSync(testFile);
 
       // Test file reading;
-const readData = JSON.parse(FS.readFileSync(testFile, 'utf8'));
+      const readData = JSON.parse(FS.readFileSync(testFile, 'utf8'));
       result.details.file_read = readData.test === 'data';
 
       // Test file deletion
@@ -260,7 +260,7 @@ const readData = JSON.parse(FS.readFileSync(testFile, 'utf8'));
           30000,
         );
         result.details.integration_tests = {
-    success: fileTest.success,
+          success: fileTest.success,
           duration: fileTest.duration,
         };
 
@@ -278,14 +278,14 @@ const readData = JSON.parse(FS.readFileSync(testFile, 'utf8'));
     }
 
     return result;
-}
+  }
 
   /**
    * Validate Agent Management functionality
    */
   async validateAgentManagement() {
     const _result = {
-    name: 'Agent Management',
+      name: 'Agent Management',
       status: 'unknown',
       details: {},
       errors: [],
@@ -301,7 +301,7 @@ const readData = JSON.parse(FS.readFileSync(testFile, 'utf8'));
           30000,
         );
         result.details.lifecycle_tests = {
-    success: agentTest.success,
+          success: agentTest.success,
           duration: agentTest.duration,
         };
 
@@ -319,7 +319,7 @@ const readData = JSON.parse(FS.readFileSync(testFile, 'utf8'));
           45000,
         );
         result.details.multi_agent_tests = {
-    success: multiAgentTest.success,
+          success: multiAgentTest.success,
           duration: multiAgentTest.duration,
         };
 
@@ -348,14 +348,14 @@ const readData = JSON.parse(FS.readFileSync(testFile, 'utf8'));
     }
 
     return result;
-}
+  }
 
   /**
    * Validate Performance Monitoring functionality
    */
   async validatePerformanceMonitoring() {
     const _result = {
-    name: 'Performance Monitoring',
+      name: 'Performance Monitoring',
       status: 'unknown',
       details: {},
       errors: [],
@@ -371,7 +371,7 @@ const readData = JSON.parse(FS.readFileSync(testFile, 'utf8'));
           30000,
         );
         result.details.performance_script = {
-    success: perfTest.success,
+          success: perfTest.success,
           duration: perfTest.duration,
         };
 
@@ -387,7 +387,7 @@ const readData = JSON.parse(FS.readFileSync(testFile, 'utf8'));
           45000,
         );
         result.details.rag_performance_tests = {
-    success: ragPerfTest.success,
+          success: ragPerfTest.success,
           duration: ragPerfTest.duration,
         };
 
@@ -400,7 +400,7 @@ const readData = JSON.parse(FS.readFileSync(testFile, 'utf8'));
 
       // Check system monitoring capabilities
       result.details.system_info = {
-    memory_usage: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
+        memory_usage: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
         cpu_usage: process.cpuUsage(),
         uptime: process.uptime(),
       };
@@ -414,14 +414,14 @@ const readData = JSON.parse(FS.readFileSync(testFile, 'utf8'));
     }
 
     return result;
-}
+  }
 
   /**
    * Validate Native Dependencies functionality
    */
   async validateNativeDependencies() {
     const _result = {
-    name: 'Native Dependencies',
+      name: 'Native Dependencies',
       status: 'unknown',
       details: {},
       errors: [],
@@ -431,10 +431,10 @@ const readData = JSON.parse(FS.readFileSync(testFile, 'utf8'));
       loggers.stopHook.log('🔧 Testing Native Dependencies...');
 
       // Test critical native dependencies;
-const nativeDeps = [
+      const nativeDeps = [
         { name: 'sqlite3', test: () => require('sqlite3') },
         { name: 'faiss-node', test: () => require('faiss-node') },
-  ];
+      ];
 
       for (const dep of nativeDeps) {
         try {
@@ -475,7 +475,7 @@ const nativeDeps = [
     }
 
     return result;
-}
+  }
 
   /**
    * Test command execution with timeout
@@ -486,27 +486,27 @@ const nativeDeps = [
 
       try {
         const _output = execSync(command, {
-          timeout,,
-    encoding: 'utf8',
+          timeout,
+          encoding: 'utf8',
           stdio: 'pipe',
         });
 
         resolve({
-    success: true,
+          success: true,
           output,
           duration: Date.now() - start,
           error: null,
         });
       } catch (_) {
         resolve({
-    success: false,
+          success: false,
           output: _error.stdout || '',
           duration: Date.now() - start,
           error: _error.message,
         });
       }
     });
-}
+  }
 
   /**
    * Run all feature validations
@@ -518,7 +518,7 @@ const nativeDeps = [
       try {
         loggers.stopHook.log(`Testing: ${feature.name} (${feature.type})`);
         // eslint-disable-next-line no-await-in-loop -- Sequential feature validation required;
-const _result = await feature.testFunction();
+        const _result = await feature.testFunction();
         this.validationResults.feature_tests[feature.name] = result;
 
         const status = result.status === 'passed' ? '✅' : '❌';
@@ -526,7 +526,7 @@ const _result = await feature.testFunction();
 
         if (result.errors.length > 0 && feature.critical) {
           this.validationResults.issues_found.push({
-    feature: feature.name,
+            feature: feature.name,
             type: 'critical',
             errors: result.errors,
           });
@@ -534,21 +534,21 @@ const _result = await feature.testFunction();
       } catch (_) {
         loggers.stopHook.log(`❌ ${feature.name}: validation failed`);
         this.validationResults.feature_tests[feature.name] = {
-    name: feature.name,
+          name: feature.name,
           status: 'failed',
           errors: [`Validation error: ${_error.message}`],
         };
 
         if (feature.critical) {
           this.validationResults.issues_found.push({
-    feature: feature.name,
+            feature: feature.name,
             type: 'critical',
             errors: [`Validation error: ${_error.message}`],
           });
         }
       }
     }
-}
+  }
 
   /**
    * Generate compatibility matrix
@@ -557,7 +557,7 @@ const _result = await feature.testFunction();
     loggers.stopHook.log('📊 Generating compatibility matrix...');
 
     const matrix = {
-    node_version: this.environment.node_version,
+      node_version: this.environment.node_version,
       platform: this.environment.platform,
       arch: this.environment.arch,
       features: {},
@@ -566,7 +566,7 @@ const _result = await feature.testFunction();
     // Analyze feature test results
     Object.values(this.validationResults.feature_tests).forEach((test) => {
       matrix.features[test.name] = {
-    status: test.status,
+        status: test.status,
         errors: test.errors.length,
         critical_issues: test.errors.filter((e) => e.includes('critical'))
           .length,
@@ -574,7 +574,7 @@ const _result = await feature.testFunction();
     });
 
     // Calculate overall compatibility score;
-const totalTests = Object.keys(matrix.features).length;
+    const totalTests = Object.keys(matrix.features).length;
     const passedTests = Object.values(matrix.features).filter(
       (f) => f.status === 'passed',
     ).length;
@@ -584,7 +584,7 @@ const totalTests = Object.keys(matrix.features).length;
     this.validationResults.compatibility_matrix = matrix;
 
     // Determine overall status;
-const criticalIssues = this.validationResults.issues_found.filter(
+    const criticalIssues = this.validationResults.issues_found.filter(
       (i) => i.type === 'critical',
     ).length;
     if (criticalIssues === 0 && matrix.compatibility_score >= 90) {
@@ -596,7 +596,7 @@ const criticalIssues = this.validationResults.issues_found.filter(
     } else {
       this.validationResults.overall_status = 'poor';
     }
-}
+  }
 
   /**
    * Save validation results
@@ -622,7 +622,7 @@ const criticalIssues = this.validationResults.issues_found.filter(
     );
 
     // Generate human-readable report;
-const reportFile = path.join(
+    const reportFile = path.join(
       this.outputDir,
       'feature-validation-report.md',
     );
@@ -632,7 +632,7 @@ const reportFile = path.join(
     loggers.stopHook.log(`📄 Results saved to: ${resultsFile}`);
     loggers.stopHook.log(`📄 Latest results: ${latestFile}`);
     loggers.stopHook.log(`📄 Report: ${reportFile}`);
-}
+  }
 
   /**
    * Generate markdown report
@@ -714,7 +714,7 @@ ${
 ---
 *Generated by Feature Validation Matrix v2.0.0*
 `;
-}
+  }
 
   /**
    * Display validation summary
@@ -747,7 +747,7 @@ ${
         );
       });
     }
-}
+  }
 
   /**
    * Run complete validation suite
@@ -767,7 +767,7 @@ ${
       loggers.stopHook.error('❌ Feature validation failed:', _error.message);
       throw _error;
     }
-}
+  }
 }
 
 // Run validation if called directly

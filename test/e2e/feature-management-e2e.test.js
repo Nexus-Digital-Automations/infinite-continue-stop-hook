@@ -46,12 +46,12 @@ describe('Feature Management System E2E', () => {
           'security',
           'documentation',
         ];
-        const suggestionPromises = categories.map((_category, _index) =>
+        const suggestionPromises = categories.map((category, _index) =>
           FeatureTestHelpers.suggestFeature(environment, {
             title: `${category.charAt(0).toUpperCase() + category.slice(1)} Test Feature`,
             description: `Comprehensive test feature for ${category} category validation`,
             business_value: `Validates ${category} workflow And ensures system handles all feature types`,
-            category: _category,
+            category: category,
           }),
         );
 

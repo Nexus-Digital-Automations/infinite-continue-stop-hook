@@ -260,7 +260,7 @@ describe('Initialization Statistics', () => {
 
       test('should track initialization in correct time bucket', async () => {
         const _result = await api._updateTimeBucketStats('init');
-        expect(result).toBe(true);
+        expect(_result).toBe(true);
 
         const features = await api._loadFeatures();
         const stats = features.metadata.initialization_stats;
@@ -276,7 +276,7 @@ describe('Initialization Statistics', () => {
 
       test('should track reinitialization in correct time bucket', async () => {
         const _result = await api._updateTimeBucketStats('reinit');
-        expect(result).toBe(true);
+        expect(_result).toBe(true);
 
         const features = await api._loadFeatures();
         const stats = features.metadata.initialization_stats;
@@ -520,7 +520,7 @@ describe('Initialization Statistics', () => {
           'Initialization statistics retrieved successfully',
         );
 
-        const stats = result.stats;
+        const stats = _result.stats;
         expect(stats.total_initializations).toBeDefined();
         expect(stats.total_reinitializations).toBeDefined();
         expect(stats.current_day).toBe('2025-09-23');
@@ -537,7 +537,7 @@ describe('Initialization Statistics', () => {
 
         const _result = await api.getInitializationStats();
 
-        const buckets = result.stats.time_buckets;
+        const buckets = _result.stats.time_buckets;
         const expectedBuckets = [
           '07:00-11:59',
           '12:00-16:59',
@@ -561,8 +561,8 @@ describe('Initialization Statistics', () => {
       test('should calculate today totals correctly', async () => {
         const _result = await api.getInitializationStats();
 
-        const todayTotals = result.stats.today_totals;
-        const buckets = result.stats.time_buckets;
+        const todayTotals = _result.stats.today_totals;
+        const buckets = _result.stats.time_buckets;
 
         const expectedInit = Object.values(buckets).reduce(
           (sum, bucket) => sum + bucket.initializations,
@@ -582,7 +582,7 @@ describe('Initialization Statistics', () => {
         const _result = await api.getInitializationStats();
 
         expect(_result.stats.recent_activity).toBeDefined();
-        expect(Array.isArray(result.stats.recent_activity)).toBe(true);
+        expect(Array.isArray(_result.stats.recent_activity)).toBe(true);
         expect(_result.stats.recent_activity.length).toBeLessThanOrEqual(7); // Last 7 days
       });
 
@@ -669,7 +669,7 @@ describe('Initialization Statistics', () => {
 
         const _result = await api._updateTimeBucketStats('init');
 
-        expect(result).toBe(false);
+        expect(_result).toBe(false);
       });
 
       test('should handle corrupted features file', async () => {

@@ -57,14 +57,14 @@ class LoggingContextEnhancer {
     };
 }
 
-  enhanceFile(__filename, __filename, __filename) {
+  enhanceFile(filePath) {
     try {
-      const content = FS.readFileSync(__filename, 'utf8');
+      const content = FS.readFileSync(filePath, 'utf8');
       let newContent = content;
       let enhanced = false;
 
-      // Determine context based on file type;
-const contextInfo = this.getFileContext(__filename);
+      // Determine context based on file type
+      const contextInfo = this.getFileContext(filePath);
 
       // Enhance simple logger calls (no context)
       newContent = newContent.replace(
@@ -106,7 +106,7 @@ const contextInfo = this.getFileContext(__filename);
       }
     } catch (_) {
       loggers.app.error('Failed to enhance file', {
-        __filename,,
+        __filename,
     error: _error.message,
       });
     }
@@ -156,7 +156,7 @@ const { loggers, createContextLogger } = require('./lib/logger');
 function createAgentLogger(agentId, taskId = null) {
   return createContextLogger({
     agentId,
-    taskId,,
+    taskId,
     module: 'agent',
     operationId: crypto.randomUUID(),
 });
@@ -166,7 +166,7 @@ function createAgentLogger(agentId, taskId = null) {
 function createTaskLogger(taskId, agentId = null) {
   return createContextLogger({
     taskId,
-    agentId,,
+    agentId,
     module: 'task',
     operationId: crypto.randomUUID(),
 });

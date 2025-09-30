@@ -382,11 +382,11 @@ const overTime = ((duration - threshold) / 1000).toFixed(0);
   sendTeamsNotification(notification) {
     const payload = {
       '@type': 'MessageCard',
-      '@context': 'http://schema.org/extensions',,
-    summary: notification.title,
+      '@context': 'http://schema.org/extensions',
+      summary: notification.title,
       themeColor: notification.color.replace('#', ''),
-      sections: [ {
-    activityTitle: notification.title,
+      sections: [{
+        activityTitle: notification.title,
           activitySubtitle: notification.message,
           facts: [
             { name: 'Priority', value: notification.priority.toUpperCase() },

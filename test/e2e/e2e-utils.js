@@ -169,7 +169,7 @@ class E2EEnvironment {
    */
   async getFeatures() {
     try {
-      const _result = await CommandExecutor.executeAPI('list-features', [], {
+      const result = await CommandExecutor.executeAPI('list-features', [], {
         projectRoot: this.testDir,
       });
 
@@ -188,7 +188,7 @@ class E2EEnvironment {
       } else {
         throw new Error(`TaskManager API error: ${apiResponse.error}`);
       }
-    } catch {
+    } catch (error) {
       throw new Error(
         `Failed to get features from TaskManager API: ${error.message}`,
       );
@@ -213,6 +213,7 @@ class CommandExecutor {
    * @param {string} command - Command to execute
    * @param {string[]} args - Command arguments
    * @param {Object} options - Execution options
+   * @returns {Promise<Object>} Execution result
    */
   static async execute(command, args = [], options = {}) {
     const {
@@ -270,7 +271,7 @@ class CommandExecutor {
         }
         isResolved = true;
 
-        const _result = {
+        const result = {
           code,
           stdout: stdout.trim(),
           stderr: stderr.trim(),
@@ -340,6 +341,10 @@ class CommandExecutor {
 
   /**
    * Execute TaskManager API command
+   * @param {string} command - API command to execute
+   * @param {string[]} args - Command arguments
+   * @param {Object} options - Execution options
+   * @returns {Promise<Object>} API execution result
    */
   static async executeAPI(command, args = [], options = {}) {
     const apiArgs = [PROJECT_ROOT + '/taskmanager-api.js', command, ...args];
@@ -361,6 +366,9 @@ class CommandExecutor {
 
   /**
    * Execute stop hook command
+   * @param {string[]} args - Command arguments
+   * @param {Object} options - Execution options
+   * @returns {Promise<Object>} Stop hook execution result
    */
   static async executeStopHook(args = [], options = {}) {
     const hookArgs = [PROJECT_ROOT + '/stop-hook.js', ...args];
@@ -406,7 +414,7 @@ class FeatureTestHelpers {
       category: data._category,
     });
 
-    const _result = await CommandExecutor.executeAPI(
+    const result = await CommandExecutor.executeAPI(
       'suggest-feature',
       [jsonData],
       { projectRoot: environment.testDir },
@@ -417,6 +425,11 @@ class FeatureTestHelpers {
 
   /**
    * Approve a feature via API
+   * @param {Object} environment - Test environment
+   * @param {string} featureId - Feature ID to approve
+   * @param {string} approver - Approver name
+   * @param {string} notes - Approval notes
+   * @returns {Promise<Object>} Approval result
    */
   static async approveFeature(
     environment,
@@ -438,6 +451,11 @@ class FeatureTestHelpers {
 
   /**
    * Reject a feature via API
+   * @param {Object} environment - Test environment
+   * @param {string} featureId - Feature ID to reject
+   * @param {string} rejector - Rejector name
+   * @param {string} reason - Rejection reason
+   * @returns {Promise<Object>} Rejection result
    */
   static async rejectFeature(
     environment,
@@ -459,6 +477,9 @@ class FeatureTestHelpers {
 
   /**
    * List features with filtering
+   * @param {Object} environment - Test environment
+   * @param {Object} filter - Filter criteria
+   * @returns {Promise<Object>} List features result
    */
   static async listFeatures(environment, filter = {}) {
     const args = Object.keys(filter).length > 0 ? [JSON.stringify(filter)] : [];
@@ -470,6 +491,8 @@ class FeatureTestHelpers {
 
   /**
    * Get feature statistics
+   * @param {Object} environment - Test environment
+   * @returns {Promise<Object>} Feature statistics result
    */
   static async getFeatureStats(environment) {
     return CommandExecutor.executeAPI('feature-stats', [], {
@@ -536,7 +559,7 @@ class StopHookTestHelpers {
     for (let i = 0; i < maxIterations; i++) {
       // Test the stop hook - should always block (exit code 2) in infinite mode
       // eslint-disable-next-line no-await-in-loop -- Sequential processing required for testing infinite continue behavior over time;
-      const _result = await CommandExecutor.executeStopHook(
+      const result = await CommandExecutor.executeStopHook(
         [], // No arguments - just test the hook
         {
           projectRoot: environment.testDir,
@@ -738,7 +761,7 @@ class E2EAssertions {
         return responseJson.feature.id;
       }
       throw new Error('No feature ID found in response');
-    } catch {
+    } catch (error) {
       throw new Error(
         `Failed to extract feature ID: ${error.message}\nResponse: ${commandResult.stdout}`,
       );

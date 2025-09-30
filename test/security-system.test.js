@@ -12,8 +12,8 @@ const {
 } = require('../lib/api-modules/security');
 
 describe('Security System', () => {
-    
-    
+
+
   let securityValidator;
   let securityMiddleware;
   let securityManager;
@@ -25,36 +25,36 @@ describe('Security System', () => {
   });
 
   describe('SecurityValidator', () => {
-    
-    
+
+
     test('should initialize with default configuration', () => {
       expect(securityValidator).toBeDefined();
       expect(securityValidator.config.maxStringLength).toBe(10000);
       expect(securityValidator.config.allowedAgentRoles).toContain(
-        'development'
+        'development',
       );
     });
 
     test('should validate input data successfully', () => {
       const testData = {
-    title: 'Test Task',
+        title: 'Test Task',
         description: 'Test description',
         category: 'feature',
       };
 
       const schema = {
-    required: ['title', 'description'],
+        required: ['title', 'description'],
         properties: {
-    title: { type: 'string' },
+          title: { type: 'string' },
           description: { type: 'string' },
           category: { type: 'string' },
-}
-};
+        },
+      };
 
       const _result = securityValidator.validateInput(
         testData,
         'test_endpoint',
-        schema
+        schema,
       );
       expect(_result.valid).toBe(true);
       expect(_result.data).toEqual(testData);
@@ -62,22 +62,22 @@ describe('Security System', () => {
 
     test('should detect security threats in input', () => {
       const maliciousData = {
-    title: '<script>alert("xss")</script>',
+        title: '<script>alert("xss")</script>',
         description: 'Normal description',
       };
 
       const schema = {
-    required: ['title', 'description'],
+        required: ['title', 'description'],
         properties: {
-    title: { type: 'string' },
+          title: { type: 'string' },
           description: { type: 'string' },
-}
-};
+        },
+      };
 
       const _result = securityValidator.validateInput(
         maliciousData,
         'test_endpoint',
-        schema
+        schema,
       );
       expect(_result.valid).toBe(false);
       expect(_result.error).toContain('Security threats detected');
@@ -91,7 +91,7 @@ describe('Security System', () => {
       const _result = securityValidator.authorizeOperation(
         AGENT_ID,
         OPERATION,
-        resource
+        resource,
       );
       expect(_result.authorized).toBe(true);
       expect(_result.agentRole).toBe('development');
@@ -105,7 +105,7 @@ describe('Security System', () => {
       const _result = securityValidator.authorizeOperation(
         invalidAgentId,
         OPERATION,
-        resource
+        resource,
       );
       expect(_result.authorized).toBe(false);
       expect(_result.error).toContain('Invalid agent ID format');
@@ -113,7 +113,7 @@ describe('Security System', () => {
 
     test('should sanitize research input data', () => {
       const maliciousInput = {
-    content: '<script>alert("xss")</script>Hello World',
+        content: '<script>alert("xss")</script>Hello World',
         data: 'SELECT * FROM users; DROP TABLE users;',
       };
 
@@ -141,11 +141,11 @@ describe('Security System', () => {
       expect(metrics).toHaveProperty('uptime');
       expect(metrics).toHaveProperty('memoryUsage');
     });
-});
+  });
 
   describe('SecurityMiddleware', () => {
-    
-    
+
+
     test('should initialize with default configuration', () => {
       expect(securityMiddleware).toBeDefined();
       expect(securityMiddleware.config.maxRequestsPerMinute).toBe(100);
@@ -170,11 +170,11 @@ describe('Security System', () => {
       expect(metrics).toHaveProperty('rateLimiting');
       expect(metrics).toHaveProperty('validation');
     });
-});
+  });
 
   describe('SecurityManager', () => {
-    
-    
+
+
     test('should initialize with default configuration', () => {
       expect(securityManager).toBeDefined();
       expect(securityManager.config.integrationMode).toBe('full');
@@ -183,7 +183,7 @@ describe('Security System', () => {
 
     test('should initialize with custom options', () => {
       const customOptions = {
-    integrationMode: 'minimal',
+        integrationMode: 'minimal',
         enableRateLimiting: false,
         enableAuditTrail: false,
       };
@@ -204,21 +204,21 @@ describe('Security System', () => {
     });
 
     test('should shutdown cleanly', () => {
-    
-    
+
+
       // This should not throw an error
       expect(() => {
         securityManager.shutdown();
       }).not.toThrow();
     });
-});
+  });
 
   describe('Integration Tests', () => {
-    
-    
+
+
     test('should integrate all security components', async () => {
       const mockTaskManager = {
-    createTask: jest
+        createTask: jest
           .fn()
           .mockResolvedValue({ id: 'test_task', title: 'Test Task' }),
         updateTask: jest
@@ -239,53 +239,53 @@ describe('Security System', () => {
     test('should validate complete security workflow', () => {
       const AGENT_ID = 'development_session_1234567890_1_general_abcdef';
       const taskData = {
-    title: 'Security Test Task',
+        title: 'Security Test Task',
         description: 'Testing security validation',
         category: 'feature',
       };
 
       // 1. Validate input;
-const schema = {
-    required: ['title', 'description', 'category'],
+      const schema = {
+        required: ['title', 'description', 'category'],
         properties: {
-    title: { type: 'string' },
+          title: { type: 'string' },
           description: { type: 'string' },
           category: { type: 'string' },
-}
-};
+        },
+      };
 
       const inputValidation = securityValidator.validateInput(
         taskData,
         'create_task',
-        schema
+        schema,
       );
       expect(inputValidation.valid).toBe(true);
 
       // 2. Authorize operation;
-const authorization = securityValidator.authorizeOperation(
+      const authorization = securityValidator.authorizeOperation(
         AGENT_ID,
         'create',
-        { type: 'task' }
+        { type: 'task' },
       );
       expect(authorization.authorized).toBe(true);
 
       // 3. Sanitize data;
-const sanitizedData = securityValidator.sanitizeResearchInput(
-        inputValidation.data
+      const sanitizedData = securityValidator.sanitizeResearchInput(
+        inputValidation.data,
       );
       expect(sanitizedData).toBeDefined();
 
       // 4. Audit the operation
       securityValidator.auditLog('TASK_CREATION_TEST', {
-        AGENT_ID,,,
-    operation: 'create',
+        AGENT_ID,
+        operation: 'create',
         success: true,
       });
 
-      const auditEntries = securityValidator.getAuditTrail({,
-    event: 'TASK_CREATION_TEST',
+      const auditEntries = securityValidator.getAuditTrail({
+        event: 'TASK_CREATION_TEST',
       });
       expect(auditEntries.length).toBeGreaterThan(0);
     });
-});
+  });
 });

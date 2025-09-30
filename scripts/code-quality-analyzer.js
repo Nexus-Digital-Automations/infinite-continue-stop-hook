@@ -27,108 +27,108 @@ const { loggers } = require('../lib/logger');
 // Quality metrics configuration;
 const QUALITY_CONFIG = {
   // Complexity thresholds,
-    complexity: {
+  complexity: {
     cyclomatic: {
-    excellent: 5,
+      excellent: 5,
       good: 10,
       acceptable: 15,
       warning: 20,
       critical: 25,
     },
     cognitive: {
-    excellent: 10,
+      excellent: 10,
       good: 15,
       acceptable: 25,
       warning: 30,
       critical: 40,
     },
     npath: {
-    excellent: 200,
+      excellent: 200,
       good: 1000,
       acceptable: 5000,
       warning: 10000,
       critical: 50000,
-    }
-},
+    },
+  },
 
   // Size thresholds
   size: {
     lines_per_function: {
-    excellent: 20,
+      excellent: 20,
       good: 50,
       acceptable: 100,
       warning: 200,
       critical: 500,
     },
     lines_per_file: {
-    excellent: 200,
+      excellent: 200,
       good: 500,
       acceptable: 1000,
       warning: 2000,
       critical: 5000,
     },
     parameters_per_function: {
-    excellent: 3,
+      excellent: 3,
       good: 5,
       acceptable: 7,
       warning: 10,
       critical: 15,
-    }
-},
+    },
+  },
 
   // Duplication thresholds
   duplication: {
     duplicate_lines_percent: {
-    excellent: 0,
+      excellent: 0,
       good: 3,
       acceptable: 5,
       warning: 10,
       critical: 20,
     },
     duplicate_blocks: {
-    excellent: 0,
+      excellent: 0,
       good: 2,
       acceptable: 5,
       warning: 10,
       critical: 25,
-    }
-},
+    },
+  },
 
   // Security thresholds
   security: {
     vulnerabilities: {
-    excellent: 0,
+      excellent: 0,
       good: 0,
       acceptable: 1,
       warning: 3,
       critical: 5,
     },
     security_hotspots: {
-    excellent: 0,
+      excellent: 0,
       good: 2,
       acceptable: 5,
       warning: 10,
       critical: 20,
-    }
-},
+    },
+  },
 
   // Maintainability thresholds
   maintainability: {
     index: {
-    excellent: 85,
+      excellent: 85,
       good: 70,
       acceptable: 60,
       warning: 50,
       critical: 30,
     },
     technical_debt_ratio: {
-    excellent: 0,
+      excellent: 0,
       good: 5,
       acceptable: 10,
       warning: 20,
       critical: 30,
-    }
-},
+    },
+  },
 
   // File patterns to analyze
   patterns: {
@@ -144,7 +144,7 @@ const QUALITY_CONFIG = {
       '**/jest.config.js',
       '**/eslint.config.js',
     ],
-}
+  },
 };
 
 /**
@@ -156,7 +156,7 @@ class QualityLogger {
     this.silent = options.silent || process.env.SILENT === 'true';
     this.structured =
       options.structured || process.env.STRUCTURED_LOGS === 'true';
-}
+  }
 
   log(level, message, data = {}) {
     if (this.silent && level !== 'error') {
@@ -167,17 +167,17 @@ class QualityLogger {
 
     if (this.structured) {
       loggers.stopHook.log(
-        JSON.stringify({ timestamp, level, message, ...data })
+        JSON.stringify({ timestamp, level, message, ...data }),
       );
     } else {
       const emoji = {
-    info: '📊',
-          success: '✅',
-          warning: '⚠️',
-          error: '❌',
-          debug: '🔍',
-          analysis: '🔬',
-        }[level] || '📊';
+        info: '📊',
+        success: '✅',
+        warning: '⚠️',
+        error: '❌',
+        debug: '🔍',
+        analysis: '🔬',
+      }[level] || '📊';
 
       loggers.stopHook.log(`${emoji} ${message}`);
 
@@ -185,26 +185,26 @@ class QualityLogger {
         loggers.stopHook.log(`   ${JSON.stringify(data, null, 2)}`);
       }
     }
-}
+  }
 
   info(message, data) {
     this.log('info', message, data);
-}
+  }
   success(message, data) {
     this.log('success', message, data);
-}
+  }
   warning(message, data) {
     this.log('warning', message, data);
-}
+  }
   error(message, data) {
     this.log('error', message, data);
-}
+  }
   debug(message, data) {
     this.log('debug', message, data);
-}
+  }
   analysis(message, data) {
     this.log('analysis', message, data);
-}
+  }
 }
 
 /**
@@ -216,7 +216,7 @@ class CodeQualityAnalyzer {
     this.logger = new QualityLogger(options);
     this.sourceFiles = [];
     this.metrics = {
-    complexity: {},
+      complexity: {},
       size: {},
       duplication: {},
       security: {},
@@ -226,7 +226,7 @@ class CodeQualityAnalyzer {
     };
     this.issues = [];
     this.recommendations = [];
-}
+  }
 
   /**
    * Main analysis pipeline
@@ -250,7 +250,7 @@ class CodeQualityAnalyzer {
       this.logger.success('Code quality analysis completed');
 
       return {
-    overall_score: this.metrics.overall_score,
+        overall_score: this.metrics.overall_score,
         quality_level: this.metrics.quality_level,
         issues: this.issues,
         recommendations: this.recommendations,
@@ -258,11 +258,11 @@ class CodeQualityAnalyzer {
       };
     } catch (_) {
       this.logger.error('Code quality analysis failed', {
-    error: _error.message,
+        error: _error.message,
       });
       throw _error;
     }
-}
+  }
 
   /**
    * Discover source files to analyze
@@ -276,20 +276,20 @@ class CodeQualityAnalyzer {
     for (const pattern of this.config.patterns.source) {
       try {
         const files = glob.sync(pattern, {
-    ignore: this.config.patterns.exclude,
+          ignore: this.config.patterns.exclude,
           absolute: true,
         });
         allFiles.push(...files);
       } catch (_) {
         this.logger.warning(`Failed to glob pattern ${pattern}`, {
-    error: _error.message,
+          error: _error.message,
         });
       }
     }
 
     this.sourceFiles = [...new Set(allFiles)]; // Remove duplicates
     this.logger.success(`Discovered ${this.sourceFiles.length} source files`);
-}
+  }
 
   /**
    * Analyze code complexity metrics
@@ -298,11 +298,11 @@ class CodeQualityAnalyzer {
     this.logger.info('Analyzing code complexity...');
 
     const complexityData = {
-    cyclomatic: { total: 0, max: 0, average: 0, files: {} },
+      cyclomatic: { total: 0, max: 0, average: 0, files: {} },
       cognitive: { total: 0, max: 0, average: 0, files: {} },
       npath: { total: 0, max: 0, average: 0, files: {} },
       functions: { total: 0, complex_functions: 0 },
-};
+    };
 
     for (const filePath of this.sourceFiles) {
       try {
@@ -313,7 +313,7 @@ class CodeQualityAnalyzer {
         complexityData.cyclomatic.total += fileComplexity.cyclomatic;
         complexityData.cyclomatic.max = Math.max(
           complexityData.cyclomatic.max,
-          fileComplexity.cyclomatic
+          fileComplexity.cyclomatic,
         );
 
         // Aggregate cognitive complexity
@@ -321,7 +321,7 @@ class CodeQualityAnalyzer {
         complexityData.cognitive.total += fileComplexity.cognitive;
         complexityData.cognitive.max = Math.max(
           complexityData.cognitive.max,
-          fileComplexity.cognitive
+          fileComplexity.cognitive,
         );
 
         // Track functions
@@ -334,7 +334,7 @@ class CodeQualityAnalyzer {
           fileComplexity.cyclomatic > this.config.complexity.cyclomatic.warning
         ) {
           this.issues.push({
-    type: 'complexity',
+            type: 'complexity',
             severity:
               fileComplexity.cyclomatic >
               this.config.complexity.cyclomatic.critical
@@ -348,13 +348,13 @@ class CodeQualityAnalyzer {
         }
       } catch (_) {
         this.logger.debug(`Failed to analyze complexity for ${filePath}`, {
-    error: _error.message,
+          error: _error.message,
         });
       }
     }
 
     // Calculate averages;
-const fileCount = this.sourceFiles.length;
+    const fileCount = this.sourceFiles.length;
     complexityData.cyclomatic.average =
       fileCount > 0 ? complexityData.cyclomatic.total / fileCount : 0;
     complexityData.cognitive.average =
@@ -362,21 +362,21 @@ const fileCount = this.sourceFiles.length;
 
     this.metrics.complexity = complexityData;
     this.logger.analysis(
-      `Complexity analysis complete - Avg cyclomatic: ${complexityData.cyclomatic.average.toFixed(2)}`
+      `Complexity analysis complete - Avg cyclomatic: ${complexityData.cyclomatic.average.toFixed(2)}`,
     );
-}
+  }
 
   /**
    * Analyze complexity for a single file
    */
-  analyzeFileComplexity(__filename, __filename) {
+  analyzeFileComplexity(filePath) {
     try {
-      const content = FS.readFileSync(__filename, 'utf8');
+      const content = FS.readFileSync(filePath, 'utf8');
 
       // Simple complexity analysis (can be enhanced with AST parsing)
       const lines = content.split('\n');
       let cyclomatic = 1; // Base complexity;
-let cognitive = 0;
+      let cognitive = 0;
       let functionCount = 0;
       let complexFunctions = 0;
 
@@ -404,21 +404,21 @@ let cognitive = 0;
 
       return {
         cyclomatic,
-        cognitive,,
-    function_count: functionCount,
+        cognitive,
+        function_count: functionCount,
         complex_functions: complexFunctions,
         line_count: lines.length,
       };
     } catch (_) {
       return {
-    cyclomatic: 0,
+        cyclomatic: 0,
         cognitive: 0,
         function_count: 0,
         complex_functions: 0,
         line_count: 0,
       };
     }
-}
+  }
 
   /**
    * Calculate nesting weight for cognitive complexity
@@ -427,7 +427,7 @@ let cognitive = 0;
     const indentation = line.length - line.trimStart().length;
     const nestingLevel = Math.floor(indentation / 2); // Assume 2-space indentation
     return Math.max(1, nestingLevel);
-}
+  }
 
   /**
    * Analyze size metrics
@@ -436,7 +436,7 @@ let cognitive = 0;
     this.logger.info('Analyzing size metrics...');
 
     const sizeData = {
-    total_lines: 0,
+      total_lines: 0,
       total_files: this.sourceFiles.length,
       average_file_size: 0,
       largest_file: { path: '', lines: 0 },
@@ -458,7 +458,7 @@ let cognitive = 0;
           sizeData.files_over_threshold++;
 
           this.issues.push({
-    type: 'size',
+            type: 'size',
             severity:
               lineCount > this.config.size.lines_per_file.critical
                 ? 'critical'
@@ -471,7 +471,7 @@ let cognitive = 0;
         }
       } catch (_) {
         this.logger.debug(`Failed to analyze size for ${filePath}`, {
-    error: _error.message,
+          error: _error.message,
         });
       }
     }
@@ -483,9 +483,9 @@ let cognitive = 0;
 
     this.metrics.size = sizeData;
     this.logger.analysis(
-      `Size analysis complete - Avg file size: ${sizeData.average_file_size.toFixed(0)} lines`
+      `Size analysis complete - Avg file size: ${sizeData.average_file_size.toFixed(0)} lines`,
     );
-}
+  }
 
   /**
    * Analyze code duplication
@@ -494,7 +494,7 @@ let cognitive = 0;
     this.logger.info('Analyzing code duplication...');
 
     const duplicationData = {
-    duplicate_lines: 0,
+      duplicate_lines: 0,
       total_lines: this.metrics.size.total_lines,
       duplication_percentage: 0,
       duplicate_blocks: 0,
@@ -542,7 +542,7 @@ let cognitive = 0;
         }
       } catch (_) {
         this.logger.debug(`Failed to analyze duplication for ${filePath}`, {
-    error: _error.message,
+          error: _error.message,
         });
       }
     }
@@ -571,7 +571,7 @@ let cognitive = 0;
       this.config.duplication.duplicate_lines_percent.warning
     ) {
       this.issues.push({
-    type: 'duplication',
+        type: 'duplication',
         severity:
           duplicationData.duplication_percentage >
           this.config.duplication.duplicate_lines_percent.critical
@@ -585,9 +585,9 @@ let cognitive = 0;
 
     this.metrics.duplication = duplicationData;
     this.logger.analysis(
-      `Duplication analysis complete - ${duplicationData.duplication_percentage.toFixed(2)}% duplication`
+      `Duplication analysis complete - ${duplicationData.duplication_percentage.toFixed(2)}% duplication`,
     );
-}
+  }
 
   /**
    * Simple hash function for content comparison
@@ -600,7 +600,7 @@ let cognitive = 0;
       hash = hash & hash; // Convert to 32-bit integer
     }
     return hash;
-}
+  }
 
   /**
    * Analyze security vulnerabilities
@@ -609,7 +609,7 @@ let cognitive = 0;
     this.logger.info('Analyzing security vulnerabilities...');
 
     const securityData = {
-    vulnerabilities: [],
+      vulnerabilities: [],
       security_hotspots: [],
       total_vulnerabilities: 0,
       critical_vulnerabilities: 0,
@@ -617,36 +617,36 @@ let cognitive = 0;
     };
 
     // Run basic security pattern detection;
-const securityPatterns = [ {
-    pattern: /eval\s*\(/,
-        severity: 'critical',
-        message: 'Use of eval() function',
-      }, {
-    pattern: /innerHTML\s*=/,
-        severity: 'warning',
-        message: 'Direct innerHTML assignment (XSS risk)',
-      }, {
-    pattern: /document\.write\s*\(/,
-        severity: 'warning',
-        message: 'Use of document.write (XSS risk)',
-      }, {
-    pattern: /Math\.random\s*\(\)/,
-        severity: 'info',
-        message: 'Use of Math.random() for security purposes',
-      }, {
-    pattern: /password\s*=\s*["'][^"']*["']/,
-        severity: 'critical',
-        message: 'Hardcoded password detected',
-      }, {
-    pattern: /api[_-]?key\s*=\s*["'][^"']*["']/,
-        severity: 'critical',
-        message: 'Hardcoded API key detected',
-      }, {
-    pattern: /\.\.\//g,
-        severity: 'warning',
-        message: 'Path traversal pattern detected',
-      },
-  ];
+    const securityPatterns = [{
+      pattern: /eval\s*\(/,
+      severity: 'critical',
+      message: 'Use of eval() function',
+    }, {
+      pattern: /innerHTML\s*=/,
+      severity: 'warning',
+      message: 'Direct innerHTML assignment (XSS risk)',
+    }, {
+      pattern: /document\.write\s*\(/,
+      severity: 'warning',
+      message: 'Use of document.write (XSS risk)',
+    }, {
+      pattern: /Math\.random\s*\(\)/,
+      severity: 'info',
+      message: 'Use of Math.random() for security purposes',
+    }, {
+      pattern: /password\s*=\s*["'][^"']*["']/,
+      severity: 'critical',
+      message: 'Hardcoded password detected',
+    }, {
+      pattern: /api[_-]?key\s*=\s*["'][^"']*["']/,
+      severity: 'critical',
+      message: 'Hardcoded API key detected',
+    }, {
+      pattern: /\.\.\//g,
+      severity: 'warning',
+      message: 'Path traversal pattern detected',
+    },
+    ];
 
     for (const filePath of this.sourceFiles) {
       try {
@@ -659,7 +659,7 @@ const securityPatterns = [ {
           for (const secPattern of securityPatterns) {
             if (secPattern.pattern.test(line)) {
               const vulnerability = {
-    type: 'security',
+                type: 'security',
                 severity: secPattern.severity,
                 file: filePath,
                 line: i + 1,
@@ -678,7 +678,7 @@ const securityPatterns = [ {
         }
       } catch (_) {
         this.logger.debug(`Failed to analyze security for ${filePath}`, {
-    error: _error.message,
+          error: _error.message,
         });
       }
     }
@@ -692,7 +692,7 @@ const securityPatterns = [ {
         securityData.critical_vulnerabilities * 20 -
         (securityData.total_vulnerabilities -
           securityData.critical_vulnerabilities) *
-          5
+          5,
     );
 
     // Add high-severity issues to main issues list
@@ -704,9 +704,9 @@ const securityPatterns = [ {
 
     this.metrics.security = securityData;
     this.logger.analysis(
-      `Security analysis complete - ${securityData.total_vulnerabilities} vulnerabilities found`
+      `Security analysis complete - ${securityData.total_vulnerabilities} vulnerabilities found`,
     );
-}
+  }
 
   /**
    * Analyze maintainability metrics
@@ -715,7 +715,7 @@ const securityPatterns = [ {
     this.logger.info('Analyzing maintainability...');
 
     const maintainabilityData = {
-    maintainability_index: 0,
+      maintainability_index: 0,
       technical_debt_minutes: 0,
       technical_debt_ratio: 0,
       code_smells: 0,
@@ -731,12 +731,12 @@ const securityPatterns = [ {
     if (totalLines > 0) {
       const complexityFactor = Math.max(
         0,
-        100 - (totalComplexity / totalLines) * 100
+        100 - (totalComplexity / totalLines) * 100,
       );
       const sizeFactor = Math.max(0, 100 - Math.log10(totalLines) * 10);
       const duplicationFactor = Math.max(
         0,
-        100 - this.metrics.duplication.duplication_percentage * 2
+        100 - this.metrics.duplication.duplication_percentage * 2,
       );
 
       maintainabilityData.maintainability_index =
@@ -757,14 +757,14 @@ const securityPatterns = [ {
 
     maintainabilityData.maintainability_score = Math.max(
       0,
-      100 - maintainabilityData.technical_debt_ratio * 2
+      100 - maintainabilityData.technical_debt_ratio * 2,
     );
 
     this.metrics.maintainability = maintainabilityData;
     this.logger.analysis(
-      `Maintainability analysis complete - Index: ${maintainabilityData.maintainability_index.toFixed(2)}`
+      `Maintainability analysis complete - Index: ${maintainabilityData.maintainability_index.toFixed(2)}`,
     );
-}
+  }
 
   /**
    * Detect code smells
@@ -773,7 +773,7 @@ const securityPatterns = [ {
     this.logger.info('Detecting code smells...');
 
     const smellsData = {
-    long_methods: 0,
+      long_methods: 0,
       large_classes: 0,
       god_objects: 0,
       feature_envy: 0,
@@ -788,7 +788,7 @@ const securityPatterns = [ {
         const lines = content.split('\n');
 
         // Detect long methods/functions;
-let inFunction = false;
+        let inFunction = false;
         let functionLineCount = 0;
         let functionName = '';
 
@@ -808,7 +808,7 @@ let inFunction = false;
               smellsData.long_methods++;
 
               this.issues.push({
-    type: 'code_smell',
+                type: 'code_smell',
                 severity:
                   functionLineCount >
                   this.config.size.lines_per_function.critical
@@ -833,7 +833,7 @@ let inFunction = false;
         }
       } catch (_) {
         this.logger.debug(`Failed to detect smells for ${filePath}`, {
-    error: _error.message,
+          error: _error.message,
         });
       }
     }
@@ -847,9 +847,9 @@ let inFunction = false;
 
     this.metrics.smells = smellsData;
     this.logger.analysis(
-      `Code smell detection complete - ${smellsData.total_smells} smells found`
+      `Code smell detection complete - ${smellsData.total_smells} smells found`,
     );
-}
+  }
 
   /**
    * Extract function name from function declaration
@@ -859,7 +859,7 @@ let inFunction = false;
     return match
       ? match[1] || match[2] || match[3] || 'anonymous'
       : 'anonymous';
-}
+  }
 
   /**
    * Analyze architecture quality
@@ -868,7 +868,7 @@ let inFunction = false;
     this.logger.info('Analyzing architecture quality...');
 
     const architectureData = {
-    module_coupling: 0,
+      module_coupling: 0,
       dependency_depth: 0,
       circular_dependencies: 0,
       architecture_score: 0,
@@ -876,7 +876,7 @@ let inFunction = false;
     };
 
     // Simple architecture analysis;
-const imports = new Map();
+    const imports = new Map();
     const exports = new Map();
 
     for (const filePath of this.sourceFiles) {
@@ -889,8 +889,8 @@ const imports = new Map();
 
         for (const line of lines) {
           // Track imports;
-const importMatch = line.match(
-            /import\s+.*\s+from\s+['"]([^'"]+)['"]/
+          const importMatch = line.match(
+            /import\s+.*\s+from\s+['"]([^'"]+)['"]/,
           );
           if (importMatch) {
             fileImports.push(importMatch[1]);
@@ -913,7 +913,7 @@ const importMatch = line.match(
         exports.set(filePath, fileExports);
       } catch (_) {
         this.logger.debug(`Failed to analyze architecture for ${filePath}`, {
-    error: _error.message,
+          error: _error.message,
         });
       }
     }
@@ -938,14 +938,14 @@ const importMatch = line.match(
     architectureData.architecture_score = Math.min(
       100,
       (100 / (1 + architectureData.module_coupling / 10)) *
-        architectureData.modularity_index
+        architectureData.modularity_index,
     );
 
     this.metrics.architecture = architectureData;
     this.logger.analysis(
-      `Architecture analysis complete - Score: ${architectureData.architecture_score.toFixed(2)}`
+      `Architecture analysis complete - Score: ${architectureData.architecture_score.toFixed(2)}`,
     );
-}
+  }
 
   /**
    * Calculate overall quality score
@@ -954,7 +954,7 @@ const importMatch = line.match(
     this.logger.info('Calculating overall quality score...');
 
     const weights = {
-    complexity: 0.2,
+      complexity: 0.2,
       size: 0.15,
       duplication: 0.15,
       security: 0.25,
@@ -967,21 +967,21 @@ const importMatch = line.match(
     // Complexity score (inverse of complexity)
     const complexityScore = Math.max(
       0,
-      100 - this.metrics.complexity.cyclomatic.average * 2
+      100 - this.metrics.complexity.cyclomatic.average * 2,
     );
     weightedScore += complexityScore * weights.complexity;
 
     // Size score (inverse of average file size)
     const sizeScore = Math.max(
       0,
-      100 - Math.log10(this.metrics.size.average_file_size + 1) * 10
+      100 - Math.log10(this.metrics.size.average_file_size + 1) * 10,
     );
     weightedScore += sizeScore * weights.size;
 
     // Duplication score;
-const duplicationScore = Math.max(
+    const duplicationScore = Math.max(
       0,
-      100 - this.metrics.duplication.duplication_percentage * 5
+      100 - this.metrics.duplication.duplication_percentage * 5,
     );
     weightedScore += duplicationScore * weights.duplication;
 
@@ -1013,9 +1013,9 @@ const duplicationScore = Math.max(
     }
 
     this.logger.success(
-      `Overall quality calculated - Score: ${this.metrics.overall_score}/100 (${this.metrics.quality_level})`
+      `Overall quality calculated - Score: ${this.metrics.overall_score}/100 (${this.metrics.quality_level})`,
     );
-}
+  }
 
   /**
    * Generate improvement recommendations
@@ -1024,13 +1024,13 @@ const duplicationScore = Math.max(
     this.logger.info('Generating improvement recommendations...');
 
     // Sort issues by severity And impact;
-const criticalIssues = this.issues.filter((i) => i.severity === 'critical');
+    const criticalIssues = this.issues.filter((i) => i.severity === 'critical');
     const WARNING_ISSUES = this.issues.filter((i) => i.severity === 'warning');
 
     // Generate specific recommendations based on analysis
     if (criticalIssues.length > 0) {
       this.recommendations.push({
-    priority: 'high',
+        priority: 'high',
         category: 'critical_issues',
         recommendation: 'Address critical quality issues immediately',
         details: `${criticalIssues.length} critical issues found That require immediate attention`,
@@ -1040,7 +1040,7 @@ const criticalIssues = this.issues.filter((i) => i.severity === 'critical');
 
     if (this.metrics.complexity.cyclomatic.average > 15) {
       this.recommendations.push({
-    priority: 'medium',
+        priority: 'medium',
         category: 'complexity',
         recommendation: 'Reduce code complexity through refactoring',
         details: `Average cyclomatic complexity is ${this.metrics.complexity.cyclomatic.average.toFixed(2)}`,
@@ -1054,7 +1054,7 @@ const criticalIssues = this.issues.filter((i) => i.severity === 'critical');
 
     if (this.metrics.duplication.duplication_percentage > 10) {
       this.recommendations.push({
-    priority: 'medium',
+        priority: 'medium',
         category: 'duplication',
         recommendation: 'Eliminate code duplication',
         details: `${this.metrics.duplication.duplication_percentage.toFixed(2)}% code duplication found`,
@@ -1068,7 +1068,7 @@ const criticalIssues = this.issues.filter((i) => i.severity === 'critical');
 
     if (this.metrics.security.total_vulnerabilities > 0) {
       this.recommendations.push({
-    priority: 'high',
+        priority: 'high',
         category: 'security',
         recommendation: 'Fix security vulnerabilities',
         details: `${this.metrics.security.total_vulnerabilities} security issues found`,
@@ -1082,7 +1082,7 @@ const criticalIssues = this.issues.filter((i) => i.severity === 'critical');
 
     if (this.metrics.smells.total_smells > 5) {
       this.recommendations.push({
-    priority: 'low',
+        priority: 'low',
         category: 'code_smells',
         recommendation: 'Address code smells to improve maintainability',
         details: `${this.metrics.smells.total_smells} code smells detected`,
@@ -1095,9 +1095,9 @@ const criticalIssues = this.issues.filter((i) => i.severity === 'critical');
     }
 
     this.logger.success(
-      `Generated ${this.recommendations.length} improvement recommendations`
+      `Generated ${this.recommendations.length} improvement recommendations`,
     );
-}
+  }
 
   /**
    * Generate comprehensive quality report
@@ -1106,17 +1106,17 @@ const criticalIssues = this.issues.filter((i) => i.severity === 'critical');
     this.logger.info('Generating quality report...');
 
     const report = {
-    metadata: {
-    timestamp: new Date().toISOString(),
+      metadata: {
+        timestamp: new Date().toISOString(),
         analyzer_version: '1.0.0',
         analysis_scope: {
-    total_files: this.sourceFiles.length,
+          total_files: this.sourceFiles.length,
           total_lines: this.metrics.size.total_lines,
-        }
-},
+        },
+      },
 
       summary: {
-    overall_score: this.metrics.overall_score,
+        overall_score: this.metrics.overall_score,
         quality_level: this.metrics.quality_level,
         total_issues: this.issues.length,
         critical_issues: this.issues.filter((i) => i.severity === 'critical')
@@ -1127,8 +1127,8 @@ const criticalIssues = this.issues.filter((i) => i.severity === 'critical');
       detailed_metrics: this.metrics,
 
       issues: {
-    by_severity: {
-    critical: this.issues.filter((i) => i.severity === 'critical'),
+        by_severity: {
+          critical: this.issues.filter((i) => i.severity === 'critical'),
           warning: this.issues.filter((i) => i.severity === 'warning'),
           info: this.issues.filter((i) => i.severity === 'info'),
         },
@@ -1139,17 +1139,17 @@ const criticalIssues = this.issues.filter((i) => i.severity === 'critical');
       recommendations: this.recommendations,
 
       quality_gates: {
-    complexity_gate: this.metrics.complexity.cyclomatic.average <= 15,
+        complexity_gate: this.metrics.complexity.cyclomatic.average <= 15,
         size_gate: this.metrics.size.average_file_size <= 500,
         duplication_gate: this.metrics.duplication.duplication_percentage <= 5,
         security_gate: this.metrics.security.critical_vulnerabilities === 0,
         maintainability_gate:
           this.metrics.maintainability.maintainability_index >= 60,
-      }
-};
+      },
+    };
 
     // Write report to file;
-const reportsDir = 'coverage/reports';
+    const reportsDir = 'coverage/reports';
 
     if (!FS.existsSync(reportsDir)) {
       FS.mkdirSync(reportsDir, { recursive: true });
@@ -1157,19 +1157,19 @@ const reportsDir = 'coverage/reports';
 
     FS.writeFileSync(
       path.join(reportsDir, 'code-quality-report.json'),
-      JSON.stringify(report, null, 2)
+      JSON.stringify(report, null, 2),
     );
 
     // Write summary for quick access
 
     FS.writeFileSync(
       path.join(reportsDir, 'quality-summary.json'),
-      JSON.stringify(report.summary, null, 2)
+      JSON.stringify(report.summary, null, 2),
     );
 
     this.logger.success('Quality report generated successfully');
     return report;
-}
+  }
 
   /**
    * Group issues by category
@@ -1185,7 +1185,7 @@ const reportsDir = 'coverage/reports';
     }
 
     return categories;
-}
+  }
 }
 
 // CLI interface
@@ -1217,14 +1217,14 @@ Environment Variables:
   STRUCTURED_LOGS=true node code-quality-analyzer.js
     `);
     return;
-}
+  }
 
   // Parse options;
-const options = {
+  const options = {
     verbose: args.includes('--verbose'),
     silent: args.includes('--silent'),
     structured: args.includes('--structured'),
-};
+  };
 
   const configArg = args.find((arg) => arg.startsWith('--config='));
   if (configArg) {
@@ -1236,28 +1236,28 @@ const options = {
       loggers.stopHook.error(`❌ Failed to load config: ${_error.message}`);
       throw _error;
     }
-}
+  }
 
   // Run analysis;
-const analyzer = new CodeQualityAnalyzer(options);
+  const analyzer = new CodeQualityAnalyzer(options);
   try {
     const _result = analyzer.analyze();
     loggers.stopHook.log(`\n📊 Code Quality Analysis Complete:`);
     loggers.app.info(
-      `   Overall Score: ${result.overall_score}/100 (${result.quality_level})`
+      `   Overall Score: ${result.overall_score}/100 (${result.quality_level})`,
     );
     loggers.stopHook.log(`   Issues Found: ${result.issues.length}`);
     loggers.stopHook.log(
-      `   Recommendations: ${result.recommendations.length}`
+      `   Recommendations: ${result.recommendations.length}`,
     );
 
     if (result.overall_score < 70) {
       throw new Error('Code quality score below threshold');
     }
-} catch (_) {
+  } catch (_) {
     loggers.stopHook.error('❌ Code quality analysis failed:', _error.message);
     throw _error;
-}
+  }
 }
 
 module.exports = CodeQualityAnalyzer;

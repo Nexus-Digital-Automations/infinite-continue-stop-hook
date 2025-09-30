@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+
 /**
  * Console.log to Structured Logging Migration Script
  *
@@ -42,16 +42,16 @@ class ConsoleToStructuredMigrator {
       'console.error': 'loggers.app.error',
       'console.debug': 'loggers.app.debug',
     };
-}
+  }
 
   shouldSkipFile(_filePath) {
     return this.skipPatterns.some((pattern) => {
       const regex = new RegExp(
-        pattern.replace(/\*\*/g, '.*').replace(/\*/g, '[^/]*')
+        pattern.replace(/\*\*/g, '.*').replace(/\*/g, '[^/]*'),
       );
       return regex.test(_filePath);
     });
-}
+  }
 
   shouldProcessFile(_filePath) {
     if (this.shouldSkipFile(_filePath)) {
@@ -60,18 +60,18 @@ class ConsoleToStructuredMigrator {
 
     return this.priorityPatterns.some((pattern) => {
       const regex = new RegExp(
-        pattern.replace(/\*\*/g, '.*').replace(/\*/g, '[^/]*')
+        pattern.replace(/\*\*/g, '.*').replace(/\*/g, '[^/]*'),
       );
       return regex.test(_filePath);
     });
-}
+  }
 
   migrateFileContent(content, filePath) {
     let modified = false;
     let newContent = content;
 
     // Check if file already has logger import;
-const hasLoggerImport = /require\(['"]\.\.?\/.*logger['"]/.test(content);
+    const hasLoggerImport = /require\(['"]\.\.?\/.*logger['"]/.test(content);
 
     // If no logger import, add it at the top after other requires
     if (
@@ -85,7 +85,7 @@ const hasLoggerImport = /require\(['"]\.\.?\/.*logger['"]/.test(content);
         const loggerImport = this.getLoggerImportForFile(filePath);
         newContent = newContent.replace(
           lastRequire,
-          lastRequire + '\n' + loggerImport
+          lastRequire + '\n' + loggerImport,
         );
         modified = true;
       }
@@ -96,34 +96,34 @@ const hasLoggerImport = /require\(['"]\.\.?\/.*logger['"]/.test(content);
       ([consoleMethod, loggerMethod]) => {
         const consoleRegex = new RegExp(
           `\\b${consoleMethod.replace('.', '\\.')}\\(`,
-          'g'
+          'g',
         );
         if (consoleRegex.test(newContent)) {
           newContent = newContent.replace(consoleRegex, `${loggerMethod}(`);
           modified = true;
           this.replacedCalls++;
         }
-      }
+      },
     );
 
     return { content: newContent, modified };
-}
+  }
 
   getLoggerImportForFile(filePath) {
     const relativePath = path.relative(
       path.dirname(filePath),
-      path.join(__dirname, '../lib/logger')
+      path.join(__dirname, '../lib/logger'),
     );
     const normalizedPath = relativePath.replace(/\\/g, '/');
     return `const { loggers } = require('${normalizedPath}');`;
-}
+  }
 
   processFile(filePath) {
     try {
       const content = FS.readFileSync(filePath, 'utf8');
       const { content: newContent, modified } = this.migrateFileContent(
         content,
-        filePath
+        filePath,
       );
 
       if (modified) {
@@ -141,12 +141,21 @@ const hasLoggerImport = /require\(['"]\.\.?\/.*logger['"]/.test(content);
       });
       this.skippedFiles.push({ fileName: filePath, reason: _error.message });
     }
-}
+  }
 
   findJavaScriptFiles(dir = process.cwd()) {
     const files = [];
 
-    function directory(_$2) { else if (stat.isFile() && item.endsWith('.js')) {
+    function scan(directory) {
+      const items = FS.readdirSync(directory);
+
+      for (const item of items) {
+        const itemPath = path.join(directory, item);
+        const stat = FS.statSync(itemPath);
+
+        if (stat.isDirectory() && !this.shouldSkipDirectory(item)) {
+          scan(itemPath);
+        } else if (stat.isFile() && item.endsWith('.js')) {
           files.push(itemPath);
         }
       }
@@ -154,18 +163,18 @@ const hasLoggerImport = /require\(['"]\.\.?\/.*logger['"]/.test(content);
 
     scan(dir);
     return files;
-}
+  }
 
   migrate() {
     loggers.app.info('Starting console.log to structured logging migration');
 
     const allFiles = this.findJavaScriptFiles();
     const filesToProcess = allFiles.filter((file) =>
-      this.shouldProcessFile(file)
+      this.shouldProcessFile(file),
     );
 
     loggers.app.info('Migration scope determined', {
-    totalFiles: allFiles.length,
+      totalFiles: allFiles.length,
       filesToProcess: filesToProcess.length,
       skippedFiles: allFiles.length - filesToProcess.length,
     });
@@ -175,7 +184,7 @@ const hasLoggerImport = /require\(['"]\.\.?\/.*logger['"]/.test(content);
     }
 
     loggers.app.info('Console.log migration completed', {
-    processedFiles: this.processedFiles,
+      processedFiles: this.processedFiles,
       totalReplacements: this.replacedCalls,
       skippedFiles: this.skippedFiles.length,
       success: this.skippedFiles.length === 0,
@@ -183,16 +192,16 @@ const hasLoggerImport = /require\(['"]\.\.?\/.*logger['"]/.test(content);
 
     if (this.skippedFiles.length > 0) {
       loggers.app.warn('Some files were skipped due to errors', {
-    skippedFiles: this.skippedFiles,
+        skippedFiles: this.skippedFiles,
       });
     }
 
     return {
-    processedFiles: this.processedFiles,
+      processedFiles: this.processedFiles,
       replacedCalls: this.replacedCalls,
       skippedFiles: this.skippedFiles.length,
     };
-}
+  }
 }
 
 // Execute migration if run directly
@@ -203,13 +212,13 @@ if (require.main === module) {
 
     if (result.skippedFiles > 0) {
       throw new Error(
-        `Migration completed with ${result.skippedFiles} skipped files`
+        `Migration completed with ${result.skippedFiles} skipped files`,
       );
     }
-} catch (_) {
+  } catch (_) {
     loggers.app.error('Migration failed', { error: _error.message });
     throw new Error(`Migration failed: ${_error.message}`);
-}
+  }
 }
 
 module.exports = ConsoleToStructuredMigrator;

@@ -112,10 +112,11 @@ const nameFixes = [ {
     let content = FS.readFileSync(filePath, 'utf8');
     let changes = 0;
 
-    // Fix specific patterns in test files;
-const fixes = [
-      // Fix result declared but result used: {
-    pattern: /const\s+result\s*=\s*([^;]+);\s*([^]*?)\bresult\b/g,
+    // Fix specific patterns in test files
+    const fixes = [
+      // Fix result declared but result used
+      {
+        pattern: /const\s+result\s*=\s*([^;]+);\s*([^]*?)\bresult\b/g,
         replacement: (match, assignment, following) => {
           // If following code uses 'result', change the declaration to use 'result'
           if (

@@ -74,12 +74,12 @@ function execAPI(command, args = [], options = {}, _category = 'general') {
         // Try to parse JSON response
         const result = JSON.parse(jsonString);
         resolve(result);
-      } catch {
+      } catch (_parseError) {
         // If JSON parsing fails, check if we can extract JSON from stderr
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch {
+        } catch (parseError) {
           // If both fail, include raw output for debugging
           reject(
             new Error(
@@ -142,7 +142,7 @@ async function createTestEnvironment(testName, _category = 'general') {
 async function cleanupTestEnvironment(testDir, _category = 'general') {
   try {
     await FS.rm(testDir, { recursive: true, force: true });
-  } catch {
+  } catch (error) {
     loggers.stopHook.warn(`Cleanup warning for ${testDir}:`, error.message);
   }
 }
@@ -286,7 +286,7 @@ async function setupGlobalCleanup() {
       return FS.rm(fullPath, { recursive: true, force: true });
     });
     await Promise.all(cleanupPromises);
-  } catch {
+  } catch (error) {
     loggers.stopHook.warn('Global cleanup warning:', error.message);
   }
 }
@@ -297,7 +297,7 @@ async function setupGlobalCleanup() {
 async function teardownGlobalCleanup() {
   try {
     await FS.rm(BASE_TEST_DIR, { recursive: true, force: true });
-  } catch {
+  } catch (error) {
     loggers.stopHook.warn('Global teardown warning:', error.message);
   }
 }

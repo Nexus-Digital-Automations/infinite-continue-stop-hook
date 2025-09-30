@@ -2511,43 +2511,7 @@
     "last_bulk_archive": "2025-09-30T00:22:57.984Z",
     "bulk_archive_count": 1347
   },
-  "agents": {
-    "claude-principal-engineer-1759190015": {
-      "lastHeartbeat": "2025-09-29T23:53:36.309Z",
-      "status": "active",
-      "reinitialized": "2025-09-29T23:53:36.309Z",
-      "sessionId": "1bbd16e927f45544",
-      "previousSessions": []
-    },
-    "claude-principal-engineer-1759190052": {
-      "lastHeartbeat": "2025-09-29T23:54:13.761Z",
-      "status": "active",
-      "reinitialized": "2025-09-29T23:54:13.761Z",
-      "sessionId": "15c99051ff6f4f4f",
-      "previousSessions": []
-    },
-    "claude-principal-engineer-1759190092": {
-      "lastHeartbeat": "2025-09-29T23:54:53.343Z",
-      "status": "active",
-      "reinitialized": "2025-09-29T23:54:53.343Z",
-      "sessionId": "6b263ec722126cbb",
-      "previousSessions": []
-    },
-    "claude-principal-engineer-1759190245": {
-      "lastHeartbeat": "2025-09-29T23:57:26.496Z",
-      "status": "active",
-      "reinitialized": "2025-09-29T23:57:26.496Z",
-      "sessionId": "0b80600a0d089581",
-      "previousSessions": []
-    },
-    "claude-fix-agent": {
-      "lastHeartbeat": "2025-09-30T00:03:37.135Z",
-      "status": "active",
-      "reinitialized": "2025-09-30T00:03:37.135Z",
-      "sessionId": "c56f451f18709f54",
-      "previousSessions": []
-    }
-  },
+  "agents": {},
   "features": [
     {
       "id": "feature_1758946372889_4bc64043b483",

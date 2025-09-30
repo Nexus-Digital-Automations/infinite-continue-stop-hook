@@ -56,7 +56,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, _category = 'general') {
         try {
           const result = stdout.trim() ? JSON.parse(stdout) : {};
           resolve(result);
-        } catch (error) {
+        } catch {
           resolve({ rawOutput: stdout, stderr });
         }
       } else {
@@ -66,7 +66,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, _category = 'general') {
       }
     });
 
-    child.on('_error', (error) => {
+    child.on('error', (error) => {
       reject(error);
     });
   });
@@ -222,9 +222,9 @@ describe('Regression Test Suite', () => {
     await fs.writeFile(path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
 
     loggers.stopHook.log('Regression test project setup completed');
-  } catch (_error) {
-    loggers.stopHook._error('Failed to setup regression test project:', error);
-    throw _error;
+  } catch (error) {
+    loggers.stopHook.error('Failed to setup regression test project:', error);
+    throw error;
   }
 }
 
@@ -232,8 +232,8 @@ async function cleanupRegressionTestProject(_category = 'general') {
   try {
     await fs.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     loggers.stopHook.log('Regression test project cleanup completed');
-  } catch (_error) {
-    loggers.stopHook._error('Failed to cleanup regression test project:', error);
+  } catch (error) {
+    loggers.stopHook.error('Failed to cleanup regression test project:', error);
   }
 }
 
@@ -381,11 +381,11 @@ describe('Success Criteria Regression Tests', () => {
 
           const status = await execAPI('success-criteria:status');
           expect(status.projectCriteria.length).toBeGreaterThan(0);
-        } catch (_error) {
+        } catch (error) {
           // Log version compatibility issues but don't fail test
           loggers.app.info(
             `API version ${version} compatibility note:`,
-            __error.message,
+            error.message,
           );
         }
       }
@@ -683,10 +683,10 @@ describe('Success Criteria Regression Tests', () => {
           loggers.stopHook.log(
             `Schema ${schema.version} compatibility confirmed`,
           );
-        } catch (_error) {
+        } catch (error) {
           loggers.app.info(
             `Schema ${schema.version} evolution note:`,
-            __error.message,
+            error.message,
           );
         }
       }
@@ -858,11 +858,11 @@ describe('Success Criteria Regression Tests', () => {
               result.warning || 'Endpoint is deprecated',
             );
           }
-        } catch (_error) {
+        } catch (error) {
           // Some deprecated endpoints might be completely removed
           loggers.app.info(
             `Deprecated endpoint ${endpoint} is no longer available:`,
-            __error.message,
+            error.message,
           );
         }
       }
@@ -977,10 +977,10 @@ describe('Success Criteria Regression Tests', () => {
           loggers.app.info(
             `Template version ${template.version} compatibility confirmed`,
           );
-        } catch (_error) {
+        } catch (error) {
           loggers.app.info(
             `Template version ${template.version} compatibility issue:`,
-            __error.message,
+            error.message,
           );
         }
       }
@@ -1142,14 +1142,14 @@ describe('Success Criteria Regression Tests', () => {
             const result = await execAPI(api);
             expect(result).toBeDefined();
             // Status should always have certain fields
-            expect(_result.projectCriteria !== undefined).toBe(true);
+            expect(result.projectCriteria !== undefined).toBe(true);
           }
 
           loggers.stopHook.log(`API contract for ${api} is stable`);
-        } catch (_error) {
+        } catch (error) {
           loggers.stopHook.log(
             `API contract issue for ${api}:`,
-            __error.message,
+            error.message,
           );
         }
       }
@@ -1218,12 +1218,12 @@ describe('Success Criteria Regression Tests', () => {
           loggers.stopHook.log(
             `Essential function '${func.name}' is preserved`,
           );
-        } catch (_error) {
-          loggers.app._error(
+        } catch (error) {
+          loggers.app.error(
             `Essential function '${func.name}' failed:`,
-            __error.message,
+            error.message,
           );
-          throw _error; // Essential functions must pass
+          throw error; // Essential functions must pass
         }
       }
 
@@ -1275,7 +1275,7 @@ describe('Success Criteria Regression Tests', () => {
       // Use for-await-of to maintain sequential processing for performance testing
       for await (const test of PERFORMANCE_TESTS) {
         const result = await test.test();
-        expect(_result.duration).toBeLessThan(result.threshold);
+        expect(result.duration).toBeLessThan(result.threshold);
 
         loggers.app.info(
           `Performance test '${test.name}': ${result.duration}ms (threshold: ${result.threshold}ms)`,

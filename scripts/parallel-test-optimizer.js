@@ -108,8 +108,8 @@ const optimalLimit = Math.min(cpuBasedLimit, memoryBasedLimit, 8); // Cap at 8
   analyzeTestSuite(name, command) {
     const suite = {
       name,
-      command,,
-    type: this.classifyTestSuite(name),
+      command,
+      type: this.classifyTestSuite(name),
       estimatedDuration: this.estimateTestDuration(name),
       resourceRequirements: this.estimateResourceRequirements(name),
       dependencies: this.identifyTestDependencies(name),

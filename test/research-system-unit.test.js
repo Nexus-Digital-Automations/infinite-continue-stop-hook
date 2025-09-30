@@ -63,15 +63,15 @@ function execAPI(command, args = [], timeout = TIMEOUT, _category = 'general') {
           jsonString = jsonString.substring(jsonStart);
         }
         const _result = JSON.parse(jsonString);
-        resolve(result);
+        resolve(_result);
       } catch {
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch {
+        } catch (error) {
           reject(
             new Error(
-              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse _error: ${__error.message}`,
+              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${error.message}`,
             ),
           );
         }
@@ -124,7 +124,7 @@ function setupFeatureTestEnvironment(_category = 'general') {
 /**
  * Cleanup test environment
  */
-async function cleanupFeatureTestEnvironment(_category = 'general', _agentId) {
+function cleanupFeatureTestEnvironment(_category = 'general', _agentId) {
   if (fs.existsSync(TEST_PROJECT_DIR)) {
     fs.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
   }
@@ -204,7 +204,7 @@ describe('Feature Management System Unit Tests', () => {
       expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
+      const task = listResult.tasks.find((t) => t.id === _result.taskId);
       const researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );
@@ -241,7 +241,7 @@ describe('Feature Management System Unit Tests', () => {
       expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
+      const task = listResult.tasks.find((t) => t.id === _result.taskId);
       const researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );
@@ -314,7 +314,7 @@ describe('Feature Management System Unit Tests', () => {
       expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
+      const task = listResult.tasks.find((t) => t.id === _result.taskId);
       const researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );
@@ -355,7 +355,7 @@ describe('Feature Management System Unit Tests', () => {
       expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
+      const task = listResult.tasks.find((t) => t.id === _result.taskId);
       const researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );
@@ -393,7 +393,7 @@ describe('Feature Management System Unit Tests', () => {
       expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
+      const task = listResult.tasks.find((t) => t.id === _result.taskId);
       const researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );
@@ -437,7 +437,7 @@ describe('Feature Management System Unit Tests', () => {
       expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
+      const task = listResult.tasks.find((t) => t.id === _result.taskId);
       const researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );
@@ -470,7 +470,7 @@ describe('Feature Management System Unit Tests', () => {
       expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
+      const task = listResult.tasks.find((t) => t.id === _result.taskId);
       const researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );
@@ -496,7 +496,7 @@ describe('Feature Management System Unit Tests', () => {
       expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
+      const task = listResult.tasks.find((t) => t.id === _result.taskId);
       const researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );
@@ -531,7 +531,7 @@ describe('Feature Management System Unit Tests', () => {
       expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
+      const task = listResult.tasks.find((t) => t.id === _result.taskId);
       const researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );
@@ -572,7 +572,7 @@ describe('Feature Management System Unit Tests', () => {
       expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
+      const task = listResult.tasks.find((t) => t.id === _result.taskId);
       const researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );
@@ -619,7 +619,7 @@ describe('Feature Management System Unit Tests', () => {
         expect(_result.success).toBe(true);
 
         const listResult = await execAPI('list');
-        const task = listResult.tasks.find((t) => t.id === result.taskId);
+        const task = listResult.tasks.find((t) => t.id === _result.taskId);
         const researchSubtask = task.subtasks.find(
           (st) => st.type === 'research',
         );
@@ -650,12 +650,12 @@ describe('Feature Management System Unit Tests', () => {
       const afterTime = Date.now();
 
       const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
+      const task = listResult.tasks.find((t) => t.id === _result.taskId);
       const researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );
 
-      if ((researchSubtask, _agentId)) {
+      if (researchSubtask) {
         expect(researchSubtask.created_at).toBeDefined();
         const createdTime = new Date(researchSubtask.created_at).getTime();
         expect(createdTime).toBeGreaterThanOrEqual(beforeTime);
@@ -688,7 +688,7 @@ describe('Feature Management System Unit Tests', () => {
       expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
+      const task = listResult.tasks.find((t) => t.id === _result.taskId);
 
       // Should still create subtasks even with minimal description
       expect(task.subtasks).toBeDefined();
@@ -718,7 +718,7 @@ describe('Feature Management System Unit Tests', () => {
       expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
+      const task = listResult.tasks.find((t) => t.id === _result.taskId);
       const researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );
@@ -759,7 +759,7 @@ describe('Feature Management System Unit Tests', () => {
       expect(_result.success).toBe(true);
 
       const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
+      const task = listResult.tasks.find((t) => t.id === _result.taskId);
       const researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );

@@ -21,7 +21,7 @@ const { loggers } = require('../lib/logger');
 class CoverageArtifactsGenerator {
   constructor(options = {}) {
     this.options = {
-    outputDir: './coverage/artifacts',
+      outputDir: './coverage/artifacts',
       reportsDir: './coverage/reports',
       sourceDir: './coverage',
       includeMetadata: true,
@@ -33,12 +33,12 @@ class CoverageArtifactsGenerator {
 
     this.artifacts = [];
     this.metadata = {
-    generator: 'Coverage Artifacts Generator v1.0.0',
+      generator: 'Coverage Artifacts Generator v1.0.0',
       timestamp: new Date().toISOString(),
       git: this.getGitInfo(),
       environment: this.getEnvironmentInfo(),
     };
-}
+  }
 
   /**
    * Main execution method
@@ -76,7 +76,7 @@ class CoverageArtifactsGenerator {
       }
       throw _error;
     }
-}
+  }
 
   /**
    * Ensure output directories exist
@@ -96,7 +96,7 @@ class CoverageArtifactsGenerator {
         FS.mkdirSync(dir, { recursive: true });
       }
     });
-}
+  }
 
   /**
    * Process And organize coverage reports
@@ -110,18 +110,18 @@ class CoverageArtifactsGenerator {
       { src: 'lcov.info', type: 'lcov', format: 'lcov' },
       { src: 'cobertura-coverage.xml', type: 'cobertura', format: 'xml' },
       { src: 'clover.xml', type: 'clover', format: 'xml' },
-  ];
+    ];
 
     for (const file of coverageFiles) {
       const srcPath = path.join(this.options.sourceDir, file.src);
 
       if (FS.existsSync(srcPath)) {
         // Copy to artifacts;
-const destPath = path.join(this.options.outputDir, file.src);
+        const destPath = path.join(this.options.outputDir, file.src);
         FS.copyFileSync(srcPath, destPath);
 
         this.artifacts.push({
-    name: file.src,
+          name: file.src,
           type: file.type,
           format: file.format,
           path: destPath,
@@ -136,13 +136,13 @@ const destPath = path.join(this.options.outputDir, file.src);
     }
 
     // Process HTML reports;
-const htmlReportDir = path.join(this.options.sourceDir, 'lcov-report');
+    const htmlReportDir = path.join(this.options.sourceDir, 'lcov-report');
     if (FS.existsSync(htmlReportDir)) {
       const htmlArtifactDir = path.join(this.options.outputDir, 'html-report');
       this.copyDirectory(htmlReportDir, htmlArtifactDir);
 
       this.artifacts.push({
-    name: 'html-report',
+        name: 'html-report',
         type: 'html',
         format: 'html',
         path: htmlArtifactDir,
@@ -152,7 +152,7 @@ const htmlReportDir = path.join(this.options.sourceDir, 'lcov-report');
 
       loggers.stopHook.log('  ✓ Processed HTML coverage report');
     }
-}
+  }
 
   /**
    * Generate summary artifacts for quick consumption
@@ -176,10 +176,10 @@ const htmlReportDir = path.join(this.options.sourceDir, 'lcov-report');
     const summary = coverageData.total;
 
     // Generate simplified summary;
-const simpleSummary = {
-    timestamp: this.metadata.timestamp,
+    const simpleSummary = {
+      timestamp: this.metadata.timestamp,
       overall_coverage: {
-    lines: Math.round(summary.lines.pct * 100) / 100,
+        lines: Math.round(summary.lines.pct * 100) / 100,
         statements: Math.round(summary.statements.pct * 100) / 100,
         functions: Math.round(summary.functions.pct * 100) / 100,
         branches: Math.round(summary.branches.pct * 100) / 100,
@@ -200,7 +200,7 @@ const simpleSummary = {
     );
 
     this.artifacts.push({
-    name: 'coverage-simple.json',
+      name: 'coverage-simple.json',
       type: 'summary',
       format: 'json',
       path: summaryArtifactPath,
@@ -209,7 +209,7 @@ const simpleSummary = {
     });
 
     // Generate CSV summary for spreadsheet integration;
-const csvSummary = this.generateCSVSummary(coverageData);
+    const csvSummary = this.generateCSVSummary(coverageData);
     const csvPath = path.join(
       this.options.outputDir,
       'summary',
@@ -218,7 +218,7 @@ const csvSummary = this.generateCSVSummary(coverageData);
     FS.writeFileSync(csvPath, csvSummary);
 
     this.artifacts.push({
-    name: 'coverage-summary.csv',
+      name: 'coverage-summary.csv',
       type: 'summary',
       format: 'csv',
       path: csvPath,
@@ -227,7 +227,7 @@ const csvSummary = this.generateCSVSummary(coverageData);
     });
 
     loggers.stopHook.log('  ✓ Generated summary artifacts');
-}
+  }
 
   /**
    * Generate dashboard-specific artifacts
@@ -250,8 +250,8 @@ const csvSummary = this.generateCSVSummary(coverageData);
     const coverageData = JSON.parse(FS.readFileSync(summaryPath, 'utf8'));
 
     // Generate metrics for Grafana/similar tools;
-const metricsData = {
-    timestamp: Date.now(),
+    const metricsData = {
+      timestamp: Date.now(),
       metrics: {
         'coverage.lines.percentage': coverageData.total.lines.pct,
         'coverage.statements.percentage': coverageData.total.statements.pct,
@@ -267,11 +267,11 @@ const metricsData = {
         'coverage.branches.total': coverageData.total.branches.total,
       },
       tags: {
-    project: this.getProjectName(),
+        project: this.getProjectName(),
         branch: this.metadata.git.branch || 'unknown',
         commit: this.metadata.git.commit || 'unknown',
-      }
-};
+      },
+    };
 
     const metricsPath = path.join(
       this.options.outputDir,
@@ -281,7 +281,7 @@ const metricsData = {
     FS.writeFileSync(metricsPath, JSON.stringify(metricsData, null, 2));
 
     this.artifacts.push({
-    name: 'metrics.json',
+      name: 'metrics.json',
       type: 'dashboard',
       format: 'json',
       path: metricsPath,
@@ -290,7 +290,7 @@ const metricsData = {
     });
 
     // Generate InfluxDB line protocol format;
-const influxData = this.generateInfluxLineProtocol(metricsData);
+    const influxData = this.generateInfluxLineProtocol(metricsData);
     const influxPath = path.join(
       this.options.outputDir,
       'dashboard',
@@ -299,7 +299,7 @@ const influxData = this.generateInfluxLineProtocol(metricsData);
     FS.writeFileSync(influxPath, influxData);
 
     this.artifacts.push({
-    name: 'coverage.influx',
+      name: 'coverage.influx',
       type: 'dashboard',
       format: 'influx',
       path: influxPath,
@@ -308,7 +308,7 @@ const influxData = this.generateInfluxLineProtocol(metricsData);
     });
 
     loggers.stopHook.log('  ✓ Generated dashboard artifacts');
-}
+  }
 
   /**
    * Generate CI-specific artifacts
@@ -317,7 +317,7 @@ const influxData = this.generateInfluxLineProtocol(metricsData);
     loggers.stopHook.log('🚀 Generating CI artifacts...');
 
     // Generate environment variables file for CI consumption;
-const summaryPath = path.join(
+    const summaryPath = path.join(
       this.options.sourceDir,
       'coverage-summary.json',
     );
@@ -341,7 +341,7 @@ const summaryPath = path.join(
       FS.writeFileSync(envPath, envVars.join('\n'));
 
       this.artifacts.push({
-    name: 'coverage.env',
+        name: 'coverage.env',
         type: 'ci',
         format: 'env',
         path: envPath,
@@ -350,7 +350,7 @@ const summaryPath = path.join(
       });
 
       // Generate GitHub Actions outputs;
-const githubOutputs = [
+      const githubOutputs = [
         `coverage-lines=${summary.lines.pct}`,
         `coverage-statements=${summary.statements.pct}`,
         `coverage-functions=${summary.functions.pct}`,
@@ -367,7 +367,7 @@ const githubOutputs = [
       FS.writeFileSync(githubPath, githubOutputs.join('\n'));
 
       this.artifacts.push({
-    name: 'github-outputs.txt',
+        name: 'github-outputs.txt',
         type: 'ci',
         format: 'text',
         path: githubPath,
@@ -377,7 +377,7 @@ const githubOutputs = [
 
       loggers.stopHook.log('  ✓ Generated CI artifacts');
     }
-}
+  }
 
   /**
    * Generate badge artifacts
@@ -401,8 +401,8 @@ const githubOutputs = [
     const summary = coverageData.total;
 
     // Generate badge data;
-const badges = {
-    lines: this.generateBadgeData('lines', summary.lines.pct),
+    const badges = {
+      lines: this.generateBadgeData('lines', summary.lines.pct),
       statements: this.generateBadgeData('statements', summary.statements.pct),
       functions: this.generateBadgeData('functions', summary.functions.pct),
       branches: this.generateBadgeData('branches', summary.branches.pct),
@@ -420,7 +420,7 @@ const badges = {
     FS.writeFileSync(badgesPath, JSON.stringify(badges, null, 2));
 
     this.artifacts.push({
-    name: 'badges.json',
+      name: 'badges.json',
       type: 'badges',
       format: 'json',
       path: badgesPath,
@@ -438,7 +438,7 @@ const badges = {
       FS.writeFileSync(urlPath, badge.url);
 
       this.artifacts.push({
-    name: `${type}-badge.url`,
+        name: `${type}-badge.url`,
         type: 'badges',
         format: 'url',
         path: urlPath,
@@ -448,7 +448,7 @@ const badges = {
     });
 
     loggers.stopHook.log('  ✓ Generated badge artifacts');
-}
+  }
 
   /**
    * Create artifact manifest
@@ -457,9 +457,9 @@ const badges = {
     loggers.stopHook.log('📋 Creating artifact manifest...');
 
     const manifest = {
-    metadata: this.metadata,
+      metadata: this.metadata,
       summary: {
-    total_artifacts: this.artifacts.length,
+        total_artifacts: this.artifacts.length,
         total_size: this.artifacts.reduce(
           (sum, artifact) => sum + artifact.size,
           0,
@@ -468,8 +468,8 @@ const badges = {
         formats: [...new Set(this.artifacts.map((a) => a.format))],
       },
       artifacts: this.artifacts.map((artifact) => ({
-        ...artifact,,
-    path: path.relative(process.cwd(), artifact.path), // Make paths relative
+        ...artifact,
+        path: path.relative(process.cwd(), artifact.path), // Make paths relative
       })),
     };
 
@@ -477,7 +477,7 @@ const badges = {
     FS.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
 
     loggers.stopHook.log('  ✓ Created artifact manifest');
-}
+  }
 
   /**
    * Generate README for artifacts
@@ -530,7 +530,7 @@ Generated by Coverage Artifacts Generator v1.0.0
     FS.writeFileSync(readmePath, readme);
 
     loggers.stopHook.log('  ✓ Generated README');
-}
+  }
 
   /**
    * Utility methods
@@ -539,35 +539,35 @@ Generated by Coverage Artifacts Generator v1.0.0
     try {
       const { execSync } = require('child_process');
       return {
-    commit: execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(),
+        commit: execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(),
         branch: execSync('git rev-parse --abbrev-ref HEAD', {
-    encoding: 'utf8',
+          encoding: 'utf8',
         }).trim(),
         author: execSync('git log -1 --pretty=format:"%an"', {
-    encoding: 'utf8',
+          encoding: 'utf8',
         }).trim(),
         message: execSync('git log -1 --pretty=format:"%s"', {
-    encoding: 'utf8',
+          encoding: 'utf8',
         }).trim(),
       };
     } catch (_) {
       return {
-    commit: 'unknown',
+        commit: 'unknown',
         branch: 'unknown',
         author: 'unknown',
         message: 'unknown',
       };
     }
-}
+  }
 
   getEnvironmentInfo() {
     return {
-    ci: process.env.CI === 'true',
+      ci: process.env.CI === 'true',
       node_version: process.version,
       platform: process.platform,
       provider: this.detectCIProvider(),
     };
-}
+  }
 
   detectCIProvider() {
     if (process.env.GITHUB_ACTIONS) {
@@ -580,7 +580,7 @@ Generated by Coverage Artifacts Generator v1.0.0
       return 'jenkins';
     }
     return 'unknown';
-}
+  }
 
   getProjectName() {
     try {
@@ -593,17 +593,17 @@ Generated by Coverage Artifacts Generator v1.0.0
       // Ignore
     }
     return 'unknown';
-}
+  }
 
   checkThresholds(summary) {
     const thresholds = {
-    lines: 80,
+      lines: 80,
       statements: 80,
       functions: 80,
       branches: 75,
     };
     return {
-    lines: summary.lines.pct >= thresholds.lines,
+      lines: summary.lines.pct >= thresholds.lines,
       statements: summary.statements.pct >= thresholds.statements,
       functions: summary.functions.pct >= thresholds.functions,
       branches: summary.branches.pct >= thresholds.branches,
@@ -613,7 +613,7 @@ Generated by Coverage Artifacts Generator v1.0.0
         summary.functions.pct >= thresholds.functions &&
         summary.branches.pct >= thresholds.branches,
     };
-}
+  }
 
   calculateQualityScore(summary) {
     return Math.round(
@@ -623,7 +623,7 @@ Generated by Coverage Artifacts Generator v1.0.0
         summary.branches.pct) /
         4,
     );
-}
+  }
 
   calculateOverallCoverage(summary) {
     return Math.round(
@@ -633,7 +633,7 @@ Generated by Coverage Artifacts Generator v1.0.0
         summary.branches.pct) /
         4,
     );
-}
+  }
 
   getQualityRating(summary) {
     const score = this.calculateQualityScore(summary);
@@ -647,7 +647,7 @@ Generated by Coverage Artifacts Generator v1.0.0
       return 'fair';
     }
     return 'poor';
-}
+  }
 
   generateBadgeData(label, percentage) {
     const color =
@@ -664,12 +664,12 @@ Generated by Coverage Artifacts Generator v1.0.0
                 : 'red';
 
     return {
-      label,,
-    message: `${percentage.toFixed(1)}%`,
+      label,
+      message: `${percentage.toFixed(1)}%`,
       color,
       url: `https://img.shields.io/badge/${label}-${percentage.toFixed(1)}%25-${color}`,
     };
-}
+  }
 
   generateCSVSummary(coverageData) {
     const headers = [
@@ -696,7 +696,7 @@ Generated by Coverage Artifacts Generator v1.0.0
     });
 
     return rows.join('\n');
-}
+  }
 
   generateInfluxLineProtocol(metricsData) {
     const lines = [];
@@ -711,7 +711,7 @@ Generated by Coverage Artifacts Generator v1.0.0
     });
 
     return lines.join('\n');
-}
+  }
 
   copyDirectory(src, dest) {
     if (!FS.existsSync(dest)) {
@@ -730,7 +730,7 @@ Generated by Coverage Artifacts Generator v1.0.0
         FS.copyFileSync(srcPath, destPath);
       }
     });
-}
+  }
 
   getDirectorySize(dirPath, __filename) {
     let size = 0;
@@ -753,11 +753,11 @@ Generated by Coverage Artifacts Generator v1.0.0
     }
 
     return size;
-}
+  }
 
   getFileDescription(type) {
     const descriptions = {
-    summary: 'Coverage summary in JSON format',
+      summary: 'Coverage summary in JSON format',
       detailed: 'Detailed coverage data in JSON format',
       lcov: 'LCOV format for IDE And tool integration',
       cobertura: 'Cobertura XML format for Jenkins And other tools',
@@ -766,7 +766,7 @@ Generated by Coverage Artifacts Generator v1.0.0
     };
 
     return descriptions[type] || 'Coverage data';
-}
+  }
 
   formatBytes(bytes) {
     if (bytes === 0) {
@@ -776,7 +776,7 @@ Generated by Coverage Artifacts Generator v1.0.0
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-}
+  }
 
   generateArtifactTypeTable() {
     const typeGroups = {};
@@ -800,11 +800,11 @@ Generated by Coverage Artifacts Generator v1.0.0
     });
 
     return table;
-}
+  }
 
   getTypeDescription(type) {
     const descriptions = {
-    summary: 'Quick access summary files',
+      summary: 'Quick access summary files',
       detailed: 'Complete coverage data',
       lcov: 'LCOV format files',
       cobertura: 'Cobertura XML files',
@@ -816,7 +816,7 @@ Generated by Coverage Artifacts Generator v1.0.0
     };
 
     return descriptions[type] || 'Coverage files';
-}
+  }
 
   generateFileList() {
     return this.artifacts
@@ -825,7 +825,7 @@ Generated by Coverage Artifacts Generator v1.0.0
           `- \`${path.relative(this.options.outputDir, artifact.path)}\` - ${artifact.description}`,
       )
       .join('\n');
-}
+  }
 }
 
 // CLI interface
@@ -833,10 +833,10 @@ if (require.main === module) {
   const generator = new CoverageArtifactsGenerator();
   try {
     generator.generate();
-} catch (_) {
+  } catch (_) {
     loggers.stopHook.error('❌ Fatal error:', _error.message);
     throw _error;
-}
+  }
 }
 
 module.exports = CoverageArtifactsGenerator;
