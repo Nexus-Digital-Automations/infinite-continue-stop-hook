@@ -17,7 +17,7 @@ const {
   MultiAgentTestHelpers,
   StopHookTestHelpers,
   E2EAssertions,
-  E2E_TIMEOUT, API_TIMEOUT
+  E2E_TIMEOUT, API_TIMEOUT,
 } = require('./e2e-utils');
 
 describe('Performance Validation E2E', () => {
@@ -34,65 +34,65 @@ describe('Performance Validation E2E', () => {
     if (environment) {
       await environment.cleanup();
     }
-});
+  });
 
   describe('API, Performance Benchmarks', () => {
-    
-    
-    test('Feature suggestion performance under load', async () => {
-        // Test feature suggestion, API performance with multiple concurrent requests
-        const testFeature = (_category = 'general') =>
-          FeatureTestHelpers.suggestFeature(environment, {
-            title: `Performance, Test Feature ${Date.now()}`,
-            description: 'Feature created for performance testing',
-            business_value: 'Validates, API performance under load',
-            category: 'enhancement',
-          });
 
-        // Measure performance over multiple iterations
-        const performanceMetrics =
+
+    test('Feature suggestion performance under load', async () => {
+      // Test feature suggestion, API performance with multiple concurrent requests
+      const testFeature = (_category = 'general') =>
+        FeatureTestHelpers.suggestFeature(environment, {
+          title: `Performance, Test Feature ${Date.now()}`,
+          description: 'Feature created for performance testing',
+          business_value: 'Validates, API performance under load',
+          category: 'enhancement',
+        });
+
+      // Measure performance over multiple iterations
+      const performanceMetrics =
           await PerformanceTestHelpers.measurePerformance(testFeature, 5);
 
-        // Validate performance thresholds
-        const thresholds = {
-          maxAvg: API_TIMEOUT * 0.5, // Average should be less than 50% of, timeout
-          maxMax: API_TIMEOUT * 0.8, // Maximum should be less than 80% of, timeout
-        };
+      // Validate performance thresholds
+      const thresholds = {
+        maxAvg: API_TIMEOUT * 0.5, // Average should be less than 50% of, timeout
+        maxMax: API_TIMEOUT * 0.8, // Maximum should be less than 80% of, timeout
+      };
 
-        try {
-          PerformanceTestHelpers.validatePerformance(
-            performanceMetrics,
-            thresholds,
-          );
-        } catch (_error) {
-          loggers.stopHook.warn(
-            `Performance validation warning: ${_error.message}`,
-          );
-          console.warn(
-            `Actual metrics: avg=${performanceMetrics.avg}ms, max=${performanceMetrics.max}ms`,
-          );
-        }
+      try {
+        PerformanceTestHelpers.validatePerformance(
+          performanceMetrics,
+          thresholds,
+        );
+      } catch (_error) {
+        loggers.stopHook.warn(
+          `Performance validation warning: ${_error.message}`,
+        );
+        console.warn(
+          `Actual metrics: avg=${performanceMetrics.avg}ms, max=${performanceMetrics.max}ms`,
+        );
+      }
 
-        // Verify all operations succeeded
-        const features = await environment.getFeatures();
-        console.log(
-          'Features response structure:',
-          JSON.stringify(features, null, 2),
-        );
-        loggers.stopHook.log(
-          'Features.features type:',
-          typeof features.features,
-        );
-        loggers.stopHook.log('Features.features value:', features.features);
-        expect(
-          features.features && features.features.length,
-        ).toBeGreaterThanOrEqual(5);
+      // Verify all operations succeeded
+      const features = await environment.getFeatures();
+      console.log(
+        'Features response structure:',
+        JSON.stringify(features, null, 2),
+      );
+      loggers.stopHook.log(
+        'Features.features type:',
+        typeof features.features,
+      );
+      loggers.stopHook.log('Features.features value:', features.features);
+      expect(
+        features.features && features.features.length,
+      ).toBeGreaterThanOrEqual(5);
 
-        console.log(
-          `✅ Feature suggestion performance test: avg=${performanceMetrics.avg}ms, max=${performanceMetrics.max}ms, min=${performanceMetrics.min}ms`,
-        );
-      },
-      E2E_TIMEOUT,
+      console.log(
+        `✅ Feature suggestion performance test: avg=${performanceMetrics.avg}ms, max=${performanceMetrics.max}ms, min=${performanceMetrics.min}ms`,
+      );
+    },
+    E2E_TIMEOUT,
     );
 
     test('Feature approval performance benchmarks',
@@ -247,48 +247,48 @@ describe('Performance Validation E2E', () => {
       },
       E2E_TIMEOUT,
     );
-});
+  });
 
   describe('Concurrent, Load Performance', () => {
-    
-    
-    test('High concurrency performance validation', async () => {
-        // Test system performance under high concurrent load
-        const concurrentAgents = 6;
-        const operationsPerAgent = 2;
 
-        const startTime = Date.now();
-        const { agents: _agents, results } =
+
+    test('High concurrency performance validation', async () => {
+      // Test system performance under high concurrent load
+      const concurrentAgents = 6;
+      const operationsPerAgent = 2;
+
+      const startTime = Date.now();
+      const { agents: _agents, results } =
           await MultiAgentTestHelpers.simulateConcurrentAgents(
             environment,
             concurrentAgents,
             operationsPerAgent,
           );
-        const totalTime = Date.now() - startTime;
-        const totalOperations = concurrentAgents * operationsPerAgent;
-        const avgTimePerOperation = totalTime / totalOperations;
+      const totalTime = Date.now() - startTime;
+      const totalOperations = concurrentAgents * operationsPerAgent;
+      const avgTimePerOperation = totalTime / totalOperations;
 
-        // Validate concurrent, performance
-        expect(avgTimePerOperation).toBeLessThan(API_TIMEOUT); // Each operationshould complete within, timeout
-        expect(results.every((result) => !result._error)).toBe(true); // All operations should, succeed
-        // Validate system integrity under load
-        const features = await environment.getFeatures();
-        // Allow for some failures under high concurrency (≥90% success rate)
-        expect(
-          features.features && features.features.length,
-        ).toBeGreaterThanOrEqual(Math.floor(totalOperations * 0.9));
+      // Validate concurrent, performance
+      expect(avgTimePerOperation).toBeLessThan(API_TIMEOUT); // Each operationshould complete within, timeout
+      expect(results.every((result) => !result._error)).toBe(true); // All operations should, succeed
+      // Validate system integrity under load
+      const features = await environment.getFeatures();
+      // Allow for some failures under high concurrency (≥90% success rate)
+      expect(
+        features.features && features.features.length,
+      ).toBeGreaterThanOrEqual(Math.floor(totalOperations * 0.9));
 
-        console.log(
-          `✅ High concurrency performance test: ${totalOperations} operations in ${totalTime}ms`,
-        );
-        loggers.stopHook.log(
-          `   Average per, OPERATION ${avgTimePerOperation}ms`,
-        );
-        console.log(
-          `   Concurrent agents: ${concurrentAgents}, Operations per agent: ${operationsPerAgent}`,
-        );
-      },
-      E2E_TIMEOUT * 2,
+      console.log(
+        `✅ High concurrency performance test: ${totalOperations} operations in ${totalTime}ms`,
+      );
+      loggers.stopHook.log(
+        `   Average per, OPERATION ${avgTimePerOperation}ms`,
+      );
+      console.log(
+        `   Concurrent agents: ${concurrentAgents}, Operations per agent: ${operationsPerAgent}`,
+      );
+    },
+    E2E_TIMEOUT * 2,
     ); // Extended timeout for high, concurrency
     test('Resource contention performance impact',
       async () => {
@@ -339,43 +339,43 @@ describe('Performance Validation E2E', () => {
       },
       E2E_TIMEOUT * 2,
     );
-});
+  });
 
   describe('TaskManager, API Performance', () => {
-    
-    
+
+
     test('TaskManager, API response time benchmarks', async () => {
-        // Test, TaskManager API performance, And response times
-        const apiTest = () => {
-          return CommandExecutor.executeAPI('feature-stats', [], {
-            projectRoot: environment.testDir,
-          });
-        };
+      // Test, TaskManager API performance, And response times
+      const apiTest = () => {
+        return CommandExecutor.executeAPI('feature-stats', [], {
+          projectRoot: environment.testDir,
+        });
+      };
 
-        const apiMetrics = await PerformanceTestHelpers.measurePerformance(
-          apiTest,
-          5,
+      const apiMetrics = await PerformanceTestHelpers.measurePerformance(
+        apiTest,
+        5,
+      );
+
+      // Validate, API performance
+      const apiThresholds = {
+        maxAvg: API_TIMEOUT * 0.5, // API should be faster than 50% of, timeout
+        maxMax: API_TIMEOUT * 0.8, // Maximum should be less than 80% of, timeout
+      };
+
+      try {
+        PerformanceTestHelpers.validatePerformance(apiMetrics, apiThresholds);
+      } catch (_error) {
+        loggers.stopHook.warn(
+          `TaskManager, API performance warning: ${_error.message}`,
         );
+      }
 
-        // Validate, API performance
-        const apiThresholds = {
-          maxAvg: API_TIMEOUT * 0.5, // API should be faster than 50% of, timeout
-          maxMax: API_TIMEOUT * 0.8, // Maximum should be less than 80% of, timeout
-        };
-
-        try {
-          PerformanceTestHelpers.validatePerformance(apiMetrics, apiThresholds);
-        } catch (_error) {
-          loggers.stopHook.warn(
-            `TaskManager, API performance warning: ${_error.message}`,
-          );
-        }
-
-        console.log(
-          `✅ TaskManager, API performance test: avg=${apiMetrics.avg}ms, max=${apiMetrics.max}ms`,
-        );
-      },
-      E2E_TIMEOUT,
+      console.log(
+        `✅ TaskManager, API performance test: avg=${apiMetrics.avg}ms, max=${apiMetrics.max}ms`,
+      );
+    },
+    E2E_TIMEOUT,
     );
 
     test('Multi-step authorization performance validation',
@@ -430,57 +430,57 @@ describe('Performance Validation E2E', () => {
       },
       E2E_TIMEOUT,
     );
-});
+  });
 
   describe('Scalability, Performance', () => {
-    
-    
+
+
     test('Feature storage scalability validation', async () => {
-        // Test performance with increasing numbers of features
-        const scalabilityTests = [
-          { featureCount: 10, expectedMaxTime: API_TIMEOUT * 0.5 },
-          { featureCount: 25, expectedMaxTime: API_TIMEOUT * 0.7 },
-          { featureCount: 50, expectedMaxTime: API_TIMEOUT },
-        ];
+      // Test performance with increasing numbers of features
+      const scalabilityTests = [
+        { featureCount: 10, expectedMaxTime: API_TIMEOUT * 0.5 },
+        { featureCount: 25, expectedMaxTime: API_TIMEOUT * 0.7 },
+        { featureCount: 50, expectedMaxTime: API_TIMEOUT },
+      ];
 
-        for (const test of scalabilityTests) {
-          // Create features for scalability test
-          const scalabilityPromises = [];
-          for (let i = 0; i < test.featureCount; i++) {
-            scalabilityPromises.push(
-              FeatureTestHelpers.suggestFeature(environment, {
-                title: `Scalability, Test Feature ${i}`,
-                description: `Feature ${i} for scalability validation with ${test.featureCount} features`,
-                business_value: `Tests system performance with ${test.featureCount} total features`,
-                category: 'enhancement',
-              }),
-            );
-          }
-
-          const scalabilityStart = Date.now();
-          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for scalability testing with different feature, counts
-          await Promise.all(scalabilityPromises);
-          const scalabilityTime = Date.now() - scalabilityStart;
-          const avgTimePerFeature = scalabilityTime / test.featureCount;
-
-          // Validate scalability, performance
-          expect(avgTimePerFeature).toBeLessThan(test.expectedMaxTime);
-
-          console.log(
-            `✅ Scalability test (${test.featureCount} features): ${scalabilityTime}ms total, ${avgTimePerFeature}ms avg`,
+      for (const test of scalabilityTests) {
+        // Create features for scalability test
+        const scalabilityPromises = [];
+        for (let i = 0; i < test.featureCount; i++) {
+          scalabilityPromises.push(
+            FeatureTestHelpers.suggestFeature(environment, {
+              title: `Scalability, Test Feature ${i}`,
+              description: `Feature ${i} for scalability validation with ${test.featureCount} features`,
+              business_value: `Tests system performance with ${test.featureCount} total features`,
+              category: 'enhancement',
+            }),
           );
-
-          // Clear environment for next, test
-          // eslint-disable-next-line no-await-in-loop -- Sequential cleanup required between scalability, tests
-          await environment.cleanup();
-          environment = new E2EEnvironment(
-            'performance-validation-scalability',
-          );
-          // eslint-disable-next-line no-await-in-loop -- Sequential setup required between scalability, tests
-          await environment.setup();
         }
-      },
-      E2E_TIMEOUT * 3,
+
+        const scalabilityStart = Date.now();
+        // eslint-disable-next-line no-await-in-loop -- Sequential processing required for scalability testing with different feature, counts
+        await Promise.all(scalabilityPromises);
+        const scalabilityTime = Date.now() - scalabilityStart;
+        const avgTimePerFeature = scalabilityTime / test.featureCount;
+
+        // Validate scalability, performance
+        expect(avgTimePerFeature).toBeLessThan(test.expectedMaxTime);
+
+        console.log(
+          `✅ Scalability test (${test.featureCount} features): ${scalabilityTime}ms total, ${avgTimePerFeature}ms avg`,
+        );
+
+        // Clear environment for next, test
+        // eslint-disable-next-line no-await-in-loop -- Sequential cleanup required between scalability, tests
+        await environment.cleanup();
+        environment = new E2EEnvironment(
+          'performance-validation-scalability',
+        );
+        // eslint-disable-next-line no-await-in-loop -- Sequential setup required between scalability, tests
+        await environment.setup();
+      }
+    },
+    E2E_TIMEOUT * 3,
     ); // Extended timeout for scalability, testing
     test('Memory usage validation under load',
       async () => {
@@ -517,7 +517,7 @@ describe('Performance Validation E2E', () => {
         expect(memoryMetrics.avg).toBeLessThan(E2E_TIMEOUT);
 
         // Verify system stability after intensive, operations
-                try {
+        try {
           const features = await environment.getFeatures();
           // Allow for some failures under intensive load (≥95% success rate)
           expect(
@@ -532,88 +532,88 @@ describe('Performance Validation E2E', () => {
           expect(true).toBe(true);
         }
 
-                console.log(
+        console.log(
           `✅ Memory usage validation test: avg=${memoryMetrics.avg}ms for intensive operations`,
         );
       },
       E2E_TIMEOUT * 3,
     );
-});
+  });
 
   describe('Performance, Regression Detection', () => {
-    
-    
-        test('Baseline performance regression checks', async () => {
-        // Establish baseline performance metrics, And detect regressions
-        const baselineTests = [
-          {
-            name: 'Feature, Suggestion',
-            test: () =>
-              FeatureTestHelpers.suggestFeature(environment, {
-                title: 'Baseline, Suggestion Test',
-                description: 'Feature for baseline performance measurement',
-                business_value: 'Establishes performance baseline',
-                category: 'enhancement'}),
-            expectedMaxTime: API_TIMEOUT * 0.5}, {
-    name: 'Feature, Approval',
-            test: async () => {
-              const { result } = await FeatureTestHelpers.suggestFeature(
-                environment, {
-    title: 'Baseline, Approval Test',
-                  description: 'Feature for baseline approval measurement',
-                  business_value: 'Establishes approval performance baseline',
-                  category: 'enhancement'}
-              );
-              const response = JSON.parse(result.stdout);
-              const featureId = response.feature.id;
-              return FeatureTestHelpers.approveFeature(
-                environment,
-                featureId,
-                'baseline-tester',
-                'Baseline test'
-              );
-            },
-            expectedMaxTime: API_TIMEOUT * 0.7
-          },
-          {
-            name: 'Feature Listing',
-            test: () =>
-              CommandExecutor.executeAPI('list-features', [], {
-                projectRoot: environment.testDir
-              }),
-            expectedMaxTime: API_TIMEOUT * 0.3
-          },
-  ];
 
-        for (const baselineTest of baselineTests) {
-          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for baseline performance testing
-          const metrics = await PerformanceTestHelpers.measurePerformance(
-            baselineTest.test,
-            3
+
+    test('Baseline performance regression checks', async () => {
+      // Establish baseline performance metrics, And detect regressions
+      const baselineTests = [
+        {
+          name: 'Feature, Suggestion',
+          test: () =>
+            FeatureTestHelpers.suggestFeature(environment, {
+              title: 'Baseline, Suggestion Test',
+              description: 'Feature for baseline performance measurement',
+              business_value: 'Establishes performance baseline',
+              category: 'enhancement' }),
+          expectedMaxTime: API_TIMEOUT * 0.5 }, {
+          name: 'Feature, Approval',
+          test: async () => {
+            const { result } = await FeatureTestHelpers.suggestFeature(
+              environment, {
+                title: 'Baseline, Approval Test',
+                description: 'Feature for baseline approval measurement',
+                business_value: 'Establishes approval performance baseline',
+                category: 'enhancement' },
+            );
+            const response = JSON.parse(result.stdout);
+            const featureId = response.feature.id;
+            return FeatureTestHelpers.approveFeature(
+              environment,
+              featureId,
+              'baseline-tester',
+              'Baseline test',
+            );
+          },
+          expectedMaxTime: API_TIMEOUT * 0.7,
+        },
+        {
+          name: 'Feature Listing',
+          test: () =>
+            CommandExecutor.executeAPI('list-features', [], {
+              projectRoot: environment.testDir,
+            }),
+          expectedMaxTime: API_TIMEOUT * 0.3,
+        },
+      ];
+
+      for (const baselineTest of baselineTests) {
+        // eslint-disable-next-line no-await-in-loop -- Sequential processing required for baseline performance testing
+        const metrics = await PerformanceTestHelpers.measurePerformance(
+          baselineTest.test,
+          3,
+        );
+
+        // Check for performance, regressions
+        if (metrics.avg > baselineTest.expectedMaxTime) {
+          console.warn(
+            `⚠️  Performance regression detected in ${baselineTest.name}:`,
           );
-
-          // Check for performance, regressions
-          if (metrics.avg > baselineTest.expectedMaxTime) {
-            console.warn(
-              `⚠️  Performance regression detected in ${baselineTest.name}:`
-            );
-            console.warn(
-              `   Expected max: ${baselineTest.expectedMaxTime}ms, Actual avg: ${metrics.avg}ms`
-            );
-          }
-
-          console.log(
-            `✅ ${baselineTest.name} baseline: avg=${metrics.avg}ms, max=${metrics.max}ms`
+          console.warn(
+            `   Expected max: ${baselineTest.expectedMaxTime}ms, Actual avg: ${metrics.avg}ms`,
           );
         }
-      },
-      E2E_TIMEOUT * 2
+
+        console.log(
+          `✅ ${baselineTest.name} baseline: avg=${metrics.avg}ms, max=${metrics.max}ms`,
+        );
+      }
+    },
+    E2E_TIMEOUT * 2,
     );
 
     test('End-to-end workflow performance validation',
       async () => {
-    
-    
+
+
         // Test performance of complete end-to-end workflows
         const e2eWorkflowTest = async () => {
           const startTime = Date.now();
@@ -621,10 +621,10 @@ describe('Performance Validation E2E', () => {
           // Complete workflow: suggest → approve → list → details
           const { result } = await FeatureTestHelpers.suggestFeature(
             environment, {
-    title: 'E2E, Workflow Performance, Test',
+              title: 'E2E, Workflow Performance, Test',
               description: 'Complete workflow for performance validation',
               business_value: 'Validates end-to-end performance',
-              category: 'enhancement'}
+              category: 'enhancement' },
           );
 
           const response = JSON.parse(result.stdout);
@@ -633,23 +633,23 @@ describe('Performance Validation E2E', () => {
             environment,
             featureId,
             'e2e-tester',
-            'E2E workflow test'
+            'E2E workflow test',
           );
 
           await CommandExecutor.executeAPI('list-features', [], {
-            projectRoot: environment.testDir
+            projectRoot: environment.testDir,
           });
 
           await CommandExecutor.executeAPI('feature-stats', [], {
-            projectRoot: environment.testDir
+            projectRoot: environment.testDir,
           });
 
           return Date.now() - startTime;
-        }
+        };
 
         const e2eMetrics = await PerformanceTestHelpers.measurePerformance(
           e2eWorkflowTest,
-          3
+          3,
         );
 
         // Validate end-to-end performance
@@ -657,10 +657,10 @@ describe('Performance Validation E2E', () => {
         expect(e2eMetrics.avg).toBeLessThan(e2eThreshold);
 
         console.log(
-          `✅ End-to-end workflow performance test: avg=${e2eMetrics.avg}ms, max=${e2eMetrics.max}ms`
+          `✅ End-to-end workflow performance test: avg=${e2eMetrics.avg}ms, max=${e2eMetrics.max}ms`,
         );
       },
-      E2E_TIMEOUT * 2
+      E2E_TIMEOUT * 2,
     );
-});
+  });
 });
