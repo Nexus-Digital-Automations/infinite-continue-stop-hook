@@ -19,7 +19,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
     const fullCommand = `timeout ${timeout / 1000}s node "${PROJECT_ROOT}/taskmanager-api.js" ${command} ${args}`;
 
     try {
-      const _output = execSync(fullCommand, {
+      const output = execSync(fullCommand, {
         cwd: PROJECT_ROOT,
         encoding: 'utf8',
         timeout: timeout,
@@ -55,7 +55,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
         resourceRequirements: i % 3 === 0 ? ['network', 'cpu'] : ['filesystem'],
       };
 
-      const _result = executeTaskManagerCommand(
+      const result = executeTaskManagerCommand(
         'add-dependency',
         `'e2e-test-${i}' '${JSON.stringify(config)}'`,
       );
@@ -1031,7 +1031,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
 
       // Verify all standard criteria have proper configurations
       standardCriteria.forEach((criterion) => {
-        expect(_result.dependencyGraph).toHaveProperty(criterion);
+        expect(result.dependencyGraph).toHaveProperty(criterion);
         const config = result.dependencyGraph[criterion];
         expect(config.metadata.description).toBeTruthy();
         expect(config.metadata.estimatedDuration).toBeGreaterThan(0);

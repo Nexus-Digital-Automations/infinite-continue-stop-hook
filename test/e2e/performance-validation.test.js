@@ -15,8 +15,8 @@ const {
   FeatureTestHelpers,
   PerformanceTestHelpers,
   MultiAgentTestHelpers,
-  StopHookTestHelpers,
-  E2EAssertions,
+  _StopHookTestHelpers: StopHookTestHelpers,
+  _E2EAssertions: E2EAssertions,
   E2E_TIMEOUT, API_TIMEOUT,
 } = require('./e2e-utils');
 

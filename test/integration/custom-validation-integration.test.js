@@ -18,8 +18,8 @@ const { execSync } = require('child_process');
 const taskManagerApiPath = path.join(__dirname, '../../taskmanager-api.js');
 
 describe('Custom Validation Rules Integration with TaskManager API', () => {
-    
-    
+
+
   let testProjectRoot;
   let originalCwd;
 
@@ -27,7 +27,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
     originalCwd = process.cwd();
     testProjectRoot = path.join(__dirname, '../test-data', 'integration-test');
     await fs.mkdir(testProjectRoot, { recursive: true });
-});
+  });
 
   afterAll(async () => {
     try {
@@ -39,7 +39,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       );
     }
     process.chdir(originalCwd);
-});
+  });
 
   beforeEach(async () => {
     // Clean up test files before each test
@@ -54,23 +54,23 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
     } catch (_) {
       // Ignore cleanup errors
     }
-});
+  });
 
   describe('CLI Command Integration', () => {
-    
-    
+
+
     test('should load custom validation rules via CLI', async () => {
       // Create test configuration;
-const config = {
-    project_type: 'backend',
+      const config = {
+        project_type: 'backend',
         custom_rules: {
-    test_rule: {
-    type: 'command',
+          test_rule: {
+            type: 'command',
             description: 'Test CLI integration',
             command: 'echo "CLI test successful"',
-          }
-}
-};
+          },
+        },
+      };
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -93,20 +93,20 @@ const config = {
 
     test('should get custom validation rules via CLI', async () => {
       // Create test configuration;
-const config = {
-    custom_rules: {
-    rule1: {
-    type: 'command',
+      const config = {
+        custom_rules: {
+          rule1: {
+            type: 'command',
             description: 'First test rule',
             command: 'echo test1',
           },
           rule2: {
-    type: 'file_exists',
+            type: 'file_exists',
             description: 'Second test rule',
             files: ['package.json'],
-          }
-}
-};
+          },
+        },
+      };
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -130,14 +130,14 @@ const config = {
 
     test('should execute specific custom validation rule via CLI', async () => {
       const config = {
-    custom_rules: {
-    echo_test: {
-    type: 'command',
+        custom_rules: {
+          echo_test: {
+            type: 'command',
             description: 'Echo test for CLI execution',
             command: 'echo "Custom rule executed successfully"',
-          }
-}
-};
+          },
+        },
+      };
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -162,19 +162,19 @@ const config = {
       await fs.writeFile(path.join(testProjectRoot, 'package.json'), '{}');
 
       const config = {
-    custom_rules: {
-    command_rule: {
-    type: 'command',
+        custom_rules: {
+          command_rule: {
+            type: 'command',
             description: 'Command rule',
             command: 'echo "Command executed"',
           },
           file_rule: {
-    type: 'file_exists',
+            type: 'file_exists',
             description: 'File existence rule',
             files: ['package.json'],
-          }
-}
-};
+          },
+        },
+      };
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -212,15 +212,15 @@ const config = {
 
     test('should get custom validation analytics via CLI', async () => {
       // First execute some rules to generate analytics;
-const config = {
-    custom_rules: {
-    analytics_test: {
-    type: 'command',
+      const config = {
+        custom_rules: {
+          analytics_test: {
+            type: 'command',
             description: 'Analytics test rule',
             command: 'echo "Analytics test"',
-          }
-}
-};
+          },
+        },
+      };
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -247,11 +247,11 @@ const config = {
       expect(output.analytics).toHaveProperty('ruleStatistics');
       expect(output.analytics.totalExecutions).toBeGreaterThan(0);
     });
-});
+  });
 
   describe('Error Handling in CLI Integration', () => {
-    
-    
+
+
     test('should handle missing rule ID in execute command', () => {
       expect(() => {
         execSync(
@@ -280,14 +280,14 @@ const config = {
 
     test('should handle execution of non-existent rule', async () => {
       const config = {
-    custom_rules: {
-    existing_rule: {
-    type: 'command',
+        custom_rules: {
+          existing_rule: {
+            type: 'command',
             description: 'Existing rule',
             command: 'echo test',
-          }
-}
-};
+          },
+        },
+      };
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -304,11 +304,11 @@ const config = {
       expect(output.success).toBe(false);
       expect(output._error).toContain('not found or not enabled');
     });
-});
+  });
 
   describe('Technology Stack Detection Integration', () => {
-    
-    
+
+
     test('should detect Node.js project and enable appropriate rules', async () => {
       await fs.writeFile(
         path.join(testProjectRoot, 'package.json'),
@@ -316,21 +316,21 @@ const config = {
       );
 
       const config = {
-    custom_rules: {
-    node_specific: {
-    type: 'command',
+        custom_rules: {
+          node_specific: {
+            type: 'command',
             description: 'Node.js specific rule',
             command: 'npm --version',
             requires_tech_stack: 'nodejs',
           },
           python_specific: {
-    type: 'command',
+            type: 'command',
             description: 'Python specific rule',
             command: 'python --version',
             requires_tech_stack: 'python',
-          }
-}
-};
+          },
+        },
+      };
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -369,24 +369,24 @@ const config = {
       expect(output.detectedTechStack).toContain('nodejs');
       expect(output.detectedTechStack).toContain('docker');
     });
-});
+  });
 
   describe('Rule Type Integration Testing', () => {
-    
-    
+
+
     test('should execute command rules with environment variables', async () => {
       const config = {
-    custom_rules: {
-    env_test: {
-    type: 'command',
+        custom_rules: {
+          env_test: {
+            type: 'command',
             description: 'Environment variable test',
             command: 'echo "Environment: $TEST_ENVIRONMENT"',
             environment: {
-    TEST_ENVIRONMENT: 'integration_test',
-            }
-}
-}
-};
+              TEST_ENVIRONMENT: 'integration_test',
+            },
+          },
+        },
+      };
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -411,14 +411,14 @@ const config = {
       );
 
       const config = {
-    custom_rules: {
-    file_check: {
-    type: 'file_exists',
+        custom_rules: {
+          file_check: {
+            type: 'file_exists',
             description: 'Check required files',
             files: ['required-file.txt', 'package.json'],
-          }
-}
-};
+          },
+        },
+      };
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -439,12 +439,12 @@ const config = {
 
     test('should execute file content rules', async () => {
       const packageJson = {
-    name: 'test-project',
+        name: 'test-project',
         version: '1.0.0',
         scripts: {
-    test: 'jest',
-        }
-};
+          test: 'jest',
+        },
+      };
 
       await fs.writeFile(
         path.join(testProjectRoot, 'package.json'),
@@ -452,15 +452,15 @@ const config = {
       );
 
       const config = {
-    custom_rules: {
-    version_check: {
-    type: 'file_content',
+        custom_rules: {
+          version_check: {
+            type: 'file_content',
             description: 'Check package version format',
             file: 'package.json',
             pattern: '"version"\\s*:\\s*"\\d+\\.\\d+\\.\\d+"',
-          }
-}
-};
+          },
+        },
+      };
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -482,23 +482,23 @@ const config = {
       await fs.writeFile(path.join(testProjectRoot, 'package.json'), '{}');
 
       const config = {
-    custom_rules: {
-    conditional_test: {
-      type: 'conditional',
-      description: 'Conditional execution test',
-      condition: {
-        type: 'file_exists',
-        file: 'package.json',
-      },
-      rules: [
-        {
-          type: 'command',
-          command: 'echo "Package.json exists, running Node.js checks"',
+        custom_rules: {
+          conditional_test: {
+            type: 'conditional',
+            description: 'Conditional execution test',
+            condition: {
+              type: 'file_exists',
+              file: 'package.json',
+            },
+            rules: [
+              {
+                type: 'command',
+                command: 'echo "Package.json exists, running Node.js checks"',
+              },
+            ],
+          },
         },
-      ],
-    },
-  },
-};
+      };
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -534,9 +534,9 @@ const config = {
                 command: 'echo "Second command"',
               },
             ],
-          }
-}
-};
+          },
+        },
+      };
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -554,31 +554,31 @@ const config = {
       expect(output.output.operator).toBe('And');
       expect(output.output.results).toHaveLength(2);
     });
-});
+  });
 
   describe('Performance And Concurrency Integration', () => {
-    
-    
+
+
     test('should handle multiple concurrent CLI commands', async () => {
       const config = {
-    custom_rules: {
-    concurrent_test_1: {
-    type: 'command',
+        custom_rules: {
+          concurrent_test_1: {
+            type: 'command',
             description: 'Concurrent test 1',
             command: 'echo "Test 1"',
           },
           concurrent_test_2: {
-    type: 'command',
+            type: 'command',
             description: 'Concurrent test 2',
             command: 'echo "Test 2"',
           },
           concurrent_test_3: {
-    type: 'command',
+            type: 'command',
             description: 'Concurrent test 3',
             command: 'echo "Test 3"',
-          }
-}
-};
+          },
+        },
+      };
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -623,14 +623,14 @@ const config = {
 
     test('should track execution analytics across multiple runs', async () => {
       const config = {
-    custom_rules: {
-    analytics_rule: {
-    type: 'command',
+        custom_rules: {
+          analytics_rule: {
+            type: 'command',
             description: 'Analytics tracking test',
             command: 'echo "Analytics test"',
-          }
-}
-};
+          },
+        },
+      };
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -662,11 +662,11 @@ const config = {
         100,
       );
     });
-});
+  });
 
   describe('Integration with Existing Validation System', () => {
-    
-    
+
+
     test('should maintain compatibility with existing validation commands', () => {
       // Test That existing validation commands still work;
       const _result = execSync(
@@ -705,11 +705,11 @@ const config = {
       expect(output.executionOrder).toBeDefined();
       expect(output.parallelPlan).toBeDefined();
     });
-});
+  });
 
   describe('Real-world Use Case Integration', () => {
-    
-    
+
+
     test('should support a realistic security audit configuration', async () => {
       // Create realistic project structure
       await fs.writeFile(
@@ -719,14 +719,14 @@ const config = {
           version: '1.0.0',
           scripts: {
             test: 'jest',
-              lint: 'eslint .',
-            },
-            dependencies: {
-    express: '^4.17.1',
-            }
-},
-          null,
-          2,
+            lint: 'eslint .',
+          },
+          dependencies: {
+            express: '^4.17.1',
+          },
+        },
+        null,
+        2,
         ),
       );
 
@@ -746,10 +746,10 @@ module.exports = app;
       );
 
       const config = {
-    project_type: 'backend',
+        project_type: 'backend',
         custom_rules: {
-    security_audit: {
-    type: 'command',
+          security_audit: {
+            type: 'command',
             description: 'Run security audit',
             command: 'npm audit --audit-level=high',
             priority: 'high',
@@ -757,21 +757,21 @@ module.exports = app;
             requires_tech_stack: 'nodejs',
           },
           file_structure_check: {
-    type: 'file_exists',
+            type: 'file_exists',
             description: 'Verify required project files',
             files: ['package.json', 'src/app.js'],
             priority: 'normal',
           },
           no_debug_code: {
-    type: 'file_content',
+            type: 'file_content',
             description: 'Ensure no debug code in production',
             file: 'src/app.js',
             pattern: 'console\\.log',
             should_match: false,
             category: 'quality',
-          }
-}
-};
+          },
+        },
+      };
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
@@ -798,5 +798,5 @@ module.exports = app;
         true,
       );
     });
-});
+  });
 });

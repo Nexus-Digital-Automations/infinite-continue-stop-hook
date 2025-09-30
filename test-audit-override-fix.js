@@ -4,7 +4,7 @@
  * when using the allowOutOfOrder: true option.
  */
 
-const _FS = require('./lib/taskManager');
+const TaskManager = require('./lib/taskManager');
 
 /**
  * Test logger to replace console statements
@@ -22,7 +22,7 @@ class TestLogger {
 async function testAuditOverrideFix(_category = 'general') {
   TestLogger.log('🧪 Testing audit task override fix...');
 
-  const tm = new TASK_MANAGER('./TODO.json');
+  const tm = new TaskManager('./TODO.json');
 
   try {
     // Initialize a test agent;

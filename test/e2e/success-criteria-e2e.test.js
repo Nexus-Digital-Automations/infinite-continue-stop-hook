@@ -517,8 +517,8 @@ describe('Success Criteria End-to-End Tests', () => {
         );
       }
 
-      // Execute comprehensive validations for enterprise feature;
-      const validationResults = {
+      // Execute comprehensive validations for enterprise feature
+      const _validationResults = {
         linter: 'passed',
         build: 'passed',
         runtime: 'passed',
@@ -602,10 +602,10 @@ module.exports = { authenticate };
 `,
       );
 
-      // 4. Run validation checks;
-      const lintResult = await execCommand('npm', ['run', 'lint']);
-      const buildResult = await execCommand('npm', ['run', 'build']);
-      const testResult = await execCommand('npm', ['run', 'test']);
+      // 4. Run validation checks
+      const _lintResult = await execCommand('npm', ['run', 'lint']);
+      const _buildResult = await execCommand('npm', ['run', 'build']);
+      const _testResult = await execCommand('npm', ['run', 'test']);
 
       // 5. Verify feature workflow completion
       try {
