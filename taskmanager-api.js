@@ -1465,7 +1465,7 @@ class AutonomousTaskManagerAPI {
 
       const authState = {
         authKey,
-        agentId,
+        agentId: _agentId,
         startTime: new Date().toISOString(),
         expiresAt: new Date(Date.now() + 30 * 60 * 1000).toISOString(), // 30 minutes
         currentStep: 0,
@@ -1488,7 +1488,7 @@ class AutonomousTaskManagerAPI {
       return {
         success: true,
         authKey,
-        message: `Multi-step authorization started for ${agentId}. Must complete ${authState.requiredSteps.length} validation steps sequentially.`,
+        message: `Multi-step authorization started for ${_agentId}. Must complete ${authState.requiredSteps.length} validation steps sequentially.`,
         nextStep: authState.requiredSteps[0],
         instructions: `Next: validate-criterion ${authKey} ${authState.requiredSteps[0]}`,
       };
