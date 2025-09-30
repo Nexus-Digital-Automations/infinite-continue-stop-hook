@@ -29,17 +29,18 @@ describe('Validation Dependency Management End-to-End Tests', () => {
 
     // Create mock package.json for validation commands
     const packageJson = {
-    name: 'test-project',
+      name: 'test-project',
       version: '1.0.0',
       scripts: {
-    lint: "echo 'Linting passed'",
+        lint: "echo 'Linting passed'",
         typecheck: "echo 'Type checking passed'",
         build: "echo 'Build completed'",
         test: "echo 'Tests passed'",
-        start: "echo 'Application started'"},
-}
+        start: "echo 'Application started'"
+      }
+    };
 
-  await fs.writeFile(
+    await fs.writeFile(
       path.join(tempDir, 'package.json'),
       JSON.stringify(packageJson, null, 2),
     );
@@ -599,7 +600,8 @@ describe('Validation Dependency Management End-to-End Tests', () => {
     });
 
     test('should maintain visualization consistency across multiple generations', () => {
-      // Generate multiple visualizations of the same data.const visualizations = [];
+      // Generate multiple visualizations of the same data.
+      const visualizations = [];
 
       for (let i = 0; i < 5; i++) {
         visualizations.push(manager.getDependencyVisualization());
