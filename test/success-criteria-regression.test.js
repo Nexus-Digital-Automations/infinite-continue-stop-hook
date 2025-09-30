@@ -56,7 +56,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, _category = 'general') {
         try {
           const result = stdout.trim() ? JSON.parse(stdout) : {};
           resolve(result);
-        } catch {
+        } catch (error) {
           resolve({ rawOutput: stdout, stderr });
         }
       } else {
@@ -222,7 +222,7 @@ describe('Regression Test Suite', () => {
     await fs.writeFile(path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
 
     loggers.stopHook.log('Regression test project setup completed');
-  } catch {
+  } catch (_error) {
     loggers.stopHook._error('Failed to setup regression test project:', error);
     throw _error;
   }
@@ -232,7 +232,7 @@ async function cleanupRegressionTestProject(_category = 'general') {
   try {
     await fs.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     loggers.stopHook.log('Regression test project cleanup completed');
-  } catch {
+  } catch (_error) {
     loggers.stopHook._error('Failed to cleanup regression test project:', error);
   }
 }
@@ -381,7 +381,7 @@ describe('Success Criteria Regression Tests', () => {
 
           const status = await execAPI('success-criteria:status');
           expect(status.projectCriteria.length).toBeGreaterThan(0);
-        } catch {
+        } catch (_error) {
           // Log version compatibility issues but don't fail test
           loggers.app.info(
             `API version ${version} compatibility note:`,
@@ -683,7 +683,7 @@ describe('Success Criteria Regression Tests', () => {
           loggers.stopHook.log(
             `Schema ${schema.version} compatibility confirmed`,
           );
-        } catch {
+        } catch (_error) {
           loggers.app.info(
             `Schema ${schema.version} evolution note:`,
             __error.message,
@@ -858,7 +858,7 @@ describe('Success Criteria Regression Tests', () => {
               result.warning || 'Endpoint is deprecated',
             );
           }
-        } catch {
+        } catch (_error) {
           // Some deprecated endpoints might be completely removed
           loggers.app.info(
             `Deprecated endpoint ${endpoint} is no longer available:`,
@@ -977,7 +977,7 @@ describe('Success Criteria Regression Tests', () => {
           loggers.app.info(
             `Template version ${template.version} compatibility confirmed`,
           );
-        } catch {
+        } catch (_error) {
           loggers.app.info(
             `Template version ${template.version} compatibility issue:`,
             __error.message,
@@ -1146,7 +1146,7 @@ describe('Success Criteria Regression Tests', () => {
           }
 
           loggers.stopHook.log(`API contract for ${api} is stable`);
-        } catch {
+        } catch (_error) {
           loggers.stopHook.log(
             `API contract issue for ${api}:`,
             __error.message,
@@ -1218,7 +1218,7 @@ describe('Success Criteria Regression Tests', () => {
           loggers.stopHook.log(
             `Essential function '${func.name}' is preserved`,
           );
-        } catch {
+        } catch (_error) {
           loggers.app._error(
             `Essential function '${func.name}' failed:`,
             __error.message,

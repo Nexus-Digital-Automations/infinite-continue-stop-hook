@@ -61,7 +61,7 @@ module.exports = () => {
             FS.unlinkSync(entryPath);
           }
           loggers.stopHook.log(`🧹 Cleaned up old test file: ${entry}`);
-        } catch {
+        } catch (error) {
           loggers.stopHook.warn(
             `⚠️  Could not clean up ${entry}:`,
             error.message,
@@ -148,7 +148,7 @@ module.exports = () => {
     }
 
     global.SAMPLE_DATA = sampleData;
-  } catch {
+  } catch (error) {
     loggers.stopHook.error('❌ Failed to load test fixtures:', error.message);
     throw new Error('Failed to load test fixtures');
   }

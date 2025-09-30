@@ -64,7 +64,7 @@ function fixCatchBlocks(_filePath) {
     }
 
     return false;
-  } catch {
+  } catch (_error) {
     console.error(`Error fixing ${filePath}:`, _error.message);
     return false;
   }

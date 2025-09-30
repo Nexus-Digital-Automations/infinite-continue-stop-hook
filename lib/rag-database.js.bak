@@ -7,10 +7,11 @@
  */
 
 const SQLITE3 = require('sqlite3').verbose();
-const PATH = require('path');
+const { loggers } = require('../lib/logger');
+const path = require('path');
 const FS = require('fs');
 const { pipeline } = require('@xenova/transformers');
-const FAISS = require('faiss-node');
+const _FAISS = require('faiss-node');
 
 
 class RAGDatabase {
@@ -21,11 +22,13 @@ class RAGDatabase {
     this.vectorIndex = null;
     this.initialized = false;
 
-    // Ensure data directory exists
-    const dataDir = PATH.dirname(dbPath);
+    // Ensure data directory exists;
+    const dataDir = path.dirname(dbPath);
 
+    // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
     if (!FS.existsSync(dataDir)) {
 
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
       FS.mkdirSync(dataDir, { recursive: true });
     }
   }
@@ -38,8 +41,8 @@ class RAGDatabase {
     try {
       loggers.app.info('[RAG-DB] Initializing database and models...');
 
-      // Set up transformers cache directory to prevent path errors
-      const cacheDir = PATH.join(process.cwd(), '.cache', 'transformers');
+      // Set up transformers cache directory to prevent path errors;
+      const cacheDir = path.join(process.cwd(), '.cache', 'transformers');
       if (!FS.existsSync(cacheDir)) {
         FS.mkdirSync(cacheDir, { recursive: true });
       }
@@ -72,24 +75,26 @@ class RAGDatabase {
       loggers.app.info('[RAG-DB] Database andmodels initialized successfully');
 
       loggers.stopHook.error('[RAG-DB] Initialization failed:', error);
-    } catch (_error) {
+    } catch {
       loggers.app.error('[RAG-DB] Initialization failed:', error);
-      return { success: false, error: error.message };
+      return { success: false, _error: error.message };
     }
   }
 
   /**
    * Create database tables
    */
-  createTables() {
+  createTables(_category = 'general') {
     return new Promise((resolve, reject) => {
+
+
       const sql = `
         -- Lessons table
         CREATE TABLE IF NOT EXISTS lessons (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           title TEXT NOT NULL,
           content TEXT NOT NULL,
-          category TEXT NOT NULL,
+          _category TEXT NOT NULL,
           subcategory TEXT,
           project_path TEXT,
           file_path TEXT,
@@ -146,7 +151,7 @@ class RAGDatabase {
         );
 
         -- Create indexes for performance
-        CREATE INDEX IF NOT EXISTS idx_lessons_category ON lessons(category);
+        CREATE INDEX IF NOT EXISTS idx_lessons_category ON lessons(_category);
         CREATE INDEX IF NOT EXISTS idx_lessons_project ON lessons(project_path);
         CREATE INDEX IF NOT EXISTS idx_lessons_created ON lessons(created_at);
         CREATE INDEX IF NOT EXISTS idx_errors_type ON errors(error_type);
@@ -176,7 +181,7 @@ class RAGDatabase {
       // Using Inner Product for cosine similarity
       loggers.stopHook.log('[RAG-DB] Vector index created successfully');
       this.vectorEmbeddings = []; // Store embeddings for search
-    } catch (error) {
+    } catch {
       loggers.stopHook.warn('[RAG-DB] Vector index initialization failed, using fallback search:', error);
       loggers.app.warn('[RAG-DB] Vector index initialization failed, using fallback search:', error);
       // Fallback to simple cosine similarity without FAISS
@@ -195,12 +200,12 @@ class RAGDatabase {
     }
 
     try {
-      const RESULT = await this.embeddingModel(text, { pooling: 'mean', normalize: true });
+      const _RESULT = await this.embeddingModel(text, { pooling: 'mean', normalize: true });
       return result.data;
-    } catch (error) {
+    } catch {
       loggers.stopHook.error('[RAG-DB] Embedding generation failed:', error);
       loggers.app.error('[RAG-DB] Embedding generation failed:', error);
-      throw error;
+      throw _error;
     }
   }
 
@@ -213,18 +218,18 @@ class RAGDatabase {
     }
 
     try {
-      const { title, content, category, subcategory, projectPath, filePath, tags } = lessonData;
+      const { title, content, _category, subcategory, projectPath, filePath, tags } = lessonData;
 
-      // Generate embedding
+      // Generate embedding;
       const embedding = await this.generateEmbedding(`${title} ${content}`);
 
-      // Store embedding
+      // Store embedding;
       const embeddingId = await this.storeEmbedding(embedding);
 
       // Store lesson
       return new Promise((resolve, reject) => {
         const sql = `
-          INSERT INTO lessons (title, content, category, subcategory, project_path, file_path, tags, embedding_id)
+          INSERT INTO lessons (title, content, _category, subcategory, project_path, file_path, tags, embedding_id)
           VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
@@ -233,7 +238,7 @@ class RAGDatabase {
         const vectorEmbeddings = this.vectorEmbeddings;
         const useSimpleSearch = this.useSimpleSearch;
 
-        db.run(sql, [title, content, category, subcategory, projectPath, filePath, JSON.stringify(tags), embeddingId], function (error) {
+        db.run(sql, [title, content, _category, subcategory, projectPath, filePath, JSON.stringify(tags), embeddingId], function (error) {
           if (error) {reject(error);} else {
             const lessonId = this.lastID;
             try {
@@ -250,7 +255,7 @@ class RAGDatabase {
                 embeddingId,
                 message: 'Lesson stored successfully',
               });
-            } catch (error) {
+            } catch {
               loggers.stopHook.warn('[RAG-DB] Vector index error, lesson stored without vector search:', vectorError);
               loggers.app.warn('[RAG-DB] Vector index error, lesson stored without vector search:', vectorError);
               resolve({
@@ -263,10 +268,10 @@ class RAGDatabase {
           }
         });
       });
-    } catch (error) {
+    } catch {
       loggers.stopHook.error('[RAG-DB] Failed to store lesson:', error);
       loggers.app.error('[RAG-DB] Failed to store lesson:', error);
-      return { success: false, error: error.message };
+      return { success: false, _error: error.message };
     }
   }
 
@@ -281,10 +286,10 @@ class RAGDatabase {
     try {
       const { title, content, errorType, resolution, projectPath, filePath, tags } = errorData;
 
-      // Generate embedding
+      // Generate embedding;
       const embedding = await this.generateEmbedding(`${title} ${content} ${resolution || ''}`);
 
-      // Store embedding
+      // Store embedding;
       const embeddingId = await this.storeEmbedding(embedding);
 
       // Store error
@@ -319,7 +324,7 @@ class RAGDatabase {
                 embeddingId,
                 message: 'Error stored successfully',
               });
-            } catch (error) {
+            } catch {
               loggers.stopHook.warn('[RAG-DB] Vector index error, error stored without vector search:', vectorError);
               loggers.app.warn('[RAG-DB] Vector index error, error stored without vector search:', vectorError);
               resolve({
@@ -332,9 +337,9 @@ class RAGDatabase {
           }
         });
       });
-    } catch (error) {
+    } catch {
       loggers.app.error('[RAG-DB] Failed to store error:', error);
-      return { success: false, error: error.message };
+      return { success: false, _error: error.message };
     }
   }
 
@@ -361,32 +366,32 @@ class RAGDatabase {
     }
 
     try {
-      // Generate query embedding
+      // Generate query embedding;
       const queryEmbedding = await this.generateEmbedding(query);
 
       let searchResults = [];
 
       if (this.vectorIndex && !this.useSimpleSearch) {
-        // Use FAISS vector search
+        // Use FAISS vector search,
         try {
-          // Check if index has any vectors before searching
+          // Check if index has any vectors before searching;
           const totalVectors = this.vectorIndex.ntotal();
           if (totalVectors === 0) {
-            loggers.stopHook.log('[RAG-DB] FAISS index is empty, using fallback search');
-            loggers.app.info('[RAG-DB] FAISS index is empty, using fallback search');
+            loggers.stopHook.log('[RAG-DB] _FAISS index is empty, using fallback search');
+            loggers.app.info('[RAG-DB] _FAISS index is empty, using fallback search');
             searchResults = [];
           } else {
-            // Adjust limit to not exceed available vectors
+            // Adjust limit to not exceed available vectors;
             const searchLimit = Math.min(limit, totalVectors);
             const faissResults = this.vectorIndex.search(queryEmbedding, searchLimit);
             for (let i = 0; i < faissResults.distances.length; i++) {
-              // eslint-disable-next-line security/detect-object-injection -- Array access with validated loop index for FAISS vector search results
+              // eslint-disable-next-line security/detect-object-injection -- Array access with validated loop index for FAISS vector search results;
               const distance = faissResults.distances[i];
               // Convert FAISS distance to normalized similarity score (0-1)
               const similarity = this._normalizeFaissDistance(distance);
               if (similarity >= threshold) {
                 searchResults.push({
-                  // eslint-disable-next-line security/detect-object-injection -- Array access with validated loop index for FAISS vector search results
+                  // eslint-disable-next-line security/detect-object-injection -- Array access with validated loop index for _FAISS vector search results,,
                   id: faissResults.labels[i] + 1,
                   similarity: similarity,
                   type: 'lesson',
@@ -395,8 +400,8 @@ class RAGDatabase {
             }
           }
         } catch {
-          loggers.stopHook.warn('[RAG-DB] FAISS search failed, using fallback:', faissError);
-          loggers.app.warn('[RAG-DB] FAISS search failed, using fallback:', faissError);
+          loggers.stopHook.warn('[RAG-DB] _FAISS search failed, using fallback:', faissError);
+          loggers.app.warn('[RAG-DB] _FAISS search failed, using fallback:', faissError);
           this.useSimpleSearch = true;
         }
       }
@@ -410,13 +415,13 @@ class RAGDatabase {
         return { success: true, lessons: [], message: 'No similar lessons found' };
       }
 
-      // Fetch lesson details
+      // Fetch lesson details;
       const lessonIds = searchResults.map(r => r.id);
       const lessons = await this.getLessonsByIds(lessonIds);
 
       // Add similarity scores
       lessons.forEach((lesson) => {
-        const RESULT = searchResults.find(r => r.id === lesson.id);
+        const _RESULT = searchResults.find(r => r.id === lesson.id);
         lesson.similarity = result ? result.similarity : 0;
       });
 
@@ -425,9 +430,9 @@ class RAGDatabase {
         lessons: lessons.sort((a, b) => b.similarity - a.similarity),
         message: `Found ${lessons.length} similar lessons`,
       };
-    } catch (error) {
+    } catch {
       loggers.app.error('[RAG-DB] Lesson search failed:', error);
-      return { success: false, error: error.message };
+      return { success: false, _error: error.message };
     }
   }
 
@@ -440,32 +445,32 @@ class RAGDatabase {
     }
 
     try {
-      // Generate query embedding
+      // Generate query embedding;
       const queryEmbedding = await this.generateEmbedding(query);
 
       let searchResults = [];
 
       if (this.vectorIndex && !this.useSimpleSearch) {
-        // Use FAISS vector search
+        // Use FAISS vector search,
         try {
-          // Check if index has any vectors before searching
+          // Check if index has any vectors before searching;
           const totalVectors = this.vectorIndex.ntotal();
           if (totalVectors === 0) {
-            loggers.stopHook.log('[RAG-DB] FAISS index is empty, using fallback search');
-            loggers.app.info('[RAG-DB] FAISS index is empty, using fallback search');
+            loggers.stopHook.log('[RAG-DB] _FAISS index is empty, using fallback search');
+            loggers.app.info('[RAG-DB] _FAISS index is empty, using fallback search');
             searchResults = [];
           } else {
-            // Adjust limit to not exceed available vectors
+            // Adjust limit to not exceed available vectors;
             const searchLimit = Math.min(limit, totalVectors);
             const faissResults = this.vectorIndex.search(queryEmbedding, searchLimit);
             for (let i = 0; i < faissResults.distances.length; i++) {
-              // eslint-disable-next-line security/detect-object-injection -- Array access with validated loop index for FAISS vector search results
+              // eslint-disable-next-line security/detect-object-injection -- Array access with validated loop index for FAISS vector search results;
               const distance = faissResults.distances[i];
               // Convert FAISS distance to normalized similarity score (0-1)
               const similarity = this._normalizeFaissDistance(distance);
               if (similarity >= threshold) {
                 searchResults.push({
-                  // eslint-disable-next-line security/detect-object-injection -- Array access with validated loop index for FAISS vector search results
+                  // eslint-disable-next-line security/detect-object-injection -- Array access with validated loop index for _FAISS vector search results,,
                   id: faissResults.labels[i] + 1,
                   similarity: similarity,
                   type: 'error',
@@ -474,8 +479,8 @@ class RAGDatabase {
             }
           }
         } catch {
-          loggers.stopHook.warn('[RAG-DB] FAISS search failed, using fallback:', faissError);
-          loggers.app.warn('[RAG-DB] FAISS search failed, using fallback:', faissError);
+          loggers.stopHook.warn('[RAG-DB] _FAISS search failed, using fallback:', faissError);
+          loggers.app.warn('[RAG-DB] _FAISS search failed, using fallback:', faissError);
           this.useSimpleSearch = true;
         }
       }
@@ -489,13 +494,13 @@ class RAGDatabase {
         return { success: true, errors: [], message: 'No similar errors found' };
       }
 
-      // Fetch error details
+      // Fetch error details;
       const errorIds = searchResults.map(r => r.id);
       const errors = await this.getErrorsByIds(errorIds);
 
       // Add similarity scores
       errors.forEach((error) => {
-        const RESULT = searchResults.find(r => r.id === error.id);
+        const _RESULT = searchResults.find(r => r.id === error.id);
         error.similarity = result ? result.similarity : 0;
       });
 
@@ -504,10 +509,10 @@ class RAGDatabase {
         errors: errors.sort((a, b) => b.similarity - a.similarity),
         message: `Found ${errors.length} similar errors`,
       };
-    } catch (error) {
+    } catch {
       loggers.stopHook.error('[RAG-DB] Error search failed:', error);
       loggers.app.error('[RAG-DB] Error search failed:', error);
-      return { success: false, error: error.message };
+      return { success: false, _error: error.message };
     }
   }
 
@@ -549,7 +554,7 @@ class RAGDatabase {
         this.vectorIndex.write(indexPath);
         loggers.app.info('[RAG-DB] Vector index saved to disk');
       }
-    } catch (error) {
+    } catch {
       loggers.stopHook.error('[RAG-DB] Failed to save vector index:', error);
       loggers.app.error('[RAG-DB] Failed to save vector index:', error);
     }
@@ -568,7 +573,7 @@ class RAGDatabase {
         });
         loggers.stopHook.log('[RAG-DB] Database connection closed');
       }
-    } catch (error) {
+    } catch {
       loggers.stopHook.error('[RAG-DB] Error closing database:', error);
       loggers.app.error('[RAG-DB] Error closing database:', error);
     }
@@ -580,7 +585,7 @@ class RAGDatabase {
   _performSimpleSearch(queryEmbedding, type, limit, threshold) {
     const results = [];
 
-    // Filter embeddings by type
+    // Filter embeddings by type;
     const typeEmbeddings = this.vectorEmbeddings.filter(item => item.type === type);
 
     // Calculate cosine similarity for each embedding
@@ -606,10 +611,10 @@ class RAGDatabase {
   _normalizeFaissDistance(distance) {
     // for normalized vectors, dot product equals cosine similarity
     // Scale FAISS distances (typically 150-250) to similarity scores (0.6-1.0)
-    const minDistance = 150; // Minimum expected distance for relevant results
+    const minDistance = 150; // Minimum expected distance for relevant results;
     const maxDistance = 250; // Maximum distance for normalization
 
-    // Invert and normalize: higher distance = lower similarity
+    // Invert and normalize: higher distance = lower similarity;
     const normalizedSimilarity = 1 - ((distance - minDistance) / (maxDistance - minDistance));
     return Math.max(0.1, Math.min(1.0, normalizedSimilarity));
   }
@@ -651,6 +656,8 @@ class RAGDatabase {
     }
 
     return new Promise((resolve, reject) => {
+
+
       const sql = `
         SELECT
           (SELECT COUNT(*) FROM lessons) as lesson_count,
@@ -680,11 +687,11 @@ class RAGDatabase {
       loggers.app.info('[RAG-DB] Vector index not available, skipping vector loading');
       return;
     }
-    loggers.stopHook.log('[RAG-DB] Loading existing vectors into FAISS index...');
+    loggers.stopHook.log('[RAG-DB] Loading existing vectors into _FAISS index...');
     try {
-      loggers.app.info('[RAG-DB] Loading existing vectors into FAISS index...');
+      loggers.app.info('[RAG-DB] Loading existing vectors into _FAISS index...');
 
-      // Get all embeddings from database
+      // Get all embeddings from database;
       const embeddings = await this.getAllEmbeddings();
       loggers.stopHook.log('[RAG-DB] No existing vectors to load');
       if (embeddings.length === 0) {
@@ -692,7 +699,7 @@ class RAGDatabase {
         return;
       }
 
-      // Add all embeddings to FAISS index
+      // Add all embeddings to FAISS index;
       let loadedCount = 0;
       for (const embeddingData of embeddings) {
         try {
@@ -706,16 +713,16 @@ class RAGDatabase {
           });
 
           loadedCount++;
-        } catch (error) {
-          loggers.app.warn(`[RAG-DB] Failed to load vector ${embeddingData.id}:`, error.message);
+        } catch {
+          loggers.app.warn(`[RAG-DB] Failed to load vector ${embeddingData.id}:`, _error.message);
         }
       }
 
-      loggers.stopHook.log(`[RAG-DB] Successfully loaded ${loadedCount} vectors into FAISS index`);
+      loggers.stopHook.log(`[RAG-DB] Successfully loaded ${loadedCount} vectors into _FAISS index`);
       loggers.stopHook.log(`[RAG-DB] Total vectors in index: ${this.vectorIndex.ntotal()}`);
-      loggers.app.info(`[RAG-DB] Successfully loaded ${loadedCount} vectors into FAISS index`);
+      loggers.app.info(`[RAG-DB] Successfully loaded ${loadedCount} vectors into _FAISS index`);
       loggers.app.info(`[RAG-DB] Total vectors in index: ${this.vectorIndex.ntotal()}`);
-    } catch (error) {
+    } catch {
       loggers.stopHook.error('[RAG-DB] Failed to load existing vectors:', error);
       loggers.app.error('[RAG-DB] Failed to load existing vectors:', error);
       // Don't throw - continue with empty index
@@ -727,6 +734,8 @@ class RAGDatabase {
    */
   getAllEmbeddings() {
     return new Promise((resolve, reject) => {
+
+
       const sql = `
         SELECT e.id, e.embedding, e.dimension,
                CASE

@@ -243,16 +243,16 @@ describe('TaskManager API Comprehensive Test Suite', () => {
         metadata: { environment: 'ci' },
       };
 
-      const _result = await execAPI('init', [JSON.stringify(config)]);
+      const result = await execAPI('init', [JSON.stringify(config)]);
 
-      expect(_result.success).toBe(true);
-      expect(_result.agentId).toBeDefined();
-      expect(_result.config.role).toBe('testing');
-      expect(_result.config.specialization).toEqual([
+      expect(result.success).toBe(true);
+      expect(result.agentId).toBeDefined();
+      expect(result.config.role).toBe('testing');
+      expect(result.config.specialization).toEqual([
         'unit-tests',
         'integration-tests',
       ]);
-      expect(_result.config.metadata).toEqual({ environment: 'ci' });
+      expect(result.config.metadata).toEqual({ environment: 'ci' });
 
       testAgentId = result.agentId;
     });
@@ -263,14 +263,14 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       testAgentId = initResult.agentId;
 
       // Get agent status;
-      const _result = await execAPI('status', [testAgentId]);
+      const result = await execAPI('status', [testAgentId]);
 
-      expect(_result.success).toBe(true);
-      expect(_result.agent).toBeDefined();
-      expect(_result.agent.role).toBe('development');
-      expect(_result.agent.status).toBe('active');
-      expect(_result.tasks).toEqual([]);
-      expect(_result.taskCount).toBe(0);
+      expect(result.success).toBe(true);
+      expect(result.agent).toBeDefined();
+      expect(result.agent.role).toBe('development');
+      expect(result.agent.status).toBe('active');
+      expect(result.tasks).toEqual([]);
+      expect(result.taskCount).toBe(0);
     });
 
     test('should reinitialize agent with updated configuration', async () => {
@@ -283,22 +283,22 @@ describe('TaskManager API Comprehensive Test Suite', () => {
         metadata: { updated: true, timestamp: new Date().toISOString() },
       };
 
-      const _result = await execAPI('reinitialize', [
+      const result = await execAPI('reinitialize', [
         testAgentId,
         JSON.stringify(updateConfig),
       ]);
 
-      expect(_result.success).toBe(true);
-      expect(_result.agentId).toBe(testAgentId);
-      expect(_result.agent.metadata.updated).toBe(true);
-      expect(_result.renewed).toBe(true);
+      expect(result.success).toBe(true);
+      expect(result.agentId).toBe(testAgentId);
+      expect(result.agent.metadata.updated).toBe(true);
+      expect(result.renewed).toBe(true);
     });
 
     test('should handle agent status request without agent initialization', async () => {
-      const _result = await execAPI('status');
+      const result = await execAPI('status');
 
-      expect(_result.success).toBe(false);
-      expect(_result.error).toBe(
+      expect(result.success).toBe(false);
+      expect(result.error).toBe(
         'No agent ID provided And no agent initialized',
       );
     });

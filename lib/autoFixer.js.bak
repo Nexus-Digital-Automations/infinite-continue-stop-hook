@@ -5,7 +5,7 @@
  */
 
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const { LOGGER } = require('./logger');
 
 /**
@@ -28,10 +28,10 @@ class SecurityValidator {
     }
 
     try {
-      // Normalize And resolve the path to prevent directory traversal
-      const normalizedPath = PATH.normalize(filePath);
-      const resolvedPath = PATH.resolve(normalizedPath);
-      const resolvedProjectRoot = PATH.resolve(projectRoot);
+      // Normalize And resolve the path to prevent directory traversal;
+      const normalizedPath = path.normalize(filePath);
+      const resolvedPath = path.resolve(normalizedPath);
+      const resolvedProjectRoot = path.resolve(projectRoot);
 
       // Ensure the path is within the project root (prevent directory traversal)
       if (!resolvedPath.startsWith(resolvedProjectRoot)) {
@@ -42,7 +42,7 @@ class SecurityValidator {
         };
       }
 
-      // Check for dangerous path components
+      // Check for dangerous path components;
       const dangerousPatterns = [/\.\.[/\\]/, /[/\\]\.\./];
       if (dangerousPatterns.some((pattern) => pattern.test(filePath))) {
         return {
@@ -57,7 +57,7 @@ class SecurityValidator {
         error: null,
         sanitizedPath: resolvedPath,
       };
-    } catch {
+    } catch (error) {
       return {
         isValid: false,
         error: `Path validation failed: ${error.message}`,
@@ -69,7 +69,7 @@ class SecurityValidator {
   /**
    * Validates And sanitizes file paths for fs operations
    * @param {string} filePath - File path to validate
-   * @param {string} OPERATION- The fs _operationbeing performed
+   * @param {string} operation - The fs operation being performed
    * @param {string} projectRoot - Project root for boundary validation
    * @returns {string} Sanitized file path
    * @throws {Error} If path validation fails
@@ -109,7 +109,7 @@ class AutoFixer {
             };
           }
 
-          // Ensure required properties exist
+          // Ensure required properties exist;
           const sanitizedData = {
             tasks: Array.isArray(data.tasks) ? data.tasks : [],
             features: Array.isArray(data.features) ? data.features : [],
@@ -126,7 +126,7 @@ class AutoFixer {
             errors: [],
             sanitizedData,
           };
-        } catch {
+        } catch (error) {
           return {
             isValid: false,
             errors: [error.message],
@@ -139,7 +139,7 @@ class AutoFixer {
     this.recovery = {
       atomicWrite: async (filePath, data) => {
         try {
-          // Security: Validate file path before any fs operations
+          // Security: Validate file path before any fs operations;
           const validatedPath = SecurityValidator.validateAndSanitizeFilePath(
             filePath,
             'writeFile',
@@ -152,30 +152,30 @@ class AutoFixer {
               this.projectRoot,
             );
 
-          // CRITICAL PREVENTION: Ensure we're writing proper JSON, not double-encoded
+          // CRITICAL PREVENTION: Ensure we're writing proper JSON, not double-encoded;
           let jsonContent;
           if (typeof data === 'string') {
-            // If already a string, validate it's proper JSON And not double-encoded
+            // If already a string, validate it's proper JSON And not double-encoded,
             try {
               const parsed = JSON.parse(data);
               if (typeof parsed === 'string') {
                 // This is double-encoded! Fix it
                 this.logger.warn(
-                  `🚨 PREVENTED JSON CORRUPTION: Double-encoded string detected in ${PATH.basename(validatedPath)}`,
+                  `🚨 PREVENTED JSON CORRUPTION: Double-encoded string detected in ${path.basename(validatedPath)}`,
                 );
                 jsonContent = parsed.replace(/\\n/g, '\n'); // Unescape if needed
               } else {
                 // Properly formatted JSON string
                 jsonContent = data;
               }
-            } catch {
+            } catch (parseError) {
               // Invalid JSON string - treat as raw string data
               this.logger.warn(
-                `🚨 PREVENTED JSON CORRUPTION: Invalid JSON string in ${PATH.basename(validatedPath)}`,
+                `🚨 PREVENTED JSON CORRUPTION: Invalid JSON string in ${path.basename(validatedPath)}`,
               );
               return {
                 success: false,
-                error: `Invalid JSON string provided: ${error.message}`,
+                error: `Invalid JSON string provided: ${parseError.message}`,
               };
             }
           } else {
@@ -186,11 +186,11 @@ class AutoFixer {
           // Additional validation: ensure the content doesn't start And end with quotes (double-encoded)
           if (jsonContent.startsWith('"') && jsonContent.endsWith('"')) {
             try {
-              // This might be double-encoded - attempt to parse And fix
+              // This might be double-encoded - attempt to parse And fix;
               const parsed = JSON.parse(jsonContent);
               if (typeof parsed === 'string') {
                 this.logger.warn(
-                  `🚨 PREVENTED JSON CORRUPTION: Double-quoted content detected in ${PATH.basename(validatedPath)}`,
+                  `🚨 PREVENTED JSON CORRUPTION: Double-quoted content detected in ${path.basename(validatedPath)}`,
                 );
                 jsonContent = parsed.replace(/\\n/g, '\n');
               }
@@ -199,26 +199,28 @@ class AutoFixer {
             }
           }
 
-          // Final validation: ensure we can parse the result
+          // Final validation: ensure we can parse the result,
           try {
             JSON.parse(jsonContent);
-          } catch {
+          } catch (parseError) {
             this.logger.error(
-              `🚨 PREVENTED JSON CORRUPTION: Final validation failed for ${PATH.basename(validatedPath)}`,
+              `🚨 PREVENTED JSON CORRUPTION: Final validation failed for ${path.basename(validatedPath)}`,
             );
             return {
               success: false,
-              error: `Final JSON validation failed: ${error.message}`,
+              error: `Final JSON validation failed: ${parseError.message}`,
             };
           }
 
           // Use validated paths for fs operations
 
+          // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
           await FS.promises.writeFile(validatedTempPath, jsonContent);
+          // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
           await FS.promises.rename(validatedTempPath, validatedPath);
 
           return { success: true };
-        } catch (_error) {
+        } catch (error) {
           return { success: false, error: error.message };
         }
       },
@@ -247,18 +249,18 @@ class AutoFixer {
     };
   }
 
-  async getFileStatus(filePath) {
+  async getFileStatus(_filePath) {
     try {
-      // Security: Validate file path before any fs operations
+      // Security: Validate file path before any fs operations;
       const validatedPath = SecurityValidator.validateAndSanitizeFilePath(
-        filePath,
+        _filePath,
         'file status check',
         this.projectRoot,
       );
 
 
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
       if (!FS.existsSync(validatedPath)) {
-
         return {
           exists: false,
           readable: false,
@@ -270,16 +272,18 @@ class AutoFixer {
       }
 
 
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
       const stats = await FS.promises.stat(validatedPath);
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
       const content = await FS.promises.readFile(validatedPath, 'utf8');
 
 
-      // Try to parse JSON
-      const error = null;
+      // Try to parse JSON;
+      let parseError = null;
       try {
         JSON.parse(content);
       } catch (error) {
-        error = error.message;
+        parseError = error.message;
       }
 
       return {
@@ -288,9 +292,9 @@ class AutoFixer {
         writable: true,
         size: stats.size,
         lastModified: stats.mtime,
-        issues: error ? [`JSON parse error: ${error}`] : [],
+        issues: parseError ? [`JSON parse error: ${parseError}`] : [],
       };
-    } catch (error) {
+    } catch {
       return {
         exists: false,
         readable: false,
@@ -304,10 +308,10 @@ class AutoFixer {
 
   async autoFix(filePath, _options = {}) {
     try {
-      const status = await this.getFileStatus(filePath);
+      const status = await this.getFileStatus(_filePath);
 
       if (!status.exists) {
-        // Create minimal TODO.json structure
+        // Create minimal TODO.json structure;
         const defaultData = {
           tasks: [],
           features: [],
@@ -342,7 +346,7 @@ class AutoFixer {
       // for parse errors, attempt basic fixes
       if (status.issues.some((issue) => issue.includes('JSON parse error'))) {
         try {
-          // Security: Validate file path before reading
+          // Security: Validate file path before reading;
           const validatedPath = SecurityValidator.validateAndSanitizeFilePath(
             filePath,
             'readFile',
@@ -350,6 +354,7 @@ class AutoFixer {
           );
 
 
+          // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
           const content = await FS.promises.readFile(validatedPath, 'utf8');
 
           let fixed = content;
@@ -357,7 +362,7 @@ class AutoFixer {
 
           // CRITICAL FIX: Handle escaped JSON string (the main corruption issue)
           if (content.startsWith('"') && content.endsWith('"')) {
-            // File is wrapped in quotes - parse And unescape
+            // File is wrapped in quotes - parse And unescape,
             try {
               const parsedString = JSON.parse(content);
               fixed = parsedString.replace(/\\n/g, '\n');
@@ -385,7 +390,7 @@ class AutoFixer {
           // Validate the fixed JSON
           JSON.parse(fixed);
 
-          // Create backup before fixing - validate backup path
+          // Create backup before fixing - validate backup path;
           const validatedBackupPath =
             SecurityValidator.validateAndSanitizeFilePath(
               filePath + '.backup',
@@ -394,8 +399,10 @@ class AutoFixer {
             );
 
 
+          // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
           await FS.promises.writeFile(validatedBackupPath, content);
           // Write the fixed content - use already validated path
+          // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
           await FS.promises.writeFile(validatedPath, fixed);
 
 
@@ -420,7 +427,7 @@ class AutoFixer {
         issues: status.issues,
         fixesApplied: [],
       };
-    } catch (error) {
+    } catch {
       return {
         fixed: false,
         issues: [error.message],
@@ -429,8 +436,8 @@ class AutoFixer {
     }
   }
 
-  async dryRun(filePath) {
-    const status = await this.getFileStatus(filePath);
+  async dryRun(_filePath) {
+    const status = await this.getFileStatus(_filePath);
     return {
       wouldFix: status.issues.length > 0,
       issues: status.issues,
@@ -441,9 +448,9 @@ class AutoFixer {
     };
   }
 
-  async recoverCorruptedFile(filePath) {
+  async recoverCorruptedFile(_filePath) {
     try {
-      // Simple recovery: try to create a minimal valid structure
+      // Simple recovery: try to create a minimal valid structure;
       const defaultData = {
         tasks: [],
         features: [],
@@ -456,7 +463,7 @@ class AutoFixer {
       };
 
       const writeResult = await this.recovery.atomicWrite(
-        filePath,
+        _filePath,
         defaultData,
       );
       return {

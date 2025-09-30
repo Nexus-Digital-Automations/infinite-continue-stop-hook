@@ -136,7 +136,7 @@ class E2EEnvironment {
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential cleanup required for proper teardown order
         await task();
-      } catch {
+      } catch (_error) {
         console.warn(`Cleanup task failed: ${_error.message}`);
       }
     }
@@ -157,7 +157,7 @@ class E2EEnvironment {
       } else {
         await FS.unlink(dirPath);
       }
-    } catch {
+    } catch (_error) {
       if (_error.code !== 'ENOENT') {
         throw _error;
       }

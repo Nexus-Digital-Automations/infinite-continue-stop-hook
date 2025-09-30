@@ -234,7 +234,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                       success: true,
                       details: `Custom validation '${customRule.name}' passed: ${customRule.description || 'No description'}`,
                     };
-                  } catch {
+                  } catch (_error) {
                     return {
                       success: false,
                       _error: `Custom validation '${customRule.name}' failed: ${_error.message}`,
@@ -248,7 +248,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 };
               }
             }
-          } catch {
+          } catch (_error) {
             return { success: false, _error: _error.message };
           }
         },
@@ -293,7 +293,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 };
               }
             }
-          } catch {
+          } catch (_error) {
             return { success: false, _error: _error.message };
           }
         },
@@ -381,7 +381,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                   success: true,
                   details: `Custom validation '${customRule.name}' passed`,
                 };
-              } catch {
+              } catch (_error) {
                 return {
                   success: false,
                   _error: `Custom validation '${customRule.name}' failed: ${_error.message}`,
@@ -393,7 +393,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
               success: false,
               error: `Unknown validation criterion: ${criterion}`,
             };
-          } catch {
+          } catch (_error) {
             return { success: false, _error: _error.message };
           }
         },
@@ -515,7 +515,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                   success: true,
                   details: `Custom validation '${customRule.name}' passed: ${customRule.description || 'No description'}`,
                 };
-              } catch {
+              } catch (_error) {
                 return {
                   success: false,
                   _error: `Custom validation '${customRule.name}' failed: ${_error.message}`,
@@ -527,7 +527,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
               success: false,
               error: `Unknown validation criterion: ${criterion}`,
             };
-          } catch {
+          } catch (_error) {
             return { success: false, _error: _error.message };
           }
         },
@@ -644,7 +644,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                   success: true,
                   details: `Custom validation '${customRule.name}' passed: ${customRule.description || 'No description'}`,
                 };
-              } catch {
+              } catch (_error) {
                 return {
                   success: false,
                   _error: `Custom validation '${customRule.name}' failed: ${_error.message}`,
@@ -656,7 +656,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
               success: false,
               error: `Unknown validation criterion: ${criterion}`,
             };
-          } catch {
+          } catch (_error) {
             return { success: false, _error: _error.message };
           }
         },
@@ -773,7 +773,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                   success: true,
                   details: `Custom validation '${customRule.name}' passed: ${customRule.description || 'No description'}`,
                 };
-              } catch {
+              } catch (_error) {
                 return {
                   success: false,
                   _error: `Custom validation '${customRule.name}' failed: ${_error.message}`,
@@ -785,7 +785,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
               success: false,
               error: `Unknown validation criterion: ${criterion}`,
             };
-          } catch {
+          } catch (_error) {
             return { success: false, _error: _error.message };
           }
         },

@@ -141,7 +141,7 @@ global.RAG_TEST_UTILS = {
    */
   measureTime: async (fn) => {
     const start = process.hrtime.bigint();
-    const _RESULT = await fn();
+    const result = await fn();
     const end = process.hrtime.bigint();
     const duration = Number(end - start) / 1000000; // Convert to milliseconds,
     return { result, duration };
@@ -169,12 +169,12 @@ global.RAG_TEST_UTILS = {
     const files = [];
 
     for (const [name, content] of Object.entries(structure)) {
-      const _fullPath = path.join(basePath, name);
+      const fullPath = path.join(basePath, name);
 
       if (typeof content === 'object') {
-        directories.push({ path: _fullPath, content });
+        directories.push({ path: fullPath, content });
       } else {
-        files.push({ path: _fullPath, content });
+        files.push({ path: fullPath, content });
       }
     }
 
@@ -196,8 +196,8 @@ global.RAG_TEST_UTILS = {
   cleanupTestDirectory: async (dirPath) => {
     try {
       await FS.rm(dirPath, { recursive: true, force: true });
-    } catch {
-      loggers.stopHook.warn(`Cleanup warning for ${dirPath}:`, _error.message);
+    } catch (error) {
+      loggers.stopHook.warn(`Cleanup warning for ${dirPath}:`, error.message);
     }
   },
 

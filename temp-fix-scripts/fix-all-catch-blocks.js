@@ -21,7 +21,7 @@ function getAllJsFiles() {
       .trim()
       .split('\n')
       .filter((f) => f && f.endsWith('.js'));
-  } catch {
+  } catch (_error) {
     console.error('Failed to get JS files:', _error.message);
     return [];
   }
@@ -275,7 +275,7 @@ try {
     encoding: 'utf8',
   });
   console.log('🎉 ALL LINTING ERRORS RESOLVED!');
-} catch {
+} catch (_error) {
   const _output = _error.stdout || _error.message;
   const errorMatches = _output.match(/(\d+) errors/);
   const warningMatches = _output.match(/(\d+) warnings/);

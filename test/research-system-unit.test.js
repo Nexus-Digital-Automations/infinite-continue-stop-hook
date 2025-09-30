@@ -267,10 +267,10 @@ describe('Feature Management System Unit Tests', () => {
         priority: 'high',
       };
 
-      const _result = await execAPI('create', [
+      const result = await execAPI('create', [
         JSON.stringify(performanceTaskData),
       ]);
-      expect(_result.success).toBe(true);
+      expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const task = listResult.tasks.find((t) => t.id === result.taskId);

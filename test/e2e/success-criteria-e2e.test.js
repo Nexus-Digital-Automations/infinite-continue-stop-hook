@@ -261,7 +261,7 @@ describe('Application Tests', () => {
       path.join(E2E_PROJECT_DIR, 'development', 'success-criteria-config.json'),
       JSON.stringify(successCriteriaConfig, null, 2),
     );
-  } catch {
+  } catch (error) {
     loggers.stopHook._error('Failed to setup E2E project:', error);
     throw error;
   }
@@ -273,7 +273,7 @@ describe('Application Tests', () => {
 async function cleanupE2EProject(_category = 'general') {
   try {
     await fs.rm(E2E_PROJECT_DIR, { recursive: true, force: true });
-  } catch {
+  } catch (error) {
     // Ignore cleanup errors
   }
 }
@@ -341,7 +341,7 @@ describe('Success Criteria End-to-End Tests', () => {
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch {
+      } catch (error) {
         loggers.stopHook.warn(`Feature approval warning: ${_error.message}`);
       }
 
@@ -383,7 +383,7 @@ describe('Success Criteria End-to-End Tests', () => {
             }
           }
         }
-      } catch {
+      } catch (error) {
         loggers.stopHook.warn(`Feature listing warning: ${_error.message}`);
       }
 
@@ -422,7 +422,7 @@ describe('Success Criteria End-to-End Tests', () => {
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch {
+      } catch (error) {
         loggers.stopHook.warn(`Feature approval warning: ${_error.message}`);
       }
 
@@ -454,7 +454,7 @@ describe('Success Criteria End-to-End Tests', () => {
             }
           }
         }
-      } catch {
+      } catch (error) {
         loggers.stopHook.warn(`Feature verification warning: ${_error.message}`);
       }
 
@@ -497,7 +497,7 @@ describe('Success Criteria End-to-End Tests', () => {
             }
           }
         }
-      } catch {
+      } catch (error) {
         loggers.stopHook.warn(
           `Feature metadata verification warning: ${_error.message}`,
         );
@@ -511,7 +511,7 @@ describe('Success Criteria End-to-End Tests', () => {
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch {
+      } catch (error) {
         loggers.stopHook.warn(
           `Enterprise feature approval warning: ${_error.message}`,
         );
@@ -547,7 +547,7 @@ describe('Success Criteria End-to-End Tests', () => {
             }
           }
         }
-      } catch {
+      } catch (error) {
         loggers.app.warn(
           `Enhanced validation verification warning: ${_error.message}`,
         );
@@ -582,7 +582,7 @@ describe('Success Criteria End-to-End Tests', () => {
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch {
+      } catch (error) {
         loggers.stopHook.warn(`Feature approval warning: ${_error.message}`);
       }
 
@@ -626,7 +626,7 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch {
+      } catch (error) {
         loggers.app.warn(
           `Feature workflow completion verification warning: ${_error.message}`,
         );
@@ -661,7 +661,7 @@ module.exports = { authenticate };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch {
+      } catch (error) {
         loggers.stopHook.warn(`Bug fix approval warning: ${_error.message}`);
       }
 
@@ -709,7 +709,7 @@ module.exports = { authenticateWithTimeout };
             }
           }
         }
-      } catch {
+      } catch (error) {
         loggers.stopHook.warn(
           `Bug fix workflow verification warning: ${_error.message}`,
         );
@@ -746,7 +746,7 @@ module.exports = { authenticateWithTimeout };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch {
+      } catch (error) {
         loggers.stopHook.warn(
           `Refactoring feature approval warning: ${_error.message}`,
         );
@@ -825,7 +825,7 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch {
+      } catch (error) {
         loggers.app.warn(
           `Refactoring workflow verification warning: ${_error.message}`,
         );
@@ -884,7 +884,7 @@ module.exports = { authenticate };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch {
+      } catch (error) {
         loggers.stopHook.warn(
           `Multi-agent feature approval warning: ${_error.message}`,
         );
@@ -919,7 +919,7 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch {
+      } catch (error) {
         loggers.app.warn(
           `Multi-agent coordination verification warning: ${_error.message}`,
         );
@@ -957,7 +957,7 @@ module.exports = { authenticate };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch {
+      } catch (error) {
         loggers.stopHook.warn(
           `Performance feature approval warning: ${_error.message}`,
         );
@@ -995,7 +995,7 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch {
+      } catch (error) {
         loggers.app.warn(
           `Performance feature verification warning: ${_error.message}`,
         );
@@ -1034,7 +1034,7 @@ module.exports = { authenticate };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch {
+      } catch (error) {
         loggers.stopHook.warn(
           `Regression detection approval warning: ${_error.message}`,
         );
@@ -1068,7 +1068,7 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch {
+      } catch (error) {
         loggers.app.warn(
           `Regression detection verification warning: ${_error.message}`,
         );
@@ -1114,7 +1114,7 @@ module.exports = { authenticate };
         } else {
           expect(approveResult.success).toBe(true);
         }
-      } catch {
+      } catch (error) {
         loggers.stopHook.warn(
           `Evidence collection approval warning: ${_error.message}`,
         );
@@ -1166,7 +1166,7 @@ module.exports = { authenticate };
             }
           }
         }
-      } catch {
+      } catch (error) {
         loggers.app.warn(
           `Evidence collection verification warning: ${_error.message}`,
         );

@@ -55,7 +55,7 @@ function execAPI(command, args = [], timeout = TIMEOUT, _category = 'general') {
         try {
           const result = stdout.trim() ? JSON.parse(stdout) : {};
           resolve(result);
-        } catch {
+        } catch (error) {
           resolve({ rawOutput: stdout, stderr });
         }
       } else {
@@ -169,7 +169,7 @@ app.start().then(() => {
     await fs.writeFile(FEATURES_PATH, JSON.stringify(initialFeatures, null, 2));
 
     loggers.stopHook.log('Features test project setup completed');
-  } catch {
+  } catch (_error) {
     loggers.stopHook._error('Failed to setup features test project:', error);
     throw _error;
   }
@@ -179,7 +179,7 @@ async function cleanupFeaturesTestProject(_category = 'general') {
   try {
     await fs.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     loggers.stopHook.log('Features test project cleanup completed');
-  } catch {
+  } catch (_error) {
     loggers.stopHook._error('Failed to cleanup features test project');
   }
 }

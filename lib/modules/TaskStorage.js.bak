@@ -20,7 +20,7 @@
  */
 
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const LOGGER = require('../appLogger');
 
 class TaskStorage {
@@ -92,7 +92,7 @@ class TaskStorage {
 
     if (this._cache.enabled) {
       try {
-        // eslint-disable-next-line security/detect-non-literal-fs-filename -- todoPath is validated path from constructor
+        // eslint-disable-next-line security/detect-non-literal-fs-filename -- todoPath is validated path from constructor;
         const stats = FS.statSync(this.todoPath);
         const currentModified = stats.mtime.getTime();
 
@@ -103,7 +103,7 @@ class TaskStorage {
         }
 
         // Update cache with fresh data
-        // eslint-disable-next-line security/detect-non-literal-fs-filename -- todoPath is validated path from constructor
+        // eslint-disable-next-line security/detect-non-literal-fs-filename -- todoPath is validated path from constructor;
         const data = FS.readFileSync(this.todoPath, 'utf8');
         const parsedData = JSON.parse(data);
 
@@ -207,7 +207,7 @@ class TaskStorage {
       // Update cache
       if (this._cache.enabled) {
         this._cache.data = data;
-        // eslint-disable-next-line security/detect-non-literal-fs-filename -- todoPath validated during constructor initialization
+        // eslint-disable-next-line security/detect-non-literal-fs-filename -- todoPath validated during constructor initialization;
         const stats = FS.statSync(this.todoPath);
         this._cache.lastModified = stats.mtime.getTime();
       }
@@ -292,18 +292,17 @@ class TaskStorage {
   listBackups() {
     this.logger?.logDebug?.('Listing available backups');
 
-    const todoDir = PATH.dirname(this.todoPath);
-    const todoFilename = PATH.basename(this.todoPath);
-
+    const todoDir = path.dirname(this.todoPath);
+    const todoFilename = path.basename(this.todoPath);
     try {
-      // eslint-disable-next-line security/detect-non-literal-fs-filename -- todoDir derived from validated todoPath
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- todoDir derived from validated todoPath;
       const files = FS.readdirSync(todoDir);
       const backupFiles = files
         .filter(file => file.startsWith(`${todoFilename}.backup.`))
         .map(file => {
-          const filePath = PATH.join(todoDir, file);
-          // eslint-disable-next-line security/detect-non-literal-fs-filename -- filePath constructed from validated directory structure
-          const stats = FS.statSync(filePath);
+          const filePath = path.join(todoDir, file);
+          // eslint-disable-next-line security/detect-non-literal-fs-filename -- filePath constructed from validated directory structure;
+          const stats = FS.statSync(_filePath);
           return {
             filename: file,
             path: filePath,
@@ -339,17 +338,17 @@ class TaskStorage {
       };
     }
 
-    let _selectedBackup;
+    let selectedBackup;
     if (backupFile) {
-      _selectedBackup = backups.find(backup => backup.filename === backupFile);
-      if (!_selectedBackup) {
+      selectedBackup = backups.find(backup => backup.filename === backupFile);
+      if (!selectedBackup) {
         return {
           success: false,
           message: `Backup file '${backupFile}' not found`,
         };
       }
     } else {
-      _selectedBackup = backups[0]; // Latest backup
+      selectedBackup = backups[0]; // Latest backup
     }
 
     try {
@@ -362,7 +361,7 @@ class TaskStorage {
       }
 
       // Restore from backup
-      FS.copyFileSync(_selectedBackup.path, this.todoPath);
+      FS.copyFileSync(selectedBackup.path, this.todoPath);
 
       // Clear cache to force reload
       if (this._cache.enabled) {
@@ -370,11 +369,11 @@ class TaskStorage {
         this._cache.lastModified = 0;
       }
 
-      this.logger?.logInfo?.(`Successfully restored from backup: ${_selectedBackup.filename}`);
+      this.logger?.logInfo?.(`Successfully restored from backup: ${selectedBackup.filename}`);
       return {
         success: true,
-        message: `Restored from backup: ${_selectedBackup.filename}`,
-        backupUsed: _selectedBackup,
+        message: `Restored from backup: ${selectedBackup.filename}`,
+        backupUsed: selectedBackup,
       };
     } catch {
       this.logger?.logError?.(error, 'Failed to restore from backup');
@@ -471,7 +470,7 @@ class TaskStorage {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- donePath validated during constructor initialization
       if (FS.existsSync(this.donePath)) {
         try {
-          // eslint-disable-next-line security/detect-non-literal-fs-filename -- donePath validated during constructor initialization
+          // eslint-disable-next-line security/detect-non-literal-fs-filename -- donePath validated during constructor initialization;
           const doneContent = FS.readFileSync(this.donePath, 'utf8');
           doneData = JSON.parse(doneContent);
 
@@ -496,7 +495,7 @@ class TaskStorage {
             continue;
           }
 
-          // Check if task is already archived
+          // Check if task is already archived;
           const existingTask = doneData.completed_tasks.find(t => t.id === task.id);
           if (existingTask) {
             results.skipped++;
@@ -532,7 +531,7 @@ class TaskStorage {
         bulk_archive_count: (doneData.metadata?.bulk_archive_count || 0) + 1,
       };
 
-      // Write DONE.json atomically
+      // Write DONE.json atomically;
       const tempPath = `${this.donePath}.tmp.${Date.now()}`;
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- tempPath constructed from validated donePath
       FS.writeFileSync(tempPath, JSON.stringify(doneData, null, 2), 'utf8');
@@ -589,7 +588,7 @@ class TaskStorage {
       // Read existing DONE.json or create structure
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- donePath validated during constructor initialization
       if (FS.existsSync(this.donePath)) {
-        // eslint-disable-next-line security/detect-non-literal-fs-filename -- donePath validated during constructor initialization
+        // eslint-disable-next-line security/detect-non-literal-fs-filename -- donePath validated during constructor initialization;
         const doneContent = FS.readFileSync(this.donePath, 'utf8');
         doneData = JSON.parse(doneContent);
       } else {
@@ -601,7 +600,7 @@ class TaskStorage {
         doneData.completed_tasks = [];
       }
 
-      // Add completion metadata
+      // Add completion metadata;
       const archivedTask = {
         ...task,
         archived_at: new Date().toISOString(),
@@ -676,7 +675,7 @@ class TaskStorage {
     }
 
     try {
-      // eslint-disable-next-line security/detect-non-literal-fs-filename -- donePath validated during constructor initialization
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- donePath validated during constructor initialization;
       const data = FS.readFileSync(this.donePath, 'utf8');
       const parsedData = JSON.parse(data);
 
@@ -700,7 +699,7 @@ class TaskStorage {
     this.logger?.logDebug?.('Getting file status information');
 
     const status = {
-      // eslint-disable-next-line security/detect-non-literal-fs-filename -- todoPath validated during constructor initialization
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- todoPath validated during constructor initialization,,
       todoExists: FS.existsSync(this.todoPath),
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- donePath validated during constructor initialization
       doneExists: FS.existsSync(this.donePath),
@@ -709,14 +708,14 @@ class TaskStorage {
     };
 
     if (status.todoExists) {
-      // eslint-disable-next-line security/detect-non-literal-fs-filename -- todoPath validated during constructor initialization
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- todoPath validated during constructor initialization;
       const stats = FS.statSync(this.todoPath);
       status.todoSize = stats.size;
       status.todoModified = stats.mtime;
     }
 
     if (status.doneExists) {
-      // eslint-disable-next-line security/detect-non-literal-fs-filename -- donePath validated during constructor initialization
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- donePath validated during constructor initialization;
       const stats = FS.statSync(this.donePath);
       status.doneSize = stats.size;
       status.doneModified = stats.mtime;

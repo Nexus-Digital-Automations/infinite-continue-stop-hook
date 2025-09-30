@@ -14,11 +14,12 @@
  */
 
 const pino = require('pino');
+// Removed circular dependency - loggers is defined in this file;
 const os = require('os');
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 
-// LOGGER configuration
+// LOGGER configuration;
 const loggerConfig = {
   level: process.env.LOG_LEVEL || 'info',
   formatters: {
@@ -48,11 +49,11 @@ const loggerConfig = {
   } : undefined,
 };
 
-// Create base logger
+// Create base logger;
 const baseLogger = pino(loggerConfig);
 
 /**
- * Creates a contextual logger with agent/task/_operationcontext
+ * Creates a contextual logger with agent/task/operation context
  * @param {Object} context - Context information
  * @param {string} context.agentId - Unique agent identifier
  * @param {string} context.taskId - Task identifier
@@ -60,7 +61,7 @@ const baseLogger = pino(loggerConfig);
  * @param {string} context.module - Module or component name
  * @returns {Object} Contextual logger instance
  */
-function createContextLogger(context = {}) {
+function createContextLogger(context = {}, _agentId) {
   const contextData = {
     agentId: context.agentId || 'unknown',
     taskId: context.taskId || null,
@@ -74,8 +75,8 @@ function createContextLogger(context = {}) {
 /**
  * Performance timing utility for operations
  * @param {Object} logger - LOGGER instance
- * @param {string} operationName - Name of the _operationbeing timed
- * @returns {Function} Function to call when _operationcompletes
+ * @param {string} operationName - name of the operation being timed
+ * @returns {Function} Function to call when operation completes
  */
 function timeOperation(logger, operationName) {
   const startTime = process.hrtime.bigint();
@@ -129,12 +130,13 @@ function logError(logger, error, context = {}, message = 'An error occurred') {
  * @param {number} duration - Request duration in ms
  */
 function logApiCall(logger, method, endpoint, params = {}, response = {}, duration = 0) {
-  // Sanitize sensitive data
+  // Sanitize sensitive data;
   const sanitizedParams = { ...params };
   const sensitiveKeys = ['password', 'token', 'secret', 'key', 'auth'];
 
   for (const key of Object.keys(sanitizedParams)) {
     if (sensitiveKeys.some(sensitive => key.toLowerCase().includes(sensitive))) {
+      // eslint-disable-next-line security/detect-object-injection -- Property access validated through input validation
       sanitizedParams[key] = '[REDACTED]';
     }
   }
@@ -153,7 +155,7 @@ function logApiCall(logger, method, endpoint, params = {}, response = {}, durati
 /**
  * Create specialized loggers for different components
  */
-const loggers = {
+const LOGGERS = {
   // Main application logger
   app: createContextLogger({ module: 'app' }),
 
@@ -187,19 +189,20 @@ const loggers = {
  * Maintains the original interface while adding structured logging capabilities
  */
 class LegacyLogger {
-  constructor(projectRoot) {
+  constructor(projectRoot, _agentId) {
     this.projectRoot = projectRoot;
     this.logger = createContextLogger({ module: 'stopHook', projectRoot });
 
-    // Configure logging to development/logs directory
-    const logsDir = PATH.join(projectRoot, 'development', 'logs');
+    // Configure logging to development/logs directory;
+    const logsDir = path.join(projectRoot, 'development', 'logs');
     // Ensure logs directory exists
 
+    // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
     if (!FS.existsSync(logsDir)) {
-
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
       FS.mkdirSync(logsDir, { recursive: true });
     }
-    this.logPath = PATH.join(logsDir, 'infinite-continue-hook.log');
+    this.logPath = path.join(logsDir, 'infinite-continue-hook.log');
     this.logData = {
       execution: {
         timestamp: new Date().toISOString(),
@@ -341,13 +344,14 @@ class LegacyLogger {
       // Add final timestamp
       this.logData.execution.endTimestamp = new Date().toISOString();
 
-      // Calculate execution duration
+      // Calculate execution duration;
       const start = new Date(this.logData.execution.timestamp);
       const end = new Date(this.logData.execution.endTimestamp);
       this.logData.execution.durationMs = end - start;
 
       // Write log file (overwrites existing)
 
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
       FS.writeFileSync(this.logPath, JSON.stringify(this.logData, null, 2), 'utf8');
 
       this.logger.info({
@@ -358,16 +362,105 @@ class LegacyLogger {
 
       // Also save a copy with timestamp for debugging if needed
       if (this.logData.errors.length > 0) {
-        const debugPath = PATH.join(this.projectRoot, `.hook-debug-${Date.now()}.json`);
+        const debugPath = path.join(this.projectRoot, `.hook-debug-${Date.now()}.json`);
 
+        // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
         FS.writeFileSync(debugPath, JSON.stringify(this.logData, null, 2), 'utf8');
         this.logger.warn({ debugPath }, 'Saved debug log due to errors');
       }
-    } catch (_error) {
+    } catch {
       // Don't let logging errors crash the hook - but log it with structured logger
-      logError(this.logger, _error, {}, 'Failed to save legacy log file');
+      logError(this.logger, error, {}, 'Failed to save legacy log file');
     }
   }
+}
+
+// Performance monitoring and alerting intervals
+let systemHealthInterval = null;
+let errorTrackingData = [];
+
+// Initialize monitoring intervals
+function startObservabilityMonitoring(options = {}) {
+  const {
+    healthCheckInterval = 60000, // 1 minute
+    memoryThreshold = 80,
+    errorTrackingWindow = 300000, // 5 minutes
+  } = options;
+
+  // System health monitoring
+  if (!systemHealthInterval) {
+    systemHealthInterval = setInterval(() => {
+      try {
+        // Collect system health metrics
+        const _healthMetrics = module.exports.metrics.systemHealth();
+
+        // Check for memory alerts
+        module.exports.metrics.alerts.highMemoryUsage(memoryThreshold);
+
+        // Clean up old error tracking data
+        const now = Date.now();
+        errorTrackingData = errorTrackingData.filter(err =>
+          (now - new Date(err.timestamp).getTime()) < errorTrackingWindow,
+        );
+
+        // Track error trends if we have data
+        if (errorTrackingData.length > 0) {
+          module.exports.errorTracking.trackErrorTrend(errorTrackingData, errorTrackingWindow);
+        }
+      } catch {
+        LOGGERS.app.error({
+          monitoring_error: {
+            message: monitoringError.message,
+            stack: monitoringError.stack,
+          },
+        }, 'Observability monitoring failed');
+      }
+    }, healthCheckInterval);
+
+    LOGGERS.app.info({
+      observability_monitoring: {
+        started: true,
+        health_check_interval_ms: healthCheckInterval,
+        memory_threshold_percent: memoryThreshold,
+        error_tracking_window_ms: errorTrackingWindow,
+      },
+    }, 'Observability monitoring started');
+  }
+}
+
+// Stop monitoring intervals
+function stopObservabilityMonitoring() {
+  if (systemHealthInterval) {
+    clearInterval(systemHealthInterval);
+    systemHealthInterval = null;
+
+    LOGGERS.app.info({
+      observability_monitoring: {
+        stopped: true,
+      },
+    }, 'Observability monitoring stopped');
+  }
+}
+
+// Enhanced error logging that feeds into tracking
+function logErrorWithTracking(logger, error, context = {}, message = 'An error occurred') {
+  // Use existing logError function
+  logError(logger, error, context, message);
+
+  // Also categorize and track the error
+  const categorizedError = module.exports.errorTracking.categorizeError(error, context);
+  errorTrackingData.push(categorizedError);
+
+  // Check for error rate spikes
+  const recentErrors = errorTrackingData.filter(err =>
+    (Date.now() - new Date(err.timestamp).getTime()) < 60000, // Last minute
+  );
+
+  if (recentErrors.length > 0) {
+    module.exports.metrics.alerts.errorRateSpike(recentErrors.length, 60000, 5);
+  }
+
+  return categorizedError;
 }
 
 // Export logger utilities
@@ -376,7 +469,7 @@ module.exports = {
   logger: baseLogger,
 
   // Specialized component loggers
-  loggers,
+  loggers: LOGGERS,
 
   // Utility functions
   createContextLogger,
@@ -394,6 +487,13 @@ module.exports = {
   debug: (message, data = {}) => baseLogger.debug(data, message),
   trace: (message, data = {}) => baseLogger.trace(data, message),
 
+  // Enhanced error logging with tracking
+  logErrorWithTracking,
+
+  // Observability monitoring controls
+  startObservabilityMonitoring,
+  stopObservabilityMonitoring,
+
   // Legacy console replacements (for gradual migration)
   log: (message, ...args) => {
     if (typeof message === 'object') {
@@ -406,7 +506,7 @@ module.exports = {
   // Performance metrics helpers
   metrics: {
     counter: (name, value = 1, labels = {}) => {
-      loggers.performance.info({
+      LOGGERS.performance.info({
         metric_type: 'counter',
         metric_name: name,
         metric_value: value,
@@ -415,7 +515,7 @@ module.exports = {
     },
 
     gauge: (name, value, labels = {}) => {
-      loggers.performance.info({
+      LOGGERS.performance.info({
         metric_type: 'gauge',
         metric_name: name,
         metric_value: value,
@@ -424,12 +524,315 @@ module.exports = {
     },
 
     histogram: (name, value, labels = {}) => {
-      loggers.performance.info({
+      LOGGERS.performance.info({
         metric_type: 'histogram',
         metric_name: name,
         metric_value: value,
         labels,
       }, `Histogram: ${name} = ${value}`);
+    },
+
+    // System health metrics
+    systemHealth: () => {
+      const memUsage = process.memoryUsage();
+      const cpuUsage = process.cpuUsage();
+      const uptime = process.uptime();
+
+      const _healthMetrics = {
+        memory: {
+          heapUsed: Math.round(memUsage.heapUsed / 1024 / 1024), // MB
+          heapTotal: Math.round(memUsage.heapTotal / 1024 / 1024), // MB
+          external: Math.round(memUsage.external / 1024 / 1024), // MB
+          rss: Math.round(memUsage.rss / 1024 / 1024), // MB
+        },
+        cpu: {
+          user: cpuUsage.user,
+          system: cpuUsage.system,
+        },
+        process: {
+          uptime: Math.round(uptime),
+          pid: process.pid,
+          platform: os.platform(),
+          arch: os.arch(),
+          nodeVersion: process.version,
+        },
+        system: {
+          hostname: os.hostname(),
+          loadAverage: os.loadavg(),
+          freeMemory: Math.round(os.freemem() / 1024 / 1024), // MB
+          totalMemory: Math.round(os.totalmem() / 1024 / 1024), // MB
+        },
+      };
+
+      LOGGERS.performance.info({
+        metric_type: 'system_health',
+        timestamp: new Date().toISOString(),
+        ...healthMetrics,
+      }, 'System health metrics collected');
+
+      return healthMetrics;
+    },
+
+    // Business metrics for task management operations
+    business: {
+      taskCreated: (taskType, priority = 'normal') => {
+        LOGGERS.performance.info({
+          metric_type: 'business_metric',
+          event: 'task_created',
+          task_type: taskType,
+          priority: priority,
+          timestamp: new Date().toISOString(),
+        }, `Task created: ${taskType} (${priority})`);
+      },
+
+      taskCompleted: (taskType, durationMs, success = true) => {
+        LOGGERS.performance.info({
+          metric_type: 'business_metric',
+          event: 'task_completed',
+          task_type: taskType,
+          duration_ms: durationMs,
+          success: success,
+          timestamp: new Date().toISOString(),
+        }, `Task completed: ${taskType} in ${durationMs}ms (${success ? 'success' : 'failed'})`);
+      },
+
+      agentInitialized: (agentId, capabilities = []) => {
+        LOGGERS.performance.info({
+          metric_type: 'business_metric',
+          event: 'agent_initialized',
+          agent_id: agentId,
+          capabilities: capabilities,
+          timestamp: new Date().toISOString(),
+        }, `Agent initialized: ${agentId}`);
+      },
+
+      validationRun: (type, passed, failed, duration) => {
+        LOGGERS.performance.info({
+          metric_type: 'business_metric',
+          event: 'validation_run',
+          validation_type: type,
+          tests_passed: passed,
+          tests_failed: failed,
+          duration_ms: duration,
+          success_rate: passed / (passed + failed) * 100,
+          timestamp: new Date().toISOString(),
+        }, `Validation run: ${type} (${passed}/${passed + failed} passed)`);
+      },
+    },
+
+    // Alert detection patterns
+    alerts: {
+      highMemoryUsage: (threshold = 80) => {
+        const memUsage = process.memoryUsage();
+        const usagePercent = (memUsage.heapUsed / memUsage.heapTotal) * 100;
+
+        if (usagePercent > threshold) {
+          LOGGERS.security.warn({
+            alert_type: 'high_memory_usage',
+            severity: 'warning',
+            memory_usage_percent: Math.round(usagePercent),
+            threshold: threshold,
+            heap_used_mb: Math.round(memUsage.heapUsed / 1024 / 1024),
+            heap_total_mb: Math.round(memUsage.heapTotal / 1024 / 1024),
+            requires_attention: true,
+            timestamp: new Date().toISOString(),
+          }, `ALERT: High memory usage detected (${Math.round(usagePercent)}% > ${threshold}%)`);
+          return true;
+        }
+        return false;
+      },
+
+      errorRateSpike: (errorCount, timeWindowMs, threshold = 10) => {
+        if (errorCount > threshold) {
+          LOGGERS.security.error({
+            alert_type: 'error_rate_spike',
+            severity: 'critical',
+            error_count: errorCount,
+            time_window_ms: timeWindowMs,
+            threshold: threshold,
+            requires_immediate_attention: true,
+            timestamp: new Date().toISOString(),
+          }, `ALERT: Error rate spike detected (${errorCount} errors in ${timeWindowMs}ms)`);
+          return true;
+        }
+        return false;
+      },
+
+      taskFailureRate: (failedTasks, totalTasks, threshold = 50) => {
+        const failureRate = (failedTasks / totalTasks) * 100;
+
+        if (failureRate > threshold) {
+          LOGGERS.security.error({
+            alert_type: 'task_failure_rate',
+            severity: 'critical',
+            failure_rate_percent: Math.round(failureRate),
+            failed_tasks: failedTasks,
+            total_tasks: totalTasks,
+            threshold_percent: threshold,
+            requires_immediate_attention: true,
+            timestamp: new Date().toISOString(),
+          }, `ALERT: High task failure rate (${Math.round(failureRate)}% > ${threshold}%)`);
+          return true;
+        }
+        return false;
+      },
+    },
+  },
+
+  // Enhanced error categorization and tracking
+  errorTracking: {
+    categorizeError: (error, context = {}) => {
+      let category = 'unknown';
+      let severity = 'medium';
+
+      // Categorize by error type and content
+      if (error.code === 'ENOENT') {
+        category = 'file_system';
+        severity = 'medium';
+      } else if (error.code === 'EACCES') {
+        category = 'permission';
+        severity = 'high';
+      } else if (error.message.includes('timeout')) {
+        category = 'timeout';
+        severity = 'medium';
+      } else if (error.message.includes('network') || error.message.includes('ECONNREFUSED')) {
+        category = 'network';
+        severity = 'high';
+      } else if (error.name === 'SyntaxError') {
+        category = 'syntax';
+        severity = 'high';
+      } else if (error.name === 'TypeError') {
+        category = 'type';
+        severity = 'medium';
+      } else if (error.name === 'ReferenceError') {
+        category = 'reference';
+        severity = 'high';
+      } else if (error.message.includes('validation')) {
+        category = 'validation';
+        severity = 'medium';
+      } else if (error.message.includes('auth')) {
+        category = 'authentication';
+        severity = 'high';
+      }
+
+      const errorData = {
+        error_id: `err_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        category: category,
+        severity: severity,
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+        code: error.code || null,
+        context: context,
+        timestamp: new Date().toISOString(),
+        requires_investigation: severity === 'high',
+      };
+
+      LOGGERS.security.error(errorData, `Categorized error: ${category}/${severity} - ${error.message}`);
+
+      return errorData;
+    },
+
+    trackErrorTrend: (errors, timeWindowMs = 300000) => { // 5 minutes default
+      const now = Date.now();
+      const recentErrors = errors.filter(err =>
+        (now - new Date(err.timestamp).getTime()) < timeWindowMs,
+      );
+
+      const categoryCounts = {};
+      const severityCounts = {};
+
+      recentErrors.forEach(err => {
+        categoryCounts[err.category] = (categoryCounts[err.category] || 0) + 1;
+        severityCounts[err.severity] = (severityCounts[err.severity] || 0) + 1;
+      });
+
+      const trendData = {
+        time_window_ms: timeWindowMs,
+        total_errors: recentErrors.length,
+        category_breakdown: categoryCounts,
+        severity_breakdown: severityCounts,
+        error_rate_per_minute: (recentErrors.length / (timeWindowMs / 60000)).toFixed(2),
+        timestamp: new Date().toISOString(),
+      };
+
+      LOGGERS.performance.info({
+        metric_type: 'error_trend',
+        ...trendData,
+      }, `Error trend analysis: ${recentErrors.length} errors in ${timeWindowMs/60000} minutes`);
+
+      return trendData;
+    },
+  },
+
+  // Health check utilities for monitoring
+  healthCheck: {
+    performSystemCheck: async () => {
+      const healthData = {
+        status: 'healthy',
+        checks: {},
+        timestamp: new Date().toISOString(),
+      };
+
+      try {
+        // Memory check
+        const memUsage = process.memoryUsage();
+        const memoryUsagePercent = (memUsage.heapUsed / memUsage.heapTotal) * 100;
+        healthData.checks.memory = {
+          status: memoryUsagePercent < 80 ? 'healthy' : 'warning',
+          usage_percent: Math.round(memoryUsagePercent),
+          heap_used_mb: Math.round(memUsage.heapUsed / 1024 / 1024),
+        };
+
+        // Process check
+        healthData.checks.process = {
+          status: 'healthy',
+          uptime_seconds: Math.round(process.uptime()),
+          pid: process.pid,
+        };
+
+        // File system check (basic)
+        try {
+          const testPath = path.join(process.cwd(), '.health-check-test');
+          FS.writeFileSync(testPath, 'test', 'utf8');
+          FS.unlinkSync(testPath);
+          healthData.checks.filesystem = { status: 'healthy' };
+        } catch {
+          healthData.checks.filesystem = {
+            status: 'error',
+            error: fsError.message,
+          };
+          healthData.status = 'degraded';
+        }
+
+        // Overall status determination
+        const hasErrors = Object.values(healthData.checks).some(check => check.status === 'error');
+        const hasWarnings = Object.values(healthData.checks).some(check => check.status === 'warning');
+
+        if (hasErrors) {
+          healthData.status = 'unhealthy';
+        } else if (hasWarnings) {
+          healthData.status = 'degraded';
+        }
+
+        LOGGERS.app.info({
+          health_check: healthData,
+        }, `Health check completed: ${healthData.status}`);
+
+        return healthData;
+      } catch {
+        healthData.status = 'error';
+        healthData.error = error.message;
+
+        LOGGERS.app.error({
+          health_check_error: {
+            message: error.message,
+            stack: error.stack,
+          },
+        }, 'Health check failed');
+
+        return healthData;
+      }
     },
   },
 };

@@ -23,7 +23,7 @@ function runCommand(command, _category = 'general') {
   try {
     const result = execSync(command, { encoding: 'utf8' });
     return JSON.parse(result);
-  } catch {
+  } catch (error) {
     return { success: false, error: error.message };
   }
 }

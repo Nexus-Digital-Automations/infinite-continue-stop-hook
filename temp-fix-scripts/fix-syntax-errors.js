@@ -24,7 +24,7 @@ class SyntaxErrorFixer {
         .split('\n')
         .filter((f) => f && f.endsWith('.js'))
         .map((f) => path.resolve(f.replace('./', '')));
-    } catch {
+    } catch (error) {
       console.error('Failed to get JS files:', error.message);
       return [];
     }
@@ -169,7 +169,7 @@ class SyntaxErrorFixer {
         } else {
           console.log(`✅ No syntax errors found in: ${relativePath}\n`);
         }
-      } catch {
+      } catch (error) {
         console.error(
           `❌ Error processing ${relativePath}: ${error.message}\n`,
         );

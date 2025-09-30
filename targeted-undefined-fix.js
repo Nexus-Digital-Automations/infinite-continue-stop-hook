@@ -33,7 +33,7 @@ class TargetedUndefinedFixer {
         .split('\n')
         .filter((f) => f && f.endsWith('.js'))
         .map((f) => path.resolve(f.replace('./', '')));
-    } catch {
+    } catch (error) {
       console.error('Failed to get JS files:', error.message);
       return [];
     }
@@ -244,7 +244,7 @@ class TargetedUndefinedFixer {
             `📊 Processed ${processedCount}/${jsFiles.length} files...`,
           );
         }
-      } catch {
+      } catch (error) {
         console.error(`❌ Error processing ${relativePath}: ${error.message}`);
       }
     }
@@ -278,7 +278,7 @@ class TargetedUndefinedFixer {
     try {
       const _output = execSync('npm run lint 2>&1', { encoding: 'utf-8' });
       console.log('🎉 No linting errors found!');
-    } catch {
+    } catch (error) {
       const _output = lintError.stdout || lintError.message;
       const undefinedMatches = output.match(/is not defined/g);
       const undefinedCount = undefinedMatches ? undefinedMatches.length : 0;
