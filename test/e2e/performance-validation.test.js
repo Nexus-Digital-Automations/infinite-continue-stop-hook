@@ -565,38 +565,45 @@ describe('Performance Validation E2E', () => {
                   category: 'enhancement'}
               );
               const response = JSON.parse(result.stdout);
-              const featureId = response.feature.id.return FeatureTestHelpers.approveFeature(
-                environment, featureId;
+              const featureId = response.feature.id;
+              return FeatureTestHelpers.approveFeature(
+                environment,
+                featureId,
                 'baseline-tester',
-                'Baseline test';
+                'Baseline test'
               );
             },
-            expectedMaxTime: API_TIMEOUT * 0.7}, {
-    name: 'Feature, Listing',
-            test: () =>;
+            expectedMaxTime: API_TIMEOUT * 0.7
+          },
+          {
+            name: 'Feature Listing',
+            test: () =>
               CommandExecutor.executeAPI('list-features', [], {
-    projectRoot: environment.testDir}),
-            expectedMaxTime: API_TIMEOUT * 0.3},
+                projectRoot: environment.testDir
+              }),
+            expectedMaxTime: API_TIMEOUT * 0.3
+          },
   ];
 
         for (const baselineTest of baselineTests) {
-          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for baseline performance testing.const metrics = await PerformanceTestHelpers.measurePerformance(
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for baseline performance testing
+          const metrics = await PerformanceTestHelpers.measurePerformance(
             baselineTest.test,
-            3;
+            3
           );
 
           // Check for performance, regressions
           if (metrics.avg > baselineTest.expectedMaxTime) {
             console.warn(
-              `⚠️  Performance regression detected in ${baselineTest.name}:`;
+              `⚠️  Performance regression detected in ${baselineTest.name}:`
             );
             console.warn(
-              `   Expected max: ${baselineTest.expectedMaxTime}ms, Actual avg: ${metrics.avg}ms`;
+              `   Expected max: ${baselineTest.expectedMaxTime}ms, Actual avg: ${metrics.avg}ms`
             );
           }
 
           console.log(
-            `✅ ${baselineTest.name} baseline: avg=${metrics.avg}ms, max=${metrics.max}ms`;
+            `✅ ${baselineTest.name} baseline: avg=${metrics.avg}ms, max=${metrics.max}ms`
           );
         }
       },
@@ -620,14 +627,17 @@ describe('Performance Validation E2E', () => {
           );
 
           const response = JSON.parse(result.stdout);
-          const featureId = response.feature.id.await FeatureTestHelpers.approveFeature(
-            environment, featureId;
+          const featureId = response.feature.id;
+          await FeatureTestHelpers.approveFeature(
+            environment,
+            featureId,
             'e2e-tester',
-            'E2E workflow test';
+            'E2E workflow test'
           );
 
           await CommandExecutor.executeAPI('list-features', [], {
-    projectRoot: environment.testDir});
+            projectRoot: environment.testDir
+          });
 
           await CommandExecutor.executeAPI('feature-stats', [], {
     projectRoot: environment.testDir});
