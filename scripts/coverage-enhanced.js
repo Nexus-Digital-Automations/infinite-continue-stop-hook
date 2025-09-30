@@ -468,7 +468,7 @@ class EnhancedCoverageSystem {
     if (FS.existsSync(trendsPath)) {
       try {
         trends = JSON.parse(FS.readFileSync(trendsPath, 'utf8'));
-      } catch (error) {
+      } catch {
         this.logger.warning('Could not load existing trends');
       }
     }

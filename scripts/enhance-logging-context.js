@@ -81,7 +81,8 @@ class LoggingContextEnhancer {
         this.patterns.contextLogger,
         (match, loggerType, level, message, context) => {
           try {
-            const existingContext = eval(`(${context})`);
+            // Try to parse as JSON first, fallback to leaving as-is
+            const existingContext = JSON.parse(context);
             const enhancedContext = {
               ...contextInfo,
               ...existingContext, // Existing context takes precedence
@@ -89,7 +90,7 @@ class LoggingContextEnhancer {
             this.enhancedCalls++;
             enhanced = true;
             return `loggers.${loggerType}.${level}('${message}', ${JSON.stringify(enhancedContext)});`;
-          } catch (error) {
+          } catch {
             // If we can't parse the context, leave it as is
             return match;
           }

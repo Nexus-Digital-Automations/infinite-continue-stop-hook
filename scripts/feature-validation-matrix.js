@@ -12,11 +12,11 @@
 const FS = require('fs');
 const path = require('path');
 const { execSync, spawn: _spawn } = require('child_process');
-const OS = require('os');
+const _OS = require('os');
 const { loggers } = require('../lib/logger');
 
 class FeatureValidationMatrix {
-  constructor(validationResults = {}) {
+  constructor(_validationResults = {}) {
     this.environment = {
       node_version: process.version,
       platform: process.platform,
@@ -112,7 +112,7 @@ class FeatureValidationMatrix {
    * Validate TaskManager API functionality
    */
   async validateTaskManagerAPI() {
-    const _result = {
+    const result = {
       name: 'TaskManager API',
       status: 'unknown',
       details: {},
@@ -146,9 +146,9 @@ class FeatureValidationMatrix {
       if (!startTest.success) {
         result.errors.push(`API startup failed: ${startTest.error}`);
       }
-    } catch (_) {
+    } catch (error) {
       result.status = 'failed';
-      result.errors.push(`API validation error: ${_error.message}`);
+      result.errors.push(`API validation error: ${error.message}`);
     }
 
     return result;
@@ -158,7 +158,7 @@ class FeatureValidationMatrix {
    * Validate RAG System functionality
    */
   async validateRAGSystem() {
-    const _result = {
+    const result = {
       name: 'RAG System',
       status: 'unknown',
       details: {},
@@ -174,7 +174,7 @@ class FeatureValidationMatrix {
         try {
           require(dep);
           result.details[`${dep}_available`] = true;
-        } catch (_) {
+        } catch {
           result.details[`${dep}_available`] = false;
           result.errors.push(`RAG dependency missing: ${dep}`);
         }
@@ -206,9 +206,9 @@ class FeatureValidationMatrix {
       }
 
       result.status = result.errors.length === 0 ? 'passed' : 'failed';
-    } catch (_) {
+    } catch (error) {
       result.status = 'failed';
-      result.errors.push(`RAG validation error: ${_error.message}`);
+      result.errors.push(`RAG validation error: ${error.message}`);
     }
 
     return result;
@@ -218,7 +218,7 @@ class FeatureValidationMatrix {
    * Validate File Operations functionality
    */
   async validateFileOperations() {
-    const _result = {
+    const result = {
       name: 'File Operations',
       status: 'unknown',
       details: {},
@@ -272,9 +272,9 @@ class FeatureValidationMatrix {
       }
 
       result.status = result.errors.length === 0 ? 'passed' : 'failed';
-    } catch (_) {
+    } catch (error) {
       result.status = 'failed';
-      result.errors.push(`File operations validation error: ${_error.message}`);
+      result.errors.push(`File operations validation error: ${error.message}`);
     }
 
     return result;
@@ -284,7 +284,7 @@ class FeatureValidationMatrix {
    * Validate Agent Management functionality
    */
   async validateAgentManagement() {
-    const _result = {
+    const result = {
       name: 'Agent Management',
       status: 'unknown',
       details: {},
@@ -340,10 +340,10 @@ class FeatureValidationMatrix {
       }
 
       result.status = result.errors.length === 0 ? 'passed' : 'failed';
-    } catch (_) {
+    } catch (error) {
       result.status = 'failed';
       result.errors.push(
-        `Agent management validation error: ${_error.message}`,
+        `Agent management validation error: ${error.message}`,
       );
     }
 
@@ -354,7 +354,7 @@ class FeatureValidationMatrix {
    * Validate Performance Monitoring functionality
    */
   async validatePerformanceMonitoring() {
-    const _result = {
+    const result = {
       name: 'Performance Monitoring',
       status: 'unknown',
       details: {},
@@ -406,10 +406,10 @@ class FeatureValidationMatrix {
       };
 
       result.status = result.errors.length === 0 ? 'passed' : 'failed';
-    } catch (_) {
+    } catch (error) {
       result.status = 'failed';
       result.errors.push(
-        `Performance monitoring validation error: ${_error.message}`,
+        `Performance monitoring validation error: ${error.message}`,
       );
     }
 
@@ -420,7 +420,7 @@ class FeatureValidationMatrix {
    * Validate Native Dependencies functionality
    */
   async validateNativeDependencies() {
-    const _result = {
+    const result = {
       name: 'Native Dependencies',
       status: 'unknown',
       details: {},
@@ -441,10 +441,10 @@ class FeatureValidationMatrix {
           const module = dep.test();
           result.details[`${dep.name}_loaded`] = true;
           result.details[`${dep.name}_version`] = module.version || 'unknown';
-        } catch (_) {
+        } catch (error) {
           result.details[`${dep.name}_loaded`] = false;
           result.errors.push(
-            `Native dependency failed: ${dep.name} - ${_error.message}`,
+            `Native dependency failed: ${dep.name} - ${error.message}`,
           );
         }
       }
@@ -461,16 +461,16 @@ class FeatureValidationMatrix {
             `Native module rebuild failed: ${rebuildTest.error}`,
           );
         }
-      } catch (_) {
+      } catch (error) {
         result.details.rebuild_capability = false;
-        result.errors.push(`Rebuild test error: ${_error.message}`);
+        result.errors.push(`Rebuild test error: ${error.message}`);
       }
 
       result.status = result.errors.length === 0 ? 'passed' : 'failed';
-    } catch (_) {
+    } catch (error) {
       result.status = 'failed';
       result.errors.push(
-        `Native dependencies validation error: ${_error.message}`,
+        `Native dependencies validation error: ${error.message}`,
       );
     }
 
@@ -485,7 +485,7 @@ class FeatureValidationMatrix {
       const start = Date.now();
 
       try {
-        const _output = execSync(command, {
+        const output = execSync(command, {
           timeout,
           encoding: 'utf8',
           stdio: 'pipe',
@@ -497,12 +497,12 @@ class FeatureValidationMatrix {
           duration: Date.now() - start,
           error: null,
         });
-      } catch (_) {
+      } catch (error) {
         resolve({
           success: false,
-          output: _error.stdout || '',
+          output: error.stdout || '',
           duration: Date.now() - start,
-          error: _error.message,
+          error: error.message,
         });
       }
     });
@@ -518,7 +518,7 @@ class FeatureValidationMatrix {
       try {
         loggers.stopHook.log(`Testing: ${feature.name} (${feature.type})`);
         // eslint-disable-next-line no-await-in-loop -- Sequential feature validation required;
-        const _result = await feature.testFunction();
+        const result = await feature.testFunction();
         this.validationResults.feature_tests[feature.name] = result;
 
         const status = result.status === 'passed' ? '✅' : '❌';
@@ -531,19 +531,19 @@ class FeatureValidationMatrix {
             errors: result.errors,
           });
         }
-      } catch (_) {
+      } catch (error) {
         loggers.stopHook.log(`❌ ${feature.name}: validation failed`);
         this.validationResults.feature_tests[feature.name] = {
           name: feature.name,
           status: 'failed',
-          errors: [`Validation error: ${_error.message}`],
+          errors: [`Validation error: ${error.message}`],
         };
 
         if (feature.critical) {
           this.validationResults.issues_found.push({
             feature: feature.name,
             type: 'critical',
-            errors: [`Validation error: ${_error.message}`],
+            errors: [`Validation error: ${error.message}`],
           });
         }
       }
@@ -553,7 +553,7 @@ class FeatureValidationMatrix {
   /**
    * Generate compatibility matrix
    */
-  generateCompatibilityMatrix(validationResults = {}) {
+  generateCompatibilityMatrix(_validationResults = {}) {
     loggers.stopHook.log('📊 Generating compatibility matrix...');
 
     const matrix = {
@@ -601,7 +601,7 @@ class FeatureValidationMatrix {
   /**
    * Save validation results
    */
-  saveResults(validationResults = {}) {
+  saveResults(_validationResults = {}) {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const resultsFile = path.join(
       this.outputDir,
@@ -637,7 +637,7 @@ class FeatureValidationMatrix {
   /**
    * Generate markdown report
    */
-  generateMarkdownReport(validationResults = {}) {
+  generateMarkdownReport(_validationResults = {}) {
     const env = this.validationResults.environment;
     const matrix = this.validationResults.compatibility_matrix;
 
@@ -719,7 +719,7 @@ ${
   /**
    * Display validation summary
    */
-  displaySummary(validationResults = {}) {
+  displaySummary(_validationResults = {}) {
     loggers.stopHook.log('\n📊 Feature Validation Summary');
     loggers.stopHook.log('=============================');
     loggers.stopHook.log(`Node.js Version: ${this.environment.node_version}`);
@@ -752,7 +752,7 @@ ${
   /**
    * Run complete validation suite
    */
-  async run(validationResults = {}) {
+  async run(_validationResults = {}) {
     loggers.stopHook.log('🚀 Starting Feature Validation Matrix...\n');
 
     try {
@@ -763,9 +763,9 @@ ${
 
       loggers.stopHook.log('\n✅ Feature validation completed successfully!');
       return this.validationResults;
-    } catch (_) {
-      loggers.stopHook.error('❌ Feature validation failed:', _error.message);
-      throw _error;
+    } catch (error) {
+      loggers.stopHook.error('❌ Feature validation failed:', error.message);
+      throw error;
     }
   }
 }
