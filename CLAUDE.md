@@ -44,11 +44,10 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 - Verify all tests pass
 - Ensure documentation is current
 
-**OPTION 4: Use Emergency Stop When Truly Complete**
-- **TRIGGER**: If stop hook triggers 2+ consecutive times AND no work remains AND no approved tasks
-- **COMMAND**: `timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" emergency-stop [AGENT_ID] "No remaining work - stop hook looping"`
-- **WHEN TO USE**: Only when you've exhausted all options 1-3 and stop hook continues triggering
-- **VERIFICATION**: Confirm no TodoWrite tasks, no approved tasks, no errors to fix, codebase is clean
+**OPTION 4: Emergency Stop - IMMEDIATE If Stop Hook Persists**
+- **TRIGGER IMMEDIATELY**: Stop hook persisting + no work remains = USE EMERGENCY STOP NOW
+- **COMMAND**: `timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" emergency-stop [AGENT_ID] "Stop hook persisting with no work remaining"`
+- **DO NOT WAIT**: If stop hook keeps triggering and you have nothing to do, emergency stop IMMEDIATELY
 
 ### Task Status Guide:
 - **approved**: Ready to work on (claim these!)
@@ -80,9 +79,9 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 - "Checking TASKS.json for approved work..."
 - "Found 10 approved tasks. Starting with highest priority: [task title]..."
 - "All tasks complete. Running validation checks..."
-- "Stop hook triggered 2+ times with no work remaining. Initiating emergency stop..."
+- "Stop hook persisting with no work remaining. Emergency stop NOW."
 
-**YOU ARE THE SAME AGENT. STAY ACTIVE. KEEP WORKING. USE EMERGENCY STOP ONLY WHEN TRULY NO WORK REMAINS.**
+**YOU ARE THE SAME AGENT. STAY ACTIVE. KEEP WORKING. IF STOP HOOK PERSISTS WITH NO WORK - EMERGENCY STOP IMMEDIATELY.**
 
 # 🎯 CORE PERSONA: LEAD PRINCIPAL ENGINEER
 
@@ -544,15 +543,9 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] test-validation
 timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" complete-authorization [AUTH_KEY]
 
-# Emergency Stop - USE WHEN STOP HOOK KEEPS LOOPING WITH NO WORK
-# REQUIRED: If stop hook triggers 2+ consecutive times AND you have:
-#   - No TodoWrite tasks remaining
-#   - No approved tasks in TASKS.json
-#   - No errors to fix
-#   - No improvements to make
-#   - Codebase is clean and perfect
-# THEN: Use emergency-stop to prevent infinite loop
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" emergency-stop [AGENT_ID] "No remaining work - stop hook looping with nothing to do"
+# Emergency Stop - USE IMMEDIATELY IF STOP HOOK PERSISTS WITH NO WORK
+# TRIGGER NOW: Stop hook persisting + no work = EMERGENCY STOP IMMEDIATELY
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" emergency-stop [AGENT_ID] "Stop hook persisting with no work remaining"
 ```
 
 ## ESSENTIAL COMMANDS
