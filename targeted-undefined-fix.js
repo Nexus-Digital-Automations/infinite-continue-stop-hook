@@ -45,7 +45,7 @@ class TargetedUndefinedFixer {
     let modified = false;
 
     // Skip files that are our own fixers to avoid recursion
-    if (_filePath.includes('fix-') || filePath.includes('fixer')) {
+    if (_filePath.includes('fix-') || _filePath.includes('fixer')) {
       return false;
     }
 
@@ -196,7 +196,7 @@ class TargetedUndefinedFixer {
         const updated = line.replace(
           /constructor\s*\(([^)]*)\)/,
           (_match, _params) => {
-            const cleanParams = params.trim();
+            const cleanParams = _params.trim();
             return cleanParams
               ? `constructor(${cleanParams}, _agentId)`
               : 'constructor(_agentId)';
@@ -278,22 +278,22 @@ class TargetedUndefinedFixer {
     try {
       const _output = execSync('npm run lint 2>&1', { encoding: 'utf-8' });
       console.log('🎉 No linting errors found!');
-    } catch (error) {
+    } catch (lintError) {
       const _output = lintError.stdout || lintError.message;
-      const undefinedMatches = output.match(/is not defined/g);
+      const undefinedMatches = _output.match(/is not defined/g);
       const undefinedCount = undefinedMatches ? undefinedMatches.length : 0;
 
       console.log(`📊 Remaining undefined variable errors: ${undefinedCount}`);
 
       if (undefinedCount > 0 && undefinedCount < 50) {
         console.log('\n🔍 Remaining specific errors:');
-        const lines = output.split('\n');
+        const lines = _output.split('\n');
         const errorMap = {};
 
         lines.forEach((line) => {
           const _match = line.match(/'([^']+)' is not defined/);
           if (_match) {
-            const variable = match[1];
+            const variable = _match[1];
             errorMap[variable] = (errorMap[variable] || 0) + 1;
           }
         });

@@ -28,7 +28,7 @@ class SystematicLintingFixer {
 
       // Apply systematic fixes
       for (const filePath of jsFiles) {
-        this.processFile(_filePath);
+        this.processFile(filePath);
       }
 
       console.log(`✅ Processed ${this.fixedFiles.length} files`);
@@ -38,7 +38,7 @@ class SystematicLintingFixer {
         console.log('\n❌ Errors encountered:');
         this.errors.forEach((error) => console.log(`  - ${error}`));
       }
-    } catch (_) {
+    } catch (error) {
       console.error('❌ Systematic fix failed:', error.message);
       throw error;
     }
@@ -121,9 +121,9 @@ class SystematicLintingFixer {
       // Write file if changes were made
       if (hasChanges) {
         FS.writeFileSync(filePath, fixedContent, 'utf8');
-        this.fixedFiles.push(_filePath);
+        this.fixedFiles.push(filePath);
       }
-    } catch (_) {
+    } catch (error) {
       this.errors.push(`${filePath}: ${error.message}`);
     }
   }
