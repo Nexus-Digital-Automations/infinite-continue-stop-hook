@@ -482,16 +482,16 @@ const stopFlagContent = await fs.readFile(stopFlagPath, 'utf8');
     });
 
     test('should handle stop authorization without reason', async () => {
-      // 1. Initialize agent;
-const AGENT_ID = 'no-reason-agent';
-      const initResult = await execAPI('initialize', [AGENT_ID], {,
-    projectRoot: testDir,
+      // 1. Initialize agent
+      const AGENT_ID = 'no-reason-agent';
+      const initResult = await execAPI('initialize', [AGENT_ID], {
+        projectRoot: testDir,
       });
       expect(initResult.success).toBe(true);
 
-      // 2. Authorize stop without reason;
-const stopResult = await execAPI('authorize-stop', [AGENT_ID], {,
-    projectRoot: testDir,
+      // 2. Authorize stop without reason
+      const stopResult = await execAPI('authorize-stop', [AGENT_ID], {
+        projectRoot: testDir,
       });
 
       expect(stopResult.success).toBe(true);

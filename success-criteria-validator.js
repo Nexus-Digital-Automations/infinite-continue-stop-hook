@@ -15,7 +15,7 @@
 
 const FS = require('fs').promises;
 const path = require('path');
-    const { execSync } = require('child_process');
+const { execSync } = require('child_process');
 const { createLogger } = require('./lib/utils/logger');
 
 /**
@@ -26,19 +26,19 @@ class ValidationLogger {
 
   static log(message) {
     this.LOGGER.info(message);
-}
+  }
 
   static error(message) {
     this.LOGGER.error(message);
-}
+  }
 
   static warn(message) {
     this.LOGGER.warn(message);
-}
+  }
 
   static debug(message) {
     this.LOGGER.debug(message);
-}
+  }
 }
 
 class SuccessCriteriaValidator {
@@ -51,7 +51,7 @@ class SuccessCriteriaValidator {
     this.validationResults = {};
     this.evidenceDir = '';
     this.reportDir = '';
-}
+  }
 
   /**
    * Initialize validator with configuration
@@ -76,7 +76,7 @@ class SuccessCriteriaValidator {
       );
       throw _error;
     }
-}
+  }
 
   /**
    * Ensure required directories exist
@@ -92,7 +92,7 @@ class SuccessCriteriaValidator {
       );
       throw _error;
     }
-}
+  }
 
   /**
    * Get 25-point standard criteria template
@@ -229,8 +229,8 @@ class SuccessCriteriaValidator {
         category: 'compliance',
         automated: false,
       },
-  ];
-}
+    ];
+  }
 
   /**
    * Get task-specific success criteria from FEATURES.json
@@ -257,7 +257,7 @@ class SuccessCriteriaValidator {
       );
       throw _error;
     }
-}
+  }
 
   /**
    * Get project-wide inherited criteria for task type
@@ -271,11 +271,11 @@ class SuccessCriteriaValidator {
     const inheritedCriteria = [];
     for (const criteriaSet of rules.inherit_from) {
       // eslint-disable-next-line security/detect-object-injection -- Accessing known criteria set names from configuration inheritance;
-const criteria = this.config.project_wide_criteria[criteriaSet];
+      const criteria = this.config.project_wide_criteria[criteriaSet];
       if (criteria) {
         inheritedCriteria.push(
           ...criteria.criteria.map((c) => ({
-    Name: c,
+            Name: c,
             category: criteriaSet,
             mandatory: criteria.mandatory,
             validation_method: criteria.validation_method,
@@ -285,7 +285,7 @@ const criteria = this.config.project_wide_criteria[criteriaSet];
     }
 
     return inheritedCriteria;
-}
+  }
 
   /**
    * Run automated validation checks
@@ -345,16 +345,16 @@ const criteria = this.config.project_wide_criteria[criteriaSet];
           case 'License Compliance':
             results[criterion.Name] = this.validateLicenseCompliance();
             break;
-    default:
+          default:
             results[criterion.Name] = {
-    status: 'pending',
+              status: 'pending',
               message: 'Automated validation not implemented',
               evidence: null,
             };
         }
       } catch (_) {
         results[criterion.Name] = {
-    status: 'failed',
+          status: 'failed',
           message: _error.message,
           evidence: null,
         };
@@ -362,7 +362,7 @@ const criteria = this.config.project_wide_criteria[criteriaSet];
     }
 
     return results;
-}
+  }
 
   /**
    * Validate linting (eslint, ruff, etc.)
@@ -370,22 +370,22 @@ const criteria = this.config.project_wide_criteria[criteriaSet];
   validateLinting() {
     try {
       // Try npm run lint first;
-const _LINT_OUTPUT = execSync('npm run lint', {
-    encoding: 'utf8',
+      const _LINT_OUTPUT = execSync('npm run lint', {
+        encoding: 'utf8',
         timeout: 30000,
         cwd: __dirname,
       });
 
       return {
-    status: 'passed',
+        status: 'passed',
         message: 'All linting checks passed with zero violations',
         evidence: {
-    tool: 'npm run lint',
+          tool: 'npm run lint',
           violations_count: 0,
           output: lintOutput.trim(),
           timestamp: new Date().toISOString(),
-        }
-};
+        },
+      };
     } catch (_) {
       // Check if it's because there are linting errors
       if (
@@ -394,25 +394,25 @@ const _LINT_OUTPUT = execSync('npm run lint', {
       ) {
         const violationsCount = (_error.stdout.match(/(warning|error)/g) || [])
           .length;
-    return {
-    status: 'failed',
+        return {
+          status: 'failed',
           message: `Linting failed with ${violationsCount} violations`,
           evidence: {
-    tool: 'npm run lint',
+            tool: 'npm run lint',
             violations_count: violationsCount,
             output: _error.stdout,
             timestamp: new Date().toISOString(),
-          }
-};
+          },
+        };
       }
 
       return {
-    status: 'error',
+        status: 'error',
         message: `Linting command failed: ${error.message}`,
         evidence: null,
       };
     }
-}
+  }
 
   /**
    * Validate build process
@@ -420,34 +420,34 @@ const _LINT_OUTPUT = execSync('npm run lint', {
   validateBuild() {
     try {
       const buildOutput = execSync('npm run build', {
-    encoding: 'utf8',
+        encoding: 'utf8',
         timeout: 60000,
         cwd: __dirname,
       });
 
       return {
-    status: 'passed',
+        status: 'passed',
         message: 'Build completed successfully with no errors or warnings',
         evidence: {
-    status: 'success',
+          status: 'success',
           warnings_count: 0,
           errors_count: 0,
           output: buildOutput.trim(),
           timestamp: new Date().toISOString(),
-        }
-};
+        },
+      };
     } catch (_) {
-    return {
-    status: 'failed',
+      return {
+        status: 'failed',
         message: `Build failed: ${_error.message}`,
         evidence: {
-    status: 'failed',
+          status: 'failed',
           output: _error.stdout || _error.message,
           timestamp: new Date().toISOString(),
-        }
-};
+        },
+      };
     }
-}
+  }
 
   /**
    * Validate runtime startup
@@ -456,16 +456,16 @@ const _LINT_OUTPUT = execSync('npm run lint', {
     // for this project, we'll check if npm start can be executed
     // In a real scenario, you'd want to start the server And check health endpoints,
     return {
-    status: 'passed',
+      status: 'passed',
       message: 'Runtime validation passed - application structure verified',
       evidence: {
-    check_type: 'structure_validation',
+        check_type: 'structure_validation',
         timestamp: new Date().toISOString(),
         notes:
           'Full runtime validation requires server startup And health checks',
-      }
-};
-}
+      },
+    };
+  }
 
   /**
    * Validate tests
@@ -473,54 +473,54 @@ const _LINT_OUTPUT = execSync('npm run lint', {
   validateTests() {
     try {
       const testOutput = execSync('npm test', {
-    encoding: 'utf8',
+        encoding: 'utf8',
         timeout: 60000,
         cwd: __dirname,
       });
 
       // Parse test output for results;
-const passMatch = testOutput.match(/(\\d+) passing/);
+      const passMatch = testOutput.match(/(\\d+) passing/);
       const failMatch = testOutput.match(/(\\d+) failing/);
 
       const passed = passMatch ? parseInt(passMatch[1]) : 0;
       const failed = failMatch ? parseInt(failMatch[1]) : 0;
 
       if (failed === 0) {
-    return {
-    status: 'passed',
+        return {
+          status: 'passed',
           message: `All ${passed} tests passed`,
           evidence: {
-    total_tests: passed,
+            total_tests: passed,
             passed_tests: passed,
             failed_tests: failed,
             output: testOutput.trim(),
             timestamp: new Date().toISOString(),
-          }
-};
+          },
+        };
       } else {
-    return {
-    status: 'failed',
+        return {
+          status: 'failed',
           message: `${failed} tests failed out of ${passed + failed}`,
           evidence: {
-    total_tests: passed + failed,
+            total_tests: passed + failed,
             passed_tests: passed,
             failed_tests: failed,
             output: testOutput.trim(),
             timestamp: new Date().toISOString(),
-          }
-};
+          },
+        };
       }
     } catch (_) {
-    return {
-    status: 'error',
+      return {
+        status: 'error',
         message: `Test execution failed: ${_error.message}`,
         evidence: {
-    output: _error.stdout || _error.message,
+          output: _error.stdout || _error.message,
           timestamp: new Date().toISOString(),
-        }
-};
+        },
+      };
     }
-}
+  }
 
   /**
    * Validate performance benchmarks
@@ -528,20 +528,20 @@ const passMatch = testOutput.match(/(\\d+) passing/);
   validatePerformance() {
     // Placeholder implementation - in real scenario, run performance benchmarks,
     return {
-    status: 'passed',
+      status: 'passed',
       message: 'Performance validation passed - no regressions detected',
       evidence: {
-    response_time: '< 2s',
+        response_time: '< 2s',
         memory_usage: 'within bounds',
         baseline_comparison: {
-    regression_percentage: 0,
+          regression_percentage: 0,
         },
         timestamp: new Date().toISOString(),
         notes:
           'Detailed performance benchmarking requires test suite implementation',
-      }
-};
-}
+      },
+    };
+  }
 
   /**
    * Validate security checks
@@ -614,7 +614,7 @@ const passMatch = testOutput.match(/(\\d+) passing/);
         evidence: null,
       };
     }
-}
+  }
 
   /**
    * Validate dependencies
@@ -628,24 +628,24 @@ const passMatch = testOutput.match(/(\\d+) passing/);
       });
 
       return {
-    status: 'passed',
+        status: 'passed',
         message: 'Dependencies audit passed - no high/critical vulnerabilities',
         evidence: {
-    audit_output: auditOutput.trim(),
+          audit_output: auditOutput.trim(),
           timestamp: new Date().toISOString(),
-        }
-};
+        },
+      };
     } catch (_) {
-    return {
-    status: 'failed',
+      return {
+        status: 'failed',
         message: `Dependency audit failed: ${_error.message}`,
         evidence: {
-    audit_output: _error.stdout || _error.message,
+          audit_output: _error.stdout || _error.message,
           timestamp: new Date().toISOString(),
-        }
-};
+        },
+      };
     }
-}
+  }
 
   /**
    * Additional validation methods (stubs for now)
@@ -656,7 +656,7 @@ const passMatch = testOutput.match(/(\\d+) passing/);
       message: 'Version compatibility validated',
       evidence: null,
     };
-}
+  }
 
   validateSecurityAudit() {
     return {
@@ -664,7 +664,7 @@ const passMatch = testOutput.match(/(\\d+) passing/);
       message: 'Security audit completed',
       evidence: null,
     };
-}
+  }
 
   validateCrossPlatform() {
     return {
@@ -672,7 +672,7 @@ const passMatch = testOutput.match(/(\\d+) passing/);
       message: 'Cross-platform compatibility verified',
       evidence: null,
     };
-}
+  }
 
   validateCredentialExposure() {
     return {
@@ -680,7 +680,7 @@ const passMatch = testOutput.match(/(\\d+) passing/);
       message: 'No credential exposure detected',
       evidence: null,
     };
-}
+  }
 
   validateInputValidation() {
     return {
@@ -688,7 +688,7 @@ const passMatch = testOutput.match(/(\\d+) passing/);
       message: 'Input validation implemented',
       evidence: null,
     };
-}
+  }
 
   validateOutputEncoding() {
     return {
@@ -696,7 +696,7 @@ const passMatch = testOutput.match(/(\\d+) passing/);
       message: 'Output encoding validated',
       evidence: null,
     };
-}
+  }
 
   validateLicenseCompliance() {
     return {
@@ -704,7 +704,7 @@ const passMatch = testOutput.match(/(\\d+) passing/);
       message: 'License compliance verified',
       evidence: null,
     };
-}
+  }
 
   /**
    * Helper methods
@@ -745,7 +745,7 @@ const passMatch = testOutput.match(/(\\d+) passing/);
 
     await walkDir(__dirname);
     return sourceFiles;
-}
+  }
 
   containsCredentials(content) {
     const patterns = [
@@ -756,14 +756,14 @@ const passMatch = testOutput.match(/(\\d+) passing/);
     ];
 
     return patterns.some((pattern) => pattern.test(content));
-}
+  }
 
   /**
    * Generate validation report
    */
   async generateReport(taskId, results) {
     const report = {
-    task_id: taskId,
+      task_id: taskId,
       validation_timestamp: new Date().toISOString(),
       overall_status: this.calculateOverallStatus(results),
       criteria_summary: this.generateCriteriaSummary(results),
@@ -781,7 +781,7 @@ const passMatch = testOutput.match(/(\\d+) passing/);
     await FS.writeFile(reportPath, JSON.stringify(report, null, 2));
 
     return report;
-}
+  }
 
   calculateOverallStatus(results) {
     const statuses = Object.values(results).map((r) => r.status);
@@ -795,7 +795,7 @@ const passMatch = testOutput.match(/(\\d+) passing/);
       return 'pending';
     }
     return 'passed';
-}
+  }
 
   generateCriteriaSummary(results) {
     const total = Object.keys(results).length;
@@ -812,7 +812,7 @@ const passMatch = testOutput.match(/(\\d+) passing/);
       (r) => r.status === 'error',
     ).length;
     return {
-    total_criteria: total,
+      total_criteria: total,
       passed: passed,
       failed: failed,
       pending: pending,
@@ -881,7 +881,7 @@ const passMatch = testOutput.match(/(\\d+) passing/);
       ValidationLogger.error(`❌ Validation failed: ${_error.message}`);
       throw _error;
     }
-}
+  }
 
   /**
    * Display validation results
@@ -898,10 +898,10 @@ const passMatch = testOutput.match(/(\\d+) passing/);
     for (const [criterion, result] of Object.entries(results)) {
       const statusEmoji = {
         passed: '✅',
-          failed: '❌',
-          pending: '⏳',
-          error: '💥',
-        }[result.status] || '❓';
+        failed: '❌',
+        pending: '⏳',
+        error: '💥',
+      }[result.status] || '❓';
 
       ValidationLogger.log(`${statusEmoji} ${criterion}: ${result.message}`);
 
@@ -942,7 +942,7 @@ const passMatch = testOutput.match(/(\\d+) passing/);
     } else {
       ValidationLogger.log('\n🎉 VALIDATION COMPLETE - All criteria satisfied');
     }
-}
+  }
 }
 
 // Command line interface
@@ -968,7 +968,7 @@ Success Criteria Validator v1.0.0
   node success-criteria-validator.js --task-id feature_12345_abcdef --report
         `);
     return;
-}
+  }
 
   const options = {};
   let taskId = null;
@@ -989,12 +989,12 @@ Success Criteria Validator v1.0.0
         ValidationLogger.log('Help message shown above');
         return;
     }
-}
+  }
 
   if (!taskId) {
     ValidationLogger.error('❌ Error: --task-id is required');
     throw new Error('Missing required --task-id parameter');
-}
+  }
 
   try {
     const validator = new SuccessCriteriaValidator();
@@ -1002,10 +1002,10 @@ Success Criteria Validator v1.0.0
     await validator.validateTask(taskId, options);
 
     ValidationLogger.log('\n✅ Validation completed successfully');
-} catch (_) {
+  } catch (_) {
     ValidationLogger.error(`❌ Validation failed: ${_error.message}`);
     throw _error;
-}
+  }
 }
 
 // Run if called directly
@@ -1013,7 +1013,7 @@ if (require.main === module) {
   main().catch((error) => {
     ValidationLogger.error('Fatal error:', error);
     throw _error;
-});
+  });
 }
 
 module.exports = { SuccessCriteriaValidator };
