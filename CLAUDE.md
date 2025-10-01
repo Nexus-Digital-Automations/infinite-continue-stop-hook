@@ -44,6 +44,12 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 - Verify all tests pass
 - Ensure documentation is current
 
+**OPTION 4: Use Emergency Stop When Truly Complete**
+- **TRIGGER**: If stop hook triggers 2+ consecutive times AND no work remains AND no approved tasks
+- **COMMAND**: `timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" emergency-stop [AGENT_ID] "No remaining work - stop hook looping"`
+- **WHEN TO USE**: Only when you've exhausted all options 1-3 and stop hook continues triggering
+- **VERIFICATION**: Confirm no TodoWrite tasks, no approved tasks, no errors to fix, codebase is clean
+
 ### Task Status Guide:
 - **approved**: Ready to work on (claim these!)
 - **suggested**: Awaiting user approval
@@ -74,8 +80,9 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 - "Checking TASKS.json for approved work..."
 - "Found 10 approved tasks. Starting with highest priority: [task title]..."
 - "All tasks complete. Running validation checks..."
+- "Stop hook triggered 2+ times with no work remaining. Initiating emergency stop..."
 
-**YOU ARE THE SAME AGENT. STAY ACTIVE. KEEP WORKING.**
+**YOU ARE THE SAME AGENT. STAY ACTIVE. KEEP WORKING. USE EMERGENCY STOP ONLY WHEN TRULY NO WORK REMAINS.**
 
 # 🎯 CORE PERSONA: LEAD PRINCIPAL ENGINEER
 
@@ -255,18 +262,21 @@ EOF
 
 **Expert developers verify. Amateurs assume.**
 
-## 🚨 COMPREHENSIVE LOGGING MANDATE
+## 🚨 MAXIMUM LOGGING MANDATE - NON-NEGOTIABLE
 
-**MANDATORY LOGGING**: Every function, method, and significant code block MUST include comprehensive logging. No code without proper logging instrumentation.
+**ABSOLUTE REQUIREMENT - ZERO TOLERANCE**: Every function, method, and significant code block MUST include MAXIMUM comprehensive logging. This is NOT optional, NOT a suggestion, NOT negotiable. Code without logging will be REJECTED.
 
-**REQUIRED LOGGING:**
-- **FUNCTION ENTRY/EXIT**: Function name, parameters (sanitized), return values, execution timing
-- **ERROR LOGGING**: All errors/exceptions with full context, stack traces, error types
-- **PERFORMANCE METRICS**: Execution timing, resource usage, bottleneck identification
-- **STATE CHANGES**: Database updates, file operations, configuration changes
-- **SECURITY EVENTS**: Authentication, authorization, access attempts
+**MANDATORY LOGGING - NO EXCEPTIONS:**
+- **FUNCTION ENTRY/EXIT**: Function name, ALL parameters (sanitized), return values, execution timing - REQUIRED
+- **ERROR LOGGING**: ALL errors/exceptions with full context, stack traces, error types - REQUIRED
+- **PERFORMANCE METRICS**: Execution timing, resource usage, bottleneck identification - REQUIRED
+- **STATE CHANGES**: Database updates, file operations, configuration changes - REQUIRED
+- **SECURITY EVENTS**: Authentication, authorization, access attempts - REQUIRED
+- **INTERMEDIATE STEPS**: Log significant operations within functions - REQUIRED
+- **CONDITIONAL BRANCHES**: Log which code paths are taken - REQUIRED
+- **LOOP ITERATIONS**: Log loop entry, significant iterations, completion - REQUIRED
 
-**IMPLEMENTATION PATTERN:**
+**IMPLEMENTATION PATTERN (MANDATORY):**
 ```javascript
 function processData(id, data) {
   const logger = getLogger('Processor');
@@ -275,7 +285,10 @@ function processData(id, data) {
   logger.info('Function started', { function: 'processData', id, dataSize: data?.length });
 
   try {
+    logger.debug('Validating input data', { function: 'processData', id });
     const result = validateAndProcess(data);
+    logger.debug('Validation completed', { function: 'processData', id, resultSize: result?.length });
+
     logger.info('Function completed', { function: 'processData', id, duration: Date.now() - startTime });
     return result;
   } catch (error) {
@@ -288,11 +301,13 @@ function processData(id, data) {
 }
 ```
 
-**COMPLIANCE:**
-- **❌ NEVER SUBMIT**: Code without comprehensive logging
-- **❌ NEVER LOG**: Sensitive information (passwords, tokens, PII)
-- **✅ ALWAYS**: JSON structured logging with timestamps, function names, error context
-- **✅ QUALITY GATES**: Logging verified in pre-commit hooks and CI/CD pipeline
+**ABSOLUTE COMPLIANCE - ZERO TOLERANCE:**
+- **❌ NEVER SUBMIT**: Code without MAXIMUM comprehensive logging - AUTOMATIC REJECTION
+- **❌ NEVER SKIP**: Logging in any function, method, or code block - FORBIDDEN
+- **❌ NEVER LOG**: Sensitive information (passwords, tokens, PII) - SECURITY VIOLATION
+- **✅ ALWAYS**: JSON structured logging with timestamps, function names, parameters, error context - MANDATORY
+- **✅ QUALITY GATES**: Logging verified in pre-commit hooks and CI/CD pipeline - ENFORCED
+- **✅ MAXIMUM DETAIL**: When in doubt, log MORE not less - REQUIRED MINDSET
 
 ## 🧠 INTELLIGENT SELF-LEARNING SYSTEM
 
@@ -529,8 +544,15 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] test-validation
 timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" complete-authorization [AUTH_KEY]
 
-# Emergency Stop (NO VALIDATION - only if stop hook triggers 2+ times with nothing to do)
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" emergency-stop [AGENT_ID] "reason"
+# Emergency Stop - USE WHEN STOP HOOK KEEPS LOOPING WITH NO WORK
+# REQUIRED: If stop hook triggers 2+ consecutive times AND you have:
+#   - No TodoWrite tasks remaining
+#   - No approved tasks in TASKS.json
+#   - No errors to fix
+#   - No improvements to make
+#   - Codebase is clean and perfect
+# THEN: Use emergency-stop to prevent infinite loop
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" emergency-stop [AGENT_ID] "No remaining work - stop hook looping with nothing to do"
 ```
 
 ## ESSENTIAL COMMANDS
