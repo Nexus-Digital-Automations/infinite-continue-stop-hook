@@ -42,7 +42,7 @@ class ValidationLogger {
 }
 
 class SuccessCriteriaValidator {
-  constructor(validationResults = {}) {
+  constructor(_validationResults = {}) {
     this.configPath = path.join(
       __dirname,
       'development/essentials/success-criteria-config.json',
@@ -70,11 +70,11 @@ class SuccessCriteriaValidator {
       ValidationLogger.log(`✅ Success Criteria Validator initialized`);
       ValidationLogger.log(`📁 Evidence storage: ${this.evidenceDir}`);
       ValidationLogger.log(`📊 Report storage: ${this.reportDir}`);
-    } catch (_) {
-      ValidationLogger._error(
+    } catch (error) {
+      ValidationLogger.error(
         `❌ Failed to initialize validator: ${error.message}`,
       );
-      throw _error;
+      throw error;
     }
   }
 
@@ -86,18 +86,18 @@ class SuccessCriteriaValidator {
       await FS.mkdir(this.evidenceDir, { recursive: true });
 
       await FS.mkdir(this.reportDir, { recursive: true });
-    } catch (_) {
-      ValidationLogger._error(
+    } catch (error) {
+      ValidationLogger.error(
         `❌ Failed to create directories: ${error.message}`,
       );
-      throw _error;
+      throw error;
     }
   }
 
   /**
    * Get 25-point standard criteria template
    */
-  getStandardCriteria(category = 'general') {
+  getStandardCriteria(_category = 'general') {
     return [
       {
         id: 1,
@@ -251,11 +251,11 @@ class SuccessCriteriaValidator {
         criteria: task.success_criteria || [],
         category: task.category || 'feature',
       };
-    } catch (_) {
-      ValidationLogger._error(
+    } catch (error) {
+      ValidationLogger.error(
         `❌ Failed to get task criteria: ${error.message}`,
       );
-      throw _error;
+      throw error;
     }
   }
 
@@ -352,10 +352,10 @@ class SuccessCriteriaValidator {
               evidence: null,
             };
         }
-      } catch (_) {
+      } catch (error) {
         results[criterion.Name] = {
           status: 'failed',
-          message: _error.message,
+          message: error.message,
           evidence: null,
         };
       }
@@ -382,17 +382,17 @@ class SuccessCriteriaValidator {
         evidence: {
           tool: 'npm run lint',
           violations_count: 0,
-          output: lintOutput.trim(),
+          output: _LINT_OUTPUT.trim(),
           timestamp: new Date().toISOString(),
         },
       };
-    } catch (_) {
+    } catch (error) {
       // Check if it's because there are linting errors
       if (
-        (error.stdout && _error.stdout.includes('warning')) ||
-        _error.stdout.includes('error')
+        (error.stdout && error.stdout.includes('warning')) ||
+        error.stdout.includes('error')
       ) {
-        const violationsCount = (_error.stdout.match(/(warning|error)/g) || [])
+        const violationsCount = (error.stdout.match(/(warning|error)/g) || [])
           .length;
         return {
           status: 'failed',
@@ -400,7 +400,7 @@ class SuccessCriteriaValidator {
           evidence: {
             tool: 'npm run lint',
             violations_count: violationsCount,
-            output: _error.stdout,
+            output: error.stdout,
             timestamp: new Date().toISOString(),
           },
         };
@@ -436,13 +436,13 @@ class SuccessCriteriaValidator {
           timestamp: new Date().toISOString(),
         },
       };
-    } catch (_) {
+    } catch (error) {
       return {
         status: 'failed',
-        message: `Build failed: ${_error.message}`,
+        message: `Build failed: ${error.message}`,
         evidence: {
           status: 'failed',
-          output: _error.stdout || _error.message,
+          output: error.stdout || error.message,
           timestamp: new Date().toISOString(),
         },
       };
@@ -510,12 +510,12 @@ class SuccessCriteriaValidator {
           },
         };
       }
-    } catch (_) {
+    } catch (error) {
       return {
         status: 'error',
-        message: `Test execution failed: ${_error.message}`,
+        message: `Test execution failed: ${error.message}`,
         evidence: {
-          output: _error.stdout || _error.message,
+          output: error.stdout || error.message,
           timestamp: new Date().toISOString(),
         },
       };
@@ -558,9 +558,9 @@ class SuccessCriteriaValidator {
         try {
           const content = await FS.readFile(file, 'utf8');
           return { file, content };
-        } catch (_) {
+        } catch (error) {
           // Skip files that can't be read
-          return { file, content: null, error: _ };
+          return { file, content: null, error: error };
         }
       });
 
@@ -607,10 +607,10 @@ class SuccessCriteriaValidator {
           },
         };
       }
-    } catch (_) {
+    } catch (error) {
       return {
         status: 'error',
-        message: `Security validation failed: ${_error.message}`,
+        message: `Security validation failed: ${error.message}`,
         evidence: null,
       };
     }
@@ -635,12 +635,12 @@ class SuccessCriteriaValidator {
           timestamp: new Date().toISOString(),
         },
       };
-    } catch (_) {
+    } catch (error) {
       return {
         status: 'failed',
-        message: `Dependency audit failed: ${_error.message}`,
+        message: `Dependency audit failed: ${error.message}`,
         evidence: {
-          audit_output: _error.stdout || _error.message,
+          audit_output: error.stdout || error.message,
           timestamp: new Date().toISOString(),
         },
       };
@@ -719,7 +719,7 @@ class SuccessCriteriaValidator {
       const jsFiles = [];
 
       for (const file of files) {
-        const filePath = path.join(dir, file.Name);
+        const _filePath = path.join(dir, file.Name);
         if (
           file.isDirectory() &&
           !file.Name.startsWith('.') &&
@@ -877,9 +877,9 @@ class SuccessCriteriaValidator {
       this.displayResults(results);
 
       return { results, report };
-    } catch (_) {
-      ValidationLogger.error(`❌ Validation failed: ${_error.message}`);
-      throw _error;
+    } catch (error) {
+      ValidationLogger.error(`❌ Validation failed: ${error.message}`);
+      throw error;
     }
   }
 
@@ -946,7 +946,7 @@ class SuccessCriteriaValidator {
 }
 
 // Command line interface
-async function main(category = 'general') {
+async function main(_category = 'general') {
   const args = process.argv.slice(2);
 
   if (args.length === 0) {
@@ -1002,9 +1002,9 @@ Success Criteria Validator v1.0.0
     await validator.validateTask(taskId, options);
 
     ValidationLogger.log('\n✅ Validation completed successfully');
-  } catch (_) {
-    ValidationLogger.error(`❌ Validation failed: ${_error.message}`);
-    throw _error;
+  } catch (error) {
+    ValidationLogger.error(`❌ Validation failed: ${error.message}`);
+    throw error;
   }
 }
 
@@ -1012,7 +1012,7 @@ Success Criteria Validator v1.0.0
 if (require.main === module) {
   main().catch((error) => {
     ValidationLogger.error('Fatal error:', error);
-    throw _error;
+    throw error;
   });
 }
 
