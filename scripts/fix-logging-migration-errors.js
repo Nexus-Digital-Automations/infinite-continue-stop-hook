@@ -23,13 +23,13 @@ function fixImportPaths() {
     },
     // Files in lib/* need ./logger
     {
-      pattern: /lib\/[^\/]+\.js$/,
+      pattern: /lib\/[^/]+\.js$/,
       findImport: "const { loggers } = require('./lib/logger');",
       replaceImport: "const { loggers } = require('./logger');",
     },
     // Files in root need ./lib/logger
     {
-      pattern: /^[^\/]+\.js$/,
+      pattern: /^[^/]+\.js$/,
       findImport: "const { loggers } = require('./lib/logger');",
       replaceImport: "const { loggers } = require('./lib/logger');",
     },
@@ -259,7 +259,8 @@ function main() {
     const { execSync } = require('child_process');
     execSync('npm run lint -- --quiet', { stdio: 'inherit' });
     console.log('✅ Linter passed! Migration successful.');
-  } catch (_) {
+    // eslint-disable-next-line no-unused-vars -- Catch parameter intentionally unused
+  } catch (_error) {
     console.log(
       '⚠️  Some linting issues remain. You may need to fix them manually.',
     );
