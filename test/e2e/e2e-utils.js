@@ -215,7 +215,7 @@ class CommandExecutor {
    * @param {Object} options - Execution options
    * @returns {Promise<Object>} Execution result
    */
-  static async execute(command, args = [], options = {}) {
+  static execute(command, args = [], options = {}) {
     const {
       cwd = process.cwd(),
       timeout = E2E_TIMEOUT,
@@ -223,7 +223,7 @@ class CommandExecutor {
       expectSuccess = true,
     } = options;
 
-    return await new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const startTime = Date.now();
       let isResolved = false;
 
@@ -346,7 +346,7 @@ class CommandExecutor {
    * @param {Object} options - Execution options
    * @returns {Promise<Object>} API execution result
    */
-  static async executeAPI(command, args = [], options = {}) {
+  static executeAPI(command, args = [], options = {}) {
     const apiArgs = [PROJECT_ROOT + '/taskmanager-api.js', command, ...args];
 
     // Add project root if specified
@@ -354,7 +354,7 @@ class CommandExecutor {
       apiArgs.push('--project-root', options.projectRoot);
     }
 
-    return await this.execute(
+    return this.execute(
       'timeout',
       [`${API_TIMEOUT / 1000}s`, 'node', ...apiArgs],
       {
@@ -370,10 +370,10 @@ class CommandExecutor {
    * @param {Object} options - Execution options
    * @returns {Promise<Object>} Stop hook execution result
    */
-  static async executeStopHook(args = [], options = {}) {
+  static executeStopHook(args = [], options = {}) {
     const hookArgs = [PROJECT_ROOT + '/stop-hook.js', ...args];
 
-    return await this.execute('node', hookArgs, {
+    return this.execute('node', hookArgs, {
       ...options,
       timeout: options.timeout || API_TIMEOUT,
     });
@@ -431,7 +431,7 @@ class FeatureTestHelpers {
    * @param {string} notes - Approval notes
    * @returns {Promise<Object>} Approval result
    */
-  static async approveFeature(
+  static approveFeature(
     environment,
     featureId,
     approver = 'e2e-test',
@@ -442,7 +442,7 @@ class FeatureTestHelpers {
       notes: notes,
     });
 
-    return await CommandExecutor.executeAPI(
+    return CommandExecutor.executeAPI(
       'approve-feature',
       [featureId, approvalData],
       { projectRoot: environment.testDir },
@@ -457,7 +457,7 @@ class FeatureTestHelpers {
    * @param {string} reason - Rejection reason
    * @returns {Promise<Object>} Rejection result
    */
-  static async rejectFeature(
+  static rejectFeature(
     environment,
     featureId,
     rejector = 'e2e-test',
@@ -468,7 +468,7 @@ class FeatureTestHelpers {
       reason: reason,
     });
 
-    return await CommandExecutor.executeAPI(
+    return CommandExecutor.executeAPI(
       'reject-feature',
       [featureId, rejectionData],
       { projectRoot: environment.testDir },
@@ -481,10 +481,10 @@ class FeatureTestHelpers {
    * @param {Object} filter - Filter criteria
    * @returns {Promise<Object>} List features result
    */
-  static async listFeatures(environment, filter = {}) {
+  static listFeatures(environment, filter = {}) {
     const args = Object.keys(filter).length > 0 ? [JSON.stringify(filter)] : [];
 
-    return await CommandExecutor.executeAPI('list-features', args, {
+    return CommandExecutor.executeAPI('list-features', args, {
       projectRoot: environment.testDir,
     });
   }
@@ -494,8 +494,8 @@ class FeatureTestHelpers {
    * @param {Object} environment - Test environment
    * @returns {Promise<Object>} Feature statistics result
    */
-  static async getFeatureStats(environment) {
-    return await CommandExecutor.executeAPI('feature-stats', [], {
+  static getFeatureStats(environment) {
+    return CommandExecutor.executeAPI('feature-stats', [], {
       projectRoot: environment.testDir,
     });
   }
