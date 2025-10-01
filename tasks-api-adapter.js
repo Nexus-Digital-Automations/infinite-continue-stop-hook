@@ -293,7 +293,7 @@ class TasksApiAdapter {
       'new-feature': 'normal',
       documentation: 'low',
     };
-    return priorityMap[category] || 'normal';
+    return priorityMap[_category] || 'normal';
   }
 
   inferCapabilitiesFromCategory(_category) {
@@ -305,7 +305,7 @@ class TasksApiAdapter {
       'new-feature': ['frontend', 'backend'],
       documentation: ['documentation'],
     };
-    return capabilityMap[category] || ['general'];
+    return capabilityMap[_category] || ['general'];
   }
 }
 
