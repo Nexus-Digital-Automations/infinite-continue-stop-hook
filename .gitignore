@@ -343,3 +343,7 @@ TODO.json.*
 *.logs
 
 .turbo/
+
+# Stop hook tracking files
+.stop-hook-calls.json
+.stop-allowed

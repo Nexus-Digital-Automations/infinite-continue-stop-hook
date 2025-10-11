@@ -866,11 +866,120 @@ process.stdin.on('data', (chunk) => {
   clearTimeout(stdinTimeout);
 });
 
+/**
+ * Track stop hook calls and detect multiple calls within 5 seconds
+ * Returns true if emergency stop should be triggered
+ */
+function detectRapidStopCalls(workingDir, _category = 'general') {
+  const trackingFilePath = path.join(workingDir, '.stop-hook-calls.json');
+  const now = Date.now();
+  const timeWindow = 5000; // 5 seconds in milliseconds
+
+  let callHistory = [];
+
+  // Read existing call history
+  try {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename -- Stop hook tracking file in validated project directory
+    if (FS.existsSync(trackingFilePath)) {
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- Stop hook tracking file in validated project directory
+      const data = FS.readFileSync(trackingFilePath, 'utf8');
+      callHistory = JSON.parse(data);
+    }
+  } catch {
+    // If file doesn't exist or is corrupted, start fresh
+    callHistory = [];
+  }
+
+  // Add current call timestamp
+  callHistory.push(now);
+
+  // Filter to only keep calls within the time window
+  const recentCalls = callHistory.filter(timestamp => now - timestamp < timeWindow);
+
+  // Save updated call history
+  try {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename -- Stop hook tracking file in validated project directory
+    FS.writeFileSync(trackingFilePath, JSON.stringify(recentCalls, null, 2));
+  } catch (_) {
+    // If we can't write, continue anyway
+    loggers.stopHook.warn('Failed to write stop hook call tracking', {
+      error: _.message,
+      component: 'StopHook',
+      operation: 'detectRapidStopCalls',
+    });
+  }
+
+  // If we have 3 or more calls within 5 seconds, trigger emergency stop
+  if (recentCalls.length >= 3) {
+    loggers.stopHook.warn('RAPID STOP HOOK CALLS DETECTED', {
+      status: 'Multiple stop hook calls detected within 5 seconds',
+      callCount: recentCalls.length,
+      timeWindow: `${timeWindow}ms`,
+      action: 'Triggering automatic emergency stop',
+      component: 'StopHook',
+      operation: 'rapidStopDetection',
+    });
+    return true;
+  }
+
+  return false;
+}
+
 process.stdin.on('end', async () => {
   clearTimeout(stdinTimeout);
   const workingDir = findClaudeProjectRoot();
   const logger = new LOGGER.LOGGER(workingDir);
   try {
+    // DETECT RAPID STOP CALLS - Check if stop hook called multiple times within 5 seconds
+    const shouldEmergencyStop = detectRapidStopCalls(workingDir);
+    if (shouldEmergencyStop) {
+      logger.addFlow('RAPID STOP CALLS DETECTED - Triggering automatic emergency stop');
+
+      // Create emergency stop flag immediately
+      const stopFlagPath = path.join(workingDir, '.stop-allowed');
+      const stopData = {
+        stop_allowed: true,
+        authorized_by: 'system_auto_detection',
+        reason: 'Emergency stop: Stop hook called 3+ times within 5 seconds',
+        timestamp: new Date().toISOString(),
+        session_type: 'emergency_stop',
+        validation_bypassed: true,
+        auto_triggered: true,
+      };
+
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- Stop flag file in validated project directory
+      FS.writeFileSync(stopFlagPath, JSON.stringify(stopData, null, 2));
+
+      logger.addFlow('Emergency stop authorized automatically');
+      logger.logExit(0, 'Automatic emergency stop due to rapid calls');
+      logger.save();
+
+      loggers.stopHook.info('AUTOMATIC EMERGENCY STOP TRIGGERED', {
+        status: 'AUTOMATIC EMERGENCY STOP TRIGGERED',
+        reason: 'Stop hook called 3+ times within 5 seconds',
+        action: 'Allowing conversation to stop',
+        authorizationType: 'automatic emergency stop',
+        component: 'StopHook',
+        operation: 'autoEmergencyStop',
+        exitCode: 0,
+      });
+
+      // Clean up tracking file
+      const trackingFilePath = path.join(workingDir, '.stop-hook-calls.json');
+      try {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename -- Stop hook tracking file cleanup
+        if (FS.existsSync(trackingFilePath)) {
+          // eslint-disable-next-line security/detect-non-literal-fs-filename -- Stop hook tracking file cleanup
+          FS.unlinkSync(trackingFilePath);
+        }
+      } catch {
+        // Ignore cleanup errors
+      }
+
+      // eslint-disable-next-line n/no-process-exit
+      process.exit(0); // Allow stop due to automatic emergency detection
+    }
+
     // Debug logging for input data
     logger.addFlow(`Raw input data: "${inputData}"`);
     logger.addFlow(`Input data length: ${inputData.length}`);
