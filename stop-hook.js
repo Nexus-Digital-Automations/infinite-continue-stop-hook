@@ -867,13 +867,13 @@ process.stdin.on('data', (chunk) => {
 });
 
 /**
- * Track stop hook calls and detect multiple calls within 5 seconds
+ * Track stop hook calls and detect multiple calls within time window
  * Returns true if emergency stop should be triggered
  */
 function detectRapidStopCalls(workingDir, _category = 'general') {
   const trackingFilePath = path.join(workingDir, '.stop-hook-calls.json');
   const now = Date.now();
-  const timeWindow = 5000; // 5 seconds in milliseconds
+  const timeWindow = 120000; // 2 minutes in milliseconds (was 5 seconds, increased to handle response timing)
 
   let callHistory = [];
 
@@ -909,12 +909,14 @@ function detectRapidStopCalls(workingDir, _category = 'general') {
     });
   }
 
-  // If we have 3 or more calls within 5 seconds, trigger emergency stop
-  if (recentCalls.length >= 3) {
-    loggers.stopHook.warn('RAPID STOP HOOK CALLS DETECTED', {
-      status: 'Multiple stop hook calls detected within 5 seconds',
+  // If we have 2 or more calls within the time window, trigger emergency stop
+  // Reduced from 3 to 2 since stop hook triggers on every response and indicates stuck loop
+  if (recentCalls.length >= 2) {
+    loggers.stopHook.warn('REPEATED STOP HOOK CALLS DETECTED', {
+      status: 'Multiple stop hook calls detected - appears to be stuck in loop',
       callCount: recentCalls.length,
-      timeWindow: `${timeWindow}ms`,
+      timeWindow: `${timeWindow}ms (${timeWindow / 1000}s)`,
+      timeBetweenCalls: recentCalls.length > 1 ? `${(recentCalls[recentCalls.length - 1] - recentCalls[0])}ms` : 'N/A',
       action: 'Triggering automatic emergency stop',
       component: 'StopHook',
       operation: 'rapidStopDetection',
@@ -940,7 +942,7 @@ process.stdin.on('end', async () => {
       const stopData = {
         stop_allowed: true,
         authorized_by: 'system_auto_detection',
-        reason: 'Emergency stop: Stop hook called 3+ times within 5 seconds',
+        reason: 'Emergency stop: Stop hook called multiple times - infinite loop detected',
         timestamp: new Date().toISOString(),
         session_type: 'emergency_stop',
         validation_bypassed: true,
@@ -956,7 +958,7 @@ process.stdin.on('end', async () => {
 
       loggers.stopHook.info('AUTOMATIC EMERGENCY STOP TRIGGERED', {
         status: 'AUTOMATIC EMERGENCY STOP TRIGGERED',
-        reason: 'Stop hook called 3+ times within 5 seconds',
+        reason: 'Stop hook called multiple times - infinite loop detected',
         action: 'Allowing conversation to stop',
         authorizationType: 'automatic emergency stop',
         component: 'StopHook',
