@@ -43,7 +43,7 @@ class TestNotificationSystem {
    */
   async processNotifications() {
     try {
-      loggers.stopHook.log('🔔 Processing test notifications...');
+      loggers.stopHook.info('🔔 Processing test notifications...');
 
       const testResults = await this.loadTestResults();
       const coverageData = await this.loadCoverageData();
@@ -56,7 +56,7 @@ class TestNotificationSystem {
       );
 
       if (notifications.length === 0) {
-        loggers.stopHook.log(
+        loggers.stopHook.info(
           '✅ No notifications needed - all quality gates passed',
         );
         return;
@@ -65,7 +65,7 @@ class TestNotificationSystem {
       await this.sendNotifications(notifications);
       await this.updateNotificationHistory(notifications);
 
-      loggers.stopHook.log(`📤 Sent ${notifications.length} notification(s)`);
+      loggers.stopHook.info(`📤 Sent ${notifications.length} notification(s)`);
     } catch (error) {
       loggers.stopHook.error(
         '❌ Failed to process notifications:',
@@ -623,7 +623,7 @@ class TestNotificationSystem {
   logNotificationResults(results) {
     results.forEach((result, index) => {
       if (result.status === 'fulfilled') {
-        loggers.stopHook.log(`✅ Notification ${index + 1} sent successfully`);
+        loggers.stopHook.info(`✅ Notification ${index + 1} sent successfully`);
       } else {
         loggers.app.info(
           `❌ Notification ${index + 1} failed:`,

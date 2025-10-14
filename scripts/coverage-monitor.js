@@ -52,24 +52,24 @@ const CONFIG = {
  */
 class LOGGER {
   static info(message) {
-    loggers.stopHook.log(`ℹ️  ${message}`);
+    loggers.stopHook.info(`ℹ️  ${message}`);
   }
 
   static success(message) {
-    loggers.stopHook.log(`✅ ${message}`);
+    loggers.stopHook.info(`✅ ${message}`);
   }
 
   static warning(message) {
-    loggers.stopHook.log(`⚠️  ${message}`);
+    loggers.stopHook.info(`⚠️  ${message}`);
   }
 
   static error(message) {
-    loggers.stopHook.log(`❌ ${message}`);
+    loggers.stopHook.info(`❌ ${message}`);
   }
 
   static debug(message) {
     if (process.env.DEBUG) {
-      loggers.stopHook.log(`🐛 DEBUG: ${message}`);
+      loggers.stopHook.info(`🐛 DEBUG: ${message}`);
     }
   }
 }
@@ -312,41 +312,41 @@ class CoverageMonitor {
 
     const { summary } = this.validation;
 
-    loggers.stopHook.log('\n📊 Coverage Summary:');
-    loggers.stopHook.log('┌──────────────┬──────────┬───────────┬────────┐');
-    loggers.stopHook.log('│ Metric       │ Coverage │ Threshold │ Status │');
-    loggers.stopHook.log('├──────────────┼──────────┼───────────┼────────┤');
+    loggers.stopHook.info('\n📊 Coverage Summary:');
+    loggers.stopHook.info('┌──────────────┬──────────┬───────────┬────────┐');
+    loggers.stopHook.info('│ Metric       │ Coverage │ Threshold │ Status │');
+    loggers.stopHook.info('├──────────────┼──────────┼───────────┼────────┤');
 
     for (const [metric, threshold] of Object.entries(CONFIG.thresholds)) {
       const actual = summary[metric].pct;
       const status = actual >= threshold ? '✅ Pass' : '❌ Fail';
       const metricName = metric.charAt(0).toUpperCase() + metric.slice(1);
 
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         `│ ${metricName.padEnd(12)} │ ${actual.toFixed(2).padStart(6)}%  │ ${threshold.toString().padStart(7)}%  │ ${status.padEnd(6)} │`,
       );
     }
 
-    loggers.stopHook.log('└──────────────┴──────────┴───────────┴────────┘');
+    loggers.stopHook.info('└──────────────┴──────────┴───────────┴────────┘');
 
     // Overall status;
     const overallStatus = this.validation.passed ? '✅ PASSED' : '❌ FAILED';
-    loggers.stopHook.log(`\nOverall Status: ${overallStatus}`);
+    loggers.stopHook.info(`\nOverall Status: ${overallStatus}`);
 
     // Additional info
     if (this.validation.warnings.length > 0) {
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         `\n⚠️  Warnings: ${this.validation.warnings.length}`,
       );
     }
 
     if (this.validation.failures.length > 0) {
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         `\n❌ Critical Issues: ${this.validation.failures.length}`,
       );
     }
 
-    loggers.stopHook.log(`\n📁 Reports available in: ${CONFIG.paths.reports}`);
+    loggers.stopHook.info(`\n📁 Reports available in: ${CONFIG.paths.reports}`);
   }
 
   /**

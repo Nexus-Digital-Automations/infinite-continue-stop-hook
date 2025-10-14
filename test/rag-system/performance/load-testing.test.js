@@ -12,7 +12,7 @@ const { loggers } = require('../../../lib/logger');
 
 describe('RAG System Performance And Load Testing', () => {
   beforeAll(() => {
-    loggers.stopHook.log('Setting up performance test environment...');
+    loggers.stopHook.info('Setting up performance test environment...');
     jest.setTimeout(300000); // 5 minutes for performance tests
 
     // Initialize performance monitoring
@@ -21,7 +21,7 @@ describe('RAG System Performance And Load Testing', () => {
   });
 
   afterAll(() => {
-    loggers.stopHook.log('Cleaning up performance test environment...');
+    loggers.stopHook.info('Cleaning up performance test environment...');
     // await performanceMonitor.generateReport();
   });
 
@@ -92,9 +92,9 @@ const _shortContent = embeddingTimes[0];
       expect(_longContent.embeddingTime).toBeLessThan(_shortContent.embeddingTime * 5);
 
       // Log performance metrics
-      loggers.stopHook.log('Embedding Performance Results:');
+      loggers.stopHook.info('Embedding Performance Results:');
       embeddingTimes.forEach(result => {
-        loggers.stopHook.log(`Content: ${result.contentLength} chars, Time: ${result.embeddingTime.toFixed(2)}ms`);
+        loggers.stopHook.info(`Content: ${result.contentLength} chars, Time: ${result.embeddingTime.toFixed(2)}ms`);
       });
       */
     });
@@ -105,7 +105,7 @@ const _shortContent = embeddingTimes[0];
 
       /* Future implementation:
       // Store dataset
-      loggers.stopHook.log('Storing test dataset...');
+      loggers.stopHook.info('Storing test dataset...');
       const _storeStartTime = Date.now();
 
       for (const lesson of _largeDataset) {
@@ -113,7 +113,7 @@ const _shortContent = embeddingTimes[0];
       }
 
       const _storeEndTime = Date.now();
-      loggers.stopHook.log(`Dataset storage completed in ${_storeEndTime - _storeStartTime}ms`);
+      loggers.stopHook.info(`Dataset storage completed in ${_storeEndTime - _storeStartTime}ms`);
 
       // Test various search queries;
 const _searchQueries = [
@@ -155,11 +155,11 @@ const _avgSearchTime = searchTimes.reduce((sum, result) =>
 
       expect(avgSearchTime).toBeLessThan(300); // Average under 300ms
 
-      loggers.stopHook.log('Search Performance Results:');
+      loggers.stopHook.info('Search Performance Results:');
       searchTimes.forEach(result => {
-        loggers.stopHook.log(`Query: "${result.query}", Time: ${result.searchTime.toFixed(2)}ms, Results: ${result.resultCount}`);
+        loggers.stopHook.info(`Query: "${result.query}", Time: ${result.searchTime.toFixed(2)}ms, Results: ${result.resultCount}`);
       });
-      loggers.stopHook.log(`Average search time: ${avgSearchTime.toFixed(2)}ms`);
+      loggers.stopHook.info(`Average search time: ${avgSearchTime.toFixed(2)}ms`);
       */
     });
 
@@ -207,9 +207,9 @@ const _retrieveStartTime = process.hrtime.bigint();
       }
 
       // Verify batch efficiency scaling
-      loggers.stopHook.log('Batch Performance Results:');
+      loggers.stopHook.info('Batch Performance Results:');
       batchPerformance.forEach(result => {
-        loggers.stopHook.log(`Batch Size: ${result.batchSize}, Store: ${result.storeTime.toFixed(2)}ms (${result.storeTimePerItem.toFixed(2)}ms/item), Retrieve: ${result.retrieveTime.toFixed(2)}ms (${result.retrieveTimePerItem.toFixed(2)}ms/item)`);
+        loggers.stopHook.info(`Batch Size: ${result.batchSize}, Store: ${result.storeTime.toFixed(2)}ms (${result.storeTimePerItem.toFixed(2)}ms/item), Retrieve: ${result.retrieveTime.toFixed(2)}ms (${result.retrieveTimePerItem.toFixed(2)}ms/item)`);
       });
 
       // Larger batches should have better per-item performance;
@@ -230,7 +230,7 @@ const _small = batchPerformance[0];
       expect(true).toBe(true);
 
       /* Future implementation:
-      loggers.stopHook.log(`Testing ${concurrentUsers} concurrent users with ${operationsPerUser} operations each`);
+      loggers.stopHook.info(`Testing ${concurrentUsers} concurrent users with ${operationsPerUser} operations each`);
 
       const _userPromises = Array.from({ length: concurrentUsers }, async (_, userId) => {
         const _userResults = {
@@ -307,11 +307,11 @@ let totalSearchTime = 0;
       expect(avgStoreTime).toBeLessThan(2000); // Under 2 seconds
       expect(totalErrors).toBe(0); // No errors under normal concurrent load
 
-      loggers.stopHook.log(`Concurrent Performance Results:`);
-      loggers.stopHook.log(`Average search time: ${avgSearchTime.toFixed(2)}ms`);
-      loggers.stopHook.log(`Average store time: ${avgStoreTime.toFixed(2)}ms`);
-      loggers.stopHook.log(`Total operations: ${totalSearches + totalStores}`);
-      loggers.stopHook.log(`Error rate: ${(totalErrors / (totalSearches + totalStores) * 100).toFixed(2)}%`);
+      loggers.stopHook.info(`Concurrent Performance Results:`);
+      loggers.stopHook.info(`Average search time: ${avgSearchTime.toFixed(2)}ms`);
+      loggers.stopHook.info(`Average store time: ${avgStoreTime.toFixed(2)}ms`);
+      loggers.stopHook.info(`Total operations: ${totalSearches + totalStores}`);
+      loggers.stopHook.info(`Error rate: ${(totalErrors / (totalSearches + totalStores) * 100).toFixed(2)}%`);
       */
     });
 
@@ -375,10 +375,10 @@ const _successfulModifications = modificationResults.filter(r => r.success).leng
       expect(finalLesson.lesson.content).toBeDefined();
       expect(finalLesson.lesson.content.length).toBeGreaterThan(0);
 
-      loggers.stopHook.log(`Concurrency Test Results:`);
-      loggers.stopHook.log(`Successful modifications: ${successfulModifications}/${concurrentModifiers}`);
-      loggers.stopHook.log(`Final modification count: ${finalLesson.lesson.modification_count}`);
-      loggers.stopHook.log(`Final content length: ${finalLesson.lesson.content.length}`);
+      loggers.stopHook.info(`Concurrency Test Results:`);
+      loggers.stopHook.info(`Successful modifications: ${successfulModifications}/${concurrentModifiers}`);
+      loggers.stopHook.info(`Final modification count: ${finalLesson.lesson.modification_count}`);
+      loggers.stopHook.info(`Final content length: ${finalLesson.lesson.content.length}`);
       */
     });
   });
@@ -389,7 +389,7 @@ const _successfulModifications = modificationResults.filter(r => r.success).leng
       expect(true).toBe(true);
 
       /* Future implementation:
-      loggers.stopHook.log('Initial memory usage:', formatMemoryUsage(initialMemory));
+      loggers.stopHook.info('Initial memory usage:', formatMemoryUsage(initialMemory));
 
       // Create large dataset to test memory usage;
 const _largeOperations = [ {
@@ -424,21 +424,21 @@ const _largeOperations = [ {
 
       for (const testOperation of largeOperations) {
         const _preOpMemory = process.memoryUsage();
-        loggers.stopHook.log(`\nStarting: ${testOperation.name}`);
-        loggers.stopHook.log('Pre-_operationmemory:', formatMemoryUsage(preOpMemory));
+        loggers.stopHook.info(`\nStarting: ${testOperation.name}`);
+        loggers.stopHook.info('Pre-_operationmemory:', formatMemoryUsage(preOpMemory));
 
         const START_TIME = Date.now();
         const _result = await testOperation.operation();
         const END_TIME = Date.now();
 
         const _postOpMemory = process.memoryUsage();
-        loggers.stopHook.log('Post-_operationmemory:', formatMemoryUsage(postOpMemory));
+        loggers.stopHook.info('Post-_operationmemory:', formatMemoryUsage(postOpMemory));
 
         const MEMORY_INCREASE = postOpMemory.heapUsed - preOpMemory.heapUsed;
         const _durationMs = endTime - startTime;
 
-        loggers.stopHook.log(`Operation completed in ${durationMs}ms`);
-        loggers.stopHook.log(`Memory increase: ${_formatBytes(memoryIncrease)}`);
+        loggers.stopHook.info(`Operation completed in ${durationMs}ms`);
+        loggers.stopHook.info(`Memory increase: ${_formatBytes(memoryIncrease)}`);
 
         // Memory increase should be reasonable
         expect(memoryIncrease).toBeLessThan(200 * 1024 * 1024); // Less than 200MB
@@ -454,7 +454,7 @@ const _largeOperations = [ {
       }
 
       const FINAL_MEMORY = process.memoryUsage();
-      loggers.stopHook.log('\nFinal memory usage:', formatMemoryUsage(finalMemory));
+      loggers.stopHook.info('\nFinal memory usage:', formatMemoryUsage(finalMemory));
 
       // Total memory usage should not have increased dramatically;
 const _totalIncrease = finalMemory.heapUsed - initialMemory.heapUsed;
@@ -485,7 +485,7 @@ const _memoryPressure = [];
             expect(searchResult.success).toBe(true);
 
             const _currentMemory = process.memoryUsage();
-            loggers.stopHook.log(`Memory pressure test ${i}: ${formatMemoryUsage(currentMemory)}`);
+            loggers.stopHook.info(`Memory pressure test ${i}: ${formatMemoryUsage(currentMemory)}`);
 
             // System should still respond within reasonable time;
 const START_TIME = Date.now();
@@ -503,7 +503,7 @@ const START_TIME = Date.now();
       } catch (_) {
         // System should handle memory errors gracefully
         expect(__error.message).toContain('memory');
-        loggers.stopHook.log('Expected memory _error handled gracefully:', _error.message);
+        loggers.stopHook.info('Expected memory _error handled gracefully:', _error.message);
       } finally {
         // Cleanup
         memoryPressure.length = 0;
@@ -529,7 +529,7 @@ const _testDatasets = [
       ];
 
       for (const dataset of testDatasets) {
-        loggers.stopHook.log(`Testing database performance with ${dataset.size} ${dataset.complexity} records`);
+        loggers.stopHook.info(`Testing database performance with ${dataset.size} ${dataset.complexity} records`);
 
         // Generate And store test data;
 const TEST_DATA = generateTestDataset(dataset.size, dataset.complexity);
@@ -542,7 +542,7 @@ const TEST_DATA = generateTestDataset(dataset.size, dataset.complexity);
         expect(storeResults.stored_count).toBe(dataset.size);
 
         const _storeTime = _storeEndTime - _storeStartTime;
-        loggers.stopHook.log(`Storage time: ${storeTime}ms (${(storeTime/dataset.size).toFixed(2)}ms per record)`);
+        loggers.stopHook.info(`Storage time: ${storeTime}ms (${(storeTime/dataset.size).toFixed(2)}ms per record)`);
 
         // Test various query patterns;
 const _queryTests = [ {
@@ -570,7 +570,7 @@ const _queryTests = [ {
           const _queryEndTime = Date.now();
 
           const QUERY_TIME = queryEndTime - queryStartTime;
-          loggers.stopHook.log(`${queryTest.name}: ${queryTime}ms`);
+          loggers.stopHook.info(`${queryTest.name}: ${queryTime}ms`);
 
           expect(_result.success).toBe(true);
           expect(queryTime).toBeLessThan(2000); // Under 2 seconds
@@ -590,7 +590,7 @@ const _queryTests = [ {
       expect(true).toBe(true);
 
       /* Future implementation:
-      loggers.stopHook.log(`Testing connection pooling with ${concurrentQueries} concurrent connections`);
+      loggers.stopHook.info(`Testing connection pooling with ${concurrentQueries} concurrent connections`);
 
       const _connectionTests = Array.from({ length: concurrentQueries }, async (_, connId) => {
         const _connectionResults = {
@@ -638,10 +638,10 @@ let totalQueries = 0;
       const _avgQueryTime = totalQueryTime / totalQueries;
       const _errorRate = (totalErrors / totalQueries) * 100;
 
-      loggers.stopHook.log(`Connection pooling results:`);
-      loggers.stopHook.log(`Total queries: ${totalQueries}`);
-      loggers.stopHook.log(`Average query time: ${avgQueryTime.toFixed(2)}ms`);
-      loggers.stopHook.log(`Error rate: ${errorRate.toFixed(2)}%`);
+      loggers.stopHook.info(`Connection pooling results:`);
+      loggers.stopHook.info(`Total queries: ${totalQueries}`);
+      loggers.stopHook.info(`Average query time: ${avgQueryTime.toFixed(2)}ms`);
+      loggers.stopHook.info(`Error rate: ${errorRate.toFixed(2)}%`);
 
       // Connection pooling should maintain good performance
       expect(avgQueryTime).toBeLessThan(500); // Under 500ms average

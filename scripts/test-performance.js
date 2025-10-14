@@ -47,30 +47,30 @@ const CONFIG = {
 class PerformanceLogger {
   static info(message) {
     if (!CONFIG.output.ci_mode || CONFIG.output.verbose) {
-      loggers.stopHook.log(`⚡ ${message}`);
+      loggers.stopHook.info(`⚡ ${message}`);
     }
   }
 
   static success(message) {
-    loggers.stopHook.log(`✅ ${message}`);
+    loggers.stopHook.info(`✅ ${message}`);
   }
 
   static warning(message) {
-    loggers.stopHook.log(`⚠️  ${message}`);
+    loggers.stopHook.info(`⚠️  ${message}`);
   }
 
   static error(message) {
-    loggers.stopHook.log(`❌ ${message}`);
+    loggers.stopHook.info(`❌ ${message}`);
   }
 
   static debug(message) {
     if (CONFIG.output.verbose) {
-      loggers.stopHook.log(`🐛 DEBUG: ${message}`);
+      loggers.stopHook.info(`🐛 DEBUG: ${message}`);
     }
   }
 
   static metric(name, value, unit = '') {
-    loggers.stopHook.log(`📊 ${name}: ${value}${unit}`);
+    loggers.stopHook.info(`📊 ${name}: ${value}${unit}`);
   }
 }
 
@@ -587,49 +587,49 @@ class TestPerformanceMonitor {
     const successfulSuites = this.suiteResults.filter((r) => r.success).length;
     const failedSuites = this.suiteResults.filter((r) => !r.success).length;
 
-    loggers.stopHook.log('\n⚡ Test Performance Summary:');
-    loggers.stopHook.log(
+    loggers.stopHook.info('\n⚡ Test Performance Summary:');
+    loggers.stopHook.info(
       '┌─────────────────────────┬──────────────────┬──────────┐',
     );
-    loggers.stopHook.log(
+    loggers.stopHook.info(
       '│ Metric                  │ Value            │ Status   │',
     );
-    loggers.stopHook.log(
+    loggers.stopHook.info(
       '├─────────────────────────┼──────────────────┼──────────┤',
     );
 
     // Overall metrics
-    loggers.stopHook.log(
+    loggers.stopHook.info(
       `│ Total Execution Time    │ ${this.formatDuration(totalDuration).padEnd(14)} │ ${this.getTimeStatus(totalDuration).padEnd(8)} │`,
     );
-    loggers.stopHook.log(
+    loggers.stopHook.info(
       `│ Test Suites Run         │ ${this.suiteResults.length.toString().padEnd(14)} │ ${'ℹ️ Info'.padEnd(8)} │`,
     );
-    loggers.stopHook.log(
+    loggers.stopHook.info(
       `│ Successful Suites       │ ${successfulSuites.toString().padEnd(14)} │ ${successfulSuites === this.suiteResults.length ? '✅ Good' : '⚠️ Check'} │`,
     );
-    loggers.stopHook.log(
+    loggers.stopHook.info(
       `│ Failed Suites           │ ${failedSuites.toString().padEnd(14)} │ ${failedSuites === 0 ? '✅ Good' : '❌ Bad'} │`,
     );
 
     if (this.analysis) {
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         `│ Peak Memory Usage       │ ${this.analysis.memoryAnalysis.peak_memory.padEnd(14)} │ ${'📊 Info'.padEnd(8)} │`,
       );
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         `│ Potential Speedup       │ ${this.analysis.parallelizationAnalysis.potential_speedup.padEnd(14)} │ ${'🚀 Info'.padEnd(8)} │`,
       );
     }
 
-    loggers.stopHook.log(
+    loggers.stopHook.info(
       '└─────────────────────────┴──────────────────┴──────────┘',
     );
 
     // Slowest tests
     if (this.analysis?.slowestTests?.length > 0) {
-      loggers.stopHook.log('\n🐌 Slowest Test Suites:');
+      loggers.stopHook.info('\n🐌 Slowest Test Suites:');
       this.analysis.slowestTests.forEach((test, index) => {
-        loggers.stopHook.log(
+        loggers.stopHook.info(
           `${index + 1}. ${test.name}: ${this.formatDuration(test.duration)}`,
         );
       });
@@ -637,26 +637,26 @@ class TestPerformanceMonitor {
 
     // Warnings And errors
     if (this.warnings.length > 0) {
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         `\n⚠️  Performance Warnings: ${this.warnings.length}`,
       );
     }
 
     if (this.errors.length > 0) {
-      loggers.stopHook.log(`\n❌ Performance Errors: ${this.errors.length}`);
+      loggers.stopHook.info(`\n❌ Performance Errors: ${this.errors.length}`);
       this.errors.forEach((error) => {
-        loggers.stopHook.log(`   - ${error.message || error.error}`);
+        loggers.stopHook.info(`   - ${error.message || error.error}`);
       });
     }
 
     // Recommendations
     if (this.analysis?.parallelizationAnalysis?.recommendation) {
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         `\n💡 Recommendation: ${this.analysis.parallelizationAnalysis.recommendation}`,
       );
     }
 
-    loggers.stopHook.log(
+    loggers.stopHook.info(
       `\n📁 Detailed reports available in: ${CONFIG.paths.reports}`,
     );
   }
@@ -724,7 +724,7 @@ if (require.main === module) {
   const args = process.argv.slice(2);
 
   if (args.includes('--help') || args.includes('-h')) {
-    loggers.stopHook.log(`
+    loggers.stopHook.info(`
 Test Performance Monitor
 Usage: node test-performance.js [options]
 

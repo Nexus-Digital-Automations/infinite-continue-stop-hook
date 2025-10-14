@@ -157,10 +157,10 @@ class EnhancedLogger {
       }[level] || 'ℹ️';
 
       const prefix = `${emoji} [${elapsed}ms]`;
-      loggers.stopHook.log(`${prefix} ${message}`);
+      loggers.stopHook.info(`${prefix} ${message}`);
 
       if (this.verbose && Object.keys(data).length > 0) {
-        loggers.stopHook.log(`   Data: ${JSON.stringify(data, null, 2)}`);
+        loggers.stopHook.info(`   Data: ${JSON.stringify(data, null, 2)}`);
       }
     }
   }
@@ -190,7 +190,7 @@ class EnhancedLogger {
     }
 
     if (title) {
-      loggers.stopHook.log(`\n📊 ${title}`);
+      loggers.stopHook.info(`\n📊 ${title}`);
     }
 
     const maxLengths = headers.map((header, i) =>
@@ -202,11 +202,11 @@ class EnhancedLogger {
     const middleBorder = `├${separator}┤`;
     const bottomBorder = `└${separator.replace(/┼/g, '┴')}┘`;
 
-    loggers.stopHook.log(topBorder);
+    loggers.stopHook.info(topBorder);
     loggers.app.info(
       `│ ${headers.map((h, i) => h.padEnd(maxLengths[i])).join(' │ ')} │`,
     );
-    loggers.stopHook.log(middleBorder);
+    loggers.stopHook.info(middleBorder);
 
     rows.forEach((row) => {
       loggers.app.info(
@@ -214,7 +214,7 @@ class EnhancedLogger {
       );
     });
 
-    loggers.stopHook.log(bottomBorder);
+    loggers.stopHook.info(bottomBorder);
   }
 }
 
@@ -1184,8 +1184,8 @@ Last updated: ${new Date().toISOString()}
       .toUpperCase()
       .replace('_', ' ');
 
-    loggers.stopHook.log(`\n🎯 Overall Status: ${overallStatus}`);
-    loggers.stopHook.log(`📊 Quality Level: ${qualityLevel}`);
+    loggers.stopHook.info(`\n🎯 Overall Status: ${overallStatus}`);
+    loggers.stopHook.info(`📊 Quality Level: ${qualityLevel}`);
 
     // Trend information
     if (this.results.trends?.analysis) {
@@ -1207,17 +1207,17 @@ Last updated: ${new Date().toISOString()}
         `\n❌ Blocking Issues: ${validation.blocking_failures.length}`,
       );
       validation.blocking_failures.forEach((failure, i) => {
-        loggers.stopHook.log(`   ${i + 1}. ${failure.message}`);
+        loggers.stopHook.info(`   ${i + 1}. ${failure.message}`);
       });
     }
 
     if (validation.warnings.length > 0) {
-      loggers.stopHook.log(`\n⚠️ Warnings: ${validation.warnings.length}`);
+      loggers.stopHook.info(`\n⚠️ Warnings: ${validation.warnings.length}`);
       validation.warnings.slice(0, 3).forEach((warning, i) => {
-        loggers.stopHook.log(`   ${i + 1}. ${warning.message}`);
+        loggers.stopHook.info(`   ${i + 1}. ${warning.message}`);
       });
       if (validation.warnings.length > 3) {
-        loggers.stopHook.log(
+        loggers.stopHook.info(
           `   ... And ${validation.warnings.length - 3} more`,
         );
       }
@@ -1225,24 +1225,24 @@ Last updated: ${new Date().toISOString()}
 
     // Recommendations
     if (validation.recommendations.length > 0) {
-      loggers.stopHook.log('\n💡 Top Recommendations:');
+      loggers.stopHook.info('\n💡 Top Recommendations:');
       validation.recommendations.slice(0, 3).forEach((rec, i) => {
-        loggers.stopHook.log(`   ${i + 1}. ${rec}`);
+        loggers.stopHook.info(`   ${i + 1}. ${rec}`);
       });
     }
 
     // Performance info
     if (this.results.performance) {
       const execTime = this.results.performance.execution_time_ms;
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         `\n⚡ Performance: ${execTime.toFixed(0)}ms execution time`,
       );
     }
 
     // Report locations
-    loggers.stopHook.log('\n📁 Generated Reports:');
+    loggers.stopHook.info('\n📁 Generated Reports:');
     Object.entries(this.results.reports).forEach(([type, path]) => {
-      loggers.stopHook.log(`   ${type}: ${path}`);
+      loggers.stopHook.info(`   ${type}: ${path}`);
     });
 
     if (this.results.badges) {

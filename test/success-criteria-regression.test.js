@@ -169,7 +169,7 @@ async function setupRegressionTestProject(_category = 'general') {
 
     // Create main application file;
     const indexJs = `
-loggers.stopHook.log('Regression test application started');
+loggers.stopHook.info('Regression test application started');
 
 class RegressionApp {
   constructor() {
@@ -179,7 +179,7 @@ class RegressionApp {
   
   start() {
     this.status = 'running';
-    loggers.stopHook.log('Regression app is running');
+    loggers.stopHook.info('Regression app is running');
     return this.status;
 }
   
@@ -192,7 +192,7 @@ const app = new RegressionApp();
 app.start().then(() => {
     
     
-  loggers.stopHook.log('App version:', app.getVersion());
+  loggers.stopHook.info('App version:', app.getVersion());
   setTimeout(() 
   
     process.exit(0);
@@ -221,7 +221,7 @@ describe('Regression Test Suite', () => {
 
     await fs.writeFile(path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
 
-    loggers.stopHook.log('Regression test project setup completed');
+    loggers.stopHook.info('Regression test project setup completed');
   } catch (error) {
     loggers.stopHook.error('Failed to setup regression test project:', error);
     throw error;
@@ -231,7 +231,7 @@ describe('Regression Test Suite', () => {
 async function cleanupRegressionTestProject(_category = 'general') {
   try {
     await fs.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
-    loggers.stopHook.log('Regression test project cleanup completed');
+    loggers.stopHook.info('Regression test project cleanup completed');
   } catch (error) {
     loggers.stopHook.error('Failed to cleanup regression test project:', error);
   }
@@ -316,7 +316,7 @@ describe('Success Criteria Regression Tests', () => {
           LEGACY_BUILD.validationType !== undefined,
       ).toBe(true);
 
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         'Legacy criteria field mappings validated successfully',
       );
     });
@@ -390,7 +390,7 @@ describe('Success Criteria Regression Tests', () => {
         }
       }
 
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         'API version backward compatibility validated successfully',
       );
     });
@@ -472,7 +472,7 @@ describe('Success Criteria Regression Tests', () => {
       expect(LOAD_RESULT.loaded).toBe(true);
       if (LOAD_RESULT.warnings) {
         expect(Array.isArray(LOAD_RESULT.warnings)).toBe(true);
-        loggers.stopHook.log('Deprecation warnings:', LOAD_RESULT.warnings);
+        loggers.stopHook.info('Deprecation warnings:', LOAD_RESULT.warnings);
       }
 
       // Validate field mapping worked;
@@ -563,7 +563,7 @@ describe('Success Criteria Regression Tests', () => {
         }
       }
 
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         'Custom extensions preservation validated successfully',
       );
     });
@@ -618,7 +618,7 @@ describe('Success Criteria Regression Tests', () => {
         expect(MIGRATED_CRITERION.description).toBe('Old format criterion'); // criterion_description -> description
       }
 
-      loggers.stopHook.log('Data format migration validated successfully');
+      loggers.stopHook.info('Data format migration validated successfully');
     });
 
     test('should handle schema evolution gracefully', async () => {
@@ -680,7 +680,7 @@ describe('Success Criteria Regression Tests', () => {
           const status = await execAPI('success-criteria:status');
           expect(status.projectCriteria.length).toBeGreaterThan(0);
 
-          loggers.stopHook.log(
+          loggers.stopHook.info(
             `Schema ${schema.version} compatibility confirmed`,
           );
         } catch (error) {
@@ -691,7 +691,7 @@ describe('Success Criteria Regression Tests', () => {
         }
       }
 
-      loggers.stopHook.log('Schema evolution handling validated successfully');
+      loggers.stopHook.info('Schema evolution handling validated successfully');
     });
 
     test('should validate data integrity after migration', async () => {
@@ -764,7 +764,7 @@ describe('Success Criteria Regression Tests', () => {
         }
       }
 
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         'Data integrity validation after migration confirmed',
       );
     });
@@ -831,7 +831,7 @@ describe('Success Criteria Regression Tests', () => {
       expect(FILE_RESULT).toBeDefined();
       expect(['passed', 'failed', 'error']).toContain(FILE_RESULT.status);
 
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         'Legacy validation commands support validated successfully',
       );
     });
@@ -867,7 +867,7 @@ describe('Success Criteria Regression Tests', () => {
         }
       }
 
-      loggers.stopHook.log('Deprecated API endpoints compatibility validated');
+      loggers.stopHook.info('Deprecated API endpoints compatibility validated');
     });
 
     test('should provide graceful degradation for missing features', async () => {
@@ -1050,7 +1050,7 @@ describe('Success Criteria Regression Tests', () => {
       expect(RESOLVED_CRITERION.description).toBe('Version 2.0.0 description');
       expect(RESOLVED_CRITERION.priority).toBe('high');
 
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         'Version conflict resolution validated successfully',
       );
     });
@@ -1099,13 +1099,13 @@ describe('Success Criteria Regression Tests', () => {
         // Should provide clear compatibility errors
         expect(COMPAT_RESULT.errors).toBeDefined();
         expect(Array.isArray(COMPAT_RESULT.errors)).toBe(true);
-        loggers.stopHook.log(
+        loggers.stopHook.info(
           'System compatibility errors:',
           COMPAT_RESULT.errors,
         );
       }
 
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         'System compatibility validation completed successfully',
       );
     });
@@ -1145,16 +1145,16 @@ describe('Success Criteria Regression Tests', () => {
             expect(result.projectCriteria !== undefined).toBe(true);
           }
 
-          loggers.stopHook.log(`API contract for ${api} is stable`);
+          loggers.stopHook.info(`API contract for ${api} is stable`);
         } catch (error) {
-          loggers.stopHook.log(
+          loggers.stopHook.info(
             `API contract issue for ${api}:`,
             error.message,
           );
         }
       }
 
-      loggers.stopHook.log('API contract consistency validated successfully');
+      loggers.stopHook.info('API contract consistency validated successfully');
     });
 
     test('should preserve essential functionality across updates', async () => {
@@ -1215,7 +1215,7 @@ describe('Success Criteria Regression Tests', () => {
         try {
           const PASSED = await func.test();
           expect(PASSED).toBe(true);
-          loggers.stopHook.log(
+          loggers.stopHook.info(
             `Essential function '${func.name}' is preserved`,
           );
         } catch (error) {
@@ -1288,7 +1288,7 @@ describe('Success Criteria Regression Tests', () => {
         }
       }
 
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         'Performance regression prevention validated successfully',
       );
     });

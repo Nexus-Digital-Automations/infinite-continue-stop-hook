@@ -728,9 +728,9 @@ ${analysis.github_actions_matrix.strategy.matrix.include
     });
 
     if (this.executionPlan.critical_path.bottlenecks?.length > 0) {
-      loggers.stopHook.log('\n⚠️ Bottlenecks Identified:');
+      loggers.stopHook.info('\n⚠️ Bottlenecks Identified:');
       this.executionPlan.critical_path.bottlenecks.forEach((bottleneck) => {
-        loggers.stopHook.log(
+        loggers.stopHook.info(
           `  ${bottleneck.type}: ${bottleneck.test || 'N/A'}`,
         );
       });
@@ -739,10 +739,10 @@ ${analysis.github_actions_matrix.strategy.matrix.include
     if (
       this.executionPlan.critical_path.optimization_opportunities?.length > 0
     ) {
-      loggers.stopHook.log('\n💡 Optimization Opportunities:');
+      loggers.stopHook.info('\n💡 Optimization Opportunities:');
       this.executionPlan.critical_path.optimization_opportunities.forEach(
         (opportunity) => {
-          loggers.stopHook.log(
+          loggers.stopHook.info(
             `  ${opportunity.type}: ${opportunity.suggestion}`,
           );
         },
@@ -754,7 +754,7 @@ ${analysis.github_actions_matrix.strategy.matrix.include
    * Run complete optimization analysis
    */
   run() {
-    loggers.stopHook.log(
+    loggers.stopHook.info(
       '🚀 Starting Parallel Test Optimization Analysis...\n',
     );
 
@@ -763,7 +763,7 @@ ${analysis.github_actions_matrix.strategy.matrix.include
       const analysis = this.saveAnalysis();
       this.displaySummary();
 
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         '\n✅ Optimization analysis completed successfully!',
       );
       return analysis;

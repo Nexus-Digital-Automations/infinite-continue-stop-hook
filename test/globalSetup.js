@@ -16,7 +16,7 @@ const { loggers } = require('../lib/logger');
  * Global setup function - runs once before all, tests
  */
 module.exports = () => {
-  loggers.stopHook.log('🚀 Initializing, Jest testing environment...');
+  loggers.stopHook.info('🚀 Initializing, Jest testing environment...');
 
   // Set up test environment, variables
   process.env.NODE_ENV = 'test';
@@ -37,7 +37,7 @@ module.exports = () => {
 
     if (!FS.existsSync(fullPath)) {
       FS.mkdirSync(fullPath, { recursive: true });
-      loggers.stopHook.log(`📁 Created test directory: ${dir}`);
+      loggers.stopHook.info(`📁 Created test directory: ${dir}`);
     }
   });
 
@@ -60,7 +60,7 @@ module.exports = () => {
           } else {
             FS.unlinkSync(entryPath);
           }
-          loggers.stopHook.log(`🧹 Cleaned up old test file: ${entry}`);
+          loggers.stopHook.info(`🧹 Cleaned up old test file: ${entry}`);
         } catch (error) {
           loggers.stopHook.warn(
             `⚠️  Could not clean up ${entry}:`,
@@ -87,7 +87,7 @@ module.exports = () => {
 
   // Performance monitoring, setup
   if (process.env.MONITOR_TEST_PERFORMANCE === 'true') {
-    loggers.stopHook.log('📊 Performance monitoring enabled');
+    loggers.stopHook.info('📊 Performance monitoring enabled');
     global.testPerformanceData = {
       suites: [],
       slowTests: [],
@@ -97,7 +97,7 @@ module.exports = () => {
 
   // Memory management for, CI, environments
   if (process.env.CI === 'true') {
-    loggers.stopHook.log(
+    loggers.stopHook.info(
       '🏗️  CI environment detected - enabling memory optimizations',
     );
 
@@ -114,23 +114,23 @@ module.exports = () => {
   }
 
   // Test reporting, setup
-  loggers.stopHook.log('📋 Test reporting configuration:');
+  loggers.stopHook.info('📋 Test reporting configuration:');
   loggers.app.info(
     `   • Coverage: ${process.env.COVERAGE ? 'enabled' : 'disabled'}`,
   );
-  loggers.stopHook.log(
+  loggers.stopHook.info(
     `   • Verbose: ${process.env.VERBOSE ? 'enabled' : 'disabled'}`,
   );
-  loggers.stopHook.log(
+  loggers.stopHook.info(
     `   • Watch mode: ${process.env.WATCH ? 'enabled' : 'disabled'}`,
   );
-  loggers.stopHook.log(
+  loggers.stopHook.info(
     `   • Max workers: ${process.env.MAX_WORKERS || 'auto'}`,
   );
 
   // Network, And external service, mocking
   if (process.env.MOCK_EXTERNAL_SERVICES !== 'false') {
-    loggers.stopHook.log('🔧 External service mocking enabled');
+    loggers.stopHook.info('🔧 External service mocking enabled');
 
     // Mock common external, services
     process.env.DISABLE_EXTERNAL_REQUESTS = 'true';
@@ -140,7 +140,7 @@ module.exports = () => {
   // Test data, initialization
   try {
     const sampleData = require('./fixtures/sampleData');
-    loggers.stopHook.log('✅ Test fixtures loaded successfully');
+    loggers.stopHook.info('✅ Test fixtures loaded successfully');
 
     // Validate sample data, structure
     if (!sampleData.SAMPLE_FEATURES || !sampleData.SAMPLE_AGENTS) {
@@ -155,7 +155,7 @@ module.exports = () => {
 
   // Database setup for integration, tests
   if (process.env.TEST_DATABASE === 'true' && __filename) {
-    loggers.stopHook.log('🗄️  Test database setup...');
+    loggers.stopHook.info('🗄️  Test database setup...');
     // This would initialize test database, connections
     // for now, we'll just set up the, environment
     process.env.DATABASE_URL =
@@ -197,7 +197,7 @@ module.exports = () => {
     },
   };
 
-  loggers.stopHook.log('✅ Jest global setup completed successfully');
-  loggers.stopHook.log('📝 Test environment ready');
-  loggers.stopHook.log('');
+  loggers.stopHook.info('✅ Jest global setup completed successfully');
+  loggers.stopHook.info('📝 Test environment ready');
+  loggers.stopHook.info('');
 };

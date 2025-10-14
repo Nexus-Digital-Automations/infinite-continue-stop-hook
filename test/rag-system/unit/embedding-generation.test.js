@@ -17,12 +17,12 @@ describe('Embedding Generation System', () => {
 
   beforeAll(() => {
     // Initialize embedding service when available
-    loggers.stopHook.log('Setting up embedding generation test environment...');
+    loggers.stopHook.info('Setting up embedding generation test environment...');
   });
 
   afterAll(() => {
     // Cleanup resources
-    loggers.stopHook.log('Cleaning up embedding test environment...');
+    loggers.stopHook.info('Cleaning up embedding test environment...');
   });
 
   beforeEach(() => {

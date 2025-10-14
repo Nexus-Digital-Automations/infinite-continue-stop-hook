@@ -120,7 +120,7 @@ class FeatureValidationMatrix {
     };
 
     try {
-      loggers.stopHook.log('🔌 Testing TaskManager API...');
+      loggers.stopHook.info('🔌 Testing TaskManager API...');
 
       // Test basic API startup;
       const startTest = await this.testCommand(
@@ -166,7 +166,7 @@ class FeatureValidationMatrix {
     };
 
     try {
-      loggers.stopHook.log('🤖 Testing RAG System...');
+      loggers.stopHook.info('🤖 Testing RAG System...');
 
       // Test RAG dependencies;
       const ragDeps = ['@xenova/transformers', 'faiss-node', 'natural'];
@@ -226,7 +226,7 @@ class FeatureValidationMatrix {
     };
 
     try {
-      loggers.stopHook.log('📁 Testing File Operations...');
+      loggers.stopHook.info('📁 Testing File Operations...');
 
       // Create temporary test directory;
       const testDir = path.join(this.outputDir, 'feature-test-temp');
@@ -292,7 +292,7 @@ class FeatureValidationMatrix {
     };
 
     try {
-      loggers.stopHook.log('🤖 Testing Agent Management...');
+      loggers.stopHook.info('🤖 Testing Agent Management...');
 
       // Test agent lifecycle
       if (FS.existsSync('test/integration/agent-lifecycle.test.js')) {
@@ -362,7 +362,7 @@ class FeatureValidationMatrix {
     };
 
     try {
-      loggers.stopHook.log('⚡ Testing Performance Monitoring...');
+      loggers.stopHook.info('⚡ Testing Performance Monitoring...');
 
       // Test performance scripts
       if (FS.existsSync('scripts/test-performance.js')) {
@@ -428,7 +428,7 @@ class FeatureValidationMatrix {
     };
 
     try {
-      loggers.stopHook.log('🔧 Testing Native Dependencies...');
+      loggers.stopHook.info('🔧 Testing Native Dependencies...');
 
       // Test critical native dependencies;
       const nativeDeps = [
@@ -512,17 +512,17 @@ class FeatureValidationMatrix {
    * Run all feature validations
    */
   async runValidations() {
-    loggers.stopHook.log('🧪 Running feature validation matrix...\n');
+    loggers.stopHook.info('🧪 Running feature validation matrix...\n');
 
     for (const feature of this.features) {
       try {
-        loggers.stopHook.log(`Testing: ${feature.name} (${feature.type})`);
+        loggers.stopHook.info(`Testing: ${feature.name} (${feature.type})`);
         // eslint-disable-next-line no-await-in-loop -- Sequential feature validation required;
         const result = await feature.testFunction();
         this.validationResults.feature_tests[feature.name] = result;
 
         const status = result.status === 'passed' ? '✅' : '❌';
-        loggers.stopHook.log(`${status} ${feature.name}: ${result.status}`);
+        loggers.stopHook.info(`${status} ${feature.name}: ${result.status}`);
 
         if (result.errors.length > 0 && feature.critical) {
           this.validationResults.issues_found.push({
@@ -532,7 +532,7 @@ class FeatureValidationMatrix {
           });
         }
       } catch (error) {
-        loggers.stopHook.log(`❌ ${feature.name}: validation failed`);
+        loggers.stopHook.info(`❌ ${feature.name}: validation failed`);
         this.validationResults.feature_tests[feature.name] = {
           name: feature.name,
           status: 'failed',
@@ -554,7 +554,7 @@ class FeatureValidationMatrix {
    * Generate compatibility matrix
    */
   generateCompatibilityMatrix(_validationResults = {}) {
-    loggers.stopHook.log('📊 Generating compatibility matrix...');
+    loggers.stopHook.info('📊 Generating compatibility matrix...');
 
     const matrix = {
       node_version: this.environment.node_version,
@@ -629,9 +629,9 @@ class FeatureValidationMatrix {
     const report = this.generateMarkdownReport();
     FS.writeFileSync(reportFile, report);
 
-    loggers.stopHook.log(`📄 Results saved to: ${resultsFile}`);
-    loggers.stopHook.log(`📄 Latest results: ${latestFile}`);
-    loggers.stopHook.log(`📄 Report: ${reportFile}`);
+    loggers.stopHook.info(`📄 Results saved to: ${resultsFile}`);
+    loggers.stopHook.info(`📄 Latest results: ${latestFile}`);
+    loggers.stopHook.info(`📄 Report: ${reportFile}`);
   }
 
   /**
@@ -720,10 +720,10 @@ ${
    * Display validation summary
    */
   displaySummary(_validationResults = {}) {
-    loggers.stopHook.log('\n📊 Feature Validation Summary');
-    loggers.stopHook.log('=============================');
-    loggers.stopHook.log(`Node.js Version: ${this.environment.node_version}`);
-    loggers.stopHook.log(`Platform: ${this.environment.platform}`);
+    loggers.stopHook.info('\n📊 Feature Validation Summary');
+    loggers.stopHook.info('=============================');
+    loggers.stopHook.info(`Node.js Version: ${this.environment.node_version}`);
+    loggers.stopHook.info(`Platform: ${this.environment.platform}`);
     loggers.app.info(
       `Overall Status: ${this.validationResults.overall_status.toUpperCase()}`,
     );
@@ -731,7 +731,7 @@ ${
       `Compatibility Score: ${this.validationResults.compatibility_matrix.compatibility_score}/100`,
     );
 
-    loggers.stopHook.log('\n🧪 Feature Results:');
+    loggers.stopHook.info('\n🧪 Feature Results:');
     Object.values(this.validationResults.feature_tests).forEach((test) => {
       const status = test.status === 'passed' ? '✅' : '❌';
       loggers.app.info(
@@ -740,7 +740,7 @@ ${
     });
 
     if (this.validationResults.issues_found.length > 0) {
-      loggers.stopHook.log('\n⚠️ Critical Issues:');
+      loggers.stopHook.info('\n⚠️ Critical Issues:');
       this.validationResults.issues_found.forEach((issue) => {
         loggers.app.info(
           `  ${issue.feature}: ${issue.errors.length} critical errors`,
@@ -753,7 +753,7 @@ ${
    * Run complete validation suite
    */
   async run(_validationResults = {}) {
-    loggers.stopHook.log('🚀 Starting Feature Validation Matrix...\n');
+    loggers.stopHook.info('🚀 Starting Feature Validation Matrix...\n');
 
     try {
       await this.runValidations();
@@ -761,7 +761,7 @@ ${
       this.saveResults();
       this.displaySummary();
 
-      loggers.stopHook.log('\n✅ Feature validation completed successfully!');
+      loggers.stopHook.info('\n✅ Feature validation completed successfully!');
       return this.validationResults;
     } catch (error) {
       loggers.stopHook.error('❌ Feature validation failed:', error.message);

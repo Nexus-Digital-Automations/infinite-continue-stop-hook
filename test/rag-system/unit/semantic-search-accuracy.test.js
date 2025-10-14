@@ -17,7 +17,7 @@ describe('Semantic Search Accuracy Validation', () => {
   let _embeddingService;
 
   beforeAll(() => {
-    loggers.stopHook.log(
+    loggers.stopHook.info(
       'Setting up semantic search accuracy test environment...',
     );
 
@@ -26,7 +26,7 @@ describe('Semantic Search Accuracy Validation', () => {
   });
 
   afterAll(() => {
-    loggers.stopHook.log('Cleaning up semantic search test environment...');
+    loggers.stopHook.info('Cleaning up semantic search test environment...');
   });
 
   beforeEach(() => {

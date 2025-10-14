@@ -38,7 +38,7 @@ class FeaturesMigration {
    */
   migrate() {
     try {
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         '🚀 Starting TODO.json → FEATURES.json migration...',
       );
 
@@ -60,7 +60,7 @@ class FeaturesMigration {
       // Step 6: Generate migration report
       this.generateMigrationReport();
 
-      loggers.stopHook.log('✅ Migration completed successfully!');
+      loggers.stopHook.info('✅ Migration completed successfully!');
       return true;
     } catch (_error) {
       loggers.stopHook.error('❌ Migration failed:', _error.message);
@@ -73,7 +73,7 @@ class FeaturesMigration {
    * Load And validate TODO.json data
    */
   loadTodoData() {
-    loggers.stopHook.log('📖 Loading TODO.json data...');
+    loggers.stopHook.info('📖 Loading TODO.json data...');
 
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
     if (!FS.existsSync(this.todoPath)) {
@@ -88,7 +88,7 @@ class FeaturesMigration {
       ? todoData.tasks.length
       : 0;
 
-    loggers.stopHook.log(
+    loggers.stopHook.info(
       `📊 Found ${this.migrationReport.totalTasks} tasks to migrate`,
     );
     return todoData;
@@ -98,18 +98,18 @@ class FeaturesMigration {
    * Create backup with timestamp
    */
   createBackup(todoData) {
-    loggers.stopHook.log('💾 Creating backup...');
+    loggers.stopHook.info('💾 Creating backup...');
 
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
     FS.writeFileSync(this.backupPath, JSON.stringify(todoData, null, 2));
-    loggers.stopHook.log(`✅ Backup created: ${this.backupPath}`);
+    loggers.stopHook.info(`✅ Backup created: ${this.backupPath}`);
   }
 
   /**
    * Create new FEATURES.json schema structure
    */
   createFeaturesSchema(todoData) {
-    loggers.stopHook.log('🏗️  Designing FEATURES.json schema...');
+    loggers.stopHook.info('🏗️  Designing FEATURES.json schema...');
     return {
       // Meta information,,
       schema_version: '1.0.0',
@@ -186,7 +186,7 @@ class FeaturesMigration {
    * Transform TODO.json data to FEATURES.json format
    */
   transformData(todoData, featuresSchema) {
-    loggers.stopHook.log('🔄 Transforming data to new format...');
+    loggers.stopHook.info('🔄 Transforming data to new format...');
 
     const transformedData = { ...featuresSchema };
 
@@ -315,13 +315,13 @@ class FeaturesMigration {
    * Write the new FEATURES.json file
    */
   writeFeaturesFile(transformedData) {
-    loggers.stopHook.log('💾 Writing FEATURES.json...');
+    loggers.stopHook.info('💾 Writing FEATURES.json...');
 
     const featuresContent = JSON.stringify(transformedData, null, 2);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
     FS.writeFileSync(this.featuresPath, featuresContent);
 
-    loggers.stopHook.log(`✅ FEATURES.json created: ${this.featuresPath}`);
+    loggers.stopHook.info(`✅ FEATURES.json created: ${this.featuresPath}`);
     loggers.app.info(
       `📊 File size: ${Math.round(featuresContent.length / 1024)} KB`,
     );
@@ -336,31 +336,31 @@ class FeaturesMigration {
       new Date(this.migrationReport.endTime) -
       new Date(this.migrationReport.startTime);
 
-    loggers.stopHook.log('\n📋 Migration Report:');
-    loggers.stopHook.log('===================');
-    loggers.stopHook.log(`📅 Start Time: ${this.migrationReport.startTime}`);
-    loggers.stopHook.log(`📅 End Time: ${this.migrationReport.endTime}`);
-    loggers.stopHook.log(`⏱️  Duration: ${this.migrationReport.duration}ms`);
-    loggers.stopHook.log(`📝 Total Tasks: ${this.migrationReport.totalTasks}`);
+    loggers.stopHook.info('\n📋 Migration Report:');
+    loggers.stopHook.info('===================');
+    loggers.stopHook.info(`📅 Start Time: ${this.migrationReport.startTime}`);
+    loggers.stopHook.info(`📅 End Time: ${this.migrationReport.endTime}`);
+    loggers.stopHook.info(`⏱️  Duration: ${this.migrationReport.duration}ms`);
+    loggers.stopHook.info(`📝 Total Tasks: ${this.migrationReport.totalTasks}`);
     loggers.app.info(
       `✅ Migrated Features: ${this.migrationReport.migratedFeatures}`,
     );
-    loggers.stopHook.log(`⚠️  Errors: ${this.migrationReport.errors.length}`);
-    loggers.stopHook.log(
+    loggers.stopHook.info(`⚠️  Errors: ${this.migrationReport.errors.length}`);
+    loggers.stopHook.info(
       `🔶 Warnings: ${this.migrationReport.warnings.length}`,
     );
 
     if (this.migrationReport.errors.length > 0) {
-      loggers.stopHook.log('\n❌ Errors:');
+      loggers.stopHook.info('\n❌ Errors:');
       this.migrationReport.errors.forEach((error, index) => {
-        loggers.stopHook.log(`   ${index + 1}. ${error}`);
+        loggers.stopHook.info(`   ${index + 1}. ${error}`);
       });
     }
 
     if (this.migrationReport.warnings.length > 0) {
-      loggers.stopHook.log('\n⚠️  Warnings:');
+      loggers.stopHook.info('\n⚠️  Warnings:');
       this.migrationReport.warnings.forEach((warning, index) => {
-        loggers.stopHook.log(`   ${index + 1}. ${warning}`);
+        loggers.stopHook.info(`   ${index + 1}. ${warning}`);
       });
     }
   }
@@ -369,7 +369,7 @@ class FeaturesMigration {
    * Validate migration results
    */
   validateMigration() {
-    loggers.stopHook.log('🔍 Validating migration results...');
+    loggers.stopHook.info('🔍 Validating migration results...');
     try {
       // Check if FEATURES.json exists And is valid JSON
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
@@ -401,7 +401,7 @@ class FeaturesMigration {
         throw new Error('Features field must be an array');
       }
 
-      loggers.stopHook.log('✅ Migration validation passed');
+      loggers.stopHook.info('✅ Migration validation passed');
       return true;
     } catch (_error) {
       loggers.stopHook.error('❌ Migration validation failed:', _error.message);

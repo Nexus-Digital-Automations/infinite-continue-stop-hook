@@ -7,7 +7,7 @@ const { loggers } = require('./lib/logger');
 
 async function testAdaptiveLearningPaths() {
   try {
-    loggers.stopHook.log(
+    loggers.stopHook.info(
       'Testing Feature 7: Adaptive Learning Paths System...',
     );
 
@@ -42,7 +42,7 @@ async function testAdaptiveLearningPaths() {
     };
 
     // Test 1: Generate adaptive learning path
-    loggers.stopHook.log('\n1. Testing generateAdaptiveLearningPath...');
+    loggers.stopHook.info('\n1. Testing generateAdaptiveLearningPath...');
     const learningPath = await ragOps.generateAdaptiveLearningPath(
       userProfile,
       learningGoals,
@@ -62,7 +62,7 @@ async function testAdaptiveLearningPaths() {
     });
 
     // Test 2: Get learning path recommendations
-    loggers.stopHook.log('\n2. Testing getLearningPathRecommendations...');
+    loggers.stopHook.info('\n2. Testing getLearningPathRecommendations...');
     const pathRecommendations = await ragOps.getLearningPathRecommendations(
       userProfile,
       ['nodejs', 'express'],
@@ -79,7 +79,7 @@ async function testAdaptiveLearningPaths() {
     });
 
     // Test 3: Track learning path progress
-    loggers.stopHook.log('\n3. Testing trackLearningPathProgress...');
+    loggers.stopHook.info('\n3. Testing trackLearningPathProgress...');
     const userProgress = {
       completionRate: 0.6,
       averageScore: 0.8,
@@ -102,7 +102,7 @@ async function testAdaptiveLearningPaths() {
     });
 
     // Test 4: Get adaptive learning analytics
-    loggers.stopHook.log('\n4. Testing getAdaptiveLearningAnalytics...');
+    loggers.stopHook.info('\n4. Testing getAdaptiveLearningAnalytics...');
     const analytics = await ragOps.getAdaptiveLearningAnalytics({
       timeRange: 30,
       includeUserSegmentation: true,
@@ -114,7 +114,7 @@ async function testAdaptiveLearningPaths() {
     });
 
     // Test 5: Adapt learning path (simulate adaptation)
-    loggers.stopHook.log('\n5. Testing adaptLearningPath...');
+    loggers.stopHook.info('\n5. Testing adaptLearningPath...');
     const pathAdaptation = await ragOps.adaptLearningPath(
       'path_123',
       userProgress,

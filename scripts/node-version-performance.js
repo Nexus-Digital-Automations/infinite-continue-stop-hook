@@ -87,7 +87,7 @@ class NodeVersionPerformanceBenchmark {
    * Memory allocation And garbage collection benchmark
    */
   benchmarkMemoryOperations() {
-    loggers.stopHook.log('🧠 Running memory operations benchmark...');
+    loggers.stopHook.info('🧠 Running memory operations benchmark...');
 
     const start = process.hrtime.bigint();
     const initialMemory = process.memoryUsage();
@@ -133,7 +133,7 @@ class NodeVersionPerformanceBenchmark {
       json_operations: 100,
     };
 
-    loggers.stopHook.log(
+    loggers.stopHook.info(
       `✅ Memory benchmark completed: ${duration.toFixed(2)}ms`,
     );
   }
@@ -142,7 +142,7 @@ class NodeVersionPerformanceBenchmark {
    * Asynchronous operations benchmark
    */
   async benchmarkAsyncOperations() {
-    loggers.stopHook.log('⚡ Running async operations benchmark...');
+    loggers.stopHook.info('⚡ Running async operations benchmark...');
 
     const start = process.hrtime.bigint();
 
@@ -182,7 +182,7 @@ class NodeVersionPerformanceBenchmark {
       total_operations: promises.length + asyncResults.length,
     };
 
-    loggers.stopHook.log(
+    loggers.stopHook.info(
       `✅ Async benchmark completed: ${duration.toFixed(2)}ms`,
     );
   }
@@ -191,7 +191,7 @@ class NodeVersionPerformanceBenchmark {
    * File system operations benchmark
    */
   async benchmarkFileOperations() {
-    loggers.stopHook.log('📁 Running file operations benchmark...');
+    loggers.stopHook.info('📁 Running file operations benchmark...');
 
     const tempDir = path.join(this.outputDir, 'temp-benchmark');
     if (!FS.existsSync(tempDir)) {
@@ -248,7 +248,7 @@ class NodeVersionPerformanceBenchmark {
    * Native module performance test
    */
   benchmarkNativeModules() {
-    loggers.stopHook.log('🔧 Testing native module performance...');
+    loggers.stopHook.info('🔧 Testing native module performance...');
 
     const start = process.hrtime.bigint();
 
@@ -289,7 +289,7 @@ class NodeVersionPerformanceBenchmark {
         _error: _error.message,
       };
 
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         `❌ Native modules benchmark failed: ${_error.message}`,
       );
     }
@@ -299,7 +299,7 @@ class NodeVersionPerformanceBenchmark {
    * Analyze benchmark results And generate performance insights
    */
   analyzePerformance() {
-    loggers.stopHook.log('📊 Analyzing performance results...');
+    loggers.stopHook.info('📊 Analyzing performance results...');
 
     const totalBenchmarkTime = Object.values(this.results.benchmarks)
       .filter((b) => b.duration_ms)
@@ -512,9 +512,9 @@ class NodeVersionPerformanceBenchmark {
     const report = this.generateMarkdownReport();
     FS.writeFileSync(reportFile, report);
 
-    loggers.stopHook.log(`📄 Results saved to: ${resultsFile}`);
-    loggers.stopHook.log(`📄 Latest results: ${latestFile}`);
-    loggers.stopHook.log(`📄 Report: ${reportFile}`);
+    loggers.stopHook.info(`📄 Results saved to: ${resultsFile}`);
+    loggers.stopHook.info(`📄 Latest results: ${latestFile}`);
+    loggers.stopHook.info(`📄 Report: ${reportFile}`);
   }
 
   /**
@@ -578,26 +578,26 @@ ${this.results.recommendations?.map((r) => `- ${r}`).join('\n')}
    * Display results summary
    */
   displaySummary() {
-    loggers.stopHook.log('\n📊 Performance Benchmark Summary');
-    loggers.stopHook.log('================================');
-    loggers.stopHook.log(
+    loggers.stopHook.info('\n📊 Performance Benchmark Summary');
+    loggers.stopHook.info('================================');
+    loggers.stopHook.info(
       `Node.js Version: ${this.results.environment.node_version}`,
     );
-    loggers.stopHook.log(`Platform: ${this.results.environment.platform}`);
+    loggers.stopHook.info(`Platform: ${this.results.environment.platform}`);
     loggers.app.info(
       `Performance Score: ${this.results.performance_analysis.performance_score}/100`,
     );
 
-    loggers.stopHook.log('\n🏃 Benchmark Results:');
+    loggers.stopHook.info('\n🏃 Benchmark Results:');
     Object.entries(this.results.benchmarks).forEach(([name, data]) => {
       if (data.duration_ms) {
-        loggers.stopHook.log(`  ${name}: ${data.duration_ms.toFixed(2)}ms`);
+        loggers.stopHook.info(`  ${name}: ${data.duration_ms.toFixed(2)}ms`);
       }
     });
 
-    loggers.stopHook.log('\n💡 Recommendations:');
+    loggers.stopHook.info('\n💡 Recommendations:');
     this.results.recommendations.forEach((rec) => {
-      loggers.stopHook.log(`  ${rec}`);
+      loggers.stopHook.info(`  ${rec}`);
     });
   }
 
@@ -605,7 +605,7 @@ ${this.results.recommendations?.map((r) => `- ${r}`).join('\n')}
    * Run complete benchmark suite
    */
   async run() {
-    loggers.stopHook.log(
+    loggers.stopHook.info(
       '🚀 Starting Node.js Performance Benchmark Suite...\n',
     );
 
@@ -620,7 +620,7 @@ ${this.results.recommendations?.map((r) => `- ${r}`).join('\n')}
       this.saveResults();
       this.displaySummary();
 
-      loggers.stopHook.log('\n✅ Benchmark suite completed successfully!');
+      loggers.stopHook.info('\n✅ Benchmark suite completed successfully!');
     } catch (_) {
       loggers.stopHook.error('❌ Benchmark suite failed:', _error.message);
       throw new Error(`Benchmark suite failed: ${_error.message}`);

@@ -222,7 +222,7 @@ global.RAG_TEST_UTILS = {
       const { result, duration } =
         await global.RAG_TEST_UTILS.measureTime(operation);
 
-      loggers.stopHook.log(`${name} completed in ${duration.toFixed(2)}ms`);
+      loggers.stopHook.info(`${name} completed in ${duration.toFixed(2)}ms`);
       global.RAG_TEST_UTILS.assertPerformance(duration, threshold, name);
 
       return result;
@@ -325,8 +325,8 @@ expect.extend({
   },
 });
 
-loggers.stopHook.log('RAG System test environment initialized');
-loggers.stopHook.log('Test data path:', global.RAG_TEST_CONFIG.testDataPath);
+loggers.stopHook.info('RAG System test environment initialized');
+loggers.stopHook.info('Test data path:', global.RAG_TEST_CONFIG.testDataPath);
 console.log(
   'Performance thresholds:',
   global.RAG_TEST_CONFIG.performanceThresholds,

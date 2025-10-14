@@ -41,7 +41,7 @@ describe('RAG System End-to-End Integration Tests', () => {
     await fs.mkdir(ragTestPath, { recursive: true });
     await fs.mkdir(path.join(ragTestPath, 'rag'), { recursive: true });
 
-    loggers.stopHook.log('RAG system initialization completed');
+    loggers.stopHook.info('RAG system initialization completed');
   }, 120000); // 2 minutes timeout for initialization
 
   afterAll(async () => {

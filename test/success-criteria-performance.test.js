@@ -289,7 +289,7 @@ async function setupPerformanceTestProject(_category = 'general') {
 
     // Create main application file;
     const indexJs = `
-loggers.stopHook.log('Performance test application started');
+loggers.stopHook.info('Performance test application started');
 
 // Simulate some work;
 function performWork(_category = 'general') {
@@ -302,7 +302,7 @@ function performWork(_category = 'general') {
 }
 
   const duration = Date.now() - start;
-  loggers.stopHook.log(\`Work completed in \${duration}ms, result: \${workResult}\`);
+  loggers.stopHook.info(\`Work completed in \${duration}ms, result: \${workResult}\`);
   return workResult;
 }
 
@@ -317,10 +317,10 @@ function allocateMemory(_category = 'general') {
 
 performWork();
 const memAlloc = allocateMemory();
-loggers.stopHook.log(\`Memory allocated: \${memAlloc} arrays\`);
+loggers.stopHook.info(\`Memory allocated: \${memAlloc} arrays\`);
 
 setTimeout(() => {
-  loggers.stopHook.log('Application completed successfully');
+  loggers.stopHook.info('Application completed successfully');
   process.exit(0);
 }, 1000);
 `;
@@ -345,7 +345,7 @@ describe('Performance Test Suite', () => {
 
     await fs.writeFile(path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
 
-    loggers.stopHook.log('Performance test project setup completed');
+    loggers.stopHook.info('Performance test project setup completed');
   } catch (_error) {
     loggers.stopHook.error('Failed to setup performance test project:', _error);
     throw _error;
@@ -355,7 +355,7 @@ describe('Performance Test Suite', () => {
 async function cleanupPerformanceTestProject(_category = 'general') {
   try {
     await fs.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
-    loggers.stopHook.log('Performance test project cleanup completed');
+    loggers.stopHook.info('Performance test project cleanup completed');
   } catch (_error) {
     loggers.stopHook.error(
       'Failed to cleanup performance test project:',
@@ -490,7 +490,7 @@ describe('Success Criteria Performance Tests', () => {
         loggers.app.info(
           `Validation duration: ${MEASUREMENT.duration.toFixed(2)}ms`,
         );
-        loggers.stopHook.log(`Validation result:`, result);
+        loggers.stopHook.info(`Validation result:`, result);
       },
       PERFORMANCE_TIMEOUT,
     );
@@ -570,10 +570,10 @@ describe('Success Criteria Performance Tests', () => {
           expect(_result.MEASUREMENT.duration).toBeLessThan(10000); // Individual ops should be fast
         });
 
-        loggers.stopHook.log(
+        loggers.stopHook.info(
           `Rapid operations total time: ${TOTAL_TIME.toFixed(2)}ms`,
         );
-        loggers.stopHook.log(
+        loggers.stopHook.info(
           `Average per OPERATION ${(TOTAL_TIME / 10).toFixed(2)}ms`,
         );
       },
@@ -629,7 +629,7 @@ describe('Success Criteria Performance Tests', () => {
         loggers.app.info(
           `Memory increase: ${(MEMORY_INCREASE / 1024 / 1024).toFixed(2)}MB`,
         );
-        loggers.stopHook.log(
+        loggers.stopHook.info(
           `Peak usage: ${(PEAK_USAGE / 1024 / 1024).toFixed(2)}MB`,
         );
       },
@@ -694,7 +694,7 @@ describe('Success Criteria Performance Tests', () => {
           heapTotal: stat.memory.heapTotal,
         }));
 
-        loggers.stopHook.log('Memory usage pattern:', MEMORY_PATTERN);
+        loggers.stopHook.info('Memory usage pattern:', MEMORY_PATTERN);
 
         // Memory should not continuously increase;
         const FINAL_HEAP = GC_STATS[GC_STATS.length - 1].memory.heapUsed;
@@ -762,11 +762,11 @@ describe('Success Criteria Performance Tests', () => {
         expect(STD_DEV).toBeLessThan(AVG_TIME * 0.5); // StdDev should be less than 50% of average
         expect(MAX_TIME).toBeLessThan(AVG_TIME * 2); // Max time shouldn't be more than 2x average
 
-        loggers.stopHook.log(`Performance consistency analysis:`);
-        loggers.stopHook.log(`  Average: ${AVG_TIME.toFixed(2)}ms`);
-        loggers.stopHook.log(`  Min: ${MIN_TIME.toFixed(2)}ms`);
-        loggers.stopHook.log(`  Max: ${MAX_TIME.toFixed(2)}ms`);
-        loggers.stopHook.log(`  Std Dev: ${STD_DEV.toFixed(2)}ms`);
+        loggers.stopHook.info(`Performance consistency analysis:`);
+        loggers.stopHook.info(`  Average: ${AVG_TIME.toFixed(2)}ms`);
+        loggers.stopHook.info(`  Min: ${MIN_TIME.toFixed(2)}ms`);
+        loggers.stopHook.info(`  Max: ${MAX_TIME.toFixed(2)}ms`);
+        loggers.stopHook.info(`  Std Dev: ${STD_DEV.toFixed(2)}ms`);
         loggers.app.info(
           `  Coefficient of variation: ${((STD_DEV / AVG_TIME) * 100).toFixed(2)}%`,
         );
@@ -910,8 +910,8 @@ describe('Success Criteria Performance Tests', () => {
         // Should not have performance violations
         expect(REPORT.performanceViolations).toHaveLength(0);
 
-        loggers.stopHook.log('Comprehensive performance metrics:');
-        loggers.stopHook.log(
+        loggers.stopHook.info('Comprehensive performance metrics:');
+        loggers.stopHook.info(
           { additionalData: [null, 2] },
           JSON.stringify(REPORT),
         );
@@ -919,7 +919,7 @@ describe('Success Criteria Performance Tests', () => {
         // Save report for analysis;
         const REPORT_PATH = path.join(__dirname, 'performance-report.json');
         await fs.writeFile(REPORT_PATH, JSON.stringify(REPORT, null, 2));
-        loggers.stopHook.log(`Performance report saved to: ${REPORT_PATH}`);
+        loggers.stopHook.info(`Performance report saved to: ${REPORT_PATH}`);
       },
       PERFORMANCE_TIMEOUT,
     );
@@ -936,7 +936,7 @@ describe('Success Criteria Performance Tests', () => {
           nodeVersion: process.version,
         };
 
-        loggers.stopHook.log('System information:', SYSTEM_INFO);
+        loggers.stopHook.info('System information:', SYSTEM_INFO);
 
         // CPU benchmark;
         const CPU_START = process.hrtime.bigint();
@@ -985,7 +985,7 @@ describe('Success Criteria Performance Tests', () => {
             (measurement.memoryDelta.heapUsed || 0) / MEM_BENCHMARK,
         };
 
-        loggers.stopHook.log('Benchmark results:', BENCHMARK_RESULTS);
+        loggers.stopHook.info('Benchmark results:', BENCHMARK_RESULTS);
 
         // Performance should scale reasonably with system capabilities
         expect(BENCHMARK_RESULTS.successCriteriaBenchmark).toBeLessThan(30000);
@@ -997,7 +997,7 @@ describe('Success Criteria Performance Tests', () => {
           BENCHMARK_PATH,
           JSON.stringify(BENCHMARK_RESULTS, null, 2),
         );
-        loggers.stopHook.log(`Benchmark results saved to: ${BENCHMARK_PATH}`);
+        loggers.stopHook.info(`Benchmark results saved to: ${BENCHMARK_PATH}`);
       },
       PERFORMANCE_TIMEOUT,
     );

@@ -86,8 +86,8 @@ class QuickPerformanceTest {
   }
 
   async runQuickTests() {
-    loggers.stopHook.log('🚀 Quick TaskManager Performance Test');
-    loggers.stopHook.log('=====================================\n');
+    loggers.stopHook.info('🚀 Quick TaskManager Performance Test');
+    loggers.stopHook.info('=====================================\n');
 
     const tests = [
       { name: 'System Initialization', command: 'init' },
@@ -100,7 +100,7 @@ class QuickPerformanceTest {
     ];
 
     for (const test of tests) {
-      loggers.stopHook.log(`📊 Testing: ${test.name}`);
+      loggers.stopHook.info(`📊 Testing: ${test.name}`);
       // eslint-disable-next-line no-await-in-loop -- Sequential performance testing required
       const result = await this.executeCommand(test.command);
 
@@ -113,10 +113,10 @@ class QuickPerformanceTest {
       const duration = result.duration.toFixed(2);
       const memoryMB = (result.memoryUsed / (1024 * 1024)).toFixed(2);
 
-      loggers.stopHook.log(`   ${status} ${duration}ms (${memoryMB}MB memory)`);
+      loggers.stopHook.info(`   ${status} ${duration}ms (${memoryMB}MB memory)`);
 
       if (!result.success) {
-        loggers.stopHook.log(`   Error: ${result.error || 'Command failed'}`);
+        loggers.stopHook.info(`   Error: ${result.error || 'Command failed'}`);
       }
     }
 
@@ -124,8 +124,8 @@ class QuickPerformanceTest {
   }
 
   generateQuickReport() {
-    loggers.stopHook.log('\n📋 Performance Analysis');
-    loggers.stopHook.log('=======================');
+    loggers.stopHook.info('\n📋 Performance Analysis');
+    loggers.stopHook.info('=======================');
 
     const successful = this.results.filter((r) => r.success);
     const failed = this.results.filter((r) => !r.success);
@@ -136,16 +136,16 @@ class QuickPerformanceTest {
       const maxTime = Math.max(...successful.map((r) => r.duration));
       const minTime = Math.min(...successful.map((r) => r.duration));
 
-      loggers.stopHook.log(`\n📊 Response Time Metrics:`);
-      loggers.stopHook.log(`   Average: ${avgTime.toFixed(2)}ms`);
-      loggers.stopHook.log(`   Fastest: ${minTime.toFixed(2)}ms`);
-      loggers.stopHook.log(`   Slowest: ${maxTime.toFixed(2)}ms`);
+      loggers.stopHook.info(`\n📊 Response Time Metrics:`);
+      loggers.stopHook.info(`   Average: ${avgTime.toFixed(2)}ms`);
+      loggers.stopHook.info(`   Fastest: ${minTime.toFixed(2)}ms`);
+      loggers.stopHook.info(`   Slowest: ${maxTime.toFixed(2)}ms`);
     }
 
     if (failed.length > 0) {
-      loggers.stopHook.log(`\n❌ Failed Operations: ${failed.length}`);
+      loggers.stopHook.info(`\n❌ Failed Operations: ${failed.length}`);
       failed.forEach((f) => {
-        loggers.stopHook.log(
+        loggers.stopHook.info(
           `   • ${f.testName}: ${f.error || 'Unknown error'}`,
         );
       });
@@ -154,9 +154,9 @@ class QuickPerformanceTest {
     // Performance analysis
     const slowOperations = successful.filter((r) => r.duration > 2000);
     if (slowOperations.length > 0) {
-      loggers.stopHook.log(`\n⚠️  Slow Operations (>2s):`);
+      loggers.stopHook.info(`\n⚠️  Slow Operations (>2s):`);
       slowOperations.forEach((op) => {
-        loggers.stopHook.log(
+        loggers.stopHook.info(
           `   • ${op.testName}: ${op.duration.toFixed(2)}ms`,
         );
       });
@@ -164,9 +164,9 @@ class QuickPerformanceTest {
 
     const fastOperations = successful.filter((r) => r.duration < 500);
     if (fastOperations.length > 0) {
-      loggers.stopHook.log(`\n⚡ Fast Operations (<500ms):`);
+      loggers.stopHook.info(`\n⚡ Fast Operations (<500ms):`);
       fastOperations.forEach((op) => {
-        loggers.stopHook.log(
+        loggers.stopHook.info(
           `   • ${op.testName}: ${op.duration.toFixed(2)}ms`,
         );
       });
@@ -179,8 +179,8 @@ class QuickPerformanceTest {
     );
     const avgMemoryPerOp = totalMemoryUsed / this.results.length;
 
-    loggers.stopHook.log(`\n💾 Memory Usage:`);
-    loggers.stopHook.log(
+    loggers.stopHook.info(`\n💾 Memory Usage:`);
+    loggers.stopHook.info(
       `   Total: ${(totalMemoryUsed / (1024 * 1024)).toFixed(2)}MB`,
     );
     loggers.app.info(
@@ -188,7 +188,7 @@ class QuickPerformanceTest {
     );
 
     // Recommendations
-    loggers.stopHook.log(`\n💡 Performance Recommendations:`);
+    loggers.stopHook.info(`\n💡 Performance Recommendations:`);
 
     if (slowOperations.length > 0) {
       loggers.app.info(
@@ -210,7 +210,7 @@ class QuickPerformanceTest {
     }
 
     if (successful.length === this.results.length) {
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         `   • System performing well - all operations successful`,
       );
     }
@@ -289,7 +289,7 @@ if (require.main === module) {
   test
     .runQuickTests()
     .then((_REPORT) => {
-      loggers.stopHook.log('\n✅ Quick performance test completed!');
+      loggers.stopHook.info('\n✅ Quick performance test completed!');
       throw new Error('Performance test completed successfully');
     })
     .catch((error) => {

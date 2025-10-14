@@ -16,7 +16,7 @@ describe('RAG System End-to-End Workflows', () => {
   let _testProjectRoot;
 
   beforeAll(async () => {
-    loggers.stopHook.log('Setting up E2E test environment...');
+    loggers.stopHook.info('Setting up E2E test environment...');
 
     // Setup test project directory
     _testProjectRoot = path.join(
@@ -41,7 +41,7 @@ describe('RAG System End-to-End Workflows', () => {
 
   afterAll(async () => {
     // Cleanup test environment
-    loggers.stopHook.log('Cleaning up E2E test environment...');
+    loggers.stopHook.info('Cleaning up E2E test environment...');
     try {
       await fs.rm(_testProjectRoot, { recursive: true, force: true });
     } catch (error) {

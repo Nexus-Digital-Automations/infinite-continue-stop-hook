@@ -44,25 +44,25 @@ const DEFAULT_CONFIG = {
 class CoverageLogger {
   static info(message) {
     if (!process.env.QUIET) {
-      loggers.stopHook.log(`📊 ${message}`);
+      loggers.stopHook.info(`📊 ${message}`);
     }
   }
 
   static success(message) {
-    loggers.stopHook.log(`✅ ${message}`);
+    loggers.stopHook.info(`✅ ${message}`);
   }
 
   static warning(message) {
-    loggers.stopHook.log(`⚠️  ${message}`);
+    loggers.stopHook.info(`⚠️  ${message}`);
   }
 
   static error(message) {
-    loggers.stopHook.log(`❌ ${message}`);
+    loggers.stopHook.info(`❌ ${message}`);
   }
 
   static debug(message) {
     if (process.env.DEBUG) {
-      loggers.stopHook.log(`🐛 DEBUG: ${message}`);
+      loggers.stopHook.info(`🐛 DEBUG: ${message}`);
     }
   }
 
@@ -76,19 +76,19 @@ class CoverageLogger {
       maxLengths.reduce((sum, len) => sum + len + 3, 1),
     );
 
-    loggers.stopHook.log(`┌${separator}┐`);
-    loggers.stopHook.log(
+    loggers.stopHook.info(`┌${separator}┐`);
+    loggers.stopHook.info(
       `│ ${headers.map((h, i) => h.padEnd(maxLengths[i])).join(' │ ')} │`,
     );
-    loggers.stopHook.log(`├${separator}┤`);
+    loggers.stopHook.info(`├${separator}┤`);
 
     rows.forEach((row) => {
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         `│ ${row.map((cell, i) => String(cell || '').padEnd(maxLengths[i])).join(' │ ')} │`,
       );
     });
 
-    loggers.stopHook.log(`└${separator}┘`);
+    loggers.stopHook.info(`└${separator}┘`);
   }
 }
 
@@ -356,7 +356,7 @@ class CoverageThresholdChecker {
   displayResults() {
     const { summary, failures, warnings, passed } = this.results;
 
-    loggers.stopHook.log('\n📊 Coverage Threshold Validation Results:');
+    loggers.stopHook.info('\n📊 Coverage Threshold Validation Results:');
 
     // Coverage table;
     const tableHeaders = ['Metric', 'Coverage', 'Target', 'Critical', 'Status'];
@@ -388,24 +388,24 @@ class CoverageThresholdChecker {
 
     // Overall status;
     const overallStatus = passed ? '✅ PASSED' : '❌ FAILED';
-    loggers.stopHook.log(`\nOverall Status: ${overallStatus}`);
+    loggers.stopHook.info(`\nOverall Status: ${overallStatus}`);
 
     // Failures
     if (failures.length > 0) {
-      loggers.stopHook.log(`\n❌ Critical Issues (${failures.length}):`);
+      loggers.stopHook.info(`\n❌ Critical Issues (${failures.length}):`);
       failures.forEach((failure, index) => {
-        loggers.stopHook.log(`  ${index + 1}. ${failure.message}`);
+        loggers.stopHook.info(`  ${index + 1}. ${failure.message}`);
       });
     }
 
     // Warnings
     if (warnings.length > 0) {
-      loggers.stopHook.log(`\n⚠️  Warnings (${warnings.length}):`);
+      loggers.stopHook.info(`\n⚠️  Warnings (${warnings.length}):`);
       warnings.forEach((warning, index) => {
         if (typeof warning === 'string') {
-          loggers.stopHook.log(`  ${index + 1}. ${warning}`);
+          loggers.stopHook.info(`  ${index + 1}. ${warning}`);
         } else {
-          loggers.stopHook.log(`  ${index + 1}. ${warning.message}`);
+          loggers.stopHook.info(`  ${index + 1}. ${warning.message}`);
         }
       });
     }
@@ -419,27 +419,27 @@ class CoverageThresholdChecker {
           summary.lines.pct) /
           4,
       );
-      loggers.stopHook.log(`\n🏷️  Coverage Badge: ${overallCoverage}%`);
-      loggers.stopHook.log(`   URL: ${this.results.badge_url}`);
+      loggers.stopHook.info(`\n🏷️  Coverage Badge: ${overallCoverage}%`);
+      loggers.stopHook.info(`   URL: ${this.results.badge_url}`);
     }
 
     // Configuration info
     if (this.config.strict_mode) {
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         '\n⚠️  Running in STRICT MODE - warnings will cause failure',
       );
     }
 
-    loggers.stopHook.log(
+    loggers.stopHook.info(
       `\n📁 Detailed report: coverage/threshold-validation.json`,
     );
 
     // Exit guidance
     if (!passed) {
-      loggers.stopHook.log('\n💡 To fix coverage issues:');
-      loggers.stopHook.log('   1. Add tests for uncovered code');
-      loggers.stopHook.log('   2. Run: npm run coverage:report');
-      loggers.stopHook.log(
+      loggers.stopHook.info('\n💡 To fix coverage issues:');
+      loggers.stopHook.info('   1. Add tests for uncovered code');
+      loggers.stopHook.info('   2. Run: npm run coverage:report');
+      loggers.stopHook.info(
         '   3. Check HTML report: coverage/lcov-report/index.html',
       );
     }
@@ -467,7 +467,7 @@ if (require.main === module) {
   const args = process.argv.slice(2);
 
   if (args.includes('--help') || args.includes('-h')) {
-    loggers.stopHook.log(`
+    loggers.stopHook.info(`
 Coverage Threshold Checker,
     Usage: node coverage-check.js [options]
 ,

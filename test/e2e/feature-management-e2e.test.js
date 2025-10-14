@@ -412,7 +412,7 @@ describe('Feature Management System E2E', () => {
           expect(feature.approved_by).toBe('bulk-approver');
         });
 
-        loggers.stopHook.log(
+        loggers.stopHook.info(
           `✅ Bulk approval test passed for ${batchSize} features`,
         );
       },

@@ -24,12 +24,12 @@ describe('RAG System API Endpoints', () => {
   beforeAll(() => {
     // Setup test environment
     // Note: This will be implemented when RAG system is available
-    loggers.stopHook.log('Setting up RAG test environment...');
+    loggers.stopHook.info('Setting up RAG test environment...');
   });
 
   afterAll(() => {
     // Cleanup test data
-    loggers.stopHook.log('Cleaning up RAG test environment...');
+    loggers.stopHook.info('Cleaning up RAG test environment...');
   });
 
   beforeEach(() => {

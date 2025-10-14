@@ -79,11 +79,11 @@ describe('Performance Validation E2E', () => {
         'Features response structure:',
         JSON.stringify(features, null, 2),
       );
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         'Features.features type:',
         typeof features.features,
       );
-      loggers.stopHook.log('Features.features value:', features.features);
+      loggers.stopHook.info('Features.features value:', features.features);
       expect(
         features.features && features.features.length,
       ).toBeGreaterThanOrEqual(5);
@@ -228,13 +228,13 @@ describe('Performance Validation E2E', () => {
         // Step 3: Performance comparison
         const avgIndividualTime = bulkSuggestionTime / bulkSize;
         const bulkEfficiency = avgIndividualTime / bulkApprovalMetrics.avg;
-        loggers.stopHook.log(
+        loggers.stopHook.info(
           `✅ Bulk operationperformance test: ${bulkSize} features`,
         );
         console.log(
           `   Individual avg: ${avgIndividualTime}ms, Bulk time: ${bulkApprovalMetrics.avg}ms`,
         );
-        loggers.stopHook.log(
+        loggers.stopHook.info(
           `   Bulk efficiency: ${bulkEfficiency.toFixed(2)}x`,
         );
 
@@ -281,7 +281,7 @@ describe('Performance Validation E2E', () => {
       console.log(
         `✅ High concurrency performance test: ${totalOperations} operations in ${totalTime}ms`,
       );
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         `   Average per, OPERATION ${avgTimePerOperation}ms`,
       );
       console.log(
@@ -333,7 +333,7 @@ describe('Performance Validation E2E', () => {
         console.log(
           `   Total time: ${contentionTime}ms, Throughput: ${contentionThroughput.toFixed(2)} ops/sec`,
         );
-        loggers.stopHook.log(
+        loggers.stopHook.info(
           `   Average time under contention: ${avgContentionTime}ms`,
         );
       },

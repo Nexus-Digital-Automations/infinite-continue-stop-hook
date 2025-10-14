@@ -81,13 +81,13 @@ class APIExecutor {
 
       child.on('close', (code) => {
         if (!silent) {
-          loggers.stopHook.log(`Command: ${command} ${args.join(' ')}`);
-          loggers.stopHook.log(`Exit code: ${code}`);
+          loggers.stopHook.info(`Command: ${command} ${args.join(' ')}`);
+          loggers.stopHook.info(`Exit code: ${code}`);
           if (stdout) {
-            loggers.stopHook.log(`Stdout: ${stdout.substring(0, 500)}...`);
+            loggers.stopHook.info(`Stdout: ${stdout.substring(0, 500)}...`);
           }
           if (stderr) {
-            loggers.stopHook.log(`Stderr: ${stderr.substring(0, 500)}...`);
+            loggers.stopHook.info(`Stderr: ${stderr.substring(0, 500)}...`);
           }
         }
 
@@ -154,7 +154,7 @@ class APIExecutor {
     await new Promise((resolve) => {
       setTimeout(resolve, 0);
     });
-    loggers.stopHook.log(`Cleaning up test data: ${JSON.stringify(testData)}`);
+    loggers.stopHook.info(`Cleaning up test data: ${JSON.stringify(testData)}`);
   }
 }
 

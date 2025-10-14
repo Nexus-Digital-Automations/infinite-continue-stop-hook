@@ -165,11 +165,11 @@ async function getProjectInfo(targetPath, category = 'general') {
 
   // Interactive mode
 
-  loggers.stopHook.log('\n=== Project Configuration ===');
+  loggers.stopHook.info('\n=== Project Configuration ===');
   const projectName =
     (await question(`Project Name (${detectedName}): `)) || detectedName;
 
-  loggers.stopHook.log('\n=== Initial Task Setup ===');
+  loggers.stopHook.info('\n=== Initial Task Setup ===');
   const taskDescription = await question('Task description: ');
   const taskMode =
     (await question(
@@ -206,7 +206,7 @@ function createProjectDirectories(targetPath, _category = 'general') {
   if (!FS.existsSync(developmentPath)) {
     FS.mkdirSync(developmentPath, { recursive: true });
 
-    loggers.stopHook.log(`✓ Created /development directory`);
+    loggers.stopHook.info(`✓ Created /development directory`);
   }
 
   // Create /development/tasks directory
@@ -215,7 +215,7 @@ function createProjectDirectories(targetPath, _category = 'general') {
   if (!FS.existsSync(tasksPath)) {
     FS.mkdirSync(tasksPath, { recursive: true });
 
-    loggers.stopHook.log(`✓ Created /development/tasks directory`);
+    loggers.stopHook.info(`✓ Created /development/tasks directory`);
   }
 
   // Create /development/reports directory
@@ -224,7 +224,7 @@ function createProjectDirectories(targetPath, _category = 'general') {
   if (!FS.existsSync(reportsPath)) {
     FS.mkdirSync(reportsPath, { recursive: true });
 
-    loggers.stopHook.log(`✓ Created /development/reports directory`);
+    loggers.stopHook.info(`✓ Created /development/reports directory`);
   }
 
   // Create /development/logs directory
@@ -233,7 +233,7 @@ function createProjectDirectories(targetPath, _category = 'general') {
   if (!FS.existsSync(logsPath)) {
     FS.mkdirSync(logsPath, { recursive: true });
 
-    loggers.stopHook.log(`✓ Created /development/logs directory`);
+    loggers.stopHook.info(`✓ Created /development/logs directory`);
   }
 
   return { developmentPath, tasksPath, reportsPath, logsPath };
@@ -401,7 +401,7 @@ This validation ensures professional-grade delivery quality.`,
 
   FS.writeFileSync(todoPath, JSON.stringify(todoData, null, 2));
 
-  loggers.stopHook.log(`\n✓ FEATURES.json created at: ${todoPath}`);
+  loggers.stopHook.info(`\n✓ FEATURES.json created at: ${todoPath}`);
 
   return true;
 }
@@ -437,7 +437,7 @@ function getProjectDirectories(basePath, category = 'general') {
 async function processProject(targetPath, category = 'general') {
   const projectName = path.basename(targetPath);
 
-  loggers.stopHook.log(`\n=== Processing ${projectName} ===`);
+  loggers.stopHook.info(`\n=== Processing ${projectName} ===`);
 
   try {
     // Get project information for this specific project
@@ -462,9 +462,9 @@ async function processProject(targetPath, category = 'general') {
     migrateToFeatureBasedSystem(targetPath);
 
     if (success) {
-      loggers.stopHook.log(`✅ ${projectName} - Setup complete`);
+      loggers.stopHook.info(`✅ ${projectName} - Setup complete`);
     } else {
-      loggers.stopHook.log(`⏭️  ${projectName} - Skipped (already up to date)`);
+      loggers.stopHook.info(`⏭️  ${projectName} - Skipped (already up to date)`);
     }
 
     return { success: true, project: projectName };
@@ -481,10 +481,10 @@ async function processProject(targetPath, category = 'general') {
 function migrateToFeatureBasedSystem(targetPath, category = 'general') {
   const todoPath = path.join(targetPath, 'FEATURES.json');
   try {
-    loggers.stopHook.log(`   🔄 Checking for feature-based migration...`);
+    loggers.stopHook.info(`   🔄 Checking for feature-based migration...`);
 
     if (!FS.existsSync(todoPath)) {
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         `   ⚠️  No FEATURES.json found - skipping migration`,
       );
       return;
@@ -495,7 +495,7 @@ function migrateToFeatureBasedSystem(targetPath, category = 'general') {
 
     // Check if already feature-based
     if (todoData.features && Array.isArray(todoData.features)) {
-      loggers.stopHook.log(`   ✅ Already feature-based - skipping migration`);
+      loggers.stopHook.info(`   ✅ Already feature-based - skipping migration`);
       return;
     }
 
@@ -504,7 +504,7 @@ function migrateToFeatureBasedSystem(targetPath, category = 'general') {
 
     FS.writeFileSync(backupPath, JSON.stringify(todoData, null, 2));
 
-    loggers.stopHook.log(`   📋 Created backup: ${path.basename(backupPath)}`);
+    loggers.stopHook.info(`   📋 Created backup: ${path.basename(backupPath)}`);
 
     // Analyze current tasks for feature grouping
     const analysis = analyzeTasksForFeatures(todoData.tasks);
@@ -530,12 +530,12 @@ function migrateToFeatureBasedSystem(targetPath, category = 'general') {
     if (FS.existsSync(featuresJsonPath)) {
       FS.unlinkSync(featuresJsonPath);
 
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         `   🗑️  Removed features.json (dual system eliminated)`,
       );
     }
   } catch (_) {
-    loggers.stopHook.log(`   ❌ Feature migration failed: ${_error.message}`);
+    loggers.stopHook.info(`   ❌ Feature migration failed: ${_error.message}`);
     // Don't fail the entire setup for migration issues
   }
 }
@@ -809,11 +809,11 @@ async function main(category = 'general') {
     throw new Error(`Path is not a directory: ${targetPath}`);
   }
 
-  loggers.stopHook.log(`Processing directories in: ${targetPath}`);
+  loggers.stopHook.info(`Processing directories in: ${targetPath}`);
 
-  loggers.stopHook.log(`Batch mode: ${flags.batchMode ? 'ON' : 'OFF'}`);
+  loggers.stopHook.info(`Batch mode: ${flags.batchMode ? 'ON' : 'OFF'}`);
 
-  loggers.stopHook.log(
+  loggers.stopHook.info(
     `Single project mode: ${flags.singleProject ? 'ON' : 'OFF'}`,
   );
 
@@ -823,7 +823,7 @@ async function main(category = 'general') {
     // Always process only the specified directory as a single project
     // This ensures TODO.json is created only in the root of the specified directory
 
-    loggers.stopHook.log(
+    loggers.stopHook.info(
       `Processing single project: ${path.basename(targetPath)}`,
     );
     const _result = await processProject(targetPath);
@@ -831,61 +831,61 @@ async function main(category = 'general') {
 
     // Summary
 
-    loggers.stopHook.log('\n=== Summary ===');
+    loggers.stopHook.info('\n=== Summary ===');
     const successful = results.filter((r) => r.success).length;
     const failed = results.filter((r) => !r.success).length;
 
-    loggers.stopHook.log(`✅ Successfully processed: ${successful} projects`);
+    loggers.stopHook.info(`✅ Successfully processed: ${successful} projects`);
     if (failed > 0) {
-      loggers.stopHook.log(`❌ Failed: ${failed} projects`);
+      loggers.stopHook.info(`❌ Failed: ${failed} projects`);
       results
         .filter((r) => !r.success)
         .forEach((r) => {
-          loggers.stopHook.log(`   - ${r.project}: ${r.error}`);
+          loggers.stopHook.info(`   - ${r.project}: ${r.error}`);
         });
     }
 
-    loggers.stopHook.log('\n📋 Usage examples:');
+    loggers.stopHook.info('\n📋 Usage examples:');
 
-    loggers.stopHook.log(
+    loggers.stopHook.info(
       '# Process all projects in Claude Coding Projects (default):',
     );
 
-    loggers.stopHook.log('node setup-infinite-hook.js');
+    loggers.stopHook.info('node setup-infinite-hook.js');
 
-    loggers.stopHook.log('');
+    loggers.stopHook.info('');
 
-    loggers.stopHook.log('# Process single project:');
+    loggers.stopHook.info('# Process single project:');
 
-    loggers.stopHook.log(
+    loggers.stopHook.info(
       'node setup-infinite-hook.js /path/to/project --single',
     );
 
-    loggers.stopHook.log('');
+    loggers.stopHook.info('');
 
-    loggers.stopHook.log('# Batch mode with no interaction:');
+    loggers.stopHook.info('# Batch mode with no interaction:');
 
-    loggers.stopHook.log('node setup-infinite-hook.js --batch');
+    loggers.stopHook.info('node setup-infinite-hook.js --batch');
 
-    loggers.stopHook.log('\n📋 Each project now includes:');
+    loggers.stopHook.info('\n📋 Each project now includes:');
 
-    loggers.stopHook.log(
+    loggers.stopHook.info(
       '   - FEATURES.json with new feature approval workflow',
     );
 
-    loggers.stopHook.log('   - Development mode files And directory structure');
+    loggers.stopHook.info('   - Development mode files And directory structure');
 
-    loggers.stopHook.log('');
+    loggers.stopHook.info('');
 
-    loggers.stopHook.log('📋 TaskManager system is centralized at:');
+    loggers.stopHook.info('📋 TaskManager system is centralized at:');
 
     loggers.app.info(
       '   /Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/',
     );
 
-    loggers.stopHook.log('');
+    loggers.stopHook.info('');
 
-    loggers.stopHook.log('📋 Use universal commands to work with any project:');
+    loggers.stopHook.info('📋 Use universal commands to work with any project:');
 
     loggers.app.info(
       '   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" init --project /path/to/project',
@@ -895,7 +895,7 @@ async function main(category = 'general') {
       '   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" api current --project /path/to/project',
     );
 
-    loggers.stopHook.log('');
+    loggers.stopHook.info('');
 
     loggers.app.info(
       '📋 Updated hook reference in ~/.claude/settings.json should point to:',

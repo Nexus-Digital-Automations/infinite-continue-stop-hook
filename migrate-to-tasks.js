@@ -26,7 +26,7 @@ class TaskMigrator {
    */
   async migrate() {
     try {
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         '🚀 Starting FEATURES.json → TASKS.json migration...',
       );
 
@@ -51,9 +51,9 @@ class TaskMigrator {
       // Step 7: Generate auto-tasks for existing approved features
       await this.generateAutoTasks(tasksData);
 
-      loggers.stopHook.log('✅ Migration completed successfully!');
-      loggers.stopHook.log(`📁 Backup created: ${this.backupPath}`);
-      loggers.stopHook.log(`📁 New file created: ${this.tasksPath}`);
+      loggers.stopHook.info('✅ Migration completed successfully!');
+      loggers.stopHook.info(`📁 Backup created: ${this.backupPath}`);
+      loggers.stopHook.info(`📁 New file created: ${this.tasksPath}`);
 
       return {
         success: true,
@@ -73,7 +73,7 @@ class TaskMigrator {
   async validateSourceFile() {
     try {
       await FS.access(this.featuresPath);
-      loggers.stopHook.log('✓ Source FEATURES.json found');
+      loggers.stopHook.info('✓ Source FEATURES.json found');
     } catch {
       throw new Error(`FEATURES.json not found at ${this.featuresPath}`);
     }
@@ -85,7 +85,7 @@ class TaskMigrator {
   async createBackup() {
     try {
       await FS.copyFile(this.featuresPath, this.backupPath);
-      loggers.stopHook.log(`✓ Backup created: ${this.backupPath}`);
+      loggers.stopHook.info(`✓ Backup created: ${this.backupPath}`);
     } catch (_error) {
       throw new Error(`Failed to create backup: ${_error.message}`);
     }
@@ -98,7 +98,7 @@ class TaskMigrator {
     try {
       const data = await FS.readFile(this.featuresPath, 'utf8');
       const parsedData = JSON.parse(data);
-      loggers.stopHook.log('✓ Features data loaded And parsed');
+      loggers.stopHook.info('✓ Features data loaded And parsed');
       return parsedData;
     } catch (_error) {
       throw new Error(`Failed to load features data: ${_error.message}`);
@@ -109,7 +109,7 @@ class TaskMigrator {
    * Transform FEATURES.json data to new TASKS.json schema
    */
   transformToTasksSchema(featuresData) {
-    loggers.stopHook.log('🔄 Transforming to TASKS.json schema...');
+    loggers.stopHook.info('🔄 Transforming to TASKS.json schema...');
 
     const migrationDate = new Date().toISOString();
     const taskIdCounter = Date.now();
@@ -333,7 +333,7 @@ class TaskMigrator {
 
     tasksData.metadata.total_tasks = tasksData.tasks.length;
 
-    loggers.stopHook.log(`✓ Transformed ${tasksData.tasks.length} tasks`);
+    loggers.stopHook.info(`✓ Transformed ${tasksData.tasks.length} tasks`);
     return tasksData;
   }
 
@@ -341,7 +341,7 @@ class TaskMigrator {
    * Generate auto-tasks for approved features
    */
   generateAutoTasks(tasksData) {
-    loggers.stopHook.log('🔄 Generating auto-tasks for approved features...');
+    loggers.stopHook.info('🔄 Generating auto-tasks for approved features...');
 
     let autoTasksGenerated = 0;
     const autoTaskIdCounter = Date.now() + 10000;
@@ -475,7 +475,7 @@ class TaskMigrator {
    * Validate the transformed data structure
    */
   validateTransformedData(tasksData) {
-    loggers.stopHook.log('🔍 Validating transformed data...');
+    loggers.stopHook.info('🔍 Validating transformed data...');
 
     // Check required fields
     if (!tasksData.project) {
@@ -507,7 +507,7 @@ class TaskMigrator {
       }
     }
 
-    loggers.stopHook.log('✓ Data validation passed');
+    loggers.stopHook.info('✓ Data validation passed');
   }
 
   /**
@@ -516,7 +516,7 @@ class TaskMigrator {
   async writeTasksFile(tasksData) {
     try {
       await FS.writeFile(this.tasksPath, JSON.stringify(tasksData, null, 2));
-      loggers.stopHook.log(`✓ TASKS.json written to ${this.tasksPath}`);
+      loggers.stopHook.info(`✓ TASKS.json written to ${this.tasksPath}`);
     } catch (_error) {
       throw new Error(`Failed to write TASKS.json: ${_error.message}`);
     }
@@ -599,8 +599,8 @@ if (require.main === module) {
   migrator
     .migrate()
     .then((result) => {
-      loggers.stopHook.log('\n📊 Migration Summary:');
-      loggers.stopHook.log(
+      loggers.stopHook.info('\n📊 Migration Summary:');
+      loggers.stopHook.info(
         { additionalData: [null, 2] },
         JSON.stringify(result.stats),
       );

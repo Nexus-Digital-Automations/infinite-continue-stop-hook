@@ -44,7 +44,7 @@ class CoverageArtifactsGenerator {
    */
   generate() {
     try {
-      loggers.stopHook.log('📦 Starting coverage artifacts generation...');
+      loggers.stopHook.info('📦 Starting coverage artifacts generation...');
 
       this.ensureDirectories();
       this.processCoverageReports();
@@ -62,9 +62,9 @@ class CoverageArtifactsGenerator {
 
       this.generateReadme();
 
-      loggers.stopHook.log(`✅ Coverage artifacts generated successfully`);
-      loggers.stopHook.log(`📁 Artifacts directory: ${this.options.outputDir}`);
-      loggers.stopHook.log(`📋 Total artifacts: ${this.artifacts.length}`);
+      loggers.stopHook.info(`✅ Coverage artifacts generated successfully`);
+      loggers.stopHook.info(`📁 Artifacts directory: ${this.options.outputDir}`);
+      loggers.stopHook.info(`📋 Total artifacts: ${this.artifacts.length}`);
     } catch (error) {
       loggers.stopHook.error(
         '❌ Failed to generate coverage artifacts:',
@@ -101,7 +101,7 @@ class CoverageArtifactsGenerator {
    * Process And organize coverage reports
    */
   processCoverageReports() {
-    loggers.stopHook.log('📊 Processing coverage reports...');
+    loggers.stopHook.info('📊 Processing coverage reports...');
 
     const coverageFiles = [
       { src: 'coverage-summary.json', type: 'summary', format: 'json' },
@@ -128,9 +128,9 @@ class CoverageArtifactsGenerator {
           description: this.getFileDescription(file.type),
         });
 
-        loggers.stopHook.log(`  ✓ Processed ${file.src}`);
+        loggers.stopHook.info(`  ✓ Processed ${file.src}`);
       } else {
-        loggers.stopHook.log(`  ⚠ Missing ${file.src}`);
+        loggers.stopHook.info(`  ⚠ Missing ${file.src}`);
       }
     }
 
@@ -149,7 +149,7 @@ class CoverageArtifactsGenerator {
         description: 'Interactive HTML coverage report',
       });
 
-      loggers.stopHook.log('  ✓ Processed HTML coverage report');
+      loggers.stopHook.info('  ✓ Processed HTML coverage report');
     }
   }
 
@@ -157,7 +157,7 @@ class CoverageArtifactsGenerator {
    * Generate summary artifacts for quick consumption
    */
   generateSummaryArtifacts() {
-    loggers.stopHook.log('📋 Generating summary artifacts...');
+    loggers.stopHook.info('📋 Generating summary artifacts...');
 
     const summaryPath = path.join(
       this.options.sourceDir,
@@ -165,7 +165,7 @@ class CoverageArtifactsGenerator {
     );
 
     if (!FS.existsSync(summaryPath)) {
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         '  ⚠ No coverage summary found, skipping summary artifacts',
       );
       return;
@@ -225,14 +225,14 @@ class CoverageArtifactsGenerator {
       description: 'Coverage summary in CSV format for spreadsheet tools',
     });
 
-    loggers.stopHook.log('  ✓ Generated summary artifacts');
+    loggers.stopHook.info('  ✓ Generated summary artifacts');
   }
 
   /**
    * Generate dashboard-specific artifacts
    */
   generateDashboardArtifacts() {
-    loggers.stopHook.log('📊 Generating dashboard artifacts...');
+    loggers.stopHook.info('📊 Generating dashboard artifacts...');
 
     const summaryPath = path.join(
       this.options.sourceDir,
@@ -240,7 +240,7 @@ class CoverageArtifactsGenerator {
     );
 
     if (!FS.existsSync(summaryPath)) {
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         '  ⚠ No coverage summary found, skipping dashboard artifacts',
       );
       return;
@@ -306,14 +306,14 @@ class CoverageArtifactsGenerator {
       description: 'InfluxDB line protocol format for time-series databases',
     });
 
-    loggers.stopHook.log('  ✓ Generated dashboard artifacts');
+    loggers.stopHook.info('  ✓ Generated dashboard artifacts');
   }
 
   /**
    * Generate CI-specific artifacts
    */
   generateCIArtifacts() {
-    loggers.stopHook.log('🚀 Generating CI artifacts...');
+    loggers.stopHook.info('🚀 Generating CI artifacts...');
 
     // Generate environment variables file for CI consumption;
     const summaryPath = path.join(
@@ -374,7 +374,7 @@ class CoverageArtifactsGenerator {
         description: 'GitHub Actions step outputs',
       });
 
-      loggers.stopHook.log('  ✓ Generated CI artifacts');
+      loggers.stopHook.info('  ✓ Generated CI artifacts');
     }
   }
 
@@ -382,7 +382,7 @@ class CoverageArtifactsGenerator {
    * Generate badge artifacts
    */
   generateBadgeArtifacts() {
-    loggers.stopHook.log('🏷️ Generating badge artifacts...');
+    loggers.stopHook.info('🏷️ Generating badge artifacts...');
 
     const summaryPath = path.join(
       this.options.sourceDir,
@@ -390,7 +390,7 @@ class CoverageArtifactsGenerator {
     );
 
     if (!FS.existsSync(summaryPath)) {
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         '  ⚠ No coverage summary found, skipping badge artifacts',
       );
       return;
@@ -446,14 +446,14 @@ class CoverageArtifactsGenerator {
       });
     });
 
-    loggers.stopHook.log('  ✓ Generated badge artifacts');
+    loggers.stopHook.info('  ✓ Generated badge artifacts');
   }
 
   /**
    * Create artifact manifest
    */
   createArtifactManifest() {
-    loggers.stopHook.log('📋 Creating artifact manifest...');
+    loggers.stopHook.info('📋 Creating artifact manifest...');
 
     const manifest = {
       metadata: this.metadata,
@@ -475,7 +475,7 @@ class CoverageArtifactsGenerator {
     const manifestPath = path.join(this.options.outputDir, 'manifest.json');
     FS.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
 
-    loggers.stopHook.log('  ✓ Created artifact manifest');
+    loggers.stopHook.info('  ✓ Created artifact manifest');
   }
 
   /**
@@ -528,7 +528,7 @@ Generated by Coverage Artifacts Generator v1.0.0
     const readmePath = path.join(this.options.outputDir, 'README.md');
     FS.writeFileSync(readmePath, readme);
 
-    loggers.stopHook.log('  ✓ Generated README');
+    loggers.stopHook.info('  ✓ Generated README');
   }
 
   /**

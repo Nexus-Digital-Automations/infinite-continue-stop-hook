@@ -103,7 +103,7 @@ async function setupFeaturesTestProject(_category = 'general') {
 
     // Create main application file;
     const indexJs = `
-loggers.stopHook.log('Features test application started');
+loggers.stopHook.info('Features test application started');
 
 // Simulate a test application for feature validation;
 class FeaturesTestApp {
@@ -114,18 +114,18 @@ class FeaturesTestApp {
 
   start() {
     this.status = 'running';
-    loggers.stopHook.log('Features application is running');
+    loggers.stopHook.info('Features application is running');
     return this.status;
 }
 
   addFeature(feature) {
     this.features.push(feature);
-    loggers.stopHook.log(\`Feature added: \${feature.title}\`);
+    loggers.stopHook.info(\`Feature added: \${feature.title}\`);
 }
 
   stop(_category = 'general') {
     this.status = 'stopped';
-    loggers.stopHook.log('Features application stopped');
+    loggers.stopHook.info('Features application stopped');
     return this.status;
 }
 }
@@ -168,7 +168,7 @@ app.start().then(() => {
 
     await fs.writeFile(FEATURES_PATH, JSON.stringify(initialFeatures, null, 2));
 
-    loggers.stopHook.log('Features test project setup completed');
+    loggers.stopHook.info('Features test project setup completed');
   } catch (error) {
     loggers.stopHook.error('Failed to setup features test project:', error);
     throw error;
@@ -178,7 +178,7 @@ app.start().then(() => {
 async function cleanupFeaturesTestProject(_category = 'general') {
   try {
     await fs.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
-    loggers.stopHook.log('Features test project cleanup completed');
+    loggers.stopHook.info('Features test project cleanup completed');
   } catch (error) {
     loggers.stopHook.error('Failed to cleanup features test project', error);
   }
@@ -302,7 +302,7 @@ describe('FEATURES.json System Validation Tests', () => {
         expect(found._category).toBe(feature._category);
       }
 
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         'Feature creation And listing validated successfully',
       );
     });
@@ -373,7 +373,7 @@ describe('FEATURES.json System Validation Tests', () => {
       );
       expect(nonOverriddenCriterion.description).toBe('Base requirement 2');
 
-      loggers.stopHook.log('Template override behavior validated successfully');
+      loggers.stopHook.info('Template override behavior validated successfully');
     });
 
     test('should validate multi-level template inheritance', async () => {
@@ -440,7 +440,7 @@ describe('FEATURES.json System Validation Tests', () => {
         expect(actualIds).toContain(expectedId);
       });
 
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         'Multi-level template inheritance validated successfully',
       );
     });
@@ -570,7 +570,7 @@ describe('FEATURES.json System Validation Tests', () => {
       expect(customCriterion2).toBeDefined();
       expect(customCriterion2.priority).toBe('high');
 
-      loggers.stopHook.log('Custom criteria addition validated successfully');
+      loggers.stopHook.info('Custom criteria addition validated successfully');
     });
 
     test('should validate custom criteria modification And removal', async () => {
@@ -740,7 +740,7 @@ describe('FEATURES.json System Validation Tests', () => {
         '2.0.0',
       );
 
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         'Template version compatibility validated successfully',
       );
     });
@@ -819,7 +819,7 @@ describe('FEATURES.json System Validation Tests', () => {
       expect(newCriterion).toBeDefined();
       expect(newCriterion._category).toBe('security');
 
-      loggers.stopHook.log('Template upgrade behavior validated successfully');
+      loggers.stopHook.info('Template upgrade behavior validated successfully');
     });
 
     test('should validate template dependency resolution', async () => {
@@ -899,7 +899,7 @@ describe('FEATURES.json System Validation Tests', () => {
         'Dependency Template',
       );
 
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         'Template dependency resolution validated successfully',
       );
     });
@@ -1029,7 +1029,7 @@ describe('FEATURES.json System Validation Tests', () => {
         (c) => c.id === 'api-specific',
       );
       if (API_CRITERION) {
-        loggers.stopHook.log(
+        loggers.stopHook.info(
           'API criterion evaluation:',
           API_CRITERION.conditions,
         );

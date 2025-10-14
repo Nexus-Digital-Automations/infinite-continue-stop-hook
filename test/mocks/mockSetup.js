@@ -259,7 +259,7 @@ class MockManager {
       }
     } catch (err) {
       // Fetch not available in this Node.js version, skip mocking
-      loggers.stopHook.log('Fetch not available for mocking:', err.message);
+      loggers.stopHook.info('Fetch not available for mocking:', err.message);
     }
   }
 
@@ -348,7 +348,7 @@ class MockManager {
       }
     } catch (err) {
       // Fetch not available, skip restoration
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         'Fetch not available for restoration:',
         err.message,
       );

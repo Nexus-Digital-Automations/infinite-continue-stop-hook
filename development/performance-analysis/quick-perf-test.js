@@ -86,7 +86,7 @@ class QuickPerfTest {
   }
 
   measureEndpoint(command, args = [], iterations = 3) {
-    loggers.stopHook.log(`Testing ${command}...`);
+    loggers.stopHook.info(`Testing ${command}...`);
     const times = [];
     let successCount = 0;
     const errors = [];
@@ -132,7 +132,7 @@ class QuickPerfTest {
   }
 
   runCriticalPathTest() {
-    loggers.stopHook.log('🚀 Running Critical Path Performance Test\n');
+    loggers.stopHook.info('🚀 Running Critical Path Performance Test\n');
 
     // Test core endpoints individually;
     const endpoints = [
@@ -147,14 +147,14 @@ class QuickPerfTest {
     ];
 
     for (const endpoint of endpoints) {
-      loggers.stopHook.log(`\n📊 Testing: ${endpoint.description}`);
+      loggers.stopHook.info(`\n📊 Testing: ${endpoint.description}`);
       this.results[endpoint.cmd] = this.measureEndpoint(
         endpoint.cmd,
         endpoint.args,
       );
 
       const result = this.results[endpoint.cmd];
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         `  ✅ Success Rate: ${result.successRate.toFixed(1)}%`,
       );
       loggers.app.info(
@@ -165,7 +165,7 @@ class QuickPerfTest {
       );
 
       if (result.errors.length > 0) {
-        loggers.stopHook.log(`  ❌ Errors: ${result.errors.length}`);
+        loggers.stopHook.info(`  ❌ Errors: ${result.errors.length}`);
       }
     }
 
@@ -295,9 +295,9 @@ function main() {
     const report = tester.generateQuickReport();
     const outputFile = tester.saveReport(report);
 
-    loggers.stopHook.log('\n\n📊 QUICK PERFORMANCE TEST RESULTS');
-    loggers.stopHook.log('===================================');
-    loggers.stopHook.log(
+    loggers.stopHook.info('\n\n📊 QUICK PERFORMANCE TEST RESULTS');
+    loggers.stopHook.info('===================================');
+    loggers.stopHook.info(
       `Total Endpoints Tested: ${report.summary.totalEndpoints}`,
     );
     loggers.app.info(
@@ -320,15 +320,15 @@ function main() {
     }
 
     if (report.recommendations.length > 0) {
-      loggers.stopHook.log('\n🔧 Key Recommendations:');
+      loggers.stopHook.info('\n🔧 Key Recommendations:');
       report.recommendations.forEach((rec, i) => {
-        loggers.stopHook.log(
+        loggers.stopHook.info(
           `  ${i + 1}. [${rec.priority}] ${rec.recommendation}`,
         );
       });
     }
 
-    loggers.stopHook.log(`\n📄 Full report saved to: ${outputFile}`);
+    loggers.stopHook.info(`\n📄 Full report saved to: ${outputFile}`);
   } catch (error) {
     loggers.stopHook.error('❌ Performance test failed:', error);
     throw error;

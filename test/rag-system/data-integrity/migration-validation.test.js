@@ -18,7 +18,7 @@ describe('RAG System Data Migration And Integrity', () => {
   let _backupManager;
 
   beforeAll(async () => {
-    loggers.stopHook.log('Setting up data integrity test environment...');
+    loggers.stopHook.info('Setting up data integrity test environment...');
 
     // Setup test migration directory
     _testMigrationPath = path.join(__dirname, '../../test-data/migration-test');
@@ -29,7 +29,7 @@ describe('RAG System Data Migration And Integrity', () => {
   });
 
   afterAll(async () => {
-    loggers.stopHook.log('Cleaning up data integrity test environment...');
+    loggers.stopHook.info('Cleaning up data integrity test environment...');
     try {
       await fs.rm(_testMigrationPath, { recursive: true, force: true });
     } catch (_error) {
@@ -101,7 +101,7 @@ const _migratedLessons = await ragSystem.getLessonsByMigrationId(
         expect(lesson.migration_timestamp).toBeDefined();
       }
 
-      loggers.stopHook.log(`Successfully migrated ${originalCount} lesson files`);
+      loggers.stopHook.info(`Successfully migrated ${originalCount} lesson files`);
       */
     });
 
@@ -292,7 +292,7 @@ const ERRORS = errorMigrationResult.errors;
       expect(hugeFilerror).toBeDefined();
       expect(hugeFil_error.error_type).toBe('file_too_large');
 
-      loggers.stopHook.log(`Migration completed with ${errorMigrationResult.errors.length} errors handled gracefully`);
+      loggers.stopHook.info(`Migration completed with ${errorMigrationResult.errors.length} errors handled gracefully`);
       */
     });
   });
@@ -361,7 +361,7 @@ const _searchResult = await ragSystem.searchLessons(
         expect(foundInSearch).toBe(true);
       }
 
-      loggers.stopHook.log('Data integrity validation passed all checks');
+      loggers.stopHook.info('Data integrity validation passed all checks');
       */
     });
 
@@ -409,7 +409,7 @@ const _corruptedLesson = corruptionResult.corrupted_items.find(
       expect(corruptedLesson.repair_suggestions).toBeDefined();
       expect(corruptedLesson.repair_suggestions).toContain('regenerate_embedding');
 
-      loggers.stopHook.log(`Detected ${corruptionResult.corrupted_items.length} corrupted items`);
+      loggers.stopHook.info(`Detected ${corruptionResult.corrupted_items.length} corrupted items`);
       */
     });
 
@@ -476,7 +476,7 @@ const _postRepairCheck = await ragSystem.detectDataCorruption();
       );
       expect(stillCorrupted).toBeUndefined();
 
-      loggers.stopHook.log('Automatic data repair completed successfully');
+      loggers.stopHook.info('Automatic data repair completed successfully');
       */
     });
   });
@@ -535,7 +535,7 @@ const _integrityResult = await ragSystem.validateBackupIntegrity(
       expect(integrityResult.is_valid).toBe(true);
       expect(integrityResult.checksum_verified).toBe(true);
 
-      loggers.stopHook.log(`Created backup ${backupResult.backup_id} with ${backupResult.lessons_backed_up} lessons`);
+      loggers.stopHook.info(`Created backup ${backupResult.backup_id} with ${backupResult.lessons_backed_up} lessons`);
       */
     });
 
@@ -622,7 +622,7 @@ const _removedLesson = await ragSystem.getLessonById(newLesson.lesson_id);
 const _searchResult = await ragSystem.searchLessons('restoration validation');
       expect(searchResult.results.length).toBeGreaterThan(0);
 
-      loggers.stopHook.log(`Restored ${restoreResult.lessons_restored} lessons from backup`);
+      loggers.stopHook.info(`Restored ${restoreResult.lessons_restored} lessons from backup`);
       */
     });
 
@@ -706,7 +706,7 @@ const _restoredNewLesson = await ragSystem.getLessonById(newLesson.lesson_id);
 const _nonExistentLesson = await ragSystem.getLessonById(anotherNewLesson.lesson_id);
       expect(nonExistentLesson.success).toBe(false); // Should not exist
 
-      loggers.stopHook.log('Point-in-time recovery completed successfully');
+      loggers.stopHook.info('Point-in-time recovery completed successfully');
       */
     });
   });

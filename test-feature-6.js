@@ -8,7 +8,7 @@ const { loggers } = require('./lib/logger');
 
 async function testLearningRecommendationEngine() {
   try {
-    loggers.stopHook.log(
+    loggers.stopHook.info(
       'Testing Feature 6: Learning Recommendation Engine...',
     );
 
@@ -37,7 +37,7 @@ async function testLearningRecommendationEngine() {
     };
 
     // Test 1: Generate learning recommendations
-    loggers.stopHook.log('\n1. Testing generateLearningRecommendations...');
+    loggers.stopHook.info('\n1. Testing generateLearningRecommendations...');
     const recommendations = await ragOps.generateLearningRecommendations(
       userContext,
       {
@@ -53,7 +53,7 @@ async function testLearningRecommendationEngine() {
     });
 
     // Test 2: Get trending lessons
-    loggers.stopHook.log('\n2. Testing getTrendingLessons...');
+    loggers.stopHook.info('\n2. Testing getTrendingLessons...');
     const trending = await ragOps.getTrendingLessons({
       timeRange: 'week',
       limit: 3,
@@ -66,7 +66,7 @@ async function testLearningRecommendationEngine() {
     });
 
     // Test 3: Get similar lessons (if we have any lessons)
-    loggers.stopHook.log('\n3. Testing getSimilarLessons...');
+    loggers.stopHook.info('\n3. Testing getSimilarLessons...');
     const similar = await ragOps.getSimilarLessons(1, {
       limit: 3,
       threshold: 0.6,
@@ -77,7 +77,7 @@ async function testLearningRecommendationEngine() {
     });
 
     // Test 4: Get recommendation analytics
-    loggers.stopHook.log('\n4. Testing getRecommendationAnalytics...');
+    loggers.stopHook.info('\n4. Testing getRecommendationAnalytics...');
     const analytics = await ragOps.getRecommendationAnalytics({
       timeRange: 30,
     });

@@ -165,7 +165,7 @@ class QualityLogger {
     const timestamp = new Date().toISOString();
 
     if (this.structured) {
-      loggers.stopHook.log(
+      loggers.stopHook.info(
         JSON.stringify({ timestamp, level, message, ...data }),
       );
     } else {
@@ -178,10 +178,10 @@ class QualityLogger {
         analysis: '🔬',
       }[level] || '📊';
 
-      loggers.stopHook.log(`${emoji} ${message}`);
+      loggers.stopHook.info(`${emoji} ${message}`);
 
       if (this.verbose && Object.keys(data).length > 0) {
-        loggers.stopHook.log(`   ${JSON.stringify(data, null, 2)}`);
+        loggers.stopHook.info(`   ${JSON.stringify(data, null, 2)}`);
       }
     }
   }
@@ -1239,12 +1239,12 @@ Environment Variables:
   const analyzer = new CodeQualityAnalyzer(options);
   try {
     const result = analyzer.analyze();
-    loggers.stopHook.log(`\n📊 Code Quality Analysis Complete:`);
+    loggers.stopHook.info(`\n📊 Code Quality Analysis Complete:`);
     loggers.app.info(
       `   Overall Score: ${result.overall_score}/100 (${result.quality_level})`,
     );
-    loggers.stopHook.log(`   Issues Found: ${result.issues.length}`);
-    loggers.stopHook.log(
+    loggers.stopHook.info(`   Issues Found: ${result.issues.length}`);
+    loggers.stopHook.info(
       `   Recommendations: ${result.recommendations.length}`,
     );
 

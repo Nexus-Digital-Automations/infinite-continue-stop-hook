@@ -6,20 +6,20 @@ async function testObjectivityEnforcement(agentId, category = 'general') {
   const tm = new TaskManager('./TODO.json');
   const data = await tm.readTodo();
 
-  loggers.stopHook.log('🔍 Audit Objectivity Enforcement Test Results');
-  loggers.stopHook.log('='.repeat(50));
-  loggers.stopHook.log('');
+  loggers.stopHook.info('🔍 Audit Objectivity Enforcement Test Results');
+  loggers.stopHook.info('='.repeat(50));
+  loggers.stopHook.info('');
 
   const taskId = 'error_1757786940145_4agh3myjq';
   const task = data.tasks.find((t) => t.id === taskId);
 
-  loggers.stopHook.log('📋 Task Details:');
-  loggers.stopHook.log(`   Task ID: ${task.id}`);
-  loggers.stopHook.log(`   Title: ${task.title}`);
-  loggers.stopHook.log(`   Category: ${task.task.category}`);
-  loggers.stopHook.log(`   Original Implementer: ${task.original_implementer}`);
-  loggers.stopHook.log(`   Current Status: ${task.status}`);
-  loggers.stopHook.log('');
+  loggers.stopHook.info('📋 Task Details:');
+  loggers.stopHook.info(`   Task ID: ${task.id}`);
+  loggers.stopHook.info(`   Title: ${task.title}`);
+  loggers.stopHook.info(`   Category: ${task.task.category}`);
+  loggers.stopHook.info(`   Original Implementer: ${task.original_implementer}`);
+  loggers.stopHook.info(`   Current Status: ${task.status}`);
+  loggers.stopHook.info('');
 
   const scenarios = [ {,
     name: '✅ Current Agent (Valid - Different from implementer)',
@@ -36,8 +36,8 @@ async function testObjectivityEnforcement(agentId, category = 'general') {
     },
   ];
 
-  loggers.stopHook.log('🧪 Testing Agent Claim Validation:');
-  loggers.stopHook.log('');
+  loggers.stopHook.info('🧪 Testing Agent Claim Validation:');
+  loggers.stopHook.info('');
 
   let passCount = 0;
   let totalTests = 0;
@@ -55,31 +55,31 @@ async function testObjectivityEnforcement(agentId, category = 'general') {
     if (actualResult === scenario.expected) passCount++;
     totalTests++;
 
-    loggers.stopHook.log(`${scenario.name}:`);
-    loggers.stopHook.log(`   Agent ID: ${scenario.agentId}`);
-    loggers.stopHook.log(`   Expected: ${scenario.expected}`);
-    loggers.stopHook.log(`   Actual: ${actualResult}`);
-    loggers.stopHook.log(`   Status: ${status}`);
+    loggers.stopHook.info(`${scenario.name}:`);
+    loggers.stopHook.info(`   Agent ID: ${scenario.agentId}`);
+    loggers.stopHook.info(`   Expected: ${scenario.expected}`);
+    loggers.stopHook.info(`   Actual: ${actualResult}`);
+    loggers.stopHook.info(`   Status: ${status}`);
 
     if (!validation.valid) {
-      loggers.stopHook.log(`   Reason: ${validation.errorResult.reason}`);
+      loggers.stopHook.info(`   Reason: ${validation.errorResult.reason}`);
     }
-    loggers.stopHook.log('');
+    loggers.stopHook.info('');
 });
 
-  loggers.stopHook.log('🎯 Test Summary:');
-  loggers.stopHook.log(`   Tests Passed: ${passCount}/${totalTests}`);
-  loggers.stopHook.log(
+  loggers.stopHook.info('🎯 Test Summary:');
+  loggers.stopHook.info(`   Tests Passed: ${passCount}/${totalTests}`);
+  loggers.stopHook.info(
     `   Success Rate: ${Math.round((passCount / totalTests) * 100)}%`
   );
-  loggers.stopHook.log('');
-  loggers.stopHook.log('🔒 Audit Objectivity System Status:');
+  loggers.stopHook.info('');
+  loggers.stopHook.info('🔒 Audit Objectivity System Status:');
   if (passCount === totalTests) {
-    loggers.stopHook.log(
+    loggers.stopHook.info(
       '   ✅ VERIFIED WORKING - All objectivity controls functioning correctly'
     );
 } else {
-    loggers.stopHook.log(
+    loggers.stopHook.info(
       '   ❌ ISSUES DETECTED - Objectivity controls need debugging'
     );
 }
