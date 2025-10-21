@@ -24,10 +24,10 @@
 
 ```bash
 # Get complete API documentation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" guide
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" guide
 
 # List all available methods
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" methods
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" methods
 ```
 
 ## 🔒 CLAUDE.md PROTECTION
@@ -81,7 +81,7 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 
 **OPTION 4: Emergency Stop - IMMEDIATE If Stop Hook Persists**
 - **TRIGGER IMMEDIATELY**: Stop hook persisting + no work remains = USE EMERGENCY STOP NOW
-- **COMMAND**: `timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" emergency-stop [AGENT_ID] "Stop hook persisting with no work remaining"`
+- **COMMAND**: `timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" emergency-stop [AGENT_ID] "Stop hook persisting with no work remaining"`
 - **DO NOT WAIT**: If stop hook keeps triggering and you have nothing to do, emergency stop IMMEDIATELY
 
 ### Task Status Guide:
@@ -217,7 +217,7 @@ All work must be committed and pushed before a task is marked as complete.
 
 ```bash
 # Create tasks for complex user requests
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task '{"title":"Specific Task Title", "description":"Detailed description with acceptance criteria", "type":"feature|error|test|audit", "priority":"normal|high|urgent"}'
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" create-task '{"title":"Specific Task Title", "description":"Detailed description with acceptance criteria", "type":"feature|error|test|audit", "priority":"normal|high|urgent"}'
 ```
 
 ## 🚨 FEATURES.MD MANAGEMENT PROTOCOL
@@ -426,19 +426,19 @@ When ALL criteria met, agent MUST complete multi-step authorization:
 
 ```bash
 # Step 1: Start authorization process
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" start-authorization [AGENT_ID]
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" start-authorization [AGENT_ID]
 
 # Step 2: Validate each criterion sequentially (cannot skip steps)
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] focused-codebase
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] security-validation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] linter-validation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] type-validation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] build-validation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] start-validation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] test-validation
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] focused-codebase
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] security-validation
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] linter-validation
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] type-validation
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] build-validation
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] start-validation
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] test-validation
 
 # Step 3: Complete authorization (only after all validations pass)
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" complete-authorization [AUTH_KEY]
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" complete-authorization [AUTH_KEY]
 ```
 
 **MANDATORY VALIDATION REQUIREMENTS:**
@@ -542,7 +542,7 @@ For ALL user requests, create tasks in TASKS.json via taskmanager-api.js to ensu
 
 ### Task Creation Command
 ```bash
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task '{"title":"Specific Task Title", "description":"Detailed description with acceptance criteria", "type":"feature|error|test|audit", "priority":"low|normal|high|urgent"}'
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" create-task '{"title":"Specific Task Title", "description":"Detailed description with acceptance criteria", "type":"feature|error|test|audit", "priority":"low|normal|high|urgent"}'
 ```
 
 ### Examples
@@ -572,57 +572,57 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 ### Agent Lifecycle Commands
 ```bash
 # Initialization + Learning Search
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [AGENT_ID]
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" search-lessons "current_task_context"
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" reinitialize [AGENT_ID]
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" search-lessons "current_task_context"
 ```
 
 ### Learning System Commands
 ```bash
 # Lesson Management
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" search-lessons "task_description_or_keywords"
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" store-lesson '{"title":"Implementation Pattern", "category":"feature_implementation", "content":"Detailed lesson", "context":"When this applies", "confidence_score":0.9}'
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" store-error '{"title":"Error Type", "error_type":"linter|build|runtime|integration", "message":"Error message", "resolution_method":"How fixed", "prevention_strategy":"How to prevent"}'
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" search-lessons "task_description_or_keywords"
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" store-lesson '{"title":"Implementation Pattern", "category":"feature_implementation", "content":"Detailed lesson", "context":"When this applies", "confidence_score":0.9}'
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" store-error '{"title":"Error Type", "error_type":"linter|build|runtime|integration", "message":"Error message", "resolution_method":"How fixed", "prevention_strategy":"How to prevent"}'
 
 # Advanced Search
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" search-lessons "task_keywords" '{"limit": 5, "threshold": 0.7}'
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" find-similar-errors "error_message" '{"limit": 3, "error_type": "runtime"}'
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" rag-analytics
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" search-lessons "task_keywords" '{"limit": 5, "threshold": 0.7}'
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" find-similar-errors "error_message" '{"limit": 3, "error_type": "runtime"}'
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" rag-analytics
 ```
 
 ### Task Management
 ```bash
 # Task Management Commands
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-task-stats
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-tasks-by-status approved
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-tasks-by-priority high
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-available-tasks [AGENT_ID]
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" get-task-stats
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" get-tasks-by-status approved
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" get-tasks-by-priority high
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" get-available-tasks [AGENT_ID]
 
 # Create Tasks
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task '{"title":"Task Title", "description":"Detailed description", "type":"error|feature|test|audit", "priority":"low|normal|high|urgent"}'
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" create-task '{"title":"Task Title", "description":"Detailed description", "type":"error|feature|test|audit", "priority":"low|normal|high|urgent"}'
 
 # Update Tasks
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" update-task <taskId> '{"status":"in-progress|completed|blocked", "progress_percentage":50}'
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" update-task <taskId> '{"status":"in-progress|completed|blocked", "progress_percentage":50}'
 ```
 
 ### Stop Authorization Commands
 ```bash
 # Verify readiness (checks user request fulfilled and no tasks remain)
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" verify-stop-readiness [AGENT_ID]
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" verify-stop-readiness [AGENT_ID]
 
 # Multi-step Authorization Process
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" start-authorization [AGENT_ID]
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] focused-codebase
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] security-validation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] linter-validation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] type-validation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] build-validation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] start-validation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] test-validation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" complete-authorization [AUTH_KEY]
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" start-authorization [AGENT_ID]
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] focused-codebase
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] security-validation
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] linter-validation
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] type-validation
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] build-validation
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] start-validation
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] test-validation
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" complete-authorization [AUTH_KEY]
 
 # Emergency Stop - USE IMMEDIATELY IF STOP HOOK PERSISTS WITH NO WORK
 # TRIGGER NOW: Stop hook persisting + no work = EMERGENCY STOP IMMEDIATELY
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" emergency-stop [AGENT_ID] "Stop hook persisting with no work remaining"
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" emergency-stop [AGENT_ID] "Stop hook persisting with no work remaining"
 ```
 
 ## ESSENTIAL COMMANDS
