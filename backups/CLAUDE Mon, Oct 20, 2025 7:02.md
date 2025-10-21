@@ -14,46 +14,10 @@
 9.  **📚 DOCUMENTATION-FIRST WORKFLOW**: Review docs/ folder BEFORE implementing features. Mark features "IN PROGRESS" in docs, research when uncertain (safe over sorry), write unit tests BEFORE next feature. Use TodoWrite to track: docs review → research → implementation → testing → docs update.
 </law>
 
-## 🔍 TASKMANAGER API SELF-DISCOVERY
-
-**WHEN YOU NEED INFORMATION ABOUT TASKMANAGER CAPABILITIES:**
-
-- **UNCERTAIN ABOUT COMMANDS?** → Use `guide` command to get full API documentation
-- **NEED LIST OF METHODS?** → Use `methods` command to see all available endpoints
-- **DON'T MEMORIZE** → Query the API itself when you need details
-
-```bash
-# Get complete API documentation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" guide
-
-# List all available methods
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" methods
-```
-
 ## 🔒 CLAUDE.md PROTECTION
 
 ❌ NEVER edit, modify, or change CLAUDE.md without explicit user permission
 ✅ ONLY edit when user explicitly requests specific changes to CLAUDE.md
-
-## 📊 WHEN TO USE TASKMANAGER INFORMATION COMMANDS
-
-**BEFORE STARTING WORK:**
-- Use `get-task-stats` → Understand overall workload and task distribution
-- Use `get-available-tasks [AGENT_ID]` → See what tasks are ready for you to claim
-- Use `get-tasks-by-status approved` → Find approved work when stop hook triggers
-
-**DURING WORK:**
-- Use `get-task <taskId>` → Get full details about a specific task
-- Use `update-task <taskId>` → Update progress at major milestones
-- Use `get-verification-requirements <taskId>` → Check what's needed to complete properly
-
-**WHEN UNCERTAIN:**
-- Use `guide` → Get comprehensive API documentation
-- Use `methods` → List all available commands
-- Use `get-agent-tasks [AGENT_ID]` → See all your assigned tasks
-
-**EMERGENCY SITUATIONS:**
-- Use `emergency-stop [AGENT_ID] "reason"` → When stop hook persists with no work
 
 ## 🔄 STOP HOOK RESPONSE PROTOCOL
 
@@ -67,11 +31,13 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 - ✅ If you were in the middle of something → Complete it
 
 **OPTION 2: Start New Work**
-- **FIRST**: Query TaskManager for current state
-  - Check `get-task-stats` to understand workload
-  - Check `get-available-tasks [AGENT_ID]` or `get-tasks-by-status approved` for ready work
-- **THEN**: Claim and work on highest priority task
-- **UPDATE**: Update task status as you progress
+```bash
+# Check for approved tasks in TASKS.json (approved = ready to work on)
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-tasks-by-status approved
+
+# Claim and work on highest priority task
+# Update task status as you progress
+```
 
 **OPTION 3: When Nothing Approved**
 - Review codebase for improvements
@@ -519,12 +485,7 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 **ALWAYS CREATE TASKS VIA TASKMANAGER FOR USER REQUESTS**
 
 ### Core Principle
-For ALL user requests, create tasks in TASKS.json via taskmanager-api.js to ensure proper tracking, progress monitoring, and work continuity across sessions.
-
-### Query First, Then Create
-- **BEFORE CREATING TASKS**: Use `get-task-stats` to see current task landscape
-- **CHECK FOR DUPLICATES**: Use `get-tasks-by-status` to avoid creating duplicate tasks
-- **UNDERSTAND WORKLOAD**: TaskManager tracks everything - query it to stay coordinated
+For ALL user requests, create tasks in TASKS.json via taskmanager-api.js to ensure proper tracking, progress monitoring, and work continuity.
 
 ### When to Create Tasks
 - ✅ **ALWAYS**: Complex requests requiring multiple steps
@@ -533,12 +494,6 @@ For ALL user requests, create tasks in TASKS.json via taskmanager-api.js to ensu
 - ✅ **ALWAYS**: Refactoring work
 - ✅ **ALWAYS**: Test creation or modification
 - ❌ **EXCEPTION**: Trivially simple requests (1-2 minute completion time)
-
-### Why TaskManager for Everything
-- **CONTINUITY**: Tasks persist across stop hook sessions
-- **COORDINATION**: Multiple agents can see and coordinate work
-- **TRACKING**: Complete visibility into what's done, in-progress, and pending
-- **ACCOUNTABILITY**: Full audit trail of all work performed
 
 ### Task Creation Command
 ```bash

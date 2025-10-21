@@ -20,8 +20,8 @@ const replacements = [
   // Catch block patterns
   { search: /catch \(error\)/g, replace: 'catch (_)' },
   { search: /catch\(error\)/g, replace: 'catch(_)' },
-  { search: /} catch \(error\) \{/g, replace: '} catch (error) {' },
-  { search: /} catch\(error\) \{/g, replace: '} catch (error) {' },
+  { search: /} catch \(error\) \{/g, replace: '} catch (_error) {' },
+  { search: /} catch\(error\) \{/g, replace: '} catch (_error) {' },
   { search: /catch \(parseError\)/g, replace: 'catch (_)' },
   { search: /catch\(parseError\)/g, replace: 'catch(_)' },
   { search: /catch \(err\)/g, replace: 'catch (_)' },
@@ -92,8 +92,8 @@ function fixFile(_filePath) {
     }
 
     return false;
-  } catch (error) {
-    console.error(`  ✗ Error processing ${_filePath}:`, error.message);
+  } catch (_error) {
+    console.error(`  ✗ Error processing ${_filePath}:`, _error.message);
     return false;
   }
 }
@@ -131,7 +131,7 @@ function main() {
     if (parseInt(beforeCount) === 0) {
       console.log('✅ All no-unused-vars violations resolved!');
     }
-  } catch (error) {
+  } catch {
     console.log('⚠️  Could not verify lint results');
   }
 

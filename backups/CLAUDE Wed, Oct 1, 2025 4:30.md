@@ -11,49 +11,12 @@
 6.  **USER FEEDBACK SUPREMACY**: User requests TRUMP EVERYTHING. Implement them immediately, but do so within the quality framework.
 7.  **🔄 STOP HOOK CONTINUATION**: When stop hook triggers, you ARE THE SAME AGENT. Finish current work OR check TASKS.json for new work. NEVER sit idle.
 8.  **🔒 CLAUDE.md PROTECTION**: NEVER edit CLAUDE.md without EXPLICIT user permission.
-9.  **📚 DOCUMENTATION-FIRST WORKFLOW**: Review docs/ folder BEFORE implementing features. Mark features "IN PROGRESS" in docs, research when uncertain (safe over sorry), write unit tests BEFORE next feature. Use TodoWrite to track: docs review → research → implementation → testing → docs update.
 </law>
-
-## 🔍 TASKMANAGER API SELF-DISCOVERY
-
-**WHEN YOU NEED INFORMATION ABOUT TASKMANAGER CAPABILITIES:**
-
-- **UNCERTAIN ABOUT COMMANDS?** → Use `guide` command to get full API documentation
-- **NEED LIST OF METHODS?** → Use `methods` command to see all available endpoints
-- **DON'T MEMORIZE** → Query the API itself when you need details
-
-```bash
-# Get complete API documentation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" guide
-
-# List all available methods
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" methods
-```
 
 ## 🔒 CLAUDE.md PROTECTION
 
 ❌ NEVER edit, modify, or change CLAUDE.md without explicit user permission
 ✅ ONLY edit when user explicitly requests specific changes to CLAUDE.md
-
-## 📊 WHEN TO USE TASKMANAGER INFORMATION COMMANDS
-
-**BEFORE STARTING WORK:**
-- Use `get-task-stats` → Understand overall workload and task distribution
-- Use `get-available-tasks [AGENT_ID]` → See what tasks are ready for you to claim
-- Use `get-tasks-by-status approved` → Find approved work when stop hook triggers
-
-**DURING WORK:**
-- Use `get-task <taskId>` → Get full details about a specific task
-- Use `update-task <taskId>` → Update progress at major milestones
-- Use `get-verification-requirements <taskId>` → Check what's needed to complete properly
-
-**WHEN UNCERTAIN:**
-- Use `guide` → Get comprehensive API documentation
-- Use `methods` → List all available commands
-- Use `get-agent-tasks [AGENT_ID]` → See all your assigned tasks
-
-**EMERGENCY SITUATIONS:**
-- Use `emergency-stop [AGENT_ID] "reason"` → When stop hook persists with no work
 
 ## 🔄 STOP HOOK RESPONSE PROTOCOL
 
@@ -67,11 +30,13 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 - ✅ If you were in the middle of something → Complete it
 
 **OPTION 2: Start New Work**
-- **FIRST**: Query TaskManager for current state
-  - Check `get-task-stats` to understand workload
-  - Check `get-available-tasks [AGENT_ID]` or `get-tasks-by-status approved` for ready work
-- **THEN**: Claim and work on highest priority task
-- **UPDATE**: Update task status as you progress
+```bash
+# Check for approved tasks in TASKS.json (approved = ready to work on)
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-tasks-by-status approved
+
+# Claim and work on highest priority task
+# Update task status as you progress
+```
 
 **OPTION 3: When Nothing Approved**
 - Review codebase for improvements
@@ -79,10 +44,11 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 - Verify all tests pass
 - Ensure documentation is current
 
-**OPTION 4: Emergency Stop - IMMEDIATE If Stop Hook Persists**
-- **TRIGGER IMMEDIATELY**: Stop hook persisting + no work remains = USE EMERGENCY STOP NOW
-- **COMMAND**: `timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" emergency-stop [AGENT_ID] "Stop hook persisting with no work remaining"`
-- **DO NOT WAIT**: If stop hook keeps triggering and you have nothing to do, emergency stop IMMEDIATELY
+**OPTION 4: Use Emergency Stop When Truly Complete**
+- **TRIGGER**: If stop hook triggers 2+ consecutive times AND no work remains AND no approved tasks
+- **COMMAND**: `timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" emergency-stop [AGENT_ID] "No remaining work - stop hook looping"`
+- **WHEN TO USE**: Only when you've exhausted all options 1-3 and stop hook continues triggering
+- **VERIFICATION**: Confirm no TodoWrite tasks, no approved tasks, no errors to fix, codebase is clean
 
 ### Task Status Guide:
 - **approved**: Ready to work on (claim these!)
@@ -114,9 +80,9 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 - "Checking TASKS.json for approved work..."
 - "Found 10 approved tasks. Starting with highest priority: [task title]..."
 - "All tasks complete. Running validation checks..."
-- "Stop hook persisting with no work remaining. Emergency stop NOW."
+- "Stop hook triggered 2+ times with no work remaining. Initiating emergency stop..."
 
-**YOU ARE THE SAME AGENT. STAY ACTIVE. KEEP WORKING. IF STOP HOOK PERSISTS WITH NO WORK - EMERGENCY STOP IMMEDIATELY.**
+**YOU ARE THE SAME AGENT. STAY ACTIVE. KEEP WORKING. USE EMERGENCY STOP ONLY WHEN TRULY NO WORK REMAINS.**
 
 # 🎯 CORE PERSONA: LEAD PRINCIPAL ENGINEER
 
@@ -280,37 +246,6 @@ EOF
 3. **SEEK APPROVAL**: Request user approval for any new feature suggestions
 4. **UPDATE FILE**: Add approved features to features.md before implementation
 5. **CREATE TASKS**: Generate project tasks only for features listed in file
-
-## 🚨 DOCUMENTATION-FIRST WORKFLOW
-
-**MANDATORY WORKFLOW FOR ALL FEATURE IMPLEMENTATION:**
-
-**ABSOLUTE REQUIREMENTS:**
-
-- **ALWAYS REVIEW DOCS/**: Check docs/ folder BEFORE implementing any feature
-- **MARK IN PROGRESS**: Update relevant docs to show feature "IN PROGRESS" before implementation
-- **RESEARCH FIRST**: If <100% certain how to implement, RESEARCH thoroughly - prioritize safe over sorry
-- **UNIT TESTS MANDATORY**: Write unit tests BEFORE moving to next feature - NO EXCEPTIONS
-- **USE TODOWRITE**: Track complete workflow in TodoWrite: docs review → research → implementation → testing → docs finalization
-
-**WORKFLOW ORDER:**
-
-1. Review relevant documentation in docs/ folder
-2. Mark feature as "IN PROGRESS" in documentation
-3. Research implementation approach if ANY uncertainty exists
-4. Implement feature with comprehensive logging
-5. Write unit tests for implemented feature
-6. Update documentation with final implementation details
-7. Verify all tests pass before moving to next feature
-
-**FORBIDDEN SHORTCUTS:**
-
-- ❌ NEVER skip documentation review
-- ❌ NEVER implement without research if uncertain
-- ❌ NEVER move to next feature without unit tests
-- ❌ NEVER forget to use TodoWrite for workflow tracking
-
-**Safe over sorry. Always.**
 
 ## 🚨 HUMBLE CODE VERIFICATION PROTOCOL
 
@@ -519,12 +454,7 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 **ALWAYS CREATE TASKS VIA TASKMANAGER FOR USER REQUESTS**
 
 ### Core Principle
-For ALL user requests, create tasks in TASKS.json via taskmanager-api.js to ensure proper tracking, progress monitoring, and work continuity across sessions.
-
-### Query First, Then Create
-- **BEFORE CREATING TASKS**: Use `get-task-stats` to see current task landscape
-- **CHECK FOR DUPLICATES**: Use `get-tasks-by-status` to avoid creating duplicate tasks
-- **UNDERSTAND WORKLOAD**: TaskManager tracks everything - query it to stay coordinated
+For ALL user requests, create tasks in TASKS.json via taskmanager-api.js to ensure proper tracking, progress monitoring, and work continuity.
 
 ### When to Create Tasks
 - ✅ **ALWAYS**: Complex requests requiring multiple steps
@@ -533,12 +463,6 @@ For ALL user requests, create tasks in TASKS.json via taskmanager-api.js to ensu
 - ✅ **ALWAYS**: Refactoring work
 - ✅ **ALWAYS**: Test creation or modification
 - ❌ **EXCEPTION**: Trivially simple requests (1-2 minute completion time)
-
-### Why TaskManager for Everything
-- **CONTINUITY**: Tasks persist across stop hook sessions
-- **COORDINATION**: Multiple agents can see and coordinate work
-- **TRACKING**: Complete visibility into what's done, in-progress, and pending
-- **ACCOUNTABILITY**: Full audit trail of all work performed
 
 ### Task Creation Command
 ```bash
@@ -620,9 +544,15 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] test-validation
 timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" complete-authorization [AUTH_KEY]
 
-# Emergency Stop - USE IMMEDIATELY IF STOP HOOK PERSISTS WITH NO WORK
-# TRIGGER NOW: Stop hook persisting + no work = EMERGENCY STOP IMMEDIATELY
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" emergency-stop [AGENT_ID] "Stop hook persisting with no work remaining"
+# Emergency Stop - USE WHEN STOP HOOK KEEPS LOOPING WITH NO WORK
+# REQUIRED: If stop hook triggers 2+ consecutive times AND you have:
+#   - No TodoWrite tasks remaining
+#   - No approved tasks in TASKS.json
+#   - No errors to fix
+#   - No improvements to make
+#   - Codebase is clean and perfect
+# THEN: Use emergency-stop to prevent infinite loop
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" emergency-stop [AGENT_ID] "No remaining work - stop hook looping with nothing to do"
 ```
 
 ## ESSENTIAL COMMANDS
