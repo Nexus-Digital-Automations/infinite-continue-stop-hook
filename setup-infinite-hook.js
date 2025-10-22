@@ -127,7 +127,7 @@ function question(prompt, category = 'general') {
   });
 }
 
-async function getProjectInfo(targetPath, category = 'general') {
+async function _getProjectInfo(targetPath, category = 'general') {
   // Try to detect project name from package.json or directory name
   let detectedName = path.basename(targetPath);
 
@@ -407,7 +407,7 @@ This validation ensures professional-grade delivery quality.`,
 }
 
 // Get all project directories to process;
-function getProjectDirectories(basePath, category = 'general') {
+function _getProjectDirectories(basePath, category = 'general') {
   if (!FS.existsSync(basePath) || !FS.statSync(basePath).isDirectory()) {
     return [];
   }
@@ -469,8 +469,8 @@ async function processProject(targetPath, category = 'general') {
 
     return { success: true, project: projectName };
   } catch (error) {
-    loggers.stopHook.error(`❌ ${projectName} - Error:`, _error.message);
-    return { success: false, project: projectName, error: _error.message };
+    loggers.stopHook.error(`❌ ${projectName} - Error:`, error.message);
+    return { success: false, project: projectName, error: error.message };
   }
 }
 
@@ -535,7 +535,7 @@ function migrateToFeatureBasedSystem(targetPath, category = 'general') {
       );
     }
   } catch (error) {
-    loggers.stopHook.info(`   ❌ Feature migration failed: ${_error.message}`);
+    loggers.stopHook.info(`   ❌ Feature migration failed: ${error.message}`);
     // Don't fail the entire setup for migration issues
   }
 }
@@ -712,7 +712,7 @@ function createFeatureFromPhaseGroup(group, category = 'general') {
     4: 'huginn',
     5: 'orchestrator',
   };
-  const CATEGORY = categoryMap[group.phase.major] || 'uncategorized';
+  const _CATEGORY = categoryMap[group.phase.major] || 'uncategorized';
 
   // Calculate status based on subtask statuses
   const statuses = group.tasks.map((t) => t.status);
@@ -827,7 +827,7 @@ async function main(category = 'general') {
       `Processing single project: ${path.basename(targetPath)}`,
     );
     const _result = await processProject(targetPath);
-    results.push(result);
+    results.push(_result);
 
     // Summary
 
@@ -905,8 +905,8 @@ async function main(category = 'general') {
       'node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/stop-hook.js"',
     );
   } catch (_) {
-    loggers.stopHook.error('\n❌ Batch setup error:', _error.message);
-    throw _error;
+    loggers.stopHook.error('\n❌ Batch setup error:', error.message);
+    throw error;
   } finally {
     rl.close();
   }

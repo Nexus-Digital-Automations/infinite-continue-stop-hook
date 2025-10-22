@@ -100,7 +100,7 @@ function analyzeConsoleUsage(_filePath) {
 
   // Check for existing logger imports
   for (const line of lines) {
-    for (const IMPORT_PATTERN of config.loggerImports.existing) {
+    for (const _IMPORT_PATTERN of config.loggerImports.existing) {
       if (
         line.includes("require('./lib/logger')") ||
         line.includes("require('./lib/utils/logger')")
@@ -139,7 +139,7 @@ function analyzeConsoleUsage(_filePath) {
  */
 function convertConsoleCall(consoleLine, fileContext) {
   const { originalLine, consoleMethod, indentation } = consoleLine;
-  const LOGGER_METHOD = config.consoleMappings[consoleMethod] || 'logger.info';
+  const _LOGGER_METHOD = config.consoleMappings[consoleMethod] || 'logger.info';
 
   // Determine appropriate logger based on file context;
   let loggerInstance = 'loggers.app';

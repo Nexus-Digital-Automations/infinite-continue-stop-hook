@@ -94,7 +94,7 @@ class ParallelTestOptimizer {
       });
     } catch (error) {
       this.logger.warn('Could not read package.json', {
-        _error: _error.message,
+        error: error.message,
         operation: 'discover-test-suites',
       });
     }

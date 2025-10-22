@@ -286,11 +286,11 @@ class NodeVersionPerformanceBenchmark {
       this.results.benchmarks.native_modules = {
         duration_ms: 0,
         status: 'failed',
-        _error: _error.message,
+        error: error.message,
       };
 
       loggers.stopHook.info(
-        `❌ Native modules benchmark failed: ${_error.message}`,
+        `❌ Native modules benchmark failed: ${error.message}`,
       );
     }
   }
@@ -622,8 +622,8 @@ ${this.results.recommendations?.map((r) => `- ${r}`).join('\n')}
 
       loggers.stopHook.info('\n✅ Benchmark suite completed successfully!');
     } catch (error) {
-      loggers.stopHook.error('❌ Benchmark suite failed:', _error.message);
-      throw new Error(`Benchmark suite failed: ${_error.message}`);
+      loggers.stopHook.error('❌ Benchmark suite failed:', error.message);
+      throw new Error(`Benchmark suite failed: ${error.message}`);
     }
   }
 }
