@@ -162,10 +162,22 @@ const fileLock = new FileLock();
 // Parse project root from --project-root flag or use current directory;
 const args = process.argv.slice(2);
 const projectRootIndex = args.indexOf('--project-root');
-const PROJECT_ROOT =
+
+// Get the raw project root value from command line arguments
+let projectRoot =
   projectRootIndex !== -1 && projectRootIndex + 1 < args.length
     ? args[projectRootIndex + 1]
     : process.cwd();
+
+// Detect and resolve shell variable literals that weren't evaluated by the shell
+// This handles cases where shell variables like $(pwd), $PWD, ${PWD} are passed as literal strings
+const shellVarPatterns = /^\$\(pwd\)$|^\$PWD$|^\$\{PWD\}$|^\(\$PWD\)$|^\(pwd\)$/i;
+if (shellVarPatterns.test(projectRoot.trim())) {
+  projectRoot = process.cwd();
+}
+
+// Normalize and resolve the path to handle relative paths and ensure absolute path
+const PROJECT_ROOT = path.resolve(projectRoot);
 const TASKS_PATH = path.join(PROJECT_ROOT, 'TASKS.json');
 
 // Parse --dry-run flag;
