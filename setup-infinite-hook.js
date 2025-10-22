@@ -112,7 +112,7 @@ const flags = {
   singleProject: args.includes('--single'),
 };
 
-function flag(_$2, category = 'general') {
+function _flag(_$2, _category = 'general') {
   return null;
 }
 
@@ -121,13 +121,13 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
-function question(prompt, category = 'general') {
+function question(prompt, _category = 'general') {
   return new Promise((resolve) => {
     rl.question(prompt, resolve);
   });
 }
 
-async function _getProjectInfo(targetPath, category = 'general') {
+async function _getProjectInfo(targetPath, _category = 'general') {
   // Try to detect project name from package.json or directory name
   let detectedName = path.basename(targetPath);
 
@@ -139,7 +139,7 @@ async function _getProjectInfo(targetPath, category = 'general') {
       if (packageJson.Name) {
         detectedName = packageJson.Name;
       }
-    } catch (error) {
+    } catch {
       // Ignore And use directory Name
     }
   }
@@ -240,7 +240,7 @@ function createProjectDirectories(targetPath, _category = 'general') {
 }
 
 // Check if FEATURES.json needs to be updated to new schema
-function needsTodoUpdate(todoPath, category = 'general') {
+function needsTodoUpdate(todoPath, _category = 'general') {
   if (!FS.existsSync(todoPath)) {
     return true;
   }
@@ -268,7 +268,7 @@ function needsTodoUpdate(todoPath, category = 'general') {
       `✓ ${path.basename(path.dirname(todoPath))} - FEATURES.json already up to date`,
     );
     return false;
-  } catch (error) {
+  } catch {
     loggers.app.info(
       `⚠️  ${path.basename(path.dirname(todoPath))} - FEATURES.json corrupted, will recreate`,
     );
@@ -407,7 +407,7 @@ This validation ensures professional-grade delivery quality.`,
 }
 
 // Get all project directories to process;
-function _getProjectDirectories(basePath, category = 'general') {
+function _getProjectDirectories(basePath, _category = 'general') {
   if (!FS.existsSync(basePath) || !FS.statSync(basePath).isDirectory()) {
     return [];
   }
@@ -434,7 +434,7 @@ function _getProjectDirectories(basePath, category = 'general') {
     });
 }
 
-async function processProject(targetPath, category = 'general') {
+async function processProject(targetPath, _category = 'general') {
   const projectName = path.basename(targetPath);
 
   loggers.stopHook.info(`\n=== Processing ${projectName} ===`);
@@ -478,7 +478,7 @@ async function processProject(targetPath, category = 'general') {
  * Migrate FEATURES.json to feature-based system (replaces dual features.json system)
  * @param {string} targetPath - Target project path
  */
-function migrateToFeatureBasedSystem(targetPath, category = 'general') {
+function migrateToFeatureBasedSystem(targetPath, _category = 'general') {
   const todoPath = path.join(targetPath, 'FEATURES.json');
   try {
     loggers.stopHook.info(`   🔄 Checking for feature-based migration...`);
@@ -545,7 +545,7 @@ function migrateToFeatureBasedSystem(targetPath, category = 'general') {
  * @param {Array} tasks - Current tasks array
  * @returns {Object} Analysis results
  */
-function analyzeTasksForFeatures(tasks, category = 'general') {
+function analyzeTasksForFeatures(tasks, _category = 'general') {
   const analysis = {
     phaseGroups: {},
     nonPhasedTasks: [],
@@ -589,7 +589,7 @@ function analyzeTasksForFeatures(tasks, category = 'general') {
  * @param {string} title - Task title
  * @returns {Object|null} Phase info or null
  */
-function extractPhaseFromTitle(title, category = 'general') {
+function extractPhaseFromTitle(title, _category = 'general') {
   if (!title) {
     return null;
   }
@@ -625,7 +625,7 @@ function extractPhaseFromTitle(title, category = 'general') {
  * @param {string} sampleTitle - Sample task title
  * @returns {string} Generated feature title
  */
-function generateFeatureTitle(phaseKey, sampleTitle, category = 'general') {
+function generateFeatureTitle(phaseKey, sampleTitle, _category = 'general') {
   // Extract feature name from task title
 
   // Use string parsing instead of regex to avoid security warnings
@@ -656,7 +656,7 @@ function generateFeatureTitle(phaseKey, sampleTitle, category = 'general') {
  * @param {Object} analysis - Task analysis results
  * @returns {Object} Migrated FEATURES.json structure
  */
-function convertToFeatureBasedSchema(todoData, analysis, category = 'general') {
+function convertToFeatureBasedSchema(todoData, analysis, _category = 'general') {
   const migrated = {
     ...todoData,
     features: [], // CRITICAL: User authorization required for feature additions
@@ -699,7 +699,7 @@ function convertToFeatureBasedSchema(todoData, analysis, category = 'general') {
  * @param {Object} group - Phase group data
  * @returns {Object} Feature object
  */
-function createFeatureFromPhaseGroup(group, category = 'general') {
+function createFeatureFromPhaseGroup(group, _category = 'general') {
   const timestamp = Date.now();
   const randomSuffix = Math.random().toString(36).substr(2, 9);
   const featureId = `feature_${timestamp}_${randomSuffix}`;
@@ -741,7 +741,7 @@ function createFeatureFromPhaseGroup(group, category = 'general') {
     title: group.feature_title,
     description: generateFeatureDescription(group),
     status: status,
-    category: category,
+    category: _CATEGORY,
     priority: priority,
     phase: group.phase,
     subtasks: group.tasks.map((t) => t.id),
@@ -760,7 +760,7 @@ function createFeatureFromPhaseGroup(group, category = 'general') {
  * @param {Object} group - Task group
  * @returns {string} Feature description
  */
-function generateFeatureDescription(group, category = 'general') {
+function generateFeatureDescription(group, _category = 'general') {
   if (group.tasks.length === 1) {
     return group.tasks[0].description || 'Feature description';
   }
@@ -782,12 +782,12 @@ function generateFeatureDescription(group, category = 'general') {
  * @param {Array} tasks - Task array
  * @returns {number} Completion percentage
  */
-function calculateCompletionPercentage(tasks, category = 'general') {
+function calculateCompletionPercentage(tasks, _category = 'general') {
   const completed = tasks.filter((t) => t.status === 'completed').length;
   return Math.round((completed / tasks.length) * 100);
 }
 
-async function main(category = 'general') {
+async function main(_category = 'general') {
   loggers.app.info(
     '=== Infinite Continue Stop Hook - Batch FEATURES.json Setup ===\n',
   );

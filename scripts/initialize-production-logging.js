@@ -198,7 +198,7 @@ async function initializeLogging() {
     console.error('\n❌ Production logging initialization failed:');
     console.error(`   Error: ${error.message}`);
     console.error(`   Stack: ${error.stack}`);
-    process.exit(1);
+    throw new Error(`Production logging initialization failed: ${error.message}`);
   }
 }
 
@@ -367,7 +367,7 @@ WantedBy=multi-user.target
 if (require.main === module) {
   initializeLogging().catch((error) => {
     console.error('Initialization failed:', error);
-    process.exit(1);
+    throw error;
   });
 }
 

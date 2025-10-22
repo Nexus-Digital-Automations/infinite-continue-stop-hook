@@ -411,7 +411,7 @@ class JestCiCdReporter {
           pct: summary.lines.pct,
         },
       };
-    } catch (_error) {
+    } catch {
       return { error: 'Failed to extract coverage summary' };
     }
   }
@@ -697,7 +697,7 @@ class JestCiCdReporter {
       return execSync('git describe --tags --abbrev=0', {
         encoding: 'utf8',
       }).trim();
-    } catch (_error) {
+    } catch {
       return null;
     }
   }
@@ -706,7 +706,7 @@ class JestCiCdReporter {
     try {
       const status = execSync('git status --porcelain', { encoding: 'utf8' });
       return status.trim().length > 0;
-    } catch (_error) {
+    } catch {
       return false;
     }
   }
@@ -716,7 +716,7 @@ class JestCiCdReporter {
       return execSync('git config --get remote.origin.url', {
         encoding: 'utf8',
       }).trim();
-    } catch (_error) {
+    } catch {
       return null;
     }
   }
@@ -746,7 +746,7 @@ class JestCiCdReporter {
   getTotalMemory() {
     try {
       return require('os').totalmem();
-    } catch (_error) {
+    } catch {
       return null;
     }
   }
@@ -754,7 +754,7 @@ class JestCiCdReporter {
   getAvailableMemory() {
     try {
       return require('os').freemem();
-    } catch (_error) {
+    } catch {
       return null;
     }
   }

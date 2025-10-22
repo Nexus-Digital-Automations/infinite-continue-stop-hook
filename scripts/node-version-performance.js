@@ -11,7 +11,7 @@
 
 const FS = require('fs');
 const path = require('path');
-const { execSync, spawn } = require('child_process');
+const { execSync: _execSync, spawn: _spawn } = require('child_process');
 const os = require('os');
 const { createLogger } = require('../lib/utils/logger');
 const { loggers } = require('../lib/logger');
@@ -156,7 +156,7 @@ class NodeVersionPerformanceBenchmark {
       );
     }
 
-    const RESULTS = await Promise.all(promises);
+    const _RESULTS = await Promise.all(promises);
 
     // Async/await operations;
     const asyncOperations = (count) => {

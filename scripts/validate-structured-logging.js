@@ -736,13 +736,15 @@ async function main() {
   const validator = new StructuredLoggingValidator();
   const success = await validator.validate();
 
-  process.exit(success ? 0 : 1);
+  if (!success) {
+    throw new Error('Validation failed');
+  }
 }
 
 if (require.main === module) {
   main().catch((error) => {
     console.error('Validation failed:', error);
-    process.exit(1);
+    throw error;
   });
 }
 

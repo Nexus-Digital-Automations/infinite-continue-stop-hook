@@ -12,7 +12,7 @@
 
 const FS = require('fs');
 const path = require('path');
-const { execSync, spawn } = require('child_process');
+const { execSync: _execSync, spawn: _spawn } = require('child_process');
 const os = require('os');
 const { createLogger } = require('../lib/utils/logger');
 const { loggers } = require('../lib/logger');
@@ -346,7 +346,7 @@ class ParallelTestOptimizer {
    * Calculate critical path through test execution
    */
   calculateCriticalPath() {
-    const ALL_GROUPS = [
+    const _ALL_GROUPS = [
       ...this.executionPlan.parallel_groups,
       ...this.executionPlan.sequential_tests,
     ];
