@@ -544,7 +544,7 @@ class TestPerformanceMonitor {
     if (FS.existsSync(CONFIG.paths.trends)) {
       try {
         trends = JSON.parse(FS.readFileSync(CONFIG.paths.trends, 'utf8'));
-      } catch (error) {
+      } catch (_error) {
         PerformanceLogger.warning(
           'Could not load existing trends, starting fresh',
         );
@@ -713,7 +713,7 @@ class TestPerformanceMonitor {
           encoding: 'utf8',
         }).trim(),
       };
-    } catch (error) {
+    } catch (_error) {
       return { commit: 'unknown', branch: 'unknown', author: 'unknown' };
     }
   }

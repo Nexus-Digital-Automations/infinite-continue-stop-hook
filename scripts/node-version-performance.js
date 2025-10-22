@@ -60,9 +60,9 @@ class NodeVersionPerformanceBenchmark {
     const start = process.hrtime.bigint();
 
     // Mathematical computations;
-    const _result = 0;
+    let _result = 0;
     for (let i = 0; i < iterations; i++) {
-      result += Math.sqrt(i) * Math.sin(i) * Math.cos(i);
+      _result += Math.sqrt(i) * Math.sin(i) * Math.cos(i);
     }
 
     const end = process.hrtime.bigint();
@@ -72,7 +72,7 @@ class NodeVersionPerformanceBenchmark {
       iterations,
       duration_ms: duration,
       operations_per_second: Math.round(iterations / (duration / 1000)),
-      result_hash: Math.round(result % 1000000),
+      result_hash: Math.round(_result % 1000000),
     };
 
     this.logger.info('CPU benchmark completed', {
@@ -282,7 +282,7 @@ class NodeVersionPerformanceBenchmark {
       loggers.app.info(
         `✅ Native modules benchmark completed: ${duration.toFixed(2)}ms`,
       );
-    } catch (_) {
+    } catch (error) {
       this.results.benchmarks.native_modules = {
         duration_ms: 0,
         status: 'failed',
@@ -621,7 +621,7 @@ ${this.results.recommendations?.map((r) => `- ${r}`).join('\n')}
       this.displaySummary();
 
       loggers.stopHook.info('\n✅ Benchmark suite completed successfully!');
-    } catch (_) {
+    } catch (error) {
       loggers.stopHook.error('❌ Benchmark suite failed:', _error.message);
       throw new Error(`Benchmark suite failed: ${_error.message}`);
     }

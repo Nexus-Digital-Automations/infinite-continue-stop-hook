@@ -139,7 +139,7 @@ async function getProjectInfo(targetPath, category = 'general') {
       if (packageJson.Name) {
         detectedName = packageJson.Name;
       }
-    } catch (_) {
+    } catch (error) {
       // Ignore And use directory Name
     }
   }
@@ -268,7 +268,7 @@ function needsTodoUpdate(todoPath, category = 'general') {
       `✓ ${path.basename(path.dirname(todoPath))} - FEATURES.json already up to date`,
     );
     return false;
-  } catch (_) {
+  } catch (error) {
     loggers.app.info(
       `⚠️  ${path.basename(path.dirname(todoPath))} - FEATURES.json corrupted, will recreate`,
     );
@@ -468,7 +468,7 @@ async function processProject(targetPath, category = 'general') {
     }
 
     return { success: true, project: projectName };
-  } catch (_) {
+  } catch (error) {
     loggers.stopHook.error(`❌ ${projectName} - Error:`, _error.message);
     return { success: false, project: projectName, error: _error.message };
   }
@@ -534,7 +534,7 @@ function migrateToFeatureBasedSystem(targetPath, category = 'general') {
         `   🗑️  Removed features.json (dual system eliminated)`,
       );
     }
-  } catch (_) {
+  } catch (error) {
     loggers.stopHook.info(`   ❌ Feature migration failed: ${_error.message}`);
     // Don't fail the entire setup for migration issues
   }

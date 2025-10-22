@@ -615,7 +615,7 @@ class TestNotificationSystem {
   getGitCommit() {
     try {
       return execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim();
-    } catch (error) {
+    } catch (_error) {
       return 'unknown';
     }
   }

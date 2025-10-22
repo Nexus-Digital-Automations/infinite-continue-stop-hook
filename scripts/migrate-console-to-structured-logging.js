@@ -210,14 +210,14 @@ if (require.main === module) {
     const migrator = new ConsoleToStructuredMigrator();
     const _result = migrator.migrate();
 
-    if (result.skippedFiles > 0) {
+    if (_result.skippedFiles > 0) {
       throw new Error(
-        `Migration completed with ${result.skippedFiles} skipped files`,
+        `Migration completed with ${_result.skippedFiles} skipped files`,
       );
     }
-  } catch (_) {
-    loggers.app.error('Migration failed', { error: _error.message });
-    throw new Error(`Migration failed: ${_error.message}`);
+  } catch (error) {
+    loggers.app.error('Migration failed', { error: error.message });
+    throw new Error(`Migration failed: ${error.message}`);
   }
 }
 

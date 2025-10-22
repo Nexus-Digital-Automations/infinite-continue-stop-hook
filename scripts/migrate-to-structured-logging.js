@@ -88,11 +88,11 @@ function findJavaScriptFiles(rootDir) {
  * Analyze console usage in a file
  */
 function analyzeConsoleUsage(_filePath) {
-  const content = FS.readFileSync(filePath, 'utf8');
+  const content = FS.readFileSync(_filePath, 'utf8');
   const lines = content.split('\n');
 
   const usage = {
-    filePath,
+    filePath: _filePath,
     consoleLines: [],
     hasLoggerImport: false,
     importType: null,
@@ -206,7 +206,7 @@ function convertConsoleCall(consoleLine, fileContext) {
 
     // Default case
     return `${indentation}${loggerInstance}.${consoleMethod.split('.')[1]}(${args});`;
-  } catch (_) {
+  } catch (error) {
     console.warn(
       `Could not parse console call in ${fileContext.filePath}:${consoleLine.lineNumber} - keeping original`,
     );
@@ -293,7 +293,7 @@ function main() {
         analysisResults.push(usage);
         totalConsoleLines += usage.consoleLines.length;
       }
-    } catch (_) {
+    } catch (error) {
       console.warn(`⚠️  Could not analyze ${file}: ${error.message}`);
     }
   }
@@ -347,14 +347,14 @@ function main() {
   for (const usage of analysisResults) {
     try {
       const _result = migrateFile(usage);
-      if (result.success && result.changes > 0) {
+      if (_result.success && _result.changes > 0) {
         migratedFiles++;
-        totalChanges += result.changes;
+        totalChanges += _result.changes;
         console.log(
-          `✅ ${path.relative(rootDir, usage.filePath)}: ${result.message}`,
+          `✅ ${path.relative(rootDir, usage.filePath)}: ${_result.message}`,
         );
       }
-    } catch (_) {
+    } catch (error) {
       console.error(`❌ Failed to migrate ${usage.filePath}: ${error.message}`);
     }
   }
@@ -372,7 +372,7 @@ function main() {
     console.log('\n🔍 Running linter to check for issues...');
     execSync('npm run lint', { stdio: 'inherit' });
     console.log('✅ Linter passed - migration successful!');
-  } catch (_) {
+  } catch (error) {
     console.warn('⚠️  Linter found issues - you may need to fix them manually');
   }
 }

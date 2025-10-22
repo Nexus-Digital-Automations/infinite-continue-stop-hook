@@ -40,7 +40,7 @@ function findUtilityFiles() {
     try {
       const command = `find . -name "${pattern}" -type f -not -path "./node_modules/*" -not -path "./coverage/*" -not -path "./.git/*"`;
       const _output = execSync(command, { encoding: 'utf8' });
-      const foundFiles = output
+      const foundFiles = _output
         .trim()
         .split('\n')
         .filter((f) => f && f.endsWith('.js'));
@@ -81,7 +81,7 @@ function addSecurityExemption(_filePath) {
     fs.writeFileSync(_filePath, newContent);
     console.log(`  ✓ Added exemption: ${path.basename(_filePath)}`);
     return true;
-  } catch {
+  } catch (error) {
     console.error(`  ❌ Error processing ${_filePath}: ${error.message}`);
     return false;
   }

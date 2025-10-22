@@ -1361,7 +1361,7 @@
         "general"
       ],
       "created_at": "2025-09-30T19:32:21.892Z",
-      "updated_at": "2025-10-21T01:48:01.093Z",
+      "updated_at": "2025-10-21T15:18:34.508Z",
       "created_by": "manual_creation",
       "verificationGate": {
         "status": "pending",
@@ -1371,9 +1371,12 @@
         "verifiedBy": null
       },
       "metadata": {
-        "auto_generated": false
+        "current_errors": 81,
+        "current_warnings": 227,
+        "total_issues": 308,
+        "reduction_from_531": "42%"
       },
-      "progress_percentage": 85
+      "progress_percentage": 90
     }
   ],
   "completed_tasks": [
@@ -1886,7 +1889,7 @@
   "metadata": {
     "version": "2.0.0",
     "created": "2025-09-22T06:19:00.000Z",
-    "updated": "2025-10-21T01:48:01.093Z",
+    "updated": "2025-10-21T15:18:34.508Z",
     "total_tasks": 21,
     "tasks_by_type": {
       "error": 0,

@@ -593,7 +593,7 @@ class StructuredLoggingValidator {
       if (passed) {
         this.passedCriteria++;
       }
-    } catch {
+    } catch (error) {
       console.log(
         `${number.toString().padStart(2, '0')}. ❌ ERROR - ${description}`,
       );
