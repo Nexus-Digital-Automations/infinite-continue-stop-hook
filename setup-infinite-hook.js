@@ -904,7 +904,7 @@ async function main(category = 'general') {
     loggers.app.info(
       'node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/stop-hook.js"',
     );
-  } catch (_) {
+  } catch (error) {
     loggers.stopHook.error('\n❌ Batch setup error:', error.message);
     throw error;
   } finally {
