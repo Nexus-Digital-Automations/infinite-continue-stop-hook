@@ -12,7 +12,59 @@
 7.  **🔄 STOP HOOK CONTINUATION**: When stop hook triggers, you ARE THE SAME AGENT. Finish current work OR check TASKS.json for new work. NEVER sit idle.
 8.  **🔒 CLAUDE.md PROTECTION**: NEVER edit CLAUDE.md without EXPLICIT user permission.
 9.  **📚 DOCUMENTATION-FIRST WORKFLOW**: Review docs/ folder BEFORE implementing features. Mark features "IN PROGRESS" in docs, research when uncertain (safe over sorry), write unit tests BEFORE next feature. Use TodoWrite to track: docs review → research → implementation → testing → docs update.
+10. **🔴 TASKMANAGER-FIRST MANDATE**: ALWAYS use TaskManager API (`/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js`) for ALL task operations. Query task status BEFORE starting work, update progress DURING work, store lessons AFTER completion. TaskManager is the SINGLE SOURCE OF TRUTH for all project tasks.
 </law>
+
+## 🔴 TASKMANAGER-FIRST MANDATE
+
+**ABSOLUTE REQUIREMENT - TASKMANAGER API MUST BE USED FOR ALL TASK OPERATIONS**
+
+**UNIVERSAL TASKMANAGER PATH:**
+```
+/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js
+```
+
+**MANDATORY TASKMANAGER USAGE POINTS:**
+
+1. **🔴 BEFORE STARTING ANY WORK**:
+   - Query `get-task-stats` to understand current workload
+   - Query `get-available-tasks [AGENT_ID]` to see claimable tasks
+   - Query `get-tasks-by-status approved` to find approved work
+   - **NEVER START WORK WITHOUT QUERYING TASKMANAGER FIRST**
+
+2. **🔴 DURING ALL WORK**:
+   - Update task status with `update-task <taskId>` at major milestones
+   - Use `get-task <taskId>` to verify requirements and acceptance criteria
+   - Query `get-verification-requirements <taskId>` before marking complete
+   - **KEEP TASKMANAGER UPDATED WITH REAL-TIME PROGRESS**
+
+3. **🔴 AFTER COMPLETING WORK**:
+   - Store lessons learned with `store-lesson` command
+   - Store error resolutions with `store-error` command
+   - Mark task complete with `update-task <taskId> '{"status":"completed"}'`
+   - **NEVER FINISH WORK WITHOUT UPDATING TASKMANAGER**
+
+4. **🔴 WHEN STOP HOOK TRIGGERS**:
+   - IMMEDIATELY query TaskManager for current state
+   - Check for in-progress tasks with `get-agent-tasks [AGENT_ID]`
+   - Find new work with `get-tasks-by-status approved`
+   - **TASKMANAGER TELLS YOU WHAT TO DO NEXT**
+
+**FORBIDDEN ACTIONS:**
+- ❌ NEVER start work without consulting TaskManager
+- ❌ NEVER complete work without updating TaskManager
+- ❌ NEVER make task decisions without querying TaskManager
+- ❌ NEVER skip lesson storage after task completion
+- ❌ NEVER ignore TaskManager when stop hook triggers
+
+**REQUIRED ACTIONS:**
+- ✅ ALWAYS query TaskManager before starting new work
+- ✅ ALWAYS update TaskManager during work progress
+- ✅ ALWAYS store lessons and errors in TaskManager
+- ✅ ALWAYS use 10-second timeout for ALL TaskManager API calls
+- ✅ ALWAYS treat TaskManager as the single source of truth
+
+**TASKMANAGER IS MANDATORY - NOT OPTIONAL**
 
 ## 🔍 TASKMANAGER API SELF-DISCOVERY
 
@@ -59,6 +111,14 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 
 **WHEN STOP HOOK TRIGGERS - YOU MUST TAKE ACTION:**
 
+**🔴 MANDATORY FIRST STEP: QUERY TASKMANAGER IMMEDIATELY**
+```bash
+# REQUIRED: Check TaskManager status BEFORE deciding what to do
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" get-task-stats
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" get-agent-tasks [AGENT_ID]
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" get-tasks-by-status approved
+```
+
 ### Immediate Actions (Choose One):
 
 **OPTION 1: Continue Current Work**
@@ -67,11 +127,13 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 - ✅ If you were in the middle of something → Complete it
 
 **OPTION 2: Start New Work**
-- **FIRST**: Query TaskManager for current state
+- **🔴 MANDATORY FIRST**: Query TaskManager for current state (DO NOT SKIP)
   - Check `get-task-stats` to understand workload
   - Check `get-available-tasks [AGENT_ID]` or `get-tasks-by-status approved` for ready work
-- **THEN**: Claim and work on highest priority task
-- **UPDATE**: Update task status as you progress
+  - **TaskManager is the ONLY source for determining what work to do**
+- **THEN**: Claim and work on highest priority task from TaskManager
+- **🔴 MANDATORY UPDATE**: Update task status in TaskManager as you progress
+- **🔴 MANDATORY COMPLETION**: Store lessons and mark complete in TaskManager when done
 
 **OPTION 3: When Nothing Approved**
 - Review codebase for improvements
@@ -516,15 +578,15 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 
 ## 🚨 MANDATORY TASKMANAGER TASK CREATION
 
-**ALWAYS CREATE TASKS VIA TASKMANAGER FOR USER REQUESTS**
+**🔴 ALWAYS CREATE TASKS VIA TASKMANAGER FOR USER REQUESTS - NO EXCEPTIONS**
 
 ### Core Principle
 For ALL user requests, create tasks in TASKS.json via taskmanager-api.js to ensure proper tracking, progress monitoring, and work continuity across sessions.
 
-### Query First, Then Create
-- **BEFORE CREATING TASKS**: Use `get-task-stats` to see current task landscape
-- **CHECK FOR DUPLICATES**: Use `get-tasks-by-status` to avoid creating duplicate tasks
-- **UNDERSTAND WORKLOAD**: TaskManager tracks everything - query it to stay coordinated
+### 🔴 Query First, Then Create (MANDATORY)
+- **🔴 BEFORE CREATING TASKS**: Use `get-task-stats` to see current task landscape (REQUIRED)
+- **🔴 CHECK FOR DUPLICATES**: Use `get-tasks-by-status` to avoid creating duplicate tasks (REQUIRED)
+- **🔴 UNDERSTAND WORKLOAD**: TaskManager tracks everything - query it to stay coordinated (REQUIRED)
 
 ### When to Create Tasks
 - ✅ **ALWAYS**: Complex requests requiring multiple steps
@@ -534,11 +596,12 @@ For ALL user requests, create tasks in TASKS.json via taskmanager-api.js to ensu
 - ✅ **ALWAYS**: Test creation or modification
 - ❌ **EXCEPTION**: Trivially simple requests (1-2 minute completion time)
 
-### Why TaskManager for Everything
-- **CONTINUITY**: Tasks persist across stop hook sessions
-- **COORDINATION**: Multiple agents can see and coordinate work
-- **TRACKING**: Complete visibility into what's done, in-progress, and pending
-- **ACCOUNTABILITY**: Full audit trail of all work performed
+### 🔴 Why TaskManager for Everything (CRITICAL UNDERSTANDING)
+- **🔴 CONTINUITY**: Tasks persist across stop hook sessions - YOU ARE THE SAME AGENT
+- **🔴 COORDINATION**: Multiple agents can see and coordinate work - PREVENTS CONFLICTS
+- **🔴 TRACKING**: Complete visibility into what's done, in-progress, and pending - SINGLE SOURCE OF TRUTH
+- **🔴 ACCOUNTABILITY**: Full audit trail of all work performed - NOTHING GETS LOST
+- **🔴 MANDATORY**: Not using TaskManager means WORK IS INVISIBLE and will be LOST
 
 ### Task Creation Command
 ```bash
@@ -565,9 +628,14 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 4. **Track Progress** → Update task status as work progresses
 5. **Mark Complete** → Update task status when finished
 
-## TASKMANAGER API REFERENCE
+## 🔴 TASKMANAGER API REFERENCE - MANDATORY USAGE
 
-**ALL COMMANDS USE 10-SECOND TIMEOUT** - Path: `/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js`
+**🔴 ALL COMMANDS USE 10-SECOND TIMEOUT - NO EXCEPTIONS**
+
+**UNIVERSAL TASKMANAGER PATH (USE THIS ALWAYS):**
+```
+/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js
+```
 
 ### Agent Lifecycle Commands
 ```bash
