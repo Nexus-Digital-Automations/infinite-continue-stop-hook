@@ -112,72 +112,21 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 
 **WHEN STOP HOOK TRIGGERS - YOU MUST TAKE ACTION:**
 
-**🔴 MANDATORY FIRST STEP: QUERY TASKMANAGER IMMEDIATELY**
-```bash
-# REQUIRED: Check TaskManager status BEFORE deciding what to do
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" get-task-stats
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" get-agent-tasks [AGENT_ID]
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" get-tasks-by-status approved
-```
+**🔴 MANDATORY FIRST**: Query TaskManager (use `$TM get-task-stats`, `$TM get-agent-tasks [AGENT_ID]`, `$TM get-tasks-by-status approved` - see [TaskManager API Reference](#-taskmanager-api-reference---mandatory-usage))
 
-### Immediate Actions (Choose One):
+### Immediate Actions:
 
-**OPTION 1: Continue Current Work**
-- ✅ If you have TodoWrite tasks → Complete them ALL
-- ✅ If you have in-progress code changes → Finish them
-- ✅ If you were in the middle of something → Complete it
+**OPTION 1**: Continue current TodoWrite tasks or in-progress work
+**OPTION 2**: Query TaskManager for current state → Claim highest priority approved task → Update status during work → Store lessons when complete
+**OPTION 3**: If nothing approved → Review codebase, check linting/security, verify tests, update docs
+**OPTION 4**: If stop hook persists with no work → `$TM emergency-stop [AGENT_ID] "reason"` IMMEDIATELY
 
-**OPTION 2: Start New Work**
-- **🔴 MANDATORY FIRST**: Query TaskManager for current state (DO NOT SKIP)
-  - Check `get-task-stats` to understand workload
-  - Check `get-available-tasks [AGENT_ID]` or `get-tasks-by-status approved` for ready work
-  - **TaskManager is the ONLY source for determining what work to do**
-- **THEN**: Claim and work on highest priority task from TaskManager
-- **🔴 MANDATORY UPDATE**: Update task status in TaskManager as you progress
-- **🔴 MANDATORY COMPLETION**: Store lessons and mark complete in TaskManager when done
+**Task Statuses**: approved (work on these) | suggested (awaiting approval) | completed (done) | assigned (claimed by others)
 
-**OPTION 3: When Nothing Approved**
-- Review codebase for improvements
-- Check for linting/security issues
-- Verify all tests pass
-- Ensure documentation is current
+**ERROR/BUG EXCEPTION**: ERROR tasks, linting errors, build errors, test failures, and security vulnerabilities can be fixed IMMEDIATELY without approval. FEATURE tasks and refactoring require "approved" status.
 
-**OPTION 4: Emergency Stop - IMMEDIATE If Stop Hook Persists**
-- **TRIGGER IMMEDIATELY**: Stop hook persisting + no work remains = USE EMERGENCY STOP NOW
-- **COMMAND**: `timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" emergency-stop [AGENT_ID] "Stop hook persisting with no work remaining"`
-- **DO NOT WAIT**: If stop hook keeps triggering and you have nothing to do, emergency stop IMMEDIATELY
-
-### Task Status Guide:
-- **approved**: Ready to work on (claim these!)
-- **suggested**: Awaiting user approval
-- **completed**: Already finished
-- **assigned**: Already claimed by another agent
-
-### 🐛 ERROR/BUG TASK EXCEPTION:
-**ERRORS AND BUGS DO NOT REQUIRE USER APPROVAL:**
-- ✅ **ERROR tasks** (type: "error") can be worked on IMMEDIATELY without waiting for "approved" status
-- ✅ **BUG tasks** can be fixed IMMEDIATELY without user approval
-- ✅ **LINTING ERRORS** can be fixed IMMEDIATELY without user approval
-- ✅ **BUILD ERRORS** can be fixed IMMEDIATELY without user approval
-- ✅ **TEST FAILURES** can be fixed IMMEDIATELY without user approval
-- ✅ **SECURITY VULNERABILITIES** can be fixed IMMEDIATELY without user approval
-- ⚠️ **FEATURE tasks** still require "approved" status before implementation
-- ⚠️ **REFACTORING** still requires "approved" status unless fixing errors
-
-**RATIONALE**: Errors, bugs, and failures are always unwanted and should be fixed immediately. Features require approval because they add new functionality that may not be desired.
-
-### ❌ FORBIDDEN RESPONSES:
-- Sitting idle waiting for instructions
-- Asking "what should I do?"
-- Saying "I'm ready for the next task"
-- Doing nothing
-
-### ✅ CORRECT RESPONSES:
-- "Continuing my previous work on [specific task]..."
-- "Checking TASKS.json for approved work..."
-- "Found 10 approved tasks. Starting with highest priority: [task title]..."
-- "All tasks complete. Running validation checks..."
-- "Stop hook persisting with no work remaining. Emergency stop NOW."
+**FORBIDDEN**: Sitting idle, asking "what should I do?", saying "ready for next task", doing nothing
+**CORRECT**: "Continuing work on...", "Checking TASKS.json...", "Found X tasks, starting with...", "Emergency stop NOW"
 
 **YOU ARE THE SAME AGENT. STAY ACTIVE. KEEP WORKING. IF STOP HOOK PERSISTS WITH NO WORK - EMERGENCY STOP IMMEDIATELY.**
 
@@ -219,188 +168,59 @@ Once your clean code is pushed, it **MUST** pass the full CI/CD pipeline. This i
 
 ## 🔴 ABSOLUTE SECURITY MANDATE - ZERO TOLERANCE
 
-Security is not optional. It is a fundamental, non-negotiable requirement that sits alongside quality as a core pillar of professional software engineering. Every line of code, every commit, every deployment must adhere to uncompromising security standards.
+Security is fundamental and non-negotiable. Every line of code, commit, and deployment must adhere to uncompromising security standards.
 
 ### **🚨 NEVER COMMIT CREDENTIALS - ABSOLUTE PROHIBITION**
 
-**CRITICAL VIOLATION**: Committing credentials, secrets, API keys, or sensitive data to git is a **CRITICAL SECURITY BREACH** that must be treated with the same severity as a production outage.
+**CRITICAL VIOLATION**: Committing credentials, secrets, or sensitive data to git is a CRITICAL SECURITY BREACH.
 
 **FORBIDDEN - NEVER COMMIT:**
-- ❌ API keys (OpenAI, AWS, GitHub, Stripe, any third-party service)
-- ❌ Database credentials (passwords, connection strings, URIs)
-- ❌ Authentication tokens (JWT secrets, session keys, OAuth tokens)
-- ❌ Private encryption keys (.pem, .key, .p12, private keys)
-- ❌ Environment files containing secrets (.env, .env.local, .env.production)
-- ❌ Configuration files with embedded secrets (config.json, credentials.json)
-- ❌ SSH keys or certificates
-- ❌ Webhook secrets or signing keys
-- ❌ Any hardcoded passwords or tokens in source code
+- ❌ API keys, database credentials, auth tokens (JWT, OAuth, session keys)
+- ❌ Private keys (.pem, .key, .p12), SSH keys, certificates
+- ❌ Environment files (.env, .env.*), config files with secrets
+- ❌ Any hardcoded passwords, tokens, or sensitive data
 
-**MANDATORY BEFORE ANY WORK**: Verify `.gitignore` includes ALL sensitive file patterns before writing any code.
+**SENSITIVE DATA INCLUDES**: Credentials & access keys, cryptographic material, PII, infrastructure secrets (cloud providers, deployment keys, Kubernetes secrets)
 
-### **Secrets & Credentials Management**
+**MANDATORY**: Verify `.gitignore` includes ALL sensitive patterns BEFORE any work.
 
-**ONLY ACCEPTABLE METHODS:**
-- ✅ Environment variables loaded at runtime (via `.env` files that are gitignored)
-- ✅ Secret management services (AWS Secrets Manager, HashiCorp Vault, Azure Key Vault)
-- ✅ Encrypted configuration stores with keys stored separately
-- ✅ CI/CD secret injection (GitHub Secrets, GitLab CI/CD Variables)
+### **Acceptable Methods & Protocol**
 
-**IMPLEMENTATION PROTOCOL:**
-1. **FIRST**: Add sensitive file patterns to `.gitignore`
-2. **THEN**: Create `.env.example` with placeholder values (never real secrets)
-3. **THEN**: Document required environment variables in README
-4. **ALWAYS**: Use process.env or equivalent for runtime secret access
-5. **NEVER**: Hardcode secrets in source code or config files
+**ONLY ACCEPTABLE:**
+- ✅ Environment variables via gitignored `.env` files
+- ✅ Secret management services (AWS Secrets Manager, Vault, Azure Key Vault)
+- ✅ CI/CD secret injection (GitHub Secrets, GitLab Variables)
 
-### **Mandatory .gitignore Requirements**
+**PROTOCOL**: (1) Add patterns to `.gitignore` → (2) Create `.env.example` (placeholders only) → (3) Document in README → (4) Use process.env → (5) NEVER hardcode
 
-**PRINCIPLES** (not exhaustive - use judgment):
+### **Gitignore & Pre-Commit Validation**
 
-**Always Gitignore:**
-- All files containing credentials, secrets, or API keys
-- Environment configuration files (.env, .env.*)
-- Private keys and certificates (*.pem, *.key, *.p12, *.crt for private certs)
-- Credentials files (credentials.json, secrets.json, aws-credentials, .aws/)
-- SSH keys (.ssh/, id_rsa, id_ed25519)
-- Database files containing real data (*.db, *.sqlite if not test fixtures)
-- Log files that may contain sensitive data (*.log if they contain auth attempts)
-- Backup files if they may contain credentials (/backups with sensitive content)
-- IDE settings if they contain file paths or credentials (.vscode/settings.json with secrets)
-- Build artifacts that may embed secrets (dist/, build/ if they contain config)
+**PRINCIPLE-BASED GITIGNORE**: Always gitignore files containing credentials (env files, keys, certs, credentials files), sensitive data (PII, real databases, auth-attempt logs), or secrets in artifacts (builds with config, backups with credentials)
 
-**Verification Protocol:**
+**VALIDATION:**
 ```bash
-# BEFORE starting work, verify .gitignore exists and covers sensitive patterns
+# BEFORE work: verify .gitignore covers sensitive patterns
 cat .gitignore | grep -E "\\.env|\\.pem|\\.key|credentials|secrets"
 
-# BEFORE committing, verify no secrets are staged
-git diff --cached | grep -i "api[_-]key\|password\|secret\|token"
-```
-
-### **Pre-Commit Security Validation**
-
-**MANDATORY LOCAL CHECKS BEFORE EVERY COMMIT:**
-
-Pre-commit hooks MUST scan for:
-- Patterns matching API keys (AKIA for AWS, sk- for OpenAI, ghp_ for GitHub)
-- Common secret patterns in diff (password=, api_key=, secret=, token=)
-- Files that should be gitignored but are being committed
-- Hardcoded URLs containing credentials (postgres://user:pass@host)
-- Base64-encoded secrets in code (common obfuscation attempt)
-
-**If pre-commit hook is not configured**, manually check before every commit:
-```bash
-# Search for potential secrets in staged files
+# BEFORE commit: verify no secrets staged (manual if pre-commit hook not configured)
 git diff --cached | grep -iE "password|api[_-]key|secret|token|credentials"
-
-# Check for sensitive file types being committed
-git status | grep -E "\\.env|\\.pem|\\.key|credentials\\.json"
 ```
 
-### **Sensitive Data Categories**
+**PRE-COMMIT HOOKS MUST SCAN**: API key patterns (AKIA, sk-, ghp_), secret patterns (password=, token=), gitignored files being committed, credential URLs, base64-encoded secrets
 
-**WHAT CONSTITUTES "SENSITIVE":**
+### **Security Operations**
 
-**Credentials & Access:**
-- API keys for any external service
-- Database passwords and connection strings
-- OAuth client secrets
-- Authentication tokens (JWT, session, bearer tokens)
-- Service account credentials
-- Webhook verification secrets
+**LOGGING**: NEVER log passwords, API keys, session IDs, PII, encryption keys, or credentials. ALWAYS sanitize before logging request/response bodies.
 
-**Cryptographic Material:**
-- Private encryption keys
-- Certificate private keys
-- Signing keys
-- Encryption salts or initialization vectors (if secret)
+**DEPENDENCY SCANNING**: Run `npm audit` (or language-equivalent) weekly. Fix Critical/High within 24h, Medium within 1 week. Never ignore warnings without documentation.
 
-**Personal & Confidential:**
-- Personally Identifiable Information (PII) in configuration
-- Internal IP addresses or network topology
-- Business-sensitive configuration values
-- Customer data in examples or fixtures
-
-**Infrastructure:**
-- Cloud provider credentials (AWS, Azure, GCP)
-- Deployment keys
-- SSH private keys
-- Kubernetes secrets (unless encrypted)
-
-### **Secure Logging Practices**
-
-**NEVER LOG:** (Cross-reference: [Maximum Logging Mandate](#-maximum-logging-mandate---non-negotiable))
-- Passwords or password hashes
-- API keys or tokens
-- Session identifiers
-- Credit card numbers or PII
-- Encryption keys
-- Authentication credentials
-
-**ALWAYS SANITIZE**: Before logging request/response bodies, user input, or error details.
-
-### **Dependency & Vulnerability Management**
-
-**PROACTIVE SECURITY SCANNING:**
-
-**Before Installing Dependencies:**
-```bash
-# Check for known vulnerabilities
-npm audit
-# or for other languages: pip-audit, bundle audit, etc.
-```
-
-**Regular Audits:**
-- Run `npm audit` (or language-equivalent) weekly minimum
-- Update dependencies with security patches immediately
-- Use tools like Dependabot, Snyk, or Renovate for automated scanning
-- Never ignore security warnings without documented risk assessment
-
-**Vulnerability Response Protocol:**
-1. **Critical/High**: Fix immediately (within 24 hours)
-2. **Medium**: Fix within 1 week
-3. **Low**: Address in regular maintenance cycle
-4. Document any vulnerabilities that cannot be immediately patched
-
-### **OWASP Security Best Practices**
-
-**Core Principles to Follow:**
-- **Input Validation**: Never trust user input - validate, sanitize, escape
-- **Output Encoding**: Properly encode output to prevent XSS
-- **Authentication**: Use established libraries, never roll your own crypto
-- **Authorization**: Implement principle of least privilege
-- **Session Management**: Use secure, httpOnly, sameSite cookies
-- **Cryptography**: Use modern, vetted algorithms (never MD5/SHA1 for passwords)
-- **Error Handling**: Don't expose sensitive details in error messages
-- **Logging**: Log security events, but never log secrets
-
-**Reference**: https://owasp.org/www-project-top-ten/
+**OWASP COMPLIANCE**: Follow input validation, output encoding, authentication (use libraries), authorization (least privilege), secure session management, modern cryptography, safe error handling. Reference: https://owasp.org/www-project-top-ten/
 
 ### **Security Violation Response**
 
-**If you discover a security violation** (committed secrets, exposed credentials):
+**If security violation discovered**: (1) IMMEDIATE - Stop all work, treat as CRITICAL → (2) ROTATE - Revoke exposed credentials → (3) REMEDIATE - Remove from git history (never "fix forward") → (4) DOCUMENT - Log incident & steps → (5) PREVENT - Update .gitignore/hooks
 
-1. **IMMEDIATE**: Treat as CRITICAL priority - stop all other work
-2. **ROTATE**: Assume compromised - rotate/revoke the exposed credentials immediately
-3. **REMEDIATE**: Remove secret from git history (git filter-branch or BFG Repo-Cleaner)
-4. **DOCUMENT**: Log the incident, what was exposed, and remediation steps taken
-5. **PREVENT**: Update .gitignore and pre-commit hooks to prevent recurrence
-
-**Never "fix forward"**: Simply removing a secret in a new commit doesn't remove it from git history. It remains accessible.
-
-### **Security Event Audit Trail**
-
-**Log all security-relevant events:**
-- Authentication attempts (success and failure)
-- Authorization failures (access denied)
-- Privilege escalations
-- Configuration changes affecting security
-- Secret rotation events
-- Vulnerability scan results
-- Security violation discoveries and remediations
-
-Use structured logging with clear security markers for easy filtering and alerting.
+**AUDIT TRAIL**: Log authentication attempts, authorization failures, privilege escalations, config changes, secret rotations, vulnerability scans, security violations
 
 -----
 
@@ -476,64 +296,28 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 
 ## 🚨 FEATURES.MD MANAGEMENT PROTOCOL
 
-**MANDATORY PROJECT FEATURE DEFINITION:**
+**SOURCE OF TRUTH**: All projects MUST have `development/essentials/features.md` defining complete feature scope. This file determines what should and should not be implemented.
 
-**FEATURES.MD AS SOURCE OF TRUTH**: All projects MUST have a `development/essentials/features.md` file that defines the complete scope of project features. This file is the single source of truth for what should and should not be implemented.
+**INITIALIZATION**: Check if features.md exists at project start. If missing, create with user approval. Never modify without explicit user consent.
 
-**PROJECT INITIALIZATION REQUIREMENTS:**
+**RESTRICTIONS** (See [Focused Code Mandate](#-focused-code-mandate) for details):
+- ❌ Never implement features not in features.md
+- ❌ Never expand scope beyond what's defined
+- ❌ Never bypass quality framework (all features MUST pass [Unified Quality Framework](#-unified-quality-framework))
+- ✅ Only implement exactly as defined
+- ✅ May suggest additions for user approval
 
-- **CHECK FOR FEATURES.MD**: Always verify if `development/essentials/features.md` exists at project start
-- **CREATE IF MISSING**: If file doesn't exist, create it with user approval before any implementation work
-- **USER APPROVAL REQUIRED**: Never create or modify features.md without explicit user consent
-- **COMPLETE SCOPE DEFINITION**: File must contain comprehensive list of all approved project features
-
-**FEATURE IMPLEMENTATION RESTRICTIONS:**
-
-- **❌ NEVER IMPLEMENT**: Features not explicitly listed in `development/essentials/features.md`
-- **❌ NEVER EXPAND**: Feature scope beyond what's defined in the file
-- **❌ NEVER ASSUME**: Additional features are needed without user approval
-- **❌ NEVER BYPASS**: Quality framework enforcement - all features MUST pass pre-commit hooks and CI/CD pipeline
-- **❌ NEVER CIRCUMVENT**: Automated quality gates, linting standards, or security validations
-- **✅ STRICTLY FOLLOW**: Only implement features exactly as defined in features.md
-- **✅ QUALITY COMPLIANCE**: ALL feature implementations MUST pass two-stage quality framework
-- **✅ SUGGEST ADDITIONS**: May propose new features for user approval and addition to file
-
-**MANDATORY QUALITY ENFORCEMENT:**
-
-- **UNBREAKABLE RULE**: Every feature implementation MUST pass Stage 1 (Pre-Commit Hooks) and Stage 2 (CI/CD Pipeline)
-- **NO EXCEPTIONS**: Quality framework cannot be bypassed, disabled, or circumvented for any reason
-- **QUALITY FIRST**: If feature implementation conflicts with quality standards, quality standards take precedence
-- **AUTOMATIC REJECTION**: Any feature that cannot pass automated quality gates MUST be redesigned or rejected
-
-**FEATURES.MD MANAGEMENT COMMANDS:**
-
+**TEMPLATE** (create with user approval):
 ```bash
-# Check if features.md exists
-ls -la development/essentials/features.md
-
-# Create features.md with user approval (template)
-mkdir -p development/essentials
-cat > development/essentials/features.md << 'EOF'
+mkdir -p development/essentials && cat > development/essentials/features.md << 'EOF'
 # Project Features
-
 ## Core Features
-[List core features approved by user]
-
 ## Planned Features
-[List planned features for future implementation]
-
 ## Suggested Features
-[List suggested features pending user approval]
 EOF
 ```
 
-**FEATURE APPROVAL WORKFLOW:**
-
-1. **VERIFY FEATURES.MD**: Check file exists and is current
-2. **VALIDATE SCOPE**: Ensure requested work aligns with defined features
-3. **SEEK APPROVAL**: Request user approval for any new feature suggestions
-4. **UPDATE FILE**: Add approved features to features.md before implementation
-5. **CREATE TASKS**: Generate project tasks only for features listed in file
+**WORKFLOW**: Verify features.md → Validate scope → Seek approval for new features → Update file → Create tasks
 
 ## 🚨 DOCUMENTATION-FIRST WORKFLOW
 
@@ -583,50 +367,27 @@ EOF
 
 ## 🚨 MAXIMUM LOGGING MANDATE - NON-NEGOTIABLE
 
-**ABSOLUTE REQUIREMENT - ZERO TOLERANCE**: Every function, method, and significant code block MUST include MAXIMUM comprehensive logging. This is NOT optional, NOT a suggestion, NOT negotiable. Code without logging will be REJECTED.
+**ABSOLUTE REQUIREMENT**: Every function MUST include comprehensive logging. Code without logging will be REJECTED.
 
-**MANDATORY LOGGING - NO EXCEPTIONS:**
-- **FUNCTION ENTRY/EXIT**: Function name, ALL parameters (sanitized), return values, execution timing - REQUIRED
-- **ERROR LOGGING**: ALL errors/exceptions with full context, stack traces, error types - REQUIRED
-- **PERFORMANCE METRICS**: Execution timing, resource usage, bottleneck identification - REQUIRED
-- **STATE CHANGES**: Database updates, file operations, configuration changes - REQUIRED
-- **SECURITY EVENTS**: Authentication, authorization, access attempts - REQUIRED
-- **INTERMEDIATE STEPS**: Log significant operations within functions - REQUIRED
-- **CONDITIONAL BRANCHES**: Log which code paths are taken - REQUIRED
-- **LOOP ITERATIONS**: Log loop entry, significant iterations, completion - REQUIRED
+**REQUIRED LOGGING**: Function entry/exit (name, sanitized params, return values, timing), error logging (full context, stack traces, types), performance metrics, state changes, security events, intermediate steps, conditional branches, loop iterations
 
-**IMPLEMENTATION PATTERN (MANDATORY):**
+**PATTERN**:
 ```javascript
 function processData(id, data) {
-  const logger = getLogger('Processor');
-  const startTime = Date.now();
-
-  logger.info('Function started', { function: 'processData', id, dataSize: data?.length });
-
+  const logger = getLogger('Processor'), startTime = Date.now();
+  logger.info('Started', { function: 'processData', id, dataSize: data?.length });
   try {
-    logger.debug('Validating input data', { function: 'processData', id });
     const result = validateAndProcess(data);
-    logger.debug('Validation completed', { function: 'processData', id, resultSize: result?.length });
-
-    logger.info('Function completed', { function: 'processData', id, duration: Date.now() - startTime });
+    logger.info('Completed', { function: 'processData', id, duration: Date.now() - startTime });
     return result;
   } catch (error) {
-    logger.error('Function failed', {
-      function: 'processData', id, duration: Date.now() - startTime,
-      error: error.message, stack: error.stack, errorType: error.constructor.name
-    });
+    logger.error('Failed', { function: 'processData', id, duration: Date.now() - startTime, error: error.message, stack: error.stack });
     throw error;
   }
 }
 ```
 
-**ABSOLUTE COMPLIANCE - ZERO TOLERANCE:**
-- **❌ NEVER SUBMIT**: Code without MAXIMUM comprehensive logging - AUTOMATIC REJECTION
-- **❌ NEVER SKIP**: Logging in any function, method, or code block - FORBIDDEN
-- **❌ NEVER LOG**: Sensitive information (passwords, tokens, API keys, PII, credentials) - SECURITY VIOLATION (See [Absolute Security Mandate](#-absolute-security-mandate---zero-tolerance) for complete security requirements)
-- **✅ ALWAYS**: JSON structured logging with timestamps, function names, parameters, error context - MANDATORY
-- **✅ QUALITY GATES**: Logging verified in pre-commit hooks and CI/CD pipeline - ENFORCED
-- **✅ MAXIMUM DETAIL**: When in doubt, log MORE not less - REQUIRED MINDSET (but ALWAYS sanitize sensitive data first)
+**COMPLIANCE**: ❌ Never submit code without logging | ❌ Never log sensitive data (see [Security Mandate](#-absolute-security-mandate---zero-tolerance)) | ✅ Always use JSON structured logging | ✅ When in doubt, log MORE (but sanitize sensitive data first)
 
 ## 🧠 INTELLIGENT SELF-LEARNING SYSTEM
 
@@ -709,64 +470,15 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 
 ## 🛑 STOP AUTHORIZATION VALIDATION CRITERIA DETAILS
 
-**DETAILED VALIDATION IMPLEMENTATIONS:**
+**VALIDATION IMPLEMENTATIONS** (All must pass with zero errors/warnings):
 
-### 1. focused-codebase
-- **Purpose**: Validates codebase contains ONLY user-outlined features
-- **Method**: Compares TASKS.json approved features against implemented code
-- **Pass Criteria**: No unauthorized features or scope creep detected
-
-### 2. security-validation
-- **Purpose**: Comprehensive security vulnerability scanning (See [Absolute Security Mandate](#-absolute-security-mandate---zero-tolerance) for complete security requirements)
-- **Tools by Language**:
-  - **JavaScript/Node**: `npm audit`, `semgrep`
-  - **Python**: `bandit`, `safety`, `semgrep`
-  - **Go**: `gosec`, `trivy`
-  - **Ruby**: `brakeman`, `bundler-audit`
-  - **Multi-language**: `trivy`, `snyk`
-- **Pass Criteria**: Zero high/critical vulnerabilities, no exposed secrets in code or git history, all .gitignore requirements met
-
-### 3. linter-validation
-- **Purpose**: Code style and quality enforcement
-- **Tools by Language**:
-  - **JavaScript/TypeScript**: `eslint`
-  - **Python**: `pylint`, `flake8`, `ruff`
-  - **Ruby**: `rubocop`
-  - **Go**: `golangci-lint`, `go fmt`
-  - **Rust**: `cargo clippy`
-- **Pass Criteria**: Zero warnings and errors
-
-### 4. type-validation
-- **Purpose**: Type safety verification
-- **Tools by Language**:
-  - **TypeScript**: `tsc --noEmit`
-  - **Python**: `mypy`
-  - **Go**: `go build`
-  - **Rust**: `cargo check`
-- **Pass Criteria**: Zero type errors
-
-### 5. build-validation
-- **Purpose**: Compilation and bundling success
-- **Commands by Language**:
-  - **JavaScript/Node**: `npm run build`, `yarn build`
-  - **Go**: `go build`
-  - **Rust**: `cargo build`
-  - **C/C++**: `make`, `cmake`
-- **Pass Criteria**: Build completes with zero errors
-
-### 6. start-validation
-- **Purpose**: Application startup verification
-- **Method**: Attempts to start application with timeout
-- **Pass Criteria**: Application starts without errors within timeout
-
-### 7. test-validation
-- **Purpose**: Test suite execution and coverage verification
-- **Tools by Language**:
-  - **JavaScript**: `npm test`, `jest`, `mocha`
-  - **Python**: `pytest`, `unittest`
-  - **Go**: `go test`
-  - **Ruby**: `rspec`, `minitest`
-- **Pass Criteria**: All tests pass, coverage >80%
+1. **focused-codebase**: Validates ONLY user-outlined features (compares TASKS.json vs implemented code)
+2. **security-validation**: Zero high/critical vulnerabilities, no exposed secrets (npm audit, bandit, gosec, trivy, snyk - See [Security Mandate](#-absolute-security-mandate---zero-tolerance))
+3. **linter-validation**: Code style/quality (eslint, pylint/ruff, rubocop, golangci-lint, cargo clippy)
+4. **type-validation**: Type safety (tsc, mypy, go build, cargo check)
+5. **build-validation**: Compilation success (npm run build, go build, cargo build, make/cmake)
+6. **start-validation**: Application starts without errors within timeout
+7. **test-validation**: All tests pass, coverage >80% (jest/mocha, pytest, go test, rspec)
 
 ## 🚨 MANDATORY TASKMANAGER TASK CREATION
 
@@ -824,66 +536,38 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 
 **🔴 ALL COMMANDS USE 10-SECOND TIMEOUT - NO EXCEPTIONS**
 
-**UNIVERSAL TASKMANAGER PATH (USE THIS ALWAYS):**
-```
-/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js
-```
+**PATH**: `/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js`
+**COMMAND FORMAT**: `timeout 10s node "[PATH]" --project-root "$(pwd)" [command] [args]`
 
-### Agent Lifecycle Commands
+### Core Commands (Representative Examples)
+
+**Agent & Learning**:
 ```bash
-# Initialization + Learning Search
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" reinitialize [AGENT_ID]
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" search-lessons "current_task_context"
+$TM reinitialize [AGENT_ID]
+$TM search-lessons "keywords"
+$TM store-lesson '{"title":"...", "category":"...", "content":"...", "context":"...", "confidence_score":0.9}'
+$TM store-error '{"title":"...", "error_type":"linter|build|runtime|integration", "message":"...", "resolution_method":"...", "prevention_strategy":"..."}'
 ```
 
-### Learning System Commands
+**Task Operations**:
 ```bash
-# Lesson Management
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" search-lessons "task_description_or_keywords"
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" store-lesson '{"title":"Implementation Pattern", "category":"feature_implementation", "content":"Detailed lesson", "context":"When this applies", "confidence_score":0.9}'
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" store-error '{"title":"Error Type", "error_type":"linter|build|runtime|integration", "message":"Error message", "resolution_method":"How fixed", "prevention_strategy":"How to prevent"}'
-
-# Advanced Search
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" search-lessons "task_keywords" '{"limit": 5, "threshold": 0.7}'
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" find-similar-errors "error_message" '{"limit": 3, "error_type": "runtime"}'
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" rag-analytics
+$TM get-task-stats
+$TM get-tasks-by-status approved
+$TM get-available-tasks [AGENT_ID]
+$TM create-task '{"title":"...", "description":"...", "type":"error|feature|test|audit", "priority":"low|normal|high|urgent"}'
+$TM update-task <taskId> '{"status":"in-progress|completed|blocked", "progress_percentage":50}'
 ```
 
-### Task Management
+**Stop Authorization** (See [Stop Authorization Validation](#-stop-authorization-validation-criteria-details) for details):
 ```bash
-# Task Management Commands
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" get-task-stats
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" get-tasks-by-status approved
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" get-tasks-by-priority high
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" get-available-tasks [AGENT_ID]
-
-# Create Tasks
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" create-task '{"title":"Task Title", "description":"Detailed description", "type":"error|feature|test|audit", "priority":"low|normal|high|urgent"}'
-
-# Update Tasks
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" update-task <taskId> '{"status":"in-progress|completed|blocked", "progress_percentage":50}'
+$TM verify-stop-readiness [AGENT_ID]
+$TM start-authorization [AGENT_ID]
+$TM validate-criterion [AUTH_KEY] focused-codebase  # Repeat for: security, linter, type, build, start, test
+$TM complete-authorization [AUTH_KEY]
+$TM emergency-stop [AGENT_ID] "reason"  # Only if stop hook persists with no work
 ```
 
-### Stop Authorization Commands
-```bash
-# Verify readiness (checks user request fulfilled and no tasks remain)
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" verify-stop-readiness [AGENT_ID]
-
-# Multi-step Authorization Process
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" start-authorization [AGENT_ID]
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] focused-codebase
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] security-validation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] linter-validation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] type-validation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] build-validation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] start-validation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] test-validation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" complete-authorization [AUTH_KEY]
-
-# Emergency Stop - USE IMMEDIATELY IF STOP HOOK PERSISTS WITH NO WORK
-# TRIGGER NOW: Stop hook persisting + no work = EMERGENCY STOP IMMEDIATELY
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" emergency-stop [AGENT_ID] "Stop hook persisting with no work remaining"
-```
+**Full command discovery**: Use `$TM guide` or `$TM methods` for complete API documentation
 
 ## ESSENTIAL COMMANDS
 
