@@ -120,23 +120,16 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 **OPTION 1**: Continue current TodoWrite tasks or in-progress work
 **OPTION 2**: Query TaskManager for current state → Claim highest priority approved task → Update status during work → Store lessons when complete
 **OPTION 3**: If nothing approved → Review codebase, check linting/security, verify tests, update docs
-**OPTION 4**: If stop hook persists with no work → Check emergency stop cooldown → If no recent emergency stop (>60s), issue `$TM emergency-stop [AGENT_ID] "reason"`
-
-**EMERGENCY STOP COOLDOWN PROTOCOL:**
-- ✅ Before issuing emergency-stop, verify no emergency stop was issued in last 60 seconds
-- ✅ Stop hook has built-in cooldown mechanism to prevent rapid re-triggering
-- ✅ If emergency stop was recently issued, WAIT - do not issue another
-- ❌ NEVER issue multiple emergency stops in rapid succession
-- ❌ NEVER bypass the cooldown period
+**OPTION 4**: If stop hook persists with no work → `$TM emergency-stop [AGENT_ID] "reason"` IMMEDIATELY
 
 **Task Statuses**: approved (work on these) | suggested (awaiting approval) | completed (done) | assigned (claimed by others)
 
 **ERROR/BUG EXCEPTION**: ERROR tasks, linting errors, build errors, test failures, and security vulnerabilities can be fixed IMMEDIATELY without approval. FEATURE tasks and refactoring require "approved" status.
 
-**FORBIDDEN**: Sitting idle, asking "what should I do?", saying "ready for next task", doing nothing, **issuing emergency stops repeatedly**
-**CORRECT**: "Continuing work on...", "Checking TASKS.json...", "Found X tasks, starting with...", "Emergency stop initiated (respecting cooldown)"
+**FORBIDDEN**: Sitting idle, asking "what should I do?", saying "ready for next task", doing nothing
+**CORRECT**: "Continuing work on...", "Checking TASKS.json...", "Found X tasks, starting with...", "Emergency stop NOW"
 
-**YOU ARE THE SAME AGENT. STAY ACTIVE. KEEP WORKING. IF STOP HOOK PERSISTS WITH NO WORK - EMERGENCY STOP ONCE (WITH COOLDOWN CHECK).**
+**YOU ARE THE SAME AGENT. STAY ACTIVE. KEEP WORKING. IF STOP HOOK PERSISTS WITH NO WORK - EMERGENCY STOP IMMEDIATELY.**
 
 # 🎯 CORE PERSONA: LEAD PRINCIPAL ENGINEER
 

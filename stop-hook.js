@@ -231,16 +231,36 @@ function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
 
       // Check if this is an emergency stop (bypasses validation reporting)
       if (flagData.session_type === 'emergency_stop' && flagData.validation_bypassed === true) {
-        loggers.stopHook.info('EMERGENCY STOP DETECTED', {
-          authorized_by: flagData.authorized_by,
-          reason: flagData.reason,
-          timestamp: flagData.timestamp,
-          validation_bypassed: true,
-          session_type: 'emergency_stop',
-        });
-        // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
-        FS.unlinkSync(stopFlagPath); // Remove flag after reading
-        return flagData.stop_allowed === true;
+        // Check if emergency stop is still within grace period (60 seconds)
+        const emergencyTimestamp = new Date(flagData.timestamp).getTime();
+        const currentTime = Date.now();
+        const gracePeriodMs = 60000; // 60 seconds
+        const timeSinceEmergency = currentTime - emergencyTimestamp;
+
+        if (timeSinceEmergency < gracePeriodMs) {
+          // Within grace period - keep flag and allow stop
+          loggers.stopHook.info('EMERGENCY STOP DETECTED (WITHIN GRACE PERIOD)', {
+            status: 'EMERGENCY STOP DETECTED',
+            authorized_by: flagData.authorized_by,
+            reason: flagData.reason,
+            timestamp: flagData.timestamp,
+            validation_bypassed: true,
+            session_type: 'emergency_stop',
+            timeSinceEmergency: `${Math.floor(timeSinceEmergency / 1000)}s`,
+            gracePeriod: '60s',
+          });
+          return flagData.stop_allowed === true;
+        } else {
+          // Grace period expired - remove flag and continue normal logic
+          loggers.stopHook.info('EMERGENCY STOP GRACE PERIOD EXPIRED', {
+            status: 'Grace period expired, resuming normal operation',
+            timeSinceEmergency: `${Math.floor(timeSinceEmergency / 1000)}s`,
+            gracePeriod: '60s',
+          });
+          // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
+          FS.unlinkSync(stopFlagPath); // Remove expired flag
+          // Fall through to normal stop hook logic
+        }
       }
 
       // Generate comprehensive validation progress report for normal stops;
@@ -872,8 +892,51 @@ process.stdin.on('data', (chunk) => {
  */
 function detectRapidStopCalls(workingDir, _category = 'general') {
   const trackingFilePath = path.join(workingDir, '.stop-hook-calls.json');
+  const cooldownFilePath = path.join(workingDir, '.emergency-cooldown');
   const now = Date.now();
   const timeWindow = 2000; // 2 seconds in milliseconds (optimized for rapid loop detection)
+  const cooldownPeriod = 60000; // 60 seconds cooldown after emergency stop
+
+  // Check for active cooldown period
+  try {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename -- Emergency cooldown file in validated project directory
+    if (FS.existsSync(cooldownFilePath)) {
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- Emergency cooldown file in validated project directory
+      const cooldownData = JSON.parse(FS.readFileSync(cooldownFilePath, 'utf8'));
+      const cooldownExpiry = new Date(cooldownData.expiresAt).getTime();
+
+      if (now < cooldownExpiry) {
+        // Still in cooldown period - suppress emergency stop detection
+        const remainingCooldown = Math.ceil((cooldownExpiry - now) / 1000);
+        loggers.stopHook.info('EMERGENCY COOLDOWN ACTIVE', {
+          status: 'Emergency stop cooldown period active',
+          remainingSeconds: remainingCooldown,
+          cooldownPeriod: '60s',
+          reason: cooldownData.reason,
+          triggeredAt: cooldownData.triggeredAt,
+          component: 'StopHook',
+          operation: 'cooldownCheck',
+        });
+        return false; // Suppress emergency stop during cooldown
+      } else {
+        // Cooldown expired - clean up file
+        loggers.stopHook.info('EMERGENCY COOLDOWN EXPIRED', {
+          status: 'Cooldown period expired, resuming normal emergency detection',
+          component: 'StopHook',
+          operation: 'cooldownExpiry',
+        });
+        // eslint-disable-next-line security/detect-non-literal-fs-filename -- Emergency cooldown file cleanup
+        FS.unlinkSync(cooldownFilePath);
+      }
+    }
+  } catch (_) {
+    // If cooldown file is corrupted or unreadable, continue with normal logic
+    loggers.stopHook.warn('Failed to read cooldown file', {
+      error: _.message,
+      component: 'StopHook',
+      operation: 'cooldownCheck',
+    });
+  }
 
   let callHistory = [];
 
@@ -921,6 +984,32 @@ function detectRapidStopCalls(workingDir, _category = 'general') {
       component: 'StopHook',
       operation: 'rapidStopDetection',
     });
+
+    // Create cooldown file to prevent immediate re-triggering
+    const cooldownData = {
+      triggeredAt: new Date(now).toISOString(),
+      expiresAt: new Date(now + cooldownPeriod).toISOString(),
+      reason: 'Automatic emergency stop due to rapid stop hook calls',
+      cooldownSeconds: cooldownPeriod / 1000,
+    };
+    try {
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- Emergency cooldown file in validated project directory
+      FS.writeFileSync(cooldownFilePath, JSON.stringify(cooldownData, null, 2));
+      loggers.stopHook.info('EMERGENCY COOLDOWN ACTIVATED', {
+        status: 'Cooldown period initiated',
+        cooldownSeconds: cooldownPeriod / 1000,
+        expiresAt: cooldownData.expiresAt,
+        component: 'StopHook',
+        operation: 'cooldownActivation',
+      });
+    } catch (_) {
+      loggers.stopHook.warn('Failed to create cooldown file', {
+        error: _.message,
+        component: 'StopHook',
+        operation: 'cooldownActivation',
+      });
+    }
+
     return true;
   }
 
@@ -964,19 +1053,12 @@ process.stdin.on('end', async () => {
         component: 'StopHook',
         operation: 'autoEmergencyStop',
         exitCode: 0,
+        note: 'Tracking file preserved to prevent re-triggering',
       });
 
-      // Clean up tracking file
-      const trackingFilePath = path.join(workingDir, '.stop-hook-calls.json');
-      try {
-        // eslint-disable-next-line security/detect-non-literal-fs-filename -- Stop hook tracking file cleanup
-        if (FS.existsSync(trackingFilePath)) {
-          // eslint-disable-next-line security/detect-non-literal-fs-filename -- Stop hook tracking file cleanup
-          FS.unlinkSync(trackingFilePath);
-        }
-      } catch {
-        // Ignore cleanup errors
-      }
+      // DO NOT clean up tracking file - it must persist to prevent re-triggering
+      // The tracking file will be cleaned up only after 5 minutes of inactivity
+      // This prevents the infinite loop where emergency stop triggers repeatedly
 
       // eslint-disable-next-line n/no-process-exit
       process.exit(0); // Allow stop due to automatic emergency detection
