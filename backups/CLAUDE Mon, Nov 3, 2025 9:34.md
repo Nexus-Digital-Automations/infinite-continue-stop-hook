@@ -14,7 +14,6 @@
 9.  **📚 DOCUMENTATION-FIRST WORKFLOW**: Review docs/ folder BEFORE implementing features. Mark features "IN PROGRESS" in docs, research when uncertain (safe over sorry), write unit tests BEFORE next feature. Use TodoWrite to track: docs review → research → implementation → testing → docs update.
 10. **🔴 TASKMANAGER-FIRST MANDATE**: ALWAYS use TaskManager API (`/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js`) for ALL task operations. Query task status BEFORE starting work, update progress DURING work, store lessons AFTER completion. TaskManager is the SINGLE SOURCE OF TRUTH for all project tasks.
 11. **🔴 ABSOLUTE SECURITY MANDATE**: NEVER commit credentials, secrets, API keys, or sensitive data to git. ALL sensitive files MUST be in .gitignore BEFORE any work begins. Pre-commit hooks MUST catch secrets. Treat security violations as CRITICAL errors. Security is non-negotiable and has ZERO tolerance.
-12. **⚡ TOKEN BUDGET OPTIMIZATION**: Allocate majority of token budget to CODE WRITING and IMPLEMENTATION WORK. Keep status updates concise and action-focused. Minimize verbose explanations. Prioritize doing over discussing. Reserve tokens for actual development work, not commentary.
 </law>
 
 ## 🔴 TASKMANAGER-FIRST MANDATE

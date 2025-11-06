@@ -873,7 +873,7 @@ process.stdin.on('data', (chunk) => {
 function detectRapidStopCalls(workingDir, _category = 'general') {
   const trackingFilePath = path.join(workingDir, '.stop-hook-calls.json');
   const now = Date.now();
-  const timeWindow = 120000; // 2 minutes in milliseconds (was 5 seconds, increased to handle response timing)
+  const timeWindow = 2000; // 2 seconds in milliseconds (optimized for rapid loop detection)
 
   let callHistory = [];
 
