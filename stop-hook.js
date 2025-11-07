@@ -894,7 +894,7 @@ function detectRapidStopCalls(workingDir, _category = 'general') {
   const trackingFilePath = path.join(workingDir, '.stop-hook-calls.json');
   const cooldownFilePath = path.join(workingDir, '.emergency-cooldown');
   const now = Date.now();
-  const timeWindow = 2000; // 2 seconds in milliseconds (optimized for rapid loop detection)
+  const timeWindow = 10000; // 10 seconds in milliseconds (balanced loop detection)
   const cooldownPeriod = 60000; // 60 seconds cooldown after emergency stop
 
   // Check for active cooldown period

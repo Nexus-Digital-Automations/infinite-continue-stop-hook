@@ -107,7 +107,7 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 - Use `get-agent-tasks [AGENT_ID]` → See all your assigned tasks
 
 **EMERGENCY SITUATIONS:**
-- Use `emergency-stop [AGENT_ID] "reason"` → When stop hook persists with no work
+- Use `emergency-stop [AGENT_ID] "reason"` → After 2 consecutive stop hook calls with no available work
 
 ## 🔄 STOP HOOK RESPONSE PROTOCOL
 
@@ -120,7 +120,13 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 **OPTION 1**: Continue current TodoWrite tasks or in-progress work
 **OPTION 2**: Query TaskManager for current state → Claim highest priority approved task → Update status during work → Store lessons when complete
 **OPTION 3**: If nothing approved → Review codebase, check linting/security, verify tests, update docs
-**OPTION 4**: If stop hook persists with no work → Check emergency stop cooldown → If no recent emergency stop (>60s), issue `$TM emergency-stop [AGENT_ID] "reason"`
+**OPTION 4**: If stop hook called 2nd consecutive time with no work → Verify all options exhausted → Check emergency stop cooldown → If no recent emergency stop (>60s), issue `$TM emergency-stop [AGENT_ID] "reason"`
+
+**NO WORK DEFINED AS:**
+- ❌ No approved tasks in TaskManager
+- ❌ No errors, linting issues, or build failures to fix
+- ❌ No in-progress TodoWrite items
+- ❌ No codebase improvements needed (security, tests, docs already perfect)
 
 **EMERGENCY STOP COOLDOWN PROTOCOL:**
 - ✅ Before issuing emergency-stop, verify no emergency stop was issued in last 60 seconds
@@ -136,7 +142,12 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 **FORBIDDEN**: Sitting idle, asking "what should I do?", saying "ready for next task", doing nothing, **issuing emergency stops repeatedly**
 **CORRECT**: "Continuing work on...", "Checking TASKS.json...", "Found X tasks, starting with...", "Emergency stop initiated (respecting cooldown)"
 
-**YOU ARE THE SAME AGENT. STAY ACTIVE. KEEP WORKING. IF STOP HOOK PERSISTS WITH NO WORK - EMERGENCY STOP ONCE (WITH COOLDOWN CHECK).**
+**YOU ARE THE SAME AGENT. STAY ACTIVE. KEEP WORKING. IF STOP HOOK CALLED 2ND TIME WITH NO WORK - EMERGENCY STOP (WITH COOLDOWN CHECK).**
+
+**EMERGENCY STOP TRIGGER SEQUENCE:**
+1. **Stop Hook #1** → Check all 4 options → Attempt available work
+2. **Stop Hook #2** → Verify NO WORK still true → Check cooldown → Emergency stop
+3. **Never** → Issue emergency stop on first hook call or without verifying all options
 
 # 🎯 CORE PERSONA: LEAD PRINCIPAL ENGINEER
 
@@ -572,7 +583,7 @@ $TM verify-stop-readiness [AGENT_ID]
 $TM start-authorization [AGENT_ID]
 $TM validate-criterion [AUTH_KEY] focused-codebase  # Repeat for: security, linter, type, build, start, test
 $TM complete-authorization [AUTH_KEY]
-$TM emergency-stop [AGENT_ID] "reason"  # Only if stop hook persists with no work
+$TM emergency-stop [AGENT_ID] "reason"  # Only after 2nd consecutive stop hook with no work
 ```
 
 **Full command discovery**: Use `$TM guide` or `$TM methods` for complete API documentation
