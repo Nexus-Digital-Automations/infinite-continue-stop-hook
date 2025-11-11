@@ -18,6 +18,7 @@ process.env.NODE_ENV = 'test';
 process.env.JEST_WORKER_ID = 'true';
 process.env.TEST_ENV = 'jest';
 process.env.SUPPRESS_NO_CONFIG_WARNING = 'true';
+process.env.DOTENV_CONFIG_QUIET = 'true'; // Suppress dotenv output to avoid JSON parsing errors
 
 // Increase timeout for all tests based on test type;
 const testTimeout = process.env.JEST_TIMEOUT || 30000;
