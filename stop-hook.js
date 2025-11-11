@@ -892,18 +892,22 @@ function detectRapidStopCalls(workingDir, _category = 'general') {
       const cooldownExpiry = new Date(cooldownData.expiresAt).getTime();
 
       if (now < cooldownExpiry) {
-        // Still in cooldown period - suppress emergency stop detection
+        // Still in cooldown period - ALLOW STOP instead of continuing infinite mode
         const remainingCooldown = Math.ceil((cooldownExpiry - now) / 1000);
-        loggers.stopHook.info('EMERGENCY COOLDOWN ACTIVE', {
+        loggers.stopHook.info('EMERGENCY COOLDOWN ACTIVE - ALLOWING STOP', {
           status: 'Emergency stop cooldown period active',
           remainingSeconds: remainingCooldown,
           cooldownPeriod: '60s',
           reason: cooldownData.reason,
           triggeredAt: cooldownData.triggeredAt,
+          action: 'Exiting with code 0 to allow conversation stop',
+          note: 'Cooldown prevents automatic detection but still allows stop',
           component: 'StopHook',
           operation: 'cooldownCheck',
         });
-        return false; // Suppress emergency stop during cooldown
+        // Exit immediately with code 0 to allow stop during cooldown
+        // eslint-disable-next-line n/no-process-exit
+        process.exit(0);
       } else {
         // Cooldown expired - clean up file
         loggers.stopHook.info('EMERGENCY COOLDOWN EXPIRED', {
@@ -1007,6 +1011,43 @@ process.stdin.on('end', async () => {
   const workingDir = findClaudeProjectRoot();
   const logger = new LOGGER.LOGGER(workingDir);
   try {
+    // ========================================================================
+    // CHECK FOR MANUAL EMERGENCY STOP FIRST (before automatic detection)
+    // ========================================================================
+    const stopAllowed = checkStopAllowed(workingDir);
+    if (stopAllowed) {
+      // Clear tracking file to prevent rapid call detection interference
+      const trackingFilePath = path.join(workingDir, '.stop-hook-calls.json');
+      try {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename -- tracking file in validated project directory
+        if (FS.existsSync(trackingFilePath)) {
+          // eslint-disable-next-line security/detect-non-literal-fs-filename -- tracking file cleanup
+          FS.unlinkSync(trackingFilePath);
+          logger.addFlow('Cleared tracking file to prevent interference');
+        }
+      } catch (_) {
+        // Ignore cleanup errors - not critical
+        logger.addFlow(`Warning: could not clear tracking file: ${_.message}`);
+      }
+
+      logger.addFlow('Manual emergency stop detected - allowing stop');
+      logger.logExit(0, 'Emergency stop authorized');
+      logger.save();
+
+      loggers.stopHook.info('MANUAL EMERGENCY STOP HONORED', {
+        status: 'MANUAL EMERGENCY STOP HONORED',
+        authorization: 'Manual emergency-stop via TaskManager API',
+        authorizationType: 'manual emergency stop',
+        action: 'Allowing conversation to stop immediately',
+        component: 'StopHook',
+        operation: 'manualEmergencyStop',
+        exitCode: 0,
+      });
+
+      // eslint-disable-next-line n/no-process-exit
+      process.exit(0); // Allow stop for manual emergency-stop
+    }
+
     // DETECT RAPID STOP CALLS - Check if stop hook called multiple times within 5 seconds
     const shouldEmergencyStop = detectRapidStopCalls(workingDir);
     if (shouldEmergencyStop) {
@@ -1495,30 +1536,12 @@ process.stdin.on('end', async () => {
     );
 
     // ========================================================================
-    // CHECK FOR STOP AUTHORIZATION BEFORE AGENT CHECKS
+    // STOP AUTHORIZATION CHECK MOVED TO TOP OF FUNCTION
     // ========================================================================
-    const stopAllowed = checkStopAllowed(workingDir);
-    if (stopAllowed) {
-      logger.addFlow(
-        'Stop endpoint triggered - allowing ONE stop, then returning to infinite mode',
-      );
-      logger.logExit(0, 'Endpoint-triggered stop (single use)');
-      logger.save();
-
-      loggers.stopHook.info('ENDPOINT-TRIGGERED STOP AUTHORIZED', {
-        status: 'ENDPOINT-TRIGGERED STOP AUTHORIZED',
-        authorization: 'A stop request was authorized via the stop endpoint',
-        authorizationType: 'single-use authorization',
-        action: 'Allowing stop now',
-        futureStopBehavior:
-          'Future stop hook triggers will return to infinite continue mode',
-        component: 'StopHook',
-        operation: 'endpointTriggeredStopAuthorization',
-        exitCode: 0,
-      });
-      // eslint-disable-next-line n/no-process-exit
-      process.exit(0); // Allow stop when endpoint triggered
-    }
+    // NOTE: checkStopAllowed() is now called at the beginning of the function
+    // (before detectRapidStopCalls) to ensure manual emergency-stops are
+    // honored before automatic detection interferes.
+    // See lines 1013-1045 for the actual check.
 
     // Enhanced agent status analysis for better messaging;
     const hadStaleAgents = staleAgents.length > 0;
