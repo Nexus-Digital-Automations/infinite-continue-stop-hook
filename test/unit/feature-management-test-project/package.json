@@ -1,8 +1,0 @@
-{
-  "name": "feature-test-project",
-  "version": "1.0.0",
-  "description": "Test project for feature management system validation",
-  "dependencies": {
-    "express": "^4.18.0"
-  }
-}
