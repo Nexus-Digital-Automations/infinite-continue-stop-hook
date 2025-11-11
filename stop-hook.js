@@ -231,36 +231,22 @@ function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
 
       // Check if this is an emergency stop (bypasses validation reporting)
       if (flagData.session_type === 'emergency_stop' && flagData.validation_bypassed === true) {
-        // Check if emergency stop is still within grace period (60 seconds)
-        const emergencyTimestamp = new Date(flagData.timestamp).getTime();
-        const currentTime = Date.now();
-        const gracePeriodMs = 60000; // 60 seconds
-        const timeSinceEmergency = currentTime - emergencyTimestamp;
+        // Emergency stops have no expiration - they persist until used
+        // This ensures emergency stops always work regardless of timing delays
+        loggers.stopHook.info('EMERGENCY STOP DETECTED', {
+          status: 'EMERGENCY STOP DETECTED',
+          authorized_by: flagData.authorized_by,
+          reason: flagData.reason,
+          timestamp: flagData.timestamp,
+          validation_bypassed: true,
+          session_type: 'emergency_stop',
+          note: 'Emergency stops do not expire - persistent until used',
+        });
 
-        if (timeSinceEmergency < gracePeriodMs) {
-          // Within grace period - keep flag and allow stop
-          loggers.stopHook.info('EMERGENCY STOP DETECTED (WITHIN GRACE PERIOD)', {
-            status: 'EMERGENCY STOP DETECTED',
-            authorized_by: flagData.authorized_by,
-            reason: flagData.reason,
-            timestamp: flagData.timestamp,
-            validation_bypassed: true,
-            session_type: 'emergency_stop',
-            timeSinceEmergency: `${Math.floor(timeSinceEmergency / 1000)}s`,
-            gracePeriod: '60s',
-          });
-          return flagData.stop_allowed === true;
-        } else {
-          // Grace period expired - remove flag and continue normal logic
-          loggers.stopHook.info('EMERGENCY STOP GRACE PERIOD EXPIRED', {
-            status: 'Grace period expired, resuming normal operation',
-            timeSinceEmergency: `${Math.floor(timeSinceEmergency / 1000)}s`,
-            gracePeriod: '60s',
-          });
-          // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
-          FS.unlinkSync(stopFlagPath); // Remove expired flag
-          // Fall through to normal stop hook logic
-        }
+        // Delete flag after reading (single-use)
+        // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
+        FS.unlinkSync(stopFlagPath);
+        return flagData.stop_allowed === true;
       }
 
       // Generate comprehensive validation progress report for normal stops;
