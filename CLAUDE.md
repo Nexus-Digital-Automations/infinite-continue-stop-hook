@@ -286,11 +286,118 @@ All work must be committed and pushed before a task is marked as complete.
 
 **MANDATORY CLEAN ROOT AND ORGANIZED STRUCTURE:**
 
-- **✅ CLEAN ROOT**: Keep project root minimal - only essential config files
-- **✅ ORGANIZED STRUCTURE**: All code in appropriate directories (lib/, test/, src/, etc.)
-- **✅ PROPER CATEGORIZATION**: Group related files logically by feature/function
-- **❌ NEVER CLUTTER**: Root directory with temporary files, logs, or unnecessary files
-- **❌ NEVER SCATTER**: Related files across multiple unrelated directories
+### **Root Directory - Keep It Minimal**
+
+Only essential configuration files belong in root:
+- **✅ ALLOWED**: `package.json`, `README.md`, `.gitignore`, `.env.example`, config files (`.eslintrc`, `tsconfig.json`, `jest.config.js`, etc.)
+- **❌ FORBIDDEN**: Documentation files (use `docs/`), utility scripts (use `scripts/`), logs, temporary files, random `.md` files, one-off scripts, test data
+
+### **Standard Directory Structure**
+
+```
+project-root/
+├── README.md                    # Project overview only
+├── package.json                 # Dependencies and scripts
+├── .gitignore                   # Ignored patterns
+├── .env.example                 # Environment template (no secrets)
+├── lib/ or src/                 # Core source code
+│   ├── utils/                   # Utility functions
+│   ├── services/                # Business logic
+│   └── models/                  # Data models
+├── test/                        # ALL test files
+│   ├── unit/                    # Unit tests
+│   ├── integration/             # Integration tests
+│   └── e2e/                     # End-to-end tests
+├── docs/                        # ALL documentation
+│   ├── architecture.md
+│   ├── api.md
+│   └── guides/
+├── scripts/                     # Build & utility scripts
+│   ├── build.sh
+│   ├── deploy.sh
+│   └── test-runner.js
+├── config/                      # Configuration files
+├── development/                 # Development artifacts
+│   ├── essentials/              # features.md, etc.
+│   └── logs/                    # Development logs
+└── [avoid]: scattered files, orphaned .md, random scripts
+```
+
+### **File Placement Rules**
+
+**Documentation:**
+- **❌ NEVER** create documentation in root (except README.md)
+- **✅ ALWAYS** place in `docs/` folder
+- **Examples**: `docs/api.md`, `docs/architecture.md`, `docs/deployment.md`, `docs/CHANGELOG.md`
+
+**Scripts & Utilities:**
+- **❌ NEVER** place utility scripts in root
+- **✅ ALWAYS** place in `scripts/` folder
+- **Examples**: `scripts/setup.sh`, `scripts/test-runner.js`, `scripts/coverage.sh`, `scripts/migrate.js`
+
+**Logs & Temporary Files:**
+- **❌ NEVER** commit logs or temporary files
+- **✅ ALWAYS** gitignore: `logs/`, `tmp/`, `*.log`, `.cache/`, `development/logs/`
+- **✅ ALWAYS** place in designated folders: `development/logs/`, `tmp/`
+
+**Test Data & Fixtures:**
+- **❌ NEVER** leave test data in root
+- **✅ ALWAYS** place in `test/fixtures/`, `test/data/`, or `test/mocks/`
+
+**Generated Files:**
+- **❌ NEVER** commit build artifacts or generated code
+- **✅ ALWAYS** gitignore: `dist/`, `build/`, `coverage/`, `node_modules/`, `.next/`, `.cache/`
+
+### **Organization Principles**
+
+1. **Separation of Concerns**: Code (`lib/`), Tests (`test/`), Docs (`docs/`), Scripts (`scripts/`)
+2. **Feature Grouping**: Related files together, not scattered across random locations
+3. **Consistent Naming**: kebab-case for files/folders (`user-service.js`, `api-client/`)
+4. **No Orphans**: Every file has a logical home directory - no "homeless" files in root
+5. **Clean Root**: Root contains only essential config - everything else properly organized
+
+### **Before Creating Any File - Ask:**
+
+1. **Is this documentation?** → Place in `docs/`
+2. **Is this a script?** → Place in `scripts/`
+3. **Is this a test?** → Place in `test/`
+4. **Is this source code?** → Place in `lib/` or `src/`
+5. **Is this temporary/generated?** → Add to `.gitignore`
+6. **Does it belong in root?** → Only if it's essential config (package.json, README.md, etc.)
+
+### **Common Violations & Corrections**
+
+**❌ WRONG** → **✅ CORRECT**
+- Creating `CHANGELOG.md` in root → Create `docs/CHANGELOG.md`
+- Creating `TODO.md` in root → Create `docs/TODO.md` or `development/TODO.md`
+- Creating `setup.sh` in root → Create `scripts/setup.sh`
+- Creating `notes.md` in root → Create `docs/notes.md` or `development/notes.md`
+- Leaving test data in root → Create `test/fixtures/` or `test/data/`
+- Scattered utility files → Group in `lib/utils/` or `scripts/utils/`
+- Random scripts in root → Organize in `scripts/` folder
+- Temporary files tracked → Add to `.gitignore`, keep in `tmp/`
+
+### **Enforcement Protocol**
+
+**BEFORE Committing:**
+1. Review all new files for proper placement
+2. Check root directory hasn't accumulated clutter
+3. Verify `.gitignore` covers temporary/generated files
+4. Ensure documentation is in `docs/`, scripts in `scripts/`
+5. Confirm no orphaned files or random `.md` files in root
+
+**DURING Development:**
+- Create files in correct locations from the start
+- Don't use root as a dumping ground for "quick" files
+- If uncertain about placement, consult directory structure guide
+- Keep root clean and professional
+
+**DURING Code Review:**
+- Flag any files in wrong locations
+- Request reorganization before merge
+- Maintain structure integrity across all contributions
+
+**This ensures codebases remain professional, maintainable, and easy to navigate for all developers.**
 
 ## 🚨 PROACTIVE TASK DECOMPOSITION
 
