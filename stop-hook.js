@@ -264,7 +264,8 @@ function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
       try {
         FS.unlinkSync(stopCountPath);
-      } catch (_) {
+        // eslint-disable-next-line no-unused-vars -- intentionally ignoring cleanup errors
+      } catch {
         // Ignore cleanup errors
       }
       return false;
