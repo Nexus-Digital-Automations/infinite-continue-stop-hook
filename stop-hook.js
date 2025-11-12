@@ -892,22 +892,22 @@ function detectRapidStopCalls(workingDir, _category = 'general') {
       const cooldownExpiry = new Date(cooldownData.expiresAt).getTime();
 
       if (now < cooldownExpiry) {
-        // Still in cooldown period - ALLOW STOP instead of continuing infinite mode
+        // Still in cooldown period - CONTINUE INFINITE MODE to prevent rapid re-triggering
         const remainingCooldown = Math.ceil((cooldownExpiry - now) / 1000);
-        loggers.stopHook.info('EMERGENCY COOLDOWN ACTIVE - ALLOWING STOP', {
+        loggers.stopHook.info('EMERGENCY COOLDOWN ACTIVE - CONTINUING INFINITE MODE', {
           status: 'Emergency stop cooldown period active',
           remainingSeconds: remainingCooldown,
           cooldownPeriod: '60s',
           reason: cooldownData.reason,
           triggeredAt: cooldownData.triggeredAt,
-          action: 'Exiting with code 0 to allow conversation stop',
-          note: 'Cooldown prevents automatic detection but still allows stop',
+          action: 'Exiting with code 2 to continue infinite mode',
+          note: 'Cooldown prevents rapid re-triggering of emergency stops',
           component: 'StopHook',
           operation: 'cooldownCheck',
         });
-        // Exit immediately with code 0 to allow stop during cooldown
+        // Exit with code 2 to continue infinite mode during cooldown
         // eslint-disable-next-line n/no-process-exit
-        process.exit(0);
+        process.exit(2);
       } else {
         // Cooldown expired - clean up file
         loggers.stopHook.info('EMERGENCY COOLDOWN EXPIRED', {
