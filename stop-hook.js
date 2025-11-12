@@ -231,21 +231,40 @@ function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
 
       // Check if this is an emergency stop (bypasses validation reporting)
       if (flagData.session_type === 'emergency_stop' && flagData.validation_bypassed === true) {
-        // Emergency stops have no expiration - they persist until used
-        // This ensures emergency stops always work regardless of timing delays
+        // Check if emergency stop is still valid (within 5-second grace period)
+        const emergencyTimestamp = new Date(flagData.timestamp).getTime();
+        const now = Date.now();
+        const gracePeriod = 5000; // 5 seconds
+        const age = now - emergencyTimestamp;
+
+        if (age > gracePeriod) {
+          // Emergency stop expired - clean up and reject
+          loggers.stopHook.warn('EMERGENCY STOP EXPIRED', {
+            status: 'Emergency stop authorization expired',
+            age: `${Math.round(age / 1000)}s`,
+            gracePeriod: '5s',
+            note: 'Emergency stop file was too old - cleaning up',
+          });
+          // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
+          FS.unlinkSync(stopFlagPath);
+          return false;
+        }
+
+        // Valid emergency stop within grace period
         loggers.stopHook.info('EMERGENCY STOP DETECTED', {
           status: 'EMERGENCY STOP DETECTED',
           authorized_by: flagData.authorized_by,
           reason: flagData.reason,
           timestamp: flagData.timestamp,
+          age: `${Math.round(age / 1000)}s`,
+          gracePeriod: '5s',
           validation_bypassed: true,
           session_type: 'emergency_stop',
-          note: 'Emergency stops do not expire - persistent until used',
+          note: 'Emergency stop valid - will be honored for all rapid calls within grace period',
         });
 
-        // Delete flag after reading (single-use)
-        // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
-        FS.unlinkSync(stopFlagPath);
+        // DON'T delete yet - let it persist for the grace period to handle rapid calls
+        // It will be auto-deleted when it expires (next check will be > 5s old)
         return flagData.stop_allowed === true;
       }
 
@@ -885,6 +904,21 @@ function detectRapidStopCalls(workingDir, _category = 'general') {
 
   // Check for active cooldown period
   try {
+    // Check if manual emergency stop is active - if so, skip cooldown enforcement
+    const stopAllowedPath = path.join(workingDir, '.stop-allowed');
+    // eslint-disable-next-line security/detect-non-literal-fs-filename -- Stop allowed file check
+    if (FS.existsSync(stopAllowedPath)) {
+      loggers.stopHook.info('MANUAL EMERGENCY STOP DETECTED - BYPASSING COOLDOWN', {
+        status: 'Active emergency stop authorization found',
+        note: 'Manual emergency stops override automatic cooldown protection',
+        component: 'StopHook',
+        operation: 'cooldownBypass',
+      });
+      // Don't enforce cooldown - let checkStopAllowed handle the manual emergency stop
+      // This ensures manual emergency stops always work regardless of cooldown state
+      return false; // Return false to indicate no automatic emergency stop needed
+    }
+
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- Emergency cooldown file in validated project directory
     if (FS.existsSync(cooldownFilePath)) {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- Emergency cooldown file in validated project directory
