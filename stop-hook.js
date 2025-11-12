@@ -235,7 +235,7 @@ function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
         const countData = JSON.parse(countStr);
         const emergencyTimestamp = new Date(countData.timestamp).getTime();
         const now = Date.now();
-        const gracePeriod = 300000; // 5 minutes
+        const gracePeriod = 20000; // 20 seconds
         const age = now - emergencyTimestamp;
 
         if (age > gracePeriod) {
@@ -243,7 +243,7 @@ function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
           loggers.stopHook.warn('EMERGENCY STOP EXPIRED (LEGACY COUNTER)', {
             status: 'Emergency stop authorization expired',
             age: `${Math.round(age / 1000)}s`,
-            gracePeriod: '300s (5 minutes)',
+            gracePeriod: '20s',
             note: 'Emergency stop file was too old - cleaning up',
           });
           // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
@@ -257,8 +257,8 @@ function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
           authorized_by: countData.authorized_by || 'unknown',
           timestamp: countData.timestamp,
           age: `${Math.round(age / 1000)}s`,
-          gracePeriod: '300s (5 minutes)',
-          note: 'Emergency stop valid - will be honored for all stop hooks within 5-minute window',
+          gracePeriod: '20s',
+          note: 'Emergency stop valid - will be honored for all stop hooks within 20-second window',
         });
 
         return true; // Allow stop
@@ -281,7 +281,7 @@ function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
           loggers.stopHook.info('EMERGENCY STOP - CONVERTED TO GRACE PERIOD FORMAT', {
             status: 'Old numeric counter detected and converted',
             action: 'Converted to grace-period format for persistence across multiple calls',
-            gracePeriod: '300s (5 minutes)',
+            gracePeriod: '20s',
             note: 'Stop will be honored for all calls within grace period',
           });
 
@@ -329,10 +329,10 @@ function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
 
       // Check if this is an emergency stop (bypasses validation reporting)
       if (flagData.session_type === 'emergency_stop' && flagData.validation_bypassed === true) {
-        // Check if emergency stop is still valid (within 5-minute grace period)
+        // Check if emergency stop is still valid (within 20-second grace period)
         const emergencyTimestamp = new Date(flagData.timestamp).getTime();
         const now = Date.now();
-        const gracePeriod = 300000; // 5 minutes (300 seconds) - handles slow stop hook intervals
+        const gracePeriod = 20000; // 20 seconds - handles slow stop hook intervals
         const age = now - emergencyTimestamp;
 
         if (age > gracePeriod) {
@@ -340,7 +340,7 @@ function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
           loggers.stopHook.warn('EMERGENCY STOP EXPIRED', {
             status: 'Emergency stop authorization expired',
             age: `${Math.round(age / 1000)}s`,
-            gracePeriod: '300s (5 minutes)',
+            gracePeriod: '20s',
             note: 'Emergency stop file was too old - cleaning up',
           });
           // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
@@ -355,14 +355,14 @@ function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
           reason: flagData.reason,
           timestamp: flagData.timestamp,
           age: `${Math.round(age / 1000)}s`,
-          gracePeriod: '300s (5 minutes)',
+          gracePeriod: '20s',
           validation_bypassed: true,
           session_type: 'emergency_stop',
-          note: 'Emergency stop valid - will be honored for all stop hooks within 5-minute window',
+          note: 'Emergency stop valid - will be honored for all stop hooks within 20-second window',
         });
 
         // DON'T delete yet - let it persist for the grace period to handle rapid calls
-        // It will be auto-deleted when it expires (next check will be > 5s old)
+        // It will be auto-deleted when it expires (next check will be > 20s old)
         return flagData.stop_allowed === true;
       }
 
@@ -1216,7 +1216,7 @@ process.stdin.on('end', async () => {
       });
 
       // DO NOT clean up tracking file - it must persist to prevent re-triggering
-      // The tracking file will be cleaned up only after 5 minutes of inactivity
+      // The tracking file will be cleaned up only after 20 seconds of inactivity
       // This prevents the infinite loop where emergency stop triggers repeatedly
 
       // eslint-disable-next-line n/no-process-exit

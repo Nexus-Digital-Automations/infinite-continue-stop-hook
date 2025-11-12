@@ -2237,7 +2237,7 @@ class AutonomousTaskManagerAPI {
         session_type: 'emergency_stop',
         validation_bypassed: true,
         auto_triggered: false, // Manual emergency stop (not automatic detection)
-        grace_period_minutes: 5, // Will be honored for 5 minutes
+        grace_period_seconds: 20, // Will be honored for 20 seconds
       };
 
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
@@ -2249,8 +2249,8 @@ class AutonomousTaskManagerAPI {
         authorized_by: agentId,
         reason: stopData.reason,
         timestamp: timestamp,
-        message: '⚠️ EMERGENCY STOP AUTHORIZED - Stop will be honored across multiple hook calls for 5 minutes',
-        grace_period: '5 minutes',
+        message: '⚠️ EMERGENCY STOP AUTHORIZED - Stop will be honored across multiple hook calls for 20 seconds',
+        grace_period: '20 seconds',
         mechanism: 'persistent .stop-allowed file with grace period',
         note: 'Stop hook will honor this authorization for all calls within the grace period',
         warning: 'This should only be used if stop hook triggered multiple times with no work to do',
