@@ -347,6 +347,7 @@ TODO.json.*
 # Stop hook tracking files
 .stop-hook-calls.json
 .stop-allowed
+.stop-count
 .emergency-cooldown
 
 # Backup files

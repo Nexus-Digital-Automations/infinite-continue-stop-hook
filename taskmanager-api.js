@@ -2224,27 +2224,21 @@ class AutonomousTaskManagerAPI {
    */
   async emergencyStop(agentId, reason) {
     try {
-      // Create stop authorization flag immediately without validation
-      const stopFlagPath = path.join(PROJECT_ROOT, '.stop-allowed');
-      const stopData = {
-        stop_allowed: true,
-        authorized_by: agentId,
-        reason: reason || 'Emergency stop: Stop hook triggered multiple times with no work remaining',
-        timestamp: new Date().toISOString(),
-        session_type: 'emergency_stop',
-        validation_bypassed: true,
-      };
+      // Create simple counter file - next stop hook allowed, then back to infinite mode
+      const stopCountPath = path.join(PROJECT_ROOT, '.stop-count');
 
+      // Write "1" to indicate one stop is allowed
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
-      await FS.writeFile(stopFlagPath, JSON.stringify(stopData, null, 2));
+      await FS.writeFile(stopCountPath, '1', 'utf8');
 
+      const timestamp = new Date().toISOString();
       return {
         success: true,
         emergency: true,
         authorized_by: agentId,
-        reason: stopData.reason,
-        timestamp: stopData.timestamp,
-        message: '⚠️ EMERGENCY STOP AUTHORIZED - All validation bypassed',
+        reason: reason || 'Emergency stop: Stop hook triggered multiple times with no work remaining',
+        timestamp: timestamp,
+        message: '⚠️ EMERGENCY STOP AUTHORIZED - Next stop allowed, then infinite mode resumes',
         warning: 'This should only be used if stop hook triggered multiple times with no work to do',
       };
 

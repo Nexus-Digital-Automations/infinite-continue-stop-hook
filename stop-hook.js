@@ -220,6 +220,58 @@ function generateValidationProgressReport(
  * Provides comprehensive visibility into validation progress And status
  */
 function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
+  // Check for simple counter-based emergency stop first
+  const stopCountPath = path.join(workingDir, '.stop-count');
+
+  // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated working directory path
+  if (FS.existsSync(stopCountPath)) {
+    try {
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script reading validated stop count file
+      const countStr = FS.readFileSync(stopCountPath, 'utf8').trim();
+      const count = parseInt(countStr, 10);
+
+      if (count === 1) {
+        // First stop hook after emergency stop - allow stop once
+        loggers.stopHook.info('EMERGENCY STOP - ALLOWING STOP (1/1)', {
+          status: 'Emergency stop counter at 1 - allowing this stop',
+          action: 'Decrementing counter to 0 for next call',
+          note: 'Next stop hook will resume infinite mode',
+        });
+
+        // Decrement counter to 0 for next call
+        // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path
+        FS.writeFileSync(stopCountPath, '0', 'utf8');
+        return true; // Allow stop
+      } else {
+        // Counter is 0 or invalid - back to infinite mode, clean up
+        loggers.stopHook.info('EMERGENCY STOP CONSUMED - RESUMING INFINITE MODE', {
+          status: 'Emergency stop already used (counter at 0)',
+          action: 'Cleaning up counter file and resuming infinite mode',
+          note: 'Conversation will continue in infinite mode',
+        });
+
+        // Clean up the file
+        // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
+        FS.unlinkSync(stopCountPath);
+        return false; // Back to infinite mode
+      }
+    } catch (error) {
+      // Invalid counter file, clean up
+      loggers.stopHook.warn('Invalid emergency stop counter detected - cleaning up', {
+        error: error.message,
+        stopCountPath,
+      });
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
+      try {
+        FS.unlinkSync(stopCountPath);
+      } catch (_) {
+        // Ignore cleanup errors
+      }
+      return false;
+    }
+  }
+
+  // Check for legacy validation-based stop authorization (.stop-allowed file)
   const stopFlagPath = path.join(workingDir, '.stop-allowed');
 
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated working directory path
