@@ -348,3 +348,6 @@ TODO.json.*
 .stop-hook-calls.json
 .stop-allowed
 .emergency-cooldown
+
+# Backup files
+backups/
