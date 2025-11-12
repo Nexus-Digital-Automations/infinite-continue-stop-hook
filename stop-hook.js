@@ -220,7 +220,8 @@ function generateValidationProgressReport(
  * Provides comprehensive visibility into validation progress And status
  */
 function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
-  // Check for simple counter-based emergency stop first
+  // Check for legacy counter-based emergency stop first (deprecated, kept for backward compatibility)
+  // NOTE: New emergency stops use .stop-allowed file format with grace period
   const stopCountPath = path.join(workingDir, '.stop-count');
 
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated working directory path
@@ -228,32 +229,76 @@ function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
     try {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script reading validated stop count file
       const countStr = FS.readFileSync(stopCountPath, 'utf8').trim();
-      const count = parseInt(countStr, 10);
 
-      if (count === 1) {
-        // First stop hook after emergency stop - allow stop once
-        loggers.stopHook.info('EMERGENCY STOP - ALLOWING STOP (1/1)', {
-          status: 'Emergency stop counter at 1 - allowing this stop',
-          action: 'Decrementing counter to 0 for next call',
-          note: 'Next stop hook will resume infinite mode',
+      // Try to parse as JSON first (new format with grace period)
+      try {
+        const countData = JSON.parse(countStr);
+        const emergencyTimestamp = new Date(countData.timestamp).getTime();
+        const now = Date.now();
+        const gracePeriod = 300000; // 5 minutes
+        const age = now - emergencyTimestamp;
+
+        if (age > gracePeriod) {
+          // Emergency stop expired - clean up and reject
+          loggers.stopHook.warn('EMERGENCY STOP EXPIRED (LEGACY COUNTER)', {
+            status: 'Emergency stop authorization expired',
+            age: `${Math.round(age / 1000)}s`,
+            gracePeriod: '300s (5 minutes)',
+            note: 'Emergency stop file was too old - cleaning up',
+          });
+          // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
+          FS.unlinkSync(stopCountPath);
+          return false;
+        }
+
+        // Valid emergency stop within grace period - honor across multiple calls
+        loggers.stopHook.info('EMERGENCY STOP DETECTED (LEGACY COUNTER WITH GRACE PERIOD)', {
+          status: 'EMERGENCY STOP DETECTED',
+          authorized_by: countData.authorized_by || 'unknown',
+          timestamp: countData.timestamp,
+          age: `${Math.round(age / 1000)}s`,
+          gracePeriod: '300s (5 minutes)',
+          note: 'Emergency stop valid - will be honored for all stop hooks within 5-minute window',
         });
 
-        // Decrement counter to 0 for next call
-        // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path
-        FS.writeFileSync(stopCountPath, '0', 'utf8');
         return true; // Allow stop
-      } else {
-        // Counter is 0 or invalid - back to infinite mode, clean up
-        loggers.stopHook.info('EMERGENCY STOP CONSUMED - RESUMING INFINITE MODE', {
-          status: 'Emergency stop already used (counter at 0)',
-          action: 'Cleaning up counter file and resuming infinite mode',
-          note: 'Conversation will continue in infinite mode',
-        });
+      } catch {
+        // Not JSON - fallback to old numeric counter format
+        const count = parseInt(countStr, 10);
 
-        // Clean up the file
-        // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
-        FS.unlinkSync(stopCountPath);
-        return false; // Back to infinite mode
+        if (count === 1) {
+          // Old format detected - convert to new format with grace period for future calls
+          const newCountData = {
+            count: 1,
+            timestamp: new Date().toISOString(),
+            authorized_by: 'legacy-counter',
+            note: 'Converted from old numeric format to grace-period format',
+          };
+
+          // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path
+          FS.writeFileSync(stopCountPath, JSON.stringify(newCountData, null, 2), 'utf8');
+
+          loggers.stopHook.info('EMERGENCY STOP - CONVERTED TO GRACE PERIOD FORMAT', {
+            status: 'Old numeric counter detected and converted',
+            action: 'Converted to grace-period format for persistence across multiple calls',
+            gracePeriod: '300s (5 minutes)',
+            note: 'Stop will be honored for all calls within grace period',
+          });
+
+          return true; // Allow stop
+        } else {
+          // Counter is 0 or invalid - back to infinite mode, clean up
+          loggers.stopHook.info('EMERGENCY STOP CONSUMED - RESUMING INFINITE MODE', {
+            status: 'Emergency stop already used (counter at 0)',
+            action: 'Cleaning up counter file and resuming infinite mode',
+            note: 'Conversation will continue in infinite mode',
+          });
+
+          // Clean up the file
+          // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
+          FS.unlinkSync(stopCountPath);
+          return false; // Back to infinite mode
+        }
       }
     } catch (error) {
       // Invalid counter file, clean up
@@ -261,10 +306,10 @@ function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
         error: error.message,
         stopCountPath,
       });
-      // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
+
       try {
         FS.unlinkSync(stopCountPath);
-        // eslint-disable-next-line no-unused-vars -- intentionally ignoring cleanup errors
+
       } catch {
         // Ignore cleanup errors
       }

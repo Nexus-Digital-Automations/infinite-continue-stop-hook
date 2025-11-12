@@ -2224,21 +2224,35 @@ class AutonomousTaskManagerAPI {
    */
   async emergencyStop(agentId, reason) {
     try {
-      // Create simple counter file - next stop hook allowed, then back to infinite mode
-      const stopCountPath = path.join(PROJECT_ROOT, '.stop-count');
-
-      // Write "1" to indicate one stop is allowed
-      // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
-      await FS.writeFile(stopCountPath, '1', 'utf8');
-
+      // Create .stop-allowed file with grace period (aligns with automatic emergency stop)
+      // This ensures persistence across multiple stop hook calls
+      const stopFlagPath = path.join(PROJECT_ROOT, '.stop-allowed');
       const timestamp = new Date().toISOString();
+
+      const stopData = {
+        stop_allowed: true,
+        authorized_by: agentId,
+        reason: reason || 'Emergency stop: Stop hook triggered multiple times with no work remaining',
+        timestamp: timestamp,
+        session_type: 'emergency_stop',
+        validation_bypassed: true,
+        auto_triggered: false, // Manual emergency stop (not automatic detection)
+        grace_period_minutes: 5, // Will be honored for 5 minutes
+      };
+
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated through security validator system
+      await FS.writeFile(stopFlagPath, JSON.stringify(stopData, null, 2), 'utf8');
+
       return {
         success: true,
         emergency: true,
         authorized_by: agentId,
-        reason: reason || 'Emergency stop: Stop hook triggered multiple times with no work remaining',
+        reason: stopData.reason,
         timestamp: timestamp,
-        message: '⚠️ EMERGENCY STOP AUTHORIZED - Next stop allowed, then infinite mode resumes',
+        message: '⚠️ EMERGENCY STOP AUTHORIZED - Stop will be honored across multiple hook calls for 5 minutes',
+        grace_period: '5 minutes',
+        mechanism: 'persistent .stop-allowed file with grace period',
+        note: 'Stop hook will honor this authorization for all calls within the grace period',
         warning: 'This should only be used if stop hook triggered multiple times with no work to do',
       };
 
