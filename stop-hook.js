@@ -231,10 +231,10 @@ function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
 
       // Check if this is an emergency stop (bypasses validation reporting)
       if (flagData.session_type === 'emergency_stop' && flagData.validation_bypassed === true) {
-        // Check if emergency stop is still valid (within 5-second grace period)
+        // Check if emergency stop is still valid (within 5-minute grace period)
         const emergencyTimestamp = new Date(flagData.timestamp).getTime();
         const now = Date.now();
-        const gracePeriod = 5000; // 5 seconds
+        const gracePeriod = 300000; // 5 minutes (300 seconds) - handles slow stop hook intervals
         const age = now - emergencyTimestamp;
 
         if (age > gracePeriod) {
@@ -242,7 +242,7 @@ function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
           loggers.stopHook.warn('EMERGENCY STOP EXPIRED', {
             status: 'Emergency stop authorization expired',
             age: `${Math.round(age / 1000)}s`,
-            gracePeriod: '5s',
+            gracePeriod: '300s (5 minutes)',
             note: 'Emergency stop file was too old - cleaning up',
           });
           // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
@@ -257,10 +257,10 @@ function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
           reason: flagData.reason,
           timestamp: flagData.timestamp,
           age: `${Math.round(age / 1000)}s`,
-          gracePeriod: '5s',
+          gracePeriod: '300s (5 minutes)',
           validation_bypassed: true,
           session_type: 'emergency_stop',
-          note: 'Emergency stop valid - will be honored for all rapid calls within grace period',
+          note: 'Emergency stop valid - will be honored for all stop hooks within 5-minute window',
         });
 
         // DON'T delete yet - let it persist for the grace period to handle rapid calls
