@@ -9,15 +9,50 @@
 4.  **IMMEDIATE TASK EXECUTION**: Plan → Execute → Document. No delays.
 5.  **ONE FEATURE AT A TIME**: Work on EXACTLY ONE feature from `FEATURES.json`, complete it fully, then move to the next.
 6.  **USER FEEDBACK SUPREMACY**: User requests TRUMP EVERYTHING. Implement them immediately, but do so within the quality framework.
-7.  **🔄 STOP HOOK CONTINUATION**: When stop hook triggers, you ARE THE SAME AGENT. Finish current work OR check TASKS.json for new work. NEVER sit idle.
+7.  **🔄 STOP HOOK CONTINUATION**: LOCAL ENVIRONMENTS ONLY - When stop hook triggers, you ARE THE SAME AGENT. Finish current work OR check TASKS.json for new work. NEVER sit idle. (Cloud-hosted: stop hook not available, use standard TodoWrite workflow)
 8.  **🔒 CLAUDE.md PROTECTION**: NEVER edit CLAUDE.md without EXPLICIT user permission.
 9.  **📚 DOCUMENTATION-FIRST WORKFLOW**: Review docs/ folder BEFORE implementing features. Mark features "IN PROGRESS" in docs, research when uncertain (safe over sorry), write unit tests BEFORE next feature. Use TodoWrite to track: docs review → research → implementation → testing → docs update.
-10. **🔴 TASKMANAGER-FIRST MANDATE**: ALWAYS use TaskManager API (`/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js`) for ALL task operations. Query task status BEFORE starting work, update progress DURING work, store lessons AFTER completion. TaskManager is the SINGLE SOURCE OF TRUTH for all project tasks.
+10. **🔴 TASKMANAGER-FIRST MANDATE**: LOCAL ENVIRONMENTS ONLY - ALWAYS use TaskManager API (`/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js`) for ALL task operations. Query task status BEFORE starting work, update progress DURING work, store lessons AFTER completion. TaskManager is the SINGLE SOURCE OF TRUTH for all project tasks. (Cloud-hosted: use standard TodoWrite instead)
 11. **🔴 ABSOLUTE SECURITY MANDATE**: NEVER commit credentials, secrets, API keys, or sensitive data to git. ALL sensitive files MUST be in .gitignore BEFORE any work begins. Pre-commit hooks MUST catch secrets. Treat security violations as CRITICAL errors. Security is non-negotiable and has ZERO tolerance.
 12. **⚡ TOKEN BUDGET OPTIMIZATION**: Allocate majority of token budget to CODE WRITING and IMPLEMENTATION WORK. Keep status updates concise and action-focused. Minimize verbose explanations. Prioritize doing over discussing. Reserve tokens for actual development work, not commentary.
 </law>
 
+## 🌐 ENVIRONMENT DETECTION - CLOUD VS LOCAL
+
+**CRITICAL: Adapt behavior based on hosting environment**
+
+**ENVIRONMENT DETECTION:**
+```bash
+# Attempt to access TaskManager API to detect environment
+timeout 2s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" methods 2>/dev/null
+# If command succeeds → LOCAL/SELF-HOSTED environment
+# If command fails/times out → CLOUD-HOSTED environment
+```
+
+**CLOUD-HOSTED ENVIRONMENT (TaskManager API not accessible):**
+- ❌ Infinite continue stop hook NOT AVAILABLE
+- ❌ TaskManager API NOT ACCESSIBLE
+- ❌ Emergency stop NOT AVAILABLE
+- ✅ USE DEFAULT TODOWRITE for all task tracking
+- ✅ Standard Claude Code workflow applies
+- ✅ Complete tasks normally without stop hook continuation
+
+**LOCAL/SELF-HOSTED ENVIRONMENT (TaskManager API accessible):**
+- ✅ Full infinite continue stop hook functionality
+- ✅ TaskManager API fully operational
+- ✅ Emergency stop available
+- ✅ Advanced task coordination and persistence
+- ✅ Multi-session work continuation
+
+**BEHAVIOR ADAPTATION:**
+- **First Action**: Attempt TaskManager API access to detect environment
+- **Cloud Detected**: Switch to standard TodoWrite-based workflow
+- **Local Detected**: Follow full TaskManager-first mandate
+- **When Uncertain**: Default to cloud behavior (safer, no dependencies)
+
 ## 🔴 TASKMANAGER-FIRST MANDATE
+
+**⚠️ LOCAL/SELF-HOSTED ENVIRONMENTS ONLY - NOT AVAILABLE IN CLOUD HOSTING**
 
 **ABSOLUTE REQUIREMENT - TASKMANAGER API MUST BE USED FOR ALL TASK OPERATIONS**
 
@@ -113,6 +148,19 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 
 **WHEN STOP HOOK TRIGGERS - YOU MUST TAKE ACTION:**
 
+**🔴 ENVIRONMENT CHECK FIRST**: Determine if cloud-hosted or local environment
+
+### CLOUD-HOSTED ENVIRONMENT (TaskManager not available):
+
+**Stop hook continuation NOT AVAILABLE - Use standard Claude Code workflow:**
+
+1. **Check TodoWrite tasks**: Complete any pending TodoWrite items
+2. **No stop hook magic**: Stop hook won't trigger in cloud environments
+3. **Standard completion**: Finish work and mark tasks complete normally
+4. **No emergency-stop**: Not applicable in cloud environments
+
+### LOCAL/SELF-HOSTED ENVIRONMENT (TaskManager available):
+
 **🔴 MANDATORY FIRST**: Query TaskManager (use `$TM get-task-stats`, `$TM get-agent-tasks [AGENT_ID]`, `$TM get-tasks-by-status approved` - see [TaskManager API Reference](#-taskmanager-api-reference---mandatory-usage))
 
 ### Immediate Actions:
@@ -122,7 +170,7 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 **OPTION 3**: If nothing approved → Review codebase, check linting/security, verify tests, update docs
 **OPTION 4**: If stop hook called 2nd consecutive time with no work → Verify all options exhausted → Check emergency stop cooldown → If no recent emergency stop (>60s), issue `$TM emergency-stop [AGENT_ID] "reason"`
 
-**NO WORK DEFINED AS:**
+**NO WORK DEFINED AS (Local environments only):**
 - ❌ No approved tasks in TaskManager
 - ❌ No errors, linting issues, or build failures to fix
 - ❌ No in-progress TodoWrite items
@@ -135,16 +183,21 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 - ❌ NEVER issue multiple emergency stops in rapid succession
 - ❌ NEVER bypass the cooldown period
 
-**Task Statuses**: approved (work on these) | suggested (awaiting approval) | completed (done) | assigned (claimed by others)
+**Task Statuses (Local environments only)**: approved (work on these) | suggested (awaiting approval) | completed (done) | assigned (claimed by others)
 
-**ERROR/BUG EXCEPTION**: ERROR tasks, linting errors, build errors, test failures, and security vulnerabilities can be fixed IMMEDIATELY without approval. FEATURE tasks and refactoring require "approved" status.
+**ERROR/BUG EXCEPTION (Local environments only)**: ERROR tasks, linting errors, build errors, test failures, and security vulnerabilities can be fixed IMMEDIATELY without approval. FEATURE tasks and refactoring require "approved" status.
 
-**FORBIDDEN**: Sitting idle, asking "what should I do?", saying "ready for next task", doing nothing, **issuing emergency stops repeatedly**
-**CORRECT**: "Continuing work on...", "Checking TASKS.json...", "Found X tasks, starting with...", "Emergency stop initiated (respecting cooldown)"
+**FORBIDDEN (Cloud)**: N/A - stop hook not available, use standard workflow
+**FORBIDDEN (Local)**: Sitting idle, asking "what should I do?", saying "ready for next task", doing nothing, **issuing emergency stops repeatedly**
 
-**YOU ARE THE SAME AGENT. STAY ACTIVE. KEEP WORKING. IF STOP HOOK CALLED 2ND TIME WITH NO WORK - EMERGENCY STOP (WITH COOLDOWN CHECK).**
+**CORRECT (Cloud)**: Complete TodoWrite tasks, finish work normally
+**CORRECT (Local)**: "Continuing work on...", "Checking TASKS.json...", "Found X tasks, starting with...", "Emergency stop initiated (respecting cooldown)"
 
-**EMERGENCY STOP TRIGGER SEQUENCE:**
+**LOCAL ENVIRONMENTS: YOU ARE THE SAME AGENT. STAY ACTIVE. KEEP WORKING. IF STOP HOOK CALLED 2ND TIME WITH NO WORK - EMERGENCY STOP (WITH COOLDOWN CHECK).**
+
+**CLOUD ENVIRONMENTS: Standard Claude Code workflow applies.**
+
+**EMERGENCY STOP TRIGGER SEQUENCE (Local environments only):**
 1. **Stop Hook #1** → Check all 4 options → Attempt available work
 2. **Stop Hook #2** → Verify NO WORK still true → Check cooldown → Emergency stop
 3. **Never** → Issue emergency stop on first hook call or without verifying all options
