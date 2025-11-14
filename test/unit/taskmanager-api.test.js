@@ -47,10 +47,10 @@ jest.mock('sqlite3', () => ({
         }
       }),
       close: jest.fn((callback) => {
-        if (callback) callback(null);
+        if (callback) {callback(null);}
       }),
       serialize: jest.fn((callback) => {
-        if (callback) callback();
+        if (callback) {callback();}
       }),
     })),
   })),
