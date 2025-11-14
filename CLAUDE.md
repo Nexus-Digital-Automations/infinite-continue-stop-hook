@@ -3,7 +3,7 @@
 <law>
 **CORE OPERATION PRINCIPLES (Display at start of every response):**
 
-1.  **🔥 AUTOMATED QUALITY & SECURITY FRAMEWORK SUPREMACY**: All code MUST pass the two-stage quality and security gauntlet: first the local pre-commit hooks (including secret scanning), then the full CI/CD pipeline (including security validation). There are no exceptions.
+1.  **🔥 AUTOMATED QUALITY & SECURITY FRAMEWORK SUPREMACY**: All code MUST pass the two-stage quality and security gauntlet: first the local pre-commit hooks (including secret scanning), then the full CI/CD pipeline (including security validation). **MANDATORY: Pre-commit hook configuration (.pre-commit-config.yaml OR .husky/) AND comprehensive CI/CD workflows (.github/workflows/) MUST exist.** There are no exceptions.
 2.  **ABSOLUTE HONESTY**: Never skip, ignore, or hide any issues, errors, or failures. Report the state of the codebase with complete transparency.
 3.  **ROOT PROBLEM SOLVING**: Fix underlying causes, not symptoms.
 4.  **IMMEDIATE TASK EXECUTION**: Plan → Execute → Document. No delays.
@@ -224,6 +224,30 @@ Before any code is committed, it **MUST** pass all local pre-commit hooks. These
     3.  Run `git commit`. The pre-commit hooks will automatically run.
     4.  If the hooks fail, fix the reported issues and repeat the process until the commit is successful.
 
+### **🚨 MANDATORY PRE-COMMIT CONFIGURATION REQUIREMENT**
+
+**ABSOLUTE REQUIREMENT - PRE-COMMIT HOOKS MUST BE CONFIGURED:**
+
+  * **Required Configuration** (at least one):
+    - **Python pre-commit framework**: `.pre-commit-config.yaml` file in project root
+    - **Husky (Node.js)**: `.husky/` directory with git hooks
+  * **Minimum Required Hooks**:
+    - Linting/formatting (eslint, prettier, pylint, black, etc.)
+    - Secret scanning (detect-secrets, gitleaks, truffleHog)
+    - Trailing whitespace/EOF newline checks
+  * **Verification**: Before ANY commit, verify pre-commit configuration exists
+  * **Consequence**: Commits without pre-commit hook infrastructure are FORBIDDEN
+
+**PRE-COMMIT VERIFICATION:**
+```bash
+# Check for pre-commit configuration
+if [ ! -f ".pre-commit-config.yaml" ] && [ ! -d ".husky" ]; then
+  echo "❌ CRITICAL ERROR: No pre-commit hook configuration found"
+  echo "❌ Required: .pre-commit-config.yaml OR .husky/ directory"
+  exit 1
+fi
+```
+
 ### **Stage 2: CI/CD Pipeline (The Official Gatekeeper)**
 
 Once your clean code is pushed, it **MUST** pass the full CI/CD pipeline. This is the project's ultimate arbiter of quality and integration.
@@ -235,6 +259,29 @@ Once your clean code is pushed, it **MUST** pass the full CI/CD pipeline. This i
       * **Test**: Full suite of unit, integration, and end-to-end tests.
       * **Security**: In-depth security and vulnerability scanning (dependency audits, OWASP checks, secret detection, vulnerability databases). Zero tolerance for exposed credentials or high/critical vulnerabilities.
       * **Build**: Compilation and packaging of the application.
+
+### **🚨 MANDATORY CI/CD CONFIGURATION REQUIREMENT**
+
+**ABSOLUTE REQUIREMENT - CI/CD MUST EXIST BEFORE ANY COMMITS:**
+
+  * **Required Location**: `.github/workflows/` directory in project root
+  * **Minimum Required Workflows**:
+    - **validate.yml**: Linting, formatting, type checking
+    - **test.yml**: Unit, integration, and E2E test suites
+    - **security.yml**: Security scanning, dependency audits, secret detection
+    - **build.yml**: Build process validation
+  * **Verification**: Before EVERY commit, verify `.github/workflows/` exists with comprehensive workflows
+  * **Consequence**: Commits without CI/CD infrastructure are FORBIDDEN
+
+**CI/CD VERIFICATION:**
+```bash
+# Check for CI/CD workflows directory
+if [ ! -d ".github/workflows" ] || [ -z "$(ls -A .github/workflows/*.yml 2>/dev/null)" ]; then
+  echo "❌ CRITICAL ERROR: .github/workflows/ missing or empty"
+  echo "❌ CI/CD configuration REQUIRED before commits"
+  exit 1
+fi
+```
 
 -----
 
@@ -301,10 +348,26 @@ git diff --cached | grep -iE "password|api[_-]key|secret|token|credentials"
 All work must be committed and pushed before a task is marked as complete.
 
   * **ATOMIC COMMITS**: Each commit must represent a single, logical, self-contained change.
+  * **PRE-COMMIT HOOKS VERIFICATION**: BEFORE staging any files, verify pre-commit hook configuration exists (.pre-commit-config.yaml OR .husky/ directory). A repository without automated local quality checks is not production-ready.
+  * **CI/CD VERIFICATION**: BEFORE staging any files, verify `.github/workflows/` directory exists with all required CI/CD workflows (validate, test, security, build). A repository without CI/CD infrastructure is not production-ready.
   * **SECURITY PRE-CHECK**: BEFORE staging any files, verify no secrets will be committed. Check .gitignore includes all sensitive patterns.
   * **PIPELINE VERIFICATION**: It is your responsibility to confirm that your pushed commits pass the CI/CD pipeline. A broken build must be treated as an urgent priority.
   * **Commit Sequence**:
     ```bash
+    # PRE-COMMIT HOOKS: Verify configuration exists
+    if [ ! -f ".pre-commit-config.yaml" ] && [ ! -d ".husky" ]; then
+      echo "❌ BLOCKED: No pre-commit hook configuration"
+      echo "❌ Create .pre-commit-config.yaml or .husky/ before committing"
+      exit 1
+    fi
+
+    # CI/CD: Verify comprehensive workflows exist
+    if [ ! -d ".github/workflows" ] || [ -z "$(ls -A .github/workflows/*.yml 2>/dev/null)" ]; then
+      echo "❌ BLOCKED: .github/workflows/ missing or empty"
+      echo "❌ Create comprehensive CI/CD workflows before committing"
+      exit 1
+    fi
+
     # SECURITY: Check for secrets before staging
     git diff | grep -iE "password|api[_-]key|secret|token|credentials" || echo "No obvious secrets detected"
 
