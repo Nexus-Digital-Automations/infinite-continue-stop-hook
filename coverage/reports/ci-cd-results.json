@@ -1,14 +1,14 @@
 {
   "metadata": {
-    "timestamp": "2025-09-30T01:47:31.148Z",
+    "timestamp": "2025-11-14T02:48:10.487Z",
     "reporter": "jest-cicd-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System",
-    "duration_ms": 31422
+    "duration_ms": 1055
   },
   "cicd_summary": {
     "pipeline_status": "FAILURE",
-    "total_duration_ms": 31422,
+    "total_duration_ms": 1055,
     "should_block_deployment": true,
     "quality_gate_status": {
       "status": "FAILED",
@@ -16,13 +16,13 @@
         "tests_passing": false,
         "no_failed_tests": false,
         "coverage_adequate": false,
-        "performance_acceptable": false
+        "performance_acceptable": true
       },
       "blocking_issues": [
         {
           "type": "test_failures",
           "severity": "critical",
-          "message": "4 test(s) failed",
+          "message": "39 test(s) failed",
           "action": "Fix failing tests before deployment"
         },
         {
@@ -30,84 +30,113 @@
           "severity": "warning",
           "message": "Code coverage below acceptable threshold",
           "action": "Add more tests to improve coverage"
-        },
-        {
-          "type": "performance",
-          "severity": "warning",
-          "message": "Test execution time is slow",
-          "action": "Optimize slow tests or improve test parallelization"
         }
       ]
     },
-    "test_health_score": 72
+    "test_health_score": 50
   },
   "test_execution": {
     "summary": {
       "total_suites": 1,
       "passed_suites": 0,
       "failed_suites": 1,
-      "total_tests": 11,
-      "passed_tests": 7,
-      "failed_tests": 4,
+      "total_tests": 39,
+      "passed_tests": 0,
+      "failed_tests": 39,
       "pending_tests": 0,
-      "success_rate": "63.64",
-      "execution_time_ms": 31422
+      "success_rate": "0.00",
+      "execution_time_ms": 1055
     },
     "performance_metrics": {
-      "average_test_duration": 2856.5454545454545,
+      "average_test_duration": 27.05128205128205,
       "slowest_suite": {
-        "path": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/validation-dependency-e2e.test.js",
-        "duration_ms": 31004,
-        "num_tests": 11
+        "path": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js",
+        "duration_ms": 913,
+        "num_tests": 39
       },
       "memory_usage": {
-        "rss": 161759232,
-        "heap_total": 98435072,
-        "heap_used": 75780784,
-        "external": 5009473,
-        "heap_usage_percent": "76.99"
+        "rss": 321306624,
+        "heap_total": 219561984,
+        "heap_used": 193923560,
+        "external": 6034581,
+        "heap_usage_percent": "88.32"
       },
       "parallel_efficiency": {
-        "parallel_efficiency_percent": "98.67",
-        "total_execution_time_ms": 31423,
-        "serial_time_ms": 31004,
+        "parallel_efficiency_percent": "86.54",
+        "total_execution_time_ms": 1055,
+        "serial_time_ms": 913,
         "time_saved_ms": 0
       }
     },
     "failure_analysis": {
-      "total_failures": 4,
+      "total_failures": 39,
       "failed_suites": 1,
       "failure_details": [
         {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/validation-dependency-e2e.test.js",
-          "test": "Validation Dependency Management End-to-End Tests Complete, Workflow Integration should handle complex parallel execution with monitoring",
-          "duration": 30006,
-          "error": "Error: thrown: \"Exceeded timeout of 30000 ms for a test.\nAdd a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout.\"\n"
-        },
-        {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/validation-dependency-e2e.test.js",
-          "test": "Validation Dependency Management End-to-End Tests Error, Recovery And, Resilience should recover from configuration corruption",
-          "duration": 3,
-          "error": "Error: Failed to load dependency configuration: Expected property name or '}' in JSON at position 2 (line 1 column 3)\n    at ValidationDependencyManager.loadDependencyConfig (/Users/jeremyparker/infin"
-        },
-        {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/validation-dependency-e2e.test.js",
-          "test": "Validation Dependency Management End-to-End Tests Integration with, Adaptive Planning should generate optimal plans for different system configurations",
-          "duration": 55,
-          "error": "Error: expect(received).toBeGreaterThanOrEqual(expected)\n\nExpected: >= 8\nReceived:    4\n    at Object.toBeGreaterThanOrEqual (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/validation-depend"
-        },
-        {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/validation-dependency-e2e.test.js",
-          "test": "Validation Dependency Management End-to-End Tests Visualization, Quality And, Completeness should generate complete, And accurate visualizations",
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js",
+          "test": "Initialization Statistics Time Bucket Calculations Current Time Bucket Detection should identify morning time bucket (07:00-11:59)",
           "duration": 1,
-          "error": "Error: expect(received).toContain(expected) // indexOf\n\nExpected substring: \"graph, TD\"\nReceived string:    \"graph TD\n  classDef strict stroke:#e74c3c,stroke-width:3px\n  classDef weak stroke:#f39c12,s"
+          "error": "TypeError: Cannot set property promises of [object Object] which has only a getter\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js:49:"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js",
+          "test": "Initialization Statistics Time Bucket Calculations Current Time Bucket Detection should identify afternoon time bucket (12:00-16:59)",
+          "duration": 0,
+          "error": "TypeError: Cannot set property promises of [object Object] which has only a getter\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js:49:"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js",
+          "test": "Initialization Statistics Time Bucket Calculations Current Time Bucket Detection should identify evening time bucket (17:00-21:59)",
+          "duration": 1,
+          "error": "TypeError: Cannot set property promises of [object Object] which has only a getter\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js:49:"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js",
+          "test": "Initialization Statistics Time Bucket Calculations Current Time Bucket Detection should identify late night time bucket (22:00-02:59)",
+          "duration": 0,
+          "error": "TypeError: Cannot set property promises of [object Object] which has only a getter\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js:49:"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js",
+          "test": "Initialization Statistics Time Bucket Calculations Current Time Bucket Detection should identify early morning time bucket (03:00-06:59)",
+          "duration": 0,
+          "error": "TypeError: Cannot set property promises of [object Object] which has only a getter\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js:49:"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js",
+          "test": "Initialization Statistics Time Bucket Calculations Current Time Bucket Detection should handle time bucket edge cases",
+          "duration": 0,
+          "error": "TypeError: Cannot set property promises of [object Object] which has only a getter\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js:49:"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js",
+          "test": "Initialization Statistics Initialization Stats Structure Stats Structure Creation should create initialization stats structure when missing",
+          "duration": 0,
+          "error": "TypeError: Cannot set property promises of [object Object] which has only a getter\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js:49:"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js",
+          "test": "Initialization Statistics Initialization Stats Structure Stats Structure Creation should create all required time buckets",
+          "duration": 0,
+          "error": "TypeError: Cannot set property promises of [object Object] which has only a getter\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js:49:"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js",
+          "test": "Initialization Statistics Initialization Stats Structure Stats Structure Creation should preserve existing stats structure",
+          "duration": 1,
+          "error": "TypeError: Cannot set property promises of [object Object] which has only a getter\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js:49:"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js",
+          "test": "Initialization Statistics Initialization Stats Structure Stats Structure Creation should create metadata if completely missing",
+          "duration": 0,
+          "error": "TypeError: Cannot set property promises of [object Object] which has only a getter\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js:49:"
         }
       ],
       "failure_patterns": {
-        "timeout": 1,
-        "assertion": 3
+        "type": 39
       },
-      "common_failure_type": "assertion"
+      "common_failure_type": "type"
     },
     "flaky_test_detection": {
       "potentially_flaky": [],
@@ -116,17 +145,17 @@
     }
   },
   "git": {
-    "commit_sha": "a35ea87616369c8753c768ea5424b47f93decaa1",
+    "commit_sha": "e70f1c42395febc3f5d7f4962307518a57e3c681",
     "branch": "main",
     "author": "Claude <claude@anthropic.com>",
-    "commit_message": "fix(tests): resolve E2E test syntax errors and logic bugs",
-    "commit_date": "2025-09-29 20:46:54 -0500",
+    "commit_message": "chore: update TASKS.json with latest task state",
+    "commit_date": "2025-11-13 19:04:51 -0600",
     "tag": null,
     "is_dirty": true,
     "remote_url": "https://github.com/Nexus-Digital-Automations/infinite-continue-stop-hook.git"
   },
   "environment": {
-    "node_version": "v22.20.0",
+    "node_version": "v22.21.1",
     "platform": "darwin",
     "arch": "arm64",
     "ci": false,
@@ -136,7 +165,7 @@
     "locale": "en-US",
     "memory": {
       "total": 25769803776,
-      "available": 307101696
+      "available": 317718528
     },
     "cpu": {
       "cores": 8,
@@ -159,7 +188,7 @@
       "category": "testing",
       "priority": "high",
       "recommendation": "Fix failing tests immediately",
-      "details": "4 tests are currently failing"
+      "details": "39 tests are currently failing"
     }
   ]
 }
