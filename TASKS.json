@@ -3738,15 +3738,7 @@
     "last_bulk_archive": "2025-11-14T02:52:50.069Z",
     "bulk_archive_count": 1350
   },
-  "agents": {
-    "testing_framework_agent": {
-      "lastHeartbeat": "2025-11-14T02:44:57.781Z",
-      "status": "active",
-      "reinitialized": "2025-11-14T02:44:57.781Z",
-      "sessionId": "5e980916f0616e51",
-      "previousSessions": []
-    }
-  },
+  "agents": {},
   "features": [
     {
       "id": "feature_1758946372889_4bc64043b483",
