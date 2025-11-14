@@ -21,12 +21,61 @@ const {
   testHelpers,
 } = require('./test-utilities');
 
+// Mock sqlite3 module before importing the main module
+jest.mock('sqlite3', () => ({
+  verbose: jest.fn(() => ({
+    Database: jest.fn().mockImplementation(() => ({
+      run: jest.fn((sql, params, callback) => {
+        if (typeof params === 'function') {
+          params(null);
+        } else if (callback) {
+          callback(null);
+        }
+      }),
+      get: jest.fn((sql, params, callback) => {
+        if (typeof params === 'function') {
+          params(null, {});
+        } else if (callback) {
+          callback(null, {});
+        }
+      }),
+      all: jest.fn((sql, params, callback) => {
+        if (typeof params === 'function') {
+          params(null, []);
+        } else if (callback) {
+          callback(null, []);
+        }
+      }),
+      close: jest.fn((callback) => {
+        if (callback) callback(null);
+      }),
+      serialize: jest.fn((callback) => {
+        if (callback) callback();
+      }),
+    })),
+  })),
+}));
+
+// Mock faiss-node module before importing the main module
+jest.mock('faiss-node', () => ({
+  IndexFlatL2: jest.fn().mockImplementation(() => ({
+    add: jest.fn(),
+    search: jest.fn(() => ({ labels: [], distances: [] })),
+    ntotal: jest.fn(() => 0),
+    write: jest.fn(),
+    read: jest.fn(),
+  })),
+}));
+
 // Mock the fs module before importing the main module
 jest.mock('fs', () => ({
+  existsSync: jest.fn(() => true),
+  mkdirSync: jest.fn(),
   promises: {
     access: jest.fn(),
     readFile: jest.fn(),
     writeFile: jest.fn(),
+    mkdir: jest.fn(),
   },
 }));
 

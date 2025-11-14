@@ -13,7 +13,6 @@
  * features of the FeatureManagerAPI with detailed time-based testing.
  */
 
-const fs = require('fs');
 const path = require('path');
 const {
   MockFileSystem,
@@ -21,6 +20,64 @@ const {
   TimeTestUtils,
   testHelpers,
 } = require('./test-utilities');
+
+// Mock sqlite3 module before importing the main module
+jest.mock('sqlite3', () => ({
+  verbose: jest.fn(() => ({
+    Database: jest.fn().mockImplementation(() => ({
+      run: jest.fn((sql, params, callback) => {
+        if (typeof params === 'function') {
+          params(null);
+        } else if (callback) {
+          callback(null);
+        }
+      }),
+      get: jest.fn((sql, params, callback) => {
+        if (typeof params === 'function') {
+          params(null, {});
+        } else if (callback) {
+          callback(null, {});
+        }
+      }),
+      all: jest.fn((sql, params, callback) => {
+        if (typeof params === 'function') {
+          params(null, []);
+        } else if (callback) {
+          callback(null, []);
+        }
+      }),
+      close: jest.fn((callback) => {
+        if (callback) callback(null);
+      }),
+      serialize: jest.fn((callback) => {
+        if (callback) callback();
+      }),
+    })),
+  })),
+}));
+
+// Mock faiss-node module before importing the main module
+jest.mock('faiss-node', () => ({
+  IndexFlatL2: jest.fn().mockImplementation(() => ({
+    add: jest.fn(),
+    search: jest.fn(() => ({ labels: [], distances: [] })),
+    ntotal: jest.fn(() => 0),
+    write: jest.fn(),
+    read: jest.fn(),
+  })),
+}));
+
+// Mock the fs module before importing the main module
+jest.mock('fs', () => ({
+  existsSync: jest.fn(() => true),
+  mkdirSync: jest.fn(),
+  promises: {
+    access: jest.fn(),
+    readFile: jest.fn(),
+    writeFile: jest.fn(),
+    mkdir: jest.fn(),
+  },
+}));
 
 // Import the FeatureManagerAPI class;
 const FeatureManagerAPI = require('../../taskmanager-api.js');
@@ -31,7 +88,6 @@ describe('Initialization Statistics', () => {
   let api;
   let mockFs;
   let timeUtils;
-  let originalFs;
 
   const TEST_PROJECT_ROOT = '/test/stats-project';
   const TEST_TASKS_PATH = path.join(TEST_PROJECT_ROOT, 'TASKS.json');
@@ -44,9 +100,11 @@ describe('Initialization Statistics', () => {
     // Override the tasks path for testing
     api.tasksPath = TEST_TASKS_PATH;
 
-    // Mock the fs module
-    originalFs = fs.promises;
-    fs.promises = mockFs;
+    // Get the mocked fs module and connect it to our MockFileSystem
+    const fs = require('fs');
+    fs.promises.access.mockImplementation((...args) => mockFs.access(...args));
+    fs.promises.readFile.mockImplementation((...args) => mockFs.readFile(...args));
+    fs.promises.writeFile.mockImplementation((...args) => mockFs.writeFile(...args));
 
     // Setup initial tasks file
     mockFs.setFile(
@@ -56,10 +114,6 @@ describe('Initialization Statistics', () => {
   });
 
   afterEach(() => {
-    // Restore original file system
-    // Use existing fs declaration from line 46
-    fs.promises = originalFs;
-
     jest.clearAllMocks();
     mockFs.clearAll();
     timeUtils.restoreTime();
