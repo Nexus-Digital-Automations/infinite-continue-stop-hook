@@ -122,6 +122,7 @@ coverage.xml
 # Test environment directories (generated during test runs)
 test/e2e/*-project/
 test/integration/test-environments/
+test/test-data/
 
 # =========================
 # Cache Files & Directories
