@@ -14,7 +14,7 @@ const { loggers } = require('../lib/logger');
 
 const logger = loggers.tests || console;
 
-module.exports = async () => {
+module.exports = () => {
   logger.info('Starting global test teardown...');
 
   try {
