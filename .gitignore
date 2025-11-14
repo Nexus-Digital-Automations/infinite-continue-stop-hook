@@ -119,6 +119,10 @@ coverage.xml
 .pytest_cache/
 .pytest_cache/*
 
+# Test environment directories (generated during test runs)
+test/e2e/*-project/
+test/integration/test-environments/
+
 # =========================
 # Cache Files & Directories
 # =========================
