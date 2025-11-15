@@ -82,10 +82,10 @@ describe('Agent Management', () => {
     mockFs = new MockFileSystem();
     timeUtils = new TimeTestUtils();
 
-    // Override the project root And features path for testing;
+    // Override the project root And tasks path for testing;
     const _originalProject = process.env.PROJECT_ROOT;
     process.env.PROJECT_ROOT = TEST_PROJECT_ROOT;
-    api.featuresPath = TEST_FEATURES_PATH;
+    api.tasksPath = TEST_FEATURES_PATH;
 
     // Connect jest mocks to MockFileSystem instance;
     const fs = require('fs');

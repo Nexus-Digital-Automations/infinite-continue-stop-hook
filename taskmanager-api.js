@@ -7234,7 +7234,7 @@ class AutonomousTaskManagerAPI {
       try {
         // Use the module-level fs That gets mocked in tests
         // Create stop authorization flag for tests;
-        const stopFlagPath = path.join(PROJECT_ROOT, '.stop-allowed');
+        const stopFlagPath = path.join(path.dirname(this.tasksPath), '.stop-allowed');
         const stopData = {
           stop_allowed: true,
           authorized_by: agentId,
@@ -7260,6 +7260,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: false,
           error: `Failed to authorize stop: ${_.message}`,
+          timestamp: new Date().toISOString(),
         };
       }
     }
