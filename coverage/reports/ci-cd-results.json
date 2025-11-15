@@ -1,14 +1,14 @@
 {
   "metadata": {
-    "timestamp": "2025-11-14T02:48:10.487Z",
+    "timestamp": "2025-11-15T18:31:55.947Z",
     "reporter": "jest-cicd-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System",
-    "duration_ms": 1055
+    "duration_ms": 306
   },
   "cicd_summary": {
     "pipeline_status": "FAILURE",
-    "total_duration_ms": 1055,
+    "total_duration_ms": 306,
     "should_block_deployment": true,
     "quality_gate_status": {
       "status": "FAILED",
@@ -22,7 +22,7 @@
         {
           "type": "test_failures",
           "severity": "critical",
-          "message": "39 test(s) failed",
+          "message": "1 test(s) failed",
           "action": "Fix failing tests before deployment"
         },
         {
@@ -33,110 +33,56 @@
         }
       ]
     },
-    "test_health_score": 50
+    "test_health_score": 99
   },
   "test_execution": {
     "summary": {
       "total_suites": 1,
       "passed_suites": 0,
       "failed_suites": 1,
-      "total_tests": 39,
+      "total_tests": 36,
       "passed_tests": 0,
-      "failed_tests": 39,
-      "pending_tests": 0,
+      "failed_tests": 1,
+      "pending_tests": 35,
       "success_rate": "0.00",
-      "execution_time_ms": 1055
+      "execution_time_ms": 306
     },
     "performance_metrics": {
-      "average_test_duration": 27.05128205128205,
+      "average_test_duration": 8.5,
       "slowest_suite": {
-        "path": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js",
-        "duration_ms": 913,
-        "num_tests": 39
+        "path": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
+        "duration_ms": 196,
+        "num_tests": 1
       },
       "memory_usage": {
-        "rss": 321306624,
-        "heap_total": 219561984,
-        "heap_used": 193923560,
-        "external": 6034581,
-        "heap_usage_percent": "88.32"
+        "rss": 194887680,
+        "heap_total": 106201088,
+        "heap_used": 56252240,
+        "external": 6023880,
+        "heap_usage_percent": "52.97"
       },
       "parallel_efficiency": {
-        "parallel_efficiency_percent": "86.54",
-        "total_execution_time_ms": 1055,
-        "serial_time_ms": 913,
+        "parallel_efficiency_percent": "64.05",
+        "total_execution_time_ms": 306,
+        "serial_time_ms": 196,
         "time_saved_ms": 0
       }
     },
     "failure_analysis": {
-      "total_failures": 39,
+      "total_failures": 1,
       "failed_suites": 1,
       "failure_details": [
         {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js",
-          "test": "Initialization Statistics Time Bucket Calculations Current Time Bucket Detection should identify morning time bucket (07:00-11:59)",
-          "duration": 1,
-          "error": "TypeError: Cannot set property promises of [object Object] which has only a getter\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js:49:"
-        },
-        {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js",
-          "test": "Initialization Statistics Time Bucket Calculations Current Time Bucket Detection should identify afternoon time bucket (12:00-16:59)",
-          "duration": 0,
-          "error": "TypeError: Cannot set property promises of [object Object] which has only a getter\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js:49:"
-        },
-        {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js",
-          "test": "Initialization Statistics Time Bucket Calculations Current Time Bucket Detection should identify evening time bucket (17:00-21:59)",
-          "duration": 1,
-          "error": "TypeError: Cannot set property promises of [object Object] which has only a getter\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js:49:"
-        },
-        {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js",
-          "test": "Initialization Statistics Time Bucket Calculations Current Time Bucket Detection should identify late night time bucket (22:00-02:59)",
-          "duration": 0,
-          "error": "TypeError: Cannot set property promises of [object Object] which has only a getter\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js:49:"
-        },
-        {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js",
-          "test": "Initialization Statistics Time Bucket Calculations Current Time Bucket Detection should identify early morning time bucket (03:00-06:59)",
-          "duration": 0,
-          "error": "TypeError: Cannot set property promises of [object Object] which has only a getter\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js:49:"
-        },
-        {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js",
-          "test": "Initialization Statistics Time Bucket Calculations Current Time Bucket Detection should handle time bucket edge cases",
-          "duration": 0,
-          "error": "TypeError: Cannot set property promises of [object Object] which has only a getter\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js:49:"
-        },
-        {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js",
-          "test": "Initialization Statistics Initialization Stats Structure Stats Structure Creation should create initialization stats structure when missing",
-          "duration": 0,
-          "error": "TypeError: Cannot set property promises of [object Object] which has only a getter\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js:49:"
-        },
-        {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js",
-          "test": "Initialization Statistics Initialization Stats Structure Stats Structure Creation should create all required time buckets",
-          "duration": 0,
-          "error": "TypeError: Cannot set property promises of [object Object] which has only a getter\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js:49:"
-        },
-        {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js",
-          "test": "Initialization Statistics Initialization Stats Structure Stats Structure Creation should preserve existing stats structure",
-          "duration": 1,
-          "error": "TypeError: Cannot set property promises of [object Object] which has only a getter\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js:49:"
-        },
-        {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js",
-          "test": "Initialization Statistics Initialization Stats Structure Stats Structure Creation should create metadata if completely missing",
-          "duration": 0,
-          "error": "TypeError: Cannot set property promises of [object Object] which has only a getter\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js:49:"
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
+          "test": "Agent Management Stop Authorization Basic Stop Authorization should create .stop-allowed flag file",
+          "duration": 4,
+          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:517:"
         }
       ],
       "failure_patterns": {
-        "type": 39
+        "assertion": 1
       },
-      "common_failure_type": "type"
+      "common_failure_type": "assertion"
     },
     "flaky_test_detection": {
       "potentially_flaky": [],
@@ -145,11 +91,11 @@
     }
   },
   "git": {
-    "commit_sha": "e70f1c42395febc3f5d7f4962307518a57e3c681",
+    "commit_sha": "caa1a5f72742acbe143adf006d3fcc4f5e7559fa",
     "branch": "main",
     "author": "Claude <claude@anthropic.com>",
-    "commit_message": "chore: update TASKS.json with latest task state",
-    "commit_date": "2025-11-13 19:04:51 -0600",
+    "commit_message": "docs: strengthen TaskManager API mandate with environment clarity",
+    "commit_date": "2025-11-15 12:27:03 -0600",
     "tag": null,
     "is_dirty": true,
     "remote_url": "https://github.com/Nexus-Digital-Automations/infinite-continue-stop-hook.git"
@@ -165,7 +111,7 @@
     "locale": "en-US",
     "memory": {
       "total": 25769803776,
-      "available": 317718528
+      "available": 298369024
     },
     "cpu": {
       "cores": 8,
@@ -188,7 +134,7 @@
       "category": "testing",
       "priority": "high",
       "recommendation": "Fix failing tests immediately",
-      "details": "39 tests are currently failing"
+      "details": "1 tests are currently failing"
     }
   ]
 }
