@@ -10,14 +10,14 @@
 5.  **ONE FEATURE AT A TIME**: Work on EXACTLY ONE feature from `FEATURES.json`, complete it fully, then move to the next.
 6.  **USER FEEDBACK SUPREMACY**: User requests TRUMP EVERYTHING. Implement them immediately, but do so within the quality framework.
 7.  **🔴 MANDATORY TASK TRACKING**: When user requests work, FIRST ACTION is to create TaskManager task (LOCAL) or TodoWrite + manually edit TASKS.json (CLOUD) for tracking and accountability. EXCEPTION: Simple questions only ("What does X do?", "Show status"). When uncertain → CREATE THE TASK.
-8.  **🔄 STOP HOOK CONTINUATION**: LOCAL ENVIRONMENTS ONLY - When stop hook triggers, you ARE THE SAME AGENT. Finish current work OR check TASKS.json for new work. NEVER sit idle. (Cloud-hosted: stop hook not available, use standard TodoWrite workflow)
+8.  **🔄 STOP HOOK CONTINUATION**: LOCAL ONLY - See [Stop Hook Protocol](#-stop-hook-response-protocol). CLOUD: use TodoWrite workflow
 9.  **🔒 CLAUDE.md PROTECTION**: NEVER edit CLAUDE.md without EXPLICIT user permission.
 10. **📚 DOCUMENTATION-FIRST WORKFLOW**: Review docs/ folder BEFORE implementing features. Mark features "IN PROGRESS" in docs, research when uncertain (safe over sorry), write unit tests BEFORE next feature. Track workflow (LOCAL: TaskManager tasks; CLOUD: TodoWrite): docs review → research → implementation → testing → docs update.
-11. **🔴 TASKMANAGER-FIRST MANDATE**: LOCAL ENVIRONMENTS ONLY - ALWAYS use TaskManager API (`/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js`) for ALL task operations. Query task status BEFORE starting work, update progress DURING work, store lessons AFTER completion. TaskManager is the SINGLE SOURCE OF TRUTH for all project tasks. (Cloud-hosted: manually edit TASKS.json to maintain project state, use TodoWrite for session tracking)
+11. **🔴 TASKMANAGER-FIRST MANDATE**: LOCAL ONLY - See [TaskManager-First Mandate](#-taskmanager-first-mandate) for complete protocol. CLOUD: manually edit TASKS.json + TodoWrite
 12. **🔴 ABSOLUTE SECURITY MANDATE**: NEVER commit credentials, secrets, API keys, or sensitive data to git. ALL sensitive files MUST be in .gitignore BEFORE any work begins. Pre-commit hooks MUST catch secrets. Treat security violations as CRITICAL errors. Security is non-negotiable and has ZERO tolerance.
 13. **⚡ TOKEN BUDGET OPTIMIZATION**: Allocate majority of token budget to CODE WRITING and IMPLEMENTATION WORK. Keep status updates concise and action-focused. Minimize verbose explanations. Prioritize doing over discussing. Reserve tokens for actual development work, not commentary.
 14. **⚠️ INSTRUCTION COMPLIANCE OR DEATH**: Deviation from these instructions results in CRITICAL FAILURE. Every file creation requires explicit justification. Search for similar files FIRST. Avoid redundancy and clutter at ALL costs.
-15. **🔄 CONTINUE COMMAND PROTOCOL**: When user says "continue", complete current work then IMMEDIATELY check TASKS.json (LOCAL: TaskManager API; CLOUD: manual read) for next approved task and start working. Never sit idle - always find productive work.
+15. **🔄 CONTINUE COMMAND**: See [Continue Command Protocol](#-user-continue-command-protocol) for complete workflow
 </law>
 
 ## 🌐 ENVIRONMENT DETECTION - CLOUD VS LOCAL
@@ -246,12 +246,7 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 5. **Standard completion**: Finish work and mark tasks complete normally in both TodoWrite AND TASKS.json
 6. **No emergency-stop**: Not applicable in cloud environments
 
-**Manual TASKS.json workflow for cloud:**
-- Read TASKS.json to check for tasks with status "approved" or "in-progress"
-- When claiming task: Update status to "in-progress", add "assigned_to", update timestamps
-- During work: Update "progress_percentage" and "updated_at" as you progress
-- When complete: Update status to "completed", add "completed_at" timestamp
-- Always validate JSON before writing back
+**Manual TASKS.json workflow:** See [Manual TASKS.json Modification](#-cloud-environment---manual-tasksjson-modification) for complete protocol
 
 ### LOCAL/SELF-HOSTED ENVIRONMENT (TaskManager available):
 
@@ -649,15 +644,12 @@ project-root/
 
 ### **Common Violations & Corrections**
 
-**❌ WRONG** → **✅ CORRECT**
-- Creating `CHANGELOG.md` in root → Create `docs/CHANGELOG.md`
-- Creating `TODO.md` in root → Create `docs/TODO.md` or `development/TODO.md`
-- Creating `setup.sh` in root → Create `scripts/setup.sh`
-- Creating `notes.md` in root → Create `docs/notes.md` or `development/notes.md`
-- Leaving test data in root → Create `test/fixtures/` or `test/data/`
-- Scattered utility files → Group in `lib/utils/` or `scripts/utils/`
-- Random scripts in root → Organize in `scripts/` folder
-- Temporary files tracked → Add to `.gitignore`, keep in `tmp/`
+| File Type | ❌ Wrong | ✅ Correct |
+|-----------|----------|------------|
+| Docs | `root/CHANGELOG.md`, `root/TODO.md`, `root/notes.md` | `docs/` or `development/` |
+| Scripts | `root/setup.sh`, scattered utilities | `scripts/` or `scripts/utils/` |
+| Test Data | root directory | `test/fixtures/` or `test/data/` |
+| Temp Files | tracked in git | Add to `.gitignore`, keep in `tmp/` |
 
 ### **Enforcement Protocol**
 
@@ -825,19 +817,13 @@ When ALL criteria met, agent MUST complete multi-step authorization:
 
 ```bash
 # Step 1: Start authorization process
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" start-authorization [AGENT_ID]
+$TM start-authorization [AGENT_ID]
 
 # Step 2: Validate each criterion sequentially (cannot skip steps)
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] focused-codebase
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] security-validation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] linter-validation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] type-validation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] build-validation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] start-validation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" validate-criterion [AUTH_KEY] test-validation
+$TM validate-criterion [AUTH_KEY] focused-codebase  # Repeat for: security, linter, type, build, start, test
 
 # Step 3: Complete authorization (only after all validations pass)
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" complete-authorization [AUTH_KEY]
+$TM complete-authorization [AUTH_KEY]
 ```
 
 **VALIDATION CRITERIA** (All must pass with zero errors/warnings):
@@ -971,40 +957,3 @@ $TM emergency-stop [AGENT_ID] "reason"  # Only after 2nd consecutive stop hook w
 ```
 
 **Full command discovery**: Use `$TM guide` or `$TM methods` for complete API documentation
-
-## ESSENTIAL COMMANDS
-
-**TODOWRITE USAGE (CLOUD ENVIRONMENTS):**
-
-```javascript
-// For complex tasks, create TodoWrite breakdown
-TodoWrite([
-  { content: 'Analyze user request', status: 'pending', activeForm: 'Analyzing user request' },
-  { content: 'Plan implementation', status: 'pending', activeForm: 'Planning implementation' },
-  { content: 'Execute implementation', status: 'pending', activeForm: 'Executing implementation' },
-]);
-```
-
-**TASKMANAGER USAGE (LOCAL ENVIRONMENTS):**
-
-```bash
-# Create task via TaskManager API
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" \
-  --project-root "$(pwd)" \
-  create-task '{
-    "title": "Implement user authentication feature",
-    "description": "Add login/logout functionality with JWT tokens. Acceptance: Users can login, tokens expire after 24h, logout clears session.",
-    "type": "feature",
-    "priority": "high"
-  }'
-
-# Update task progress
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" \
-  --project-root "$(pwd)" \
-  update-task <taskId> '{"status": "in-progress", "progress_percentage": 50}'
-
-# Mark task complete
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" \
-  --project-root "$(pwd)" \
-  update-task <taskId> '{"status": "completed", "progress_percentage": 100}'
-```
