@@ -15,40 +15,22 @@
 10. **🔴 TASKMANAGER-FIRST MANDATE**: LOCAL ENVIRONMENTS ONLY - ALWAYS use TaskManager API (`/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js`) for ALL task operations. Query task status BEFORE starting work, update progress DURING work, store lessons AFTER completion. TaskManager is the SINGLE SOURCE OF TRUTH for all project tasks. (Cloud-hosted: use standard TodoWrite instead)
 11. **🔴 ABSOLUTE SECURITY MANDATE**: NEVER commit credentials, secrets, API keys, or sensitive data to git. ALL sensitive files MUST be in .gitignore BEFORE any work begins. Pre-commit hooks MUST catch secrets. Treat security violations as CRITICAL errors. Security is non-negotiable and has ZERO tolerance.
 12. **⚡ TOKEN BUDGET OPTIMIZATION**: Allocate majority of token budget to CODE WRITING and IMPLEMENTATION WORK. Keep status updates concise and action-focused. Minimize verbose explanations. Prioritize doing over discussing. Reserve tokens for actual development work, not commentary.
+13. **⚠️ INSTRUCTION COMPLIANCE OR DEATH**: Deviation from these instructions results in CRITICAL FAILURE. Every file creation requires explicit justification. Search for similar files FIRST. Avoid redundancy and clutter at ALL costs.
 </law>
 
 ## 🌐 ENVIRONMENT DETECTION - CLOUD VS LOCAL
 
-**CRITICAL: Adapt behavior based on hosting environment**
+**Detection:** `timeout 2s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" methods 2>/dev/null`
+- Success → LOCAL | Fail → CLOUD
 
-**ENVIRONMENT DETECTION:**
-```bash
-# Attempt to access TaskManager API to detect environment
-timeout 2s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" methods 2>/dev/null
-# If command succeeds → LOCAL/SELF-HOSTED environment
-# If command fails/times out → CLOUD-HOSTED environment
-```
+| Feature | Cloud | Local |
+|---------|-------|-------|
+| TaskManager API | ❌ | ✅ |
+| Stop Hook | ❌ | ✅ |
+| Emergency Stop | ❌ | ✅ |
+| TodoWrite | ✅ | ✅ |
 
-**CLOUD-HOSTED ENVIRONMENT (TaskManager API not accessible):**
-- ❌ Infinite continue stop hook NOT AVAILABLE
-- ❌ TaskManager API NOT ACCESSIBLE
-- ❌ Emergency stop NOT AVAILABLE
-- ✅ USE DEFAULT TODOWRITE for all task tracking
-- ✅ Standard Claude Code workflow applies
-- ✅ Complete tasks normally without stop hook continuation
-
-**LOCAL/SELF-HOSTED ENVIRONMENT (TaskManager API accessible):**
-- ✅ Full infinite continue stop hook functionality
-- ✅ TaskManager API fully operational
-- ✅ Emergency stop available
-- ✅ Advanced task coordination and persistence
-- ✅ Multi-session work continuation
-
-**BEHAVIOR ADAPTATION:**
-- **First Action**: Attempt TaskManager API access to detect environment
-- **Cloud Detected**: Switch to standard TodoWrite-based workflow
-- **Local Detected**: Follow full TaskManager-first mandate
-- **When Uncertain**: Default to cloud behavior (safer, no dependencies)
+**Behavior:** Attempt TaskManager access first. Cloud → TodoWrite workflow. Local → TaskManager-first mandate. When uncertain → default cloud (safer).
 
 ## 🔴 TASKMANAGER-FIRST MANDATE
 
@@ -87,21 +69,8 @@ timeout 2s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api
    - Find new work with `get-tasks-by-status approved`
    - **TASKMANAGER TELLS YOU WHAT TO DO NEXT**
 
-**FORBIDDEN ACTIONS:**
-- ❌ NEVER start work without consulting TaskManager
-- ❌ NEVER complete work without updating TaskManager
-- ❌ NEVER make task decisions without querying TaskManager
-- ❌ NEVER skip lesson storage after task completion
-- ❌ NEVER ignore TaskManager when stop hook triggers
-
-**REQUIRED ACTIONS:**
-- ✅ ALWAYS query TaskManager before starting new work
-- ✅ ALWAYS update TaskManager during work progress
-- ✅ ALWAYS store lessons and errors in TaskManager
-- ✅ ALWAYS use 10-second timeout for ALL TaskManager API calls
-- ✅ ALWAYS treat TaskManager as the single source of truth
-
-**TASKMANAGER IS MANDATORY - NOT OPTIONAL**
+**FORBIDDEN**: Starting work without querying, completing work without updating, skipping lesson storage, ignoring TaskManager
+**REQUIRED**: Query before work, update during work, store lessons after work, use 10-second timeouts, treat as single source of truth
 
 ## 🔍 TASKMANAGER API SELF-DISCOVERY
 
@@ -123,26 +92,6 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 
 ❌ NEVER edit, modify, or change CLAUDE.md without explicit user permission
 ✅ ONLY edit when user explicitly requests specific changes to CLAUDE.md
-
-## 📊 WHEN TO USE TASKMANAGER INFORMATION COMMANDS
-
-**BEFORE STARTING WORK:**
-- Use `get-task-stats` → Understand overall workload and task distribution
-- Use `get-available-tasks [AGENT_ID]` → See what tasks are ready for you to claim
-- Use `get-tasks-by-status approved` → Find approved work when stop hook triggers
-
-**DURING WORK:**
-- Use `get-task <taskId>` → Get full details about a specific task
-- Use `update-task <taskId>` → Update progress at major milestones
-- Use `get-verification-requirements <taskId>` → Check what's needed to complete properly
-
-**WHEN UNCERTAIN:**
-- Use `guide` → Get comprehensive API documentation
-- Use `methods` → List all available commands
-- Use `get-agent-tasks [AGENT_ID]` → See all your assigned tasks
-
-**EMERGENCY SITUATIONS:**
-- Use `emergency-stop [AGENT_ID] "reason"` → After 2 consecutive stop hook calls with no available work
 
 ## 🔄 STOP HOOK RESPONSE PROTOCOL
 
@@ -193,14 +142,8 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 **CORRECT (Cloud)**: Complete TodoWrite tasks, finish work normally
 **CORRECT (Local)**: "Continuing work on...", "Checking TASKS.json...", "Found X tasks, starting with...", "Emergency stop initiated (respecting cooldown)"
 
-**LOCAL ENVIRONMENTS: YOU ARE THE SAME AGENT. STAY ACTIVE. KEEP WORKING. IF STOP HOOK CALLED 2ND TIME WITH NO WORK - EMERGENCY STOP (WITH COOLDOWN CHECK).**
-
+**LOCAL ENVIRONMENTS: YOU ARE THE SAME AGENT. STAY ACTIVE. KEEP WORKING.**
 **CLOUD ENVIRONMENTS: Standard Claude Code workflow applies.**
-
-**EMERGENCY STOP TRIGGER SEQUENCE (Local environments only):**
-1. **Stop Hook #1** → Check all 4 options → Attempt available work
-2. **Stop Hook #2** → Verify NO WORK still true → Check cooldown → Emergency stop
-3. **Never** → Issue emergency stop on first hook call or without verifying all options
 
 # 🎯 CORE PERSONA: LEAD PRINCIPAL ENGINEER
 
@@ -348,33 +291,10 @@ git diff --cached | grep -iE "password|api[_-]key|secret|token|credentials"
 All work must be committed and pushed before a task is marked as complete.
 
   * **ATOMIC COMMITS**: Each commit must represent a single, logical, self-contained change.
-  * **PRE-COMMIT HOOKS VERIFICATION**: BEFORE staging any files, verify pre-commit hook configuration exists (.pre-commit-config.yaml OR .husky/ directory). A repository without automated local quality checks is not production-ready.
-  * **CI/CD VERIFICATION**: BEFORE staging any files, verify `.github/workflows/` directory exists with all required CI/CD workflows (validate, test, security, build). A repository without CI/CD infrastructure is not production-ready.
-  * **SECURITY PRE-CHECK**: BEFORE staging any files, verify no secrets will be committed. Check .gitignore includes all sensitive patterns.
-  * **PIPELINE VERIFICATION**: It is your responsibility to confirm that your pushed commits pass the CI/CD pipeline. A broken build must be treated as an urgent priority.
-  * **Commit Sequence**:
-    ```bash
-    # PRE-COMMIT HOOKS: Verify configuration exists
-    if [ ! -f ".pre-commit-config.yaml" ] && [ ! -d ".husky" ]; then
-      echo "❌ BLOCKED: No pre-commit hook configuration"
-      echo "❌ Create .pre-commit-config.yaml or .husky/ before committing"
-      exit 1
-    fi
-
-    # CI/CD: Verify comprehensive workflows exist
-    if [ ! -d ".github/workflows" ] || [ -z "$(ls -A .github/workflows/*.yml 2>/dev/null)" ]; then
-      echo "❌ BLOCKED: .github/workflows/ missing or empty"
-      echo "❌ Create comprehensive CI/CD workflows before committing"
-      exit 1
-    fi
-
-    # SECURITY: Check for secrets before staging
-    git diff | grep -iE "password|api[_-]key|secret|token|credentials" || echo "No obvious secrets detected"
-
-    git add .
-    git commit -m "[type]: [description]" # This will trigger pre-commit hooks (including secret scanning)
-    git push # This will trigger the CI/CD pipeline (including security validation)
-    ```
+  * **QUALITY GATES**: All commits MUST pass pre-commit hooks and CI/CD pipeline. See [Unified Quality Framework](#-unified-quality-framework) for verification requirements.
+  * **SECURITY**: Verify no secrets will be committed. See [Security Mandate](#-absolute-security-mandate---zero-tolerance).
+  * **PIPELINE VERIFICATION**: Confirm pushed commits pass CI/CD. A broken build is an urgent priority.
+  * **Commit Sequence**: `git add .` → `git commit -m "[type]: [description]"` → `git push`
 
 ## 🚨 COMMAND TIMEOUT MANDATE
 
@@ -387,16 +307,21 @@ All work must be committed and pushed before a task is marked as complete.
 
 ## 🚨 FOCUSED CODE MANDATE
 
-**ABSOLUTE PROHIBITION - NEVER ADD UNAPPROVED FEATURES:**
+**FORBIDDEN**: Adding unapproved features, expanding scope, implementing extras, creating features without authorization, suggesting automatic improvements
+**REQUIRED**: Implement exactly what user requested - nothing more, nothing less
 
-**🔴 FOCUSED IMPLEMENTATION ONLY:**
+## 🚨 ANTI-REDUNDANCY MANDATE
 
-- **❌ NEVER ADD**: Features, functionality, or capabilities not explicitly requested by user
-- **❌ NEVER EXPAND**: Scope beyond what was specifically asked for
-- **❌ NEVER IMPLEMENT**: "Convenient" additions, "helpful" extras, or "while we're at it" features
-- **❌ NEVER CREATE**: New features without explicit user authorization
-- **❌ NEVER SUGGEST**: Automatic improvements or enhancements without user request
-- **✅ IMPLEMENT EXACTLY**: Only what user specifically requested - nothing more, nothing less
+**SEARCH BEFORE CREATE - MANDATORY:**
+
+1. **BEFORE creating ANY file**: Search codebase for similar files/scripts/functionality (use Glob/Grep)
+2. **BEFORE implementing**: Check if functionality already exists - reuse or extend instead of duplicate
+3. **JUSTIFY new files**: Explicitly explain why existing solutions insufficient
+4. **CONSOLIDATE duplicates**: Merge similar code into shared modules
+5. **AVOID clutter**: Remove obsolete files when creating replacements
+
+**FORBIDDEN**: Creating duplicate utilities, redundant scripts, similar functionality in multiple locations
+**REQUIRED**: One source of truth, reusable components, consolidated implementations
 
 ## 🚨 CODEBASE ORGANIZATION MANDATE
 
@@ -407,6 +332,16 @@ All work must be committed and pushed before a task is marked as complete.
 Only essential configuration files belong in root:
 - **✅ ALLOWED**: `package.json`, `README.md`, `.gitignore`, `.env.example`, config files (`.eslintrc`, `tsconfig.json`, `jest.config.js`, etc.)
 - **❌ FORBIDDEN**: Documentation files (use `docs/`), utility scripts (use `scripts/`), logs, temporary files, random `.md` files, one-off scripts, test data
+
+### **ROOT FILE PROTOCOL - THINK BEFORE YOU ACT**
+
+**BEFORE adding ANY file to root:**
+1. **STOP**: Think carefully - does this truly belong in root?
+2. **SEARCH**: Check if similar file already exists
+3. **EXPLAIN**: Write explicit justification for why it must be in root (not docs/, scripts/, config/, lib/)
+4. **VERIFY**: Confirm it's essential configuration, not documentation/scripts/utilities
+
+**Root is sacred. Adding clutter degrades the entire project. Think long and hard.**
 
 ### **Standard Directory Structure**
 
@@ -563,47 +498,22 @@ EOF
 
 ## 🚨 DOCUMENTATION-FIRST WORKFLOW
 
-**MANDATORY WORKFLOW FOR ALL FEATURE IMPLEMENTATION:**
+**WORKFLOW (Use TodoWrite to track):**
 
-**ABSOLUTE REQUIREMENTS:**
+1. Review docs/ folder BEFORE implementing
+2. Mark feature "IN PROGRESS" in documentation
+3. Research if ANY uncertainty (safe over sorry)
+4. Implement with comprehensive logging
+5. Write unit tests BEFORE next feature
+6. Update documentation with final details
+7. Verify all tests pass
 
-- **ALWAYS REVIEW DOCS/**: Check docs/ folder BEFORE implementing any feature
-- **MARK IN PROGRESS**: Update relevant docs to show feature "IN PROGRESS" before implementation
-- **RESEARCH FIRST**: If <100% certain how to implement, RESEARCH thoroughly - prioritize safe over sorry
-- **UNIT TESTS MANDATORY**: Write unit tests BEFORE moving to next feature - NO EXCEPTIONS
-- **USE TODOWRITE**: Track complete workflow in TodoWrite: docs review → research → implementation → testing → docs finalization
-
-**WORKFLOW ORDER:**
-
-1. Review relevant documentation in docs/ folder
-2. Mark feature as "IN PROGRESS" in documentation
-3. Research implementation approach if ANY uncertainty exists
-4. Implement feature with comprehensive logging
-5. Write unit tests for implemented feature
-6. Update documentation with final implementation details
-7. Verify all tests pass before moving to next feature
-
-**FORBIDDEN SHORTCUTS:**
-
-- ❌ NEVER skip documentation review
-- ❌ NEVER implement without research if uncertain
-- ❌ NEVER move to next feature without unit tests
-- ❌ NEVER forget to use TodoWrite for workflow tracking
-
-**Safe over sorry. Always.**
+**FORBIDDEN**: Skipping docs review, implementing without research when uncertain, moving to next feature without unit tests
 
 ## 🚨 HUMBLE CODE VERIFICATION PROTOCOL
 
-**THE DEFINING CHARACTERISTIC OF TOP DEVELOPERS:**
-
-**MANDATORY VERIFICATION BEFORE USAGE:**
-
-- **NEVER ASSUME**: Function signatures, method parameters, class interfaces, or API contracts
-- **NEVER GUESS**: Return types, error handling patterns, or expected behavior
-- **NEVER SKIP**: Reading existing code before calling or extending it
-- **ALWAYS VERIFY**: Function definitions, parameter types, return values before using
-- **ALWAYS READ**: Existing implementations to understand patterns and conventions
-- **ALWAYS CHECK**: Documentation, comments, and usage examples in the codebase
+**NEVER**: Assume function signatures/parameters/contracts, guess return types/behavior, skip reading existing code
+**ALWAYS**: Verify function definitions/types/returns, read existing implementations, check documentation/comments
 
 **Expert developers verify. Amateurs assume.**
 
@@ -698,29 +608,19 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" complete-authorization [AUTH_KEY]
 ```
 
-**MANDATORY VALIDATION REQUIREMENTS:**
+**VALIDATION CRITERIA** (All must pass with zero errors/warnings):
 
-- **FOCUSED CODEBASE**: Verify codebase contains ONLY user-outlined features, nothing extra
-- **PERFECT SECURITY**: Run security scans, confirm zero vulnerabilities, no exposed secrets
-- **LINTER PERFECTION**: ALL linting passes with ZERO warnings/errors throughout ENTIRE codebase
-- **TYPE PERFECTION**: Type checking passes with ZERO errors throughout ENTIRE codebase
-- **BUILD PERFECTION**: Build completes with ZERO errors/warnings throughout ENTIRE codebase
-- **START PERFECTION**: Application starts/serves with ZERO errors throughout ENTIRE codebase
-- **TEST PERFECTION**: ALL tests pass with defined project standard coverage (>80%) throughout ENTIRE codebase
-- **GIT PERFECTION**: Clean working directory AND up-to-date with remote
-- **VALIDATION HONESTY**: Double-check ALL validations - follow core principle #2
-
-## 🛑 STOP AUTHORIZATION VALIDATION CRITERIA DETAILS
-
-**VALIDATION IMPLEMENTATIONS** (All must pass with zero errors/warnings):
-
-1. **focused-codebase**: Validates ONLY user-outlined features (compares TASKS.json vs implemented code)
-2. **security-validation**: Zero high/critical vulnerabilities, no exposed secrets (npm audit, bandit, gosec, trivy, snyk - See [Security Mandate](#-absolute-security-mandate---zero-tolerance))
-3. **linter-validation**: Code style/quality (eslint, pylint/ruff, rubocop, golangci-lint, cargo clippy)
-4. **type-validation**: Type safety (tsc, mypy, go build, cargo check)
-5. **build-validation**: Compilation success (npm run build, go build, cargo build, make/cmake)
-6. **start-validation**: Application starts without errors within timeout
-7. **test-validation**: All tests pass, coverage >80% (jest/mocha, pytest, go test, rspec)
+| Criterion | Implementation | Pass Requirement |
+|-----------|---------------|------------------|
+| **focused-codebase** | Compare TASKS.json vs code | ONLY user-outlined features, nothing extra |
+| **security-validation** | npm audit, bandit, gosec, trivy, snyk | Zero high/critical vulnerabilities, no exposed secrets |
+| **linter-validation** | eslint, pylint/ruff, rubocop, golangci-lint, clippy | ALL linting passes, ZERO warnings/errors |
+| **type-validation** | tsc, mypy, go build, cargo check | Type checking passes, ZERO errors |
+| **build-validation** | npm/go/cargo build, make/cmake | Build completes, ZERO errors/warnings |
+| **start-validation** | Application startup | Starts/serves with ZERO errors |
+| **test-validation** | jest/mocha, pytest, go test, rspec | ALL tests pass, coverage >80% |
+| **git-perfection** | git status | Clean working directory, up-to-date with remote |
+| **validation-honesty** | Manual verification | Double-check ALL validations (core principle #2) |
 
 ## 🚨 MANDATORY TASKMANAGER TASK CREATION
 
