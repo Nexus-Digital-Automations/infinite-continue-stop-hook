@@ -28,7 +28,13 @@ jest.mock('fs', () => ({
     access: jest.fn(),
     readFile: jest.fn(),
     writeFile: jest.fn(),
+    mkdir: jest.fn(),
   },
+  exists: jest.fn((path, callback) => callback(false)),
+  existsSync: jest.fn(() => false),
+  mkdirSync: jest.fn(),
+  readFileSync: jest.fn(),
+  writeFileSync: jest.fn(),
 }));
 
 // Mock crypto for deterministic ID generation
@@ -39,6 +45,19 @@ jest.mock('crypto', () => ({
     const counterStr = global.cryptoCounter.toString().padStart(12, '0');
     return Buffer.from(counterStr, 'ascii');
   }),
+}));
+
+// Mock sqlite3 to avoid native binding issues in tests
+jest.mock('sqlite3', () => ({
+  verbose: jest.fn(() => ({
+    Database: jest.fn(),
+  })),
+}));
+
+// Mock faiss-node to avoid native binding issues in tests
+jest.mock('faiss-node', () => ({
+  IndexFlatL2: jest.fn(),
+  IndexFlatIP: jest.fn(),
 }));
 
 // Import the FeatureManagerAPI class AFTER mocking fs;
@@ -77,6 +96,18 @@ describe('Agent Management', () => {
     fs.promises.writeFile.mockImplementation((...args) =>
       mockFs.writeFile(...args),
     );
+    fs.readFileSync.mockImplementation((filePath, encoding) => {
+      try {
+        return mockFs.getFile(filePath);
+      } catch {
+        return undefined;
+      }
+    });
+    fs.writeFileSync.mockImplementation((filePath, data) => {
+      mockFs.setFile(filePath, typeof data === 'string' ? data : data.toString());
+    });
+    fs.existsSync.mockImplementation((filePath) => mockFs.hasFile(filePath));
+    fs.mkdirSync.mockImplementation(() => {});
 
     // Mock time for consistent testing
     timeUtils.mockCurrentTimeISO('2025-09-23T12:00:00.000Z');

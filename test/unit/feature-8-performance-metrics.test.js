@@ -87,7 +87,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       } catch (_error) {
         return {
           success: false,
-          _error: _error.message,
+          error: _error.message,
           metrics: [],
           statistics: null,
         };
