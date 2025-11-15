@@ -1,14 +1,14 @@
 {
   "metadata": {
-    "timestamp": "2025-11-15T18:31:55.947Z",
+    "timestamp": "2025-11-15T20:18:17.463Z",
     "reporter": "jest-cicd-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System",
-    "duration_ms": 306
+    "duration_ms": 913
   },
   "cicd_summary": {
     "pipeline_status": "FAILURE",
-    "total_duration_ms": 306,
+    "total_duration_ms": 913,
     "should_block_deployment": true,
     "quality_gate_status": {
       "status": "FAILED",
@@ -22,7 +22,7 @@
         {
           "type": "test_failures",
           "severity": "critical",
-          "message": "1 test(s) failed",
+          "message": "4 test(s) failed",
           "action": "Fix failing tests before deployment"
         },
         {
@@ -33,7 +33,7 @@
         }
       ]
     },
-    "test_health_score": 99
+    "test_health_score": 94
   },
   "test_execution": {
     "summary": {
@@ -41,46 +41,64 @@
       "passed_suites": 0,
       "failed_suites": 1,
       "total_tests": 36,
-      "passed_tests": 0,
-      "failed_tests": 1,
-      "pending_tests": 35,
-      "success_rate": "0.00",
-      "execution_time_ms": 306
+      "passed_tests": 32,
+      "failed_tests": 4,
+      "pending_tests": 0,
+      "success_rate": "88.89",
+      "execution_time_ms": 913
     },
     "performance_metrics": {
-      "average_test_duration": 8.5,
+      "average_test_duration": 25.36111111111111,
       "slowest_suite": {
         "path": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
-        "duration_ms": 196,
-        "num_tests": 1
+        "duration_ms": 783,
+        "num_tests": 36
       },
       "memory_usage": {
-        "rss": 194887680,
-        "heap_total": 106201088,
-        "heap_used": 56252240,
-        "external": 6023880,
-        "heap_usage_percent": "52.97"
+        "rss": 196886528,
+        "heap_total": 107511808,
+        "heap_used": 63542376,
+        "external": 6023937,
+        "heap_usage_percent": "59.10"
       },
       "parallel_efficiency": {
-        "parallel_efficiency_percent": "64.05",
-        "total_execution_time_ms": 306,
-        "serial_time_ms": 196,
+        "parallel_efficiency_percent": "85.76",
+        "total_execution_time_ms": 913,
+        "serial_time_ms": 783,
         "time_saved_ms": 0
       }
     },
     "failure_analysis": {
-      "total_failures": 1,
+      "total_failures": 4,
       "failed_suites": 1,
       "failure_details": [
         {
           "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
-          "test": "Agent Management Stop Authorization Basic Stop Authorization should create .stop-allowed flag file",
+          "test": "Agent Management Stop Authorization Stop Authorization Error Handling should handle file system errors gracefully",
+          "duration": 3,
+          "error": "Error: expect(received).toContain(expected) // indexOf\n\nExpected substring: \"File system unavailable\"\nReceived string:    \"expect(received).toBe(expected) // Object.is equality·\nExpected: false\nReceiv"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
+          "test": "Agent Management Agent Management Integration Agent Management with Feature Operations should maintain agent state during feature operations",
+          "duration": 14,
+          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:735:"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
+          "test": "Agent Management Edge Cases And Error Recovery Data Consistency should handle malformed agent data",
           "duration": 4,
-          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:517:"
+          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:795:"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
+          "test": "Agent Management Edge Cases And Error Recovery Concurrent Operations should handle multiple agent operations on same file",
+          "duration": 11,
+          "error": "Error: expect(received).toBeDefined()\n\nReceived: undefined\n    at toBeDefined (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:823:46)\n    at Array.forEach (<anonymo"
         }
       ],
       "failure_patterns": {
-        "assertion": 1
+        "assertion": 4
       },
       "common_failure_type": "assertion"
     },
@@ -91,11 +109,11 @@
     }
   },
   "git": {
-    "commit_sha": "caa1a5f72742acbe143adf006d3fcc4f5e7559fa",
+    "commit_sha": "46e30fdf3e5204a394cd2b2d0460fc96ad4b6fb7",
     "branch": "main",
     "author": "Claude <claude@anthropic.com>",
-    "commit_message": "docs: strengthen TaskManager API mandate with environment clarity",
-    "commit_date": "2025-11-15 12:27:03 -0600",
+    "commit_message": "docs: consolidate CLAUDE.md to reduce verbosity and duplication",
+    "commit_date": "2025-11-15 14:08:42 -0600",
     "tag": null,
     "is_dirty": true,
     "remote_url": "https://github.com/Nexus-Digital-Automations/infinite-continue-stop-hook.git"
@@ -111,7 +129,7 @@
     "locale": "en-US",
     "memory": {
       "total": 25769803776,
-      "available": 298369024
+      "available": 950386688
     },
     "cpu": {
       "cores": 8,
@@ -134,7 +152,7 @@
       "category": "testing",
       "priority": "high",
       "recommendation": "Fix failing tests immediately",
-      "details": "1 tests are currently failing"
+      "details": "4 tests are currently failing"
     }
   ]
 }

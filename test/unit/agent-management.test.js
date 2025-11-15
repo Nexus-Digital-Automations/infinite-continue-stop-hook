@@ -96,7 +96,7 @@ describe('Agent Management', () => {
     fs.promises.writeFile.mockImplementation((...args) =>
       mockFs.writeFile(...args),
     );
-    fs.readFileSync.mockImplementation((filePath, encoding) => {
+    fs.readFileSync.mockImplementation((filePath, _encoding) => {
       try {
         return mockFs.getFile(filePath);
       } catch {

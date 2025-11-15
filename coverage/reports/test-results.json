@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "timestamp": "2025-11-15T18:31:55.946Z",
+    "timestamp": "2025-11-15T20:18:17.462Z",
     "reporter": "jest-json-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System"
@@ -11,13 +11,13 @@
     "numFailedTestSuites": 1,
     "numPendingTestSuites": 0,
     "numTotalTests": 36,
-    "numPassedTests": 0,
-    "numFailedTests": 1,
-    "numPendingTests": 35,
+    "numPassedTests": 32,
+    "numFailedTests": 4,
+    "numPendingTests": 0,
     "numTodoTests": 0,
-    "startTime": 1763231515641,
-    "endTime": 1763231515946,
-    "duration": 305,
+    "startTime": 1763237896550,
+    "endTime": 1763237897462,
+    "duration": 912,
     "success": false
   },
   "testResults": [
@@ -28,13 +28,13 @@
         "name": "unit"
       },
       "status": "failed",
-      "startTime": 1763231515738,
-      "endTime": 1763231515934,
-      "duration": 196,
+      "startTime": 1763237896662,
+      "endTime": 1763237897445,
+      "duration": 783,
       "numTests": 36,
-      "numPassingTests": 0,
-      "numFailingTests": 1,
-      "numPendingTests": 35,
+      "numPassingTests": 32,
+      "numFailingTests": 4,
+      "numPendingTests": 0,
       "snapshot": {
         "added": 0,
         "matched": 0,
@@ -51,9 +51,9 @@
           ],
           "title": "should initialize new agent successfully",
           "fullName": "Agent Management Agent Initialization Basic Agent Initialization should initialize new agent successfully",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 12,
+          "numPassingAsserts": 7,
           "location": null
         },
         {
@@ -64,9 +64,9 @@
           ],
           "title": "should generate unique session IDs for different agents",
           "fullName": "Agent Management Agent Initialization Basic Agent Initialization should generate unique session IDs for different agents",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 21,
+          "numPassingAsserts": 5,
           "location": null
         },
         {
@@ -77,9 +77,9 @@
           ],
           "title": "should update features file with agent data",
           "fullName": "Agent Management Agent Initialization Basic Agent Initialization should update features file with agent data",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 12,
+          "numPassingAsserts": 7,
           "location": null
         },
         {
@@ -90,9 +90,9 @@
           ],
           "title": "should track initialization in time bucket stats",
           "fullName": "Agent Management Agent Initialization Basic Agent Initialization should track initialization in time bucket stats",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 13,
+          "numPassingAsserts": 3,
           "location": null
         },
         {
@@ -103,9 +103,9 @@
           ],
           "title": "should handle agent initialization with special characters in ID",
           "fullName": "Agent Management Agent Initialization Basic Agent Initialization should handle agent initialization with special characters in ID",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 37,
+          "numPassingAsserts": 8,
           "location": null
         },
         {
@@ -116,9 +116,9 @@
           ],
           "title": "should create agent entry in features file",
           "fullName": "Agent Management Agent Initialization Agent Session Management should create agent entry in features file",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 11,
+          "numPassingAsserts": 5,
           "location": null
         },
         {
@@ -129,9 +129,9 @@
           ],
           "title": "should overwrite existing agent data on new initialization",
           "fullName": "Agent Management Agent Initialization Agent Session Management should overwrite existing agent data on new initialization",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 21,
+          "numPassingAsserts": 5,
           "location": null
         },
         {
@@ -142,9 +142,9 @@
           ],
           "title": "should initialize agents section if it does not exist",
           "fullName": "Agent Management Agent Initialization Agent Session Management should initialize agents section if it does not exist",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 11,
+          "numPassingAsserts": 3,
           "location": null
         },
         {
@@ -155,9 +155,9 @@
           ],
           "title": "should handle file write errors during initialization",
           "fullName": "Agent Management Agent Initialization Initialization Error Handling should handle file write errors during initialization",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 6,
+          "numPassingAsserts": 3,
           "location": null
         },
         {
@@ -168,9 +168,9 @@
           ],
           "title": "should handle corrupted features file during initialization",
           "fullName": "Agent Management Agent Initialization Initialization Error Handling should handle corrupted features file during initialization",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 4,
+          "numPassingAsserts": 2,
           "location": null
         },
         {
@@ -181,9 +181,9 @@
           ],
           "title": "should handle empty agent ID gracefully",
           "fullName": "Agent Management Agent Initialization Initialization Error Handling should handle empty agent ID gracefully",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 10,
+          "numPassingAsserts": 2,
           "location": null
         },
         {
@@ -194,9 +194,9 @@
           ],
           "title": "should reinitialize existing agent successfully",
           "fullName": "Agent Management Agent Reinitialization Basic Agent Reinitialization should reinitialize existing agent successfully",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 19,
+          "numPassingAsserts": 8,
           "location": null
         },
         {
@@ -207,9 +207,9 @@
           ],
           "title": "should preserve agent history during reinitialization",
           "fullName": "Agent Management Agent Reinitialization Basic Agent Reinitialization should preserve agent history during reinitialization",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 22,
+          "numPassingAsserts": 4,
           "location": null
         },
         {
@@ -220,9 +220,9 @@
           ],
           "title": "should update timestamps on reinitialization",
           "fullName": "Agent Management Agent Reinitialization Basic Agent Reinitialization should update timestamps on reinitialization",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 21,
+          "numPassingAsserts": 3,
           "location": null
         },
         {
@@ -233,9 +233,9 @@
           ],
           "title": "should track reinitialization in time bucket stats",
           "fullName": "Agent Management Agent Reinitialization Basic Agent Reinitialization should track reinitialization in time bucket stats",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 22,
+          "numPassingAsserts": 3,
           "location": null
         },
         {
@@ -246,9 +246,9 @@
           ],
           "title": "should accumulate previous sessions across multiple reinitializations",
           "fullName": "Agent Management Agent Reinitialization Reinitialization Session Management should accumulate previous sessions across multiple reinitializations",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 31,
+          "numPassingAsserts": 7,
           "location": null
         },
         {
@@ -259,9 +259,9 @@
           ],
           "title": "should reinitialize non-existent agent as new agent",
           "fullName": "Agent Management Agent Reinitialization Reinitialization Session Management should reinitialize non-existent agent as new agent",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 20,
+          "numPassingAsserts": 8,
           "location": null
         },
         {
@@ -272,9 +272,9 @@
           ],
           "title": "should handle agent without previous session data",
           "fullName": "Agent Management Agent Reinitialization Reinitialization Session Management should handle agent without previous session data",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 23,
+          "numPassingAsserts": 3,
           "location": null
         },
         {
@@ -285,9 +285,9 @@
           ],
           "title": "should handle file write errors during reinitialization",
           "fullName": "Agent Management Agent Reinitialization Reinitialization Error Handling should handle file write errors during reinitialization",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 15,
+          "numPassingAsserts": 3,
           "location": null
         },
         {
@@ -298,9 +298,9 @@
           ],
           "title": "should handle corrupted features file during reinitialization",
           "fullName": "Agent Management Agent Reinitialization Reinitialization Error Handling should handle corrupted features file during reinitialization",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 14,
+          "numPassingAsserts": 2,
           "location": null
         },
         {
@@ -311,9 +311,9 @@
           ],
           "title": "should authorize stop successfully with reason",
           "fullName": "Agent Management Stop Authorization Basic Stop Authorization should authorize stop successfully with reason",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 2,
+          "numPassingAsserts": 7,
           "location": null
         },
         {
@@ -324,9 +324,9 @@
           ],
           "title": "should authorize stop with default reason when none provided",
           "fullName": "Agent Management Stop Authorization Basic Stop Authorization should authorize stop with default reason when none provided",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 1,
+          "numPassingAsserts": 3,
           "location": null
         },
         {
@@ -337,9 +337,9 @@
           ],
           "title": "should create .stop-allowed flag file",
           "fullName": "Agent Management Stop Authorization Basic Stop Authorization should create .stop-allowed flag file",
-          "status": "failed",
-          "duration": 4,
-          "numPassingAsserts": 1,
+          "status": "passed",
+          "duration": 2,
+          "numPassingAsserts": 6,
           "location": null
         },
         {
@@ -350,9 +350,9 @@
           ],
           "title": "should include comprehensive stop data in flag file",
           "fullName": "Agent Management Stop Authorization Basic Stop Authorization should include comprehensive stop data in flag file",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 2,
+          "numPassingAsserts": 2,
           "location": null
         },
         {
@@ -363,9 +363,9 @@
           ],
           "title": "should handle empty agent ID",
           "fullName": "Agent Management Stop Authorization Stop Authorization Edge Cases should handle empty agent ID",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 1,
+          "numPassingAsserts": 3,
           "location": null
         },
         {
@@ -376,9 +376,9 @@
           ],
           "title": "should handle very long reasons",
           "fullName": "Agent Management Stop Authorization Stop Authorization Edge Cases should handle very long reasons",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 1,
+          "numPassingAsserts": 3,
           "location": null
         },
         {
@@ -389,9 +389,9 @@
           ],
           "title": "should handle special characters in agent ID And reason",
           "fullName": "Agent Management Stop Authorization Stop Authorization Edge Cases should handle special characters in agent ID And reason",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 2,
+          "numPassingAsserts": 3,
           "location": null
         },
         {
@@ -402,9 +402,9 @@
           ],
           "title": "should overwrite existing stop flag",
           "fullName": "Agent Management Stop Authorization Stop Authorization Edge Cases should overwrite existing stop flag",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 3,
+          "numPassingAsserts": 5,
           "location": null
         },
         {
@@ -415,9 +415,9 @@
           ],
           "title": "should handle file write errors during stop authorization",
           "fullName": "Agent Management Stop Authorization Stop Authorization Error Handling should handle file write errors during stop authorization",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 1,
+          "numPassingAsserts": 3,
           "location": null
         },
         {
@@ -428,8 +428,8 @@
           ],
           "title": "should handle file system errors gracefully",
           "fullName": "Agent Management Stop Authorization Stop Authorization Error Handling should handle file system errors gracefully",
-          "status": "pending",
-          "duration": 0,
+          "status": "failed",
+          "duration": 3,
           "numPassingAsserts": 0,
           "location": null
         },
@@ -441,9 +441,9 @@
           ],
           "title": "should handle complete agent lifecycle",
           "fullName": "Agent Management Agent Management Integration Agent Lifecycle Integration should handle complete agent lifecycle",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 22,
+          "numPassingAsserts": 8,
           "location": null
         },
         {
@@ -454,9 +454,9 @@
           ],
           "title": "should handle multiple agents with different lifecycles",
           "fullName": "Agent Management Agent Management Integration Agent Lifecycle Integration should handle multiple agents with different lifecycles",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 50,
+          "numPassingAsserts": 9,
           "location": null
         },
         {
@@ -467,9 +467,9 @@
           ],
           "title": "should maintain agent state during feature operations",
           "fullName": "Agent Management Agent Management Integration Agent Management with Feature Operations should maintain agent state during feature operations",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "failed",
+          "duration": 14,
+          "numPassingAsserts": 1,
           "location": null
         },
         {
@@ -480,9 +480,9 @@
           ],
           "title": "should handle partial agent data gracefully",
           "fullName": "Agent Management Edge Cases And Error Recovery Data Consistency should handle partial agent data gracefully",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "passed",
+          "duration": 11,
+          "numPassingAsserts": 3,
           "location": null
         },
         {
@@ -493,8 +493,8 @@
           ],
           "title": "should handle malformed agent data",
           "fullName": "Agent Management Edge Cases And Error Recovery Data Consistency should handle malformed agent data",
-          "status": "pending",
-          "duration": 0,
+          "status": "failed",
+          "duration": 4,
           "numPassingAsserts": 0,
           "location": null
         },
@@ -506,18 +506,33 @@
           ],
           "title": "should handle multiple agent operations on same file",
           "fullName": "Agent Management Edge Cases And Error Recovery Concurrent Operations should handle multiple agent operations on same file",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
+          "status": "failed",
+          "duration": 11,
+          "numPassingAsserts": 3,
           "location": null
         }
       ],
       "failureDetails": [
         {
-          "title": "should create .stop-allowed flag file",
-          "fullName": "Agent Management Stop Authorization Basic Stop Authorization should create .stop-allowed flag file",
+          "title": "should handle file system errors gracefully",
+          "fullName": "Agent Management Stop Authorization Stop Authorization Error Handling should handle file system errors gracefully",
           "failureMessages": [
-            "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:517:53)"
+            "Error: expect(received).toContain(expected) // indexOf\n\nExpected substring: \"File system unavailable\"\nReceived string:    \"expect(received).toBe(expected) // Object.is equality·\nExpected: false\nReceived: true\"\n    at Object.toContain (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:641:33)"
+          ],
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "message": "expect(received).toContain(expected) // indexOf\n\nExpected substring: \"File system unavailable\"\nReceived string:    \"expect(received).toBe(expected) // Object.is equality·\nExpected: false\nReceived: true\"",
+                "pass": false
+              }
+            }
+          ]
+        },
+        {
+          "title": "should maintain agent state during feature operations",
+          "fullName": "Agent Management Agent Management Integration Agent Management with Feature Operations should maintain agent state during feature operations",
+          "failureMessages": [
+            "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:735:39)"
           ],
           "failureDetails": [
             {
@@ -526,6 +541,39 @@
                 "expected": true,
                 "message": "expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false",
                 "name": "toBe",
+                "pass": false
+              }
+            }
+          ]
+        },
+        {
+          "title": "should handle malformed agent data",
+          "fullName": "Agent Management Edge Cases And Error Recovery Data Consistency should handle malformed agent data",
+          "failureMessages": [
+            "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:795:33)"
+          ],
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "actual": false,
+                "expected": true,
+                "message": "expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false",
+                "name": "toBe",
+                "pass": false
+              }
+            }
+          ]
+        },
+        {
+          "title": "should handle multiple agent operations on same file",
+          "fullName": "Agent Management Edge Cases And Error Recovery Concurrent Operations should handle multiple agent operations on same file",
+          "failureMessages": [
+            "Error: expect(received).toBeDefined()\n\nReceived: undefined\n    at toBeDefined (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:823:46)\n    at Array.forEach (<anonymous>)\n    at Object.forEach (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:822:16)"
+          ],
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "message": "expect(received).toBeDefined()\n\nReceived: undefined",
                 "pass": false
               }
             }
