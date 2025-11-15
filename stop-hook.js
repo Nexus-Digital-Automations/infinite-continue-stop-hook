@@ -221,85 +221,20 @@ function generateValidationProgressReport(
  */
 function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
   // Check for legacy counter-based emergency stop first (deprecated, kept for backward compatibility)
-  // NOTE: New emergency stops use .stop-allowed file format with grace period
   const stopCountPath = path.join(workingDir, '.stop-count');
 
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated working directory path
   if (FS.existsSync(stopCountPath)) {
     try {
-      // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script reading validated stop count file
-      const countStr = FS.readFileSync(stopCountPath, 'utf8').trim();
+      loggers.stopHook.info('LEGACY STOP COUNT DETECTED', {
+        status: 'Legacy .stop-count file found - honoring and removing',
+        note: 'Use emergency-stop command via TaskManager API instead',
+      });
 
-      // Try to parse as JSON first (new format with grace period)
-      try {
-        const countData = JSON.parse(countStr);
-        const emergencyTimestamp = new Date(countData.timestamp).getTime();
-        const now = Date.now();
-        const gracePeriod = 20000; // 20 seconds
-        const age = now - emergencyTimestamp;
-
-        if (age > gracePeriod) {
-          // Emergency stop expired - clean up and reject
-          loggers.stopHook.warn('EMERGENCY STOP EXPIRED (LEGACY COUNTER)', {
-            status: 'Emergency stop authorization expired',
-            age: `${Math.round(age / 1000)}s`,
-            gracePeriod: '20s',
-            note: 'Emergency stop file was too old - cleaning up',
-          });
-          // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
-          FS.unlinkSync(stopCountPath);
-          return false;
-        }
-
-        // Valid emergency stop within grace period - honor across multiple calls
-        loggers.stopHook.info('EMERGENCY STOP DETECTED (LEGACY COUNTER WITH GRACE PERIOD)', {
-          status: 'EMERGENCY STOP DETECTED',
-          authorized_by: countData.authorized_by || 'unknown',
-          timestamp: countData.timestamp,
-          age: `${Math.round(age / 1000)}s`,
-          gracePeriod: '20s',
-          note: 'Emergency stop valid - will be honored for all stop hooks within 20-second window',
-        });
-
-        return true; // Allow stop
-      } catch {
-        // Not JSON - fallback to old numeric counter format
-        const count = parseInt(countStr, 10);
-
-        if (count === 1) {
-          // Old format detected - convert to new format with grace period for future calls
-          const newCountData = {
-            count: 1,
-            timestamp: new Date().toISOString(),
-            authorized_by: 'legacy-counter',
-            note: 'Converted from old numeric format to grace-period format',
-          };
-
-          // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path
-          FS.writeFileSync(stopCountPath, JSON.stringify(newCountData, null, 2), 'utf8');
-
-          loggers.stopHook.info('EMERGENCY STOP - CONVERTED TO GRACE PERIOD FORMAT', {
-            status: 'Old numeric counter detected and converted',
-            action: 'Converted to grace-period format for persistence across multiple calls',
-            gracePeriod: '20s',
-            note: 'Stop will be honored for all calls within grace period',
-          });
-
-          return true; // Allow stop
-        } else {
-          // Counter is 0 or invalid - back to infinite mode, clean up
-          loggers.stopHook.info('EMERGENCY STOP CONSUMED - RESUMING INFINITE MODE', {
-            status: 'Emergency stop already used (counter at 0)',
-            action: 'Cleaning up counter file and resuming infinite mode',
-            note: 'Conversation will continue in infinite mode',
-          });
-
-          // Clean up the file
-          // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
-          FS.unlinkSync(stopCountPath);
-          return false; // Back to infinite mode
-        }
-      }
+      // Delete the legacy file and allow stop
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
+      FS.unlinkSync(stopCountPath);
+      return true; // Allow stop
     } catch (error) {
       // Invalid counter file, clean up
       loggers.stopHook.warn('Invalid emergency stop counter detected - cleaning up', {
@@ -309,7 +244,6 @@ function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
 
       try {
         FS.unlinkSync(stopCountPath);
-
       } catch {
         // Ignore cleanup errors
       }
@@ -317,53 +251,30 @@ function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
     }
   }
 
-  // Check for legacy validation-based stop authorization (.stop-allowed file)
+  // Check for emergency stop flag file
   const stopFlagPath = path.join(workingDir, '.stop-allowed');
 
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated working directory path
   if (FS.existsSync(stopFlagPath)) {
-    // Read And immediately delete the flag (single-use),
     try {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script reading validated stop flag file;
       const flagData = JSON.parse(FS.readFileSync(stopFlagPath, 'utf8'));
 
-      // Check if this is an emergency stop (bypasses validation reporting)
-      if (flagData.session_type === 'emergency_stop' && flagData.validation_bypassed === true) {
-        // Check if emergency stop is still valid (within 20-second grace period)
-        const emergencyTimestamp = new Date(flagData.timestamp).getTime();
-        const now = Date.now();
-        const gracePeriod = 20000; // 20 seconds - handles slow stop hook intervals
-        const age = now - emergencyTimestamp;
-
-        if (age > gracePeriod) {
-          // Emergency stop expired - clean up and reject
-          loggers.stopHook.warn('EMERGENCY STOP EXPIRED', {
-            status: 'Emergency stop authorization expired',
-            age: `${Math.round(age / 1000)}s`,
-            gracePeriod: '20s',
-            note: 'Emergency stop file was too old - cleaning up',
-          });
-          // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
-          FS.unlinkSync(stopFlagPath);
-          return false;
-        }
-
-        // Valid emergency stop within grace period
+      // Simple check: if stop_allowed is true, honor it and delete the file
+      if (flagData.stop_allowed === true) {
         loggers.stopHook.info('EMERGENCY STOP DETECTED', {
           status: 'EMERGENCY STOP DETECTED',
-          authorized_by: flagData.authorized_by,
-          reason: flagData.reason,
-          timestamp: flagData.timestamp,
-          age: `${Math.round(age / 1000)}s`,
-          gracePeriod: '20s',
-          validation_bypassed: true,
-          session_type: 'emergency_stop',
-          note: 'Emergency stop valid - will be honored for all stop hooks within 20-second window',
+          authorized_by: flagData.authorized_by || 'unknown',
+          reason: flagData.reason || 'No reason provided',
+          timestamp: flagData.timestamp || 'Unknown',
+          note: 'Honoring emergency stop flag and removing file',
         });
 
-        // DON'T delete yet - let it persist for the grace period to handle rapid calls
-        // It will be auto-deleted when it expires (next check will be > 20s old)
-        return flagData.stop_allowed === true;
+        // Delete the file immediately (single-use flag)
+        // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
+        FS.unlinkSync(stopFlagPath);
+
+        return true; // Allow stop
       }
 
       // Generate comprehensive validation progress report for normal stops;
