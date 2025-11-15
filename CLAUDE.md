@@ -9,13 +9,14 @@
 4.  **IMMEDIATE TASK EXECUTION**: Plan → Execute → Document. No delays.
 5.  **ONE FEATURE AT A TIME**: Work on EXACTLY ONE feature from `FEATURES.json`, complete it fully, then move to the next.
 6.  **USER FEEDBACK SUPREMACY**: User requests TRUMP EVERYTHING. Implement them immediately, but do so within the quality framework.
-7.  **🔄 STOP HOOK CONTINUATION**: LOCAL ENVIRONMENTS ONLY - When stop hook triggers, you ARE THE SAME AGENT. Finish current work OR check TASKS.json for new work. NEVER sit idle. (Cloud-hosted: stop hook not available, use standard TodoWrite workflow)
-8.  **🔒 CLAUDE.md PROTECTION**: NEVER edit CLAUDE.md without EXPLICIT user permission.
-9.  **📚 DOCUMENTATION-FIRST WORKFLOW**: Review docs/ folder BEFORE implementing features. Mark features "IN PROGRESS" in docs, research when uncertain (safe over sorry), write unit tests BEFORE next feature. Track workflow (LOCAL: TaskManager tasks; CLOUD: TodoWrite): docs review → research → implementation → testing → docs update.
-10. **🔴 TASKMANAGER-FIRST MANDATE**: LOCAL ENVIRONMENTS ONLY - ALWAYS use TaskManager API (`/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js`) for ALL task operations. Query task status BEFORE starting work, update progress DURING work, store lessons AFTER completion. TaskManager is the SINGLE SOURCE OF TRUTH for all project tasks. (Cloud-hosted: use standard TodoWrite instead)
-11. **🔴 ABSOLUTE SECURITY MANDATE**: NEVER commit credentials, secrets, API keys, or sensitive data to git. ALL sensitive files MUST be in .gitignore BEFORE any work begins. Pre-commit hooks MUST catch secrets. Treat security violations as CRITICAL errors. Security is non-negotiable and has ZERO tolerance.
-12. **⚡ TOKEN BUDGET OPTIMIZATION**: Allocate majority of token budget to CODE WRITING and IMPLEMENTATION WORK. Keep status updates concise and action-focused. Minimize verbose explanations. Prioritize doing over discussing. Reserve tokens for actual development work, not commentary.
-13. **⚠️ INSTRUCTION COMPLIANCE OR DEATH**: Deviation from these instructions results in CRITICAL FAILURE. Every file creation requires explicit justification. Search for similar files FIRST. Avoid redundancy and clutter at ALL costs.
+7.  **🔴 MANDATORY TASK TRACKING**: When user requests work, FIRST ACTION is to create TaskManager task (LOCAL) or TodoWrite (CLOUD) for tracking and accountability. EXCEPTION: Simple questions only ("What does X do?", "Show status"). When uncertain → CREATE THE TASK.
+8.  **🔄 STOP HOOK CONTINUATION**: LOCAL ENVIRONMENTS ONLY - When stop hook triggers, you ARE THE SAME AGENT. Finish current work OR check TASKS.json for new work. NEVER sit idle. (Cloud-hosted: stop hook not available, use standard TodoWrite workflow)
+9.  **🔒 CLAUDE.md PROTECTION**: NEVER edit CLAUDE.md without EXPLICIT user permission.
+10. **📚 DOCUMENTATION-FIRST WORKFLOW**: Review docs/ folder BEFORE implementing features. Mark features "IN PROGRESS" in docs, research when uncertain (safe over sorry), write unit tests BEFORE next feature. Track workflow (LOCAL: TaskManager tasks; CLOUD: TodoWrite): docs review → research → implementation → testing → docs update.
+11. **🔴 TASKMANAGER-FIRST MANDATE**: LOCAL ENVIRONMENTS ONLY - ALWAYS use TaskManager API (`/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js`) for ALL task operations. Query task status BEFORE starting work, update progress DURING work, store lessons AFTER completion. TaskManager is the SINGLE SOURCE OF TRUTH for all project tasks. (Cloud-hosted: use standard TodoWrite instead)
+12. **🔴 ABSOLUTE SECURITY MANDATE**: NEVER commit credentials, secrets, API keys, or sensitive data to git. ALL sensitive files MUST be in .gitignore BEFORE any work begins. Pre-commit hooks MUST catch secrets. Treat security violations as CRITICAL errors. Security is non-negotiable and has ZERO tolerance.
+13. **⚡ TOKEN BUDGET OPTIMIZATION**: Allocate majority of token budget to CODE WRITING and IMPLEMENTATION WORK. Keep status updates concise and action-focused. Minimize verbose explanations. Prioritize doing over discussing. Reserve tokens for actual development work, not commentary.
+14. **⚠️ INSTRUCTION COMPLIANCE OR DEATH**: Deviation from these instructions results in CRITICAL FAILURE. Every file creation requires explicit justification. Search for similar files FIRST. Avoid redundancy and clutter at ALL costs.
 </law>
 
 ## 🌐 ENVIRONMENT DETECTION - CLOUD VS LOCAL
@@ -634,10 +635,28 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 
 ## 🚨 MANDATORY TASKMANAGER TASK CREATION
 
-**🔴 ALWAYS CREATE TASKS VIA TASKMANAGER FOR USER REQUESTS - NO EXCEPTIONS**
+**🔴 FIRST ACTION FOR USER REQUESTS: CREATE TASKMANAGER TASK**
 
 ### Core Principle
-For ALL user requests, create tasks in TASKS.json via taskmanager-api.js to ensure proper tracking, progress monitoring, and work continuity across sessions.
+When user requests work (implementation, fixes, features, tests), **FIRST ACTION** is creating a task in TASKS.json via taskmanager-api.js. This ensures tracking, progress monitoring, and work continuity across sessions.
+
+**EXCEPTION:** Simple questions only ("What does X do?", "Explain this code", "Show status"). When uncertain → CREATE THE TASK.
+
+### 🎯 Quick Decision Flowchart
+
+```
+USER REQUEST
+     ↓
+Is it a QUESTION or INFO request?
+     ↓
+   YES → Answer/provide info immediately (NO TASK)
+     ↓
+   NO → Does it involve CHANGES/IMPLEMENTATION?
+     ↓
+   YES → CREATE TASKMANAGER TASK FIRST, then work
+     ↓
+UNCERTAIN? → CREATE THE TASK (safer)
+```
 
 ### 🔴 Query First, Then Create (MANDATORY)
 - **🔴 BEFORE CREATING TASKS**: Use `get-task-stats` to see current task landscape (REQUIRED)
@@ -645,13 +664,23 @@ For ALL user requests, create tasks in TASKS.json via taskmanager-api.js to ensu
 - **🔴 UNDERSTAND WORKLOAD**: TaskManager tracks everything - query it to stay coordinated (REQUIRED)
 
 ### When to Create Tasks
-- ✅ **ALWAYS**: Complex requests requiring multiple steps
-- ✅ **ALWAYS**: Feature implementations
-- ✅ **ALWAYS**: Bug fixes and error corrections
-- ✅ **ALWAYS**: Refactoring work
-- ✅ **ALWAYS**: Test creation or modification
-- ✅ **ALWAYS**: Agent-suggested improvements or tasks
-- ❌ **EXCEPTION**: Trivially simple requests (1-2 minute completion time)
+
+**✅ ALWAYS CREATE TASK:**
+- Feature implementations (any new functionality)
+- Bug fixes and error corrections
+- Refactoring work
+- Test creation or modification
+- File modifications or code changes
+- Agent-suggested improvements
+- Multi-step operations
+- **When uncertain → CREATE THE TASK (safer)**
+
+**❌ EXCEPTION - NO TASK NEEDED (Questions/Info Only):**
+- Simple questions: "What does X do?", "Explain this function", "How does Y work?"
+- Status requests: "Show TASKS.json", "List files", "Check git status"
+- Quick info: "Read this file", "Search for X"
+
+**DECISION RULE:** If the request involves making changes, writing code, or implementing anything → CREATE TASK FIRST.
 
 ### 🔴 Why TaskManager for Everything (CRITICAL UNDERSTANDING)
 - **🔴 CONTINUITY**: Tasks persist across stop hook sessions - YOU ARE THE SAME AGENT
