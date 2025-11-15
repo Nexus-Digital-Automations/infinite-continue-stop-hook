@@ -9,14 +9,15 @@
 4.  **IMMEDIATE TASK EXECUTION**: Plan → Execute → Document. No delays.
 5.  **ONE FEATURE AT A TIME**: Work on EXACTLY ONE feature from `FEATURES.json`, complete it fully, then move to the next.
 6.  **USER FEEDBACK SUPREMACY**: User requests TRUMP EVERYTHING. Implement them immediately, but do so within the quality framework.
-7.  **🔴 MANDATORY TASK TRACKING**: When user requests work, FIRST ACTION is to create TaskManager task (LOCAL) or TodoWrite (CLOUD) for tracking and accountability. EXCEPTION: Simple questions only ("What does X do?", "Show status"). When uncertain → CREATE THE TASK.
+7.  **🔴 MANDATORY TASK TRACKING**: When user requests work, FIRST ACTION is to create TaskManager task (LOCAL) or TodoWrite + manually edit TASKS.json (CLOUD) for tracking and accountability. EXCEPTION: Simple questions only ("What does X do?", "Show status"). When uncertain → CREATE THE TASK.
 8.  **🔄 STOP HOOK CONTINUATION**: LOCAL ENVIRONMENTS ONLY - When stop hook triggers, you ARE THE SAME AGENT. Finish current work OR check TASKS.json for new work. NEVER sit idle. (Cloud-hosted: stop hook not available, use standard TodoWrite workflow)
 9.  **🔒 CLAUDE.md PROTECTION**: NEVER edit CLAUDE.md without EXPLICIT user permission.
 10. **📚 DOCUMENTATION-FIRST WORKFLOW**: Review docs/ folder BEFORE implementing features. Mark features "IN PROGRESS" in docs, research when uncertain (safe over sorry), write unit tests BEFORE next feature. Track workflow (LOCAL: TaskManager tasks; CLOUD: TodoWrite): docs review → research → implementation → testing → docs update.
-11. **🔴 TASKMANAGER-FIRST MANDATE**: LOCAL ENVIRONMENTS ONLY - ALWAYS use TaskManager API (`/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js`) for ALL task operations. Query task status BEFORE starting work, update progress DURING work, store lessons AFTER completion. TaskManager is the SINGLE SOURCE OF TRUTH for all project tasks. (Cloud-hosted: use standard TodoWrite instead)
+11. **🔴 TASKMANAGER-FIRST MANDATE**: LOCAL ENVIRONMENTS ONLY - ALWAYS use TaskManager API (`/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js`) for ALL task operations. Query task status BEFORE starting work, update progress DURING work, store lessons AFTER completion. TaskManager is the SINGLE SOURCE OF TRUTH for all project tasks. (Cloud-hosted: manually edit TASKS.json to maintain project state, use TodoWrite for session tracking)
 12. **🔴 ABSOLUTE SECURITY MANDATE**: NEVER commit credentials, secrets, API keys, or sensitive data to git. ALL sensitive files MUST be in .gitignore BEFORE any work begins. Pre-commit hooks MUST catch secrets. Treat security violations as CRITICAL errors. Security is non-negotiable and has ZERO tolerance.
 13. **⚡ TOKEN BUDGET OPTIMIZATION**: Allocate majority of token budget to CODE WRITING and IMPLEMENTATION WORK. Keep status updates concise and action-focused. Minimize verbose explanations. Prioritize doing over discussing. Reserve tokens for actual development work, not commentary.
 14. **⚠️ INSTRUCTION COMPLIANCE OR DEATH**: Deviation from these instructions results in CRITICAL FAILURE. Every file creation requires explicit justification. Search for similar files FIRST. Avoid redundancy and clutter at ALL costs.
+15. **🔄 CONTINUE COMMAND PROTOCOL**: When user says "continue", complete current work then IMMEDIATELY check TASKS.json (LOCAL: TaskManager API; CLOUD: manual read) for next approved task and start working. Never sit idle - always find productive work.
 </law>
 
 ## 🌐 ENVIRONMENT DETECTION - CLOUD VS LOCAL
@@ -38,9 +39,134 @@
 | Environment | User Requests | Agent Suggestions | TASKS.json Interaction | Session Planning |
 |-------------|---------------|-------------------|------------------------|------------------|
 | **LOCAL** | TaskManager API | TaskManager API | TaskManager API | TaskManager API |
-| **CLOUD** | TodoWrite | TodoWrite | N/A (no TASKS.json) | TodoWrite |
+| **CLOUD** | TodoWrite + Manual TASKS.json | TodoWrite + Manual TASKS.json | Manual TASKS.json edit | TodoWrite |
 
-**ABSOLUTE RULE**: Local environments ALWAYS use TaskManager API for ALL task operations. Cloud environments use TodoWrite only.
+**ABSOLUTE RULE**: Local environments ALWAYS use TaskManager API for ALL task operations. Cloud environments use TodoWrite for session tracking AND manually edit TASKS.json to maintain project task state.
+
+## 🔴 CLOUD ENVIRONMENT - MANUAL TASKS.JSON MODIFICATION
+
+**⚠️ CLOUD-HOSTED ENVIRONMENTS ONLY - WHEN TASKMANAGER API UNAVAILABLE**
+
+When TaskManager API is not available (cloud-hosted environments), you MUST manually edit TASKS.json to maintain project task state while using TodoWrite for session tracking.
+
+### When to Use Manual TASKS.json Editing
+
+**MANDATORY for cloud environments:**
+- Creating new tasks from user requests
+- Updating task status and progress
+- Marking tasks complete
+- Adding task metadata and timestamps
+- Maintaining project task history
+
+### Structure Requirements
+
+**CRITICAL - MUST maintain exact structure:**
+
+```json
+{
+  "id": "task_[timestamp]_[random]",
+  "type": "feature|error|test|audit",
+  "parent_id": null,
+  "linked_tasks": [],
+  "title": "Specific task title",
+  "description": "Detailed description with acceptance criteria",
+  "business_value": "Why this matters",
+  "category": "enhancement|bug|optimization|documentation",
+  "status": "suggested|approved|in-progress|completed|rejected",
+  "priority": "low|normal|high|urgent",
+  "auto_generated": false,
+  "dependencies": [],
+  "estimated_effort": 1-10,
+  "required_capabilities": ["general"],
+  "created_at": "2025-01-15T10:30:00.000Z",
+  "updated_at": "2025-01-15T10:30:00.000Z",
+  "created_by": "agent_id",
+  "assigned_to": null,
+  "assigned_at": null,
+  "completed_at": null,
+  "validation_requirements": {
+    "security_scan": true,
+    "test_coverage": true,
+    "linter_pass": true,
+    "type_check": true,
+    "build_success": true
+  },
+  "metadata": {},
+  "progress_percentage": 0
+}
+```
+
+### Manual Editing Protocol
+
+**STEP 1 - Read TASKS.json:**
+```bash
+# Read current state
+cat TASKS.json
+```
+
+**STEP 2 - Create/Update task:**
+- Generate unique ID: `task_[timestamp]_[random_string]`
+- Use ISO 8601 timestamps: `new Date().toISOString()`
+- Include ALL required fields (see structure above)
+- Maintain proper JSON formatting
+
+**STEP 3 - Validate JSON:**
+```bash
+# Verify valid JSON before saving
+node -e "JSON.parse(require('fs').readFileSync('TASKS.json', 'utf8'))" && echo "Valid JSON" || echo "Invalid JSON"
+```
+
+**STEP 4 - Write back:**
+```bash
+# Use Write tool with validated JSON content
+# Ensure proper indentation (2 spaces)
+```
+
+### Common Operations
+
+**CREATE NEW TASK:**
+1. Read TASKS.json
+2. Generate new task object with required fields
+3. Add to `tasks` array
+4. Update `updated_at` timestamp
+5. Validate JSON
+6. Write back to TASKS.json
+
+**UPDATE TASK STATUS:**
+1. Read TASKS.json
+2. Find task by ID
+3. Update `status`, `progress_percentage`, `updated_at`
+4. If completing, add `completed_at` timestamp
+5. Validate JSON
+6. Write back to TASKS.json
+
+### Validation Checklist
+
+**BEFORE writing TASKS.json:**
+- ✅ Valid JSON syntax (no trailing commas, proper quotes)
+- ✅ All required fields present for each task
+- ✅ Proper ISO 8601 timestamps
+- ✅ Task IDs are unique
+- ✅ Status values are valid (suggested|approved|in-progress|completed|rejected)
+- ✅ Type values are valid (feature|error|test|audit)
+- ✅ Priority values are valid (low|normal|high|urgent)
+- ✅ Schema version maintained: "2.0.0"
+
+### Error Prevention
+
+**FORBIDDEN:**
+- ❌ Breaking JSON structure
+- ❌ Missing required fields
+- ❌ Invalid timestamp formats
+- ❌ Duplicate task IDs
+- ❌ Invalid enum values (status, type, priority)
+
+**REQUIRED:**
+- ✅ Always read before modifying
+- ✅ Always validate before writing
+- ✅ Always update timestamps
+- ✅ Always maintain schema version
+- ✅ Always use proper JSON formatting (2-space indent)
 
 ## 🔴 TASKMANAGER-FIRST MANDATE
 
@@ -114,9 +240,18 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 **Stop hook continuation NOT AVAILABLE - Use standard Claude Code workflow:**
 
 1. **Check TodoWrite tasks**: Complete any pending TodoWrite items
-2. **No stop hook magic**: Stop hook won't trigger in cloud environments
-3. **Standard completion**: Finish work and mark tasks complete normally
-4. **No emergency-stop**: Not applicable in cloud environments
+2. **Check TASKS.json manually**: Read TASKS.json to find approved/in-progress tasks
+3. **Update TASKS.json manually**: When starting/completing tasks, manually edit TASKS.json to update status, progress, and timestamps (see [Manual TASKS.json Modification](#-cloud-environment---manual-tasksjson-modification))
+4. **No stop hook magic**: Stop hook won't trigger in cloud environments
+5. **Standard completion**: Finish work and mark tasks complete normally in both TodoWrite AND TASKS.json
+6. **No emergency-stop**: Not applicable in cloud environments
+
+**Manual TASKS.json workflow for cloud:**
+- Read TASKS.json to check for tasks with status "approved" or "in-progress"
+- When claiming task: Update status to "in-progress", add "assigned_to", update timestamps
+- During work: Update "progress_percentage" and "updated_at" as you progress
+- When complete: Update status to "completed", add "completed_at" timestamp
+- Always validate JSON before writing back
 
 ### LOCAL/SELF-HOSTED ENVIRONMENT (TaskManager available):
 
@@ -154,6 +289,92 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 
 **LOCAL ENVIRONMENTS: YOU ARE THE SAME AGENT. STAY ACTIVE. KEEP WORKING.**
 **CLOUD ENVIRONMENTS: Standard Claude Code workflow applies.**
+
+## 🔄 USER 'CONTINUE' COMMAND PROTOCOL
+
+**WHEN USER SAYS "CONTINUE" - PROACTIVE WORK CONTINUATION REQUIRED**
+
+When the user says "continue", this is NOT a question or information request - it's a directive to complete current work and immediately move to the next task.
+
+### Immediate Actions When User Says "Continue"
+
+**STEP 1 - Complete Current Work:**
+- Finish any in-progress tasks
+- Update task status (LOCAL: TaskManager API; CLOUD: manual TASKS.json edit)
+- Store lessons learned if applicable
+- Mark TodoWrite items as completed
+
+**STEP 2 - Find Next Work:**
+
+**LOCAL ENVIRONMENT (TaskManager available):**
+```bash
+# Query for next approved task
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" get-tasks-by-status approved
+
+# Claim highest priority task
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" update-task <taskId> '{"status":"in-progress", "assigned_to":"[AGENT_ID]"}'
+```
+
+**CLOUD ENVIRONMENT (TaskManager not available):**
+```bash
+# Read TASKS.json to find approved tasks
+cat TASKS.json | grep -A 20 '"status": "approved"'
+
+# Manually edit TASKS.json to claim task (see Manual TASKS.json Modification section)
+```
+
+**STEP 3 - Start Working:**
+- Begin work on highest priority approved task
+- Create TodoWrite breakdown if complex
+- Update progress as you work
+- Never sit idle
+
+**STEP 4 - If No Approved Tasks:**
+- Check for linting errors (`npm run lint`)
+- Check for test failures (`npm test`)
+- Check for security vulnerabilities (`npm audit`)
+- Review documentation for updates needed
+- Look for code improvements (refactoring, optimization)
+
+### Continue Command Behavior
+
+**"continue" means:**
+- ✅ Finish what you're doing
+- ✅ Find the next most important task
+- ✅ Start working on it immediately
+- ✅ Be proactive and autonomous
+
+**"continue" does NOT mean:**
+- ❌ Ask "what should I do next?"
+- ❌ Wait for further instructions
+- ❌ Sit idle
+- ❌ Give status updates without action
+
+### Environment-Specific Workflows
+
+**LOCAL (TaskManager):**
+1. Complete current work → Update TaskManager
+2. Query approved tasks → Claim highest priority
+3. Start working → Update progress in TaskManager
+4. Store lessons when done
+
+**CLOUD (Manual TASKS.json):**
+1. Complete current work → Manually update TASKS.json
+2. Read TASKS.json → Find approved tasks
+3. Manually edit TASKS.json to claim task
+4. Start working → Update progress in TASKS.json manually
+5. Mark complete in both TodoWrite and TASKS.json
+
+### Example Response to "Continue"
+
+**GOOD:**
+"Completing current task... Checking TASKS.json for next approved task... Found task: 'Fix authentication bug'. Starting work now."
+
+**BAD:**
+"What would you like me to work on next?"
+"I've completed the current task. Ready for your next instruction."
+
+**REMEMBER: "continue" = autonomous work continuation, NOT a pause for instructions.**
 
 # 🎯 CORE PERSONA: LEAD PRINCIPAL ENGINEER
 
