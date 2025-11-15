@@ -11,7 +11,7 @@
 6.  **USER FEEDBACK SUPREMACY**: User requests TRUMP EVERYTHING. Implement them immediately, but do so within the quality framework.
 7.  **🔄 STOP HOOK CONTINUATION**: LOCAL ENVIRONMENTS ONLY - When stop hook triggers, you ARE THE SAME AGENT. Finish current work OR check TASKS.json for new work. NEVER sit idle. (Cloud-hosted: stop hook not available, use standard TodoWrite workflow)
 8.  **🔒 CLAUDE.md PROTECTION**: NEVER edit CLAUDE.md without EXPLICIT user permission.
-9.  **📚 DOCUMENTATION-FIRST WORKFLOW**: Review docs/ folder BEFORE implementing features. Mark features "IN PROGRESS" in docs, research when uncertain (safe over sorry), write unit tests BEFORE next feature. Use TodoWrite to track: docs review → research → implementation → testing → docs update.
+9.  **📚 DOCUMENTATION-FIRST WORKFLOW**: Review docs/ folder BEFORE implementing features. Mark features "IN PROGRESS" in docs, research when uncertain (safe over sorry), write unit tests BEFORE next feature. Track workflow (LOCAL: TaskManager tasks; CLOUD: TodoWrite): docs review → research → implementation → testing → docs update.
 10. **🔴 TASKMANAGER-FIRST MANDATE**: LOCAL ENVIRONMENTS ONLY - ALWAYS use TaskManager API (`/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js`) for ALL task operations. Query task status BEFORE starting work, update progress DURING work, store lessons AFTER completion. TaskManager is the SINGLE SOURCE OF TRUTH for all project tasks. (Cloud-hosted: use standard TodoWrite instead)
 11. **🔴 ABSOLUTE SECURITY MANDATE**: NEVER commit credentials, secrets, API keys, or sensitive data to git. ALL sensitive files MUST be in .gitignore BEFORE any work begins. Pre-commit hooks MUST catch secrets. Treat security violations as CRITICAL errors. Security is non-negotiable and has ZERO tolerance.
 12. **⚡ TOKEN BUDGET OPTIMIZATION**: Allocate majority of token budget to CODE WRITING and IMPLEMENTATION WORK. Keep status updates concise and action-focused. Minimize verbose explanations. Prioritize doing over discussing. Reserve tokens for actual development work, not commentary.
@@ -31,6 +31,15 @@
 | TodoWrite | ✅ | ✅ |
 
 **Behavior:** Attempt TaskManager access first. Cloud → TodoWrite workflow. Local → TaskManager-first mandate. When uncertain → default cloud (safer).
+
+### 🔴 TASK MANAGEMENT DECISION MATRIX
+
+| Environment | User Requests | Agent Suggestions | TASKS.json Interaction | Session Planning |
+|-------------|---------------|-------------------|------------------------|------------------|
+| **LOCAL** | TaskManager API | TaskManager API | TaskManager API | TaskManager API |
+| **CLOUD** | TodoWrite | TodoWrite | N/A (no TASKS.json) | TodoWrite |
+
+**ABSOLUTE RULE**: Local environments ALWAYS use TaskManager API for ALL task operations. Cloud environments use TodoWrite only.
 
 ## 🔴 TASKMANAGER-FIRST MANDATE
 
@@ -498,7 +507,7 @@ EOF
 
 ## 🚨 DOCUMENTATION-FIRST WORKFLOW
 
-**WORKFLOW (Use TodoWrite to track):**
+**WORKFLOW (LOCAL: Create TaskManager tasks; CLOUD: Use TodoWrite):**
 
 1. Review docs/ folder BEFORE implementing
 2. Mark feature "IN PROGRESS" in documentation
@@ -584,9 +593,10 @@ function processData(id, data) {
 
 1. **FOCUSED FEATURES ONLY** - Codebase contains ONLY features explicitly outlined by user, nothing extra
 2. **ALL APPROVED FEATURES COMPLETE** - Every approved feature in FEATURES.json implemented perfectly
-3. **ALL TODOWRITE TASKS COMPLETE** - Every task in TodoWrite marked as completed
-4. **PERFECT SECURITY** - Zero security vulnerabilities, no exposed secrets, all security scans pass
-5. **TECHNICAL PERFECTION** - All validation requirements below must pass throughout entire codebase
+3. **ALL TODOWRITE TASKS COMPLETE** (Cloud) - Every task in TodoWrite marked as completed
+4. **ALL TASKMANAGER TASKS COMPLETE** (Local) - Every task in TASKS.json marked as completed
+5. **PERFECT SECURITY** - Zero security vulnerabilities, no exposed secrets, all security scans pass
+6. **TECHNICAL PERFECTION** - All validation requirements below must pass throughout entire codebase
 
 **MULTI-STEP AUTHORIZATION PROCESS (LANGUAGE-AGNOSTIC):**
 When ALL criteria met, agent MUST complete multi-step authorization:
@@ -640,6 +650,7 @@ For ALL user requests, create tasks in TASKS.json via taskmanager-api.js to ensu
 - ✅ **ALWAYS**: Bug fixes and error corrections
 - ✅ **ALWAYS**: Refactoring work
 - ✅ **ALWAYS**: Test creation or modification
+- ✅ **ALWAYS**: Agent-suggested improvements or tasks
 - ❌ **EXCEPTION**: Trivially simple requests (1-2 minute completion time)
 
 ### 🔴 Why TaskManager for Everything (CRITICAL UNDERSTANDING)
@@ -713,7 +724,7 @@ $TM emergency-stop [AGENT_ID] "reason"  # Only after 2nd consecutive stop hook w
 
 ## ESSENTIAL COMMANDS
 
-**TODOWRITE USAGE:**
+**TODOWRITE USAGE (CLOUD ENVIRONMENTS):**
 
 ```javascript
 // For complex tasks, create TodoWrite breakdown
@@ -722,4 +733,28 @@ TodoWrite([
   { content: 'Plan implementation', status: 'pending', activeForm: 'Planning implementation' },
   { content: 'Execute implementation', status: 'pending', activeForm: 'Executing implementation' },
 ]);
+```
+
+**TASKMANAGER USAGE (LOCAL ENVIRONMENTS):**
+
+```bash
+# Create task via TaskManager API
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" \
+  --project-root "$(pwd)" \
+  create-task '{
+    "title": "Implement user authentication feature",
+    "description": "Add login/logout functionality with JWT tokens. Acceptance: Users can login, tokens expire after 24h, logout clears session.",
+    "type": "feature",
+    "priority": "high"
+  }'
+
+# Update task progress
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" \
+  --project-root "$(pwd)" \
+  update-task <taskId> '{"status": "in-progress", "progress_percentage": 50}'
+
+# Mark task complete
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" \
+  --project-root "$(pwd)" \
+  update-task <taskId> '{"status": "completed", "progress_percentage": 100}'
 ```
