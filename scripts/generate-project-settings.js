@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 
 /**
  * Claude Code Project Settings Generator
@@ -39,6 +38,7 @@ function parseArgs() {
     minimal: false,
     copyHook: true,
     projectRoot: process.cwd(),
+    batchDir: null,
   };
 
   for (let i = 0; i < args.length; i++) {
@@ -55,6 +55,9 @@ function parseArgs() {
         break;
       case '--project-root':
         options.projectRoot = args[++i];
+        break;
+      case '--batch-dir':
+        options.batchDir = args[++i];
         break;
       case '--help':
       case '-h':
@@ -84,6 +87,7 @@ Options:
   --minimal         Minimal settings (no global inheritance)
   --no-copy-hook    Don't copy stop-hook.js (use existing)
   --project-root    Target project directory (default: current directory)
+  --batch-dir       Process all projects in specified directory
   -h, --help        Show this help message
 
 Examples:
@@ -98,6 +102,12 @@ Examples:
 
   # Use existing stop-hook.js (don't copy)
   node generate-project-settings.js --no-copy-hook
+
+  # Process all projects in Claude Coding Projects directory
+  node generate-project-settings.js --batch-dir "/Users/jeremyparker/Desktop/Claude Coding Projects"
+
+  # Batch process with force overwrite
+  node generate-project-settings.js --batch-dir "/Users/jeremyparker/Desktop/Claude Coding Projects" --force
 `);
 }
 
@@ -108,14 +118,14 @@ function readGlobalSettings() {
   const startTime = Date.now();
   logger.info('Reading global settings', {
     function: 'readGlobalSettings',
-    path: GLOBAL_SETTINGS_PATH
+    path: GLOBAL_SETTINGS_PATH,
   });
 
   try {
     if (!fs.existsSync(GLOBAL_SETTINGS_PATH)) {
       logger.warn('Global settings not found, using defaults', {
         function: 'readGlobalSettings',
-        path: GLOBAL_SETTINGS_PATH
+        path: GLOBAL_SETTINGS_PATH,
       });
       return null;
     }
@@ -128,7 +138,7 @@ function readGlobalSettings() {
       duration: Date.now() - startTime,
       hasEnv: !!settings.env,
       hasPermissions: !!settings.permissions,
-      hasHooks: !!settings.hooks
+      hasHooks: !!settings.hooks,
     });
 
     return settings;
@@ -137,7 +147,7 @@ function readGlobalSettings() {
       function: 'readGlobalSettings',
       duration: Date.now() - startTime,
       error: error.message,
-      stack: error.stack
+      stack: error.stack,
     });
     throw new Error(`Failed to read global settings: ${error.message}`);
   }
@@ -153,7 +163,7 @@ function copyStopHook(projectRoot, force) {
   logger.info('Copying stop-hook.js to project', {
     function: 'copyStopHook',
     source: HOOK_SOURCE_PATH,
-    target: targetPath
+    target: targetPath,
   });
 
   try {
@@ -166,7 +176,7 @@ function copyStopHook(projectRoot, force) {
     if (fs.existsSync(targetPath) && !force) {
       logger.warn('stop-hook.js already exists (use --force to overwrite)', {
         function: 'copyStopHook',
-        path: targetPath
+        path: targetPath,
       });
       return false;
     }
@@ -198,7 +208,7 @@ function copyStopHook(projectRoot, force) {
       function: 'copyStopHook',
       duration: Date.now() - startTime,
       path: targetPath,
-      size: hookContent.length
+      size: hookContent.length,
     });
 
     return true;
@@ -207,7 +217,7 @@ function copyStopHook(projectRoot, force) {
       function: 'copyStopHook',
       duration: Date.now() - startTime,
       error: error.message,
-      stack: error.stack
+      stack: error.stack,
     });
     throw new Error(`Failed to copy stop-hook.js: ${error.message}`);
   }
@@ -221,7 +231,7 @@ function generateSettings(projectRoot, globalSettings, minimal) {
   logger.info('Generating project settings', {
     function: 'generateSettings',
     projectRoot,
-    minimal
+    minimal,
   });
 
   try {
@@ -232,8 +242,8 @@ function generateSettings(projectRoot, globalSettings, minimal) {
         timestamp: new Date().toISOString(),
         generator: 'infinite-continue-stop-hook/scripts/generate-project-settings.js',
         hookStrategy: 'relative-path',
-        infiniteHookVersion: INFINITE_HOOK_VERSION
-      }
+        infiniteHookVersion: INFINITE_HOOK_VERSION,
+      },
     };
 
     // Add environment variables (inherit from global unless minimal)
@@ -245,7 +255,7 @@ function generateSettings(projectRoot, globalSettings, minimal) {
         BASH_MAX_TIMEOUT_MS: '300000',
         CLAUDE_CODE_DISABLE_TELEMETRY: '1',
         CLAUDE_CODE_SECURE_MODE: '1',
-        NODE_OPTIONS: '--max-old-space-size=8192'
+        NODE_OPTIONS: '--max-old-space-size=8192',
       };
     }
 
@@ -253,7 +263,7 @@ function generateSettings(projectRoot, globalSettings, minimal) {
     if (!minimal && globalSettings?.permissions) {
       settings.permissions = {
         $inherited: GLOBAL_SETTINGS_PATH,
-        ...globalSettings.permissions
+        ...globalSettings.permissions,
       };
     }
 
@@ -264,9 +274,9 @@ function generateSettings(projectRoot, globalSettings, minimal) {
         hooks: [{
           type: 'command',
           command: 'node ./stop-hook.js',  // RELATIVE PATH!
-          timeout: 10000
-        }]
-      }]
+          timeout: 10000,
+        }],
+      }],
     };
 
     // Add feature flags
@@ -277,7 +287,7 @@ function generateSettings(projectRoot, globalSettings, minimal) {
       duration: Date.now() - startTime,
       hasEnv: !!settings.env,
       hasPermissions: !!settings.permissions,
-      hookCommand: settings.hooks.Stop[0].hooks[0].command
+      hookCommand: settings.hooks.Stop[0].hooks[0].command,
     });
 
     return settings;
@@ -286,7 +296,7 @@ function generateSettings(projectRoot, globalSettings, minimal) {
       function: 'generateSettings',
       duration: Date.now() - startTime,
       error: error.message,
-      stack: error.stack
+      stack: error.stack,
     });
     throw new Error(`Failed to generate settings: ${error.message}`);
   }
@@ -302,7 +312,7 @@ function writeSettings(projectRoot, settings, force) {
 
   logger.info('Writing project settings', {
     function: 'writeSettings',
-    path: settingsPath
+    path: settingsPath,
   });
 
   try {
@@ -311,7 +321,7 @@ function writeSettings(projectRoot, settings, force) {
       fs.mkdirSync(claudeDir, { recursive: true });
       logger.info('.claude directory created', {
         function: 'writeSettings',
-        path: claudeDir
+        path: claudeDir,
       });
     }
 
@@ -319,7 +329,7 @@ function writeSettings(projectRoot, settings, force) {
     if (fs.existsSync(settingsPath) && !force) {
       logger.warn('settings.json already exists (use --force to overwrite)', {
         function: 'writeSettings',
-        path: settingsPath
+        path: settingsPath,
       });
       return false;
     }
@@ -335,7 +345,7 @@ function writeSettings(projectRoot, settings, force) {
       function: 'writeSettings',
       duration: Date.now() - startTime,
       path: settingsPath,
-      size: content.length
+      size: content.length,
     });
 
     return true;
@@ -344,7 +354,7 @@ function writeSettings(projectRoot, settings, force) {
       function: 'writeSettings',
       duration: Date.now() - startTime,
       error: error.message,
-      stack: error.stack
+      stack: error.stack,
     });
     throw new Error(`Failed to write settings: ${error.message}`);
   }
@@ -357,7 +367,7 @@ function validateProject(projectRoot) {
   const startTime = Date.now();
   logger.info('Validating project structure', {
     function: 'validateProject',
-    projectRoot
+    projectRoot,
   });
 
   try {
@@ -380,14 +390,14 @@ function validateProject(projectRoot) {
       logger.warn('TASKS.json not found - is this a Claude Code project?', {
         function: 'validateProject',
         projectRoot,
-        tasksPath
+        tasksPath,
       });
     }
 
     logger.info('Project validation complete', {
       function: 'validateProject',
       duration: Date.now() - startTime,
-      hasTasksJson
+      hasTasksJson,
     });
 
     return { valid: true, hasTasksJson };
@@ -396,7 +406,143 @@ function validateProject(projectRoot) {
       function: 'validateProject',
       duration: Date.now() - startTime,
       error: error.message,
-      stack: error.stack
+      stack: error.stack,
+    });
+    throw error;
+  }
+}
+
+/**
+ * Process a single project - generate settings and copy hook
+ */
+function processSingleProject(projectRoot, globalSettings, options) {
+  const startTime = Date.now();
+  const projectName = path.basename(projectRoot);
+
+  logger.info('Processing single project', {
+    function: 'processSingleProject',
+    projectRoot,
+    projectName,
+  });
+
+  try {
+    // Validate project
+    const validation = validateProject(projectRoot);
+
+    // Copy stop-hook.js if requested
+    let hookCopied = false;
+    if (options.copyHook) {
+      hookCopied = copyStopHook(projectRoot, options.force);
+    }
+
+    // Generate settings
+    const settings = generateSettings(projectRoot, globalSettings, options.minimal);
+
+    // Write settings
+    const settingsWritten = writeSettings(projectRoot, settings, options.force);
+
+    logger.info('Project processed successfully', {
+      function: 'processSingleProject',
+      duration: Date.now() - startTime,
+      projectName,
+      hookCopied,
+      settingsWritten,
+    });
+
+    return {
+      success: true,
+      projectName,
+      projectRoot,
+      hookCopied,
+      settingsWritten,
+      hasTasksJson: validation.hasTasksJson,
+    };
+  } catch (error) {
+    logger.error('Failed to process project', {
+      function: 'processSingleProject',
+      duration: Date.now() - startTime,
+      projectName,
+      error: error.message,
+      stack: error.stack,
+    });
+
+    return {
+      success: false,
+      projectName,
+      projectRoot,
+      error: error.message,
+    };
+  }
+}
+
+/**
+ * Process all projects in a directory (batch mode)
+ */
+function processBatchDirectory(batchDir, globalSettings, options) {
+  const startTime = Date.now();
+  logger.info('Starting batch processing', {
+    function: 'processBatchDirectory',
+    batchDir,
+  });
+
+  try {
+    // Validate batch directory exists
+    if (!fs.existsSync(batchDir)) {
+      throw new Error(`Batch directory does not exist: ${batchDir}`);
+    }
+
+    const stats = fs.statSync(batchDir);
+    if (!stats.isDirectory()) {
+      throw new Error(`Batch path is not a directory: ${batchDir}`);
+    }
+
+    // Read all subdirectories
+    const entries = fs.readdirSync(batchDir, { withFileTypes: true });
+    const projectDirs = entries
+      .filter(entry => entry.isDirectory())
+      .filter(entry => !entry.name.startsWith('.'))  // Skip hidden directories
+      .filter(entry => entry.name !== 'node_modules')  // Skip node_modules
+      .map(entry => path.join(batchDir, entry.name));
+
+    logger.info('Found project directories', {
+      function: 'processBatchDirectory',
+      batchDir,
+      count: projectDirs.length,
+      projects: projectDirs.map(d => path.basename(d)),
+    });
+
+    // Process each project
+    const results = [];
+    for (const projectDir of projectDirs) {
+      console.log(`\nProcessing: ${path.basename(projectDir)}...`);
+      const result = processSingleProject(projectDir, globalSettings, options);
+      results.push(result);
+    }
+
+    // Generate summary
+    const successful = results.filter(r => r.success);
+    const failed = results.filter(r => !r.success);
+
+    logger.info('Batch processing complete', {
+      function: 'processBatchDirectory',
+      duration: Date.now() - startTime,
+      total: results.length,
+      successful: successful.length,
+      failed: failed.length,
+    });
+
+    return {
+      total: results.length,
+      successful,
+      failed,
+      duration: Date.now() - startTime,
+    };
+  } catch (error) {
+    logger.error('Batch processing failed', {
+      function: 'processBatchDirectory',
+      duration: Date.now() - startTime,
+      error: error.message,
+      stack: error.stack,
     });
     throw error;
   }
@@ -409,7 +555,7 @@ async function main() {
   const startTime = Date.now();
   logger.info('Starting project settings generator', {
     function: 'main',
-    version: GENERATOR_VERSION
+    version: GENERATOR_VERSION,
   });
 
   try {
@@ -418,61 +564,108 @@ async function main() {
 
     logger.info('Options parsed', {
       function: 'main',
-      options
+      options,
     });
-
-    // Validate project
-    const validation = validateProject(options.projectRoot);
 
     // Read global settings
     const globalSettings = options.minimal ? null : readGlobalSettings();
 
-    // Copy stop-hook.js if requested
-    let hookCopied = false;
-    if (options.copyHook) {
-      hookCopied = copyStopHook(options.projectRoot, options.force);
-    }
+    // Check if batch mode
+    if (options.batchDir) {
+      // BATCH MODE - Process all projects in directory
+      console.log(`\n📦 Batch Processing Mode\n`);
+      console.log(`Directory: ${options.batchDir}\n`);
+      console.log('═'.repeat(60));
 
-    // Generate settings
-    const settings = generateSettings(options.projectRoot, globalSettings, options.minimal);
+      const batchResults = processBatchDirectory(options.batchDir, globalSettings, options);
 
-    // Write settings
-    const settingsWritten = writeSettings(options.projectRoot, settings, options.force);
+      // Print summary
+      console.log('\n' + '═'.repeat(60));
+      console.log(`\n📊 Batch Processing Summary\n`);
+      console.log(`Total Projects: ${batchResults.total}`);
+      console.log(`✅ Successful: ${batchResults.successful.length}`);
+      console.log(`❌ Failed: ${batchResults.failed.length}`);
+      console.log(`⏱️  Duration: ${(batchResults.duration / 1000).toFixed(2)}s\n`);
 
-    // Summary
-    logger.info('Project settings generation complete', {
-      function: 'main',
-      duration: Date.now() - startTime,
-      projectRoot: options.projectRoot,
-      hookCopied,
-      settingsWritten,
-      hasTasksJson: validation.hasTasksJson
-    });
+      if (batchResults.successful.length > 0) {
+        console.log('✅ Successfully Processed:');
+        for (const result of batchResults.successful) {
+          const flags = [];
+          if (result.hookCopied) {flags.push('hook copied');}
+          if (result.settingsWritten) {flags.push('settings created');}
+          const flagStr = flags.length > 0 ? ` (${flags.join(', ')})` : '';
+          console.log(`   ✓ ${result.projectName}${flagStr}`);
+        }
+        console.log('');
+      }
 
-    console.log('\n✅ Project settings generated successfully!\n');
-    console.log(`Project: ${options.projectRoot}`);
-    if (hookCopied) {
-      console.log('✅ stop-hook.js copied to project root');
+      if (batchResults.failed.length > 0) {
+        console.log('❌ Failed Projects:');
+        for (const result of batchResults.failed) {
+          console.log(`   ✗ ${result.projectName}: ${result.error}`);
+        }
+        console.log('');
+      }
+
+      console.log('Next steps for each project:');
+      console.log('  cd <project-directory>');
+      console.log('  git add .claude/settings.json stop-hook.js');
+      console.log('  git commit -m "Add Claude Code project configuration"');
+      console.log('\nAll configurations use RELATIVE PATHS and are cloud-compatible! 🚀\n');
+
+      process.exit(batchResults.failed.length > 0 ? 1 : 0);
     } else {
-      console.log('ℹ️  stop-hook.js not copied (already exists or --no-copy-hook)');
-    }
-    if (settingsWritten) {
-      console.log('✅ .claude/settings.json created with relative path');
-    } else {
-      console.log('ℹ️  .claude/settings.json not created (already exists)');
-    }
-    console.log('\nNext steps:');
-    console.log('  git add .claude/settings.json stop-hook.js');
-    console.log('  git commit -m "Add Claude Code project configuration"');
-    console.log('\nConfiguration uses RELATIVE PATH and is cloud-compatible! 🚀\n');
+      // SINGLE PROJECT MODE
+      // Validate project
+      const validation = validateProject(options.projectRoot);
 
-    process.exit(0);
+      // Copy stop-hook.js if requested
+      let hookCopied = false;
+      if (options.copyHook) {
+        hookCopied = copyStopHook(options.projectRoot, options.force);
+      }
+
+      // Generate settings
+      const settings = generateSettings(options.projectRoot, globalSettings, options.minimal);
+
+      // Write settings
+      const settingsWritten = writeSettings(options.projectRoot, settings, options.force);
+
+      // Summary
+      logger.info('Project settings generation complete', {
+        function: 'main',
+        duration: Date.now() - startTime,
+        projectRoot: options.projectRoot,
+        hookCopied,
+        settingsWritten,
+        hasTasksJson: validation.hasTasksJson,
+      });
+
+      console.log('\n✅ Project settings generated successfully!\n');
+      console.log(`Project: ${options.projectRoot}`);
+      if (hookCopied) {
+        console.log('✅ stop-hook.js copied to project root');
+      } else {
+        console.log('ℹ️  stop-hook.js not copied (already exists or --no-copy-hook)');
+      }
+      if (settingsWritten) {
+        console.log('✅ .claude/settings.json created with relative path');
+      } else {
+        console.log('ℹ️  .claude/settings.json not created (already exists)');
+      }
+      console.log('\nNext steps:');
+      console.log('  git add .claude/settings.json stop-hook.js');
+      console.log('  git commit -m "Add Claude Code project configuration"');
+      console.log('\nConfiguration uses RELATIVE PATH and is cloud-compatible! 🚀\n');
+
+      process.exit(0);
+    }
   } catch (error) {
     logger.error('Project settings generation failed', {
       function: 'main',
       duration: Date.now() - startTime,
       error: error.message,
-      stack: error.stack
+      stack: error.stack,
     });
 
     console.error('\n❌ Failed to generate project settings\n');

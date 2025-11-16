@@ -183,7 +183,55 @@ node scripts/generate-project-settings.js --no-copy-hook
 
 # Specify target project directory
 node scripts/generate-project-settings.js --project-root /path/to/project
+
+# 🚀 BATCH MODE: Process all projects in a directory
+node scripts/generate-project-settings.js --batch-dir "/Users/username/Claude Coding Projects"
+
+# Batch process with force overwrite
+node scripts/generate-project-settings.js --batch-dir "/Users/username/Claude Coding Projects" --force
 ```
+
+#### **Batch Processing Mode**
+
+Process all projects in a directory simultaneously - perfect for setting up multiple projects at once!
+
+```bash
+# Process all projects in Claude Coding Projects directory
+node scripts/generate-project-settings.js --batch-dir "/Users/jeremyparker/Desktop/Claude Coding Projects"
+
+# Example output:
+# 📦 Batch Processing Mode
+# Directory: /Users/jeremyparker/Desktop/Claude Coding Projects
+#
+# Processing: Kenny Files...
+# Processing: Trading App...
+# Processing: Dashboard...
+#
+# 📊 Batch Processing Summary
+# Total Projects: 12
+# ✅ Successful: 12
+# ❌ Failed: 0
+# ⏱️  Duration: 0.02s
+#
+# ✅ Successfully Processed:
+#    ✓ Kenny Files (hook copied, settings created)
+#    ✓ Trading App (hook copied, settings created)
+#    ✓ Dashboard (hook copied, settings created)
+```
+
+**Features:**
+- ✅ Automatically discovers all subdirectories
+- ✅ Skips hidden directories (`.git`, `.DS_Store`, etc.)
+- ✅ Skips `node_modules`
+- ✅ Processes each project independently
+- ✅ Provides detailed summary report
+- ✅ Works with `--force` and other options
+
+**When to Use Batch Mode:**
+- Setting up stop hook for multiple existing projects
+- Migrating team projects to cloud-compatible configuration
+- Ensuring all projects have consistent settings
+- Initial setup across your entire project directory
 
 #### **Usage Workflow**
 
