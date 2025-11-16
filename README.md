@@ -104,6 +104,155 @@ node taskmanager-api.js suggest-feature '{"title":"Implement user authentication
 
 ---
 
+## 🌐 Project-Specific Configuration (Cloud-Compatible)
+
+### **Automated Settings Generator**
+
+The `generate-project-settings` script creates project-specific `.claude/settings.json` files with **relative paths**, making your configuration **cloud-compatible** and portable across environments.
+
+#### **Why Use Project Settings?**
+
+- ✅ **Cloud Compatible**: Works in GitHub Codespaces, cloud environments, and local development
+- ✅ **Portable**: Clone project → settings work immediately
+- ✅ **Team-Friendly**: Team members get identical configuration automatically
+- ✅ **Self-Contained**: Each project has everything it needs (checked into git)
+- ✅ **Relative Paths**: No hardcoded absolute paths, works anywhere
+
+#### **Quick Setup**
+
+```bash
+# From the infinite-continue-stop-hook directory
+npm run generate:settings
+
+# Or run directly
+node scripts/generate-project-settings.js
+
+# Force overwrite existing files
+npm run generate:settings:force
+
+# Minimal settings (no global inheritance)
+npm run generate:settings:minimal
+```
+
+#### **What Gets Generated**
+
+The generator creates:
+
+1. **`.claude/settings.json`** - Project-specific Claude Code settings with:
+   - **Relative path hook**: `"node ./stop-hook.js"`
+   - Inherited environment variables from global settings
+   - Inherited security permissions
+   - Generation metadata and versioning
+
+2. **`stop-hook.js`** (optional) - Copy of the stop hook script in project root
+
+#### **Generated Configuration Structure**
+
+```json
+{
+  "$generated": {
+    "version": "1.0.0",
+    "hookStrategy": "relative-path",
+    "infiniteHookVersion": "1.0.0"
+  },
+  "hooks": {
+    "Stop": [{
+      "hooks": [{
+        "command": "node ./stop-hook.js",  // ← Relative path!
+        "timeout": 10000
+      }]
+    }]
+  }
+}
+```
+
+#### **Command Options**
+
+```bash
+# Default: Generate settings with global inheritance
+node scripts/generate-project-settings.js
+
+# Force overwrite existing files
+node scripts/generate-project-settings.js --force
+
+# Minimal settings (no global permissions/env inheritance)
+node scripts/generate-project-settings.js --minimal
+
+# Don't copy stop-hook.js (use existing in project)
+node scripts/generate-project-settings.js --no-copy-hook
+
+# Specify target project directory
+node scripts/generate-project-settings.js --project-root /path/to/project
+```
+
+#### **Usage Workflow**
+
+**For New Projects:**
+
+```bash
+# 1. Navigate to your project
+cd /path/to/your/project
+
+# 2. Generate project settings
+node /path/to/infinite-continue-stop-hook/scripts/generate-project-settings.js
+
+# 3. Commit to git (makes it cloud-compatible)
+git add .claude/settings.json stop-hook.js
+git commit -m "Add Claude Code project configuration"
+
+# 4. Done! Works in local and cloud environments
+```
+
+**For Cloud Deployment (GitHub Codespaces, etc.):**
+
+```bash
+# Just clone - settings already in repo!
+git clone https://github.com/your-org/your-project.git
+cd your-project
+
+# .claude/settings.json and stop-hook.js already present
+# Relative path "node ./stop-hook.js" works immediately!
+```
+
+#### **Global Alias (Optional Convenience)**
+
+Add to your `~/.bashrc` or `~/.zshrc`:
+
+```bash
+# Quick project settings generation
+alias claude-init="node /Users/jeremyparker/infinite-continue-stop-hook/scripts/generate-project-settings.js"
+
+# Usage: just run 'claude-init' from any project directory
+cd /path/to/project && claude-init
+```
+
+#### **Environment Detection**
+
+The stop hook automatically detects whether TaskManager API is available:
+
+- **Local**: Full TaskManager functionality, infinite continue, emergency stop
+- **Cloud**: TodoWrite workflow, manual TASKS.json editing, standard workflow
+
+**No manual configuration needed** - the hook adapts automatically!
+
+#### **Validation**
+
+After generation, verify your setup:
+
+```bash
+# Check generated files exist
+ls -la .claude/settings.json stop-hook.js
+
+# Validate JSON syntax
+cat .claude/settings.json | jq '.'
+
+# Verify relative path in hook configuration
+grep "command" .claude/settings.json
+# Should show: "command": "node ./stop-hook.js"
+```
+
+---
+
 ## 📚 Core Concepts
 
 ### **Priority System Architecture**

@@ -101,7 +101,10 @@
     "security:scan:json": "semgrep --config=p/security-audit --config=p/owasp-top-ten --json --output=security-report.json .",
     "pre-commit:simulate": "npx lint-staged --debug --no-stash",
     "hooks:test": "git add . && git commit --dry-run",
-    "commit:validate": "npx commitlint --from=HEAD~1"
+    "commit:validate": "npx commitlint --from=HEAD~1",
+    "generate:settings": "node scripts/generate-project-settings.js",
+    "generate:settings:force": "node scripts/generate-project-settings.js --force",
+    "generate:settings:minimal": "node scripts/generate-project-settings.js --minimal"
   },
   "keywords": [
     "taskmanager",
