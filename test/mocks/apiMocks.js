@@ -347,7 +347,7 @@ class FileSystemMock {
   mkdirSync(_path, options = {}) {
     if (options.recursive) {
       // Create all parent directories;
-      const parts = path.split('/');
+      const parts = _path.split('/');
       let currentPath = '';
       for (const part of parts) {
         if (part) {
