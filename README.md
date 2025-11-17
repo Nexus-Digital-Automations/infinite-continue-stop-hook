@@ -104,19 +104,19 @@ node taskmanager-api.js suggest-feature '{"title":"Implement user authentication
 
 ---
 
-## 🌐 Project-Specific Configuration (Cloud-Compatible)
+## 🌐 Project-Specific Configuration
 
 ### **Automated Settings Generator**
 
-The `generate-project-settings` script creates project-specific `.claude/settings.json` files with **relative paths**, making your configuration **cloud-compatible** and portable across environments.
+The `generate-project-settings` script creates project-specific `.claude/settings.json` files that inherit the stop hook from your global configuration.
 
 #### **Why Use Project Settings?**
 
-- ✅ **Cloud Compatible**: Works in GitHub Codespaces, cloud environments, and local development
-- ✅ **Portable**: Clone project → settings work immediately
-- ✅ **Team-Friendly**: Team members get identical configuration automatically
-- ✅ **Self-Contained**: Each project has everything it needs (checked into git)
-- ✅ **Relative Paths**: No hardcoded absolute paths, works anywhere
+- ✅ **Global Inheritance**: All projects inherit stop hook from ~/.claude/settings.json
+- ✅ **Consistent Behavior**: Same stop hook behavior across all projects
+- ✅ **Single Source of Truth**: Configure once globally, use everywhere
+- ✅ **Environment Variables**: Project-specific environment overrides
+- ✅ **Permissions**: Inherit or override global permissions
 
 #### **Quick Setup**
 
@@ -139,12 +139,10 @@ npm run generate:settings:minimal
 The generator creates:
 
 1. **`.claude/settings.json`** - Project-specific Claude Code settings with:
-   - **Relative path hook**: `"node ./stop-hook.js"`
    - Inherited environment variables from global settings
    - Inherited security permissions
    - Generation metadata and versioning
-
-2. **`stop-hook.js`** (optional) - Copy of the stop hook script in project root
+   - **Note**: Stop hook is inherited from ~/.claude/settings.json
 
 #### **Generated Configuration Structure**
 
@@ -152,17 +150,14 @@ The generator creates:
 {
   "$generated": {
     "version": "1.0.0",
-    "hookStrategy": "relative-path",
+    "hookStrategy": "global-only",
     "infiniteHookVersion": "1.0.0"
   },
-  "hooks": {
-    "Stop": [{
-      "hooks": [{
-        "command": "node ./stop-hook.js",  // ← Relative path!
-        "timeout": 10000
-      }]
-    }]
-  }
+  "env": {
+    "BASH_DEFAULT_TIMEOUT_MS": "300000",
+    "BASH_MAX_TIMEOUT_MS": "300000"
+  },
+  "alwaysThinkingEnabled": true
 }
 ```
 
@@ -177,9 +172,6 @@ node scripts/generate-project-settings.js --force
 
 # Minimal settings (no global permissions/env inheritance)
 node scripts/generate-project-settings.js --minimal
-
-# Don't copy stop-hook.js (use existing in project)
-node scripts/generate-project-settings.js --no-copy-hook
 
 # Specify target project directory
 node scripts/generate-project-settings.js --project-root /path/to/project
@@ -214,9 +206,9 @@ node scripts/generate-project-settings.js --batch-dir "/Users/jeremyparker/Deskt
 # ⏱️  Duration: 0.02s
 #
 # ✅ Successfully Processed:
-#    ✓ Kenny Files (hook copied, settings created)
-#    ✓ Trading App (hook copied, settings created)
-#    ✓ Dashboard (hook copied, settings created)
+#    ✓ Kenny Files (settings created)
+#    ✓ Trading App (settings created)
+#    ✓ Dashboard (settings created)
 ```
 
 **Features:**
@@ -228,10 +220,10 @@ node scripts/generate-project-settings.js --batch-dir "/Users/jeremyparker/Deskt
 - ✅ Works with `--force` and other options
 
 **When to Use Batch Mode:**
-- Setting up stop hook for multiple existing projects
-- Migrating team projects to cloud-compatible configuration
-- Ensuring all projects have consistent settings
+- Setting up project settings for multiple existing projects
+- Ensuring all projects have consistent configuration
 - Initial setup across your entire project directory
+- Migrating projects to global stop hook inheritance
 
 #### **Usage Workflow**
 
@@ -244,22 +236,30 @@ cd /path/to/your/project
 # 2. Generate project settings
 node /path/to/infinite-continue-stop-hook/scripts/generate-project-settings.js
 
-# 3. Commit to git (makes it cloud-compatible)
-git add .claude/settings.json stop-hook.js
+# 3. Commit to git
+git add .claude/settings.json
 git commit -m "Add Claude Code project configuration"
 
-# 4. Done! Works in local and cloud environments
+# 4. Done! Stop hook is inherited from global settings
 ```
 
-**For Cloud Deployment (GitHub Codespaces, etc.):**
+**Global Stop Hook Configuration:**
 
-```bash
-# Just clone - settings already in repo!
-git clone https://github.com/your-org/your-project.git
-cd your-project
+The stop hook is configured once in `~/.claude/settings.json` and inherited by all projects:
 
-# .claude/settings.json and stop-hook.js already present
-# Relative path "node ./stop-hook.js" works immediately!
+```json
+{
+  "hooks": {
+    "Stop": [{
+      "matcher": "",
+      "hooks": [{
+        "type": "command",
+        "command": "node /Users/jeremyparker/infinite-continue-stop-hook/stop-hook.js",
+        "timeout": 10000
+      }]
+    }]
+  }
+}
 ```
 
 #### **Global Alias (Optional Convenience)**
@@ -278,25 +278,27 @@ cd /path/to/project && claude-init
 
 The stop hook automatically detects whether TaskManager API is available:
 
-- **Local**: Full TaskManager functionality, infinite continue, emergency stop
-- **Cloud**: TodoWrite workflow, manual TASKS.json editing, standard workflow
+- **Local/Self-Hosted**: Full TaskManager functionality, infinite continue, emergency stop
+- **Cloud-Hosted**: TodoWrite workflow, manual TASKS.json editing, standard workflow
 
 **No manual configuration needed** - the hook adapts automatically!
+
+**Note**: The stop hook runs from the global installation path configured in `~/.claude/settings.json`.
 
 #### **Validation**
 
 After generation, verify your setup:
 
 ```bash
-# Check generated files exist
-ls -la .claude/settings.json stop-hook.js
+# Check generated file exists
+ls -la .claude/settings.json
 
 # Validate JSON syntax
 cat .claude/settings.json | jq '.'
 
-# Verify relative path in hook configuration
-grep "command" .claude/settings.json
-# Should show: "command": "node ./stop-hook.js"
+# Verify global hook configuration
+grep -A5 "hooks" ~/.claude/settings.json
+# Should show stop hook configured with absolute path
 ```
 
 ---
