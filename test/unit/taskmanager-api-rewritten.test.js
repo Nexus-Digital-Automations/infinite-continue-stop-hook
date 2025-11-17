@@ -280,6 +280,7 @@ describe('FeatureManagerAPI', () => {
         'description',
         'business_value',
         'category',
+        'type', // API includes type in required fields
       ]);
     });
 
