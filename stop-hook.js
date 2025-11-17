@@ -842,6 +842,10 @@ function provideInstructiveTaskGuidance(
 
 📋 **WORKFLOW:**
 
+0. **📖 READ CLAUDE.md FIRST:**
+   Review CLAUDE.md to understand all project guidelines, protocols, and requirements
+   This is MANDATORY before any work - ensures compliance with all standards
+
 1. **FINISH CURRENT WORK:**
    Complete all TodoWrite tasks and in-progress changes
 
