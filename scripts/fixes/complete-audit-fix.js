@@ -17,13 +17,13 @@ async function completeAuditFix() {
     // Pattern: Find lines with only expect(result.success) without prior API call
     content = content.replace(
       /(\s+)(expect\(result\.success\)\.toBe\(true\);)/g,
-      "$1const RESULT = await execAPI('create', [JSON.stringify(featureTaskData)]);\n1$2"
+      "$1const RESULT = await execAPI('create', [JSON.stringify(featureTaskData)]);\n1$2",
     );
 
     // Fix the result variables that should be result in JSON parse
     content = content.replace(
       /const RESULT = JSON\.parse\(jsonString\);/g,
-      'const RESULT = JSON.parse(jsonString);'
+      'const RESULT = JSON.parse(jsonString);',
     );
 
     // Fix the resolve statement
