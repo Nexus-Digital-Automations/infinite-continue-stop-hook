@@ -5,21 +5,32 @@
 
 1.  **🔥 AUTOMATED QUALITY & SECURITY FRAMEWORK SUPREMACY**: All code MUST pass the two-stage quality and security gauntlet: first the local pre-commit hooks (including secret scanning), then the full CI/CD pipeline (including security validation). **MANDATORY: Pre-commit hook configuration (.pre-commit-config.yaml OR .husky/) AND comprehensive CI/CD workflows (.github/workflows/) MUST exist.** There are no exceptions.
 2.  **ABSOLUTE HONESTY**: Never skip, ignore, or hide any issues, errors, or failures. Report the state of the codebase with complete transparency.
-3.  **ROOT PROBLEM SOLVING**: Fix underlying causes, not symptoms.
-4.  **IMMEDIATE TASK EXECUTION**: Plan → Execute → Document. No delays.
-5.  **ONE FEATURE AT A TIME**: Work on EXACTLY ONE feature from `FEATURES.json`, complete it fully, then move to the next.
-6.  **USER FEEDBACK SUPREMACY**: User requests TRUMP EVERYTHING. Implement them immediately, but do so within the quality framework.
-7.  **🔴 MANDATORY TASK TRACKING**: When user requests work, FIRST ACTION is to create TaskManager task (LOCAL) for tracking and accountability. Query TaskManager BEFORE starting ANY work. Update TaskManager DURING work. Store lessons in TaskManager AFTER work. EXCEPTION: Simple questions only ("What does X do?", "Show status"). When uncertain → CREATE THE TASK. TaskManager is your SINGLE SOURCE OF TRUTH.
-8.  **🔄 STOP HOOK CONTINUATION**: LOCAL ONLY - See [Stop Hook Protocol](#-stop-hook-response-protocol). CLOUD: use TodoWrite workflow
-9.  **🔒 CLAUDE.md PROTECTION**: NEVER edit CLAUDE.md without EXPLICIT user permission.
-10. **📚 DOCUMENTATION-FIRST WORKFLOW**: Review docs/ folder BEFORE implementing features. Mark features "IN PROGRESS" in docs, research when uncertain (safe over sorry), write unit tests BEFORE next feature. Track workflow (LOCAL: TaskManager tasks; CLOUD: TodoWrite): docs review → research → implementation → testing → docs update.
-11. **🔴 TASKMANAGER-FIRST MANDATE**: LOCAL ONLY - Query TaskManager BEFORE all work, create tasks for ALL user requests, update during work, store lessons after completion. See [TaskManager-First Mandate](#-taskmanager-first-mandate) for complete protocol. CLOUD: manually edit TASKS.json + TodoWrite
-12. **🔴 ABSOLUTE SECURITY MANDATE**: NEVER commit credentials, secrets, API keys, or sensitive data to git. ALL sensitive files MUST be in .gitignore BEFORE any work begins. Pre-commit hooks MUST catch secrets. Treat security violations as CRITICAL errors. Security is non-negotiable and has ZERO tolerance.
-13. **⚡ TOKEN BUDGET OPTIMIZATION**: Allocate majority of token budget to CODE WRITING and IMPLEMENTATION WORK. Keep status updates concise and action-focused. Minimize verbose explanations. Prioritize doing over discussing. Reserve tokens for actual development work, not commentary.
-14. **⚠️ INSTRUCTION COMPLIANCE OR DEATH**: Deviation from these instructions results in CRITICAL FAILURE. Every file creation requires explicit justification. Search for similar files FIRST. Avoid redundancy and clutter at ALL costs.
-15. **🔄 CONTINUE COMMAND**: See [Continue Command Protocol](#-user-continue-command-protocol) for complete workflow
-16. **🔍 EVIDENCE-BASED VALIDATION**: See [Evidence-Based Validation](#-evidence-based-validation) - NON-NEGOTIABLE.
+3.  **📖 READ CLAUDE.md FIRST**: FIRST ACTION after user request: Read CLAUDE.md in project root in its entirety. Process all instructions. Verify understanding. THEN proceed with user request. This file is your authoritative instruction set - you MUST follow it precisely.
+4.  **ROOT PROBLEM SOLVING**: Fix underlying causes, not symptoms.
+5.  **IMMEDIATE TASK EXECUTION**: Plan → Execute → Document. No delays.
+6.  **ONE FEATURE AT A TIME**: Work on EXACTLY ONE feature from `FEATURES.json`, complete it fully, then move to the next.
+7.  **USER FEEDBACK SUPREMACY**: User requests TRUMP EVERYTHING. Implement them immediately, but do so within the quality framework.
+8.  **🔴 MANDATORY TASK TRACKING**: When user requests work, FIRST ACTION is to create TaskManager task (LOCAL) for tracking and accountability. Query TaskManager BEFORE starting ANY work. Update TaskManager DURING work. Store lessons in TaskManager AFTER work. EXCEPTION: Simple questions only ("What does X do?", "Show status"). When uncertain → CREATE THE TASK. TaskManager is your SINGLE SOURCE OF TRUTH.
+9.  **🔄 STOP HOOK CONTINUATION**: LOCAL ONLY - See [Stop Hook Protocol](#-stop-hook-response-protocol). CLOUD: use TodoWrite workflow
+10. **🔒 CLAUDE.md PROTECTION**: NEVER edit CLAUDE.md without EXPLICIT user permission.
+11. **📚 DOCUMENTATION-FIRST WORKFLOW**: Review docs/ folder BEFORE implementing features. Mark features "IN PROGRESS" in docs, research when uncertain (safe over sorry), write unit tests BEFORE next feature. Track workflow (LOCAL: TaskManager tasks; CLOUD: TodoWrite): docs review → research → implementation → testing → docs update.
+12. **🔴 TASKMANAGER-FIRST MANDATE**: LOCAL ONLY - Query TaskManager BEFORE all work, create tasks for ALL user requests, update during work, store lessons after completion. See [TaskManager-First Mandate](#-taskmanager-first-mandate) for complete protocol. CLOUD: manually edit TASKS.json + TodoWrite
+13. **🔴 ABSOLUTE SECURITY MANDATE**: NEVER commit credentials, secrets, API keys, or sensitive data to git. ALL sensitive files MUST be in .gitignore BEFORE any work begins. Pre-commit hooks MUST catch secrets. Treat security violations as CRITICAL errors. Security is non-negotiable and has ZERO tolerance.
+14. **⚡ TOKEN BUDGET OPTIMIZATION**: Allocate majority of token budget to CODE WRITING and IMPLEMENTATION WORK. Keep status updates concise and action-focused. Minimize verbose explanations. Prioritize doing over discussing. Reserve tokens for actual development work, not commentary.
+15. **⚠️ INSTRUCTION COMPLIANCE OR DEATH**: Deviation from these instructions results in CRITICAL FAILURE. Every file creation requires explicit justification. Search for similar files FIRST. Avoid redundancy and clutter at ALL costs.
+16. **🔄 CONTINUE COMMAND**: See [Continue Command Protocol](#-user-continue-command-protocol) for complete workflow
+17. **🔍 EVIDENCE-BASED VALIDATION**: See [Evidence-Based Validation](#-evidence-based-validation) - NON-NEGOTIABLE.
 </law>
+
+## 📖 FIRST ACTION PROTOCOL
+
+**EVERY user request begins with:**
+1. Read CLAUDE.md in project root
+2. Process all instructions thoroughly
+3. Verify understanding of protocols
+4. THEN proceed with user's request
+
+CLAUDE.md is your authoritative instruction set. Following it is NON-NEGOTIABLE.
 
 ## 🌐 ENVIRONMENT DETECTION - CLOUD VS LOCAL
 
