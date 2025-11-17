@@ -1055,13 +1055,35 @@
       },
       "success": false,
       "error": "Invalid authorization key. Cannot skip validation steps."
+    },
+    {
+      "criterion": "focused-codebase",
+      "startTime": "2025-11-17T19:03:19.960Z",
+      "endTime": "2025-11-17T19:03:19.967Z",
+      "durationMs": 7,
+      "memoryUsageBefore": {
+        "rss": 76021760,
+        "heapTotal": 11698176,
+        "heapUsed": 7945640,
+        "external": 2087454,
+        "arrayBuffers": 8405531
+      },
+      "memoryUsageAfter": {
+        "rss": 77938688,
+        "heapTotal": 11698176,
+        "heapUsed": 8003000,
+        "external": 2088739,
+        "arrayBuffers": 8406776
+      },
+      "success": false,
+      "error": "Invalid authorization key. Cannot skip validation steps."
     }
   ],
   "statistics": {
-    "lastUpdated": "2025-09-29T22:27:43.131Z",
-    "totalMeasurements": 48,
-    "averageDurationMs": 685.8958333333334,
-    "successRate": 54.166666666666664,
+    "lastUpdated": "2025-11-17T19:03:19.974Z",
+    "totalMeasurements": 49,
+    "averageDurationMs": 672.0408163265306,
+    "successRate": 53.06122448979592,
     "bycriterion": {
       "custom-validation": {
         "count": 1,
@@ -1071,11 +1093,11 @@
         "successRate": 0
       },
       "focused-codebase": {
-        "count": 10,
-        "totalDuration": 352,
+        "count": 11,
+        "totalDuration": 359,
         "successCount": 8,
-        "avgDuration": 35.2,
-        "successRate": 80
+        "avgDuration": 32.63636363636363,
+        "successRate": 72.72727272727273
       },
       "linter-validation": {
         "count": 11,
