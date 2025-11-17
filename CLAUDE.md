@@ -539,6 +539,12 @@ All work must be committed and pushed before a task is marked as complete.
 - **✅ SHORT OPS**: 30-60s timeout (git, ls, npm run lint)
 - **✅ LONG OPS**: Background execution with BashOutput monitoring (builds, tests, installs)
 
+**WAITING FOR OPERATIONS:**
+- ✅ Use `sleep [seconds]` in foreground when waiting for operations to complete
+- ✅ Examples: waiting for servers to start, builds to finish, processes to initialize
+- ✅ Prefer explicit waits over assumptions: `sleep 3 && curl localhost:3000`
+- ❌ Don't assume instant availability - wait for readiness
+
 ## 🚨 FOCUSED CODE MANDATE
 
 **FORBIDDEN**: Adding unapproved features, expanding scope, implementing extras, creating features without authorization, suggesting automatic improvements
