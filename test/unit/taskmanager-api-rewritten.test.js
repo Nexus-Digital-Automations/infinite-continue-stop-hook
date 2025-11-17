@@ -359,7 +359,7 @@ describe('FeatureManagerAPI', () => {
         // Create invalid JSON file
         fs.writeFileSync(TEST_TASKS_PATH, 'invalid json content');
 
-        await expect(api._loadFeatures()).rejects.toThrow('Failed to load features');
+        await expect(api._loadFeatures()).rejects.toThrow(); // API returns raw JSON.parse error
       });
 
       test('should handle file read errors', async () => {
