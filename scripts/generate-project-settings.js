@@ -236,7 +236,7 @@ function generateSettings(projectRoot, globalSettings, minimal) {
 
   try {
     const settings = {
-      $schema: 'https://claude.ai/schemas/settings-v1.json',
+      $schema: 'https://json.schemastore.org/claude-code-settings.json',
       $generated: {
         version: GENERATOR_VERSION,
         timestamp: new Date().toISOString(),

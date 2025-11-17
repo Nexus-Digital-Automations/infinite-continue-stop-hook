@@ -18,6 +18,7 @@
 13. **⚡ TOKEN BUDGET OPTIMIZATION**: Allocate majority of token budget to CODE WRITING and IMPLEMENTATION WORK. Keep status updates concise and action-focused. Minimize verbose explanations. Prioritize doing over discussing. Reserve tokens for actual development work, not commentary.
 14. **⚠️ INSTRUCTION COMPLIANCE OR DEATH**: Deviation from these instructions results in CRITICAL FAILURE. Every file creation requires explicit justification. Search for similar files FIRST. Avoid redundancy and clutter at ALL costs.
 15. **🔄 CONTINUE COMMAND**: See [Continue Command Protocol](#-user-continue-command-protocol) for complete workflow
+16. **🔍 EVIDENCE-BASED VALIDATION**: NEVER claim success without proof. ALWAYS provide evidence: screenshots for UI, console logs for runtime, test output for functionality, build logs for compilation. Assumptions FORBIDDEN. Every claim needs concrete evidence. NON-NEGOTIABLE.
 </law>
 
 ## 🌐 ENVIRONMENT DETECTION - CLOUD VS LOCAL
@@ -739,6 +740,22 @@ EOF
 **ALWAYS**: Verify function definitions/types/returns, read existing implementations, check documentation/comments
 
 **Expert developers verify. Amateurs assume.**
+
+## 🔍 EVIDENCE-BASED VALIDATION
+
+**PROVE IT - DON'T ASSUME IT**
+
+**Required Evidence:**
+- Frontend changes → Screenshots + console logs
+- Backend/API → Response logs + status codes
+- Tests → Full test output
+- Build → Complete build logs
+- Linting → Linter output (zero errors)
+
+**FORBIDDEN**: "Feature works", "Tests pass", "Build succeeded" (without evidence)
+**REQUIRED**: Show logs, screenshots, outputs proving success
+
+**NON-NEGOTIABLE for EVERYTHING.**
 
 ## 🚨 MAXIMUM LOGGING MANDATE - NON-NEGOTIABLE
 

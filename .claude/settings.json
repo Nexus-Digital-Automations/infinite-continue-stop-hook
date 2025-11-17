@@ -1,8 +1,8 @@
 {
-  "$schema": "https://claude.ai/schemas/settings-v1.json",
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "$generated": {
     "version": "1.0.0",
-    "timestamp": "2025-11-16T06:59:55.240Z",
+    "timestamp": "2025-11-17T01:02:38.748Z",
     "generator": "infinite-continue-stop-hook/scripts/generate-project-settings.js",
     "hookStrategy": "relative-path",
     "infiniteHookVersion": "1.0.0"
