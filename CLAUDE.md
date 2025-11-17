@@ -179,9 +179,12 @@ timeout 10s node taskmanager-api.js generate-compliance-report '<agent_id>'
 - Prevents violations
 - Validates scope
 
-**PostToolUse** - Runs after tool execution
-- Multi-method validation (10+ checks)
-- Evidence collection
+**PostToolUse** - Runs after code tool execution (Edit, Write, MultiEdit)
+- Linting validation (npm run lint)
+- Syntax checking
+- Security scanning (npm audit)
+- Shows warnings without blocking work
+- Stores results in .validation-artifacts/logs/
 
 **Stop** - Runs when attempting to stop
 - Autonomous continuation protocol

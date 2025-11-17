@@ -229,6 +229,41 @@ function generateValidationProgressReport(
  * Provides comprehensive visibility into validation progress And status
  */
 function checkStopAllowed(workingDir = process.cwd(), _category = 'general') {
+  // PRIORITY 1: Check for incomplete tasks FIRST - highest priority
+  // Read TASKS.json to check for pending/in-progress tasks
+  const tasksPath = path.join(workingDir, 'TASKS.json');
+
+  // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated working directory path
+  if (FS.existsSync(tasksPath)) {
+    try {
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script reading validated TASKS.json
+      const tasksData = JSON.parse(FS.readFileSync(tasksPath, 'utf8'));
+
+      // Count tasks by status
+      const pendingTasks = tasksData.tasks?.filter(t => t.status === 'approved') || [];
+      const inProgressTasks = tasksData.tasks?.filter(t => t.status === 'in-progress') || [];
+
+      if (pendingTasks.length > 0 || inProgressTasks.length > 0) {
+        loggers.stopHook.warn('INCOMPLETE TASKS DETECTED - MUST CONTINUE WORKING', {
+          status: 'Tasks remaining',
+          pendingCount: pendingTasks.length,
+          inProgressCount: inProgressTasks.length,
+          totalIncomplete: pendingTasks.length + inProgressTasks.length,
+          action: 'CONTINUE - Complete all tasks before stopping',
+          pendingTasks: pendingTasks.map(t => t.title).slice(0, 5),
+          inProgressTasks: inProgressTasks.map(t => t.title).slice(0, 5),
+        });
+
+        return false; // BLOCK stop - tasks remain
+      }
+    } catch (error) {
+      loggers.stopHook.warn('Error reading TASKS.json for task check', {
+        error: error.message,
+        action: 'Proceeding with stop check',
+      });
+    }
+  }
+
   // Check for legacy counter-based emergency stop first (deprecated, kept for backward compatibility)
   const stopCountPath = path.join(workingDir, '.stop-count');
 
@@ -841,22 +876,36 @@ function provideInstructiveTaskGuidance(
 **ULTRATHINK - Complete ALL TodoWrite tasks first**
 **ULTRATHINK - Never abandon unfinished work**
 
-📋 **WORKFLOW:**
+📋 **TASK COMPLETION WORKFLOW:**
 
 0. **📖 READ CLAUDE.md FIRST:**
    Review CLAUDE.md to understand all project guidelines, protocols, and requirements
    This is MANDATORY before any work - ensures compliance with all standards
 
-1. **FINISH CURRENT WORK:**
-   Complete all TodoWrite tasks and in-progress changes
+1. **FINISH CURRENT WORK (HIGHEST PRIORITY):**
+   ✅ Complete ALL TodoWrite tasks first
+   ✅ Finish all in-progress code changes
+   ✅ Complete current feature/fix before moving on
 
-2. **CHECK TASKS.json:**
+2. **CHECK TASKS.json FOR MORE WORK:**
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-tasks-by-status approved
 
-3. **CLAIM & COMPLETE:**
+3. **CLAIM & COMPLETE APPROVED TASKS:**
    Work through pending tasks in priority order
+   Finish each task completely before claiming the next
 
-🛑 **STOP AUTHORIZATION (When ALL Complete & Project Perfect):**
+4. **VERIFY ALL WORK COMPLETE:**
+   ✅ TodoWrite list empty (all tasks done)
+   ✅ No approved tasks remaining in TASKS.json
+   ✅ No in-progress tasks in TASKS.json
+
+📊 **CURRENT STATUS:** ${taskStatus.pending} pending | ${taskStatus.in_progress} in progress | ${taskStatus.completed} completed
+
+⚠️ **IF ANY WORK REMAINS: CONTINUE WORKING - DO NOT STOP**
+
+🛑 **STOP AUTHORIZATION (ONLY When ALL Tasks Complete):**
+
+**Only proceed if TodoWrite is empty AND no pending/in-progress tasks exist**
 
 **Verify Readiness:**
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" verify-stop-readiness [agentId]
@@ -864,12 +913,9 @@ function provideInstructiveTaskGuidance(
 **Start Authorization:**
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" start-authorization [agentId]
 
-**Validate (sequential):**
+**Validate Core Criteria (sequential):**
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] focused-codebase
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] security-validation
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] linter-validation
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] type-validation
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] build-validation
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] start-validation
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] test-validation
 
@@ -879,16 +925,13 @@ function provideInstructiveTaskGuidance(
 **⚠️ EMERGENCY STOP (Only if stop hook triggers 2+ times with nothing to do):**
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" emergency-stop [agentId] "reason"
 
-**SUCCESS CRITERIA:**
-• focused-codebase
-• security-validation
-• linter-validation
-• type-validation
-• build-validation
-• start-validation
-• test-validation
+**STOP AUTHORIZATION CRITERIA:**
+• focused-codebase (clean, organized)
+• security-validation (no vulnerabilities)
+• start-validation (app runs successfully)
+• test-validation (tests pass)
 
-📊 **STATUS:** ${taskStatus.pending} pending | ${taskStatus.in_progress} in progress | ${taskStatus.completed} completed
+**NOTE:** Linting, type checking, and build validation are handled by PostToolUse hook during work.
 
 See CLAUDE.md for detailed validation criteria and complete command reference.
 `;
