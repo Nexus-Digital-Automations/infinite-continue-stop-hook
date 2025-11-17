@@ -18,7 +18,7 @@
 13. **⚡ TOKEN BUDGET OPTIMIZATION**: Allocate majority of token budget to CODE WRITING and IMPLEMENTATION WORK. Keep status updates concise and action-focused. Minimize verbose explanations. Prioritize doing over discussing. Reserve tokens for actual development work, not commentary.
 14. **⚠️ INSTRUCTION COMPLIANCE OR DEATH**: Deviation from these instructions results in CRITICAL FAILURE. Every file creation requires explicit justification. Search for similar files FIRST. Avoid redundancy and clutter at ALL costs.
 15. **🔄 CONTINUE COMMAND**: See [Continue Command Protocol](#-user-continue-command-protocol) for complete workflow
-16. **🔍 EVIDENCE-BASED VALIDATION**: NEVER claim success without proof. ALWAYS provide evidence: screenshots for UI, console logs for runtime, test output for functionality, build logs for compilation. Assumptions FORBIDDEN. Every claim needs concrete evidence. NON-NEGOTIABLE.
+16. **🔍 EVIDENCE-BASED VALIDATION**: See [Evidence-Based Validation](#-evidence-based-validation) - NON-NEGOTIABLE.
 </law>
 
 ## 🌐 ENVIRONMENT DETECTION - CLOUD VS LOCAL
@@ -241,7 +241,7 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 
 **WHEN STOP HOOK TRIGGERS - YOU MUST TAKE ACTION:**
 
-**🔴 ENVIRONMENT CHECK FIRST**: Determine if cloud-hosted or local environment
+**🔴 ENVIRONMENT CHECK FIRST**: Check environment (see [Environment Detection](#-environment-detection---cloud-vs-local))
 
 ### CLOUD-HOSTED ENVIRONMENT (TaskManager not available):
 
@@ -249,12 +249,10 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 
 1. **Check TodoWrite tasks**: Complete any pending TodoWrite items
 2. **Check TASKS.json manually**: Read TASKS.json to find approved/in-progress tasks
-3. **Update TASKS.json manually**: When starting/completing tasks, manually edit TASKS.json to update status, progress, and timestamps (see [Manual TASKS.json Modification](#-cloud-environment---manual-tasksjson-modification))
+3. **Update TASKS.json manually**: See [Manual TASKS.json Modification](#-cloud-environment---manual-tasksjson-modification)
 4. **No stop hook magic**: Stop hook won't trigger in cloud environments
 5. **Standard completion**: Finish work and mark tasks complete normally in both TodoWrite AND TASKS.json
 6. **No emergency-stop**: Not applicable in cloud environments
-
-**Manual TASKS.json workflow:** See [Manual TASKS.json Modification](#-cloud-environment---manual-tasksjson-modification) for complete protocol
 
 ### LOCAL/SELF-HOSTED ENVIRONMENT (TaskManager available):
 
@@ -262,7 +260,7 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 
 ### Immediate Actions:
 
-**OPTION 1**: Continue current TodoWrite tasks or in-progress work
+**OPTION 1**: Continue current work - see [Continue Command Protocol](#-user-continue-command-protocol)
 **OPTION 2**: Query TaskManager for current state → Claim highest priority approved task → Update status during work → Store lessons when complete
 **OPTION 3**: If nothing approved → Review codebase, check linting/security, verify tests, update docs
 **OPTION 4**: If stop hook called 2nd consecutive time with no work → Verify all options exhausted → Check emergency stop cooldown → If no recent emergency stop (>60s), issue `$TM emergency-stop [AGENT_ID] "reason"`
@@ -303,7 +301,7 @@ When the user says "continue", this is NOT a question or information request - i
 
 **STEP 1 - Complete Current Work:**
 - Finish any in-progress tasks
-- Update task status (LOCAL: TaskManager API; CLOUD: manual TASKS.json edit)
+- Update task status - check environment (see [Environment Detection](#-environment-detection---cloud-vs-local))
 - Store lessons learned if applicable
 - Mark TodoWrite items as completed
 
@@ -319,12 +317,7 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 ```
 
 **CLOUD ENVIRONMENT (TaskManager not available):**
-```bash
-# Read TASKS.json to find approved tasks
-cat TASKS.json | grep -A 20 '"status": "approved"'
-
-# Manually edit TASKS.json to claim task (see Manual TASKS.json Modification section)
-```
+See [Manual TASKS.json Modification](#-cloud-environment---manual-tasksjson-modification) for task claiming workflow
 
 **STEP 3 - Start Working:**
 - Begin work on highest priority approved task
@@ -393,7 +386,7 @@ Quality is not a phase; it is the foundation of our work. We enforce this throug
 
 Before any code is committed, it **MUST** pass all local pre-commit hooks. These hooks are your personal, instantaneous quality assistant.
 
-  * **Purpose**: To catch and fix all linting, formatting, and stylistic errors *before* they enter the codebase history. CRITICAL: Pre-commit hooks MUST also scan for and block any secrets, credentials, API keys, or sensitive data from being committed.
+  * **Purpose**: To catch and fix all linting, formatting, and stylistic errors *before* they enter the codebase history. CRITICAL: Pre-commit hooks MUST also scan for and block secrets/credentials (see [Security Mandate](#-absolute-security-mandate---zero-tolerance) for forbidden items).
   * **Mandate**: You are forbidden from committing code that fails these checks. Use the autofix capabilities of the linters to resolve issues immediately.
   * **Workflow**:
     1.  Write code to implement a feature.
@@ -502,7 +495,7 @@ cat .gitignore | grep -E "\\.env|\\.pem|\\.key|credentials|secrets"
 git diff --cached | grep -iE "password|api[_-]key|secret|token|credentials"
 ```
 
-**PRE-COMMIT HOOKS MUST SCAN**: API key patterns (AKIA, sk-, ghp_), secret patterns (password=, token=), gitignored files being committed, credential URLs, base64-encoded secrets
+**PRE-COMMIT HOOKS MUST SCAN**: See [Security Mandate](#-absolute-security-mandate---zero-tolerance) for complete list of forbidden patterns including API keys, secrets, credentials, and sensitive data
 
 ### **Security Operations**
 
@@ -667,6 +660,12 @@ project-root/
 
 ### **Enforcement Protocol**
 
+**BEFORE Creating Files:**
+1. **STOP**: Think carefully - does this truly belong in root?
+2. **SEARCH**: Check if similar file already exists
+3. **EXPLAIN**: Write explicit justification for why it must be in root (not docs/, scripts/, config/, lib/)
+4. **VERIFY**: Confirm it's essential configuration, not documentation/scripts/utilities
+
 **BEFORE Committing:**
 1. Review all new files for proper placement
 2. Check root directory hasn't accumulated clutter
@@ -802,24 +801,23 @@ function processData(id, data) {
 
 **ABSOLUTE REQUIREMENTS - NEVER SKIP LEARNING:**
 
+See [TaskManager API Reference](#-taskmanager-api-reference---mandatory-usage) for all commands: search-lessons, store-lesson, store-error.
+
 **PRE-TASK LESSON RETRIEVAL:**
 
 - **MANDATORY**: ALWAYS search for relevant lessons before starting ANY task
-- **COMMAND**: See [TaskManager API Reference](#taskmanager-api-reference) for search-lessons commands
 - **INTEGRATION**: Incorporate found lessons into TodoWrite planning and implementation approach
 - **VERIFICATION**: Document which lessons were retrieved and how they influenced approach
 
 **POST-TASK LESSON STORAGE:**
 
 - **MANDATORY**: ALWAYS store lessons after successful task completion
-- **COMMAND**: See [TaskManager API Reference](#taskmanager-api-reference) for store-lesson commands
 - **TIMING**: Store lessons immediately after task completion, before moving to next task
 - **QUALITY**: Include specific implementation details, patterns used, and lessons learned
 
 **ERROR RESOLUTION LEARNING:**
 
 - **MANDATORY**: ALWAYS store error patterns and their resolutions
-- **COMMAND**: See [TaskManager API Reference](#taskmanager-api-reference) for store-error commands
 - **TRIGGER**: Immediately when error is resolved, before continuing work
 - **DEPTH**: Include full error context, resolution steps, and prevention strategies
 
@@ -872,84 +870,7 @@ $TM complete-authorization [AUTH_KEY]
 
 ## 🔴 MANDATORY TASKMANAGER TASK CREATION - FIRST ACTION ALWAYS
 
-**🔴 FIRST ACTION FOR USER REQUESTS: CREATE TASKMANAGER TASK**
-
-### Core Principle
-When user requests work (implementation, fixes, features, tests), **FIRST ACTION** is creating a task in TASKS.json via taskmanager-api.js. This ensures tracking, progress monitoring, and work continuity across sessions.
-
-**EXCEPTION:** Simple questions only ("What does X do?", "Explain this code", "Show status"). When uncertain → CREATE THE TASK.
-
-### 🎯 Quick Decision Flowchart
-
-```
-USER REQUEST
-     ↓
-Is it a QUESTION or INFO request?
-     ↓
-   YES → Answer/provide info immediately (NO TASK)
-     ↓
-   NO → Does it involve CHANGES/IMPLEMENTATION?
-     ↓
-   YES → CREATE TASKMANAGER TASK FIRST, then work
-     ↓
-UNCERTAIN? → CREATE THE TASK (safer)
-```
-
-### 🔴 Query First, Then Create (MANDATORY)
-- **🔴 BEFORE CREATING TASKS**: Use `get-task-stats` to see current task landscape (REQUIRED)
-- **🔴 CHECK FOR DUPLICATES**: Use `get-tasks-by-status` to avoid creating duplicate tasks (REQUIRED)
-- **🔴 UNDERSTAND WORKLOAD**: TaskManager tracks everything - query it to stay coordinated (REQUIRED)
-
-### When to Create Tasks
-
-**✅ ALWAYS CREATE TASK:**
-- Feature implementations (any new functionality)
-- Bug fixes and error corrections
-- Refactoring work
-- Test creation or modification
-- File modifications or code changes
-- Agent-suggested improvements
-- Multi-step operations
-- **When uncertain → CREATE THE TASK (safer)**
-
-**❌ EXCEPTION - NO TASK NEEDED (Questions/Info Only):**
-- Simple questions: "What does X do?", "Explain this function", "How does Y work?"
-- Status requests: "Show TASKS.json", "List files", "Check git status"
-- Quick info: "Read this file", "Search for X"
-
-**DECISION RULE:** If the request involves making changes, writing code, or implementing anything → CREATE TASK FIRST.
-
-### 🔴 Why TaskManager for Everything (CRITICAL UNDERSTANDING)
-- **🔴 CONTINUITY**: Tasks persist across stop hook sessions - YOU ARE THE SAME AGENT
-- **🔴 COORDINATION**: Multiple agents can see and coordinate work - PREVENTS CONFLICTS
-- **🔴 TRACKING**: Complete visibility into what's done, in-progress, and pending - SINGLE SOURCE OF TRUTH
-- **🔴 ACCOUNTABILITY**: Full audit trail of all work performed - NOTHING GETS LOST
-- **🔴 MANDATORY**: Not using TaskManager means WORK IS INVISIBLE and will be LOST
-
-### Task Creation Command
-```bash
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" --project-root "$(pwd)" create-task '{"title":"Specific Task Title", "description":"Detailed description with acceptance criteria", "type":"feature|error|test|audit", "priority":"low|normal|high|urgent"}'
-```
-
-### Examples
-
-**✅ CREATE TASK:**
-- "Add user authentication system" → Complex feature, create task
-- "Fix 5 linting errors in auth module" → Multiple errors, create task
-- "Refactor database connection logic" → Significant refactoring, create task
-- "Add unit tests for payment processor" → Test work, create task
-
-**❌ NO TASK NEEDED:**
-- "What does this function do?" → Simple question, answer immediately
-- "Show me current TASKS.json status" → Quick info request, execute immediately
-- "Format this code snippet" → Trivial 30-second task, do immediately
-
-### Workflow
-1. **User Request Received** → Evaluate complexity
-2. **If Complex** → Create task via taskmanager-api.js
-3. **Task Created** → Work through task systematically
-4. **Track Progress** → Update task status as work progresses
-5. **Mark Complete** → Update task status when finished
+See [TaskManager-First Mandate](#-taskmanager-first-mandate) for complete protocol including when to create tasks, query requirements, examples, and workflow details.
 
 ## 🔴 TASKMANAGER API REFERENCE - MANDATORY USAGE
 
