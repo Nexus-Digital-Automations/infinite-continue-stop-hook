@@ -361,3 +361,57 @@ backups/
 # SQLite temporary files
 *.db-shm
 *.db-wal
+
+# Additional backup patterns
+*.backup
+*.backup*
+*.bak*
+CLAUDE.md.backup
+*.js.bak
+*.js.bak*
+
+# Debug and temporary project files
+.hook-debug-*.json
+eslint_output.txt
+lint_output.txt
+
+# Runtime state files (should not be committed)
+DONE.json
+TODO.json
+usage-tracking.json
+.auth-state.json
+.claude-stop-control.json
+.claude-validation.json
+.node-modules-checksums.json
+.audit-ci.json
+test-python-validation-rules.json
+test-dependency-config.json
+
+# Report and output files
+*-report.json
+result-*.json
+structured-logging-validation-report.json
+
+# Validation and cache directories
+.validation-cache/
+.validation-snapshots/
+.validation-failures/
+.validation-*/
+.audit-snapshots/
+.compliance-logs/
+.claude-temp/
+.todo-backups/
+.agent_tracking/
+.heartbeats/
+.locks/
+.test-isolated/
+.node-modules-backup/
+
+# Python cache directories
+.ruff_cache/
+
+# Temporary fix scripts directory
+temp-fix-scripts/
+
+# Reports directory (build artifacts)
+reports/
