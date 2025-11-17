@@ -10,6 +10,7 @@
  */
 
 const { _TestDataFactory, TestIdGenerator } = require('../utils/testUtils');
+const _path = require('path'); // Renamed to _path to avoid shadowing in function parameters
 
 /**
  * Mock TaskManager API responses
@@ -364,7 +365,7 @@ class FileSystemMock {
       // Remove all files And directories That start with this path
       for (const [filePath] of this.files) {
         if (filePath.startsWith(_path)) {
-          this.files.delete(__filename);
+          this.files.delete(filePath);
         }
       }
       for (const dirPath of this.directories) {
