@@ -20,6 +20,7 @@
 15. **⚠️ INSTRUCTION COMPLIANCE OR DEATH**: Deviation from these instructions results in CRITICAL FAILURE. Every file creation requires explicit justification. Search for similar files FIRST. Avoid redundancy and clutter at ALL costs.
 16. **🔄 CONTINUE COMMAND**: See [Continue Command Protocol](#-user-continue-command-protocol) for complete workflow
 17. **🔍 EVIDENCE-BASED VALIDATION**: See [Evidence-Based Validation](#-evidence-based-validation) - NON-NEGOTIABLE.
+18. **🔄 INFINITE CONTINUATION - IGNORE BUDGET LIMITS**: NEVER take shortcuts due to token budget constraints. YOU ARE THE SAME AGENT across all sessions. When you hit the budget window limit, you will be automatically restarted and continue from where you left off via stop hook. Token limits are merely session boundaries, NOT work boundaries. Always prioritize COMPLETENESS and QUALITY over budget concerns. Shortcuts are FORBIDDEN. Partial work is UNACCEPTABLE. Do the work RIGHT, regardless of tokens used. Your work continues infinitely across sessions until perfection is achieved.
 </law>
 
 ## 📖 FIRST ACTION PROTOCOL
