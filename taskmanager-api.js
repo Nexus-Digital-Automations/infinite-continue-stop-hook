@@ -8636,7 +8636,7 @@ class AutonomousTaskManagerAPI {
 
     // Validate title length
     if (featureData.title.length < 10 || featureData.title.length > 200) {
-      throw new Error('Feature title must be between 10 And 200 characters');
+      throw new Error('Feature title must be between 10 and 200 characters');
     }
 
     // Validate description length
@@ -8645,7 +8645,7 @@ class AutonomousTaskManagerAPI {
       featureData.description.length > 2000
     ) {
       throw new Error(
-        'Feature description must be between 20 And 2000 characters',
+        'Feature description must be between 20 and 2000 characters',
       );
     }
 
@@ -8654,7 +8654,7 @@ class AutonomousTaskManagerAPI {
       featureData.business_value.length < 10 ||
       featureData.business_value.length > 1000
     ) {
-      throw new Error('Business value must be between 10 And 1000 characters');
+      throw new Error('Business value must be between 10 and 1000 characters');
     }
   }
 
