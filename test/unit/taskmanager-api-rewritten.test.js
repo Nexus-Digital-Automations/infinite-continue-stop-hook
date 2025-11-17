@@ -38,96 +38,96 @@ const TEST_FIXTURES = {
       total_features: 0,
       created: '2025-09-23T12:00:00.000Z',
       updated: '2025-09-23T12:00:00.000Z',
-      approval_history: []
-    }
+      approval_history: [],
+    },
   },
 
   validFeature: {
     title: 'Implement user authentication system',
     description: 'Add comprehensive user authentication with JWT tokens, password hashing, and session management for secure user access control',
     business_value: 'Enables secure user access and protects sensitive data from unauthorized access',
-    category: 'enhancement'
+    category: 'enhancement',
   },
 
   validApprovalData: {
     approved_by: 'test-reviewer',
-    notes: 'Looks good, approved for implementation'
+    notes: 'Looks good, approved for implementation',
   },
 
   validRejectionData: {
     rejected_by: 'test-reviewer',
-    reason: 'Out of scope for current sprint'
+    reason: 'Out of scope for current sprint',
   },
 
   invalidFeatures: {
     missingTitle: {
       description: 'This is a description without a title',
       business_value: 'Some business value',
-      category: 'enhancement'
+      category: 'enhancement',
     },
     missingDescription: {
       title: 'Feature without description',
       business_value: 'Some business value',
-      category: 'enhancement'
+      category: 'enhancement',
     },
     missingBusinessValue: {
       title: 'Feature without business value',
       description: 'This is a description without business value',
-      category: 'enhancement'
+      category: 'enhancement',
     },
     missingCategory: {
       title: 'Feature without category',
       description: 'This is a description without category',
-      business_value: 'Some business value'
+      business_value: 'Some business value',
     },
     emptyTitle: {
       title: '',
       description: 'This is a description with empty title',
       business_value: 'Some business value',
-      category: 'enhancement'
+      category: 'enhancement',
     },
     shortTitle: {
       title: 'Short',
       description: 'This is a description but title is too short',
       business_value: 'Some business value',
-      category: 'enhancement'
+      category: 'enhancement',
     },
     longTitle: {
       title: 'T'.repeat(201),
       description: 'This is a description but title is too long',
       business_value: 'Some business value',
-      category: 'enhancement'
+      category: 'enhancement',
     },
     shortDescription: {
       title: 'Valid title here',
       description: 'Short desc',
       business_value: 'Some business value',
-      category: 'enhancement'
+      category: 'enhancement',
     },
     longDescription: {
       title: 'Valid title here',
       description: 'D'.repeat(2001),
       business_value: 'Some business value',
-      category: 'enhancement'
+      category: 'enhancement',
     },
     shortBusinessValue: {
       title: 'Valid title here',
       description: 'Valid description here for testing purposes',
       business_value: 'Short',
-      category: 'enhancement'
+      category: 'enhancement',
     },
     longBusinessValue: {
       title: 'Valid title here',
       description: 'Valid description here for testing purposes',
       business_value: 'B'.repeat(1001),
-      category: 'enhancement'
+      category: 'enhancement',
     },
     invalidCategory: {
       title: 'Valid title here',
       description: 'Valid description here for testing purposes',
       business_value: 'Valid business value here',
-      category: 'invalid-category'
-    }
+      category: 'invalid-category',
+    },
   },
 
   featuresWithData: {
@@ -142,7 +142,7 @@ const TEST_FIXTURES = {
         category: 'enhancement',
         status: 'suggested',
         created_at: '2025-09-20T10:00:00.000Z',
-        updated_at: '2025-09-20T10:00:00.000Z'
+        updated_at: '2025-09-20T10:00:00.000Z',
       },
       {
         id: 'feature_1234567891_def456',
@@ -154,7 +154,7 @@ const TEST_FIXTURES = {
         approved_by: 'product-manager',
         approval_notes: 'High priority feature',
         created_at: '2025-09-21T10:00:00.000Z',
-        updated_at: '2025-09-21T11:00:00.000Z'
+        updated_at: '2025-09-21T11:00:00.000Z',
       },
       {
         id: 'feature_1234567892_ghi789',
@@ -166,8 +166,8 @@ const TEST_FIXTURES = {
         rejected_by: 'tech-lead',
         rejection_reason: 'Will be handled by automated doc generation',
         created_at: '2025-09-22T10:00:00.000Z',
-        updated_at: '2025-09-22T12:00:00.000Z'
-      }
+        updated_at: '2025-09-22T12:00:00.000Z',
+      },
     ],
     metadata: {
       total_features: 3,
@@ -178,11 +178,11 @@ const TEST_FIXTURES = {
           feature_id: 'feature_1234567891_def456',
           action: 'approved',
           approved_by: 'product-manager',
-          timestamp: '2025-09-21T11:00:00.000Z'
-        }
-      ]
-    }
-  }
+          timestamp: '2025-09-21T11:00:00.000Z',
+        },
+      ],
+    },
+  },
 };
 
 describe('FeatureManagerAPI', () => {
@@ -265,7 +265,7 @@ describe('FeatureManagerAPI', () => {
         'in-progress',
         'completed',
         'blocked',
-        'rejected'
+        'rejected',
       ]);
       expect(newApi.validCategories).toEqual([
         'enhancement',
@@ -273,13 +273,13 @@ describe('FeatureManagerAPI', () => {
         'new-feature',
         'performance',
         'security',
-        'documentation'
+        'documentation',
       ]);
       expect(newApi.requiredFields).toEqual([
         'title',
         'description',
         'business_value',
-        'category'
+        'category',
       ]);
     });
 
@@ -334,7 +334,7 @@ describe('FeatureManagerAPI', () => {
         // Create test file
         fs.writeFileSync(
           TEST_TASKS_PATH,
-          JSON.stringify(TEST_FIXTURES.featuresWithData, null, 2)
+          JSON.stringify(TEST_FIXTURES.featuresWithData, null, 2),
         );
 
         const features = await api._loadFeatures();
@@ -418,7 +418,7 @@ describe('FeatureManagerAPI', () => {
           'missingTitle',
           'missingDescription',
           'missingBusinessValue',
-          'missingCategory'
+          'missingCategory',
         ];
 
         missingFields.forEach(key => {
@@ -488,7 +488,7 @@ describe('FeatureManagerAPI', () => {
       // Setup empty features file for each test
       fs.writeFileSync(
         TEST_TASKS_PATH,
-        JSON.stringify(TEST_FIXTURES.emptyFeaturesFile, null, 2)
+        JSON.stringify(TEST_FIXTURES.emptyFeaturesFile, null, 2),
       );
     });
 
@@ -655,7 +655,7 @@ describe('FeatureManagerAPI', () => {
         const features = [
           { ...TEST_FIXTURES.validFeature, title: 'Feature 1 for bulk approval' },
           { ...TEST_FIXTURES.validFeature, title: 'Feature 2 for bulk approval' },
-          { ...TEST_FIXTURES.validFeature, title: 'Feature 3 for bulk approval' }
+          { ...TEST_FIXTURES.validFeature, title: 'Feature 3 for bulk approval' },
         ];
 
         suggestedFeatureIds = [];
@@ -668,7 +668,7 @@ describe('FeatureManagerAPI', () => {
       test('should approve multiple features successfully', async () => {
         const result = await api.bulkApproveFeatures(
           suggestedFeatureIds,
-          TEST_FIXTURES.validApprovalData
+          TEST_FIXTURES.validApprovalData,
         );
 
         expect(result.success).toBe(true);
@@ -729,7 +729,7 @@ describe('FeatureManagerAPI', () => {
         // Use features file with test data
         fs.writeFileSync(
           TEST_TASKS_PATH,
-          JSON.stringify(TEST_FIXTURES.featuresWithData, null, 2)
+          JSON.stringify(TEST_FIXTURES.featuresWithData, null, 2),
         );
       });
 
@@ -778,7 +778,7 @@ describe('FeatureManagerAPI', () => {
       beforeEach(() => {
         fs.writeFileSync(
           TEST_TASKS_PATH,
-          JSON.stringify(TEST_FIXTURES.featuresWithData, null, 2)
+          JSON.stringify(TEST_FIXTURES.featuresWithData, null, 2),
         );
       });
 
@@ -811,7 +811,7 @@ describe('FeatureManagerAPI', () => {
       test('should handle empty features file', async () => {
         fs.writeFileSync(
           TEST_TASKS_PATH,
-          JSON.stringify(TEST_FIXTURES.emptyFeaturesFile, null, 2)
+          JSON.stringify(TEST_FIXTURES.emptyFeaturesFile, null, 2),
         );
 
         const result = await api.getFeatureStats();
@@ -999,7 +999,7 @@ describe('FeatureManagerAPI', () => {
     beforeEach(() => {
       fs.writeFileSync(
         api.tasksPath,
-        JSON.stringify(TEST_FIXTURES.emptyFeaturesFile, null, 2)
+        JSON.stringify(TEST_FIXTURES.emptyFeaturesFile, null, 2),
       );
     });
 
@@ -1106,7 +1106,7 @@ describe('FeatureManagerAPI', () => {
     beforeEach(() => {
       fs.writeFileSync(
         api.tasksPath,
-        JSON.stringify(TEST_FIXTURES.emptyFeaturesFile, null, 2)
+        JSON.stringify(TEST_FIXTURES.emptyFeaturesFile, null, 2),
       );
     });
 

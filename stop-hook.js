@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /**
  * @generated-from: infinite-continue-stop-hook v1.0.0
  * @generated-on: 2025-11-17T01:02:38.746Z
