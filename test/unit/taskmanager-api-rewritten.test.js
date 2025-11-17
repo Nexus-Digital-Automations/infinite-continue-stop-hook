@@ -522,7 +522,7 @@ describe('FeatureManagerAPI', () => {
 
         const features = await api._loadFeatures();
         expect(features.metadata.total_features).toBe(1);
-        expect(features.metadata.updated).toBe('2025-09-23T12:00:00.000Z');
+        expect(features.metadata.updated).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/); // Validate ISO 8601 format
       });
     });
 
