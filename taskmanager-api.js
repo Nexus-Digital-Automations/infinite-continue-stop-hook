@@ -7240,7 +7240,7 @@ class AutonomousTaskManagerAPI {
           authorized_by: agentId,
           reason:
             reason ||
-            'Agent authorized stop after completing all tasks And achieving project perfection',
+            'Agent authorized stop after completing all tasks and achieving project perfection',
           timestamp: new Date().toISOString(),
           session_type: 'self_authorized',
         };
@@ -11140,7 +11140,7 @@ async function main(category = 'general') {
         }
         const stopReason =
           args[2] ||
-          'Agent authorized stop after completing all tasks And achieving project perfection';
+          'Agent authorized stop after completing all tasks and achieving project perfection';
         result = await api.authorizeStop(args[1], stopReason);
         break;
       }
