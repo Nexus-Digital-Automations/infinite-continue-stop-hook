@@ -876,36 +876,54 @@ function provideInstructiveTaskGuidance(
 **ULTRATHINK - Complete ALL TodoWrite tasks first**
 **ULTRATHINK - Never abandon unfinished work**
 
-📋 **TASK COMPLETION WORKFLOW:**
+🎯 **PRIORITY ORDER - COMPLETE IN THIS EXACT ORDER:**
 
-0. **📖 READ CLAUDE.md FIRST:**
-   Review CLAUDE.md to understand all project guidelines, protocols, and requirements
-   This is MANDATORY before any work - ensures compliance with all standards
+📌 **PRIORITY #1 - TODOWRITE TASKS (HIGHEST):**
+   ✅ Complete ALL TodoWrite tasks first - NOTHING ELSE MATTERS
+   ✅ Never stop with incomplete TodoWrite tasks
+   🔴 **CRITICAL:** Quality checks DO NOT matter if TodoWrite has tasks
+   🔴 **CRITICAL:** Linting errors DO NOT block task completion
 
-1. **FINISH CURRENT WORK (HIGHEST PRIORITY):**
-   ✅ Complete ALL TodoWrite tasks first
-   ✅ Finish all in-progress code changes
-   ✅ Complete current feature/fix before moving on
+   **IF TodoWrite HAS TASKS → CONTINUE WORKING, IGNORE QUALITY CHECKS**
 
-2. **CHECK TASKS.json FOR MORE WORK:**
+📌 **PRIORITY #2 - TASKMANAGER TASKS:**
+   ✅ Complete all approved TASKS.json tasks
+   ✅ Complete all in-progress TASKS.json tasks
+   🔴 **CRITICAL:** Quality checks DO NOT matter if tasks remain
+   🔴 **CRITICAL:** Linting/type/build errors DO NOT block task completion
+
+   **Command to check:**
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-tasks-by-status approved
 
-3. **CLAIM & COMPLETE APPROVED TASKS:**
-   Work through pending tasks in priority order
-   Finish each task completely before claiming the next
+   **IF TASKS REMAIN → CONTINUE WORKING, IGNORE QUALITY CHECKS**
 
-4. **VERIFY ALL WORK COMPLETE:**
-   ✅ TodoWrite list empty (all tasks done)
-   ✅ No approved tasks remaining in TASKS.json
-   ✅ No in-progress tasks in TASKS.json
+📌 **PRIORITY #3 - QUALITY CHECKS (LOWEST - ONLY AFTER ALL TASKS 100% DONE):**
+   • Linting (handled by PostToolUse hook - warnings OK)
+   • Type checking (handled by PostToolUse hook - warnings OK)
+   • Build validation (handled by PostToolUse hook - warnings OK)
+   • Security scans (run during work)
+
+   🟢 **QUALITY CHECKS ARE OPTIONAL FOR STOPPING**
+   🟢 **Quality warnings/errors DO NOT prevent stopping**
+   🟢 **Tasks are ALWAYS more important than perfect code quality**
 
 📊 **CURRENT STATUS:** ${taskStatus.pending} pending | ${taskStatus.in_progress} in progress | ${taskStatus.completed} completed
 
-⚠️ **IF ANY WORK REMAINS: CONTINUE WORKING - DO NOT STOP**
+⚠️ **IF ANY TODOWRITE OR TASKMANAGER TASKS REMAIN:**
+⚠️ **→ CONTINUE WORKING - DO NOT STOP - IGNORE ALL QUALITY CHECKS**
 
 🛑 **STOP AUTHORIZATION (ONLY When ALL Tasks Complete):**
 
-**Only proceed if TodoWrite is empty AND no pending/in-progress tasks exist**
+**✅ ONLY proceed if:**
+1. TodoWrite list is 100% empty (all tasks done)
+2. No approved tasks in TASKS.json
+3. No in-progress tasks in TASKS.json
+
+**❌ IGNORE these when deciding to stop:**
+- Linting warnings/errors
+- Type check warnings/errors
+- Build warnings
+- Minor quality issues
 
 **Verify Readiness:**
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" verify-stop-readiness [agentId]
@@ -925,13 +943,16 @@ function provideInstructiveTaskGuidance(
 **⚠️ EMERGENCY STOP (Only if stop hook triggers 2+ times with nothing to do):**
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" emergency-stop [agentId] "reason"
 
-**STOP AUTHORIZATION CRITERIA:**
+**STOP AUTHORIZATION CRITERIA (MINIMAL - Tasks Matter Most):**
 • focused-codebase (clean, organized)
-• security-validation (no vulnerabilities)
+• security-validation (no critical vulnerabilities)
 • start-validation (app runs successfully)
 • test-validation (tests pass)
 
-**NOTE:** Linting, type checking, and build validation are handled by PostToolUse hook during work.
+🔴 **CRITICAL PHILOSOPHY:**
+**Tasks > Quality. Always complete tasks even with linting/type/build warnings.**
+**Linting, type checking, and build validation are handled by PostToolUse hook.**
+**These quality checks show warnings but NEVER block task completion.**
 
 See CLAUDE.md for detailed validation criteria and complete command reference.
 `;

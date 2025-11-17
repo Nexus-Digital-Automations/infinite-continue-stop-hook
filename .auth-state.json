@@ -1,8 +1,8 @@
 {
-  "authKey": "34c38b409b39631fc0d09e9827bb8c0f",
-  "agentId": "variable-naming-fix-agent",
-  "startTime": "2025-09-29T15:39:53.189Z",
-  "expiresAt": "2025-09-29T16:09:53.189Z",
+  "authKey": "39b5203806b81d58ab14c39bfdf3256d",
+  "agentId": "debug-agent-$(date +%s)",
+  "startTime": "2025-11-17T19:33:55.017Z",
+  "expiresAt": "2025-11-17T20:03:55.017Z",
   "currentStep": 0,
   "completedSteps": [],
   "requiredSteps": [

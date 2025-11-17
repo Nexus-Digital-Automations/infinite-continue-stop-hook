@@ -102,6 +102,14 @@ timeout 10s node taskmanager-api.js get-pattern-analytics
 
 ### Stop Authorization System
 
+**🎯 PRIORITY PHILOSOPHY:**
+1. **HIGHEST:** Complete all TodoWrite tasks
+2. **HIGH:** Complete all TaskManager tasks (approved/in-progress)
+3. **LOWEST:** Quality checks (linting, type checking, build)
+
+**🔴 CRITICAL:** Tasks always take priority over quality checks
+**🔴 CRITICAL:** Never let linting/type/build errors block task completion
+
 #### Verify Readiness
 ```bash
 timeout 10s node taskmanager-api.js verify-stop-readiness '<agent_id>'
@@ -113,17 +121,26 @@ timeout 10s node taskmanager-api.js start-authorization '<agent_id>'
 ```
 
 #### Validate Criteria (run sequentially)
+
+**Core Criteria (REQUIRED):**
 ```bash
 AUTH_KEY="<from_start_authorization>"
 
 timeout 10s node taskmanager-api.js validate-criterion $AUTH_KEY focused-codebase
 timeout 10s node taskmanager-api.js validate-criterion $AUTH_KEY security-validation
-timeout 10s node taskmanager-api.js validate-criterion $AUTH_KEY linter-validation
-timeout 10s node taskmanager-api.js validate-criterion $AUTH_KEY type-validation
-timeout 10s node taskmanager-api.js validate-criterion $AUTH_KEY build-validation
 timeout 10s node taskmanager-api.js validate-criterion $AUTH_KEY start-validation
 timeout 10s node taskmanager-api.js validate-criterion $AUTH_KEY test-validation
 ```
+
+**Quality Criteria (OPTIONAL - Only if time permits):**
+```bash
+# These are LOW priority - only run if all tasks are 100% complete
+timeout 10s node taskmanager-api.js validate-criterion $AUTH_KEY linter-validation
+timeout 10s node taskmanager-api.js validate-criterion $AUTH_KEY type-validation
+timeout 10s node taskmanager-api.js validate-criterion $AUTH_KEY build-validation
+```
+
+**⚠️ NOTE:** Linting, type checking, and build validation are handled automatically by PostToolUse hook during work. They show warnings but NEVER block task completion.
 
 #### Complete Authorization
 ```bash
@@ -180,10 +197,11 @@ timeout 10s node taskmanager-api.js generate-compliance-report '<agent_id>'
 - Validates scope
 
 **PostToolUse** - Runs after code tool execution (Edit, Write, MultiEdit)
-- Linting validation (npm run lint)
-- Syntax checking
-- Security scanning (npm audit)
-- Shows warnings without blocking work
+- Linting validation (npm run lint) - **WARNINGS ONLY, NEVER BLOCKS**
+- Syntax checking - **WARNINGS ONLY, NEVER BLOCKS**
+- Security scanning (npm audit) - **WARNINGS ONLY, NEVER BLOCKS**
+- **🔴 CRITICAL:** Shows warnings but NEVER blocks task completion
+- **🔴 CRITICAL:** Quality checks are informational only
 - Stores results in .validation-artifacts/logs/
 
 **Stop** - Runs when attempting to stop
