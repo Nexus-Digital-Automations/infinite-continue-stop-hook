@@ -196,7 +196,7 @@ describe('Example Test with Mock Framework', () => {
 
       // Verify environment files exist in mock filesystem
       const mocks = mockManager.getMocks();
-      expect(mocks.fileSystem.existsSync(testEnvironment.featuresPath)).toBe(
+      expect(mocks.fileSystem.existsSync(testEnvironment.tasksPath)).toBe(
         true,
       );
       expect(mocks.fileSystem.existsSync(testEnvironment.packagePath)).toBe(

@@ -116,8 +116,8 @@ describe('FeatureManagerAPI', () => {
     // Create API instance
     api = new FeatureManagerAPI();
 
-    // Override the features path for testing
-    api.featuresPath = TEST_FEATURES_PATH;
+    // Override the tasks path for testing
+    api.tasksPath = TEST_FEATURES_PATH;
 
     // Reset time mocking
     timeUtils.restoreTime();
@@ -178,7 +178,7 @@ describe('FeatureManagerAPI', () => {
 
     test('should set features path correctly', () => {
       const newApi = new FeatureManagerAPI();
-      expect(newApi.featuresPath).toContain('FEATURES.json');
+      expect(newApi.tasksPath).toContain('FEATURES.json');
     });
 
     test('should have withTimeout method for _operationtimeouts', () => {
@@ -1024,7 +1024,7 @@ describe('FeatureManagerAPI', () => {
 
     beforeEach(() => {
       mockFs.setFile(
-        api.featuresPath,
+        api.tasksPath,
         JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
       );
     });
@@ -1043,7 +1043,7 @@ describe('FeatureManagerAPI', () => {
       });
 
       test('should handle agent initialization errors', async () => {
-        mockFs.setWriteError(api.featuresPath, 'Write failed');
+        mockFs.setWriteError(api.tasksPath, 'Write failed');
         const _result = await api.initializeAgent('error-agent');
         expect(_result.success).toBe(false);
         expect(_result.error).toContain('Failed to initialize agent');
@@ -1067,7 +1067,7 @@ describe('FeatureManagerAPI', () => {
       });
 
       test('should handle reinitialization errors', async () => {
-        mockFs.setWriteError(api.featuresPath, 'Write failed');
+        mockFs.setWriteError(api.tasksPath, 'Write failed');
         const _result = await api.reinitializeAgent('error-agent');
         expect(_result.success).toBe(false);
         expect(_result.error).toContain('Failed to reinitialize agent');
@@ -1115,7 +1115,7 @@ describe('FeatureManagerAPI', () => {
 
     beforeEach(() => {
       mockFs.setFile(
-        api.featuresPath,
+        api.tasksPath,
         JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
       );
     });
@@ -1134,7 +1134,7 @@ describe('FeatureManagerAPI', () => {
       });
 
       test('should handle stats retrieval errors', async () => {
-        mockFs.setReadError(api.featuresPath, 'Read failed');
+        mockFs.setReadError(api.tasksPath, 'Read failed');
         const _result = await api.getInitializationStats();
         expect(_result.success).toBe(false);
         expect(_result.error).toContain('Failed to load features');

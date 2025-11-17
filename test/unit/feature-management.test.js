@@ -63,7 +63,7 @@ describe('Feature Management Lifecycle', () => {
     timeUtils = new TimeTestUtils();
 
     // Override the tasks path for testing
-    api.featuresPath = TEST_FEATURES_PATH;
+    api.tasksPath = TEST_FEATURES_PATH;
 
     // Connect jest mocks to MockFileSystem instance;
     const fs = require('fs');
