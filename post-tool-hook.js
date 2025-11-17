@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 
 /**
  * PostToolUse Hook - Quality Validation During Work
@@ -31,7 +30,7 @@ const CODE_TOOLS = [
 function parseToolInput() {
   try {
     const stdin = fs.readFileSync(0, 'utf-8');
-    if (!stdin) return null;
+    if (!stdin) {return null;}
 
     const data = JSON.parse(stdin);
     return {
@@ -49,7 +48,7 @@ function parseToolInput() {
  * Check if tool execution warrants quality validation
  */
 function shouldValidate(toolInfo) {
-  if (!toolInfo || !toolInfo.tool) return false;
+  if (!toolInfo || !toolInfo.tool) {return false;}
 
   // Check if it's a code-related tool
   return CODE_TOOLS.includes(toolInfo.tool);
@@ -110,7 +109,7 @@ function checkLinting(workingDir) {
  * Run syntax validation
  */
 function checkSyntax(filePath, workingDir) {
-  if (!filePath) return { success: true, message: 'No file to check' };
+  if (!filePath) {return { success: true, message: 'No file to check' };}
 
   const fullPath = path.isAbsolute(filePath) ? filePath : path.join(workingDir, filePath);
 
@@ -179,6 +178,7 @@ function runPostToolValidation() {
   // Only validate for code-related tools
   if (!shouldValidate(toolInfo)) {
     // Silent exit for non-code tools
+    // eslint-disable-next-line n/no-process-exit -- Hook script needs explicit exit codes
     process.exit(0);
   }
 
@@ -222,6 +222,7 @@ function runPostToolValidation() {
   console.error('\n💡 These are informational - continue your work\n');
 
   // Always exit 0 - never block work
+  // eslint-disable-next-line n/no-process-exit -- Hook script needs explicit exit codes
   process.exit(0);
 }
 
@@ -231,5 +232,6 @@ try {
 } catch (error) {
   console.error('⚠️  PostToolUse hook error:', error.message);
   // Always exit 0 - never block work even on hook errors
+  // eslint-disable-next-line n/no-process-exit -- Hook script needs explicit exit codes
   process.exit(0);
 }
