@@ -93,12 +93,9 @@ describe('Initialization Statistics', () => {
   const TEST_TASKS_PATH = path.join(TEST_PROJECT_ROOT, 'TASKS.json');
 
   beforeEach(() => {
-    api = new FeatureManagerAPI();
+    api = new FeatureManagerAPI({ projectRoot: TEST_PROJECT_ROOT });
     mockFs = new MockFileSystem();
     timeUtils = new TimeTestUtils();
-
-    // Override the tasks path for testing
-    api.tasksPath = TEST_TASKS_PATH;
 
     // Get the mocked fs module and connect it to our MockFileSystem
     const fs = require('fs');

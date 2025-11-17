@@ -52,18 +52,15 @@ describe('Feature Management Lifecycle', () => {
   let timeUtils;
 
   const TEST_PROJECT_ROOT = '/test/feature-project';
-  const TEST_FEATURES_PATH = path.join(TEST_PROJECT_ROOT, 'FEATURES.json');
+  const TEST_TASKS_PATH = path.join(TEST_PROJECT_ROOT, 'TASKS.json');
 
   beforeEach(() => {
     // Reset the crypto counter for deterministic ID generation
     global.cryptoCounter = 0;
 
-    api = new FeatureManagerAPI();
+    api = new FeatureManagerAPI({ projectRoot: TEST_PROJECT_ROOT });
     mockFs = new MockFileSystem();
     timeUtils = new TimeTestUtils();
-
-    // Override the tasks path for testing
-    api.tasksPath = TEST_FEATURES_PATH;
 
     // Connect jest mocks to MockFileSystem instance;
     const fs = require('fs');
@@ -92,7 +89,7 @@ describe('Feature Management Lifecycle', () => {
 
     beforeEach(() => {
       mockFs.setFile(
-        TEST_FEATURES_PATH,
+        TEST_TASKS_PATH,
         JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
       );
     });
@@ -401,7 +398,7 @@ describe('Feature Management Lifecycle', () => {
 
     beforeEach(async () => {
       mockFs.setFile(
-        TEST_FEATURES_PATH,
+        TEST_TASKS_PATH,
         JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
       );
 
@@ -534,7 +531,7 @@ describe('Feature Management Lifecycle', () => {
           },
           ],
         };
-        mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(invalidFeatures));
+        mockFs.setFile(TEST_TASKS_PATH, JSON.stringify(invalidFeatures));
 
         const _result = await api.approveFeature(suggestedFeatureId);
         expect(_result.success).toBe(true);
@@ -602,7 +599,7 @@ describe('Feature Management Lifecycle', () => {
 
     beforeEach(async () => {
       mockFs.setFile(
-        TEST_FEATURES_PATH,
+        TEST_TASKS_PATH,
         JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
       );
 
@@ -736,7 +733,7 @@ describe('Feature Management Lifecycle', () => {
 
     beforeEach(async () => {
       mockFs.setFile(
-        TEST_FEATURES_PATH,
+        TEST_TASKS_PATH,
         JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
       );
 
@@ -857,7 +854,7 @@ describe('Feature Management Lifecycle', () => {
     beforeEach(() => {
       // Use features file with diverse test data
       mockFs.setFile(
-        TEST_FEATURES_PATH,
+        TEST_TASKS_PATH,
         JSON.stringify(TEST_FIXTURES.featuresWithData),
       );
     });
@@ -944,7 +941,7 @@ describe('Feature Management Lifecycle', () => {
 
     beforeEach(() => {
       mockFs.setFile(
-        TEST_FEATURES_PATH,
+        TEST_TASKS_PATH,
         JSON.stringify(TEST_FIXTURES.featuresWithData),
       );
     });
@@ -991,7 +988,7 @@ describe('Feature Management Lifecycle', () => {
 
       test('should handle empty features file for statistics', async () => {
         mockFs.setFile(
-          TEST_FEATURES_PATH,
+          TEST_TASKS_PATH,
           JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
         );
 
@@ -1048,7 +1045,7 @@ describe('Feature Management Lifecycle', () => {
 
     describe('File System Error Handling', () => {
       test('should handle file read errors in feature listing', async () => {
-        mockFs.setReadError(TEST_FEATURES_PATH, 'Permission denied');
+        mockFs.setReadError(TEST_TASKS_PATH, 'Permission denied');
 
         const _result = await api.listFeatures();
         expect(_result.success).toBe(false);
@@ -1057,10 +1054,10 @@ describe('Feature Management Lifecycle', () => {
 
       test('should handle file write errors in feature suggestion', async () => {
         mockFs.setFile(
-          TEST_FEATURES_PATH,
+          TEST_TASKS_PATH,
           JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
         );
-        mockFs.setWriteError(TEST_FEATURES_PATH, 'Disk full');
+        mockFs.setWriteError(TEST_TASKS_PATH, 'Disk full');
 
         const _result = await api.suggestFeature(TEST_FIXTURES.validFeature);
         expect(_result.success).toBe(false);
@@ -1072,7 +1069,7 @@ describe('Feature Management Lifecycle', () => {
 
 
       test('should handle corrupted JSON gracefully', async () => {
-        mockFs.setFile(TEST_FEATURES_PATH, '{ invalid json structure }');
+        mockFs.setFile(TEST_TASKS_PATH, '{ invalid json structure }');
 
         const _result = await api.suggestFeature(TEST_FIXTURES.validFeature);
         expect(_result.success).toBe(false);
@@ -1083,7 +1080,7 @@ describe('Feature Management Lifecycle', () => {
         // Don't create the file - it will be created automatically;
         const _result = await api.suggestFeature(TEST_FIXTURES.validFeature);
         expect(_result.success).toBe(true);
-        expect(mockFs.hasFile(TEST_FEATURES_PATH)).toBe(true);
+        expect(mockFs.hasFile(TEST_TASKS_PATH)).toBe(true);
       });
     });
   });

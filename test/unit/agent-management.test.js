@@ -71,21 +71,16 @@ describe('Agent Management', () => {
   let timeUtils;
 
   const TEST_PROJECT_ROOT = '/test/agent-project';
-  const TEST_FEATURES_PATH = path.join(TEST_PROJECT_ROOT, 'FEATURES.json');
+  const TEST_TASKS_PATH = path.join(TEST_PROJECT_ROOT, 'TASKS.json');
   const TEST_STOP_FLAG_PATH = path.join(TEST_PROJECT_ROOT, '.stop-allowed');
 
   beforeEach(() => {
     // Reset the crypto counter for deterministic ID generation
     global.cryptoCounter = 0;
 
-    api = new FeatureManagerAPI();
+    api = new FeatureManagerAPI({ projectRoot: TEST_PROJECT_ROOT });
     mockFs = new MockFileSystem();
     timeUtils = new TimeTestUtils();
-
-    // Override the project root And tasks path for testing;
-    const _originalProject = process.env.PROJECT_ROOT;
-    process.env.PROJECT_ROOT = TEST_PROJECT_ROOT;
-    api.tasksPath = TEST_FEATURES_PATH;
 
     // Connect jest mocks to MockFileSystem instance;
     const fs = require('fs');
@@ -114,7 +109,7 @@ describe('Agent Management', () => {
 
     // Setup initial features file
     mockFs.setFile(
-      TEST_FEATURES_PATH,
+      TEST_TASKS_PATH,
       JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
     );
   });
@@ -261,7 +256,7 @@ describe('Agent Management', () => {
         };
         delete featuresWithoutAgents.agents;
         mockFs.setFile(
-          TEST_FEATURES_PATH,
+          TEST_TASKS_PATH,
           JSON.stringify(featuresWithoutAgents),
         );
 
@@ -281,7 +276,7 @@ describe('Agent Management', () => {
 
       test('should handle file write errors during initialization', async () => {
 
-        mockFs.setWriteError(TEST_FEATURES_PATH, 'Disk full');
+        mockFs.setWriteError(TEST_TASKS_PATH, 'Disk full');
 
         const _result = await api.initializeAgent('error-test-agent');
 
@@ -291,7 +286,7 @@ describe('Agent Management', () => {
       });
 
       test('should handle corrupted features file during initialization', async () => {
-        mockFs.setFile(TEST_FEATURES_PATH, 'invalid json');
+        mockFs.setFile(TEST_TASKS_PATH, 'invalid json');
 
         const _result = await api.initializeAgent('corrupt-file-agent');
 
@@ -450,7 +445,7 @@ describe('Agent Management', () => {
 
       test('should handle file write errors during reinitialization', async () => {
 
-        mockFs.setWriteError(TEST_FEATURES_PATH, 'Permission denied');
+        mockFs.setWriteError(TEST_TASKS_PATH, 'Permission denied');
 
         const _result = await api.reinitializeAgent(existingAgentId);
 
@@ -460,7 +455,7 @@ describe('Agent Management', () => {
       });
 
       test('should handle corrupted features file during reinitialization', async () => {
-        mockFs.setFile(TEST_FEATURES_PATH, '{ corrupted json }');
+        mockFs.setFile(TEST_TASKS_PATH, '{ corrupted json }');
 
         const _result = await api.reinitializeAgent(existingAgentId);
 
@@ -770,7 +765,7 @@ describe('Agent Management', () => {
             },
           },
         };
-        mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(partialAgentData));
+        mockFs.setFile(TEST_TASKS_PATH, JSON.stringify(partialAgentData));
 
         const _result = await api.reinitializeAgent('partial-agent');
 
@@ -788,7 +783,7 @@ describe('Agent Management', () => {
           ...TEST_FIXTURES.emptyFeaturesFile,
           agents: 'not an object',
         };
-        mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(malformedData));
+        mockFs.setFile(TEST_TASKS_PATH, JSON.stringify(malformedData));
 
         const _result = await api.initializeAgent('recovery-agent');
 

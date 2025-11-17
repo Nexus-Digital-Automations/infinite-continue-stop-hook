@@ -84,7 +84,7 @@ const FeatureManagerAPI = require('../../taskmanager-api.js');
 
 // Test constants;
 const TEST_PROJECT_ROOT = '/test/project';
-const TEST_FEATURES_PATH = path.join(TEST_PROJECT_ROOT, 'FEATURES.json');
+const TEST_TASKS_PATH = path.join(TEST_PROJECT_ROOT, 'TASKS.json');
 
 describe('FeatureManagerAPI', () => {
 
@@ -113,11 +113,8 @@ describe('FeatureManagerAPI', () => {
       mockFs.writeFile(...args),
     );
 
-    // Create API instance
-    api = new FeatureManagerAPI();
-
-    // Override the tasks path for testing
-    api.tasksPath = TEST_FEATURES_PATH;
+    // Create API instance with test project root
+    api = new FeatureManagerAPI({ projectRoot: TEST_PROJECT_ROOT });
 
     // Reset time mocking
     timeUtils.restoreTime();
@@ -194,12 +191,12 @@ describe('FeatureManagerAPI', () => {
     describe('_ensureFeaturesFile', () => {
       test('should create FEATURES.json if it does not exist', async () => {
         // File doesn't exist (default mockFs state)
-        expect(mockFs.hasFile(TEST_FEATURES_PATH)).toBe(false);
+        expect(mockFs.hasFile(TEST_TASKS_PATH)).toBe(false);
 
         await api._ensureFeaturesFile();
 
-        expect(mockFs.hasFile(TEST_FEATURES_PATH)).toBe(true);
-        const fileContent = JSON.parse(mockFs.getFile(TEST_FEATURES_PATH));
+        expect(mockFs.hasFile(TEST_TASKS_PATH)).toBe(true);
+        const fileContent = JSON.parse(mockFs.getFile(TEST_TASKS_PATH));
         testHelpers.validateFeaturesFileStructure(fileContent);
         expect(fileContent.project).toBe('infinite-continue-stop-hook');
         expect(fileContent.features).toEqual([]);
@@ -210,11 +207,11 @@ describe('FeatureManagerAPI', () => {
         const originalData = testHelpers.deepClone(
           TEST_FIXTURES.featuresWithData,
         );
-        mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(originalData));
+        mockFs.setFile(TEST_TASKS_PATH, JSON.stringify(originalData));
 
         await api._ensureFeaturesFile();
 
-        const fileContent = JSON.parse(mockFs.getFile(TEST_FEATURES_PATH));
+        const fileContent = JSON.parse(mockFs.getFile(TEST_TASKS_PATH));
         expect(fileContent.features).toHaveLength(3);
         expect(fileContent.project).toBe('test-project'); // Should preserve original project name
         expect(fileContent).toEqual(originalData); // Should not change anything
@@ -226,7 +223,7 @@ describe('FeatureManagerAPI', () => {
 
       test('should load existing features file successfully', async () => {
         mockFs.setFile(
-          TEST_FEATURES_PATH,
+          TEST_TASKS_PATH,
           JSON.stringify(TEST_FIXTURES.featuresWithData),
         );
 
@@ -238,17 +235,17 @@ describe('FeatureManagerAPI', () => {
 
       test('should create file And return default structure if file does not exist', async () => {
         // File doesn't exist
-        expect(mockFs.hasFile(TEST_FEATURES_PATH)).toBe(false);
+        expect(mockFs.hasFile(TEST_TASKS_PATH)).toBe(false);
 
         const features = await api._loadFeatures();
 
         testHelpers.validateFeaturesFileStructure(features);
         expect(features.features).toEqual([]);
-        expect(mockFs.hasFile(TEST_FEATURES_PATH)).toBe(true);
+        expect(mockFs.hasFile(TEST_TASKS_PATH)).toBe(true);
       });
 
       test('should handle JSON parsing errors gracefully', async () => {
-        mockFs.setFile(TEST_FEATURES_PATH, 'invalid json content');
+        mockFs.setFile(TEST_TASKS_PATH, 'invalid json content');
 
         await expect(api._loadFeatures()).rejects.toThrow(
           'Failed to load features',
@@ -256,7 +253,7 @@ describe('FeatureManagerAPI', () => {
       });
 
       test('should handle file read errors', async () => {
-        mockFs.setReadError(TEST_FEATURES_PATH, 'Permission denied');
+        mockFs.setReadError(TEST_TASKS_PATH, 'Permission denied');
 
         await expect(api._loadFeatures()).rejects.toThrow(
           'Failed to load features',
@@ -272,13 +269,13 @@ describe('FeatureManagerAPI', () => {
 
         await api._saveFeatures(testData);
 
-        expect(mockFs.hasFile(TEST_FEATURES_PATH)).toBe(true);
-        const savedContent = JSON.parse(mockFs.getFile(TEST_FEATURES_PATH));
+        expect(mockFs.hasFile(TEST_TASKS_PATH)).toBe(true);
+        const savedContent = JSON.parse(mockFs.getFile(TEST_TASKS_PATH));
         expect(savedContent).toEqual(testData);
       });
 
       test('should handle file write errors', async () => {
-        mockFs.setWriteError(TEST_FEATURES_PATH, 'Permission denied');
+        mockFs.setWriteError(TEST_TASKS_PATH, 'Permission denied');
         const testData = testHelpers.deepClone(TEST_FIXTURES.emptyFeaturesFile);
 
         await expect(api._saveFeatures(testData)).rejects.toThrow(
@@ -415,7 +412,7 @@ describe('FeatureManagerAPI', () => {
     beforeEach(() => {
       // Setup empty features file for each test
       mockFs.setFile(
-        TEST_FEATURES_PATH,
+        TEST_TASKS_PATH,
         JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
       );
     });
@@ -445,7 +442,7 @@ describe('FeatureManagerAPI', () => {
       });
 
       test('should handle file system errors during feature creation', async () => {
-        mockFs.setWriteError(TEST_FEATURES_PATH, 'Disk full');
+        mockFs.setWriteError(TEST_TASKS_PATH, 'Disk full');
 
         const _result = await api.suggestFeature(TEST_FIXTURES.validFeature);
         expect(_result.success).toBe(false);
@@ -548,7 +545,7 @@ describe('FeatureManagerAPI', () => {
           },
           ],
         };
-        mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(invalidFeatures));
+        mockFs.setFile(TEST_TASKS_PATH, JSON.stringify(invalidFeatures));
 
         const _result = await api.approveFeature(testFeatureId);
         expect(_result.success).toBe(true);
@@ -729,7 +726,7 @@ describe('FeatureManagerAPI', () => {
       beforeEach(() => {
         // Use features file with test data
         mockFs.setFile(
-          TEST_FEATURES_PATH,
+          TEST_TASKS_PATH,
           JSON.stringify(TEST_FIXTURES.featuresWithData),
         );
       });
@@ -771,7 +768,7 @@ describe('FeatureManagerAPI', () => {
       });
 
       test('should handle file system errors', async () => {
-        mockFs.setReadError(TEST_FEATURES_PATH, 'Permission denied');
+        mockFs.setReadError(TEST_TASKS_PATH, 'Permission denied');
 
         const _result = await api.listFeatures();
         expect(_result.success).toBe(false);
@@ -784,7 +781,7 @@ describe('FeatureManagerAPI', () => {
 
       beforeEach(() => {
         mockFs.setFile(
-          TEST_FEATURES_PATH,
+          TEST_TASKS_PATH,
           JSON.stringify(TEST_FIXTURES.featuresWithData),
         );
       });
@@ -815,7 +812,7 @@ describe('FeatureManagerAPI', () => {
 
       test('should handle empty features file', async () => {
         mockFs.setFile(
-          TEST_FEATURES_PATH,
+          TEST_TASKS_PATH,
           JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
         );
 
@@ -881,7 +878,7 @@ describe('FeatureManagerAPI', () => {
 
 
     test('should handle corrupted FEATURES.json gracefully', async () => {
-      mockFs.setFile(TEST_FEATURES_PATH, '{ invalid json }');
+      mockFs.setFile(TEST_TASKS_PATH, '{ invalid json }');
 
       const _result = await api.suggestFeature(TEST_FIXTURES.validFeature);
       expect(_result.success).toBe(false);
@@ -889,8 +886,8 @@ describe('FeatureManagerAPI', () => {
     });
 
     test('should handle file permission errors', async () => {
-      mockFs.setAccessError(TEST_FEATURES_PATH, 'Permission denied');
-      mockFs.setWriteError(TEST_FEATURES_PATH, 'Permission denied');
+      mockFs.setAccessError(TEST_TASKS_PATH, 'Permission denied');
+      mockFs.setWriteError(TEST_TASKS_PATH, 'Permission denied');
 
       const _result = await api.suggestFeature(TEST_FIXTURES.validFeature);
       expect(_result.success).toBe(false);
